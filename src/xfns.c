@@ -157,6 +157,10 @@ int x_gtk_file_dialog_help_text;
 
 int x_gtk_whole_detached_tool_bar;
 
+/* If non-zero, don't collapse to tab bar when it is detached.  */
+
+/* int x_gtk_whole_detached_tab_bar; */
+
 /* The background and shape of the mouse pointer, and shape when not
    over text or in the modeline.  */
 
@@ -515,6 +519,7 @@ void x_explicitly_set_name P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_menu_bar_lines P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_title P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_tool_bar_lines P_ ((struct frame *, Lisp_Object, Lisp_Object));
+void x_set_tab_bar_lines P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_scroll_bar_foreground P_ ((struct frame *, Lisp_Object,
 				      Lisp_Object));
 void x_set_scroll_bar_background P_ ((struct frame *, Lisp_Object,
@@ -1451,6 +1456,103 @@ x_set_tool_bar_lines (f, value, oldval)
 
       if (WINDOWP (f->tool_bar_window))
 	clear_glyph_matrix (XWINDOW (f->tool_bar_window)->current_matrix);
+    }
+}
+
+
+/* Set the number of lines used for the tab bar of frame F to VALUE.
+   VALUE not an integer, or < 0 means set the lines to zero.  OLDVAL
+   is the old number of tab bar lines.  This function changes the
+   height of all windows on frame F to match the new tab bar height.
+   The frame's height doesn't change.  */
+
+void
+x_set_tab_bar_lines (f, value, oldval)
+     struct frame *f;
+     Lisp_Object value, oldval;
+{
+  int delta, nlines, root_height;
+  Lisp_Object root_window;
+
+  /* Treat tab bars like menu bars.  */
+  if (FRAME_MINIBUF_ONLY_P (f))
+    return;
+
+  /* Use VALUE only if an integer >= 0.  */
+  if (INTEGERP (value) && XINT (value) >= 0)
+    nlines = XFASTINT (value);
+  else
+    nlines = 0;
+
+/* #ifdef USE_GTK */
+/*   FRAME_TAB_BAR_LINES (f) = 0; */
+/*   if (nlines) */
+/*     { */
+/*       FRAME_EXTERNAL_TAB_BAR (f) = 1; */
+/*       if (FRAME_X_P (f) && f->output_data.x->tabbar_widget == 0) */
+/* 	/\* Make sure next redisplay shows the tab bar.  *\/ */
+/* 	XWINDOW (FRAME_SELECTED_WINDOW (f))->update_mode_line = Qt; */
+/*       update_frame_tab_bar (f); */
+/*     } */
+/*   else */
+/*     { */
+/*       if (FRAME_EXTERNAL_TAB_BAR (f)) */
+/*         free_frame_tab_bar (f); */
+/*       FRAME_EXTERNAL_TAB_BAR (f) = 0; */
+/*     } */
+/*   return; */
+/* #endif */
+
+     /* Make sure we redisplay all windows in this frame.  */
+  ++windows_or_buffers_changed;
+
+  delta = nlines - FRAME_TAB_BAR_LINES (f);
+
+  /* Don't resize the tab-bar to more than we have room for.  */
+  root_window = FRAME_ROOT_WINDOW (f);
+  root_height = WINDOW_TOTAL_LINES (XWINDOW (root_window));
+  if (root_height - delta < 1)
+    {
+      delta = root_height - 1;
+      nlines = FRAME_TAB_BAR_LINES (f) + delta;
+    }
+
+  FRAME_TAB_BAR_LINES (f) = nlines;
+  change_window_heights (root_window, delta);
+  adjust_glyphs (f);
+
+  /* We also have to make sure that the internal border at the top of
+     the frame, below the menu bar or tab bar, is redrawn when the
+     tab bar disappears.  This is so because the internal border is
+     below the tab bar if one is displayed, but is below the menu bar
+     if there isn't a tab bar.  The tab bar draws into the area
+     below the menu bar.  */
+  if (FRAME_X_WINDOW (f) && FRAME_TAB_BAR_LINES (f) == 0)
+    {
+      clear_frame (f);
+      clear_current_matrices (f);
+    }
+
+  /* If the tab bar gets smaller, the internal border below it
+     has to be cleared.  It was formerly part of the display
+     of the larger tab bar, and updating windows won't clear it.  */
+  if (delta < 0)
+    {
+      int height = FRAME_INTERNAL_BORDER_WIDTH (f);
+      int width = FRAME_PIXEL_WIDTH (f);
+      int y = nlines * FRAME_LINE_HEIGHT (f);
+
+      /* height can be zero here. */
+      if (height > 0 && width > 0)
+	{
+          BLOCK_INPUT;
+          x_clear_area (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
+                        0, y, width, height, False);
+          UNBLOCK_INPUT;
+        }
+
+      if (WINDOWP (f->tab_bar_window))
+	clear_glyph_matrix (XWINDOW (f->tab_bar_window)->current_matrix);
     }
 }
 
@@ -2414,6 +2516,7 @@ xic_set_statusarea (f)
   area.y = (FRAME_PIXEL_HEIGHT (f) - area.height
 	    - FRAME_MENUBAR_HEIGHT (f)
 	    - FRAME_TOOLBAR_HEIGHT (f)
+	    - FRAME_TABBAR_HEIGHT (f)
             - FRAME_INTERNAL_BORDER_WIDTH (f));
   XFree (needed);
 
@@ -3448,6 +3551,8 @@ This function is an internal primitive--use `make-frame' instead.  */)
 		       "menuBar", "MenuBar", RES_TYPE_BOOLEAN_NUMBER);
   x_default_parameter (f, parms, Qtool_bar_lines, make_number (1),
 		       "toolBar", "ToolBar", RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qtab_bar_lines, make_number (1),
+		       "tabBar", "TabBar", RES_TYPE_NUMBER);
   x_default_parameter (f, parms, Qbuffer_predicate, Qnil,
 		       "bufferPredicate", "BufferPredicate",
 		       RES_TYPE_SYMBOL);
@@ -3459,7 +3564,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
                        "fullscreen", "Fullscreen", RES_TYPE_SYMBOL);
 
   /* Compute the size of the X window.  */
-  window_prompting = x_figure_window_size (f, parms, 1);
+  window_prompting = x_figure_window_size (f, parms, 1, 1);
 
   tem = x_get_arg (dpyinfo, parms, Qunsplittable, 0, 0, RES_TYPE_BOOLEAN);
   f->no_split = minibuffer_only || EQ (tem, Qt);
@@ -4890,7 +4995,7 @@ x_create_tip_frame (dpyinfo, parms, text)
 
   f->output_data.x->parent_desc = FRAME_X_DISPLAY_INFO (f)->root_window;
 
-  window_prompting = x_figure_window_size (f, parms, 0);
+  window_prompting = x_figure_window_size (f, parms, 0, 0);
 
   {
     XSetWindowAttributes attrs;
@@ -5869,6 +5974,7 @@ frame_parm_handler x_frame_parm_handlers[] =
   x_set_vertical_scroll_bars,
   x_set_visibility,
   x_set_tool_bar_lines,
+  x_set_tab_bar_lines,
   x_set_scroll_bar_foreground,
   x_set_scroll_bar_background,
   x_set_screen_gamma,

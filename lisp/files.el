@@ -6354,5 +6354,11 @@ Otherwise, trash FILENAME using the freedesktop.org conventions,
 (define-key ctl-x-5-map "r" 'find-file-read-only-other-frame)
 (define-key ctl-x-5-map "\C-o" 'display-buffer-other-frame)
 
+(define-key ctl-x-7-map "b" 'switch-to-buffer-other-tab)
+(define-key ctl-x-7-map "f" 'find-file-other-tab)
+(define-key ctl-x-7-map "\C-f" 'find-file-other-tab)
+(define-key ctl-x-7-map "r" 'find-file-read-only-other-tab)
+(define-key ctl-x-7-map "\C-o" 'display-buffer-other-tab)
+
 ;; arch-tag: bc68d3ea-19ca-468b-aac6-3a4a7766101f
 ;;; files.el ends here

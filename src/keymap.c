@@ -4041,6 +4041,7 @@ preferred.  */);
   staticpro (&Vmouse_events);
   Vmouse_events = pure_cons (intern_c_string ("menu-bar"),
 		  pure_cons (intern_c_string ("tool-bar"),
+		  pure_cons (intern_c_string ("tab-bar"),
 		  pure_cons (intern_c_string ("header-line"),
 		  pure_cons (intern_c_string ("mode-line"),
 		  pure_cons (intern_c_string ("mouse-1"),
@@ -4048,7 +4049,7 @@ preferred.  */);
 		  pure_cons (intern_c_string ("mouse-3"),
 		  pure_cons (intern_c_string ("mouse-4"),
 		  pure_cons (intern_c_string ("mouse-5"),
-			     Qnil)))))))));
+			     Qnil))))))))));
 
 
   Qsingle_key_description = intern_c_string ("single-key-description");

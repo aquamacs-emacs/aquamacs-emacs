@@ -751,6 +751,11 @@ x_after_update_window_line (desired_row)
     {
       int y = WINDOW_TO_FRAME_PIXEL_Y (w, max (0, desired_row->y));
 
+      /* Internal border is drawn below the tab bar.  */
+      if (WINDOWP (f->tab_bar_window)
+	  && w == XWINDOW (f->tab_bar_window))
+	y -= width;
+
       BLOCK_INPUT;
       x_clear_area (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
 		    0, y, width, height, False);
@@ -2314,6 +2319,7 @@ x_draw_image_relief (s)
       || s->hl == DRAW_IMAGE_RAISED)
     {
       thick = tool_bar_button_relief >= 0 ? tool_bar_button_relief : DEFAULT_TOOL_BAR_BUTTON_RELIEF;
+      /* thick = tab_bar_button_relief >= 0 ? tab_bar_button_relief : DEFAULT_TAB_BAR_BUTTON_RELIEF; */
       raised_p = s->hl == DRAW_IMAGE_RAISED;
     }
   else
@@ -6333,7 +6339,8 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
 	 mouse highlighting.  */
       if (!dpyinfo->mouse_face_hidden && INTEGERP (Vmouse_highlight)
 	  && (f == 0
-	      || !EQ (f->tool_bar_window, dpyinfo->mouse_face_window)))
+	      || !EQ (f->tool_bar_window, dpyinfo->mouse_face_window)
+	      || !EQ (f->tab_bar_window, dpyinfo->mouse_face_window)))
         {
           clear_mouse_face (dpyinfo);
           dpyinfo->mouse_face_hidden = 1;
@@ -6752,7 +6759,7 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
 
                 window = window_from_coordinates (f,
                                                   event.xmotion.x, event.xmotion.y,
-                                                  0, 0, 0, 0);
+                                                  0, 0, 0, 0, 0);
 
                 /* Window will be selected only when it is not selected now and
                    last mouse movement event was not in it.  Minibuffer window
@@ -6865,6 +6872,7 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
         /* If we decide we want to generate an event to be seen
            by the rest of Emacs, we put it here.  */
         int tool_bar_p = 0;
+        int tab_bar_p = 0;
 
         bzero (&compose_status, sizeof (compose_status));
 	last_mouse_glyph_frame = 0;
@@ -6891,7 +6899,7 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
                 int x = event.xbutton.x;
                 int y = event.xbutton.y;
 
-                window = window_from_coordinates (f, x, y, 0, 0, 0, 1);
+                window = window_from_coordinates (f, x, y, 0, 0, 0, 1, 1);
                 tool_bar_p = EQ (window, f->tool_bar_window);
 
                 if (tool_bar_p && event.xbutton.button < 4)
@@ -6903,7 +6911,27 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
                   }
               }
 
-            if (!tool_bar_p)
+            /* Is this in the tab-bar?  */
+            if (WINDOWP (f->tab_bar_window)
+                && WINDOW_TOTAL_LINES (XWINDOW (f->tab_bar_window)))
+              {
+                Lisp_Object window;
+                int x = event.xbutton.x;
+                int y = event.xbutton.y;
+
+                window = window_from_coordinates (f, x, y, 0, 0, 0, 1, 1);
+                tab_bar_p = EQ (window, f->tab_bar_window);
+
+                if (tab_bar_p && event.xbutton.button < 4)
+                  {
+		    handle_tab_bar_click (f, x, y,
+					  event.xbutton.type == ButtonPress,
+					  x_x_to_emacs_modifiers (dpyinfo,
+								  event.xbutton.state));
+                  }
+              }
+
+            if (!tool_bar_p && !tab_bar_p)
 #if defined (USE_X_TOOLKIT) || defined (USE_GTK)
               if (! popup_activated ())
 #endif
@@ -6953,6 +6981,9 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
 
             if (!tool_bar_p)
               last_tool_bar_item = -1;
+
+            if (!tab_bar_p)
+              last_tab_bar_item = -1;
           }
         else
           dpyinfo->grabbed &= ~(1 << event.xbutton.button);
@@ -8933,7 +8964,7 @@ x_set_window_size_1 (f, change_gravity, cols, rows)
 
   pixelwidth = FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, cols);
   pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows)
-    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f);
+    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f) + FRAME_TABBAR_HEIGHT (f);
 
   if (change_gravity) f->win_gravity = NorthWestGravity;
   x_wm_set_size_hint (f, (long) 0, 0);
@@ -9003,7 +9034,7 @@ x_set_window_size (f, change_gravity, cols, rows)
       int pixelh = FRAME_PIXEL_HEIGHT (f);
 #ifdef USE_X_TOOLKIT
       /* The menu bar is not part of text lines.  The tool bar
-         is however.  */
+         and the tab bar is however.  */
       pixelh -= FRAME_MENUBAR_HEIGHT (f);
 #endif
       r = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, pixelh);
@@ -10893,6 +10924,7 @@ x_initialize ()
 
   x_noop_count = 0;
   last_tool_bar_item = -1;
+  last_tab_bar_item = -1;
   any_help_event_p = 0;
   ignore_next_mouse_click_timeout = 0;
 #ifdef HAVE_X_SM

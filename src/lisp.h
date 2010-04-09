@@ -3115,6 +3115,7 @@ EXFUN (Fcommand_execute, 4);
 EXFUN (Finput_pending_p, 0);
 extern Lisp_Object menu_bar_items P_ ((Lisp_Object));
 extern Lisp_Object tool_bar_items P_ ((Lisp_Object, int *));
+extern Lisp_Object tab_bar_items P_ ((Lisp_Object, int *));
 extern Lisp_Object Qvertical_scroll_bar;
 extern void discard_mouse_events P_ ((void));
 EXFUN (Fevent_convert_list, 1);

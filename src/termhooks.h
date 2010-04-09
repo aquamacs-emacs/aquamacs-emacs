@@ -165,6 +165,11 @@ enum event_kind
      and `arg' are equal, this is a prefix event.  */
   TOOL_BAR_EVENT,
 
+  /* An event from a tab-bar.  Member `arg' of the input event
+     contains the tab-bar item selected.  If `frame_or_window'
+     and `arg' are equal, this is a prefix event.  */
+  TAB_BAR_EVENT,
+
   /* Queued from XTread_socket on FocusIn events.  Translated into
      `switch-frame' events in kbd_buffer_get_event, if necessary.  */
   FOCUS_IN_EVENT,

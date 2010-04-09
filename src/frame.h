@@ -194,6 +194,15 @@ struct frame
   /* Desired and current contents displayed in tool_bar_window.  */
   Lisp_Object desired_tool_bar_string, current_tool_bar_string;
 
+  /* A window used to display the tab-bar of a frame.  */
+  Lisp_Object tab_bar_window;
+
+  /* Desired and current tab-bar items.  */
+  Lisp_Object tab_bar_items;
+
+  /* Desired and current contents displayed in tab_bar_window.  */
+  Lisp_Object desired_tab_bar_string, current_tab_bar_string;
+
   /* Beyond here, there should be no more Lisp_Object components.  */
 
   /* Cache of realized faces.  */
@@ -240,6 +249,10 @@ struct frame
      auto-resize-tool-bar is set to grow-only.  */
   unsigned minimize_tool_bar_window_p : 1;
 
+  /* Set to non-zero to minimize tab-bar height even when
+     auto-resize-tab-bar is set to grow-only.  */
+  unsigned minimize_tab_bar_window_p : 1;
+
 #if defined (USE_GTK) || defined (HAVE_NS)
   /* Nonzero means using a tool bar that comes from the toolkit.  */
   int external_tool_bar;
@@ -250,6 +263,12 @@ struct frame
 
   int n_tool_bar_rows;
   int n_tool_bar_items;
+
+  /* Margin at the top of the frame.  Used to display the tab-bar.  */
+  int tab_bar_lines;
+
+  int n_tab_bar_rows;
+  int n_tab_bar_items;
 
   /* A buffer for decode_mode_line. */
   char *decode_mode_spec_buffer;
@@ -551,15 +570,15 @@ typedef struct frame *FRAME_PTR;
    (If this is 0, F must use some other minibuffer window.)  */
 #define FRAME_HAS_MINIBUF_P(f) ((f)->has_minibuffer)
 
-/* Pixel height of frame F, including non-toolkit menu bar and
-   non-toolkit tool bar lines.  */
+/* Pixel height of frame F, including non-toolkit menu bar,
+   non-toolkit tool bar and non-toolkit tab bar lines.  */
 #define FRAME_PIXEL_HEIGHT(f) ((f)->pixel_height)
 
 /* Pixel width of frame F.  */
 #define FRAME_PIXEL_WIDTH(f) ((f)->pixel_width)
 
 /* Height of frame F, measured in canonical lines, including
-   non-toolkit menu bar and non-toolkit tool bar lines.  */
+   non-toolkit menu bar, non-toolkit tool bar and non-toolkit tab bar lines.  */
 #define FRAME_LINES(f) (f)->text_lines
 
 /* Width of frame F, measured in canonical character columns,
@@ -585,10 +604,23 @@ typedef struct frame *FRAME_PTR;
 #define FRAME_TOOL_BAR_LINES(f) (f)->tool_bar_lines
 
 
+/* Nonzero if this frame should display a tab bar
+   in a way that does not use any text lines.  */
+/* #if defined (USE_GTK) || defined (HAVE_NS) */
+/* #define FRAME_EXTERNAL_TAB_BAR(f) (f)->external_tab_bar */
+/* #else */
+#define FRAME_EXTERNAL_TAB_BAR(f) 0
+/* #endif */
+
+/* Number of lines of frame F used for the tab-bar.  */
+
+#define FRAME_TAB_BAR_LINES(f) (f)->tab_bar_lines
+
+
 /* Lines above the top-most window in frame F.  */
 
 #define FRAME_TOP_MARGIN(F) \
-     (FRAME_MENU_BAR_LINES (F) + FRAME_TOOL_BAR_LINES (F))
+     (FRAME_MENU_BAR_LINES (F) + FRAME_TOOL_BAR_LINES (F) + FRAME_TAB_BAR_LINES (F))
 
 /* Pixel height of the top margin above.  */
 
@@ -1044,7 +1076,7 @@ extern Lisp_Object Qfont;
 extern Lisp_Object Qbackground_color, Qforeground_color;
 extern Lisp_Object Qicon, Qicon_name, Qicon_type, Qicon_left, Qicon_top;
 extern Lisp_Object Qinternal_border_width;
-extern Lisp_Object Qmenu_bar_lines, Qtool_bar_lines;
+extern Lisp_Object Qmenu_bar_lines, Qtool_bar_lines, Qtab_bar_lines;
 extern Lisp_Object Qmouse_color;
 extern Lisp_Object Qname, Qtitle;
 extern Lisp_Object Qparent_id;
@@ -1121,7 +1153,7 @@ extern void x_set_scroll_bar_width P_ ((struct frame *, Lisp_Object,
 
 extern Lisp_Object x_icon_type P_ ((struct frame *));
 
-extern int x_figure_window_size P_ ((struct frame *, Lisp_Object, int));
+extern int x_figure_window_size P_ ((struct frame *, Lisp_Object, int, int));
 
 extern Lisp_Object Vframe_alpha_lower_limit;
 extern void x_set_alpha P_ ((struct frame *, Lisp_Object, Lisp_Object));

@@ -1119,6 +1119,7 @@ or \\[semantic-mode]")))))
 (define-key ctl-x-map "m" 'compose-mail)
 (define-key ctl-x-4-map "m" 'compose-mail-other-window)
 (define-key ctl-x-5-map "m" 'compose-mail-other-frame)
+(define-key ctl-x-7-map "m" 'compose-mail-other-tab)
 
 
 (defvar ctl-x-r-map (make-sparse-keymap)

@@ -197,7 +197,9 @@
       (load "image")
       (load "international/fontset")
       (load "dnd")
-      (load "tool-bar")))
+      (load "tool-bar")
+      (load "tab-bar")
+      (load "tab")))
 
 (if (or (featurep 'system-font-setting) (featurep 'font-render-setting))
     (load "font-setting"))

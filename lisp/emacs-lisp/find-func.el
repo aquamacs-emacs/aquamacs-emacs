@@ -558,10 +558,12 @@ Set mark before moving, if the buffer already existed."
   (define-key ctl-x-map "F" 'find-function)
   (define-key ctl-x-4-map "F" 'find-function-other-window)
   (define-key ctl-x-5-map "F" 'find-function-other-frame)
+  (define-key ctl-x-7-map "F" 'find-function-other-tab)
   (define-key ctl-x-map "K" 'find-function-on-key)
   (define-key ctl-x-map "V" 'find-variable)
   (define-key ctl-x-4-map "V" 'find-variable-other-window)
-  (define-key ctl-x-5-map "V" 'find-variable-other-frame))
+  (define-key ctl-x-5-map "V" 'find-variable-other-frame)
+  (define-key ctl-x-7-map "V" 'find-variable-other-tab))
 
 (provide 'find-func)
 

@@ -274,7 +274,8 @@ for instance using the window manager, then this produces a quit and
   /* Decode the first argument: find the window or frame to use.  */
   if (EQ (position, Qt)
       || (CONSP (position) && (EQ (XCAR (position), Qmenu_bar)
-			       || EQ (XCAR (position), Qtool_bar))))
+			       || EQ (XCAR (position), Qtool_bar)
+			       || EQ (XCAR (position), Qtab_bar))))
     {
 #if 0 /* Using the frame the mouse is on may not be right.  */
       /* Use the mouse's current position.  */

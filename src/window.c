@@ -1041,6 +1041,7 @@ check_window_containing (w, user_data)
 
    If there is no window under X, Y return nil and leave *PART
    unmodified.  TOOL_BAR_P non-zero means detect tool-bar windows.
+   TAB_BAR_P non-zero means detect tab-bar windows.
 
    This function was previously implemented with a loop cycling over
    windows with Fnext_window, and starting with the frame's selected
@@ -1052,12 +1053,13 @@ check_window_containing (w, user_data)
    case.  */
 
 Lisp_Object
-window_from_coordinates (f, x, y, part, wx, wy, tool_bar_p)
+window_from_coordinates (f, x, y, part, wx, wy, tool_bar_p, tab_bar_p)
      struct frame *f;
      int x, y;
      enum window_part *part;
      int *wx, *wy;
      int tool_bar_p;
+     int tab_bar_p;
 {
   Lisp_Object window;
   struct check_window_data cw;
@@ -1081,6 +1083,19 @@ window_from_coordinates (f, x, y, part, wx, wy, tool_bar_p)
     {
       *part = ON_TEXT;
       window = f->tool_bar_window;
+    }
+
+  /* If not found above, see if it's in the tab bar window, if a tab
+     bar exists.  */
+  if (NILP (window)
+      && tab_bar_p
+      && WINDOWP (f->tab_bar_window)
+      && WINDOW_TOTAL_LINES (XWINDOW (f->tab_bar_window)) > 0
+      && (coordinates_in_window (XWINDOW (f->tab_bar_window), &x, &y)
+	  != ON_NOTHING))
+    {
+      *part = ON_TEXT;
+      window = f->tab_bar_window;
     }
 
   if (wx) *wx = x;
@@ -1113,7 +1128,7 @@ column 0.  */)
 				   + FRAME_INTERNAL_BORDER_WIDTH (f)),
 				  (FRAME_PIXEL_Y_FROM_CANON_Y (f, y)
 				   + FRAME_INTERNAL_BORDER_WIDTH (f)),
-				  0, 0, 0, 0);
+				  0, 0, 0, 0, 0);
 }
 
 DEFUN ("window-point", Fwindow_point, Swindow_point, 0, 1, 0,
@@ -5636,8 +5651,10 @@ If ARG is omitted or nil, then recenter with point on the middle line of
 the selected window; if the variable `recenter-redisplay' is non-nil,
 also erase the entire frame and redraw it (when `auto-resize-tool-bars'
 is set to `grow-only', this resets the tool-bar's height to the minimum
-height needed); if `recenter-redisplay' has the special value `tty',
-then only tty frame are redrawn.
+height needed; when `auto-resize-tab-bars' is set to `grow-only',
+this resets the tab-bar's height to the minimum height needed);
+if `recenter-redisplay' has the special value `tty', then only
+tty frame are redrawn.
 
 Just C-u as prefix means put point in the center of the window
 and redisplay normally--don't erase and redraw the frame.  */)
@@ -5668,6 +5685,7 @@ and redisplay normally--don't erase and redraw the frame.  */)
 	    composition_table[i]->font = NULL;
 
 	  WINDOW_XFRAME (w)->minimize_tool_bar_window_p = 1;
+	  WINDOW_XFRAME (w)->minimize_tab_bar_window_p = 1;
 
 	  Fredraw_frame (WINDOW_FRAME (w));
 	  SET_FRAME_GARBAGED (WINDOW_XFRAME (w));
@@ -5929,6 +5947,7 @@ struct save_window_data
 
     int frame_cols, frame_lines, frame_menu_bar_lines;
     int frame_tool_bar_lines;
+    int frame_tab_bar_lines;
   };
 
 /* This is saved as a Lisp_Vector  */
@@ -6063,6 +6082,7 @@ the return value is nil.  Otherwise the value is t.  */)
       int previous_frame_cols =  FRAME_COLS  (f);
       int previous_frame_menu_bar_lines = FRAME_MENU_BAR_LINES (f);
       int previous_frame_tool_bar_lines = FRAME_TOOL_BAR_LINES (f);
+      int previous_frame_tab_bar_lines = FRAME_TAB_BAR_LINES (f);
 
       /* The mouse highlighting code could get screwed up
 	 if it runs during this.  */
@@ -6081,6 +6101,10 @@ the return value is nil.  Otherwise the value is t.  */)
       if (data->frame_tool_bar_lines
 	  != previous_frame_tool_bar_lines)
 	x_set_tool_bar_lines (f, make_number (data->frame_tool_bar_lines),
+			      make_number (0));
+      if (data->frame_tab_bar_lines
+	  != previous_frame_tab_bar_lines)
+	x_set_tab_bar_lines (f, make_number (data->frame_tab_bar_lines),
 			      make_number (0));
 #endif
 #endif
@@ -6272,6 +6296,9 @@ the return value is nil.  Otherwise the value is t.  */)
 #ifdef HAVE_WINDOW_SYSTEM
       if (previous_frame_tool_bar_lines != FRAME_TOOL_BAR_LINES (f))
 	x_set_tool_bar_lines (f, make_number (previous_frame_tool_bar_lines),
+			      make_number (0));
+      if (previous_frame_tab_bar_lines != FRAME_TAB_BAR_LINES (f))
+	x_set_tab_bar_lines (f, make_number (previous_frame_tab_bar_lines),
 			      make_number (0));
 #endif
 #endif
@@ -6524,6 +6551,7 @@ redirection (see `redirect-frame-focus').  */)
   data->frame_lines = FRAME_LINES (f);
   data->frame_menu_bar_lines = FRAME_MENU_BAR_LINES (f);
   data->frame_tool_bar_lines = FRAME_TOOL_BAR_LINES (f);
+  data->frame_tab_bar_lines = FRAME_TAB_BAR_LINES (f);
   data->selected_frame = selected_frame;
   data->current_window = FRAME_SELECTED_WINDOW (f);
   XSETBUFFER (data->current_buffer, current_buffer);

@@ -597,7 +597,7 @@ static EMACS_TIME timer_idleness_start_time;
 
 static EMACS_TIME timer_last_idleness_start_time;
 
-/* If non-nil, events produced by disabled menu items and tool-bar
+/* If non-nil, events produced by disabled menu items, tool-bar and tab-bar
    buttons are not ignored.  Help functions bind this to allow help on
    those items and buttons.  */
 Lisp_Object Venable_disabled_menus_and_buttons;
@@ -2490,7 +2490,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu, end_time)
       if (used_mouse_menu
 	  /* Also check was_disabled so last-nonmenu-event won't return
 	     a bad value when submenus are involved.  (Bug#447)  */
-	  && (EQ (c, Qtool_bar) || EQ (c, Qmenu_bar) || was_disabled))
+	  && (EQ (c, Qtool_bar) || EQ (c, Qtab_bar) || EQ (c, Qmenu_bar) || was_disabled))
 	*used_mouse_menu = 1;
 
       goto reread_for_input_method;
@@ -2775,6 +2775,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu, end_time)
       && EVENT_HAS_PARAMETERS (prev_event)
       && !EQ (XCAR (prev_event), Qmenu_bar)
       && !EQ (XCAR (prev_event), Qtool_bar)
+      && !EQ (XCAR (prev_event), Qtab_bar)
       /* Don't bring up a menu if we already have another event.  */
       && NILP (Vunread_command_events)
       && unread_command_char < 0)
@@ -3076,7 +3077,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu, end_time)
       posn = POSN_POSN (EVENT_START (c));
       /* Handle menu-bar events:
 	 insert the dummy prefix event `menu-bar'.  */
-      if (EQ (posn, Qmenu_bar) || EQ (posn, Qtool_bar))
+      if (EQ (posn, Qmenu_bar) || EQ (posn, Qtool_bar) || EQ (posn, Qtab_bar))
 	{
 	  /* Change menu-bar to (menu-bar) as the event "position".  */
 	  POSN_SET_POSN (EVENT_START (c), Fcons (posn, Qnil));
@@ -4206,7 +4207,8 @@ kbd_buffer_get_event (kbp, used_mouse_menu, end_time)
 	      if (used_mouse_menu
 		  && !EQ (event->frame_or_window, event->arg)
 		  && (event->kind == MENU_BAR_EVENT
-		      || event->kind == TOOL_BAR_EVENT))
+		      || event->kind == TOOL_BAR_EVENT
+		      || event->kind == TAB_BAR_EVENT))
 		*used_mouse_menu = 1;
 #endif
 #ifdef HAVE_NS
@@ -5269,7 +5271,7 @@ make_lispy_position (f, x, y, time)
   /* Set `window' to the window under frame pixel coordinates (x,y)  */
   if (f)
     window = window_from_coordinates (f, XINT (*x), XINT (*y),
-				      &part, &wx, &wy, 0);
+				      &part, &wx, &wy, 0, 0);
   else
     window = Qnil;
 
@@ -6057,6 +6059,16 @@ make_lispy_event (event)
 	   `(tool_bar)' because the code in keyboard.c for tool bar
 	   events, which we use, relies on this.  */
 	return Fcons (Qtool_bar, Qnil);
+      else if (SYMBOLP (event->arg))
+	return apply_modifiers (event->modifiers, event->arg);
+      return event->arg;
+
+    case TAB_BAR_EVENT:
+      if (EQ (event->arg, event->frame_or_window))
+	/* This is the prefix key.  We translate this to
+	   `(tab_bar)' because the code in keyboard.c for tab bar
+	   events, which we use, relies on this.  */
+	return Fcons (Qtab_bar, Qnil);
       else if (SYMBOLP (event->arg))
 	return apply_modifiers (event->modifiers, event->arg);
       return event->arg;
@@ -8434,6 +8446,389 @@ append_tool_bar_item ()
 
 
 
+/***********************************************************************
+			       Tab-bars
+ ***********************************************************************/
+
+/* A vector holding tab bar items while they are parsed in function
+   tab_bar_items. Each item occupies TAB_BAR_ITEM_NSCLOTS elements
+   in the vector.  */
+
+static Lisp_Object tab_bar_items_vector;
+
+/* A vector holding the result of parse_tab_bar_item.  Layout is like
+   the one for a single item in tab_bar_items_vector.  */
+
+static Lisp_Object tab_bar_item_properties;
+
+/* Next free index in tab_bar_items_vector.  */
+
+static int ntab_bar_items;
+
+/* The symbols `tab-bar', `:image' and `:rtl'.  */
+
+extern Lisp_Object Qtab_bar;
+Lisp_Object QCimage;
+Lisp_Object Qrtl;
+
+/* Function prototypes.  */
+
+static void init_tab_bar_items P_ ((Lisp_Object));
+static void process_tab_bar_item P_ ((Lisp_Object, Lisp_Object, Lisp_Object, void*));
+static int parse_tab_bar_item P_ ((Lisp_Object, Lisp_Object));
+static void append_tab_bar_item P_ ((void));
+
+
+/* Return a vector of tab bar items for keymaps currently in effect.
+   Reuse vector REUSE if non-nil.  Return in *NITEMS the number of
+   tab bar items found.  */
+
+Lisp_Object
+tab_bar_items (reuse, nitems)
+     Lisp_Object reuse;
+     int *nitems;
+{
+  Lisp_Object *maps;
+  int nmaps, i;
+  Lisp_Object oquit;
+  Lisp_Object *tmaps;
+
+  *nitems = 0;
+
+  /* In order to build the menus, we need to call the keymap
+     accessors.  They all call QUIT.  But this function is called
+     during redisplay, during which a quit is fatal.  So inhibit
+     quitting while building the menus.  We do this instead of
+     specbind because (1) errors will clear it anyway and (2) this
+     avoids risk of specpdl overflow.  */
+  oquit = Vinhibit_quit;
+  Vinhibit_quit = Qt;
+
+  /* Initialize tab_bar_items_vector and protect it from GC.  */
+  init_tab_bar_items (reuse);
+
+  /* Build list of keymaps in maps.  Set nmaps to the number of maps
+     to process.  */
+
+  /* Should overriding-terminal-local-map and overriding-local-map apply?  */
+  if (!NILP (Voverriding_local_map_menu_flag))
+    {
+      /* Yes, use them (if non-nil) as well as the global map.  */
+      maps = (Lisp_Object *) alloca (3 * sizeof (maps[0]));
+      nmaps = 0;
+      if (!NILP (current_kboard->Voverriding_terminal_local_map))
+	maps[nmaps++] = current_kboard->Voverriding_terminal_local_map;
+      if (!NILP (Voverriding_local_map))
+	maps[nmaps++] = Voverriding_local_map;
+    }
+  else
+    {
+      /* No, so use major and minor mode keymaps and keymap property.
+	 Note that tab-bar bindings in the local-map and keymap
+	 properties may not work reliable, as they are only
+	 recognized when the tab-bar (or mode-line) is updated,
+	 which does not normally happen after every command.  */
+      Lisp_Object tem;
+      int nminor;
+      nminor = current_minor_maps (NULL, &tmaps);
+      maps = (Lisp_Object *) alloca ((nminor + 3) * sizeof (maps[0]));
+      nmaps = 0;
+      if (tem = get_local_map (PT, current_buffer, Qkeymap), !NILP (tem))
+	maps[nmaps++] = tem;
+      bcopy (tmaps, (void *) (maps + nmaps), nminor * sizeof (maps[0]));
+      nmaps += nminor;
+      maps[nmaps++] = get_local_map (PT, current_buffer, Qlocal_map);
+    }
+
+  /* Add global keymap at the end.  */
+  maps[nmaps++] = current_global_map;
+
+  /* Process maps in reverse order and look up in each map the prefix
+     key `tab-bar'.  */
+  for (i = nmaps - 1; i >= 0; --i)
+    if (!NILP (maps[i]))
+      {
+	Lisp_Object keymap;
+
+	keymap = get_keymap (access_keymap (maps[i], Qtab_bar, 1, 0, 1), 0, 1);
+	if (CONSP (keymap))
+	  map_keymap (keymap, process_tab_bar_item, Qnil, NULL, 1);
+      }
+
+  Vinhibit_quit = oquit;
+  *nitems = ntab_bar_items / TAB_BAR_ITEM_NSLOTS;
+  return tab_bar_items_vector;
+}
+
+
+/* Process the definition of KEY which is DEF.  */
+
+static void
+process_tab_bar_item (key, def, data, args)
+     Lisp_Object key, def, data;
+     void *args;
+{
+  int i;
+  extern Lisp_Object Qundefined;
+  struct gcpro gcpro1, gcpro2;
+
+  /* Protect KEY and DEF from GC because parse_tab_bar_item may call
+     eval.  */
+  GCPRO2 (key, def);
+
+  if (EQ (def, Qundefined))
+    {
+      /* If a map has an explicit `undefined' as definition,
+	 discard any previously made item.  */
+      for (i = 0; i < ntab_bar_items; i += TAB_BAR_ITEM_NSLOTS)
+	{
+	  Lisp_Object *v = XVECTOR (tab_bar_items_vector)->contents + i;
+
+	  if (EQ (key, v[TAB_BAR_ITEM_KEY]))
+	    {
+	      if (ntab_bar_items > i + TAB_BAR_ITEM_NSLOTS)
+		bcopy (v + TAB_BAR_ITEM_NSLOTS, v,
+		       ((ntab_bar_items - i - TAB_BAR_ITEM_NSLOTS)
+			* sizeof (Lisp_Object)));
+	      ntab_bar_items -= TAB_BAR_ITEM_NSLOTS;
+	      break;
+	    }
+	}
+    }
+  else if (parse_tab_bar_item (key, def))
+    /* Append a new tab bar item to tab_bar_items_vector.  Accept
+       more than one definition for the same key.  */
+    append_tab_bar_item ();
+
+  UNGCPRO;
+}
+
+
+/* Parse a tab bar item specification ITEM for key KEY and return the
+   result in tab_bar_item_properties.  Value is zero if ITEM is
+   invalid.
+
+   ITEM is a list `(menu-item CAPTION BINDING PROPS...)'.
+
+   CAPTION is the caption of the item,  If it's not a string, it is
+   evaluated to get a string.
+
+   BINDING is the tab bar item's binding.  Tab-bar items with keymaps
+   as binding are currently ignored.
+
+   The following properties are recognized:
+
+   - `:enable FORM'.
+
+   FORM is evaluated and specifies whether the tab bar item is
+   enabled or disabled.
+
+   - `:visible FORM'
+
+   FORM is evaluated and specifies whether the tab bar item is visible.
+
+   - `:filter FUNCTION'
+
+   FUNCTION is invoked with one parameter `(quote BINDING)'.  Its
+   result is stored as the new binding.
+
+   - `:button (TYPE SELECTED)'
+
+   TYPE must be one of `:radio' or `:toggle'.  SELECTED is evaluated
+   and specifies whether the button is selected (pressed) or not.
+
+   - `:image IMAGES'
+
+   IMAGES is either a single image specification or a vector of four
+   image specifications.  See enum tab_bar_item_images.
+
+   - `:help HELP-STRING'.
+
+   Gives a help string to display for the tab bar item.  */
+
+static int
+parse_tab_bar_item (key, item)
+     Lisp_Object key, item;
+{
+  /* Access slot with index IDX of vector tab_bar_item_properties.  */
+#define PROP(IDX) XVECTOR (tab_bar_item_properties)->contents[IDX]
+
+  Lisp_Object filter = Qnil;
+  Lisp_Object caption;
+  int i;
+
+  /* Defininition looks like `(menu-item CAPTION BINDING PROPS...)'.
+     Rule out items that aren't lists, don't start with
+     `menu-item' or whose rest following `tab-bar-item' is not a
+     list.  */
+  if (!CONSP (item)
+      || !EQ (XCAR (item), Qmenu_item)
+      || (item = XCDR (item),
+	  !CONSP (item)))
+    return 0;
+
+  /* Create tab_bar_item_properties vector if necessary.  Reset it to
+     defaults.  */
+  if (VECTORP (tab_bar_item_properties))
+    {
+      for (i = 0; i < TAB_BAR_ITEM_NSLOTS; ++i)
+	PROP (i) = Qnil;
+    }
+  else
+    tab_bar_item_properties
+      = Fmake_vector (make_number (TAB_BAR_ITEM_NSLOTS), Qnil);
+
+  /* Set defaults.  */
+  PROP (TAB_BAR_ITEM_KEY) = key;
+  PROP (TAB_BAR_ITEM_ENABLED_P) = Qt;
+
+  /* Get the caption of the item.  If the caption is not a string,
+     evaluate it to get a string.  If we don't get a string, skip this
+     item.  */
+  caption = XCAR (item);
+  if (!STRINGP (caption))
+    {
+      caption = menu_item_eval_property (caption);
+      if (!STRINGP (caption))
+	return 0;
+    }
+  PROP (TAB_BAR_ITEM_CAPTION) = caption;
+
+  /* Give up if rest following the caption is not a list.  */
+  item = XCDR (item);
+  if (!CONSP (item))
+    return 0;
+
+  /* Store the binding.  */
+  PROP (TAB_BAR_ITEM_BINDING) = XCAR (item);
+  item = XCDR (item);
+
+  /* Ignore cached key binding, if any.  */
+  if (CONSP (item) && CONSP (XCAR (item)))
+    item = XCDR (item);
+
+  /* Process the rest of the properties.  */
+  for (; CONSP (item) && CONSP (XCDR (item)); item = XCDR (XCDR (item)))
+    {
+      Lisp_Object key, value;
+
+      key = XCAR (item);
+      value = XCAR (XCDR (item));
+
+      if (EQ (key, QCenable))
+	{
+	  /* `:enable FORM'.  */
+	  if (!NILP (Venable_disabled_menus_and_buttons))
+	    PROP (TAB_BAR_ITEM_ENABLED_P) = Qt;
+	  else
+	    PROP (TAB_BAR_ITEM_ENABLED_P) = value;
+	}
+      else if (EQ (key, QCvisible))
+	{
+	  /* `:visible FORM'.  If got a visible property and that
+	     evaluates to nil then ignore this item.  */
+	  if (NILP (menu_item_eval_property (value)))
+	    return 0;
+	}
+      else if (EQ (key, QChelp))
+	/* `:help HELP-STRING'.  */
+	PROP (TAB_BAR_ITEM_HELP) = value;
+      else if (EQ (key, QCfilter))
+	/* ':filter FORM'.  */
+	filter = value;
+      else if (EQ (key, QCbutton) && CONSP (value))
+	{
+	  /* `:button (TYPE . SELECTED)'.  */
+	  Lisp_Object type, selected;
+
+	  type = XCAR (value);
+	  selected = XCDR (value);
+	  if (EQ (type, QCtoggle) || EQ (type, QCradio))
+	    {
+	      PROP (TAB_BAR_ITEM_SELECTED_P) = selected;
+	      PROP (TAB_BAR_ITEM_TYPE) = type;
+	    }
+	}
+      else if (EQ (key, QCimage)
+	       && (CONSP (value)
+		   || (VECTORP (value) && XVECTOR (value)->size == 4)))
+	/* Value is either a single image specification or a vector
+	   of 4 such specifications for the different button states.  */
+	PROP (TAB_BAR_ITEM_IMAGES) = value;
+      else if (EQ (key, Qrtl))
+        /* ':rtl STRING' */
+	PROP (TAB_BAR_ITEM_RTL_IMAGE) = value;
+    }
+
+  /* If got a filter apply it on binding.  */
+  if (!NILP (filter))
+    PROP (TAB_BAR_ITEM_BINDING)
+      = menu_item_eval_property (list2 (filter,
+					list2 (Qquote,
+					       PROP (TAB_BAR_ITEM_BINDING))));
+
+  /* See if the binding is a keymap.  Give up if it is.  */
+  if (CONSP (get_keymap (PROP (TAB_BAR_ITEM_BINDING), 0, 1)))
+    return 0;
+
+  /* Enable or disable selection of item.  */
+  if (!EQ (PROP (TAB_BAR_ITEM_ENABLED_P), Qt))
+    PROP (TAB_BAR_ITEM_ENABLED_P)
+      = menu_item_eval_property (PROP (TAB_BAR_ITEM_ENABLED_P));
+
+  /* Handle radio buttons or toggle boxes.  */
+  if (!NILP (PROP (TAB_BAR_ITEM_SELECTED_P)))
+    PROP (TAB_BAR_ITEM_SELECTED_P)
+      = menu_item_eval_property (PROP (TAB_BAR_ITEM_SELECTED_P));
+
+  return 1;
+
+#undef PROP
+}
+
+
+/* Initialize tab_bar_items_vector.  REUSE, if non-nil, is a vector
+   that can be reused.  */
+
+static void
+init_tab_bar_items (reuse)
+     Lisp_Object reuse;
+{
+  if (VECTORP (reuse))
+    tab_bar_items_vector = reuse;
+  else
+    tab_bar_items_vector = Fmake_vector (make_number (64), Qnil);
+  ntab_bar_items = 0;
+}
+
+
+/* Append parsed tab bar item properties from
+   tab_bar_item_properties */
+
+static void
+append_tab_bar_item ()
+{
+  Lisp_Object *to, *from;
+
+  /* Enlarge tab_bar_items_vector if necessary.  */
+  if (ntab_bar_items + TAB_BAR_ITEM_NSLOTS
+      >= XVECTOR (tab_bar_items_vector)->size)
+    tab_bar_items_vector
+      = larger_vector (tab_bar_items_vector,
+		       2 * XVECTOR (tab_bar_items_vector)->size, Qnil);
+
+  /* Append entries from tab_bar_item_properties to the end of
+     tab_bar_items_vector.  */
+  to = XVECTOR (tab_bar_items_vector)->contents + ntab_bar_items;
+  from = XVECTOR (tab_bar_item_properties)->contents;
+  bcopy (from, to, TAB_BAR_ITEM_NSLOTS * sizeof *to);
+  ntab_bar_items += TAB_BAR_ITEM_NSLOTS;
+}
+
+
+
+
+
 /* Read a character using menus based on maps in the array MAPS.
    NMAPS is the length of MAPS.  Return nil if there are no menus in the maps.
    Return t if we displayed a menu but the user rejected it.
@@ -8483,7 +8878,8 @@ read_char_x_menu_prompt (nmaps, maps, prev_event, used_mouse_menu)
      use a real menu for mouse selection.  */
   if (EVENT_HAS_PARAMETERS (prev_event)
       && !EQ (XCAR (prev_event), Qmenu_bar)
-      && !EQ (XCAR (prev_event), Qtool_bar))
+      && !EQ (XCAR (prev_event), Qtool_bar)
+      && !EQ (XCAR (prev_event), Qtab_bar))
     {
       /* Display the menu and get the selection.  */
       Lisp_Object *realmaps
@@ -9691,7 +10087,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
 	      posn = POSN_POSN (EVENT_START (key));
 	      /* Handle menu-bar events:
 		 insert the dummy prefix event `menu-bar'.  */
-	      if (EQ (posn, Qmenu_bar) || EQ (posn, Qtool_bar))
+	      if (EQ (posn, Qmenu_bar) || EQ (posn, Qtool_bar) || EQ (posn, Qtab_bar))
 		{
 		  if (t + 1 >= bufsize)
 		    error ("Key sequence too long");
@@ -11622,6 +12018,12 @@ syms_of_keyboard ()
   staticpro (&tool_bar_items_vector);
   tool_bar_items_vector = Qnil;
 
+  /* Tab-bars.  */
+  staticpro (&tab_bar_item_properties);
+  tab_bar_item_properties = Qnil;
+  staticpro (&tab_bar_items_vector);
+  tab_bar_items_vector = Qnil;
+
   staticpro (&real_this_command);
   real_this_command = Qnil;
 
@@ -12355,10 +12757,10 @@ and the Lisp function within which the error was signaled.  */);
 
   DEFVAR_LISP ("enable-disabled-menus-and-buttons",
 	       &Venable_disabled_menus_and_buttons,
-	       doc: /* If non-nil, don't ignore events produced by disabled menu items and tool-bar.
+	       doc: /* If non-nil, don't ignore events produced by disabled menu items, tool-bar and tab-bar.
 
 Help functions bind this to allow help on disabled menu items
-and tool-bar buttons.  */);
+and tool-bar and tab-bar buttons.  */);
   Venable_disabled_menus_and_buttons = Qnil;
 
   /* Create the initial keyboard. */

@@ -2734,7 +2734,7 @@ term_mouse_highlight (struct frame *f, int x, int y)
     return;
 
   /* Which window is that in?  */
-  window = window_from_coordinates (f, x, y, &part, &x, &y, 0);
+  window = window_from_coordinates (f, x, y, &part, &x, &y, 0, 0);
 
   /* Not on a window -> return.  */
   if (!WINDOWP (window))

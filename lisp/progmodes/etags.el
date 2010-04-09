@@ -995,6 +995,31 @@ See documentation of variable `tags-file-name'."
 ;;;###autoload (define-key ctl-x-5-map "." 'find-tag-other-frame)
 
 ;;;###autoload
+(defun find-tag-other-tab (tagname &optional next-p)
+  "Find tag (in current tags table) whose name contains TAGNAME.
+Select the buffer containing the tag's definition in another tab, and
+move point there.  The default for TAGNAME is the expression in the buffer
+around or before point.
+
+If second arg NEXT-P is t (interactively, with prefix arg), search for
+another tag that matches the last tagname or regexp used.  When there are
+multiple matches for a tag, more exact matches are found first.  If NEXT-P
+is negative (interactively, with prefix arg that is a negative number or
+just \\[negative-argument]), pop back to the previous tag gone to.
+
+If third arg REGEXP-P is non-nil, treat TAGNAME as a regexp.
+
+A marker representing the point when this command is invoked is pushed
+onto a ring and may be popped back to with \\[pop-tag-mark].
+Contrast this with the ring of marks gone to by the command.
+
+See documentation of variable `tags-file-name'."
+  (interactive (find-tag-interactive "Find tag other tab: "))
+  (let ((pop-up-tabs t))
+    (find-tag-other-window tagname next-p)))
+;;;###autoload (define-key ctl-x-7-map "." 'find-tag-other-tab)
+
+;;;###autoload
 (defun find-tag-regexp (regexp &optional next-p other-window)
   "Find tag (in current tags table) whose name matches REGEXP.
 Select the buffer containing the tag's definition and move point there.

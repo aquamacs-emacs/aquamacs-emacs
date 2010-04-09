@@ -118,7 +118,7 @@ Lisp_Object Qparent_id;
 Lisp_Object Qtitle, Qname;
 Lisp_Object Qexplicit_name;
 Lisp_Object Qunsplittable;
-Lisp_Object Qmenu_bar_lines, Qtool_bar_lines;
+Lisp_Object Qmenu_bar_lines, Qtool_bar_lines, Qtab_bar_lines;
 Lisp_Object Qleft_fringe, Qright_fringe;
 Lisp_Object Qbuffer_predicate, Qbuffer_list, Qburied_buffer_list;
 Lisp_Object Qtty_color_mode;
@@ -331,6 +331,10 @@ make_frame (mini_p)
   f->tool_bar_items = Qnil;
   f->desired_tool_bar_string = f->current_tool_bar_string = Qnil;
   f->n_tool_bar_items = 0;
+  f->tab_bar_window = Qnil;
+  f->tab_bar_items = Qnil;
+  f->desired_tab_bar_string = f->current_tab_bar_string = Qnil;
+  f->n_tab_bar_items = 0;
   f->left_fringe_width = f->right_fringe_width = 0;
   f->fringe_cols = 0;
   f->scroll_bar_actual_width = 0;
@@ -2659,13 +2663,13 @@ of the result depends on the window-system and toolkit in use:
 
 In the Gtk+ version of Emacs, it includes only any window (including
 the minibuffer or eacho area), mode line, and header line.  It does not
-include the tool bar or menu bar.
+include the tool bar, the tab bar or menu bar.
 
-With the Motif or Lucid toolkits, it also includes the tool bar (but
-not the menu bar).
+With the Motif or Lucid toolkits, it also includes the tool bar and
+the tab bar (but not the menu bar).
 
-In a graphical version with no toolkit, it includes both the tool bar
-and menu bar.
+In a graphical version with no toolkit, it includes the tool bar,
+the tab bar and menu bar.
 
 For a text-only terminal, it includes the menu bar.  In this case, the
 result is really in characters rather than pixels (i.e., is identical
@@ -2862,6 +2866,7 @@ static struct frame_parm_table frame_parms[] =
   {"vertical-scroll-bars",	&Qvertical_scroll_bars},
   {"visibility",		&Qvisibility},
   {"tool-bar-lines",		&Qtool_bar_lines},
+  {"tab-bar-lines",		&Qtab_bar_lines},
   {"scroll-bar-foreground",	&Qscroll_bar_foreground},
   {"scroll-bar-background",	&Qscroll_bar_background},
   {"screen-gamma",		&Qscreen_gamma},
@@ -3439,6 +3444,8 @@ x_set_font (f, arg, oldval)
 #endif
   /* Recalculate toolbar height.  */
   f->n_tool_bar_rows = 0;
+  /* Recalculate tabbar height.  */
+  f->n_tab_bar_rows = 0;
   /* Ensure we redraw it.  */
   clear_current_matrices (f);
 
@@ -4196,16 +4203,19 @@ On Nextstep, this just calls `ns-parse-geometry'.  */)
 
    Adjust height for toolbar if TOOLBAR_P is 1.
 
+   Adjust height for tabbar if TABBAR_P is 1.
+
    This function does not make the coordinates positive.  */
 
 #define DEFAULT_ROWS 35
 #define DEFAULT_COLS 80
 
 int
-x_figure_window_size (f, parms, toolbar_p)
+x_figure_window_size (f, parms, toolbar_p, tabbar_p)
      struct frame *f;
      Lisp_Object parms;
      int toolbar_p;
+     int tabbar_p;
 {
   register Lisp_Object tem0, tem1, tem2;
   long window_prompting = 0;
@@ -4280,6 +4290,34 @@ x_figure_window_size (f, parms, toolbar_p)
 	margin = 0;
 
       bar_height = DEFAULT_TOOL_BAR_IMAGE_HEIGHT + 2 * margin + 2 * relief;
+      FRAME_LINES (f) += (bar_height + FRAME_LINE_HEIGHT (f) - 1) / FRAME_LINE_HEIGHT (f);
+    }
+
+  /* Add the tab-bar height to the initial frame height so that the
+     user gets a text display area of the size he specified with -g or
+     via .Xdefaults.  Later changes of the tab-bar height don't
+     change the frame size.  This is done so that users can create
+     tall Emacs frames without having to guess how tall the tab-bar
+     will get.  */
+  if (tabbar_p && FRAME_TAB_BAR_LINES (f))
+    {
+      int margin, relief, bar_height;
+
+      relief = (tab_bar_button_relief >= 0
+		? tab_bar_button_relief
+		: DEFAULT_TAB_BAR_BUTTON_RELIEF);
+
+      if (INTEGERP (Vtab_bar_button_margin)
+	  && XINT (Vtab_bar_button_margin) > 0)
+	margin = XFASTINT (Vtab_bar_button_margin);
+      else if (CONSP (Vtab_bar_button_margin)
+	       && INTEGERP (XCDR (Vtab_bar_button_margin))
+	       && XINT (XCDR (Vtab_bar_button_margin)) > 0)
+	margin = XFASTINT (XCDR (Vtab_bar_button_margin));
+      else
+	margin = 0;
+
+      bar_height = DEFAULT_TAB_BAR_IMAGE_HEIGHT + 2 * margin + 2 * relief;
       FRAME_LINES (f) += (bar_height + FRAME_LINE_HEIGHT (f) - 1) / FRAME_LINE_HEIGHT (f);
     }
 

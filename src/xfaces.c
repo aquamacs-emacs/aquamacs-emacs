@@ -348,7 +348,7 @@ Lisp_Object Qframe_set_background_mode;
 
 /* Names of basic faces.  */
 
-Lisp_Object Qdefault, Qtool_bar, Qregion, Qfringe;
+Lisp_Object Qdefault, Qtool_bar, Qtab_bar, Qregion, Qfringe;
 Lisp_Object Qheader_line, Qscroll_bar, Qcursor, Qborder, Qmouse, Qmenu;
 Lisp_Object Qmode_line_inactive, Qvertical_border;
 extern Lisp_Object Qmode_line;
@@ -4834,6 +4834,7 @@ lookup_basic_face (f, face_id)
     case MODE_LINE_INACTIVE_FACE_ID:	name = Qmode_line_inactive;	break;
     case HEADER_LINE_FACE_ID:		name = Qheader_line;		break;
     case TOOL_BAR_FACE_ID:		name = Qtool_bar;		break;
+    case TAB_BAR_FACE_ID:		name = Qtab_bar;		break;
     case FRINGE_FACE_ID:		name = Qfringe;			break;
     case SCROLL_BAR_FACE_ID:		name = Qscroll_bar;		break;
     case BORDER_FACE_ID:		name = Qborder;			break;
@@ -5570,6 +5571,7 @@ realize_basic_faces (f)
       realize_named_face (f, Qmode_line, MODE_LINE_FACE_ID);
       realize_named_face (f, Qmode_line_inactive, MODE_LINE_INACTIVE_FACE_ID);
       realize_named_face (f, Qtool_bar, TOOL_BAR_FACE_ID);
+      realize_named_face (f, Qtab_bar, TAB_BAR_FACE_ID);
       realize_named_face (f, Qfringe, FRINGE_FACE_ID);
       realize_named_face (f, Qheader_line, HEADER_LINE_FACE_ID);
       realize_named_face (f, Qscroll_bar, SCROLL_BAR_FACE_ID);
@@ -6868,6 +6870,8 @@ syms_of_xfaces ()
   staticpro (&Qdefault);
   Qtool_bar = intern_c_string ("tool-bar");
   staticpro (&Qtool_bar);
+  Qtab_bar = intern_c_string ("tab-bar");
+  staticpro (&Qtab_bar);
   Qregion = intern_c_string ("region");
   staticpro (&Qregion);
   Qfringe = intern_c_string ("fringe");

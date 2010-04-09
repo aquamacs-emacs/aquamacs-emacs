@@ -4485,7 +4485,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
 
   f->output_data.w32->current_cursor = f->output_data.w32->nontext_cursor;
 
-  window_prompting = x_figure_window_size (f, parameters, 1);
+  window_prompting = x_figure_window_size (f, parameters, 1, 1);
 
   tem = x_get_arg (dpyinfo, parameters, Qunsplittable, 0, 0, RES_TYPE_BOOLEAN);
   f->no_split = minibuffer_only || EQ (tem, Qt);
@@ -5553,7 +5553,7 @@ x_create_tip_frame (dpyinfo, parms, text)
   f->output_data.w32->dwStyle = WS_BORDER | WS_POPUP | WS_DISABLED;
   f->output_data.w32->parent_desc = FRAME_W32_DISPLAY_INFO (f)->root_window;
 
-  window_prompting = x_figure_window_size (f, parms, 0);
+  window_prompting = x_figure_window_size (f, parms, 0, 0);
 
   /* No fringes on tip frame.  */
   f->fringe_cols = 0;

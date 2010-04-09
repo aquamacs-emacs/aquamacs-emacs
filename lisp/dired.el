@@ -699,6 +699,13 @@ If DIRNAME is already in a dired buffer, that buffer is used without refresh."
   (interactive (dired-read-dir-and-switches "in other frame "))
   (switch-to-buffer-other-frame (dired-noselect dirname switches)))
 
+;;;###autoload (define-key ctl-x-7-map "d" 'dired-other-tab)
+;;;###autoload
+(defun dired-other-tab (dirname &optional switches)
+  "\"Edit\" directory DIRNAME.  Like `dired' but makes a new tab."
+  (interactive (dired-read-dir-and-switches "in other tab "))
+  (switch-to-buffer-other-tab (dired-noselect dirname switches)))
+
 ;;;###autoload
 (defun dired-noselect (dir-or-list &optional switches)
   "Like `dired' but returns the dired buffer as value, does not select it."

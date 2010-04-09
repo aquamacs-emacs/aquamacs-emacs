@@ -603,6 +603,12 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 (defvar tool-bar-originally-present nil
   "Non-nil if tool-bars are present before user and site init files are read.")
 
+(defconst tab-bar-images-pixel-height 18
+  "Height in pixels of images in the tab-bar.")
+
+(defvar tab-bar-originally-present nil
+  "Non-nil if tab-bars are present before user and site init files are read.")
+
 (defvar handle-args-function-alist '((nil . tty-handle-args))
   "Functions for processing window-system dependent command-line arguments.
 Window system startup files should add their own function to this
@@ -687,6 +693,8 @@ opening the first frame (e.g. open a connection to an X server).")
 		  (attribute class &optional component subclass))
 (declare-function tool-bar-mode "tool-bar" (&optional arg))
 (declare-function tool-bar-setup "tool-bar")
+(declare-function tab-bar-mode "tab-bar" (&optional arg))
+(declare-function tab-bar-setup "tab-bar")
 
 (defvar server-name)
 (defvar server-process)
@@ -910,6 +918,19 @@ opening the first frame (e.g. open a connection to an X server).")
       ;; Otherwise, enable tool-bar-mode.
       (tool-bar-mode 1)))
 
+  ;; (unless (or noninteractive (not (fboundp 'tab-bar-mode)))
+  ;;   ;; Set up the tab-bar.  Do this even in tty frames, so that there
+  ;;   ;; is a tab-bar if Emacs later opens a graphical frame.
+  ;;   (if (or emacs-basic-display
+  ;; 	    (and (numberp (frame-parameter nil 'tab-bar-lines))
+  ;; 		 (<= (frame-parameter nil 'tab-bar-lines) 0)))
+  ;; 	;; On a graphical display with the tabbar disabled via X
+  ;; 	;; resources, set up the tabbar without enabling it.
+  ;; 	(tab-bar-setup)
+  ;;     ;; Otherwise, enable tab-bar-mode.
+  ;;     (tab-bar-mode 1)))
+  (tab-bar-mode 0)
+
   ;; Re-evaluate predefined variables whose initial value depends on
   ;; the runtime context.
   (mapc 'custom-reevaluate-setting
@@ -943,6 +964,18 @@ opening the first frame (e.g. open a connection to an X server).")
             (and tool-bar-lines
                  (cdr tool-bar-lines)
                  (not (eq 0 (cdr tool-bar-lines)))))))
+
+  ;; Record whether the tab-bar is present before the user and site
+  ;; init files are processed.  frame-notice-user-settings uses this
+  ;; to determine if the tab-bar has been disabled by the init files,
+  ;; and the frame needs to be resized.
+  (when (fboundp 'frame-notice-user-settings)
+    (let ((tab-bar-lines (or (assq 'tab-bar-lines initial-frame-alist)
+                              (assq 'tab-bar-lines default-frame-alist))))
+      (setq tab-bar-originally-present
+            (and tab-bar-lines
+                 (cdr tab-bar-lines)
+                 (not (eq 0 (cdr tab-bar-lines)))))))
 
   (let ((old-scalable-fonts-allowed scalable-fonts-allowed)
 	(old-font-list-limit font-list-limit)

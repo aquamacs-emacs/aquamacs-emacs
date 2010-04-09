@@ -1635,6 +1635,7 @@ enum face_id
   MODE_LINE_FACE_ID,
   MODE_LINE_INACTIVE_FACE_ID,
   TOOL_BAR_FACE_ID,
+  TAB_BAR_FACE_ID,
   FRINGE_FACE_ID,
   HEADER_LINE_FACE_ID,
   SCROLL_BAR_FACE_ID,
@@ -2819,6 +2820,80 @@ extern EMACS_INT tool_bar_button_relief;
 
 
 /***********************************************************************
+			       Tab-bars
+ ***********************************************************************/
+
+/* Enumeration defining where to find tab-bar item information in
+   tab-bar items vectors stored with frames.  Each tab-bar item
+   occupies TAB_BAR_ITEM_NSLOTS elements in such a vector.  */
+
+enum tab_bar_item_idx
+{
+  /* The key of the tab-bar item.  Used to remove items when a binding
+     for `undefined' is found.  */
+  TAB_BAR_ITEM_KEY,
+
+  /* Non-nil if item is enabled.  */
+  TAB_BAR_ITEM_ENABLED_P,
+
+  /* Non-nil if item is selected (pressed).  */
+  TAB_BAR_ITEM_SELECTED_P,
+
+  /* Caption.  */
+  TAB_BAR_ITEM_CAPTION,
+
+  /* Image(s) to display.  This is either a single image specification
+     or a vector of specifications.  */
+  TAB_BAR_ITEM_IMAGES,
+
+  /* The binding.  */
+  TAB_BAR_ITEM_BINDING,
+
+  /* Button type.  One of nil, `:radio' or `:toggle'.  */
+  TAB_BAR_ITEM_TYPE,
+
+  /* Help string.  */
+  TAB_BAR_ITEM_HELP,
+
+  /* Icon file name of right to left image when an RTL locale is used.  */
+  TAB_BAR_ITEM_RTL_IMAGE,
+
+  /* Sentinel = number of slots in tab_bar_items occupied by one
+     tab-bar item.  */
+  TAB_BAR_ITEM_NSLOTS
+};
+
+
+/* An enumeration for the different images that can be specified
+   for a tab-bar item.  */
+
+enum tab_bar_item_image
+{
+  TAB_BAR_IMAGE_ENABLED_SELECTED,
+  TAB_BAR_IMAGE_ENABLED_DESELECTED,
+  TAB_BAR_IMAGE_DISABLED_SELECTED,
+  TAB_BAR_IMAGE_DISABLED_DESELECTED
+};
+
+/* Margin around tab-bar buttons in pixels.  */
+
+extern Lisp_Object Vtab_bar_button_margin;
+
+/* Thickness of relief to draw around tab-bar buttons.  */
+
+extern EMACS_INT tab_bar_button_relief;
+
+/* Default values of the above variables.  */
+
+#define DEFAULT_TAB_BAR_BUTTON_MARGIN 0
+#define DEFAULT_TAB_BAR_BUTTON_RELIEF 1
+
+/* The height in pixels of the default tab-bar images.  */
+
+#define DEFAULT_TAB_BAR_IMAGE_HEIGHT 18
+
+
+/***********************************************************************
 			 Terminal Capabilities
  ***********************************************************************/
 
@@ -2896,6 +2971,7 @@ int in_display_vector_p P_ ((struct it *));
 int frame_mode_line_height P_ ((struct frame *));
 void highlight_trailing_whitespace P_ ((struct frame *, struct glyph_row *));
 extern Lisp_Object Qtool_bar;
+extern Lisp_Object Qtab_bar;
 extern Lisp_Object Vshow_trailing_whitespace;
 extern int mode_line_in_non_selected_windows;
 extern int redisplaying_p;
@@ -2907,6 +2983,7 @@ extern Lisp_Object help_echo_object, previous_help_echo_string;
 extern int help_echo_pos;
 extern struct frame *last_mouse_frame;
 extern int last_tool_bar_item;
+extern int last_tab_bar_item;
 extern Lisp_Object Vmouse_autoselect_window;
 extern int unibyte_display_via_language_environment;
 extern EMACS_INT underline_minimum_offset;
@@ -2962,6 +3039,8 @@ extern void x_clear_window_mouse_face P_ ((struct window *));
 extern void cancel_mouse_face P_ ((struct frame *));
 
 extern void handle_tool_bar_click P_ ((struct frame *,
+				       int, int, int, unsigned int));
+extern void handle_tab_bar_click P_ ((struct frame *,
 				       int, int, int, unsigned int));
 
 /* msdos.c defines its own versions of these functions. */

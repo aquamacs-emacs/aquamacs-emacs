@@ -981,6 +981,12 @@ mail status in mode line"))
 	      :visible (display-graphic-p)
 	      :button (:toggle . (> (frame-parameter nil 'tool-bar-lines) 0))))
 
+(define-key menu-bar-showhide-menu [showhide-tab-bar]
+  `(menu-item ,(purecopy "Tab-bar") toggle-tab-bar-mode-from-frame
+	      :help ,(purecopy "Turn tab-bar on/off")
+	      :visible (display-graphic-p)
+	      :button (:toggle . (> (frame-parameter nil 'tab-bar-lines) 0))))
+
 (define-key menu-bar-options-menu [showhide]
   `(menu-item ,(purecopy "Show/Hide") ,menu-bar-showhide-menu))
 

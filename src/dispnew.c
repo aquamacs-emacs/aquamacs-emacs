@@ -1032,6 +1032,10 @@ clear_current_matrices (f)
   if (WINDOWP (f->tool_bar_window))
     clear_glyph_matrix (XWINDOW (f->tool_bar_window)->current_matrix);
 
+  /* Clear the matrix of the tab-bar window, if any.  */
+  if (WINDOWP (f->tab_bar_window))
+    clear_glyph_matrix (XWINDOW (f->tab_bar_window)->current_matrix);
+
   /* Clear current window matrices.  */
   xassert (WINDOWP (FRAME_ROOT_WINDOW (f)));
   clear_window_matrices (XWINDOW (FRAME_ROOT_WINDOW (f)), 0);
@@ -1052,6 +1056,9 @@ clear_desired_matrices (f)
 
   if (WINDOWP (f->tool_bar_window))
     clear_glyph_matrix (XWINDOW (f->tool_bar_window)->desired_matrix);
+
+  if (WINDOWP (f->tab_bar_window))
+    clear_glyph_matrix (XWINDOW (f->tab_bar_window)->desired_matrix);
 
   /* Do it for window matrices.  */
   xassert (WINDOWP (FRAME_ROOT_WINDOW (f)));
@@ -2451,6 +2458,24 @@ adjust_frame_glyphs_for_window_redisplay (f)
   XSETFASTINT (w->total_lines, FRAME_TOOL_BAR_LINES (f));
   XSETFASTINT (w->total_cols, FRAME_TOTAL_COLS (f));
   allocate_matrices_for_window_redisplay (w);
+
+  /* Allocate/ reallocate matrices of the tab bar window.  If we
+     don't have a tab bar window yet, make one.  */
+  if (NILP (f->tab_bar_window))
+    {
+      f->tab_bar_window = make_window ();
+      w = XWINDOW (f->tab_bar_window);
+      XSETFRAME (w->frame, f);
+      w->pseudo_window_p = 1;
+    }
+  else
+    w = XWINDOW (f->tab_bar_window);
+
+  XSETFASTINT (w->top_line, FRAME_MENU_BAR_LINES (f) + FRAME_TOOL_BAR_LINES (f));
+  XSETFASTINT (w->left_col, 0);
+  XSETFASTINT (w->total_lines, FRAME_TAB_BAR_LINES (f));
+  XSETFASTINT (w->total_cols, FRAME_TOTAL_COLS (f));
+  allocate_matrices_for_window_redisplay (w);
 #endif
 }
 
@@ -2537,6 +2562,16 @@ free_glyphs (f)
 	  free_glyph_matrix (w->current_matrix);
 	  w->desired_matrix = w->current_matrix = NULL;
 	  f->tool_bar_window = Qnil;
+	}
+
+      /* Free the tab bar window and its glyph matrices.  */
+      if (!NILP (f->tab_bar_window))
+	{
+	  struct window *w = XWINDOW (f->tab_bar_window);
+	  free_glyph_matrix (w->desired_matrix);
+	  free_glyph_matrix (w->current_matrix);
+	  w->desired_matrix = w->current_matrix = NULL;
+	  f->tab_bar_window = Qnil;
 	}
 
       /* Release frame glyph matrices.  Reset fields to zero in
@@ -3532,6 +3567,28 @@ update_frame (f, force_p, inhibit_hairy_id_p)
 	      tem = f->current_tool_bar_string;
 	      f->current_tool_bar_string = f->desired_tool_bar_string;
 	      f->desired_tool_bar_string = tem;
+	    }
+	}
+
+
+      /* Update the tab-bar window, if present.  */
+      if (WINDOWP (f->tab_bar_window))
+	{
+	  struct window *w = XWINDOW (f->tab_bar_window);
+
+	  /* Update tab-bar window.  */
+	  if (w->must_be_updated_p)
+	    {
+	      Lisp_Object tem;
+
+	      update_window (w, 1);
+	      w->must_be_updated_p = 0;
+
+	      /* Swap tab-bar strings.  We swap because we want to
+		 reuse strings.  */
+	      tem = f->current_tab_bar_string;
+	      f->current_tab_bar_string = f->desired_tab_bar_string;
+	      f->desired_tab_bar_string = tem;
 	    }
 	}
 
@@ -6002,6 +6059,9 @@ change_frame_size_1 (f, newheight, newwidth, pretend, delay, safe)
 
       if (WINDOWP (f->tool_bar_window))
 	XSETFASTINT (XWINDOW (f->tool_bar_window)->total_cols, newwidth);
+
+      if (WINDOWP (f->tab_bar_window))
+	XSETFASTINT (XWINDOW (f->tab_bar_window)->total_cols, newwidth);
     }
 
   FRAME_LINES (f) = newheight;
