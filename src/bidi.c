@@ -1242,7 +1242,7 @@ bidi_resolve_explicit (struct bidi_it *bidi_it)
   if (prev_level < new_level
       && bidi_it->type == WEAK_BN
       && bidi_it->ignore_bn_limit == 0 /* only if not already known */
-      && bidi_it->ch != BIDI_EOB       /* not already at EOB */
+      && bidi_it->bytepos < ZV_BYTE    /* not already at EOB */
       && bidi_explicit_dir_char (FETCH_CHAR (bidi_it->bytepos
 					     + bidi_it->ch_len)))
     {
@@ -1347,12 +1347,14 @@ bidi_resolve_weak (struct bidi_it *bidi_it)
       if (type == WEAK_NSM)	/* W1 */
 	{
 	  /* Note that we don't need to consider the case where the
-	     prev character has its type overridden by an RLO or LRO:
-	     such characters are outside the current level run, and
-	     thus not relevant to this NSM.  Thus, NSM gets the
-	     orig_type of the previous character.  */
+	     prev character has its type overridden by an RLO or LRO,
+	     because then either the type of this NSM would have been
+	     also overridden, or the previous character is outside the
+	     current level run, and thus not relevant to this NSM.
+	     This is why NSM gets the type_after_w1 of the previous
+	     character.  */
 	  if (bidi_it->prev.type != UNKNOWN_BT)
-	    type = bidi_it->prev.orig_type;
+	    type = bidi_it->prev.type_after_w1;
 	  else if (bidi_it->sor == R2L)
 	    type = STRONG_R;
 	  else if (bidi_it->sor == L2R)
@@ -1648,7 +1650,7 @@ bidi_level_of_next_char (struct bidi_it *bidi_it)
   if (bidi_it->scan_dir == 1)
     {
       /* There's no sense in trying to advance if we hit end of text.  */
-      if (bidi_it->ch == BIDI_EOB)
+      if (bidi_it->bytepos >= ZV_BYTE)
 	return bidi_it->resolved_level;
 
       /* Record the info about the previous character.  */
