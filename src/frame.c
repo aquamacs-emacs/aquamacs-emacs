@@ -3324,18 +3324,6 @@ x_set_line_spacing (f, new_value, old_value)
     redraw_frame (f);
 }
 
-void
-x_set_notabs (f, new_value, old_value)
-     struct frame *f;
-     Lisp_Object new_value, old_value;
-{
-  Lisp_Object frame;
-
-  /* Only allow false => true at startup.  */
-  if (NILP (old_value) && !NILP (new_value))
-      f->no_tabs = 1;
-}
-
 /* Change the `screen-gamma' frame parameter of frame F.  OLD_VALUE is
    the previous value of that parameter, NEW_VALUE is the new value.  */
 

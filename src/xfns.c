@@ -505,6 +505,7 @@ static Lisp_Object unwind_create_tip_frame P_ ((Lisp_Object));
 
 void x_set_foreground_color P_ ((struct frame *, Lisp_Object, Lisp_Object));
 static void x_set_wait_for_wm P_ ((struct frame *, Lisp_Object, Lisp_Object));
+static void x_set_notabs P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_background_color P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_mouse_color P_ ((struct frame *, Lisp_Object, Lisp_Object));
 void x_set_cursor_color P_ ((struct frame *, Lisp_Object, Lisp_Object));
@@ -738,6 +739,22 @@ x_set_wait_for_wm (f, new_value, old_value)
      Lisp_Object new_value, old_value;
 {
   f->output_data.x->wait_for_wm = !NILP (new_value);
+}
+
+static void
+x_set_notabs (f, new_value, old_value)
+     struct frame *f;
+     Lisp_Object new_value, old_value;
+{
+  if (! EQ (new_value, old_value))
+    {
+      f->no_tabs = !NILP (new_value);
+#ifdef USE_GTK
+      BLOCK_INPUT;
+      xg_enable_tabs (f, NILP (new_value));
+      UNBLOCK_INPUT;
+#endif
+    }
 }
 
 #ifdef USE_GTK
@@ -5869,7 +5886,8 @@ Returns the key for the tab, which can be passed to `tab-delete'.  */)
   FRAME_PTR f = check_x_frame (frame);
   const char *key;
 
-  if (f->no_tabs) return Qnil;
+  if (f->no_tabs) error ("Frame is a tabless frame");
+
   if (NILP (label))
     {
       if (!NILP (Fminibufferp (Qnil))) return;
@@ -6060,7 +6078,7 @@ If FRAME is a tab-less frame, returns nil.  */)
 }
 
 DEFUN ("tab-show", Ftab_show,
-       Stab_show, 0, 2, 0,
+       Stab_show, 1, 2, 0,
        doc: /* Make tab with key the current tab on FRAME.
 FRAME nil means use the selected frame.
 If FRAME is a tab-less frame or the key doesn't refer to a tab, do nothing.  */)
@@ -6075,6 +6093,19 @@ If FRAME is a tab-less frame or the key doesn't refer to a tab, do nothing.  */)
   xg_set_current_tab (f, SDATA (key));
   UNBLOCK_INPUT;
 
+  return Qnil;
+}
+
+DEFUN ("tab-enable", Ftab_enable,
+       Stab_enable, 1, 2, 0,
+       doc: /* Enable or disable tabs on FRAME.
+FRAME nil means use the selected frame.
+If enable is non-nil, enable tabs.  If it is nil, disable tabs.  */)
+     (enable, frame)
+     Lisp_Object enable, frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  x_set_notabs (f, NILP (enable) ? Qt : Qnil, f->no_tabs ? Qt : Qnil);
   return Qnil;
 }
 
@@ -6249,6 +6280,7 @@ the tool bar buttons.  */);
   defsubr (&Stab_configuration);
   defsubr (&Stab_current);
   defsubr (&Stab_show);
+  defsubr (&Stab_enable);
 
 #endif /* USE_GTK */
 

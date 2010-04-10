@@ -1120,7 +1120,6 @@ extern void x_set_visibility P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_autoraise P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_autolower P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_unsplittable P_ ((struct frame *, Lisp_Object, Lisp_Object));
-extern void x_set_notabs P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_vertical_scroll_bars P_ ((struct frame *, Lisp_Object,
 					    Lisp_Object));
 extern void x_set_scroll_bar_width P_ ((struct frame *, Lisp_Object,
