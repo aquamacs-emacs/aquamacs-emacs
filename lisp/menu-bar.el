@@ -970,6 +970,12 @@ mail status in mode line"))
 	      :visible (and (display-graphic-p) (fboundp 'x-show-tip))
 	      :button (:toggle . tooltip-mode)))
 
+(define-key menu-bar-showhide-menu [showhide-tabs]
+  `(menu-item ,(purecopy "Tabs") tab-mode
+	      :help ,(purecopy "Turn tab on/off")
+	      :visible (and (display-graphic-p) (featurep 'tabs))
+	      :button (:toggle . tab-mode)))
+
 (define-key menu-bar-showhide-menu [menu-bar-mode]
   `(menu-item ,(purecopy "Menu-bar") toggle-menu-bar-mode-from-frame
 	      :help ,(purecopy "Turn menu-bar on/off")

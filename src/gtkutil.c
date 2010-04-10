@@ -763,7 +763,10 @@ static int xg_tab_nr;
 static xg_list_node tabs_gc_list;
 static GtkNotebook* notebook_on_hold;
 
-typedef struct tabs_gc_data_
+/* If 1, show tabs even if there is only one tab.  */
+static int xg_always_show_tabs;
+
+typedef struct
 {
   xg_list_node  ptrs;
   Lisp_Object object;
@@ -791,13 +794,14 @@ xg_check_show_tabs (FRAME_PTR f,
 {
   gboolean shown = gtk_notebook_get_show_tabs (wnote);
   int pages = gtk_notebook_get_n_pages (wnote);
-
-  if ((shown && pages == 1) || (!shown && pages > 1)) 
+  int should_show = pages > 1 || xg_always_show_tabs;
+  
+  if ((shown && !should_show) || (!shown && should_show)) 
     {
       GtkRequisition req;
       int oldheight, row_add = 0;
 
-      gtk_notebook_set_show_tabs (wnote, pages > 1);
+      gtk_notebook_set_show_tabs (wnote, should_show);
       oldheight = FRAME_TABS_HEIGHT (f);
 
       gtk_widget_size_request (f->output_data.x->notebook_widget, &req);
@@ -814,15 +818,14 @@ xg_check_show_tabs (FRAME_PTR f,
       if (oldheight > 0 && FRAME_LINE_HEIGHT (f) > 0)
         {
           row_add = oldheight/FRAME_LINE_HEIGHT (f);
-          if (row_add * FRAME_LINE_HEIGHT (f) != oldheight)
-            --row_add;
         }
       else if (FRAME_TABS_HEIGHT (f) > 0 && FRAME_LINE_HEIGHT (f) > 0)
         {
           row_add = -(FRAME_TABS_HEIGHT (f)/FRAME_LINE_HEIGHT (f));
         }
 
-      xg_frame_set_char_size (f, FRAME_COLS (f), FRAME_LINES (f) + row_add);
+      if (row_add != 0)
+        xg_frame_set_char_size (f, FRAME_COLS (f), FRAME_LINES (f) + row_add);
     }
 }
 
@@ -1334,6 +1337,18 @@ xg_tab_get_win_config (FRAME_PTR f, int nr)
   return conf ? conf->object : Qnil;
 }
 
+void
+xg_tabs_always_show (FRAME_PTR f, int show)
+{
+  if (f == 0)
+    xg_always_show_tabs = show;
+  else
+    {
+      GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+      if (wnote) xg_check_show_tabs (f, wnote);
+    }
+}
+
 static void
 xg_setup_notebook (FRAME_PTR f, GtkWidget *wvbox, GtkWidget *wnote)
 {
@@ -1355,7 +1370,7 @@ xg_setup_notebook (FRAME_PTR f, GtkWidget *wvbox, GtkWidget *wnote)
 #else
   gtk_notebook_set_group_id (GTK_NOTEBOOK (wnote), 1);
 #endif
-  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (wnote), FALSE);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (wnote), xg_always_show_tabs);
 
   style = gtk_widget_get_modifier_style (wnote);
   style->xthickness = style->ythickness = 0;
@@ -4925,6 +4940,7 @@ xg_initialize ()
   id_to_widget.widgets = 0;
   xg_tab_nr = 1;
   tabs_gc_list.prev = tabs_gc_list.next = 0;
+  xg_always_show_tabs = 0;
 
   /* Remove F10 as a menu accelerator, it does not mix well with Emacs key
      bindings.  It doesn't seem to be any way to remove properties,

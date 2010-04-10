@@ -148,6 +148,8 @@ extern void xg_set_current_tab P_ ((FRAME_PTR f, const char *key));
 extern void xg_enable_tabs P_ ((FRAME_PTR f, int enable));
 
 extern Lisp_Object xg_tab_get_win_config P_ ((FRAME_PTR f, int nr));
+extern void xg_tabs_always_show P_ ((FRAME_PTR f, int show));
+
 
 extern GtkWidget *xg_create_widget P_ ((char *type,
                                         char *name,

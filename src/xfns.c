@@ -746,15 +746,12 @@ x_set_notabs (f, new_value, old_value)
      struct frame *f;
      Lisp_Object new_value, old_value;
 {
-  if (! EQ (new_value, old_value))
-    {
-      f->no_tabs = !NILP (new_value);
+  f->no_tabs = !NILP (new_value);
 #ifdef USE_GTK
-      BLOCK_INPUT;
-      xg_enable_tabs (f, NILP (new_value));
-      UNBLOCK_INPUT;
+  BLOCK_INPUT;
+  xg_enable_tabs (f, NILP (new_value));
+  UNBLOCK_INPUT;
 #endif
-    }
 }
 
 #ifdef USE_GTK
@@ -6100,7 +6097,7 @@ DEFUN ("tab-enable", Ftab_enable,
        Stab_enable, 1, 2, 0,
        doc: /* Enable or disable tabs on FRAME.
 FRAME nil means use the selected frame.
-If enable is non-nil, enable tabs.  If it is nil, disable tabs.  */)
+If ENABLE is non-nil, enable tabs.  If it is nil, disable tabs.  */)
      (enable, frame)
      Lisp_Object enable, frame;
 {
@@ -6108,6 +6105,26 @@ If enable is non-nil, enable tabs.  If it is nil, disable tabs.  */)
   x_set_notabs (f, NILP (enable) ? Qt : Qnil, f->no_tabs ? Qt : Qnil);
   return Qnil;
 }
+
+DEFUN ("tab-show-always", Ftab_show_always,
+       Stab_show_always, 1, 1, 0,
+       doc: /* Set if tabs always should be visible on frames.
+If SHOW is non-nil, always show tabs.  If it is nil, show tabs if there are
+more than one.  */)
+     (show)
+     Lisp_Object show;
+{
+  xg_tabs_always_show (0, NILP (show));
+  Lisp_Object rest, frame;
+  FOR_EACH_FRAME (rest, frame)
+    {
+      struct frame *f = XFRAME (frame);
+      xg_tabs_always_show (f, !NILP (show));
+    }
+
+  return Qnil;
+}
+
 
 #endif
 
@@ -6281,7 +6298,7 @@ the tool bar buttons.  */);
   defsubr (&Stab_current);
   defsubr (&Stab_show);
   defsubr (&Stab_enable);
-
+  defsubr (&Stab_show_always);
 #endif /* USE_GTK */
 
   /* X window properties.  */

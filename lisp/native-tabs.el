@@ -27,7 +27,36 @@
 
 ;;; Code:
 
-;;; Customizable variables
+(defvar tab-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-x7\C-f" 'find-file-new-tab)
+    (define-key map "\C-x70" 'tab-delete)
+    (define-key map "\C-x71" 'tab-delete-other)
+    (define-key map "\C-x72" 'tab-new)
+    (define-key map "\C-x73" 'switch-to-buffer-tab)
+    (define-key map "\C-x7b" 'switch-to-buffer-other-tab)
+    (define-key map "\C-x7f" 'find-file-new-tab)
+    (define-key map "\C-x7o" 'tab-next)
+    (define-key map "\C-x7n" 'tab-next)
+    (define-key map "\C-x7p" 'tab-previous)
+    map)
+  "Keymap for `tab-mode´")
+
+;;;###autoload
+(define-minor-mode tab-mode
+  "Toggle use of tabs.
+This command applies to all frames that exist and frames to be
+created in the future.
+With numeric ARG, use tabs if and only if ARG is positive.
+
+Keyboard commands for tabs are:
+\\{tab-mode-map}."
+  :init-value t
+  :global t
+  :group 'mouse
+  :group 'frames
+  :keymap tab-mode-map
+  (modify-all-frames-parameters (list (cons 'disable-tabs (not tab-mode)))))
 
 (declare-function tab-new "xfns.c" ())
 (declare-function tab-delete "xfns.c" ())
@@ -38,6 +67,7 @@
 (declare-function tab-configuration "xfns.c" ())
 (declare-function tab-current "xfns.c" ())
 (declare-function tab-show "xfns.c" ())
+(declare-function tab-enable "xfns.c" ())
 
 (defun find-file-new-tab (filename &optional wildcards)
   "Edit file FILENAME, in a new tab.
@@ -131,7 +161,7 @@ BUFFER-OR-NAME."
 	 (frame (car n1))
 	 (x (car (cdr n1)))
 	 (y (cdr (cdr n1))))
-    (if (eq type 2) 
+    (if (eq type 2) ;; // A tab is dropped from another frame.
 	(let ((top y)
 	      (left x)
 	      (width (frame-pixel-width frame))
@@ -148,18 +178,6 @@ BUFFER-OR-NAME."
 		 (cons 'top top)
 		 (cons 'left left)))))))
 
-(if (featurep 'tabs)
-    (progn
-      (define-key special-event-map [tab-event]
-	'handle-tab-event)
-      (global-set-key "\C-x7\C-f" 'find-file-new-tab)
-      (global-set-key "\C-x70" 'tab-delete)
-      (global-set-key "\C-x71" 'tab-delete-other)
-      (global-set-key "\C-x72" 'tab-new)
-      (global-set-key "\C-x73" 'switch-to-buffer-tab)
-      (global-set-key "\C-x7b" 'switch-to-buffer-other-tab)
-      (global-set-key "\C-x7f" 'find-file-new-tab)
-      (global-set-key "\C-x7o" 'tab-next)
-      (global-set-key "\C-x7n" 'tab-next)
-      (global-set-key "\C-x7p" 'tab-previous)))
+(define-key special-event-map [tab-event] 'handle-tab-event)
+
 
