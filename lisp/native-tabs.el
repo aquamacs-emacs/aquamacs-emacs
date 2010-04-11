@@ -42,6 +42,7 @@
     map)
   "Keymap for `tab-mode´")
 
+;;;###autoload
 (define-minor-mode tab-mode
   "Toggle use of tabs.
 This command applies to all frames that exist and frames to be
