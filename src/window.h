@@ -415,11 +415,17 @@ struct window
   (WINDOWP (WINDOW_XFRAME (W)->tool_bar_window) \
    && (W) == XWINDOW (WINDOW_XFRAME (W)->tool_bar_window))
 
+/* 1 if W is a tab bar window.  */
+
+#define WINDOW_TAB_BAR_P(W) \
+  (WINDOWP (WINDOW_XFRAME (W)->tab_bar_window) \
+   && (W) == XWINDOW (WINDOW_XFRAME (W)->tab_bar_window))
+
 /* Return the frame y-position at which window W starts.
    This includes a header line, if any.  */
 
 #define WINDOW_TOP_EDGE_Y(W) \
-  (((WINDOW_MENU_BAR_P (W) || WINDOW_TOOL_BAR_P (W)) \
+  (((WINDOW_MENU_BAR_P (W) || WINDOW_TOOL_BAR_P (W) || WINDOW_TAB_BAR_P (W)) \
     ? 0 : FRAME_INTERNAL_BORDER_WIDTH (WINDOW_XFRAME (W))) \
    + WINDOW_TOP_EDGE_LINE (W) * WINDOW_FRAME_LINE_HEIGHT (W))
 
@@ -427,7 +433,7 @@ struct window
    This includes a mode line, if any.  */
 
 #define WINDOW_BOTTOM_EDGE_Y(W) \
-  (((WINDOW_MENU_BAR_P (W) || WINDOW_TOOL_BAR_P (W)) \
+  (((WINDOW_MENU_BAR_P (W) || WINDOW_TOOL_BAR_P (W) || WINDOW_TAB_BAR_P (W)) \
     ? 0 : FRAME_INTERNAL_BORDER_WIDTH (WINDOW_XFRAME (W))) \
    + WINDOW_BOTTOM_EDGE_LINE (W) * WINDOW_FRAME_LINE_HEIGHT (W))
 

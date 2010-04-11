@@ -1540,7 +1540,8 @@ x_set_tab_bar_lines (f, value, oldval)
     {
       int height = FRAME_INTERNAL_BORDER_WIDTH (f);
       int width = FRAME_PIXEL_WIDTH (f);
-      int y = nlines * FRAME_LINE_HEIGHT (f);
+      int y = (FRAME_MENU_BAR_LINES (f) + FRAME_TOOL_BAR_LINES (f)
+	       + nlines) * FRAME_LINE_HEIGHT (f);
 
       /* height can be zero here. */
       if (height > 0 && width > 0)

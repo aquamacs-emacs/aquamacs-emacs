@@ -751,11 +751,6 @@ x_after_update_window_line (desired_row)
     {
       int y = WINDOW_TO_FRAME_PIXEL_Y (w, max (0, desired_row->y));
 
-      /* Internal border is drawn below the tab bar.  */
-      if (WINDOWP (f->tab_bar_window)
-	  && w == XWINDOW (f->tab_bar_window))
-	y -= width;
-
       BLOCK_INPUT;
       x_clear_area (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
 		    0, y, width, height, False);
