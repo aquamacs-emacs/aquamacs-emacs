@@ -1229,9 +1229,8 @@ py-beep-if-tab-change\t\tring the bell if `tab-width' is changed"
         (imenu-add-to-menubar (format "%s-%s" "IM" mode-name)))
     )
   ;; Run the mode hook.  Note that py-mode-hook is deprecated.
-  (if python-mode-hook
-      (run-hooks 'python-mode-hook)
-    (run-hooks 'py-mode-hook))
+  
+  (run-mode-hooks (if python-mode-hook 'python-mode-hook 'py-mode-hook))
   ;; Now do the automagical guessing
   (if py-smart-indentation
     (let ((offset py-indent-offset))
