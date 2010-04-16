@@ -144,12 +144,12 @@
  
   (tool-bar-add-item-from-menu 'revert-buffer '("update" . "Revert") nil)
   
-  (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-file
+  (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-buffer
 			       :visible '(and buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
 							   'mode-class)))))
-  (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'save-file-as
+  (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'write-file
 		     :visible '(and (not buffer-file-name)
 				    (not (eq 'special
 					     (get major-mode
