@@ -3676,6 +3676,7 @@ FRAME_PTR f;
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
 
+#if 0 /* does harm and doesnt seem to be needed. */
 	  /* Handle scroll bars */
 	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
 	  if (fs)
@@ -3702,7 +3703,7 @@ FRAME_PTR f;
 						       ns_fullscreen_vertical_scrollbar_state),
 	      					Qnil));
 	    }
-	    
+#endif	    
 	  /* Fixme: after going back to normal mode, scroll bars flicker heavily
 	     Miniaturizing/de-m. removes flicker.  Why? */
 
