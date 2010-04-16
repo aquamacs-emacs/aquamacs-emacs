@@ -2023,7 +2023,7 @@ DEFUN ("visible-frame-list", Fvisible_frame_list, Svisible_frame_list,
 
 DEFUN ("raise-frame", Fraise_frame, Sraise_frame, 0, 1, "",
        doc: /* Bring FRAME to the front, so it occludes any frames it overlaps.
-If FRAME is invisible or iconified, make it visible.
+If FRAME is iconified, make it visible.
 If you don't specify a frame, the selected frame is used.
 If Emacs is displaying on an ordinary terminal or some other device which
 doesn't support multiple overlapping frames, this function selects FRAME.  */)
