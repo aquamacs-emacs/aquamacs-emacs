@@ -596,12 +596,22 @@ name_is_separator (name)
     return;
 
   NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
-  /* HACK: Cocoa/Carbon will request update on every keystroke
-     via IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
-     since key equivalents are handled through emacs.
-     On Leopard, even keystroke events generate SystemDefined events, but
-     their subtype is 8. */
-  if ([event type] != NSSystemDefined || [event subtype] == 8
+  /* HACK: Cocoa/Carbon will request update on every keystroke via
+     IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
+     since key equivalents are handled through emacs.  
+     
+     On Leopard, even keystroke events generate SystemDefined events,
+     but their subtype is 8.  At least in Snow Leopard, it seems that
+     only the first key stroke in a series generates this event
+     (subtype might not be distinguishable).
+     
+     Third-party applications that enhance mouse / trackpad
+     interaction, or also VNC/Remote Desktop will send events
+     that are NSApplicationDefined.  It would be wrong to discard such
+     events, as menus won't show up if we do so.
+  */
+  if (([event type] != NSSystemDefined && [event type] != NSApplicationDefined)
+      || [event subtype] == 8    /* subtype can't be sent to all types of events */
       /* Also, don't try this if from an event picked up asynchronously,
          as lots of lisp evaluation happens in ns_update_menubar. */
       || handling_signal != 0)
@@ -631,6 +641,7 @@ name_is_separator (name)
       return NO;
       // return [[NSApp mainMenu] performKeyEquivalent:event];
     }
+
    return YES;
  }
 
