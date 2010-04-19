@@ -826,6 +826,7 @@ unless the current buffer is a scratch buffer."
 (defun ns-find-file ()
   "Do a `find-file' with the `ns-input-file' as argument."
   (interactive)
+  (while (car ns-input-file) 
   (let ((f) (file) (bufwin1) (bufwin2))
     (setq f (file-truename (car ns-input-file)))
     (setq ns-input-file (cdr ns-input-file))
@@ -848,7 +849,7 @@ unless the current buffer is a scratch buffer."
       (let ((pop-up-frames t)) (pop-to-buffer file nil)))
      (t
       (ns-hide-emacs 'activate)
-      (find-file f)))))
+      (find-file f))))))
 
 
 
