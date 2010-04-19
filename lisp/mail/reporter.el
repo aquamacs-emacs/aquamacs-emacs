@@ -319,73 +319,74 @@ This function does not send a message; it uses the given information
 to initialize a message, which the user can then edit and finally send
 \(or decline to send).  The variable `mail-user-agent' controls which
 mail-sending package is used for editing and sending the message."
-  (let ((reporter-eval-buffer (current-buffer))
-	final-resting-place
-	after-sep-pos
-	(reporter-status-message "Formatting bug report buffer...")
-	(reporter-status-count 0)
-	(problem (and reporter-prompt-for-summary-p
-		      (read-string (if (stringp reporter-prompt-for-summary-p)
-				       reporter-prompt-for-summary-p
-				     "(Very) brief summary of problem: "))))
-	(agent (reporter-compose-outgoing))
-	(mailbuf (current-buffer))
-	hookvar)
-    ;; do the work
-    (require 'sendmail)
-    ;; If mailbuf did not get made visible before, make it visible now.
     (let (same-window-buffer-names same-window-regexps)
-      (pop-to-buffer mailbuf)
-      ;; Just in case the original buffer is not visible now, bring it
-      ;; back somewhere
-      (and pop-up-windows (display-buffer reporter-eval-buffer)))
-    (goto-char (point-min))
-    (mail-position-on-field "to")
-    (insert address)
-    ;; insert problem summary if available
-    (if (and reporter-prompt-for-summary-p problem pkgname)
-	(progn
-	  (mail-position-on-field "subject")
-	  (insert pkgname "; " problem)))
-    ;; move point to the body of the message
-    (mail-text)
-    (forward-line 1)
-    (setq after-sep-pos (point))
-    (and salutation (insert "\n" salutation "\n\n"))
-    (unwind-protect
-	(progn
-	  (setq final-resting-place (point-marker))
-	  (insert "\n\n")
-	  (reporter-dump-state pkgname varlist pre-hooks post-hooks)
-	  (goto-char final-resting-place))
-      (set-marker final-resting-place nil))
+      ;; `reporter-compose-outgoing' may pop up the window.
+      (let ((reporter-eval-buffer (current-buffer))
+	    final-resting-place
+	    after-sep-pos
+	    (reporter-status-message "Formatting bug report buffer...")
+	    (reporter-status-count 0)
+	    (problem (and reporter-prompt-for-summary-p
+			  (read-string (if (stringp reporter-prompt-for-summary-p)
+					   reporter-prompt-for-summary-p
+					 "(Very) brief summary of problem: "))))
+	    (agent (reporter-compose-outgoing))
+	    (mailbuf (current-buffer))
+	    hookvar)
+	;; do the work
+	(require 'sendmail)
+	;; If mailbuf did not get made visible before, make it visible now.
+	(pop-to-buffer mailbuf)
+	;; Just in case the original buffer is not visible now, bring it
+	;; back somewhere
+	(and pop-up-windows (display-buffer reporter-eval-buffer))
+	(goto-char (point-min))
+	(mail-position-on-field "to")
+	(insert address)
+	;; insert problem summary if available
+	(if (and reporter-prompt-for-summary-p problem pkgname)
+	    (progn
+	      (mail-position-on-field "subject")
+	      (insert pkgname "; " problem)))
+	;; move point to the body of the message
+	(mail-text)
+	(forward-line 1)
+	(setq after-sep-pos (point))
+	(and salutation (insert "\n" salutation "\n\n"))
+	(unwind-protect
+	    (progn
+	      (setq final-resting-place (point-marker))
+	      (insert "\n\n")
+	      (reporter-dump-state pkgname varlist pre-hooks post-hooks)
+	      (goto-char final-resting-place))
+	  (set-marker final-resting-place nil))
 
-    ;; save initial text and set up the `no-empty-submission' hook.
-    ;; This only works for mailers that support a pre-send hook, and
-    ;; for which the paradigm has a non-nil value for the `hookvar'
-    ;; key in its agent (i.e. sendmail.el's mail-send-hook).
-    (save-excursion
-      (goto-char (point-max))
-      (skip-chars-backward " \t\n")
-      (setq reporter-initial-text (buffer-substring after-sep-pos (point))))
-    (if (setq hookvar (get agent 'hookvar))
-	(add-hook hookvar 'reporter-bug-hook nil t))
+	;; save initial text and set up the `no-empty-submission' hook.
+	;; This only works for mailers that support a pre-send hook, and
+	;; for which the paradigm has a non-nil value for the `hookvar'
+	;; key in its agent (i.e. sendmail.el's mail-send-hook).
+	(save-excursion
+	  (goto-char (point-max))
+	  (skip-chars-backward " \t\n")
+	  (setq reporter-initial-text (buffer-substring after-sep-pos (point))))
+	(if (setq hookvar (get agent 'hookvar))
+	    (add-hook hookvar 'reporter-bug-hook nil t))
 
-    ;; compose the minibuf message and display this.
-    (let* ((sendkey-whereis (where-is-internal
-			     (get agent 'sendfunc) nil t))
-	   (abortkey-whereis (where-is-internal
-			      (get agent 'abortfunc) nil t))
-	   (sendkey (if sendkey-whereis
-			(key-description sendkey-whereis)
-		      "C-c C-c"))   ; TBD: BOGUS hardcode
-	   (abortkey (if abortkey-whereis
-			 (key-description abortkey-whereis)
-		       "M-x kill-buffer"))  ; TBD: BOGUS hardcode
-	   )
-      (message "Please enter your report.  Type %s to send, %s to abort."
-	       sendkey abortkey))
-    ))
+	;; compose the minibuf message and display this.
+	(let* ((sendkey-whereis (where-is-internal
+				 (get agent 'sendfunc) nil t))
+	       (abortkey-whereis (where-is-internal
+				  (get agent 'abortfunc) nil t))
+	       (sendkey (if sendkey-whereis
+			    (key-description sendkey-whereis)
+			  "C-c C-c"))   ; TBD: BOGUS hardcode
+	       (abortkey (if abortkey-whereis
+			     (key-description abortkey-whereis)
+			   "M-x kill-buffer"))  ; TBD: BOGUS hardcode
+	       )
+	  (message "Please enter your report.  Type %s to send, %s to abort."
+		   sendkey abortkey))
+	)))
 
 (defun reporter-bug-hook ()
   "Prohibit sending mail if empty bug report."
