@@ -5930,20 +5930,23 @@ get_next_display_element (it)
     {
       struct face *face = FACE_FROM_ID (it->f, it->face_id);
 
-      if (it->what == IT_COMPOSITION && it->cmp_it.ch >= 0)
+      if (face) /* is face id valid? */
 	{
-	  /* Automatic composition with glyph-string.   */
-	  Lisp_Object gstring = composition_gstring_from_id (it->cmp_it.id);
+	  if (it->what == IT_COMPOSITION && it->cmp_it.ch >= 0)
+	    {
+	      /* Automatic composition with glyph-string.   */
+	      Lisp_Object gstring = composition_gstring_from_id (it->cmp_it.id);
 
-	  it->face_id = face_for_font (it->f, LGSTRING_FONT (gstring), face);
-	}
-      else
-	{
-	  int pos = (it->s ? -1
-		     : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
-		     : IT_CHARPOS (*it));
+	      it->face_id = face_for_font (it->f, LGSTRING_FONT (gstring), face);
+	    }
+	  else
+	    {
+	      int pos = (it->s ? -1
+			 : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
+			 : IT_CHARPOS (*it));
 
-	  it->face_id = FACE_FOR_CHAR (it->f, face, it->c, pos, it->string);
+	      it->face_id = FACE_FOR_CHAR (it->f, face, it->c, pos, it->string);
+	    }
 	}
     }
 #endif
