@@ -22,7 +22,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2009, 2010: David Reitter
 
 
 
@@ -143,12 +143,14 @@
 				   (not one-buffer-one-frame-mode)))
  
   (tool-bar-add-item-from-menu 'revert-buffer '("update" . "Revert") nil)
-  
+
   (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-buffer
-			       :visible '(and buffer-file-name
-					     (not (eq 'special
-						      (get major-mode
-							   'mode-class)))))
+		     :enable '(and (buffer-modified-p)
+				   (buffer-file-name))
+		     :visible '(and buffer-file-name
+				    (not (eq 'special
+					     (get major-mode
+						  'mode-class)))))
   (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'write-file
 		     :visible '(and (not buffer-file-name)
 				    (not (eq 'special
