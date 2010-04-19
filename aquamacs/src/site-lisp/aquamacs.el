@@ -757,8 +757,14 @@ yes-or-no prompts - y or n will do."
 		     (cons '(default . echo-area)
 			   (default-value 'face-remapping-alist)))))
 	  '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
+  (defun aquamacs-set-minibuffer-face ()
+    (set (make-local-variable 'face-remapping-alist)
+	 (cons '(default . minibuffer)
+	       face-remapping-alist)))
+
   (add-hook 'after-make-frame-functions 'aquamacs-setup-echo-areas)
   (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
+  (add-hook 'minibuffer-setup-hook 'aquamacs-set-minibuffer-face)
   (aquamacs-setup-echo-areas)
 
   ;; tabbar needs to be defined before osxkeys
