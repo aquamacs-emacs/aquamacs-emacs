@@ -86,12 +86,16 @@ Return a newly created frame displaying the current buffer."
   (unless tab-bar-mode
     (tab-bar-mode 1))
   (let* ((tab-list (tab-list frame))
-         (tab-new (list (tab-gensym)
-                        parameters
-                        (current-window-configuration frame)
-                        nil ;; tab-history-back
-                        nil ;; tab-history-forward
-                        )))
+         (tab-new
+          (list (tab-gensym)
+                parameters
+                (current-window-configuration frame)
+                ;; set-window-configuration does not restore the value
+                ;; of point in the current buffer, so record that separately.
+                (point-marker)
+                nil         ;; tab-history-back
+                nil         ;; tab-history-forward
+                )))
     ;; FIXME: use `AFTER'.
     (modify-frame-parameters
      frame
@@ -139,13 +143,17 @@ This function returns TAB, or nil if TAB has been deleted."
          (tab-name (assq 'name (nth 1 tab-param))))
     (when tab-param
       (setcar (cddr tab-param) (current-window-configuration frame))
-      (setcar (cdr (cddr tab-param)) tab-history-back)
-      (setcar (cddr (cddr tab-param)) tab-history-forward)
+      (setcar (cdr (cddr tab-param)) (point-marker))
+      (setcar (cddr (cddr tab-param)) tab-history-back)
+      (setcar (cdr (cddr (cddr tab-param))) tab-history-forward)
       (if tab-name (setcdr tab-name (tab-name))))
     (modify-frame-parameters frame (list (cons 'selected-tab tab)))
     (set-window-configuration (nth 2 (assq tab tab-list)))
-    (setq tab-history-back (nth 3 (assq tab tab-list)))
-    (setq tab-history-forward (nth 4 (assq tab tab-list)))
+    ;; set-window-configuration does not restore the value
+    ;; of point in the current buffer, so restore that separately.
+    (goto-char (nth 3 (assq tab tab-list)))
+    (setq tab-history-back (nth 4 (assq tab tab-list)))
+    (setq tab-history-forward (nth 5 (assq tab tab-list)))
     (tab-bar-setup)))
 
 (defun delete-tab (&optional tab frame)
