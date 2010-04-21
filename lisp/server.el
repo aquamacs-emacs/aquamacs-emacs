@@ -803,6 +803,9 @@ The following commands are accepted by the server:
 `-current-frame'
   Forbid the creation of new frames.
 
+`-create-tab'
+  Create a new tab on the current Emacs frame.
+
 `-nowait'
   Request that the next frame created should not be
   associated with this client.
@@ -904,6 +907,7 @@ The following commands are accepted by the client:
 		commands
 		dir
 		use-current-frame
+		create-tab
 		tty-name       ;nil, `window-system', or the tty name.
 		tty-type             ;string.
 		files
@@ -925,6 +929,9 @@ The following commands are accepted by the client:
 
 		 ;; -current-frame:  Don't create frames.
 		 ((equal "-current-frame" arg) (setq use-current-frame t))
+
+		 ;; -create-tab:  Create a new tab.
+		 ((equal "-create-tab" arg) (setq create-tab t))
 
 		 ;; -display DISPLAY:
 		 ;; Open X frames on the given display instead of the default.
@@ -1040,6 +1047,9 @@ The following commands are accepted by the client:
 		   ;; When resuming on a tty, tty-name is nil.
 		   (tty-name
 		    (server-create-tty-frame tty-name tty-type proc))))
+
+	    (when create-tab
+	      (select-tab (make-tab)))
 
             (process-put
              proc 'continuation

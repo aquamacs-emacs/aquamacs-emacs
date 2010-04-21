@@ -135,6 +135,9 @@ int eval = 0;
 /* Nonzero means don't open a new frame.  Inverse of --create-frame.  */
 int current_frame = 1;
 
+/* Nonzero means open a new Emacs tab. */
+int create_tab = 0;
+
 /* The display on which Emacs should work.  --display.  */
 char *display = NULL;
 
@@ -165,6 +168,7 @@ struct option longopts[] =
   { "tty",	no_argument,       NULL, 't' },
   { "nw",	no_argument,       NULL, 't' },
   { "create-frame", no_argument,   NULL, 'c' },
+  { "create-tab", no_argument,     NULL, 'x' },
   { "alternate-editor", required_argument, NULL, 'a' },
 #ifndef NO_SOCKETS_IN_FILE_SYSTEM
   { "socket-name",	required_argument, NULL, 's' },
@@ -583,6 +587,10 @@ decode_options (argc, argv)
           current_frame = 0;
           break;
 
+        case 'x':
+          create_tab = 1;
+          break;
+
 	case 'H':
 	  print_help_and_exit ();
 	  break;
@@ -653,6 +661,7 @@ The following OPTIONS are accepted:\n\
 -nw, -t, --tty 		Open a new Emacs frame on the current terminal\n\
 -c, --create-frame    	Create a new frame instead of trying to\n\
 			use the current Emacs frame\n\
+-t, --create-tab    	Create a new tab on the current Emacs frame\n\
 -e, --eval    		Evaluate the FILE arguments as ELisp expressions\n\
 -n, --no-wait		Don't wait for the server to return\n\
 -d DISPLAY, --display=DISPLAY\n\
@@ -1612,6 +1621,9 @@ main (argc, argv)
 
   if (current_frame)
     send_to_emacs (emacs_socket, "-current-frame ");
+
+  if (create_tab)
+    send_to_emacs (emacs_socket, "-create-tab ");
 
   if (display)
     {
