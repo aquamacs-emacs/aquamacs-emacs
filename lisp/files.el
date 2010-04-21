@@ -1235,6 +1235,31 @@ documentation for additional customization information."
 	same-window-buffer-names same-window-regexps)
     (pop-to-buffer buffer-or-name t norecord)))
 
+(defun switch-to-buffer-other-tab (buffer-or-name &optional norecord)
+  "Select the buffer specified by BUFFER-OR-NAME in another tab.
+BUFFER-OR-NAME may be a buffer, a string \(a buffer name), or
+nil.  Return the buffer switched to.
+
+If called interactively, prompt for the buffer name using the
+minibuffer.  The variable `confirm-nonexistent-file-or-buffer'
+determines whether to request confirmation before creating a new
+buffer.
+
+If BUFFER-OR-NAME is a string and does not identify an existing
+buffer, create a new buffer with that name.  If BUFFER-OR-NAME is
+nil, switch to the buffer returned by `other-buffer'.
+
+Optional second argument NORECORD non-nil means do not put this
+buffer at the front of the list of recently selected ones.
+
+This uses the function `display-buffer' as a subroutine; see its
+documentation for additional customization information."
+  (interactive
+   (list (read-buffer-to-switch "Switch to buffer in other tab: ")))
+  (let ((pop-up-tabs t)
+	same-tab-buffer-names same-tab-regexps)
+    (pop-to-buffer buffer-or-name t norecord)))
+
 (defun switch-to-buffer-other-frame (buffer-or-name &optional norecord)
   "Switch to buffer BUFFER-OR-NAME in another frame.
 BUFFER-OR-NAME may be a buffer, a string \(a buffer name), or
@@ -1361,6 +1386,29 @@ expand wildcards (if any) and visit multiple files."
 	  (cons (switch-to-buffer-other-window (car value))
 		(mapcar 'switch-to-buffer (cdr value))))
       (switch-to-buffer-other-window value))))
+
+(defun find-file-other-tab (filename &optional wildcards)
+  "Edit file FILENAME, in another tab.
+
+Like \\[find-file] (which see), but creates a new tab.
+See the function `display-buffer'.
+
+Interactively, the default if you just type RET is the current directory,
+but the visited file name is available through the minibuffer history:
+type M-n to pull it into the minibuffer.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files."
+  (interactive
+   (find-file-read-args "Find file in other tab: "
+                        (confirm-nonexistent-file-or-buffer)))
+  (let ((value (find-file-noselect filename nil nil wildcards)))
+    (if (listp value)
+	(progn
+	  (setq value (nreverse value))
+	  (cons (switch-to-buffer-other-tab (car value))
+		(mapcar 'switch-to-buffer (cdr value))))
+      (switch-to-buffer-other-tab value))))
 
 (defun find-file-other-frame (filename &optional wildcards)
   "Edit file FILENAME, in another frame.

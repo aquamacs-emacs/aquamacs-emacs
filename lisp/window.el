@@ -808,6 +808,11 @@ that frame."
   :type 'boolean
   :group 'windows)
 
+(defcustom pop-up-tabs nil
+  "Non-nil means `display-buffer' should make a new tab."
+  :type 'boolean
+  :group 'tabs)
+
 (defcustom split-window-preferred-function 'split-window-sensibly
   "Function called by `display-buffer' routines to split a window.
 This function is called with a window as single argument and is
@@ -1144,6 +1149,11 @@ consider all visible or iconified frames."
       ;; We want or need a new frame.
       (let ((win (frame-selected-window (funcall pop-up-frame-function))))
         (window--display-buffer-2 buffer win display-buffer-mark-dedicated)))
+     (pop-up-tabs
+      ;; Make a new tab.
+      (select-tab (make-tab))
+      (window--display-buffer-2 buffer (selected-window)
+                                display-buffer-mark-dedicated))
      ((and pop-up-windows
 	   ;; Make a new window.
 	   (or (not (frame-parameter frame-to-use 'unsplittable))
@@ -1223,8 +1233,11 @@ at the front of the list of recently selected ones."
 	(old-window (selected-window))
 	(old-frame (selected-frame))
 	new-window new-frame)
-    (set-buffer buffer)
+    (unless pop-up-tabs
+      (set-buffer buffer))
     (setq new-window (display-buffer buffer other-window))
+    (when pop-up-tabs
+      (set-buffer buffer))
     (unless (eq new-window old-window)
       ;; `display-buffer' has chosen another window, select it.
       (select-window new-window norecord)
