@@ -92,7 +92,8 @@ See `tab-bar-add-item' for conveniently adding tab bar items."
       (progn
 	(modify-all-frames-parameters (list (cons 'tab-bar-lines 1)))
 	(when (<= 1 (length (default-value 'tab-bar-map))) ; not yet setup
-	  ;;(make-tab-command)
+	  (unless (tab-list)
+	    (select-tab (make-tab)))
 	  (tab-bar-setup))
 	(setq tab-frames (frame-list))
 	(add-hook 'window-configuration-change-hook 'tab-window-configuration-change))

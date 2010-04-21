@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(defgroup tab nil
+(defgroup tabs nil
   "Tabs."
   :group 'frames)
 
@@ -40,7 +40,7 @@ If the value is a function, call it and switch to the buffer it returns."
 	  (string   :tag "Buffer name" :value "*scratch*")
 	  (function :tag "Function name")
 	  (other    :tag "Current buffer" nil))
-  :group 'tab
+  :group 'tabs
   :version "24.1")
 
 (defcustom tab-name nil
@@ -49,6 +49,7 @@ If the value is a function, call it and switch to the buffer it returns."
 	  (const    :tag "Buffer names of all windows" window-list)
 	  (function :tag "Function name")
 	  (other    :tag "Current buffer" nil))
+  :group 'tabs
   :version "24.1")
 
 (defun tab-name ()
@@ -86,9 +87,12 @@ Return a newly created frame displaying the current buffer."
   (unless tab-bar-mode
     (tab-bar-mode 1))
   (let* ((tab-list (tab-list frame))
+         (tab-parameters (if (assoc 'name parameters)
+                             parameters
+                           (append parameters `((name . ,(tab-name))))))
          (tab-new
           (list (tab-gensym)
-                parameters
+                tab-parameters
                 (current-window-configuration frame)
                 ;; set-window-configuration does not restore the value
                 ;; of point in the current buffer, so record that separately.
@@ -96,7 +100,7 @@ Return a newly created frame displaying the current buffer."
                 nil         ;; tab-history-back
                 nil         ;; tab-history-forward
                 )))
-    ;; FIXME: use `AFTER'.
+    ;; FIXME: use `AFTER'.  When nil, use default of custom `tab-after'.
     (modify-frame-parameters
      frame
      (list (cons 'tab-list (append tab-list (list tab-new)))))
@@ -110,7 +114,7 @@ Return a newly created frame displaying the current buffer."
 If the terminal is a text-only terminal, this also selects the
 new tab."
   (interactive)
-  (select-tab (make-tab nil `((name . ,(tab-name))))))
+  (select-tab (make-tab)))
 
 (defun tab-list (&optional frame)
   "Return a list of all tabs on FRAME.
@@ -140,7 +144,8 @@ This function returns TAB, or nil if TAB has been deleted."
   (let* ((selected-tab (selected-tab))
          (tab-list (tab-list frame))
          (tab-param (assq selected-tab tab-list))
-         (tab-name (assq 'name (nth 1 tab-param))))
+         (tab-name (assq 'name (nth 1 tab-param)))
+         (tab-new-param (assq tab tab-list)))
     (when tab-param
       (setcar (cddr tab-param) (current-window-configuration frame))
       (setcar (cdr (cddr tab-param)) (point-marker))
@@ -148,12 +153,14 @@ This function returns TAB, or nil if TAB has been deleted."
       (setcar (cdr (cddr (cddr tab-param))) tab-history-forward)
       (if tab-name (setcdr tab-name (tab-name))))
     (modify-frame-parameters frame (list (cons 'selected-tab tab)))
-    (set-window-configuration (nth 2 (assq tab tab-list)))
+    (set-window-configuration (nth 2 tab-new-param))
     ;; set-window-configuration does not restore the value
     ;; of point in the current buffer, so restore that separately.
-    (goto-char (nth 3 (assq tab tab-list)))
-    (setq tab-history-back (nth 4 (assq tab tab-list)))
-    (setq tab-history-forward (nth 5 (assq tab tab-list)))
+    (when (and (markerp (nth 3 tab-new-param))
+               (marker-buffer (nth 3 tab-new-param)))
+      (goto-char (nth 3 tab-new-param)))
+    (setq tab-history-back (nth 4 tab-new-param))
+    (setq tab-history-forward (nth 5 tab-new-param))
     (tab-bar-setup)))
 
 (defun delete-tab (&optional tab frame)
@@ -162,20 +169,82 @@ TAB defaults to the selected tab.  Return nil.
 FRAME nil or omitted means use the selected frame.
 Signal an error when TAB is the only tab on its frame."
   (interactive)
-  (let* ((selected-tab (selected-tab))
+  (let* ((selected-tab (selected-tab frame))
          (tab (or tab selected-tab))
          (tab-list (tab-list frame))
          (tab-param (assq tab tab-list))
-         (tab-next (and (eq tab selected-tab)
-                        (caar (or (cdr (member tab-param tab-list))
-                                  (cdr (member tab-param (reverse tab-list))))))))
+         (tab-select (or (next-tab tab) (previous-tab tab))))
     (modify-frame-parameters
      frame
-     (list (cons 'tab-list (assq-delete-all tab (tab-list)))))
-    (if (null (tab-list))
+     (list (cons 'tab-list (assq-delete-all tab tab-list))))
+    (if (null (tab-list frame))
         (tab-bar-mode 0)
-      (if tab-next (select-tab tab-next))
+      (when tab-select (select-tab tab-select))
       (tab-bar-setup))))
+
+(defun delete-other-tabs (&optional tab frame)
+  "Delete all tabs except TAB.
+TAB defaults to the selected tab.
+FRAME nil or omitted means use the selected frame."
+  (interactive)
+  (when tab (select-tab tab frame))
+  (let* ((tab (or tab (selected-tab frame)))
+         (tab-list (tab-list frame))
+         (tab-param (assq tab tab-list)))
+    (modify-frame-parameters
+     frame
+     (list (cons 'tab-list (list tab-param))))
+    (if (null (tab-list frame))
+        (tab-bar-mode 0)
+      (tab-bar-setup))))
+
+(defun next-tab (&optional tab frame wrap)
+  "Return the next tab in the tab list after TAB.
+FRAME nil or omitted means use the selected frame.
+When WRAP is non-nil, warp to the first tab."
+  (let* ((tab (or tab (selected-tab frame)))
+         (tab-list (tab-list frame)))
+    (caar (or (cdr (member (assq tab tab-list) tab-list))
+              (and wrap tab-list)))))
+
+(defun previous-tab (&optional tab frame wrap)
+  "Return the previous tab in the tab list before TAB.
+FRAME nil or omitted means use the selected frame.
+When WRAP is non-nil, warp to the last tab."
+  (let* ((tab (or tab (selected-tab frame)))
+         (tab-list (tab-list frame)))
+    (caar (or (cdr (member (assq tab tab-list) (reverse tab-list)))
+              (and wrap (last tab-list))))))
+
+(defun other-tab (count &optional tab frame)
+  "Select another tab in cyclic ordering of tabs.
+COUNT specifies the number of tabs to skip, starting with the
+selected tab, before making the selection.  If COUNT is
+positive, skip COUNT tabs forwards.  If COUNT is negative,
+skip -COUNT tabs backwards.  COUNT zero means do not skip any
+tab, so select the selected tab.  In an interactive call,
+COUNT is the numeric prefix argument.  Return nil."
+  (interactive "p")
+  (let ((tab (or tab (selected-tab frame))))
+    (while (> count 0)
+      (setq tab (next-tab tab frame t))
+      (setq count (1- count)))
+    (while (< count 0)
+      (setq tab (previous-tab tab frame t))
+      (setq count (1+ count)))
+    (select-tab tab)))
+
+(defun select-next-tab (&optional count)
+  "Select the next tab in cyclic order.
+COUNT has the same meaning as in the command `other-tab'."
+  (interactive "p")
+  (other-tab (or count 1)))
+
+(defun select-previous-tab (&optional count)
+  "Select the previous tab in cyclic order.
+COUNT has the same meaning as in the command `other-tab'."
+  (interactive "p")
+  (other-tab (- (or count 1))))
 
 
 ;;; Tab identity (until it's first-class object).
@@ -290,8 +359,9 @@ For more information, see the function `tab-menu'."
 (define-key ctl-x-7-map "1" 'delete-other-tabs)
 (define-key ctl-x-7-map "0" 'delete-tab)
 (define-key ctl-x-7-map "o" 'other-tab)
-(define-key ctl-x-7-map "n" 'next-tab)
-(define-key ctl-x-7-map "p" 'previous-tab)
+
+(global-set-key [(control tab)]               'select-next-tab)
+(global-set-key [(control shift iso-lefttab)] 'select-previous-tab)
 
 (provide 'tab)
 
