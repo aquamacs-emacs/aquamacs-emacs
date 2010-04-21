@@ -177,8 +177,8 @@ Like `previous-line', but always move by logical buffer lines
 rather than by visual lines.  `line-move-visual' is set to nil
 for this command."
   (interactive "^p\np")
-  (let ((line-move-visual nil)
-	(this-command 'previous-line))
+  (setq this-command 'previous-line)  ; ensure last-command will be set
+  (let ((line-move-visual nil))
     (previous-line arg try-vscroll)))
 (defun aquamacs-next-nonvisual-line (&optional arg try-vscroll)
   "Move cursor vertically down ARG buffer lines.
@@ -186,8 +186,8 @@ Like `next-line', but always move by logical buffer lines
 rather than by visual lines.  `line-move-visual' is set to nil
 for this command."
   (interactive "^p\np")
-  (let ((line-move-visual nil)
-	(this-command 'next-line))
+  (setq this-command 'next-line)  ; ensure last-command will be set
+  (let ((line-move-visual nil))
     (next-line arg try-vscroll)))
 
 (defun aquamacs-kill-word (&optional arg)
