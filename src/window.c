@@ -5943,7 +5943,7 @@ struct save_window_data
     Lisp_Object saved_windows;
 
     /* All fields above are traced by the GC.
-       From `fame-cols' down, the fields are ignored by the GC.  */
+       From `frame-cols' down, the fields are ignored by the GC.  */
 
     int frame_cols, frame_lines, frame_menu_bar_lines;
     int frame_tool_bar_lines;
@@ -6567,6 +6567,138 @@ redirection (see `redirect-frame-focus').  */)
   save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
   XSETWINDOW_CONFIGURATION (tem, data);
   return (tem);
+}
+
+static int
+save_window_save_to_sexp (window)
+     Lisp_Object window;
+{
+  register struct window *w;
+  register Lisp_Object data;
+
+  w = XWINDOW (window);
+
+  data = Fcons (intern ("saved-window"), Qnil);
+
+  if (EQ (window, selected_window))
+    data = Fcons (Fcons (intern ("current-window"), Qt), data);
+
+  if (!NILP (w->buffer))
+    data = Fcons (Fcons (intern ("buffer"),
+			 XBUFFER (w->buffer)->name), data);
+
+  data = Fcons (Fcons (intern ("left-col"),
+		       w->left_col), data);
+  data = Fcons (Fcons (intern ("top-line"),
+		       w->top_line), data);
+  data = Fcons (Fcons (intern ("total-cols"),
+		       w->total_cols), data);
+  data = Fcons (Fcons (intern ("total-lines"),
+		       w->total_lines), data);
+  data = Fcons (Fcons (intern ("hscroll"),
+		       w->hscroll), data);
+  data = Fcons (Fcons (intern ("min-hscroll"),
+		       w->min_hscroll), data);
+  data = Fcons (Fcons (intern ("display-table"),
+		       w->display_table), data);
+  data = Fcons (Fcons (intern ("orig-top-line"),
+		       w->orig_top_line), data);
+  data = Fcons (Fcons (intern ("orig-total-lines"),
+		       w->orig_total_lines), data);
+  data = Fcons (Fcons (intern ("left-margin-cols"),
+		       w->left_margin_cols), data);
+  data = Fcons (Fcons (intern ("right-margin-cols"),
+		       w->right_margin_cols), data);
+  data = Fcons (Fcons (intern ("left-fringe-width"),
+		       w->left_fringe_width), data);
+  data = Fcons (Fcons (intern ("right-fringe-width"),
+		       w->right_fringe_width), data);
+  data = Fcons (Fcons (intern ("fringes-outside-margins"),
+		       w->fringes_outside_margins), data);
+  data = Fcons (Fcons (intern ("scroll-bar-width"),
+		       w->scroll_bar_width), data);
+  data = Fcons (Fcons (intern ("vertical-scroll-bar-type"),
+		       w->vertical_scroll_bar_type), data);
+  data = Fcons (Fcons (intern ("dedicated"),
+		       w->dedicated), data);
+  data = Fcons (Fcons (intern ("resize-proportionally"),
+		       w->resize_proportionally), data);
+
+  if (!NILP (w->buffer))
+    {
+      /* Save w's value of point in the window configuration.
+	 If w is the selected window, then get the value of point
+	 from the buffer; pointm is garbage in the selected window.  */
+      if (EQ (window, selected_window))
+	data = Fcons (Fcons (intern ("pointm"),
+			     make_number (BUF_PT (XBUFFER (w->buffer)))), data);
+      else
+	data = Fcons (Fcons (intern ("pointm"),
+			     make_number (XMARKER (w->pointm)->charpos)), data);
+
+      data = Fcons (Fcons (intern ("start"),
+			   make_number (XMARKER (w->start)->charpos)), data);
+      data = Fcons (Fcons (intern ("start-at-line-beg"),
+			   w->start_at_line_beg), data);
+
+      if (XMARKER (XBUFFER (w->buffer)->mark)->buffer)
+	data = Fcons (Fcons (intern ("mark"),
+			     make_number (XMARKER (XBUFFER (w->buffer)->mark)->charpos)), data);
+    }
+
+  if (!NILP (w->next))
+    data = Fcons (Fcons (intern ("next"),
+			 save_window_save_to_sexp (w->next)), data);
+  if (!NILP (w->vchild))
+    data = Fcons (Fcons (intern ("vchild"),
+			 save_window_save_to_sexp (w->vchild)), data);
+  if (!NILP (w->hchild))
+    data = Fcons (Fcons (intern ("hchild"),
+			 save_window_save_to_sexp (w->hchild)), data);
+
+  return (Fnreverse (data));
+}
+
+DEFUN ("current-window-configuration-to-sexp", Fcurrent_window_configuration_to_sexp,
+       Scurrent_window_configuration_to_sexp, 0, 1, 0,
+       doc: /* Return a sexp representing the current window configuration of FRAME.
+If FRAME is nil or omitted, use the selected frame.
+This describes the number of windows, their sizes and current buffers,
+and for each displayed buffer, where display starts, and the positions of
+point and mark.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  register Lisp_Object data;
+  FRAME_PTR f;
+
+  if (NILP (frame))
+    frame = selected_frame;
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+
+  data = Fcons (intern ("window-configuration"), Qnil);
+  data = Fcons (Fcons (intern ("frame-cols"),
+		       make_number (FRAME_COLS (f))), data);
+  data = Fcons (Fcons (intern ("frame-lines"),
+		       make_number (FRAME_LINES (f))), data);
+  data = Fcons (Fcons (intern ("frame-menu-bar-lines"),
+		       make_number (FRAME_MENU_BAR_LINES (f))), data);
+  data = Fcons (Fcons (intern ("frame-tool-bar-lines"),
+		       make_number (FRAME_TOOL_BAR_LINES (f))), data);
+  data = Fcons (Fcons (intern ("frame-tab-bar-lines"),
+		       make_number (FRAME_TAB_BAR_LINES (f))), data);
+  data = Fcons (Fcons (intern ("current-buffer"),
+		       current_buffer->name), data);
+  data = Fcons (Fcons (intern ("minibuf-scroll-window"),
+		       minibuf_level > 0 ? Vminibuf_scroll_window : Qnil), data);
+  data = Fcons (Fcons (intern ("minibuf-selected-window"),
+		       minibuf_level > 0 ? minibuf_selected_window : Qnil), data);
+
+  data = Fcons (Fcons (intern ("saved-windows"),
+		       save_window_save_to_sexp (FRAME_ROOT_WINDOW (f))), data);
+
+  return (Fnreverse (data));
 }
 
 DEFUN ("save-window-excursion", Fsave_window_excursion, Ssave_window_excursion,
@@ -7376,6 +7508,7 @@ frame to be redrawn only if it is a tty frame.  */);
   defsubr (&Swindow_configuration_frame);
   defsubr (&Sset_window_configuration);
   defsubr (&Scurrent_window_configuration);
+  defsubr (&Scurrent_window_configuration_to_sexp);
   defsubr (&Ssave_window_excursion);
   defsubr (&Swindow_tree);
   defsubr (&Sset_window_margins);
