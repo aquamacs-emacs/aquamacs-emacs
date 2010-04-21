@@ -610,6 +610,21 @@ and then modifies one entry in it."
 
 ;;;; Key binding commands.
 
+(defun subr--check-key-binding (key command)
+  (condition-case nil
+      (if (eq command (key-binding key t))
+	  command
+	(message "Warning: key %s already bound to %s %s.  Use `define-key' instead."
+		 key
+		 (key-binding key t)
+		 (let ((mm
+			(mapcar
+			 (lambda (x)
+			   (car x))
+			 (minor-mode-key-binding key))))
+		   (if mm (format "by minor modes %s" mm) ""))))
+    (error nil)))
+
 (defun global-set-key (key command)
   "Give KEY a global binding as COMMAND.
 COMMAND is the command definition to use; usually it is
@@ -624,7 +639,9 @@ that you make with this function."
   (interactive "KSet key globally: \nCSet key %s to command: ")
   (or (vectorp key) (stringp key)
       (signal 'wrong-type-argument (list 'arrayp key)))
-  (define-key (current-global-map) key command))
+  
+  (define-key (current-global-map) key command)
+  (subr--check-key-binding key command))
 
 (defun local-set-key (key command)
   "Give KEY a local binding as COMMAND.
@@ -642,7 +659,8 @@ which in most cases is shared with all other buffers in the same major mode."
 	(use-local-map (setq map (make-sparse-keymap))))
     (or (vectorp key) (stringp key)
 	(signal 'wrong-type-argument (list 'arrayp key)))
-    (define-key map key command)))
+    (define-key map key command)
+    (subr--check-key-binding key command)))
 
 (defun global-unset-key (key)
   "Remove global binding of KEY.
