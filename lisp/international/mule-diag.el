@@ -60,8 +60,9 @@
 
 The D column contains the dimension of this character set.  The CH
 column contains the number of characters in a block of this character
-set.  The FINAL-CHAR column contains an ISO-2022 <final-char> to use
-for designating this character set in ISO-2022-based coding systems.
+set.  The FINAL-BYTE column contains an ISO-2022 <final-byte> to use
+in the designation escape sequence for this character set in
+ISO-2022-based coding systems.
 
 With prefix ARG, the output format gets more cryptic,
 but still shows the full information."
@@ -86,7 +87,7 @@ but still shows the full information."
 	(indent-to 48)
 	(insert "| +--CHARS\n")
 	(let ((columns '(("CHARSET-NAME" . name) "\t\t\t\t\t"
-			 ("D CH  FINAL-CHAR" . iso-spec)))
+			 ("D CH  FINAL-BYTE" . iso-spec)))
 	      pos)
 	  (while columns
 	    (if (stringp (car columns))
