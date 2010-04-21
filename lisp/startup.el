@@ -2079,6 +2079,7 @@ A fancy display is used on graphic displays, normal otherwise."
      :warning))
 
   (let ((file-count 0)
+	(pop-up-tabs pop-up-tabs)
 	first-file-buffer)
     (when command-line-args-left
       ;; We have command args; process them.
@@ -2104,7 +2105,7 @@ A fancy display is used on graphic displays, normal otherwise."
 	    ;; This includes our standard options' long versions
 	    ;; and long versions of what's on command-switch-alist.
 	    (longopts
-           (append '("--funcall" "--load" "--insert" "--kill"
+           (append '("--funcall" "--load" "--insert" "--kill" "--tabs"
                      "--directory" "--eval" "--execute" "--no-splash"
                      "--find-file" "--visit" "--file" "--no-desktop")
                    (mapcar (lambda (elt) (concat "-" (car elt)))
@@ -2236,6 +2237,9 @@ A fancy display is used on graphic displays, normal otherwise."
 		   (setq command-line-args-left
 			 (nthcdr (nth 1 cl1-tem) command-line-args-left)))
 
+		  ((equal argi "-tabs")
+		   (setq pop-up-tabs t))
+
 		  ((member argi '("-find-file" "-file" "-visit"))
 		   (setq inhibit-startup-screen t)
 		   ;; An explicit option to specify visiting a file.
@@ -2248,7 +2252,9 @@ A fancy display is used on graphic displays, normal otherwise."
 				cl1-dir)))
 		     (if (= file-count 1)
 			 (setq first-file-buffer (find-file file))
-		       (find-file-other-window file)))
+		       (if pop-up-tabs
+			   (find-file-other-tab file)
+			 (find-file-other-window file))))
 		   (unless (zerop cl1-line)
 		     (goto-char (point-min))
 		     (forward-line (1- cl1-line)))
@@ -2281,6 +2287,8 @@ A fancy display is used on graphic displays, normal otherwise."
 				   cl1-dir)))
 			     (cond ((= file-count 1)
 				    (setq first-file-buffer (find-file file)))
+				   (pop-up-tabs
+				    (find-file-other-tab file))
 				   (inhibit-startup-screen
 				    (find-file-other-window file))
 				   (t (find-file file))))
@@ -2321,6 +2329,7 @@ A fancy display is used on graphic displays, normal otherwise."
 	(and (> file-count 2)
 	     (not noninteractive)
 	     (not inhibit-startup-buffer-menu)
+	     (not pop-up-tabs)
 	     (or (get-buffer-window first-file-buffer)
 		 (list-buffers)))
 
@@ -2356,9 +2365,13 @@ A fancy display is used on graphic displays, normal otherwise."
       ;; (with-no-warnings
       ;; 	(setq menubar-bindings-done t))
 
-      (if (> file-count 0)
-	  (display-startup-screen t)
-	(display-startup-screen nil)))))
+      (cond (pop-up-tabs
+	     (select-tab (make-tab nil nil 1))
+	     (display-startup-screen nil))
+	    ((> file-count 0)
+	     (display-startup-screen t))
+	    (t
+	     (display-startup-screen nil))))))
 
 (defun command-line-normalize-file-name (file)
   "Collapse multiple slashes to one, to handle non-Emacs file names."

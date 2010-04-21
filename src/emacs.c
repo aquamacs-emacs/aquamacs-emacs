@@ -298,6 +298,7 @@ FILE                    visit FILE using find-file\n\
 --insert FILE           insert contents of FILE into current buffer\n\
 --kill                  exit without asking for confirmation\n\
 --load, -l FILE         load Emacs Lisp FILE using the load function\n\
+--tabs                  use tabs to visit files in a new tab\n\
 --visit FILE            visit FILE using find-file\n\
 \n"
 
@@ -1887,6 +1888,7 @@ const struct standard_args standard_args[] =
   { "-eval", "--eval", 0, 1 },
   { "-execute", "--execute", 0, 1 },
   { "-find-file", "--find-file", 0, 1 },
+  { "-tabs", "--tabs", 0, 0 },
   { "-visit", "--visit", 0, 1 },
   { "-file", "--file", 0, 1 },
   { "-insert", "--insert", 0, 1 },
