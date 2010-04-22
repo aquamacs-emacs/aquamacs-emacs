@@ -6370,6 +6370,282 @@ delete_all_subwindows (w)
 
   Vwindow_list = Qnil;
 }
+
+static Lisp_Object
+set_window_from_sexp (data, prev, parent, new_current_window)
+     Lisp_Object data, prev, parent, *new_current_window;
+{
+  register Lisp_Object tem;
+  register Lisp_Object window;
+  register struct window *w;
+
+  if (!CONSP (data)
+      || !EQ (XCAR (data), intern ("saved-window")))
+    wrong_type_argument (intern ("saved-window"), data);
+
+  data = Fcdr (data);
+
+  window = make_window ();
+  w = XWINDOW (window);
+  w->frame = selected_frame;
+  w->prev = prev;
+  w->parent = parent;
+
+  tem = Fcdr (Fassq (intern ("current-window"), data));
+  if (!NILP (tem))
+    *new_current_window = window;
+
+  tem = Fcdr (Fassq (intern ("next"), data));
+  if (!NILP (tem))
+    w->next = set_window_from_sexp (tem, window, Qnil, new_current_window);
+
+  tem = Fcdr (Fassq (intern ("hchild"), data));
+  if (!NILP (tem))
+    w->hchild = set_window_from_sexp (tem, Qnil, window, new_current_window);
+
+  tem = Fcdr (Fassq (intern ("vchild"), data));
+  if (!NILP (tem))
+    w->vchild = set_window_from_sexp (tem, Qnil, window, new_current_window);
+
+  tem = Fassq (intern ("left-col"), data);
+  if (!NILP (tem))
+    w->left_col = Fcdr (tem);
+  tem = Fassq (intern ("top-line"), data);
+  if (!NILP (tem))
+    w->top_line = Fcdr (tem);
+  tem = Fassq (intern ("total-cols"), data);
+  if (!NILP (tem))
+    w->total_cols = Fcdr (tem);
+  tem = Fassq (intern ("total-lines"), data);
+  if (!NILP (tem))
+    w->total_lines = Fcdr (tem);
+  tem = Fassq (intern ("hscroll"), data);
+  if (!NILP (tem))
+    w->hscroll = Fcdr (tem);
+  tem = Fassq (intern ("min-hscroll"), data);
+  if (!NILP (tem))
+    w->min_hscroll = Fcdr (tem);
+  tem = Fassq (intern ("display-table"), data);
+  if (!NILP (tem))
+    w->display_table = Fcdr (tem);
+  tem = Fassq (intern ("orig-top-line"), data);
+  if (!NILP (tem))
+    w->orig_top_line = Fcdr (tem);
+  tem = Fassq (intern ("orig-total-lines"), data);
+  if (!NILP (tem))
+    w->orig_total_lines = Fcdr (tem);
+  tem = Fassq (intern ("left-margin-cols"), data);
+  if (!NILP (tem))
+    w->left_margin_cols = Fcdr (tem);
+  tem = Fassq (intern ("right-margin-cols"), data);
+  if (!NILP (tem))
+    w->right_margin_cols = Fcdr (tem);
+  tem = Fassq (intern ("left-fringe-width"), data);
+  if (!NILP (tem))
+    w->left_fringe_width = Fcdr (tem);
+  tem = Fassq (intern ("right-fringe-width"), data);
+  if (!NILP (tem))
+    w->right_fringe_width = Fcdr (tem);
+  tem = Fassq (intern ("fringes-outside-margins"), data);
+  if (!NILP (tem))
+    w->fringes_outside_margins = Fcdr (tem);
+  tem = Fassq (intern ("scroll-bar-width"), data);
+  if (!NILP (tem))
+    w->scroll_bar_width = Fcdr (tem);
+  tem = Fassq (intern ("vertical-scroll-bar-type"), data);
+  if (!NILP (tem))
+    w->vertical_scroll_bar_type = Fcdr (tem);
+  tem = Fassq (intern ("dedicated"), data);
+  if (!NILP (tem))
+    w->dedicated = Fcdr (tem);
+  tem = Fassq (intern ("resize-proportionally"), data);
+  if (!NILP (tem))
+    w->resize_proportionally = Fcdr (tem);
+  XSETFASTINT (w->last_modified, 0);
+  XSETFASTINT (w->last_overlay_modified, 0);
+
+  /* Reinstall the saved buffer and pointers into it.  */
+  tem = Fcdr (Fassq (intern ("buffer"), data));
+  if (NILP (tem))
+    w->buffer = Qnil;
+  else
+    {
+      w->buffer = Fget_buffer_create (tem);
+
+      tem = Fcdr (Fassq (intern ("start-at-line-beg"), data));
+      if (!NILP (tem))
+	w->start_at_line_beg = tem;
+      tem = Fcdr (Fassq (intern ("start"), data));
+      if (!NILP (tem))
+	set_marker_restricted (w->start, tem, w->buffer);
+      tem = Fcdr (Fassq (intern ("pointm"), data));
+      if (!NILP (tem))
+	set_marker_restricted (w->pointm, tem, w->buffer);
+      else
+      	Fgoto_char (1);
+      tem = Fcdr (Fassq (intern ("mark"), data));
+      if (!NILP (tem))
+	Fset_marker (XBUFFER (w->buffer)->mark,
+		     tem, w->buffer);
+    }
+
+  return (window);
+}
+
+DEFUN ("set-window-configuration-from-sexp", Fset_window_configuration_from_sexp,
+       Sset_window_configuration_from_sexp, 1, 1, 0,
+       doc: /* Set the configuration of windows and buffers as specified by CONFIGURATION.
+CONFIGURATION must be a Lisp expression previously returned
+by `current-window-configuration-to-sexp' (which see).  */)
+     (configuration)
+     Lisp_Object configuration;
+{
+  register Lisp_Object data;
+  register Lisp_Object tem, tem2;
+  Lisp_Object saved_windows;
+  Lisp_Object new_current_buffer;
+  Lisp_Object new_current_window;
+  Lisp_Object frame;
+  FRAME_PTR f;
+
+  if (!CONSP (configuration)
+      || !EQ (XCAR (configuration), intern ("window-configuration")))
+    wrong_type_argument (intern ("window-configuration"), configuration);
+
+  data = Fcdr (configuration);
+  saved_windows = Fcdr (Fassq (intern ("saved-windows"), data));
+
+  new_current_buffer = Fcdr (Fassq (intern ("current-buffer"), data));
+  new_current_window = Qnil;
+
+  frame = selected_frame;
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+
+  /* Rebuild the window tree in the selected frame.  */
+  if (FRAME_LIVE_P (f))
+    {
+      register struct window *w;
+      register struct saved_window *p;
+      int k, i, n;
+
+      /* If the frame has different sizes than in the window configuration,
+	 we change the frame to the size specified in the
+	 configuration, restore the configuration, and then resize it
+	 back.  We keep track of the prevailing height in these variables.  */
+      int previous_frame_lines = FRAME_LINES (f);
+      int previous_frame_cols =  FRAME_COLS  (f);
+      int previous_frame_menu_bar_lines = FRAME_MENU_BAR_LINES (f);
+      int previous_frame_tool_bar_lines = FRAME_TOOL_BAR_LINES (f);
+      int previous_frame_tab_bar_lines = FRAME_TAB_BAR_LINES (f);
+
+      /* The mouse highlighting code could get screwed up
+	 if it runs during this.  */
+      BLOCK_INPUT;
+
+      tem = Fcdr (Fassq (intern ("frame-lines"), data));
+      if (!NILP (tem))
+	{
+          CHECK_NUMBER (tem);
+	  tem2 = Fcdr (Fassq (intern ("frame-cols"), data));
+	  if (!NILP (tem2))
+	    {
+              CHECK_NUMBER (tem2);
+	      if (XINT (tem) != previous_frame_lines
+                 || XINT (tem2) != previous_frame_cols)
+		change_frame_size (f, XINT (tem),
+                                   XINT (tem2), 0, 0, 0);
+            }
+        }
+
+#if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
+      tem = Fcdr (Fassq (intern ("frame-menu-bar-lines"), data));
+      if (!NILP (tem))
+	{
+          CHECK_NUMBER (tem);
+	  if (XINT (tem) != previous_frame_menu_bar_lines)
+	    x_set_menu_bar_lines (f, tem, make_number (0));
+        }
+#ifdef HAVE_WINDOW_SYSTEM
+      tem = Fcdr (Fassq (intern ("frame-tool-bar-lines"), data));
+      if (!NILP (tem))
+	{
+          CHECK_NUMBER (tem);
+	  if (XINT (tem) != previous_frame_tool_bar_lines)
+	    x_set_tool_bar_lines (f, tem, make_number (0));
+        }
+      tem = Fcdr (Fassq (intern ("frame-tab-bar-lines"), data));
+      if (!NILP (tem))
+	{
+          CHECK_NUMBER (tem);
+	  if (XINT (tem) != previous_frame_tab_bar_lines)
+	    x_set_tab_bar_lines (f, tem, make_number (0));
+        }
+#endif
+#endif
+
+      windows_or_buffers_changed++;
+      FRAME_WINDOW_SIZES_CHANGED (f) = 1;
+
+      /* Mark all windows now on frame as "deleted".
+	 Restoring the new configuration "undeletes" any that are in it.  */
+      delete_all_subwindows (XWINDOW (FRAME_ROOT_WINDOW (f)));
+
+      FRAME_ROOT_WINDOW (f) = set_window_from_sexp (saved_windows, Qnil, Qnil,
+						    &new_current_window);
+
+      if (!NILP (new_current_window))
+	{
+	  Fselect_window (new_current_window, Qnil);
+	  XBUFFER (XWINDOW (selected_window)->buffer)->last_selected_window
+	    = selected_window;
+	}
+      else
+	{
+	  /* FIXME: what else? */
+	  /* Fselect_window (FRAME_ROOT_WINDOW (f), Qnil); */
+	  /* Fselect_window (XWINDOW (FRAME_ROOT_WINDOW (f))->hchild, Qnil); */
+	}
+
+      /* Set the screen height to the value it had before this function.  */
+      if (previous_frame_lines != FRAME_LINES (f)
+	  || previous_frame_cols != FRAME_COLS (f))
+	change_frame_size (f, previous_frame_lines, previous_frame_cols,
+			   0, 0, 0);
+#if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
+      if (previous_frame_menu_bar_lines != FRAME_MENU_BAR_LINES (f))
+	x_set_menu_bar_lines (f, make_number (previous_frame_menu_bar_lines),
+			      make_number (0));
+#ifdef HAVE_WINDOW_SYSTEM
+      if (previous_frame_tool_bar_lines != FRAME_TOOL_BAR_LINES (f))
+	x_set_tool_bar_lines (f, make_number (previous_frame_tool_bar_lines),
+			      make_number (0));
+      if (previous_frame_tab_bar_lines != FRAME_TAB_BAR_LINES (f))
+	x_set_tab_bar_lines (f, make_number (previous_frame_tab_bar_lines),
+			      make_number (0));
+#endif
+#endif
+
+      adjust_glyphs (f);
+
+      UNBLOCK_INPUT;
+
+      run_window_configuration_change_hook (f);
+    }
+
+  if (!NILP (new_current_buffer))
+    Fset_buffer (Fget_buffer_create (new_current_buffer));
+
+  tem = Fassq (intern ("minibuf-scroll-window"), data);
+  if (!NILP (tem))
+    Vminibuf_scroll_window = Fcdr (tem);
+  tem = Fassq (intern ("minibuf-selected-window"), data);
+  if (!NILP (tem))
+    minibuf_selected_window = Fcdr (tem);
+
+  return (FRAME_LIVE_P (f) ? Qt : Qnil);
+}
+
 
 static int
 count_windows (window)
@@ -6569,7 +6845,7 @@ redirection (see `redirect-frame-focus').  */)
   return (tem);
 }
 
-static int
+static Lisp_Object
 save_window_save_to_sexp (window)
      Lisp_Object window;
 {
@@ -6663,9 +6939,9 @@ DEFUN ("current-window-configuration-to-sexp", Fcurrent_window_configuration_to_
        Scurrent_window_configuration_to_sexp, 0, 1, 0,
        doc: /* Return a sexp representing the current window configuration of FRAME.
 If FRAME is nil or omitted, use the selected frame.
-This describes the number of windows, their sizes and current buffers,
-and for each displayed buffer, where display starts, and the positions of
-point and mark.  */)
+This Lisp expression describes the number of windows, their sizes and
+current buffers, and for each displayed buffer, where display starts,
+and the positions of point and mark.  */)
      (frame)
      Lisp_Object frame;
 {
@@ -7507,6 +7783,7 @@ frame to be redrawn only if it is a tty frame.  */);
   defsubr (&Swindow_configuration_p);
   defsubr (&Swindow_configuration_frame);
   defsubr (&Sset_window_configuration);
+  defsubr (&Sset_window_configuration_from_sexp);
   defsubr (&Scurrent_window_configuration);
   defsubr (&Scurrent_window_configuration_to_sexp);
   defsubr (&Ssave_window_excursion);
