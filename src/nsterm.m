@@ -4025,9 +4025,9 @@ ns_term_init (Lisp_Object display_name)
   [NSApp setDelegate: NSApp];
 
   /* debugging: log all notifications */
-  /*   [[NSNotificationCenter defaultCenter] addObserver: NSApp
-                                         selector: @selector (logNotification:)
-                                             name: nil object: nil]; */
+    // [[NSNotificationCenter defaultCenter] addObserver: NSApp
+    //                                      selector: @selector (logNotification:)
+    //                                          name: nil object: nil];
 
   dpyinfo = (struct ns_display_info *)xmalloc (sizeof (struct ns_display_info));
   bzero (dpyinfo, sizeof (struct ns_display_info));
@@ -4250,6 +4250,10 @@ ns_term_init (Lisp_Object display_name)
     [NSApp setServicesMenu: svcsMenu];
     /* Needed at least on Cocoa, to get dock menu to show windows */
     [NSApp setWindowsMenu: [[NSMenu alloc] init]];
+
+    [[NSNotificationCenter defaultCenter] addObserver: mainMenu
+					     selector: @selector (didBeginTrackingNotification:)
+                                             name: NSMenuDidBeginTrackingNotification object: mainMenu];
   }
 #endif /* MAC OS X menu setup */
 
@@ -4731,18 +4735,10 @@ ns_term_shutdown (int sig)
 
 @implementation EmacsView
 
-
--(void)windowDidBecomeMain:(NSNotification *)aNotification
-{
-  set_frame_menubar (emacsframe, 1, 1);
-}
-
-/* needed to inform when window closed from LISP */
 - (void) setWindowClosing: (BOOL)closing
 {
   windowClosing = closing;
 }
-
 
 - (void)dealloc
 {

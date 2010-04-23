@@ -267,7 +267,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
                was causing crashes in the _common parsing code.. need to make
                sure proper initialization done.. */
 /*        if (submenu && strcmp (submenuTitle, SDATA (string)))
-             continue; */
+	      continue; */
 
 	  submenu_start[i] = menu_items_used;
 
@@ -580,9 +580,15 @@ name_is_separator (name)
 {
   frame = f;
 }
-
 /* delegate method called when a submenu is being opened: run a 'deep' call
    to set_frame_menubar */
+
+static int trackingMenu = 0;
+/* NSMenuDidBeginTrackingNotification */
+-(void)didBeginTrackingNotification:(NSNotification *)aNotification
+{
+  trackingMenu = 1; /* update menu in menuNeedsUpdate */
+}
 - (void)menuNeedsUpdate: (NSMenu *)menu
 {
   /* events may be sent to recently deleted frames,
@@ -590,33 +596,32 @@ name_is_separator (name)
   if (! (frame && FRAME_LIVE_P (frame) && FRAME_NS_VIEW (frame)))
     return;
 
-  NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
+  // NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
   // fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); 
 
-  /* HACK: Cocoa/Carbon will request update on every keystroke via
+  /* Cocoa/Carbon will request update on every keystroke via
      IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
      since key equivalents are handled through emacs.  
      
-     On Leopard, even keystroke events generate SystemDefined events,
-     but their subtype is 8.  At least in Snow Leopard, it seems that
-     only the first key stroke in a series generates this event
-     (subtype might not be distinguishable).
-     
+     On Leopard, even keystroke events generate SystemDefined event.
      Third-party applications that enhance mouse / trackpad
      interaction, or also VNC/Remote Desktop will send events
-     that are AppDefined and never SysDefined. 
+     of type AppDefined rather than SysDefined.
      Menus will fail to show up if they haven't been initialized.
-
      AppDefined events may lack timing data.
+
+     Thus, we rely on the didBeginTrackingNotification notification
+     as above to indicate the need for updates.
+     From 10.6 on, we could also use -[NSMenu propertiesToUpdate]: In the
+     key press case, NSMenuPropertyItemImage (e.g.) won't be set.
   */
-  if (([event type] != NSSystemDefined) // && [event type] != NSApplicationDefined)  [too slow if we do that]
-      || [event subtype] == 8    /* subtype can't be sent to all types of events */
+  if (trackingMenu == 0
       /* Also, don't try this if from an event picked up asynchronously,
          as lots of lisp evaluation happens in ns_update_menubar. */
       || handling_signal != 0)
     return;
-  ns_update_menubar (frame, 1, self);
-  
+  ns_update_menubar (frame, 1, self); /* deep */
+  trackingMenu = 0;
 }
 
 
@@ -785,7 +790,7 @@ name_is_separator (name)
 	    wv->name = SDATA (name);
 	  }
       }
-
+   
     /* add new contents */
 
     NSMenuItem *item = [self addItemWithWidgetValue: wv];
