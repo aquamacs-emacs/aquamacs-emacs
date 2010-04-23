@@ -128,7 +128,6 @@
 ;; ---------------------------------------------------------------------------
 ;; TODO:
 ;;
-;; Save window configuration.
 ;; Recognize more minor modes.
 ;; Save mark rings.
 
@@ -365,6 +364,12 @@ Possible values are:
   :type '(choice (const absolute) (const tilde) (const local))
   :group 'desktop
   :version "22.1")
+
+(defcustom desktop-save-frame-configuration nil
+  "Save states of all frames with their window configurations."
+  :type 'boolean
+  :group 'desktop
+  :version "24.1")
 
 (defcustom desktop-restore-eager t
   "Number of buffers to restore immediately.
@@ -692,6 +697,12 @@ is nil, ask the user where to save the desktop."
        (setq locals (cdr locals)))
      ll)))
 
+(defun desktop-frame-info (frame)
+  (list
+   frame
+   (frame-parameters frame)
+   (current-window-configuration-to-sexp frame)))
+
 ;; ----------------------------------------------------------------------------
 (defun desktop-internal-v2s (value)
   "Convert VALUE to a pair (QUOTE . TXT); (eval (read TXT)) gives VALUE.
@@ -831,6 +842,10 @@ MODE is the major mode.
                   (null dired-skip)     ; bug#5755
 		  (with-current-buffer bufname desktop-save-buffer))))))
 
+(defun desktop-save-frame-p (parameters window-configuration)
+  "Return t if FRAME should have its state saved in the desktop file."
+  t)
+
 ;; ----------------------------------------------------------------------------
 (defun desktop-file-name (filename dirname)
   "Convert FILENAME to format specified in `desktop-file-name-format'.
@@ -912,6 +927,20 @@ See also `desktop-base-file-name'."
 		(dolist (e l)
 		  (insert "\n  " (desktop-value-to-string e)))
 		(insert ")\n\n"))))
+
+	  (when desktop-save-frame-configuration
+	    (dolist (l (mapcar 'desktop-frame-info (frame-list)))
+	      (let ((frame (pop l)))
+		(when (apply 'desktop-save-frame-p l)
+		  (insert "("
+			  (if (eq frame (selected-frame))
+			      "desktop-set-frame"
+			    "desktop-create-frame")
+			  " "
+			  desktop-file-version)
+		  (dolist (e l)
+		    (insert "\n  " (desktop-value-to-string e)))
+		  (insert ")\n\n")))))
 
 	  (setq default-directory desktop-dirname)
 	  (let ((coding-system-for-write 'emacs-mule))
@@ -1210,6 +1239,14 @@ directory DIRNAME."
               (make-local-variable this)
               (makunbound this)))
           (setq desktop-buffer-locals (cdr desktop-buffer-locals)))))))
+
+(defun desktop-create-frame (desktop-file-version parameters window-configuration)
+  (make-frame parameters)
+  (set-window-configuration-from-sexp window-configuration))
+
+(defun desktop-set-frame (desktop-file-version parameters window-configuration)
+  (modify-frame-parameters nil parameters)
+  (set-window-configuration-from-sexp window-configuration))
 
 ;; ----------------------------------------------------------------------------
 ;; Backward compatibility -- update parameters to 205 standards.
