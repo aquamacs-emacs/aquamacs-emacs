@@ -52,15 +52,17 @@ If the value is a function, call it and switch to the buffer it returns."
   :group 'tabs
   :version "24.1")
 
-(defun tab-name ()
+(defun tab-name (&optional frame)
   (cond
    ((eq tab-name 'window-list)
     (mapconcat
      (lambda (w) (buffer-name (window-buffer w)))
-     (window-list)
+     (window-list frame)
      ", "))
    ((functionp tab-name)
-    (funcall tab-name))
+    (funcall tab-name frame))
+   (frame
+    (buffer-name (window-buffer (frame-selected-window frame))))
    (t
     (buffer-name))))
 
@@ -89,7 +91,7 @@ Return a newly created frame displaying the current buffer."
   (let* ((tab-list (tab-list frame))
          (tab-parameters (if (assoc 'name parameters)
                              parameters
-                           (append parameters `((name . ,(tab-name))))))
+                           (append parameters `((name . ,(tab-name frame))))))
          (tab-new
           (list (tab-gensym)
                 tab-parameters
@@ -105,16 +107,16 @@ Return a newly created frame displaying the current buffer."
      frame
      (list (cons 'tab-list (append tab-list (list tab-new)))))
     (tab-initial-buffer)
-    (tab-bar-setup)
+    (tab-bar-setup frame)
     (car tab-new)))
 
 ;;;###autoload
-(defun make-tab-command ()
+(defun make-tab-command (&optional frame)
   "Make a new tab, on the same frame as the selected tab.
 If the terminal is a text-only terminal, this also selects the
 new tab."
   (interactive)
-  (select-tab (make-tab)))
+  (select-tab (make-tab frame) frame))
 
 (defun tab-list (&optional frame)
   "Return a list of all tabs on FRAME.
@@ -141,7 +143,7 @@ this function is called.
 
 This function returns TAB, or nil if TAB has been deleted."
   ;; Save current win conf
-  (let* ((selected-tab (selected-tab))
+  (let* ((selected-tab (selected-tab frame))
          (tab-list (tab-list frame))
          (tab-param (assq selected-tab tab-list))
          (tab-name (assq 'name (nth 1 tab-param)))
@@ -151,7 +153,7 @@ This function returns TAB, or nil if TAB has been deleted."
       (setcar (cdr (cddr tab-param)) (point-marker))
       (setcar (cddr (cddr tab-param)) tab-history-back)
       (setcar (cdr (cddr (cddr tab-param))) tab-history-forward)
-      (if tab-name (setcdr tab-name (tab-name))))
+      (if tab-name (setcdr tab-name (tab-name frame))))
     (modify-frame-parameters frame (list (cons 'selected-tab tab)))
     (set-window-configuration (nth 2 tab-new-param))
     ;; set-window-configuration does not restore the value
@@ -161,7 +163,7 @@ This function returns TAB, or nil if TAB has been deleted."
       (goto-char (nth 3 tab-new-param)))
     (setq tab-history-back (nth 4 tab-new-param))
     (setq tab-history-forward (nth 5 tab-new-param))
-    (tab-bar-setup)))
+    (tab-bar-setup frame)))
 
 (defun delete-tab (&optional tab frame)
   "Remove TAB from its FRAME.
@@ -179,8 +181,8 @@ Signal an error when TAB is the only tab on its frame."
      (list (cons 'tab-list (assq-delete-all tab tab-list))))
     (if (null (tab-list frame))
         (tab-bar-mode 0)
-      (when tab-select (select-tab tab-select))
-      (tab-bar-setup))))
+      (when tab-select (select-tab tab-select frame))
+      (tab-bar-setup frame))))
 
 (defun delete-other-tabs (&optional tab frame)
   "Delete all tabs except TAB.
@@ -196,7 +198,7 @@ FRAME nil or omitted means use the selected frame."
      (list (cons 'tab-list (list tab-param))))
     (if (null (tab-list frame))
         (tab-bar-mode 0)
-      (tab-bar-setup))))
+      (tab-bar-setup frame))))
 
 (defun next-tab (&optional tab frame wrap)
   "Return the next tab in the tab list after TAB.
@@ -232,7 +234,7 @@ COUNT is the numeric prefix argument.  Return nil."
     (while (< count 0)
       (setq tab (previous-tab tab frame t))
       (setq count (1+ count)))
-    (select-tab tab)))
+    (select-tab tab frame)))
 
 (defun select-next-tab (&optional count)
   "Select the next tab in cyclic order.
@@ -264,6 +266,8 @@ The name is made by appending a number to PREFIX, default \"tab-\"."
 
 ;;; Tab history.
 
+;; FIXME: add `tab-history-mode'.
+
 (defvar tab-history-back nil
   "Stack of window configurations user has visited.
 Each element of the stack is a window configuration.")
@@ -289,13 +293,13 @@ Each element of the stack is a window configuration.")
 (defun tab-history-update ()
   (push (current-window-configuration) tab-history-back))
 
-(defun tab-name-update ()
-  (let* ((selected-tab (selected-tab))
-         (tab-list (tab-list))
+(defun tab-name-update (&optional frame)
+  (let* ((selected-tab (selected-tab frame))
+         (tab-list (tab-list frame))
          (tab-param (assq selected-tab tab-list))
          (tab-name (assq 'name (nth 1 tab-param))))
-    (if tab-name (setcdr tab-name (tab-name)))
-    (tab-bar-setup)))
+    (if tab-name (setcdr tab-name (tab-name frame)))
+    (tab-bar-setup frame)))
 
 (defvar tab-frames nil)
 

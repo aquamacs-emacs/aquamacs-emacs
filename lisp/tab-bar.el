@@ -91,13 +91,16 @@ See `tab-bar-add-item' for conveniently adding tab bar items."
   (if tab-bar-mode
       (progn
 	(modify-all-frames-parameters (list (cons 'tab-bar-lines 1)))
-	(when (<= 1 (length (default-value 'tab-bar-map))) ; not yet setup
-	  (unless (tab-list)
-	    (select-tab (make-tab)))
-	  (tab-bar-setup))
+	(dolist (frame (frame-list))
+	  (when (<= 1 (length (or (cdr (assoc 'tab-bar-map (frame-parameters frame)))
+				  (default-value 'tab-bar-map)))) ; not yet setup
+	    (unless (tab-list frame)
+	      (select-tab (make-tab frame) frame))))
 	(setq tab-frames (frame-list))
+	(add-hook 'after-make-frame-functions 'make-tab-command)
 	(add-hook 'window-configuration-change-hook 'tab-window-configuration-change))
     (modify-all-frames-parameters (list (cons 'tab-bar-lines 0)))
+    (remove-hook 'after-make-frame-functions 'make-tab-command)
     (remove-hook 'window-configuration-change-hook 'tab-window-configuration-change)))
 
 ;;;###autoload
@@ -156,10 +159,11 @@ color capability and based on the available image libraries."
 					bind))
 		    (plist-put plist :image image))))
 	      bind))
-	  tab-bar-map))
+	  (or (cdr (assoc 'tab-bar-map (frame-parameters)))
+	      (default-value 'tab-bar-map))))
 
 ;;;###autoload
-(defun tab-bar-add-item (icon name def key selected &rest props)
+(defun tab-bar-add-item (frame icon name def key selected &rest props)
   "Add an item to the tab bar.
 ICON names the image, DEF is the key definition and KEY is a symbol
 for the fake function key in the menu keymap.  Remaining arguments
@@ -174,7 +178,9 @@ ICON.xbm, using `find-image'.
 Use this function only to make bindings in the global value of `tab-bar-map'.
 To define items in any other map, use `tab-bar-local-item'."
   (apply 'tab-bar-local-item icon name def key
-	 (default-value 'tab-bar-map) selected props))
+	 (or (cdr (assoc 'tab-bar-map (frame-parameters frame)))
+	     (default-value 'tab-bar-map))
+	 selected props))
 
 ;;;###autoload
 (defun tab-bar-local-item (icon name def key map selected &rest props)
@@ -221,28 +227,31 @@ ICON.xbm, using `find-image'."
 
 ;;; Set up some global items.  Additions/deletions up for grabs.
 
-(defun tab-bar-setup ()
-  (setq tab-bar-map (make-sparse-keymap))
-  (tab-bar-add-item "tab-left"
+(defun tab-bar-setup (&optional frame)
+  (modify-frame-parameters frame (list (cons 'tab-bar-map (make-sparse-keymap))))
+  (tab-bar-add-item frame
+		    "tab-left"
 		    ""
 		    'tab-history-back
 		    'tab-history-back
 		    nil
 		    :enable 'tab-history-back
 		    :help "Go back in history")
-  (tab-bar-add-item "tab-right"
+  (tab-bar-add-item frame
+		    "tab-right"
 		    ""
 		    'tab-history-forward
 		    'tab-history-forward
 		    nil
 		    :enable 'tab-history-forward
 		    :help "Go forward in history")
-  (let ((selected-tab (selected-tab)))
-    (dolist (tab (tab-list))
+  (let ((selected-tab (selected-tab frame)))
+    (dolist (tab (tab-list frame))
       (let ((tab-id (car tab))
-	    (tab-name (or (cdr (assoc 'name (nth 1 tab))) (tab-name))))
+	    (tab-name (or (cdr (assoc 'name (nth 1 tab))) (tab-name frame))))
 	(when tab-id
-	  (tab-bar-add-item nil
+	  (tab-bar-add-item frame
+			    nil
 			    tab-name
 			    `(lambda ()
 			       (interactive)
@@ -251,7 +260,8 @@ ICON.xbm, using `find-image'."
 			    (eq selected-tab tab-id)
 			    :enable `(not (eq (selected-tab) ',tab-id))
 			    :help "Select this tab")
-	  (tab-bar-add-item "tab-delete"
+	  (tab-bar-add-item frame
+			    "tab-delete"
 			    ""
 			    `(lambda ()
 			       (interactive)
@@ -259,7 +269,7 @@ ICON.xbm, using `find-image'."
 			    (intern (concat "delete-" (symbol-name tab-id)))
 			    nil
 			    :help "Delete this tab")))))
-  ;; (redraw-frame (selected-frame))
+  ;; (redraw-frame (or frame (selected-frame)))
   )
 
 (provide 'tab-bar)
