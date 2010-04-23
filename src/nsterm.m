@@ -4731,6 +4731,12 @@ ns_term_shutdown (int sig)
 
 @implementation EmacsView
 
+
+-(void)windowDidBecomeMain:(NSNotification *)aNotification
+{
+  set_frame_menubar (emacsframe, 1, 1);
+}
+
 /* needed to inform when window closed from LISP */
 - (void) setWindowClosing: (BOOL)closing
 {
@@ -4962,7 +4968,6 @@ ns_term_shutdown (int sig)
   static BOOL firstTime = YES;
 
   NSTRACE (keyDown);
-
   /* Rhapsody and OS X give up and down events for the arrow keys */
   if (ns_fake_keydown == YES)
     ns_fake_keydown = NO;
@@ -6382,6 +6387,9 @@ ns_term_shutdown (int sig)
   else
     [super mouseDragged: theEvent];
 }
+
+
+@end
 
 @end /* EmacsWindow */
 

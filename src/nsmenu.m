@@ -144,10 +144,8 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 #endif
 
   NSTRACE (set_frame_menubar);
-
   if (f != SELECTED_FRAME ())
       return;
-
   if ([[FRAME_NS_VIEW (f) window] attachedSheet] &&
       [[[FRAME_NS_VIEW (f) window] attachedSheet] isKindOfClass: [EmacsSavePanel class]])
     {
@@ -162,7 +160,6 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
     }
   
   [NSApp setMainMenu: mainMenu];
-
 
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
@@ -198,7 +195,6 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 #ifdef NS_IMPL_GNUSTEP
   deep_p = 1; /* until GNUstep NSMenu implements the Panther delegation model */
 #endif
-
   if (deep_p)
     {
       /* Fully parse one or more of the submenus. */
@@ -585,7 +581,6 @@ name_is_separator (name)
   frame = f;
 }
 
-
 /* delegate method called when a submenu is being opened: run a 'deep' call
    to set_frame_menubar */
 - (void)menuNeedsUpdate: (NSMenu *)menu
@@ -596,6 +591,8 @@ name_is_separator (name)
     return;
 
   NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
+  // fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); 
+
   /* HACK: Cocoa/Carbon will request update on every keystroke via
      IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
      since key equivalents are handled through emacs.  
@@ -607,17 +604,19 @@ name_is_separator (name)
      
      Third-party applications that enhance mouse / trackpad
      interaction, or also VNC/Remote Desktop will send events
-     that are NSApplicationDefined.  It would be wrong to discard such
-     events, as menus won't show up if we do so.
+     that are AppDefined and never SysDefined. 
+     Menus will fail to show up if they haven't been initialized.
+
+     AppDefined events may lack timing data.
   */
-  if (([event type] != NSSystemDefined && [event type] != NSApplicationDefined)
+  if (([event type] != NSSystemDefined) // && [event type] != NSApplicationDefined)  [too slow if we do that]
       || [event subtype] == 8    /* subtype can't be sent to all types of events */
       /* Also, don't try this if from an event picked up asynchronously,
          as lots of lisp evaluation happens in ns_update_menubar. */
       || handling_signal != 0)
     return;
-/*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
   ns_update_menubar (frame, 1, self);
+  
 }
 
 
