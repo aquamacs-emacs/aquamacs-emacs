@@ -13,6 +13,11 @@ date >>aquamacs-build.log
 git checkout -f master >>aquamacs-build.log  2>>aquamacs-build.log
 git pull origin master  >>aquamacs-build.log  2>>aquamacs-build.log
 
+# update documentation: requires latex (tetex with nonfreefonts package)
+cd aquamacs/doc/latex
+make 
+cd -
+
 aquamacs/build/build23ub.sh >>aquamacs-build.log 2>>aquamacs-build.log
 
 date >>aquamacs-build.log
