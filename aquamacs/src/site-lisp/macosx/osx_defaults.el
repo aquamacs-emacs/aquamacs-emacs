@@ -29,7 +29,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006,2007,2008 David Reitter
+;; Copyright (C) 2005, 2006,2007,2008,2010 David Reitter
 
  
 ; remaining issues
@@ -304,6 +304,7 @@ Set `auto-save-file-name-transforms' instead.")
 (aquamacs-set-defaults 
  `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
    (recentf-menu-action aquamacs-find-file-2)
+   (user-emacs-directory "~/Library/Application Support/Aquamacs Emacs/")
    (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
    (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
    (trash-directory "~/.Trash")
