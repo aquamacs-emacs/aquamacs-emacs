@@ -6381,8 +6381,8 @@ set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
   register struct window *w;
 
   if (!CONSP (data)
-      || !EQ (XCAR (data), intern ("saved-window")))
-    wrong_type_argument (intern ("saved-window"), data);
+      || !EQ (XCAR (data), intern ("window")))
+    wrong_type_argument (intern ("window"), data);
 
   data = Fcdr (data);
 
@@ -6398,7 +6398,7 @@ set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
 
   tem = Fcdr (Fassq (intern ("next"), data));
   if (!NILP (tem))
-    w->next = set_window_from_sexp (tem, window, Qnil,
+    w->next = set_window_from_sexp (tem, window, parent,
 				    new_current_window,
 				    new_mini_window);
 
@@ -6477,7 +6477,7 @@ set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
   XSETFASTINT (w->last_overlay_modified, 0);
 
   /* Reinstall the saved buffer and pointers into it.  */
-  tem = Fcdr (Fassq (intern ("buffer"), data));
+  tem = Fcdr (Fassq (intern ("buffer-name"), data));
   if (NILP (tem))
     w->buffer = Qnil;
   else
@@ -6525,9 +6525,9 @@ by `current-window-configuration-to-sexp' (which see).  */)
     wrong_type_argument (intern ("window-configuration"), configuration);
 
   data = Fcdr (configuration);
-  saved_windows = Fcdr (Fassq (intern ("saved-windows"), data));
+  saved_windows = Fcdr (Fassq (intern ("windows"), data));
 
-  new_current_buffer = Fcdr (Fassq (intern ("current-buffer"), data));
+  new_current_buffer = Fcdr (Fassq (intern ("current-buffer-name"), data));
   new_current_window = new_mini_window = Qnil;
 
   frame = selected_frame;
@@ -6539,6 +6539,9 @@ by `current-window-configuration-to-sexp' (which see).  */)
     {
       register struct window *w;
       register struct saved_window *p;
+      struct window *root_window;
+      struct window **leaf_windows;
+      int n_leaf_windows;
       int k, i, n;
 
       /* If the frame has different sizes than in the window configuration,
@@ -6599,6 +6602,12 @@ by `current-window-configuration-to-sexp' (which see).  */)
       windows_or_buffers_changed++;
       FRAME_WINDOW_SIZES_CHANGED (f) = 1;
 
+      root_window = XWINDOW (FRAME_ROOT_WINDOW (f));
+      leaf_windows
+	= (struct window **) alloca (count_windows (root_window)
+				     * sizeof (struct window *));
+      n_leaf_windows = get_leaf_windows (root_window, leaf_windows, 0);
+
       /* Mark all windows now on frame as "deleted".
 	 Restoring the new configuration "undeletes" any that are in it.  */
       delete_all_subwindows (XWINDOW (FRAME_ROOT_WINDOW (f)));
@@ -6643,6 +6652,20 @@ by `current-window-configuration-to-sexp' (which see).  */)
 			      make_number (0));
 #endif
 #endif
+
+      /* Now, free glyph matrices in old windows.  */
+      for (i = n = 0; i < n_leaf_windows; ++i)
+	{
+	  if (NILP (leaf_windows[i]->buffer))
+	    {
+	      /* Assert it's not reused as a combination.  */
+	      xassert (NILP (leaf_windows[i]->hchild)
+		       && NILP (leaf_windows[i]->vchild));
+	      free_window_matrices (leaf_windows[i]);
+	    }
+	  else if (EQ (leaf_windows[i]->buffer, new_current_buffer))
+	    ++n;
+	}
 
       adjust_glyphs (f);
 
@@ -6864,22 +6887,30 @@ redirection (see `redirect-frame-focus').  */)
 }
 
 static Lisp_Object
-save_window_save_to_sexp (window)
-     Lisp_Object window;
+save_window_save_to_sexp (window, live_p)
+     Lisp_Object window, live_p;
 {
   register struct window *w;
-  register Lisp_Object data;
+  register Lisp_Object data, tem;
 
   w = XWINDOW (window);
 
-  data = Fcons (intern ("saved-window"), Qnil);
+  data = Fcons (intern ("window"), Qnil);
+
+  if (!NILP (live_p))
+    data = Fcons (Fcons (intern ("id"), window), data);
 
   if (EQ (window, selected_window))
     data = Fcons (Fcons (intern ("current-window"), Qt), data);
 
   if (!NILP (w->buffer))
-    data = Fcons (Fcons (intern ("buffer"),
-			 XBUFFER (w->buffer)->name), data);
+    {
+      data = Fcons (Fcons (intern ("buffer-name"),
+			   XBUFFER (w->buffer)->name), data);
+      if (!NILP (live_p))
+	data = Fcons (Fcons (intern ("buffer"),
+			     w->buffer), data);
+    }
 
   data = Fcons (Fcons (intern ("left-col"),
 		       w->left_col), data);
@@ -6927,46 +6958,91 @@ save_window_save_to_sexp (window)
 	 If w is the selected window, then get the value of point
 	 from the buffer; pointm is garbage in the selected window.  */
       if (EQ (window, selected_window))
-	data = Fcons (Fcons (intern ("pointm"),
-			     make_number (BUF_PT (XBUFFER (w->buffer)))), data);
+	{
+	  data = Fcons (Fcons (intern ("pointm"),
+			       make_number (BUF_PT (XBUFFER (w->buffer)))), data);
+	  if (!NILP (live_p))
+	    {
+	      tem = Fmake_marker ();
+	      set_marker_both (tem, w->buffer,
+			       BUF_PT (XBUFFER (w->buffer)),
+			       BUF_PT_BYTE (XBUFFER (w->buffer)));
+	      data = Fcons (Fcons (intern ("pointm-marker"),
+				   tem), data);
+	    }
+	}
       else
-	data = Fcons (Fcons (intern ("pointm"),
-			     make_number (XMARKER (w->pointm)->charpos)), data);
+	{
+	  data = Fcons (Fcons (intern ("pointm"),
+			       make_number (XMARKER (w->pointm)->charpos)), data);
+	  if (!NILP (live_p))
+	    data = Fcons (Fcons (intern ("pointm-marker"),
+				 Fcopy_marker (w->pointm, Qnil)), data);
+	}
 
       data = Fcons (Fcons (intern ("start"),
 			   make_number (XMARKER (w->start)->charpos)), data);
+      if (!NILP (live_p))
+	data = Fcons (Fcons (intern ("start-marker"),
+			     Fcopy_marker (w->start, Qnil)), data);
       data = Fcons (Fcons (intern ("start-at-line-beg"),
 			   w->start_at_line_beg), data);
 
       if (XMARKER (XBUFFER (w->buffer)->mark)->buffer)
-	data = Fcons (Fcons (intern ("mark"),
-			     make_number (XMARKER (XBUFFER (w->buffer)->mark)->charpos)), data);
+	{
+	  data = Fcons (Fcons (intern ("mark"),
+			       make_number (XMARKER (XBUFFER (w->buffer)->mark)->charpos)), data);
+	  if (!NILP (live_p))
+	    data = Fcons (Fcons (intern ("mark-marker"),
+				 Fcopy_marker (XBUFFER (w->buffer)->mark, Qnil)), data);
+	}
+    }
+
+  if (!NILP (live_p))
+    {
+      if (!NILP (w->next))
+	data = Fcons (Fcons (intern ("next-window"),
+			     w->next), data);
+      if (!NILP (w->prev))
+	data = Fcons (Fcons (intern ("prev-window"),
+			     w->prev), data);
+      if (!NILP (w->vchild))
+	data = Fcons (Fcons (intern ("vchild-window"),
+			     w->vchild), data);
+      if (!NILP (w->hchild))
+	data = Fcons (Fcons (intern ("hchild-window"),
+			     w->hchild), data);
+      if (!NILP (w->parent))
+	data = Fcons (Fcons (intern ("parent-window"),
+			     w->parent), data);
     }
 
   if (!NILP (w->next))
     data = Fcons (Fcons (intern ("next"),
-			 save_window_save_to_sexp (w->next)), data);
+			 save_window_save_to_sexp (w->next, live_p)), data);
   if (!NILP (w->vchild))
     data = Fcons (Fcons (intern ("vchild"),
-			 save_window_save_to_sexp (w->vchild)), data);
+			 save_window_save_to_sexp (w->vchild, live_p)), data);
   if (!NILP (w->hchild))
     data = Fcons (Fcons (intern ("hchild"),
-			 save_window_save_to_sexp (w->hchild)), data);
+			 save_window_save_to_sexp (w->hchild, live_p)), data);
 
   return (Fnreverse (data));
 }
 
 DEFUN ("current-window-configuration-to-sexp", Fcurrent_window_configuration_to_sexp,
-       Scurrent_window_configuration_to_sexp, 0, 1, 0,
+       Scurrent_window_configuration_to_sexp, 0, 2, 0,
        doc: /* Return a sexp representing the current window configuration of FRAME.
 If FRAME is nil or omitted, use the selected frame.
-This Lisp expression describes the number of windows, their sizes and
-current buffers, and for each displayed buffer, where display starts,
+If LIVE-P is non-nil, include live data like markers, buffer objects
+and window objects.
+Return a Lisp expression that describes the number of windows, their sizes
+and current buffers, and for each displayed buffer, where display starts,
 and the positions of point and mark.  */)
-     (frame)
-     Lisp_Object frame;
+     (frame, live_p)
+     Lisp_Object frame, live_p;
 {
-  register Lisp_Object data;
+  register Lisp_Object data, tem;
   FRAME_PTR f;
 
   if (NILP (frame))
@@ -6985,15 +7061,22 @@ and the positions of point and mark.  */)
 		       make_number (FRAME_TOOL_BAR_LINES (f))), data);
   data = Fcons (Fcons (intern ("frame-tab-bar-lines"),
 		       make_number (FRAME_TAB_BAR_LINES (f))), data);
-  data = Fcons (Fcons (intern ("current-buffer"),
+  data = Fcons (Fcons (intern ("current-buffer-name"),
 		       current_buffer->name), data);
+  if (!NILP (live_p))
+    {
+      XSETBUFFER (tem, current_buffer);
+      data = Fcons (Fcons (intern ("current-buffer"),
+			   tem), data);
+    }
   data = Fcons (Fcons (intern ("minibuf-scroll-window"),
 		       minibuf_level > 0 ? Vminibuf_scroll_window : Qnil), data);
   data = Fcons (Fcons (intern ("minibuf-selected-window"),
 		       minibuf_level > 0 ? minibuf_selected_window : Qnil), data);
 
-  data = Fcons (Fcons (intern ("saved-windows"),
-		       save_window_save_to_sexp (FRAME_ROOT_WINDOW (f))), data);
+  data = Fcons (Fcons (intern ("windows"),
+		       save_window_save_to_sexp (FRAME_ROOT_WINDOW (f),
+						 live_p)), data);
 
   return (Fnreverse (data));
 }
