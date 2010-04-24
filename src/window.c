@@ -6372,8 +6372,9 @@ delete_all_subwindows (w)
 }
 
 static Lisp_Object
-set_window_from_sexp (data, prev, parent, new_current_window)
-     Lisp_Object data, prev, parent, *new_current_window;
+set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
+     Lisp_Object data, prev, parent;
+     Lisp_Object *new_current_window, *new_mini_window;
 {
   register Lisp_Object tem;
   register Lisp_Object window;
@@ -6397,15 +6398,21 @@ set_window_from_sexp (data, prev, parent, new_current_window)
 
   tem = Fcdr (Fassq (intern ("next"), data));
   if (!NILP (tem))
-    w->next = set_window_from_sexp (tem, window, Qnil, new_current_window);
+    w->next = set_window_from_sexp (tem, window, Qnil,
+				    new_current_window,
+				    new_mini_window);
 
   tem = Fcdr (Fassq (intern ("hchild"), data));
   if (!NILP (tem))
-    w->hchild = set_window_from_sexp (tem, Qnil, window, new_current_window);
+    w->hchild = set_window_from_sexp (tem, Qnil, window,
+				      new_current_window,
+				      new_mini_window);
 
   tem = Fcdr (Fassq (intern ("vchild"), data));
   if (!NILP (tem))
-    w->vchild = set_window_from_sexp (tem, Qnil, window, new_current_window);
+    w->vchild = set_window_from_sexp (tem, Qnil, window,
+				      new_current_window,
+				      new_mini_window);
 
   tem = Fassq (intern ("left-col"), data);
   if (!NILP (tem))
@@ -6461,6 +6468,11 @@ set_window_from_sexp (data, prev, parent, new_current_window)
   tem = Fassq (intern ("resize-proportionally"), data);
   if (!NILP (tem))
     w->resize_proportionally = Fcdr (tem);
+  tem = Fassq (intern ("mini-p"), data);
+  if (!NILP (tem)) {
+    w->mini_p = Fcdr (tem);
+    *new_mini_window = window;
+  }
   XSETFASTINT (w->last_modified, 0);
   XSETFASTINT (w->last_overlay_modified, 0);
 
@@ -6504,7 +6516,7 @@ by `current-window-configuration-to-sexp' (which see).  */)
   register Lisp_Object tem, tem2;
   Lisp_Object saved_windows;
   Lisp_Object new_current_buffer;
-  Lisp_Object new_current_window;
+  Lisp_Object new_current_window, new_mini_window;
   Lisp_Object frame;
   FRAME_PTR f;
 
@@ -6516,7 +6528,7 @@ by `current-window-configuration-to-sexp' (which see).  */)
   saved_windows = Fcdr (Fassq (intern ("saved-windows"), data));
 
   new_current_buffer = Fcdr (Fassq (intern ("current-buffer"), data));
-  new_current_window = Qnil;
+  new_current_window = new_mini_window = Qnil;
 
   frame = selected_frame;
   CHECK_LIVE_FRAME (frame);
@@ -6592,7 +6604,13 @@ by `current-window-configuration-to-sexp' (which see).  */)
       delete_all_subwindows (XWINDOW (FRAME_ROOT_WINDOW (f)));
 
       FRAME_ROOT_WINDOW (f) = set_window_from_sexp (saved_windows, Qnil, Qnil,
-						    &new_current_window);
+						    &new_current_window,
+						    &new_mini_window);
+
+      if (!NILP (new_mini_window))
+	f->minibuffer_window = new_mini_window;
+      else
+	f->minibuffer_window = Qnil;
 
       if (!NILP (new_current_window))
 	{
@@ -6899,6 +6917,9 @@ save_window_save_to_sexp (window)
 		       w->dedicated), data);
   data = Fcons (Fcons (intern ("resize-proportionally"),
 		       w->resize_proportionally), data);
+  if (!NILP (w->mini_p))
+    data = Fcons (Fcons (intern ("mini-p"),
+			 w->mini_p), data);
 
   if (!NILP (w->buffer))
     {
