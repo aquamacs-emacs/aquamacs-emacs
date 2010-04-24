@@ -177,7 +177,7 @@ The File menu includes basic operations for opening, closing, and printing files
 
 You can create a new buffer: Aquamacs allows you to choose from a list of recently and commonly used editing modes.  A similar function lets you change the current editing mode.
 
-You can also open a directory. When called by mouse from the menubar, this brings up a standard Aqua dialog box. When called up with a keyboard command (Control-x d), it brings up a directory name in the ``minibuffer'' (small space for commands at the bottom of the main window, or frame).
+You can also open a directory. When called by mouse from the menubar, this brings up a standard Aqua dialog box. When called up with a keyboard command (C-x d), it brings up a directory name in the ``minibuffer'' (small space for commands at the bottom of the main window, or frame).
 
 Printing is fully supported, although no ``Page Setup'' option is available at this point.  You will see a print screen (in the system's Preview.app) from where you can select a printer and the usual options.  This may take a few seconds to appear with very large buffers. (Printing of embedded images such in LaTeX Preview mode is currently not supported.)
 
@@ -204,11 +204,7 @@ these are accessible from the menu in case you need to paste these
 items again.  The Edit menu also supports ``bookmarks,'' a feature
 that allows you to save your place in a specific file. 
 
-Aquamacs contains spell-checking functions; however, either the extra
-packages ``Aspell'' or ``Ispell'' need to be installed. The
-recommended way to do that is to install ``CocoAspell'', which is a
-Mac variant of the Aspell program. It comes with a dictionaries for
-English, but a variety of other dictionaries is available.
+Aquamacs lets you spell-check your texts, either while typing (`flyspell-mode') or for the whole buffer with an interactive interface (`ispell').
 
 
 \subsection{Options}
@@ -223,8 +219,7 @@ If you want to delve deeply into customizing Aquamacs, select
 menu. A new frame titled ``Customize Group: Emacs'' will open. Scroll
 down and find the ``Aquamacs Group'' listing, and push the ``Go to
 Group'' button. This will open a new frame with all of the
-configuration options for Aquamacs Emacs---deep-level customization that can be implemented by 
-Aquamacs power users in the Emacs scripting language, elisp---and each option is documented there. 
+configuration options for Aquamacs ---power users can customize Aquamacs this way, or via the Emacs Lisp programming language, elisp---and each option is documented there. 
 Table \ref{tab:variables} displays a complete list of the options. 
 
 \subsubsection{Line wrapping}
@@ -233,7 +228,7 @@ Text is usually shown and read line by line.  Several lines commonly form a para
 
 What's the alternative?  \textbf{Hard word wrap} means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.  If a line is too long, it can either be \textbf{truncated} (cut off) or be continued on the next line. (The difference between hard and soft word wrap is technically whether lines are continued only at word boundaries.)
 
-Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Auto Word Wrap in Text Modes'' function.  (You can control the default, e.g.,~for new files, by setting `auto-word-wrap-default-function' to `turn-on-word-wrap' using Options / Customize Aquamacs / Specific Option.)
+Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Auto-Detext Word Wrap in Text Files'' function.  (You can control the default, e.g.,~for new files, by setting `auto-word-wrap-default-function' to `turn-on-word-wrap' using Options / Customize Aquamacs / Specific Option.)
  
 A useful function to convert hard wrapped text into soft wrapped text can be found in the Edit menu: \emph{Remove Hard Line Breaks} will turn (non-indented!) paragraphs into soft-wrapped lines (turn on soft wrapping to see). 
 
@@ -346,6 +341,10 @@ The Help menu contains a wealth of information about Aquamacs Emacs and GNU Emac
 
 While experienced users of Emacs on other platforms can continue to use all the key combinations to which they are accustomed, we recommend that they use the Aquamacs-specific conventions to get the most benefit from the applications.  Many of the standard Emacs behaviors and interface conventions have been modified in Aquamacs in the interest of providing a more Aqua-native experience. In this section, we discuss some of the ways that Emacs conventions are mapped to Aqua conventions, and outline some advanced ways that users can modify Aquamacs to their specific preferences.
 
+\subsection{Bringing some Emacs 23 behavior back}
+
+Export users who find themselves confused by some changes to the Emacs behavior that they are used to, either due to the upgrade to Emacs 23, or to Aquamacs, may undo configuration changes quickly by using the Emacs Lisp code shown at \url{http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings} in their Preferences.el file.
+
 \subsection{Keyboard Shortcuts}
 Emacs has a well-defined set of keyboard shortcuts, to which Aquamacs adds its own to accomodate OS X conventions. See Table \ref{tab:shortcuts} and Table \ref{tab:command} for details.
 
@@ -359,6 +358,7 @@ Note that the descriptions of keys in Aquamacs conform to the Mac standards.
 \hline Command-N &new-frame-with & Create new buffer\\ &-new-scratch & \\
 
 \hline Command-O & mac-find-file- & Open a file\\ & other-frame & \\
+\hline  Command-W &  close-window & Close selected window \\ & & deleting buffer\\
 
 \hline Command-Shift-S & mac-save-file-as & Save as\\
  
@@ -382,8 +382,8 @@ from secondary selection\\ & kill-secondary &\\
 
 \hline Command-G &  isearch-repeat-forward & Repeat search\\
 \hline Command-E & aquamacs-use-selection-for-find & Use selected text for next search\\
+\hline Command-; & spellcheck-now & Jump to next spelling error\\
 
-\hline  Command-W &  close-window & Close selected window\\
 
 \hline Command-M & iconify-or-deiconify- & Minimize window \\ & frame &  to the Dock\\
 
@@ -391,7 +391,7 @@ from secondary selection\\ & kill-secondary &\\
 
 \hline Command-, & customize & Show Customization Buffer\\
 
-\hline Command-; & toggle-mac-option- & Change Option key function\\ & modifier &\\
+\hline Control-; & toggle-mac-option- & Change Option key function\\ & modifier &\\
 
 \hline Command-{ / } / '& (un)comment-region-or-line & Comment out or in the \\ & current line or region if 
 marked  &\\
@@ -412,7 +412,7 @@ marked  &\\
 \hline 
 \end{tabular} 
 \caption{Aqua-specific keyboard shortcuts implemented in
-  Aquamacs. This assumes that the ``Option Key is Meta'' (Options menu).}
+  Aquamacs. This assumes that the ``Option Key is Meta'' (Options menu).  Commands given are usually the traditional Emacs commands rather than direct bindings.}
 \label{tab:shortcuts}
 \end{center}
 \end{table}
@@ -462,7 +462,7 @@ Below are some specific customization options and groups that may be of interest
 
 \item \textbf{Autofaces.} These styles provide a convenient way to tie default faces to specific major modes so that every frame showing a buffer in a particular major mode is styled that way. Such faces can  determine background and foreground color as well as font settings.  Such settings always override any global choices made with, for instance, `default-frame-alist' or the `default' face.   The autofaces may be customized (`customize-face') directly or set through the GUI.  Note that these faces apply {\em per buffer}.
 
-\item \textbf{mac-option-modifier.} This is  the modifier to use for the Mac alt/option key.  The value can
+\item \textbf{ns-alternate-modifier.} This is  the modifier to use for the Mac alt/option key.  The value can
 be alt, hyper, or super for the respective modifier.  If the value is
 nil then the key will act as the normal Mac option modifier, and the option
 key can be used to compose characters depending on the chosen Mac keyboard
@@ -480,8 +480,8 @@ setting.
 
   As mentioned above, the Aquamacs scratch buffer is simply a buffer into which notes can be typed.  For this reason, the scratch buffer is opened in text mode, as opposed to lisp interaction mode (the default mode for the plain GNU Emacs). Customize `initial-major-mode' (and restart) to change this.  In Aquamacs, the scratch buffer is automatically retained between sessions.  It can also be saved using the normal save commands; you are free to save its contents to another file.
 
-\item \textbf{Want some GNU Emacs 22 behavior back?} In most cases
-  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (22) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
+\item \textbf{Want some GNU Emacs 23 behavior back?} In most cases
+  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (23) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
 
 Also, see Table \ref{tab:variables} for a partial list of such settings.
 
@@ -521,7 +521,7 @@ customization group.}
 
 \end{itemize}
 
-The range of possible customizations---including restoring some of Emacs' traditional interface conventions---is beyond the scope of this help document. However, we provide a wiki for users to share their modifications. See \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/} for more details.
+The range of possible customizations---including restoring some of Emacs' traditional interface conventions---is beyond the scope of this help document. However, we provide a wiki for users to share their modifications. See \url{http://www.emacswiki.org/emacs/AquamacsEmacs} for more details.
 
 \subsection{\LaTeX\ Support}
 
@@ -550,13 +550,17 @@ When editing \LaTeX files, you will often need to view the compiled results. App
 
 Clicking on a position in the PDF file in Skimwhile holding the Command and Shift keys causes Aquamacs to move your cursor to the corresponding point in the underlying source file, opening it if necessary. To enable Skim with SyncTeX, enable Aquamacs in Skim's Preferences dialog.  Aquamacs does not need to be configured further -- it should recognize Skim once the first \LaTeX file has been opened. 
 
-Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box with Aquamacs. ``Pdfsync'' works.
+Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box with Aquamacs. Using the ``Pdfsync'' package works.
 
 
 \subsection{Lisp Support}
 
 Lisp programmers will appreciate the Superior Lisp Interaction Mode for Emacs, SLIME.  This is available from the Aquamacs website as a convenient point-and-click installer package, which will result in fully integrated Lisp experience.
 
+
+\subsection{Java Support}
+
+Java programmers should install the JDEE point-and-click installer package, available from the Aquamacs website (\url{http://aquamacs.org/download.shtml}).
 
 \section{Extending Aquamacs}
 
@@ -659,7 +663,7 @@ the project developed further, \emph{please make a donation.}
 \section {Contribute to Aquamacs -- Join the Fun!}
 
 If you'd like to join us in working on Aquamacs, download the source
-code from CVS and take a look. Do ask if you have questions! When you
+code from Git and take a look. Do ask if you have questions! When you
 have a patch or a less specific suggestion for improvements, send it
 to the development mailing list.
 
@@ -677,49 +681,18 @@ without the help of developers, designers, writers and users. The
 following people have contributed code, bug reports and ideas to the
 Aquamacs project at one point of the other.\footnote{We apologize for not being able to list everyone.  If you feel that someone should be mentioned, please e-mail us.}
 
-Lawrence Akka; Mahn-Soo Choi; Bill Clementson; Nathaniel Cunningham; José Figueroa-O'Farrill; Enrico Franconi; Terry Jones; Jean-Christophe Helary; Marcin Koziej;  Konrad Podczeck; David Reitter (co-founder, lead developer); Robert H. Sloan; Jessica Walker (Aquamacs 2.0 application icon); Kevin Walzer (co-founder, documentation); and others.
+Lawrence Akka; Dave Carlton (web server maintenance); Mahn-Soo Choi; Bill Clementson; Nathaniel Cunningham; José Figueroa-O'Farrill; Enrico Franconi; Terry Jones; Jean-Christophe Helary; Marcin Koziej;  Konrad Podczeck; David Reitter (co-founder, lead developer); Robert H. Sloan; Jessica Walker (Aquamacs 2.0 application icon); Kevin Walzer (co-founder, documentation); and others.
 
-We would also like to acknowledge the contributions of these authors,
+We would also like to acknowledge the contributions of the many authors 
 whose source code and hints on public forums have already been
-integrated into the build:
-
-Drew Adams;
-Ralf Angeli (AUCTeX);
-Emil Astrom; 
-Stefan Bruda; 
-Steve Dodd;  
-Helmut Eller (SLIME);
-Massimiliano Gubinelli (Aquamacs ``gnu'' icon); 
-Taiichi Hashimoto;
-T. Hiromatsu; 
-Kyle E. Jones; 
-David Kastrip (AUCTeX);
-Paul Kinnucan (JDE);
-Gian Uberto Lauri (HTML Helper Mode);
-Vinicius Jose Latorre (Highline Mode);
-Vebjorn Ljosa (Fullscreen);
-Eric M. Ludlam (Cedet);
- Xavier Maillard;
- Pekka Marjola;
-Nelson Minar (HTML Helper Mode);
-Mitsuharu Yamamoto;
-Gerd Neugebauer;
-David Ponce (original Tabbar);
- Ovidiu Predesc; 
- Alex Schröder;
- Mikael Sjödin;
-Joel Stanley (Fullscreen);
-Bob Weiner;  
-Milan Zamazal;
-Seiji Zenitani; and many others.
+integrated into the build.  They are too numerous to mention here.
 
 Aquamacs is based on GNU Emacs, which is the work of Richard Stallman
 and many other developers, in particular Andrew Choi (original GNU
-Emacs-to-MacOS and OSX ports), Steven Tamm and Mitsuharu Yamamoto
-(continued port development). We also would like to acknowledge the work
+Emacs-to-MacOS and OSX ports), Steven Tamm, Mitsuharu Yamamoto, Adrian Robert. We also would like to acknowledge the work
 of the many authors of the major modes included.
 
-Aquamacs contains icon artwork by Adrian Chromenko and David Reitter,
+Aquamacs contains icon artwork by Adrian Chromenko, Jessica Walker and David Reitter,
 Jasper Hauser, and the Nuovext Project.  The Aquamacs website was designed by Ted Roden.
 
 Last but not least, Aquamacs couldn't exist without the dedication of
@@ -737,17 +710,17 @@ See \url{http://aquamacs.org/nightlies.shtml} for downloads.
 \section {Obtaining the Source Code}
 
 You may download the source code for each release of Aquamacs, or
-download the source of the current development version (CVS) from
-\url{http://aquamacs.org}.
+download the source of the current development version from
+\url{http://aquamacs.org/development.shtml}.  You need Git (\url{http://git-scm.com}) in order to download it.
 
 The author offers  to provide you with the source code for a time period of
-at least three years from the date of release. Source code may be
-obtained from the Git repository (see (\url{http://aquamacs.org/development.shtml}) or,
-if this is impossible, from the author directly.
+at least three years from the date of release. Source code should be
+obtained from the aforementioned Git repository or,
+if this is impossible, by written request from the author.
 
 \section {Licenses}
 
-Aquamacs: the Emacs distribution, (c) 2005,2006,2007,2008,2009 by Free Software
+Aquamacs: the Emacs distribution, (c) 2005,2006,2007,2008,2009,2010 by Free Software
 Foundation, Inc., and David Reitter. Aquamacs is licensed under the
 terms of the GNU General Public License, either Version 3, or (at your
 option) any later version. 
