@@ -34,6 +34,7 @@
 ;;		- the mark & mark-active
 ;;		- buffer-read-only
 ;;		- some local variables
+;; 	- the list of frames with associated tabs and window configurations.
 
 ;; To use this, use customize to turn on desktop-save-mode or add the
 ;; following line somewhere in your .emacs file:
@@ -371,6 +372,53 @@ Possible values are:
   :group 'desktop
   :version "24.1")
 
+(defcustom desktop-frame-parameters-to-save
+  '(name
+    top
+    left
+    width
+    height
+    border-width
+    internal-border-width
+    visibility
+    icon-name
+    icon-type
+    unsplittable
+    background-mode
+    display-type
+    menu-bar-lines
+    tool-bar-lines
+    tab-bar-lines
+    vertical-scroll-bars
+    horizontal-scroll-bars
+    scroll-bar-width
+    scroll-bar-background
+    scroll-bar-foreground
+    right-fringe
+    left-fringe
+    cursor-type
+    auto-lower
+    auto-raise
+    fullscreen
+    line-spacing
+    screen-gamma
+    border-color
+    cursor-color
+    mouse-color
+    background-color
+    foreground-color
+    font
+    font-parameter
+    font-backend
+    buffer-list
+    buried-buffer-list
+    ;; FIXME: minibuffer
+    modeline)
+  "List of frame parameters to save for each frame."
+  :type '(repeat symbol)
+  :group 'desktop
+  :version "24.1")
+
 (defcustom desktop-restore-eager t
   "Number of buffers to restore immediately.
 Remaining buffers are restored lazily (when Emacs is idle).
@@ -700,7 +748,24 @@ is nil, ask the user where to save the desktop."
 (defun desktop-frame-info (frame)
   (list
    frame
-   (frame-parameters frame)
+   ;; Frame parameters
+   (delq nil
+	 (mapcar
+	  (lambda (frame-parameter)
+	    (cond
+	     ;; Skip unsaveable frame parameters.
+	     ((not (member (car frame-parameter)
+			   desktop-frame-parameters-to-save))
+	      nil)
+	     ;; Serialize a list of buffers.
+	     ((memq (car frame-parameter)
+		    '(buffer-list buried-buffer-list))
+	      (cons (car frame-parameter)
+		    (mapcar 'buffer-name (cdr frame-parameter))))
+	     ;; Save the rest of frame parameters as is.
+	     (t
+	      frame-parameter)))
+	  (frame-parameters frame)))
    (current-window-configuration-to-sexp frame)))
 
 ;; ----------------------------------------------------------------------------
@@ -1240,12 +1305,28 @@ directory DIRNAME."
               (makunbound this)))
           (setq desktop-buffer-locals (cdr desktop-buffer-locals)))))))
 
+(defun desktop-create-frame-parameters (parameters)
+  (mapcar
+   (lambda (frame-parameter)
+     (cond
+      ;; Deserialize a list of buffers.
+      ((memq (car frame-parameter)
+	     '(buffer-list buried-buffer-list))
+       (cons (car frame-parameter)
+	     (delq nil (mapcar 'get-buffer (cdr frame-parameter)))))
+      ;; Restore the rest of frame parameters as is.
+      (t
+       frame-parameter)))
+   parameters))
+
 (defun desktop-create-frame (desktop-file-version parameters window-configuration)
-  (make-frame parameters)
+  (make-frame (desktop-create-frame-parameters parameters))
   (set-window-configuration-from-sexp window-configuration))
 
 (defun desktop-set-frame (desktop-file-version parameters window-configuration)
-  (modify-frame-parameters nil parameters)
+  (modify-frame-parameters
+   nil
+   (desktop-create-frame-parameters parameters))
   (set-window-configuration-from-sexp window-configuration))
 
 ;; ----------------------------------------------------------------------------
