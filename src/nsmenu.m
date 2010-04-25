@@ -585,9 +585,10 @@ name_is_separator (name)
 
 static int trackingMenu = 0;
 /* NSMenuDidBeginTrackingNotification */
--(void)didBeginTrackingNotification:(NSNotification *)aNotification
+-(void)trackingNotification:(NSNotification *)notification
 {
-  trackingMenu = 1; /* update menu in menuNeedsUpdate */
+  trackingMenu = (([notification name] == NSMenuDidBeginTrackingNotification) ? 1 : 0);
+  /* update menu in menuNeedsUpdate only while tracking menus*/
 }
 - (void)menuNeedsUpdate: (NSMenu *)menu
 {
@@ -621,7 +622,6 @@ static int trackingMenu = 0;
       || handling_signal != 0)
     return;
   ns_update_menubar (frame, 1, self); /* deep */
-  trackingMenu = 0;
 }
 
 
