@@ -546,7 +546,7 @@ left and right margin"))
   
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
-(defun toggle-auto-text-mode-wrap ()
+(defun toggle-text-mode-auto-detect-wrap ()
   "Toggle automatic word wrapping in Text and related modes.
 This command affects all buffers that use modes related to Text
 mode, both existing buffers and buffers that you subsequently
@@ -562,14 +562,13 @@ or with `auto-fill-mode', which see."
 			      (memq 'auto-detect-longlines text-mode-hook)))))
     (if enable-mode
 	(add-hook 'text-mode-hook 'auto-detect-wrap)
-      (progn
-	(remove-hook 'text-mode-hook 'auto-detect-wrap)
-	(remove-hook 'text-mode-hook 'auto-detect-longlines))) ; longlines was used up to version 1.4
+      (remove-hook 'text-mode-hook 'auto-detect-wrap)
+      (remove-hook 'text-mode-hook 'auto-detect-longlines)); longlines was used up to version 1.4
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
 	    (auto-detect-wrap))))
-    (message "Auto Soft Wrap %s in Text modes"
+    (message "Auto-Detect Line Wrap %s in Text modes"
 	     (if enable-mode "enabled" "disabled"))))
 
 (defun menu-bar-auto-text-mode-wrap ()
@@ -582,41 +581,110 @@ subsequently create.  Upon entering text-mode, the function
   (toggle-auto-text-mode-wrap)
   (customize-mark-as-set 'text-mode-hook))
   
+(defun aquamacs-set-line-wrapping-in-text-modes ()
+  "Sets line wrapping in all text modes.
+Line wrapping is determined according to whether text-mode-hook
+contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
+  (interactive)
+
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (if (or (derived-mode-p 'text-mode) text-mode-variant)
+					; check buffer-local values
+	  (let ((function (if (memq 'turn-on-auto-fill text-mode-hook)  'turn-on-auto-fill
+			    (if (memq 'turn-on-word-wrap text-mode-hook)  'turn-on-word-wrap
+			      (if (memq 'auto-detect-wrap text-mode-hook)  'auto-detect-wrap
+				'ignore  ;; FIXME: turn off everything
+				)))))
+	    (funcall function))))))
+
+
+;; (defun aquamacs-menu-bar-toggle-text-mode-word-wrap ()
+;;   "Toggle whether to use `visual-line-mode' in Text mode and related modes.
+;; Runs `aquamacs-set-line-wrapping-in-text-modes'."
+;;   (interactive)
+;;   (if (memq 'auto-detect-wrap text-mode-hook)
+;;       ;; we're just setting the default there.
+;;       (progn (setq auto-word-wrap-default-function 'turn-on-word-wrap)
+;; 	     (message "Line Wrap is auto-detected in Text modes and defaults to Soft Word Wrap (Visual Line Mode)."))
+;;     (let ((enable-mode (not (memq 'turn-on-word-wrap text-mode-hook))))
+;;       (if enable-mode
+;; 	  (progn (add-hook 'text-mode-hook 'turn-on-word-wrap)
+;; 		 (remove-hook 'text-mode-hook 'turn-on-auto-fill)
+;; 		 (setq auto-word-wrap-default-function 'turn-on-word-wrap))
+;; 	(remove-hook 'text-mode-hook 'turn-on-word-wrap)
+;; 	(setq auto-word-wrap-default-function nil))
+;;       (customize-mark-as-set 'text-mode-hook)
+;;       (message "Soft Word Wrap %s in Text modes"
+;; 	       (if enable-mode "enabled" "disabled")))
+;;     (customize-mark-as-set 'auto-word-wrap-default-function)
+;;     (aquamacs-set-line-wrapping-in-text-modes)))
+
+;; (defun aquamacs-menu-bar-toggle-text-mode-auto-fill ()
+;;   "Toggle whether to use Auto Fill in Text mode and related modes.
+;; Runs `aquamacs-set-line-wrapping-in-text-modes'."
+;;   (interactive)
+
+;;   (if (memq 'auto-detect-wrap text-mode-hook)
+;;       ;; we're just setting the default there.
+;;       (progn (setq auto-word-wrap-default-function 'turn-on-auto-fill)
+;; 	     (message "Line Wrap is auto-detected in Text modes and defaults to Hard Word Wrap (Auto Fill)."))
+;;     (let ((enable-mode (not (memq 'turn-on-auto-fill text-mode-hook))))
+;;       (if enable-mode
+;; 	  (progn (add-hook 'text-mode-hook 'turn-on-auto-fill)
+;; 		 (remove-hook 'text-mode-hook 'turn-on-word-wrap)
+;; 		 (setq auto-word-wrap-default-function 'turn-on-auto-fill))
+;; 	(remove-hook 'text-mode-hook 'turn-on-auto-fill)
+;; 	(setq auto-word-wrap-default-function nil))
+;;       (customize-mark-as-set 'text-mode-hook)
+;;       (message "Hard Word Wrap (Auto Fill) %s in Text modes"
+;; 	       (if enable-mode "enabled" "disabled")))
+;;     (customize-mark-as-set 'auto-word-wrap-default-function)
+;;     (aquamacs-set-line-wrapping-in-text-modes)))
+
 (define-key menu-bar-options-menu [highlight-separator] nil)
-(define-key menu-bar-options-menu [line-wrapping] nil)
 
-(define-key menu-bar-options-menu [auto-fill-mode]
-  '(menu-item "Hard Word Wrap"
-              toggle-auto-fill
-	      :help "Automatically fill text between left and right margins (Auto Fill)"
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-              :button (:toggle . auto-fill-function)))
+(define-key-after menu-bar-line-wrapping-menu [separator] '("--") 'auto-fill-mode)
 
-(define-key-after menu-bar-options-menu [word-wrap]
-  '(menu-item "Soft Word Wrap\t\t"
-	      toggle-word-wrap
-	      :help "Wrap long lines without inserting carriage returns (Word Wrap)"
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-              :button (:toggle . word-wrap)) 'auto-fill-mode)
-
-(define-key-after menu-bar-options-menu [truncate-lines]
-  '(menu-item "Truncate Long Lines"
-	      toggle-truncate-lines
-	      :help "Truncate long lines on the screen"
-	      :button (:toggle . truncate-lines)
-	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'word-wrap)
-
-(define-key-after menu-bar-options-menu [auto-wrap]
-  '(menu-item "Auto Word Wrap in Text Modes"
-	      menu-bar-auto-text-mode-wrap
+(define-key-after menu-bar-line-wrapping-menu [auto-wrap]
+  '(menu-item "Detect Line Wrap in Text Files"
+	      toggle-text-mode-auto-detect-wrap
 	      :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
 	      :button (:toggle . (if (listp text-mode-hook)
 				     (or (member 'auto-detect-wrap text-mode-hook)
 					 (member 'auto-detect-longlines text-mode-hook))
 				   (or (eq 'auto-detect-wrap text-mode-hook)
 				       (eq 'auto-detect-longlines text-mode-hook)))))
-  'truncate-lines)
+  'separator)
  
+;; giving these options would be too much configuration for most users
+;; (define-key-after menu-bar-line-wrapping-menu [word-wrap-text-mode]
+;;   `(menu-item ,(purecopy "Soft Word Wrap as Default in Text Modes")
+;;               aquamacs-menu-bar-toggle-text-mode-word-wrap
+;; 	      :help ,(purecopy "Automatically soft wrap text while typing (Visual Line mode)")
+;;               :button (:toggle . (if (if (listp text-mode-hook)
+;; 					 (member 'auto-detect-wrap text-mode-hook)
+;; 				       (eq 'auto-detect-wrap text-mode-hook))
+;; 				     (eq auto-word-wrap-default-function 'turn-on-word-wrap)
+;; 				   (if (listp text-mode-hook)
+;; 				       (member 'turn-on-word-wrap text-mode-hook)
+;; 				     (eq 'turn-on-word-wrap text-mode-hook)))))
+;;   'auto-wrap)
+
+;; (define-key-after menu-bar-line-wrapping-menu [auto-fill-text-mode]
+;;   `(menu-item ,(purecopy "Hard Word Wrap as Default in Text Modes")
+;;               aquamacs-menu-bar-toggle-text-mode-auto-fill
+;; 	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
+;;               :button (:toggle . (if (if (listp text-mode-hook)
+;; 					 (member 'auto-detect-wrap text-mode-hook)
+;; 				       (eq 'auto-detect-wrap text-mode-hook))
+;; 				     (eq auto-word-wrap-default-function 'turn-on-auto-fill)
+;; 				   (if (listp text-mode-hook)
+;; 				       (member 'turn-on-auto-fill text-mode-hook)
+;; 				     (eq 'turn-on-auto-fill text-mode-hook)))))
+;;   'word-wrap-text-mode)
+
+
 ;; (define-key-after menu-bar-options-menu [global-smart-spacing]
 ;;   (menu-bar-make-mm-toggle
 ;;    global-smart-spacing-mode
@@ -632,7 +700,7 @@ subsequently create.  Upon entering text-mode, the function
 	      :button (:toggle . (if (listp text-mode-hook)
 				     (member 'smart-spacing-mode text-mode-hook)
 				   (eq 'smart-spacing-mode text-mode-hook))))
-	      'truncate-lines)
+	      'line-wrapping)
 
 (defun menu-bar-text-mode-smart-spacing ()
   "Toggle `smart-spacing-mode' in `text-mode-hook'"

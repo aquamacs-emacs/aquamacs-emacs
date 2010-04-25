@@ -5146,6 +5146,10 @@ Some major modes set this.")
 (put 'auto-fill-function 'safe-local-variable 'null)
 ;; FIXME: turn into a proper minor mode.
 ;; Add a global minor mode version of it.
+(defvar auto-fill-mode nil "Non-nil if auto-fill-mode is on.
+Setting this variable takes no effect.  Use `auto-fill-mode' function.")
+(make-variable-buffer-local 'auto-fill-mode)
+
 (defun auto-fill-mode (&optional arg)
   "Toggle Auto Fill mode.
 With ARG, turn Auto Fill mode on if and only if ARG is positive.
@@ -5155,12 +5159,13 @@ automatically breaks the line at a previous space.
 The value of `normal-auto-fill-function' specifies the function to use
 for `auto-fill-function' when turning Auto Fill mode on."
   (interactive "P")
-  (prog1 (setq auto-fill-function
-	       (if (if (null arg)
-		       (not auto-fill-function)
-		       (> (prefix-numeric-value arg) 0))
-		   normal-auto-fill-function
-		   nil))
+  (prog1 (setq auto-fill-mode 
+	       (setq auto-fill-function
+		     (if (if (null arg)
+			     (not auto-fill-function)
+			   (> (prefix-numeric-value arg) 0))
+			 normal-auto-fill-function
+		       nil)))
     (force-mode-line-update)))
 
 ;; This holds a document string used to document auto-fill-mode.

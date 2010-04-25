@@ -683,7 +683,8 @@ by \"Save Options\" in Custom buffers.")
 		   ;; Nonetheless, not saving it would like be confuse
 		   ;; more often.
 		   ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-		   text-mode-hook))
+		   text-mode-hook
+		   word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode))
       (and (get elt 'customized-value)
 	   (customize-mark-to-save elt)
 	   (setq need-save t)))
@@ -1015,66 +1016,91 @@ mail status in mode line"))
 	    "Case-Insensitive Search %s"
 	    "Ignore letter-case in search commands"))
 
-(defun menu-bar-text-mode-auto-fill ()
-  (interactive)
-  (toggle-text-mode-auto-fill)
-  ;; This is somewhat questionable, as `text-mode-hook'
-  ;; might have changed outside customize.
-  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-  (customize-mark-as-set 'text-mode-hook))
-
-(define-key menu-bar-options-menu [auto-fill-mode]
-  `(menu-item ,(purecopy "Auto Fill in Text Modes")
-              menu-bar-text-mode-auto-fill
-	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
-              :button (:toggle . (if (listp text-mode-hook)
-				     (member 'turn-on-auto-fill text-mode-hook)
-				   (eq 'turn-on-auto-fill text-mode-hook)))))
-
-
 (defvar menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
+;(setq menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
+
+(define-globalized-minor-mode global-auto-fill-mode auto-fill-mode turn-on-auto-fill)
+
+(defun set-global-mode-here-and-default (global-mode &optional enable)
+  "Sets global minor mode GLOBAL-MODE in this buffer, and as default
+for future buffers."
+  (let ((sgmh-this-buffer (current-buffer))
+	(saved (symbol-function 'buffer-list)))
+    (unwind-protect
+	(progn
+	  (fset 'buffer-list (lambda (&optional frame) (list sgmh-this-buffer)))
+	  (funcall global-mode enable))
+      (fset 'buffer-list saved))))
+
+(defun menu-bar-set-wrapping (wrap-style)
+  "Set line wrapping in this buffer, and for future buffers.
+WRAP-STYLE is one of truncate, wrap, soft and fill."
+  (set-global-mode-here-and-default 'global-visual-line-mode (if (eq wrap-style 'soft) 1 0))
+  ; visual line mode saves state of some important variables, so let's toggle that first
+  (set-global-mode-here-and-default 'global-auto-fill-mode (if (eq wrap-style 'fill) 1 0))
+  (set-default 'word-wrap (setq word-wrap (eq wrap-style 'soft))) ; if it's just wrapping, then nil
+  (toggle-truncate-lines (if (eq wrap-style 'truncate) 1 0))
+  (set-default 'truncate-lines (eq wrap-style 'truncate))
+  (force-mode-line-update)
+  (customize-mark-as-set 'word-wrap)
+  (customize-mark-as-set 'truncate-lines)
+  (customize-mark-as-set 'global-visual-line-mode)
+  (customize-mark-as-set 'global-auto-fill-mode)
+  (message "Line wrapping set to `%s' in this buffer and in future%s buffers."
+	   wrap-style (if (or (memq 'auto-detect-wrap text-mode-hook)
+			      (memq 'turn-on-word-wrap text-mode-hook)
+			      (memq 'turn-on-auto-fill text-mode-hook)
+			      (memq 'auto-detect-longlines text-mode-hook))
+			  " non-text" "")))
+
+;; We just offer the auto-wrap option in Aquamacs
+;; (define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
+;;   `(menu-item ,(purecopy "Hard Word Wrap as Default in Text Modes")
+;;               menu-bar-text-mode-auto-fill
+;; 	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
+;;               :button (:toggle . (if (listp text-mode-hook)
+;; 				     (member 'turn-on-auto-fill text-mode-hook)
+;; 				   (eq 'turn-on-auto-fill text-mode-hook)))))
+
+(define-key menu-bar-line-wrapping-menu [auto-fill-mode]
+  `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
+              (lambda () (interactive) (menu-bar-set-wrapping 'fill))
+	      :help  ,(purecopy "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers.")
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+              :button (:radio . auto-fill-function)))
 
 (define-key menu-bar-line-wrapping-menu [word-wrap]
-  `(menu-item ,(purecopy "Word Wrap (Visual Line mode)")
-	      (lambda ()
-		(interactive)
-		(unless visual-line-mode
-		  (visual-line-mode 1))
-		(message ,(purecopy "Visual-Line mode enabled")))
-	      :help ,(purecopy "Wrap long lines at word boundaries")
+  `(menu-item ,(purecopy "Word Wrap")
+	      (lambda () (interactive) (menu-bar-set-wrapping 'soft))
+	      :help ,(purecopy "Wrap long lines at word boundaries in this buffer and in new buffers.")
 	      :button (:radio . (and (null truncate-lines)
 				     (not (truncated-partial-width-window-p))
 				     word-wrap))
-	      :visible (menu-bar-menu-frame-live-and-visible-p)))
+	      :enable (menu-bar-menu-frame-live-and-visible-p)))
 
-(define-key menu-bar-line-wrapping-menu [truncate]
-  `(menu-item ,(purecopy "Truncate Long Lines")
-	      (lambda ()
-		(interactive)
-		(if visual-line-mode (visual-line-mode 0))
-		(setq word-wrap nil)
-		(toggle-truncate-lines 1))
-	      :help ,(purecopy "Truncate long lines at window edge")
-	      :button (:radio . (or truncate-lines
-				    (truncated-partial-width-window-p)))
+
+(define-key menu-bar-line-wrapping-menu [window-wrap]
+  `(menu-item ,(purecopy "Wrap")
+	      (lambda () (interactive) (menu-bar-set-wrapping 'wrap))
+	      :help ,(purecopy "Wrap long lines at window edge in this buffer and in new buffers.")
+	      :button (:radio . (and (null truncate-lines)
+				     (not (truncated-partial-width-window-p))
+				     (not word-wrap)
+				     (null auto-fill-function)))
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
-(define-key menu-bar-line-wrapping-menu [window-wrap]
-  `(menu-item ,(purecopy "Wrap at Window Edge")
-	      (lambda () (interactive)
-		(if visual-line-mode (visual-line-mode 0))
-		(setq word-wrap nil)
-		(if truncate-lines (toggle-truncate-lines -1)))
-	      :help ,(purecopy "Wrap long lines at window edge")
-	      :button (:radio . (and (null truncate-lines)
-				     (not (truncated-partial-width-window-p))
-				     (not word-wrap)))
+(define-key menu-bar-line-wrapping-menu [truncate]
+  `(menu-item ,(purecopy "Truncate")
+	      (lambda () (interactive) (menu-bar-set-wrapping 'truncate))
+	      :help ,(purecopy "Truncate long lines at window edge in this buffer and in new buffers.")
+	      :button (:radio . (or (truncated-partial-width-window-p)
+				    truncate-lines)) ; truncate takes precedence over word-wrap
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
 (define-key menu-bar-options-menu [line-wrapping]
-  `(menu-item ,(purecopy "Line Wrapping in this Buffer") ,menu-bar-line-wrapping-menu))
+  `(menu-item ,(purecopy "Line Wrapping") ,menu-bar-line-wrapping-menu))
 
 
 (define-key menu-bar-options-menu [highlight-separator]

@@ -129,6 +129,7 @@ word wrap (autofill) or soft word wrap (word-wrap).  The variable
 default in case there is not enough text."
   (interactive)
   ;; (longlines-mode -1) ;; turn it off
+  (visual-line-mode -1) ;; Note: this restores word-wrap
   (setq word-wrap nil)
   (toggle-truncate-lines -1)
   ;; calc mean length of lines

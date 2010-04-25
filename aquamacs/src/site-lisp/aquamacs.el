@@ -604,7 +604,8 @@ No errors are signaled."
 	    (setq buffer-file-coding-system 'utf-8)
 	    (add-hook 'before-save-hook 
 		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
-		      nil 'local))
+		      nil 'local)
+	    (funcall initial-major-mode)) ; ensure mode hooks are run
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
@@ -1434,7 +1435,7 @@ listed here."
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
      text-mode-hook
-
+     word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
      blink-cursor-mode
      aquamacs-customization-version-id
      mac-print-monochrome-mode

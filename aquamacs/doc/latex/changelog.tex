@@ -53,7 +53,9 @@ Patch by Matthew Dempsky.
 
 \item As per Emacs 23, Aquamacs now supports multi-file commits in distributed version-control systems through the VC-dir package.
 
-\item Soft wrapping is called `visual-line-mode' internally now, and the former Aquamacs mode of the same name is now a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is considered obsolete.   Users with manual customizations should adjust their settings.
+\item Revise line wrapping menu Line wrapping is now set in a submenu (in Options).  The settings of truncation, wrapping, word wrapping and line breaking (auto fill) apply to the current buffer and, as a default, for future buffers.  There is also a setting to detect word wrap in text files (as before), which now, when this is off, use the global line wrapping setting.  When it is on, it detects the wrapping style of a buffer automatically, but defaults to whatever is set with the customization variable `auto-word-wrap-default-function' (normally standard word wrapping).
+
+\item (Soft) Word Wrapping is called `visual-line-mode' internally now, and the former Aquamacs mode of the same name is now a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is considered obsolete.   Users with manual customizations should adjust their settings.
 
 \item When `osx-key-mode' is switched off, `x-select-enable-clipboard' is restored to its (new) default value, \emph{t}. That means that kill and yank operations (C-w, C-y, mouse text selection and more) are integrated with the Mac pasteboard.  When `osx-key-mode' is on (as is default), the standard copy\&paste operations (A-c, A-v) use the system pasteboard, while the killring operations from traditional Emacs do not (as has been the case in Aquamacs 1.x).
 Reported by José M Figueroa-O'Farrill.
