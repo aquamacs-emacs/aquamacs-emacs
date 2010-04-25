@@ -905,7 +905,7 @@ yes-or-no prompts - y or n will do."
 (require 'saveplace)
 ;;  (require 'longlines) 
 (aquamacs-set-defaults 
-   `((line-move-visual t)
+   `((line-move-visual arrow-keys-only)
      (text-mode-hook (smart-spacing-mode auto-detect-wrap)) 
      (save-place t)
      (save-place-limit 500) ;; speed on quit
