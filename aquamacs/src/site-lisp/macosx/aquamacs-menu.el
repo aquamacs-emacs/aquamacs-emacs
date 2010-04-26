@@ -568,18 +568,9 @@ or with `auto-fill-mode', which see."
       (with-current-buffer buffer
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
 	    (auto-detect-wrap))))
+    (customize-mark-as-set 'text-mode-hook)
     (message "Auto-Detect Line Wrap %s in Text modes"
 	     (if enable-mode "enabled" "disabled"))))
-
-(defun menu-bar-auto-text-mode-wrap ()
-"Toggle whether to automatically turn on word-wrap in text mode and related modes.
-This command affects all buffers that use modes related to
-text-mode, both existing buffers and buffers that you
-subsequently create.  Upon entering text-mode, the function
-`auto-detect-wrap' is used to determine wrapping."
-  (interactive)
-  (toggle-auto-text-mode-wrap)
-  (customize-mark-as-set 'text-mode-hook))
   
 (defun aquamacs-set-line-wrapping-in-text-modes ()
   "Sets line wrapping in all text modes.

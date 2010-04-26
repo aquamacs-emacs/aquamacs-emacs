@@ -666,7 +666,8 @@ by \"Save Options\" in Custom buffers.")
     (dolist (elt '(global-show-newlines-mode line-number-mode
 		   column-number-mode size-indication-mode
 		   cua-mode show-paren-mode transient-mark-mode
-		   display-time-mode display-battery-mode))
+		   display-time-mode display-battery-mode
+		   visual-line-mode))
       (and (customize-mark-to-save elt)
 	   (setq need-save t)))
     ;; These are set with `customize-set-variable'.
@@ -1019,8 +1020,6 @@ mail status in mode line"))
 (defvar menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
 ;(setq menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
 
-(define-globalized-minor-mode global-auto-fill-mode auto-fill-mode turn-on-auto-fill)
-
 (defun set-global-mode-here-and-default (global-mode &optional enable)
   "Sets global minor mode GLOBAL-MODE in this buffer, and as default
 for future buffers."
@@ -1032,21 +1031,101 @@ for future buffers."
 	  (funcall global-mode enable))
       (fset 'buffer-list saved))))
 
+(setq truncate-lines nil
+	      word-wrap t
+	      fringe-indicator-alist
+	      (cons (cons 'continuation visual-line-fringe-indicators)
+		    fringe-indicator-alist))
+
+(defvar line-wrapping--saved-state nil)
+
+(defvar line-wrapping--state nil "Line wrapping mode in effect.
+One of `truncate', `wrap', `word-wrap' and `fill'.")
+(make-variable-buffer-local 'line-wrapping--state)
+
+; problem is: this variant may change settings in other buffers where no other mode has been set
+
+; could add something to minor-mode-alist as a lighter for the
+; mode-line
+
 (defun menu-bar-set-wrapping (wrap-style)
   "Set line wrapping in this buffer, and for future buffers.
-WRAP-STYLE is one of truncate, wrap, soft and fill."
-  (set-global-mode-here-and-default 'global-visual-line-mode (if (eq wrap-style 'soft) 1 0))
-  ; visual line mode saves state of some important variables, so let's toggle that first
-  (set-global-mode-here-and-default 'global-auto-fill-mode (if (eq wrap-style 'fill) 1 0))
-  (set-default 'word-wrap (setq word-wrap (eq wrap-style 'soft))) ; if it's just wrapping, then nil
+WRAP-STYLE is one of `truncate', `wrap', `word-wrap' and `fill'.
+
+This function sets the following variables in the present buffer
+and as defaults: `auto-fill-function', `word-wrap', `truncate-lines',
+`line-move-visual', as well as `fringe-indicator-alist', `visual-line-mode'."
+
+
+  (let ((variables '(word-wrap truncate-lines line-move-visual
+			       visual-line-mode auto-fill-function
+			       fringe-indicator-alist)))
+    
+
+  (let ((prev-saved-state line-wrapping--saved-state))
+    ;; save values of some variables
+    (unless (default-value 'line-wrapping--state)
+      (dolist (var variables)
+	(push (cons var (default-value var))
+	      line-wrapping--saved-state)))
+    ;; restore values of some varibles
+    (dolist (saved prev-saved-state)
+      (kill-local-variable (car saved))
+      (set-default (car saved) (cdr saved)))
+    (setq line-wrapping--state wrap-style))
+
+  ;; variables set here:  
+  ;; auto-fill-function, 
+					; visual line mode saves state of some important variables, so let's toggle that first
+  ;; do not use global minor modes - their semantics aren't right.
+  (setq auto-fill-function (if (eq wrap-style 'fill) normal-auto-fill-function nil))
+  (setq word-wrap (eq wrap-style 'word-wrap)) ; if it's just wrapping, then nil
   (toggle-truncate-lines (if (eq wrap-style 'truncate) 1 0))
-  (set-default 'truncate-lines (eq wrap-style 'truncate))
+
+  ;; Repeating the visual-line-mode code here seems like a hack
+  ;; but we can't define default for it.
+  (if (eq wrap-style 'word-wrap)  ; visual line mode
+      (progn
+	(set (make-local-variable 'line-move-visual) t)
+	(unless (member (cons 'continuation visual-line-fringe-indicators)
+			(default-value 'fringe-indicator-alist))
+	  (set-default 'fringe-indicator-alist
+		       (cons (cons 'continuation visual-line-fringe-indicators)
+			     (default-value 'fringe-indicator-alist))))
+	(unless (member (cons 'continuation visual-line-fringe-indicators)
+			fringe-indicator-alist)
+	  (setq fringe-indicator-alist
+		(cons (cons 'continuation visual-line-fringe-indicators)
+		      fringe-indicator-alist))))
+    ;; restore line-move-visual as above
+    ;; remove fringe item as above
+    )
+  (setq visual-line-mode (eq wrap-style 'word-wrap))
+
   (force-mode-line-update)
+
+  ;;set defaults for future buffers
+  ;; create local bindings in all buffers
+  ;; in order to just set the default for future buffers
+  (dolist (buf (buffer-list))
+    (when (buffer-live-p buf)
+      (with-current-buffer buf
+	(unless (eq major-mode 'fundamental-mode)
+	  (dolist (v variables)
+	    ;; create local binding
+	    (set v (symbol-value v)))))))
+  
+  ;; set default values
+  (dolist (v variables)
+    (set-default v (symbol-value v))))
+
+  (set-default 'line-wrapping--state line-wrapping--state)
   (customize-mark-as-set 'word-wrap)
   (customize-mark-as-set 'truncate-lines)
-  (customize-mark-as-set 'global-visual-line-mode)
-  (customize-mark-as-set 'global-auto-fill-mode)
-  (message "Line wrapping set to `%s' in this buffer and in future%s buffers."
+  (customize-mark-as-set 'fringe-indicator-alist)
+  (customize-mark-as-set 'auto-fill-function)
+
+  (message "Line wrapping set to `%s' in this buffer and as a default."
 	   wrap-style (if (or (memq 'auto-detect-wrap text-mode-hook)
 			      (memq 'turn-on-word-wrap text-mode-hook)
 			      (memq 'turn-on-auto-fill text-mode-hook)
@@ -1071,7 +1150,7 @@ WRAP-STYLE is one of truncate, wrap, soft and fill."
 
 (define-key menu-bar-line-wrapping-menu [word-wrap]
   `(menu-item ,(purecopy "Word Wrap")
-	      (lambda () (interactive) (menu-bar-set-wrapping 'soft))
+	      (lambda () (interactive) (menu-bar-set-wrapping 'word-wrap))
 	      :help ,(purecopy "Wrap long lines at word boundaries in this buffer and in new buffers.")
 	      :button (:radio . (and (null truncate-lines)
 				     (not (truncated-partial-width-window-p))

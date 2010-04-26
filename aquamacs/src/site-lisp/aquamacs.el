@@ -1399,6 +1399,7 @@ listed here."
 	      display-time-mode 
 	      display-battery-mode
 	      one-buffer-one-frame-mode 
+	      visual-line-mode ; set by line wrapping menu functions
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
 	      aquamacs-tool-bar-user-customization
@@ -1434,7 +1435,7 @@ listed here."
      ;; Nonetheless, not saving it would like be confuse
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-     text-mode-hook
+     text-mode-hook 
      word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
      blink-cursor-mode
      aquamacs-customization-version-id
