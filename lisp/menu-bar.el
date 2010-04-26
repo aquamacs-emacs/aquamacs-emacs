@@ -1031,106 +1031,62 @@ for future buffers."
 	  (funcall global-mode enable))
       (fset 'buffer-list saved))))
 
-(setq truncate-lines nil
-	      word-wrap t
-	      fringe-indicator-alist
-	      (cons (cons 'continuation visual-line-fringe-indicators)
-		    fringe-indicator-alist))
+;; (defvar line-wrapping--saved-state nil)
 
-(defvar line-wrapping--saved-state nil)
-
-(defvar line-wrapping--state nil "Line wrapping mode in effect.
-One of `truncate', `wrap', `word-wrap' and `fill'.")
-(make-variable-buffer-local 'line-wrapping--state)
-
-; problem is: this variant may change settings in other buffers where no other mode has been set
+;; (defvar line-wrapping--state nil "Line wrapping mode in effect.
+;; One of `truncate', `wrap', `word-wrap' and `fill'.")
+;; (make-variable-buffer-local 'line-wrapping--state)
 
 ; could add something to minor-mode-alist as a lighter for the
 ; mode-line
+(setq minor-mode-alist (cons (list 'truncate-lines " Trunc")
+			   minor-mode-alist))
 
-(defun menu-bar-set-wrapping (wrap-style)
-  "Set line wrapping in this buffer, and for future buffers.
-WRAP-STYLE is one of `truncate', `wrap', `word-wrap' and `fill'.
-
-This function sets the following variables in the present buffer
-and as defaults: `auto-fill-function', `word-wrap', `truncate-lines',
-`line-move-visual', as well as `fringe-indicator-alist', `visual-line-mode'."
-
+(defun menu-bar-set-wrapping-default ()
+  "Set current buffer's line wrapping style as default."
+  (interactive)
 
   (let ((variables '(word-wrap truncate-lines line-move-visual
 			       visual-line-mode auto-fill-function
 			       fringe-indicator-alist)))
-    
 
-  (let ((prev-saved-state line-wrapping--saved-state))
-    ;; save values of some variables
-    (unless (default-value 'line-wrapping--state)
-      (dolist (var variables)
-	(push (cons var (default-value var))
-	      line-wrapping--saved-state)))
-    ;; restore values of some varibles
-    (dolist (saved prev-saved-state)
-      (kill-local-variable (car saved))
-      (set-default (car saved) (cdr saved)))
-    (setq line-wrapping--state wrap-style))
-
-  ;; variables set here:  
-  ;; auto-fill-function, 
-					; visual line mode saves state of some important variables, so let's toggle that first
-  ;; do not use global minor modes - their semantics aren't right.
-  (setq auto-fill-function (if (eq wrap-style 'fill) normal-auto-fill-function nil))
-  (setq word-wrap (eq wrap-style 'word-wrap)) ; if it's just wrapping, then nil
-  (toggle-truncate-lines (if (eq wrap-style 'truncate) 1 0))
-
-  ;; Repeating the visual-line-mode code here seems like a hack
-  ;; but we can't define default for it.
-  (if (eq wrap-style 'word-wrap)  ; visual line mode
-      (progn
-	(set (make-local-variable 'line-move-visual) t)
-	(unless (member (cons 'continuation visual-line-fringe-indicators)
-			(default-value 'fringe-indicator-alist))
+    (let ((vlf (member (cons 'continuation visual-line-fringe-indicators)
+		       fringe-indicator-alist)))
+      
+      (unless (eq (if vlf t nil)
+		  (if (member (cons 'continuation visual-line-fringe-indicators)
+			      (default-value 'fringe-indicator-alist)) t nil))
+	(if vlf
+	    (set-default 'fringe-indicator-alist
+			 (cons (cons 'continuation visual-line-fringe-indicators)
+			       (default-value 'fringe-indicator-alist)))
 	  (set-default 'fringe-indicator-alist
-		       (cons (cons 'continuation visual-line-fringe-indicators)
-			     (default-value 'fringe-indicator-alist))))
-	(unless (member (cons 'continuation visual-line-fringe-indicators)
-			fringe-indicator-alist)
-	  (setq fringe-indicator-alist
-		(cons (cons 'continuation visual-line-fringe-indicators)
-		      fringe-indicator-alist))))
-    ;; restore line-move-visual as above
-    ;; remove fringe item as above
-    )
-  (setq visual-line-mode (eq wrap-style 'word-wrap))
+		       (remove (cons 'continuation visual-line-fringe-indicators)
+			       (default-value 'fringe-indicator-alist))))))
 
-  (force-mode-line-update)
+    ;; create local bindings in all buffers
+    ;; in order to just set the default for future buffers
+    ;; WE DON'T NEED THIS IF USERS CALL THIS FUNCTION EXPLICITLY
+    ;; (dolist (buf (buffer-list))
+    ;;   (when (buffer-live-p buf)
+    ;; 	(with-current-buffer buf
+    ;; 	  (unless (eq major-mode 'fundamental-mode)
+    ;; 	    (dolist (v variables)
+    ;; 	      ;; create local binding
+    ;; 	      (set v (symbol-value v)))))))
+    
+    ;; set default values and remove local bindings in current buffer
+    (dolist (v variables)
+      (set-default v (symbol-value v))
+      (kill-local-variable v))
 
-  ;;set defaults for future buffers
-  ;; create local bindings in all buffers
-  ;; in order to just set the default for future buffers
-  (dolist (buf (buffer-list))
-    (when (buffer-live-p buf)
-      (with-current-buffer buf
-	(unless (eq major-mode 'fundamental-mode)
-	  (dolist (v variables)
-	    ;; create local binding
-	    (set v (symbol-value v)))))))
-  
-  ;; set default values
-  (dolist (v variables)
-    (set-default v (symbol-value v))))
+    (customize-mark-as-set 'word-wrap)
+    (customize-mark-as-set 'truncate-lines)
+    (customize-mark-as-set 'fringe-indicator-alist)
+    (customize-mark-as-set 'auto-fill-function)
 
-  (set-default 'line-wrapping--state line-wrapping--state)
-  (customize-mark-as-set 'word-wrap)
-  (customize-mark-as-set 'truncate-lines)
-  (customize-mark-as-set 'fringe-indicator-alist)
-  (customize-mark-as-set 'auto-fill-function)
+    (message "Line wrapping set as default for other buffers.")))
 
-  (message "Line wrapping set to `%s' in this buffer and as a default."
-	   wrap-style (if (or (memq 'auto-detect-wrap text-mode-hook)
-			      (memq 'turn-on-word-wrap text-mode-hook)
-			      (memq 'turn-on-auto-fill text-mode-hook)
-			      (memq 'auto-detect-longlines text-mode-hook))
-			  " non-text" "")))
 
 ;; We just offer the auto-wrap option in Aquamacs
 ;; (define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
@@ -1140,17 +1096,34 @@ and as defaults: `auto-fill-function', `word-wrap', `truncate-lines',
 ;;               :button (:toggle . (if (listp text-mode-hook)
 ;; 				     (member 'turn-on-auto-fill text-mode-hook)
 ;; 				   (eq 'turn-on-auto-fill text-mode-hook)))))
+(defun menu-bar-local-wrapping-p ()
+  (or (local-variable-p 'word-wrap)
+      (local-variable-p 'truncate-lines)
+      (local-variable-p 'auto-fill-function)))
+
+(define-key menu-bar-line-wrapping-menu [wrapping-set-default]
+  `(menu-item (if (menu-bar-local-wrapping-p)
+		  "Adopt as Default"
+		"Adopted as Default")
+              menu-bar-set-wrapping-default
+	      :help  ,(purecopy "Set current wrapping style as default for other buffers.")
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-local-wrapping-p))
+              :button (:toggle . (not (menu-bar-local-wrapping-p)))))
+
+(define-key menu-bar-line-wrapping-menu [default-separator]
+  '("--"))
 
 (define-key menu-bar-line-wrapping-menu [auto-fill-mode]
   `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
-              (lambda () (interactive) (menu-bar-set-wrapping 'fill))
+              set-auto-fill
 	      :help  ,(purecopy "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers.")
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:radio . auto-fill-function)))
 
 (define-key menu-bar-line-wrapping-menu [word-wrap]
   `(menu-item ,(purecopy "Word Wrap")
-	      (lambda () (interactive) (menu-bar-set-wrapping 'word-wrap))
+	      set-word-wrap
 	      :help ,(purecopy "Wrap long lines at word boundaries in this buffer and in new buffers.")
 	      :button (:radio . (and (null truncate-lines)
 				     (not (truncated-partial-width-window-p))
@@ -1160,7 +1133,7 @@ and as defaults: `auto-fill-function', `word-wrap', `truncate-lines',
 
 (define-key menu-bar-line-wrapping-menu [window-wrap]
   `(menu-item ,(purecopy "Wrap")
-	      (lambda () (interactive) (menu-bar-set-wrapping 'wrap))
+	      set-line-wrap
 	      :help ,(purecopy "Wrap long lines at window edge in this buffer and in new buffers.")
 	      :button (:radio . (and (null truncate-lines)
 				     (not (truncated-partial-width-window-p))
@@ -1171,7 +1144,7 @@ and as defaults: `auto-fill-function', `word-wrap', `truncate-lines',
 
 (define-key menu-bar-line-wrapping-menu [truncate]
   `(menu-item ,(purecopy "Truncate")
-	      (lambda () (interactive) (menu-bar-set-wrapping 'truncate))
+	      set-truncate-lines
 	      :help ,(purecopy "Truncate long lines at window edge in this buffer and in new buffers.")
 	      :button (:radio . (or (truncated-partial-width-window-p)
 				    truncate-lines)) ; truncate takes precedence over word-wrap

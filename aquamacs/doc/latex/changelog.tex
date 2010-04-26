@@ -53,11 +53,10 @@ Patch by Matthew Dempsky.
 
 \item As per Emacs 23, Aquamacs now supports multi-file commits in distributed version-control systems through the VC-dir package.
 
-\item Revise line wrapping menu Line wrapping is now set in a submenu (in Options).  The settings of truncation, wrapping, word wrapping and line breaking (auto fill) apply to the current buffer and, as a default, for future buffers.  There is also a setting to detect word wrap in text files (as before), which now, when this is off, use the global line wrapping setting.  When it is on, it detects the wrapping style of a buffer automatically, but defaults to whatever is set with the customization variable `auto-word-wrap-default-function' (normally standard word wrapping).
+\item Line wrapping is now set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under \emph{Options / Line Wrapping} for the current buffer.  A \emph{Set as Default} will set it as default for all buffers that have no explicit line wrap setting.  As before, there is also a setting to detect word wrap in text files.  When it is on, Aquamacs detects the wrapping style of text-mode buffers automatically, but prefers word wrapping (see the customization variable `auto-word-wrap-default-function').
+{\small Word Wrapping translates to `visual-line-mode' internally now, and the former Aquamacs 1.x mode of the same name now corresponds to a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is obsolete.   Users with manual customizations should adjust their settings.  Fine control can be achieved by customizing `visual-line-mode', `word-wrap', `truncate-lines', and `auto-fill-mode'.}
 
-\item (Soft) Word Wrapping translates to `visual-line-mode' internally now, and the former Aquamacs 1.x mode of the same name now corresponds to a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is obsolete.   Users with manual customizations should adjust their settings.
-
-\item Note that `visual-line-mode' (Word Wrapping in the menu) affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
+\item Note that Word Wrapping (`visual-line-mode') affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
 \begin{itemize}
 \item In Word Wrapping (visual-line-mode), C-aenp and arrow keys move according to visual lines.
 \item Without Word Wrapping (visual-line-mode off), arrow keys move visually, but C-aenp move non-visually according to buffer lines as in Emacs 22 and Aquamacs 1.x.

@@ -635,8 +635,6 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 
 (define-key menu-bar-options-menu [highlight-separator] nil)
 
-(define-key-after menu-bar-line-wrapping-menu [separator] '("--") 'auto-fill-mode)
-
 (define-key-after menu-bar-line-wrapping-menu [auto-wrap]
   '(menu-item "Detect Line Wrap in Text Files"
 	      toggle-text-mode-auto-detect-wrap
@@ -646,7 +644,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 					 (member 'auto-detect-longlines text-mode-hook))
 				   (or (eq 'auto-detect-wrap text-mode-hook)
 				       (eq 'auto-detect-longlines text-mode-hook)))))
-  'separator)
+  'wrapping-set-default)
  
 ;; giving these options would be too much configuration for most users
 ;; (define-key-after menu-bar-line-wrapping-menu [word-wrap-text-mode]
