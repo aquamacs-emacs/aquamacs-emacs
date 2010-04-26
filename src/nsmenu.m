@@ -1280,7 +1280,8 @@ update_frame_tool_bar (FRAME_PTR f)
 
 DEFUN ("ns-tool-bar-customize", Fns_tool_bar_customize, Sns_tool_bar_customize, 0, 1, "",
        doc: /* View tool bar configuration.
-Shows the tool bar customization panel in the given frame. */)
+Shows the tool bar customization panel in the given frame. 
+The tool bar should be visible in FRAME when calling this function.*/)
      (frame)
      Lisp_Object frame;
 {
@@ -1296,7 +1297,7 @@ Shows the tool bar customization panel in the given frame. */)
     }
 
   BLOCK_INPUT;
-  Lisp_Object item_identifiers = Qnil;
+  update_frame_tool_bar (f);  /* fill in items */
   [[FRAME_NS_VIEW (f) toolbar] setVisible: YES];
   [[FRAME_NS_VIEW (f) toolbar] runCustomizationPalette:FRAME_NS_VIEW (f)];
   UNBLOCK_INPUT;

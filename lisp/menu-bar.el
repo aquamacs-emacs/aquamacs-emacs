@@ -745,8 +745,18 @@ mail status in mode line"))
 
 (define-key menu-bar-showhide-menu [datetime-separator]
   '("--"))
+
+(defun customize-tool-bar ()
+  "Show tool bar customization.
+Only available in Aquamacs."
+  (interactive)
+  (tool-bar-mode 1)  ; must be visible
+  (sit-for 0)
+  (ns-tool-bar-customize))
+
 (define-key menu-bar-showhide-menu [ns-tool-bar]
-  `(menu-item ,(purecopy "Toolbar...") ns-tool-bar-customize
+  `(menu-item ,(purecopy "Toolbar...") 
+	      customize-tool-bar
 	      :help ,(purecopy "Display the Toolbar customization panel")
 	      :visible ,(fboundp 'ns-tool-bar-customize)))
 
