@@ -863,20 +863,21 @@ and Return:
 2: A list of possible correct spellings of the format:
    (\"ORIGINAL-WORD\" OFFSET MISS-LIST)
    ORIGINAL-WORD is a string of the possibly misspelled word.
-   OFFSET is an integer giving the line offset of the word.
+   OFFSET is an integer giving the character offset of the word from
+     the beginning of the line.
    MISS-LIST is a possibly null list of guesses."
   (unless (string= ispell-current-dictionary
 		     (ns-spellchecker-current-language))
       (ispell-change-dictionary (ns-spellchecker-current-language)))
   (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
-	 (offset (car output)))
+	 (offset (1+ (car output))))
     (cond
      ;; word is correct -- return t
      ((equal output (cons -1 0)) t)
      ;; word is incorrect -- return
      ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
      ;; don't know what the difference between miss-list and guess-list is...
-     ((> offset -1)
+     ((> offset 0)
       (list word offset (ns-spellchecker-get-suggestions word) nil)))))
 
 (defun ispell-ns-spellcheck-string (string) 
