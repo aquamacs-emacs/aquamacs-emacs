@@ -2,25 +2,6 @@
 
 ;; this package realizes mode-specific faces in Aquamacs.
 
-
-;; To do here:
-
-;; it appears that just changing the default face does not
-;; do enough: background of non-text can't be changed.
-;; this requires a C-level patch.  'tiling' branch seems to have this.
-
-
-
-
-;; Filename: aquamacs-autofaces.el
-;; Description: Emacs init file for use with libraries from Drew Adams
-;; Author: David Reitter
-;; Maintainer: David Reitter
-;; Keywords: aquamacs
-
-
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.58 2009/03/08 21:24:13 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -39,7 +20,21 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2008 David Reitter, all rights reserved.
+;; Copyright (C) 2008, 2010 David Reitter, all rights reserved.
+
+
+
+;; To do here:
+
+;; it appears that just changing the default face does not
+;; do enough: background of non-text can't be changed.
+;; this requires a C-level patch.  'tiling' branch seems to have this.
+
+;; Filename: aquamacs-autofaces.el
+;; Description: Emacs init file for use with libraries from Drew Adams
+;; Author: David Reitter
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
 
 
 ; (require 'cl)
@@ -596,11 +591,16 @@ modified, or in FRAME if given."
 (define-key aquamacs-autoface-menu [menu-clear-sep-3]
   '(menu-item  "--"))
 
+(defvar aquamacs-autoface-face-summary-none-cache nil)
 (define-key aquamacs-autoface-menu [menu-delete-one-autoface]
   '(menu-item "Remove Mode Face"
 	      aquamacs-delete-one-autoface
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   aquamacs-autoface-mode)
+			   aquamacs-autoface-mode
+			   ;; use of this cache is a hack
+			   ;; it is set by `aquamacs-autoface-face-summary'
+			   ;; as we hope it is checked before this one
+			   aquamacs-autoface-face-summary-none-cache)
 	      :help "Removes a mode-specific face."))
 
 (define-key aquamacs-autoface-menu [autoface-default-face]
@@ -653,9 +653,9 @@ modified, or in FRAME if given."
 (defun aquamacs-autoface-face-summary (face)
 					; (setq face 'emacs-lisp-mode-default)
 					; (setq face 'text-mode-default)
-
+  (setq aquamacs-autoface-face-summary-none-cache t)
   (if (not (facep face))
-      "none"
+      (progn (setq aquamacs-autoface-face-summary-none-cache nil) "none")
     (let ((str
 	   (concat
 	    (let ((fam (face-attribute face :family)))
@@ -674,7 +674,7 @@ modified, or in FRAME if given."
 	      (if (and bg (not (eq bg 'unspecified)))
 		  (format "on %s" bg)
 		"")))))
-      (if (> (length str) 0) str "none"))))
+      (if (> (length str) 0) str (progn (setq aquamacs-autoface-face-summary-none-cache nil) "none")))))
 
 (defun aquamacs-autoface-customize-mode-face (&optional face)
   "Customize the mode-specific face for `aquamacs-autoface'"
