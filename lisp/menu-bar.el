@@ -1674,7 +1674,8 @@ Buffers menu is regenerated."
     (when (and file (> (length file) 20))
       (setq file (concat "..." (substring file -17))))
     (cons (if buffers-menu-show-status
-	      (let ((mod (if (buffer-modified-p buf) "*" ""))
+	      (let ((mod (if (buffer-modified-p buf) "\u25CF " ""))  ; on NS this indicates modification. To Do: show on the left
+		    ;; (icon (if (buffer-modified-p buf) "\u2666 " ""))
 		    (ro (if (buffer-local-value 'buffer-read-only buf) "%" "")))
 		(if file
 		    (format "%s  %s%s  --  %s" (cdr elt) mod ro file)
