@@ -1687,11 +1687,12 @@ Buffers menu is regenerated."
 ;; Used to cache the menu entries for commands in the Buffers menu
 (defvar menu-bar-buffers-menu-command-entries nil)
 
-(defun menu-bar-update-buffers (&optional force)
+(defun menu-bar-update-buffers (&optional force) 
   ;; If user discards the Buffers item, play along.
   (and (lookup-key (current-global-map) [menu-bar buffer])
        (or force (frame-or-buffer-changed-p))
-       (let ((buffers (buffer-list))
+       ;; buffers list in menu should be stable (rather than reflecting Emacs buffer ordering)
+       (let ((buffers (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
 	     (frames (frame-list))
 	     buffers-menu)
 	 ;; If requested, list only the N most recently selected buffers.
@@ -1728,11 +1729,15 @@ Buffers menu is regenerated."
                    (dolist (pair alist)
                      (setq i (1- i))
                      (aset buffers-vec i
-			   (nconc (list (car pair)
-					(cons nil nil))
-				  `(lambda ()
-                                     (interactive)
-                                     (menu-bar-select-buffer ,(cdr pair))))))
+			   (cons 'menu-item
+				 (nconc (list
+					 (car pair)
+					 `(lambda ()
+					    (interactive)
+					    (menu-bar-select-buffer ,(cdr pair))))
+					(if (eq (window-buffer) (cdr pair)) ;  menu-updating-frame is incorrect
+					    (list :button '(:toggle . t)))
+					))))
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.
