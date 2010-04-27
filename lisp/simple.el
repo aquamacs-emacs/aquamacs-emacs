@@ -6750,6 +6750,8 @@ This feature is part of Aquamacs."
   (interactive)
   (smart-spacing-mode 0))
 
+(custom-add-option 'text-mode-hook 'turn-on-smart-spacing-mode)
+
 (define-globalized-minor-mode 
   global-smart-spacing-mode smart-spacing-mode
   turn-on-smart-spacing-mode)
