@@ -870,15 +870,14 @@ and Return:
 		     (ns-spellchecker-current-language))
       (ispell-change-dictionary (ns-spellchecker-current-language)))
   (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
-	 (offset (1+ (car output))))
-    (cond
-     ;; word is correct -- return t
-     ((equal output (cons -1 0)) t)
-     ;; word is incorrect -- return
-     ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
-     ;; don't know what the difference between miss-list and guess-list is...
-     ((> offset 0)
-      (list word offset (ns-spellchecker-get-suggestions word) nil)))))
+	 (offset (car output)))
+    (if offset
+	;; word is incorrect -- return
+	;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
+	;; GUESS-LIST built from known affixes is nil for NSSpellChecker
+	(list word (+1 offset) (ns-spellchecker-get-suggestions word) nil)
+      ;; offset is nil: word is correct -- return t
+      t)))
 
 (defun ispell-ns-spellcheck-string (string) 
   "NSSpellChecker replacement for ispell-parse-output.  Spellcheck STRING
@@ -902,9 +901,8 @@ and return a list of lists (one for each misspelled word) of the format:
 		   (ns-spellchecker-check-spelling string (current-buffer))
 		   offset (car ns-spellcheck-output)
 		   length (cdr ns-spellcheck-output))
-	     (if (< offset 0)
-		 ;; no misspelled words -- terminate while loop
-		 nil
+	     ;; if no misspelled words, terminate while loop
+	     (when offset
 	       ;; misspelled word found; get word;
 	       ;;  set string to not-yet-checked portion;
 	       ;;  add details of misspelling to head of return-list
