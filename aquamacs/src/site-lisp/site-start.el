@@ -42,7 +42,7 @@
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 207
+(defvar aquamacs-version-id 208
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.

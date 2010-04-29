@@ -264,10 +264,11 @@ Separate paths from file names with --."
 		       'default  
 		       aquamacs-default-styles))))))
     (when (< aquamacs-customization-version-id 162)
-      (aquamacs-import-frame-parameters-to-auto-faces)) 
-    ;; Print warnings / compatibility options
-    
-
+      (aquamacs-import-frame-parameters-to-auto-faces))
+    (when (< aquamacs-customization-version-id 208)
+      (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
+      (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
+  
 ;; Emacs 23 transition
 
 ;; add to default-frame-alist:  (internal-border-width . 0)
