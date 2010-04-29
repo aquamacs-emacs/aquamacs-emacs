@@ -7,8 +7,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.146 2009/03/05 02:58:58 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -33,7 +31,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -193,6 +191,40 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
 			       (not (eq line-move-visual 'arrow-keys-only)))))
     (next-line arg try-vscroll)))
 
+
+(defun beginning-of-visual-line (&optional n)
+  "Move point to the beginning of the current line.
+If `word-wrap' is nil, we move to the beginning of the buffer
+line (as in `beginning-of-line'); otherwise, point is moved to
+the beginning of the visual line."
+  (interactive)
+  (if word-wrap
+      (progn 
+	(if (and n (/= n 1))
+	    (vertical-motion (1- n))
+;; the following would need Emacs 23
+;; 	    (let ((line-move-visual t))
+;; 	      (line-move (1- n) t)))
+	  (vertical-motion 0))
+	(skip-read-only-prompt))
+    (beginning-of-line n)))
+
+(defun end-of-visual-line (&optional n)
+  "Move point to the end of the current line.
+If `word-wrap' is nil, we move to the end of the line (as in
+`beginning-of-line'); otherwise, point is moved to the end of the
+visual line."
+  (interactive)
+  (if word-wrap
+      (unless (eobp)
+	(progn
+	  (if (and n (/= n 1))
+	      (vertical-motion (1- n))
+	    (vertical-motion 1))
+	  (skip-chars-backward " \r\n" (- (point) 1))))
+    (end-of-line n)))
+
+
 (defun aquamacs-move-beginning-of-line (arg)
  "Move point to beginning of current buffer line.
 As `move-beginning-of-line', but move by logical buffer lines
@@ -202,7 +234,13 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
   ;; visual-line-mode sets line-move-visual to t (unconditionally)
   (let ((line-move-visual (and line-move-visual
 			       (not (eq line-move-visual 'arrow-keys-only)))))
-    (move-beginning-of-line arg)))
+    (if line-move-visual
+	(progn 
+	  (if (and arg (/= arg 1))
+	      (vertical-motion (1- arg))
+	    (vertical-motion 0))
+	  (skip-read-only-prompt))
+      (move-beginning-of-line arg))))
 
 (defun aquamacs-move-end-of-line (arg)
  "Move point to end of current buffer line.
@@ -213,7 +251,14 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
   ;; visual-line-mode sets line-move-visual to t (unconditionally)
   (let ((line-move-visual (and line-move-visual
 			       (not (eq line-move-visual 'arrow-keys-only)))))
-    (move-end-of-line arg)))
+    (if line-move-visual
+	(unless (eobp)
+	  (progn
+	    (if (and arg (/= arg 1))
+		(vertical-motion (1- arg))
+	      (vertical-motion 1))
+	    (skip-chars-backward " \r\n" (- (point) 1))))
+      (move-end-of-line arg))))
   
 
 (defun aquamacs-kill-word (&optional arg)
