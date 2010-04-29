@@ -169,23 +169,67 @@ The return value is ARGS minus the number of arguments processed."
 	(setq args (cons orig-this-switch args)))))
   (nreverse args))
 
+
+;; Handle the geometry option
+(defun x-handle-geometry (switch)
+  ;; In NS, x-parse-geometry just calls ns-parse-geometry
+  (let* ((geo (x-parse-geometry (car ns-invocation-args)))
+	 (left (assq 'left geo))
+	 (top (assq 'top geo))
+	 (height (assq 'height geo))
+	 (width (assq 'width geo)))
+    (if (or height width)
+	(setq default-frame-alist
+	      (append default-frame-alist
+		      '((user-size . t))
+		      (if height (list height))
+		      (if width (list width)))
+	      initial-frame-alist
+	      (append initial-frame-alist
+		      '((user-size . t))
+		      (if height (list height))
+		      (if width (list width)))))
+    (if (or left top)
+	(setq initial-frame-alist
+	      (append initial-frame-alist
+		      '((user-position . t))
+		      (if left (list left))
+		      (if top (list top)))))
+    (setq ns-invocation-args (cdr ns-invocation-args))))
+
 (defun ns-parse-geometry (geom)
-  "Parse a Nextstep-style geometry string GEOM.
+  "Parse a Nextstep- or X-style geometry string GEOM.
 Returns an alist of the form ((top . TOP), (left . LEFT) ... ).
 The properties returned may include `top', `left', `height', and `width'."
-  (when (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
+
+  (or
+   ;; X-Style specification
+   (append
+    (when (string-match "\\([0-9]+\\)x\\([0-9]+\\)" geom)
+      (append
+       (if (match-string 2 geom)
+	   (list (cons 'height (string-to-number (match-string 2 geom)))))
+       (if (match-string 1 geom)
+	   (list (cons 'width (string-to-number (match-string 1 geom)))))))
+    (when (string-match "\\([+-][0-9]+\\)\\([+-][0-9]+\\)" geom)
+      (append
+       (if (match-string 1 geom)
+	   (list (cons 'left (string-to-number (match-string 1 geom)))))
+       (if (match-string 2 geom)
+	   (list (cons 'top (string-to-number (match-string 2 geom))))))))
+
+   ;; NS-Style specification
+   (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		      geom)
-    (apply
-     'append
-     (list
-      (list (cons 'top (string-to-number (match-string 1 geom))))
-      (if (match-string 3 geom)
-	  (list (cons 'left (string-to-number (match-string 3 geom)))))
-      (if (match-string 5 geom)
-	  (list (cons 'height (string-to-number (match-string 5 geom)))))
-      (if (match-string 7 geom)
-	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+		     geom)
+       (append
+	 (list (cons 'top (string-to-number (match-string 1 geom))))
+	 (if (match-string 3 geom)
+	     (list (cons 'left (string-to-number (match-string 3 geom)))))
+	 (if (match-string 5 geom)
+	     (list (cons 'height (string-to-number (match-string 5 geom)))))
+	 (if (match-string 7 geom)
+	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
 
