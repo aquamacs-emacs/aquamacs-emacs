@@ -4704,7 +4704,7 @@ other purposes."
 This also turns on `word-wrap' in the buffer."
   :keymap visual-line-mode-map
   :group 'visual-line
-  :lighter " Wrap"
+  :lighter " WordWrap"
   (if visual-line-mode
       (progn
 	(set (make-local-variable 'visual-line--saved-state) nil)
@@ -5146,6 +5146,10 @@ Some major modes set this.")
 (put 'auto-fill-function 'safe-local-variable 'null)
 ;; FIXME: turn into a proper minor mode.
 ;; Add a global minor mode version of it.
+(defvar auto-fill-mode nil "Non-nil if auto-fill-mode is on.
+Setting this variable takes no effect.  Use `auto-fill-mode' function.")
+(make-variable-buffer-local 'auto-fill-mode)
+
 (defun auto-fill-mode (&optional arg)
   "Toggle Auto Fill mode.
 With ARG, turn Auto Fill mode on if and only if ARG is positive.
@@ -5155,18 +5159,20 @@ automatically breaks the line at a previous space.
 The value of `normal-auto-fill-function' specifies the function to use
 for `auto-fill-function' when turning Auto Fill mode on."
   (interactive "P")
-  (prog1 (setq auto-fill-function
-	       (if (if (null arg)
-		       (not auto-fill-function)
-		       (> (prefix-numeric-value arg) 0))
-		   normal-auto-fill-function
-		   nil))
+  (prog1 (setq auto-fill-mode 
+	       (setq auto-fill-function
+		     (if (if (null arg)
+			     (not auto-fill-function)
+			   (> (prefix-numeric-value arg) 0))
+			 normal-auto-fill-function
+		       nil)))
     (force-mode-line-update)))
 
 ;; This holds a document string used to document auto-fill-mode.
 (defun auto-fill-function ()
   "Automatically break line at a previous space, in insertion of text."
   nil)
+
 
 (defun turn-on-auto-fill ()
   "Unconditionally turn on Auto Fill mode."
@@ -5175,8 +5181,6 @@ for `auto-fill-function' when turning Auto Fill mode on."
 (defun turn-off-auto-fill ()
   "Unconditionally turn off Auto Fill mode."
   (auto-fill-mode -1))
-
-(custom-add-option 'text-mode-hook 'turn-on-auto-fill)
 
 (defun toggle-auto-fill ()
   "Toggle whether to use Auto Fill Mode."
@@ -5257,36 +5261,63 @@ is non-nil.  This function disables `visual-line-mode' when enabling
 	   (if truncate-lines "enabled" "disabled")))
 
 
-;;  backward compatibility (in case users have it in their customizations)
-(defun turn-on-longlines ()
-  "Turn on Longlines mode.
-... unless buffer is read-only."
-  (unless buffer-read-only
-    (require 'longlines)
-    (longlines-mode 1)))
-
-(defun turn-off-longlines ()
-  "Unconditionally turn off Longlines mode."
-  (and (boundp 'longlines-mode)
-       (longlines-mode -1)))
-; (custom-add-option 'text-mode-hook 'turn-on-longlines)
-
-(defun toggle-longlines ()
-  "Toggle whether to use Longlines Mode."
+(defun set-auto-fill ()
+  "Unconditionally turn on Auto Fill mode."
   (interactive)
-  (require 'longlines-mode)
-  (unless longlines-mode 
-    (auto-fill-mode -1))
-  (longlines-mode))
+  (turn-off-longlines)
+  (visual-line-mode 0)
+  (setq truncate-lines nil)
+  (auto-fill-mode 1)
+  (if (interactive-p)
+      (message "Line wrapping set to Line Breaking (Auto Fill) mode in this buffer.")))
 
-(defun turn-on-word-wrap ()
-  "Turn on Word Wrap mode in current buffer."
+(defun set-truncate-lines ()
+  "Turn on Truncate Lines mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (turn-on-visual-line-mode))
+  (toggle-truncate-lines t)
+  (if (interactive-p)
+      (message "Line wrapping set to Truncate Lines mode in this buffer.")))
+
+(defun set-line-wrap ()
+  "Turn off Line Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+    (message "Line wrapping set to Wrap mode in this buffer.")))
+
+(defun set-word-wrap ()
+  "Turn on Word Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (turn-on-visual-line-mode) ; let it save settings first
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+      (message "Line wrapping set to Word Wrap mode in this buffer.")))
+
+
+(custom-add-option 'text-mode-hook 'set-auto-fill)
+(custom-add-option 'text-mode-hook 'set-word-wrap)
+(custom-add-option 'text-mode-hook 'set-line-wrap)
+(custom-add-option 'text-mode-hook 'set-truncate-lines)
+
+(defun turn-on-word-wrap ()
+  "Turn on Visual Line mode in current buffer.
+See `visual-line-mode'."
+  (visual-line-mode 1))
 
 (defun turn-off-word-wrap ()
-  "Turn off Word Wrap mode in current buffer."
+  "Turn off Visual Line mode in current buffer.
+See `visual-line-mode'."
   (visual-line-mode 0))
 
 (defun toggle-word-wrap ()
@@ -5298,6 +5329,40 @@ is non-nil.  This function disables `visual-line-mode' when enabling
   (when (interactive-p)
     (force-mode-line-update)
     (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
+
+;;  backward compatibility (in case users have it in their customizations)
+
+(defun turn-on-longlines ()
+  "Switch to Word Wrap mode in current buffer.
+`longlines-mode' is deprecated.  Use `visual-line-mode' instead,
+or `set-word-wrap'.  This function calls `set-word-wrap'.
+To turn on the classic `longlines-mode', use `turn-on-longlines*'."
+  (set-word-wrap))
+
+(defun turn-on-longlines* ()
+  "Turn on Longlines mode.
+... unless buffer is read-only."
+  (unless buffer-read-only
+    (require 'longlines)
+    (longlines-mode 1)))
+
+(defun turn-off-longlines ()
+  "Unconditionally turn off Longlines mode."
+  (interactive)
+  (and (boundp 'longlines-mode)
+       (longlines-mode -1)))
+; (custom-add-option 'text-mode-hook 'turn-on-longlines)
+
+(make-obsolete 'longlines-mode 'visual-line-mode "23.1")
+(make-obsolete 'turn-on-longlines 'set-word-wrap "23.1")
+
+(defun toggle-longlines ()
+  "Toggle whether to use Longlines Mode."
+  (interactive)
+  (require 'longlines-mode)
+  (unless longlines-mode 
+    (auto-fill-mode -1))
+  (longlines-mode))
 
 
 (defvar overwrite-mode-textual (purecopy " Ovwrt")

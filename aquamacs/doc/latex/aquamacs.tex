@@ -224,11 +224,22 @@ Table \ref{tab:variables} displays a complete list of the options.
 
 \subsubsection{Line wrapping}
 
-Text is usually shown and read line by line.  Several lines commonly form a paragraph.   However, text is not necessarily stored this way in a file:  sometimes, a \emph{line} stored in a file is much wider than what would fit on a computer screen, and is really a paragraph.  This makes sense: authors of documents do not know how wide the reader's computer screen is, or how wide the window is going to be that is used to read and edit the text.  Aquamacs supports this mode of editing with \emph{word wrapping}: lines are wrapped at word boundaries.  This way, a buffer line is displayed as a paragraph (several visual lines) on the screen.  In Aquamacs, this mode of operation is called \textbf{soft word wrap} and is available from the Options menu.\footnote{Emacs also knows a `longlines-mode', which is similar, but is unreliable with compilers such as LaTeX in conjunction with Aquamacs LaTeX-Mode, AUCTeX.  It also doesn't work well with variable width fonts, and it is slow.  We don't recommend it!}
+Text is usually shown and read line by line.  Several lines commonly form a paragraph.   However, text is not necessarily stored this way in a file:  sometimes, a \emph{line} stored in a file is much wider than what would fit on a computer screen, and is really a paragraph.  This makes sense: authors of documents do not know how wide the reader's computer screen is, or how wide the window is going to be that is used to read and edit the text.  Aquamacs supports this mode of editing with \emph{word wrapping}: lines are wrapped at word boundaries.  This way, a buffer line is displayed as a paragraph (several visual lines) on the screen.  In Aquamacs, this mode of operation is called \textbf{ word wrap} and is available from the Options menu.  Internally, word wrapping enables \emph{Visual Line Mode}.\footnote{Earlier Emacs versions provided `longlines-mode', which is similar, but is unreliable and deprecated.}
 
-What's the alternative?  \textbf{Hard word wrap} means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.  If a line is too long, it can either be \textbf{truncated} (cut off) or be continued on the next line. (The difference between hard and soft word wrap is technically whether lines are continued only at word boundaries.)
+What's the alternative?  \textbf{Hard line breaking} means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.   Line Breaking, called \emph{Auto Fill} in classical Emacs, changes the actual buffer and file contents, unlike all the other options discussed here.
 
-Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Auto-Detext Word Wrap in Text Files'' function.  (You can control the default, e.g.,~for new files, by setting `auto-word-wrap-default-function' to `turn-on-word-wrap' using Options / Customize Aquamacs / Specific Option.)
+Long lines can also be \textbf{truncated} (cut off) or be continued (\textbf{wrap}) on the next line.
+
+Line wrapping can be set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under \emph{Options / Line Wrapping} for the current buffer.  A \emph{Set as Default} will set it as default for all buffers that have no explicit line wrap setting.  
+
+Note that Word Wrapping (`visual-line-mode') affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
+\begin{itemize}
+\item In Word Wrapping (visual-line-mode), C-aenp and arrow keys move according to visual lines.
+\item Without Word Wrapping (visual-line-mode off), arrow keys move visually, but C-aenp move non-visually according to buffer lines as in Emacs 22 and Aquamacs 1.x.
+\end{itemize}
+ou may configure this behavior via the `line-move-visual' customization variable.  Set it to \emph{t} for unconditional visual movement of all keys, and \emph{nil} for unconditional logical (buffer) movement of all keys.
+
+Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Detect Line Wrap in Text Files'' function.  (You can control the default, e.g.,~for new files, by setting `auto-word-wrap-default-function' to `set-word-wrap' using Options / Customize Aquamacs / Specific Option.)
  
 A useful function to convert hard wrapped text into soft wrapped text can be found in the Edit menu: \emph{Remove Hard Line Breaks} will turn (non-indented!) paragraphs into soft-wrapped lines (turn on soft wrapping to see). 
 

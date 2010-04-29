@@ -171,24 +171,50 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
-(defun aquamacs-previous-nonvisual-line (&optional arg try-vscroll)
+(defun aquamacs-previous-line (&optional arg try-vscroll)
   "Move cursor vertically up ARG buffer lines.
-Like `previous-line', but always move by logical buffer lines
-rather than by visual lines.  `line-move-visual' is set to nil
-for this command."
+Like `previous-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
   (interactive "^p\np")
   (setq this-command 'previous-line)  ; ensure last-command will be set
-  (let ((line-move-visual nil))
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
     (previous-line arg try-vscroll)))
-(defun aquamacs-next-nonvisual-line (&optional arg try-vscroll)
+
+(defun aquamacs-next-line (&optional arg try-vscroll)
   "Move cursor vertically down ARG buffer lines.
-Like `next-line', but always move by logical buffer lines
-rather than by visual lines.  `line-move-visual' is set to nil
-for this command."
+Like `next-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
   (interactive "^p\np")
   (setq this-command 'next-line)  ; ensure last-command will be set
-  (let ((line-move-visual nil))
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
     (next-line arg try-vscroll)))
+
+(defun aquamacs-move-beginning-of-line (arg)
+ "Move point to beginning of current buffer line.
+As `move-beginning-of-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
+  (interactive "^p")
+  (setq this-command 'move-beginning-of-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
+    (move-beginning-of-line arg)))
+
+(defun aquamacs-move-end-of-line (arg)
+ "Move point to end of current buffer line.
+As `move-end-of-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
+  (interactive "^p")
+  (setq this-command 'move-end-of-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
+    (move-end-of-line arg)))
+  
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
@@ -747,8 +773,10 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
     (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-line)
 
-    (define-key map `[(control p)] 'aquamacs-previous-nonvisual-line)
-    (define-key map `[(control n)] 'aquamacs-next-nonvisual-line)
+    (define-key map `[(control a)] 'aquamacs-move-beginning-of-line)
+    (define-key map `[(control e)] 'aquamacs-move-end-of-line)
+    (define-key map `[(control p)] 'aquamacs-previous-line)
+    (define-key map `[(control n)] 'aquamacs-next-line)
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     ;; left / right (for transient-mark-mode)

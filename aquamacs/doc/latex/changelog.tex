@@ -53,7 +53,17 @@ Patch by Matthew Dempsky.
 
 \item As per Emacs 23, Aquamacs now supports multi-file commits in distributed version-control systems through the VC-dir package.
 
-\item Soft wrapping is called `visual-line-mode' internally now, and the former Aquamacs mode of the same name is now a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is considered obsolete.   Users with manual customizations should adjust their settings.
+\item Line wrapping is now set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under \emph{Options / Line Wrapping} for the current buffer.  A \emph{Set as Default} will set it as default for all buffers that have no explicit line wrap setting.  As before, there is also a setting to detect word wrap in text files.  When it is on, Aquamacs detects the wrapping style of text-mode buffers automatically, but prefers word wrapping (see the customization variable `auto-word-wrap-default-function').
+{\small Word Wrapping translates to `visual-line-mode' internally now, and the former Aquamacs 1.x mode of the same name now corresponds to a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is obsolete.   Users with manual customizations should adjust their settings.  Fine control can be achieved by customizing `visual-line-mode', `word-wrap', `truncate-lines', and `auto-fill-mode'.}
+
+\item Note that Word Wrapping (`visual-line-mode') affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
+\begin{itemize}
+\item In Word Wrapping (visual-line-mode), C-aenp and arrow keys move according to visual lines.
+\item Without Word Wrapping (visual-line-mode off), arrow keys move visually, but C-aenp move non-visually according to buffer lines as in Emacs 22 and Aquamacs 1.x.
+\end{itemize}
+Users may configure this behavior via the (new) `line-move-visual' customization variable.  Set it to \emph{t} for unconditional visual movement of all keys, and \emph{nil} for unconditional logical (buffer) movement of all keys.
+
+\item Users who have included `turn-on-auto-fill' or `turn-on-word-wrap' in their customization of `text-mode-hook' or other hooks are advised to change this to `set-auto-fill', or `set-word-wrap', respectively.  These functions are more comprehensive and disable (usually) nonsensical alternatives.
 
 \item When `osx-key-mode' is switched off, `x-select-enable-clipboard' is restored to its (new) default value, \emph{t}. That means that kill and yank operations (C-w, C-y, mouse text selection and more) are integrated with the Mac pasteboard.  When `osx-key-mode' is on (as is default), the standard copy\&paste operations (A-c, A-v) use the system pasteboard, while the killring operations from traditional Emacs do not (as has been the case in Aquamacs 1.x).
 Reported by José M Figueroa-O'Farrill.

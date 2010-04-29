@@ -264,10 +264,11 @@ Separate paths from file names with --."
 		       'default  
 		       aquamacs-default-styles))))))
     (when (< aquamacs-customization-version-id 162)
-      (aquamacs-import-frame-parameters-to-auto-faces)) 
-    ;; Print warnings / compatibility options
-    
-
+      (aquamacs-import-frame-parameters-to-auto-faces))
+    (when (< aquamacs-customization-version-id 208)
+      (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
+      (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
+  
 ;; Emacs 23 transition
 
 ;; add to default-frame-alist:  (internal-border-width . 0)
@@ -604,7 +605,8 @@ No errors are signaled."
 	    (setq buffer-file-coding-system 'utf-8)
 	    (add-hook 'before-save-hook 
 		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
-		      nil 'local))
+		      nil 'local)
+	    (funcall initial-major-mode)) ; ensure mode hooks are run
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
@@ -904,7 +906,7 @@ yes-or-no prompts - y or n will do."
 (require 'saveplace)
 ;;  (require 'longlines) 
 (aquamacs-set-defaults 
-   `((line-move-visual t)
+   `((line-move-visual arrow-keys-only)
      (text-mode-hook (smart-spacing-mode auto-detect-wrap)) 
      (save-place t)
      (save-place-limit 500) ;; speed on quit
@@ -1398,6 +1400,7 @@ listed here."
 	      display-time-mode 
 	      display-battery-mode
 	      one-buffer-one-frame-mode 
+	      visual-line-mode ; set by line wrapping menu functions
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
 	      aquamacs-tool-bar-user-customization
@@ -1433,8 +1436,8 @@ listed here."
      ;; Nonetheless, not saving it would like be confuse
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-     text-mode-hook
-
+     text-mode-hook 
+     word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
      blink-cursor-mode
      aquamacs-customization-version-id
      mac-print-monochrome-mode
