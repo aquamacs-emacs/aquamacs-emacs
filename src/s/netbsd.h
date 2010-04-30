@@ -28,14 +28,14 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define LIBS_TERMCAP -ltermcap
 
-#define START_FILES pre-crt0.o /usr/lib/crt0.o START_FILES_1 /usr/lib/crtbegin.o
-#define LIB_STANDARD -lgcc -lc -lgcc /usr/lib/crtend.o END_FILES_1
+#define START_FILES pre-crt0.o $(CRT_DIR)/crt0.o START_FILES_1 $(CRT_DIR)/crtbegin.o
+#define LIB_STANDARD -lgcc -lc -lgcc $(CRT_DIR)/crtend.o END_FILES_1
 #undef LIB_GCC
 #define LIB_GCC
 
 #ifdef HAVE_CRTIN
-#define START_FILES_1 /usr/lib/crti.o 
-#define END_FILES_1 /usr/lib/crtn.o
+#define START_FILES_1 $(CRT_DIR)/crti.o 
+#define END_FILES_1 $(CRT_DIR)/crtn.o
 #else
 #define START_FILES_1
 #define END_FILES_1
@@ -48,20 +48,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    which is what OSF1 uses.  */
 #define LD_SWITCH_SYSTEM_tmp `echo LD_SWITCH_X_SITE_AUX | sed -e 's/-R/-Wl,-rpath,/'`
 #define LD_SWITCH_SYSTEM LD_SWITCH_SYSTEM_tmp -Wl,-rpath,/usr/pkg/lib -L/usr/pkg/lib -Wl,-rpath,/usr/local/lib -L/usr/local/lib
-
-/* The following is needed to make `configure' find Xpm, Xaw3d and
-   image include and library files if using /usr/bin/gcc.  That
-   compiler seems to be modified to not find headers in
-   /usr/local/include or libs in /usr/local/lib by default.  */
-
-#define C_SWITCH_SYSTEM -I/usr/X11R6/include -I/usr/pkg/include -I/usr/local/include -L/usr/pkg/lib -L/usr/local/lib
-
-/* Link temacs with -z nocombreloc so that unexec works right, whether or
-   not -z combreloc is the default.  GNU ld ignores unknown -z KEYWORD
-   switches, so this also works with older versions that don't implement
-   -z combreloc.  */
-
-#define LD_SWITCH_SYSTEM_TEMACS -Wl,-z,nocombreloc
 
 /* On post 1.3 releases of NetBSD, gcc -nostdlib also clears
    the library search parth, i.e. it won't search /usr/lib

@@ -767,24 +767,46 @@ The return value is BASE-VARIABLE.  */)
   CHECK_SYMBOL (new_alias);
   CHECK_SYMBOL (base_variable);
 
-  if (SYMBOL_CONSTANT_P (new_alias))
-    error ("Cannot make a constant an alias");
-
   sym = XSYMBOL (new_alias);
+
+  if (sym->constant)
+    if (sym->redirect == SYMBOL_VARALIAS)
+      sym->constant = 0;	/* Reset.  */
+    else
+      /* Not sure why.  */
+      error ("Cannot make a constant an alias");
+
+  switch (sym->redirect)
+    {
+    case SYMBOL_FORWARDED:
+      error ("Cannot make an internal variable an alias");
+    case SYMBOL_LOCALIZED:
+      error ("Don't know how to make a localized variable an alias");
+    }
+
   /* http://lists.gnu.org/archive/html/emacs-devel/2008-04/msg00834.html
-     If n_a is bound, but b_v is not, set the value of b_v to n_a.
-     This is for the sake of define-obsolete-variable-alias and user
-     customizations.  */
-  if (NILP (Fboundp (base_variable)) && !NILP (Fboundp (new_alias)))
-    XSYMBOL(base_variable)->value = sym->value;
-  sym->indirect_variable = 1;
-  sym->value = base_variable;
+     If n_a is bound, but b_v is not, set the value of b_v to n_a,
+     so that old-code that affects n_a before the aliasing is setup
+     still works.  */
+  if (NILP (Fboundp (base_variable)))
+    set_internal (base_variable, find_symbol_value (new_alias), NULL, 1);
+
+  {
+    struct specbinding *p;
+
+    for (p = specpdl_ptr - 1; p >= specpdl; p--)
+      if (p->func == NULL
+	  && (EQ (new_alias,
+		  CONSP (p->symbol) ? XCAR (p->symbol) : p->symbol)))
+	error ("Don't know how to make a let-bound variable an alias");
+  }
+
+  sym->redirect = SYMBOL_VARALIAS;
+  SET_SYMBOL_ALIAS (sym, XSYMBOL (base_variable));
   sym->constant = SYMBOL_CONSTANT_P (base_variable);
   LOADHIST_ATTACH (new_alias);
-  if (!NILP (docstring))
-    Fput (new_alias, Qvariable_documentation, docstring);
-  else
-    Fput (new_alias, Qvariable_documentation, Qnil);
+  /* Even if docstring is nil: remove old docstring.  */
+  Fput (new_alias, Qvariable_documentation, docstring);
 
   return base_variable;
 }
@@ -944,7 +966,7 @@ chain of symbols.  */)
       return Qnil;
 
   /* If indirect and there's an alias loop, don't check anything else.  */
-  if (XSYMBOL (variable)->indirect_variable
+  if (XSYMBOL (variable)->redirect == SYMBOL_VARALIAS
       && NILP (internal_condition_case_1 (lisp_indirect_variable, variable,
                                           Qt, user_variable_p_eh)))
     return Qnil;
@@ -968,11 +990,11 @@ chain of symbols.  */)
           || (!NILP (Fget (variable, intern ("custom-autoload")))))
         return Qt;
 
-      if (!XSYMBOL (variable)->indirect_variable)
+      if (!(XSYMBOL (variable)->redirect == SYMBOL_VARALIAS))
         return Qnil;
 
       /* An indirect variable?  Let's follow the chain.  */
-      variable = XSYMBOL (variable)->value;
+      XSETSYMBOL (variable, SYMBOL_ALIAS (XSYMBOL (variable)));
     }
 }
 
@@ -2112,8 +2134,6 @@ this does nothing and returns nil.  */)
      (function, file, docstring, interactive, type)
      Lisp_Object function, file, docstring, interactive, type;
 {
-  Lisp_Object args[4];
-
   CHECK_SYMBOL (function);
   CHECK_STRING (file);
 
@@ -2129,8 +2149,11 @@ this does nothing and returns nil.  */)
     LOADHIST_ATTACH (Fcons (Qautoload, function));
   else
     /* We don't want the docstring in purespace (instead,
-       Snarf-documentation should (hopefully) overwrite it).  */
-    docstring = make_number (0);
+       Snarf-documentation should (hopefully) overwrite it).
+       We used to use 0 here, but that leads to accidental sharing in
+       purecopy's hash-consing, so we use a (hopefully) unique integer
+       instead.  */
+    docstring = make_number (XHASH (function));
   return Ffset (function,
 		Fpurecopy (list5 (Qautoload, file, docstring,
 				  interactive, type)));
@@ -2764,7 +2787,6 @@ apply1 (fn, arg)
   if (NILP (arg))
     RETURN_UNGCPRO (Ffuncall (1, &fn));
   gcpro1.nvars = 2;
-#ifdef NO_ARG_ARRAY
   {
     Lisp_Object args[2];
     args[0] = fn;
@@ -2772,9 +2794,6 @@ apply1 (fn, arg)
     gcpro1.var = args;
     RETURN_UNGCPRO (Fapply (2, args));
   }
-#else /* not NO_ARG_ARRAY */
-  RETURN_UNGCPRO (Fapply (2, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn on no arguments */
@@ -2795,7 +2814,6 @@ call1 (fn, arg1)
      Lisp_Object fn, arg1;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[2];
 
   args[0] = fn;
@@ -2803,11 +2821,6 @@ call1 (fn, arg1)
   GCPRO1 (args[0]);
   gcpro1.nvars = 2;
   RETURN_UNGCPRO (Ffuncall (2, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 2;
-  RETURN_UNGCPRO (Ffuncall (2, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn with 2 arguments arg1, arg2 */
@@ -2817,7 +2830,6 @@ call2 (fn, arg1, arg2)
      Lisp_Object fn, arg1, arg2;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[3];
   args[0] = fn;
   args[1] = arg1;
@@ -2825,11 +2837,6 @@ call2 (fn, arg1, arg2)
   GCPRO1 (args[0]);
   gcpro1.nvars = 3;
   RETURN_UNGCPRO (Ffuncall (3, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 3;
-  RETURN_UNGCPRO (Ffuncall (3, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn with 3 arguments arg1, arg2, arg3 */
@@ -2839,7 +2846,6 @@ call3 (fn, arg1, arg2, arg3)
      Lisp_Object fn, arg1, arg2, arg3;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[4];
   args[0] = fn;
   args[1] = arg1;
@@ -2848,11 +2854,6 @@ call3 (fn, arg1, arg2, arg3)
   GCPRO1 (args[0]);
   gcpro1.nvars = 4;
   RETURN_UNGCPRO (Ffuncall (4, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 4;
-  RETURN_UNGCPRO (Ffuncall (4, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn with 4 arguments arg1, arg2, arg3, arg4 */
@@ -2862,7 +2863,6 @@ call4 (fn, arg1, arg2, arg3, arg4)
      Lisp_Object fn, arg1, arg2, arg3, arg4;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[5];
   args[0] = fn;
   args[1] = arg1;
@@ -2872,11 +2872,6 @@ call4 (fn, arg1, arg2, arg3, arg4)
   GCPRO1 (args[0]);
   gcpro1.nvars = 5;
   RETURN_UNGCPRO (Ffuncall (5, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 5;
-  RETURN_UNGCPRO (Ffuncall (5, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn with 5 arguments arg1, arg2, arg3, arg4, arg5 */
@@ -2886,7 +2881,6 @@ call5 (fn, arg1, arg2, arg3, arg4, arg5)
      Lisp_Object fn, arg1, arg2, arg3, arg4, arg5;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[6];
   args[0] = fn;
   args[1] = arg1;
@@ -2897,11 +2891,6 @@ call5 (fn, arg1, arg2, arg3, arg4, arg5)
   GCPRO1 (args[0]);
   gcpro1.nvars = 6;
   RETURN_UNGCPRO (Ffuncall (6, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 6;
-  RETURN_UNGCPRO (Ffuncall (6, &fn));
-#endif /* not NO_ARG_ARRAY */
 }
 
 /* Call function fn with 6 arguments arg1, arg2, arg3, arg4, arg5, arg6 */
@@ -2911,7 +2900,6 @@ call6 (fn, arg1, arg2, arg3, arg4, arg5, arg6)
      Lisp_Object fn, arg1, arg2, arg3, arg4, arg5, arg6;
 {
   struct gcpro gcpro1;
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[7];
   args[0] = fn;
   args[1] = arg1;
@@ -2923,11 +2911,27 @@ call6 (fn, arg1, arg2, arg3, arg4, arg5, arg6)
   GCPRO1 (args[0]);
   gcpro1.nvars = 7;
   RETURN_UNGCPRO (Ffuncall (7, args));
-#else /* not NO_ARG_ARRAY */
-  GCPRO1 (fn);
-  gcpro1.nvars = 7;
-  RETURN_UNGCPRO (Ffuncall (7, &fn));
-#endif /* not NO_ARG_ARRAY */
+}
+
+/* Call function fn with 7 arguments arg1, arg2, arg3, arg4, arg5, arg6, arg7 */
+/* ARGSUSED */
+Lisp_Object
+call7 (fn, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+     Lisp_Object fn, arg1, arg2, arg3, arg4, arg5, arg6, arg7;
+{
+  struct gcpro gcpro1;
+  Lisp_Object args[8];
+  args[0] = fn;
+  args[1] = arg1;
+  args[2] = arg2;
+  args[3] = arg3;
+  args[4] = arg4;
+  args[5] = arg5;
+  args[6] = arg6;
+  args[7] = arg7;
+  GCPRO1 (args[0]);
+  gcpro1.nvars = 8;
+  RETURN_UNGCPRO (Ffuncall (8, args));
 }
 
 /* The caller should GCPRO all the elements of ARGS.  */
@@ -3263,78 +3267,94 @@ void
 specbind (symbol, value)
      Lisp_Object symbol, value;
 {
-  Lisp_Object valcontents;
+  struct Lisp_Symbol *sym;
+
+  eassert (!handling_signal);
 
   CHECK_SYMBOL (symbol);
+  sym = XSYMBOL (symbol);
   if (specpdl_ptr == specpdl + specpdl_size)
     grow_specpdl ();
 
-  /* The most common case is that of a non-constant symbol with a
-     trivial value.  Make that as fast as we can.  */
-  valcontents = SYMBOL_VALUE (symbol);
-  if (!MISCP (valcontents) && !SYMBOL_CONSTANT_P (symbol))
+ start:
+  switch (sym->redirect)
     {
-      specpdl_ptr->symbol = symbol;
-      specpdl_ptr->old_value = valcontents;
-      specpdl_ptr->func = NULL;
-      ++specpdl_ptr;
-      SET_SYMBOL_VALUE (symbol, value);
-    }
-  else
-    {
-      Lisp_Object ovalue = find_symbol_value (symbol);
-      specpdl_ptr->func = 0;
-      specpdl_ptr->old_value = ovalue;
-
-      valcontents = XSYMBOL (symbol)->value;
-
-      if (BUFFER_LOCAL_VALUEP (valcontents)
-	  || BUFFER_OBJFWDP (valcontents))
-	{
-	  Lisp_Object where, current_buffer;
-
-	  current_buffer = Fcurrent_buffer ();
-
-	  /* For a local variable, record both the symbol and which
-	     buffer's or frame's value we are saving.  */
-	  if (!NILP (Flocal_variable_p (symbol, Qnil)))
-	    where = current_buffer;
-	  else if (BUFFER_LOCAL_VALUEP (valcontents)
-		   && XBUFFER_LOCAL_VALUE (valcontents)->found_for_frame)
-	    where = XBUFFER_LOCAL_VALUE (valcontents)->frame;
+    case SYMBOL_VARALIAS:
+      sym = indirect_variable (sym); XSETSYMBOL (symbol, sym); goto start;
+    case SYMBOL_PLAINVAL:
+	{ /* The most common case is that of a non-constant symbol with a
+	     trivial value.  Make that as fast as we can.  */
+	  specpdl_ptr->symbol = symbol;
+	  specpdl_ptr->old_value = SYMBOL_VAL (sym);
+	  specpdl_ptr->func = NULL;
+	  ++specpdl_ptr;
+	  if (!sym->constant)
+	    SET_SYMBOL_VAL (sym, value);
 	  else
-	    where = Qnil;
-
-	  /* We're not using the `unused' slot in the specbinding
-	     structure because this would mean we have to do more
-	     work for simple variables.  */
-	  specpdl_ptr->symbol = Fcons (symbol, Fcons (where, current_buffer));
-
-	  /* If SYMBOL is a per-buffer variable which doesn't have a
-	     buffer-local value here, make the `let' change the global
-	     value by changing the value of SYMBOL in all buffers not
-	     having their own value.  This is consistent with what
-	     happens with other buffer-local variables.  */
-	  if (NILP (where)
-	      && BUFFER_OBJFWDP (valcontents))
-	    {
-	      ++specpdl_ptr;
-	      Fset_default (symbol, value);
-	      return;
-	    }
+	    set_internal (symbol, value, 0, 1);
+	  break;
 	}
-      else
-	specpdl_ptr->symbol = symbol;
+    case SYMBOL_LOCALIZED: case SYMBOL_FORWARDED:
+      {
+	Lisp_Object ovalue = find_symbol_value (symbol);
+	specpdl_ptr->func = 0;
+	specpdl_ptr->old_value = ovalue;
 
-      specpdl_ptr++;
-      /* We used to do
-            if (BUFFER_OBJFWDP (ovalue) || KBOARD_OBJFWDP (ovalue))
-	      store_symval_forwarding (symbol, ovalue, value, NULL);
-            else
-         but ovalue comes from find_symbol_value which should never return
-         such an internal value.  */
-      eassert (!(BUFFER_OBJFWDP (ovalue) || KBOARD_OBJFWDP (ovalue)));
-      set_internal (symbol, value, 0, 1);
+	eassert (sym->redirect != SYMBOL_LOCALIZED
+		 || (EQ (SYMBOL_BLV (sym)->where,
+			 SYMBOL_BLV (sym)->frame_local ?
+			 Fselected_frame () : Fcurrent_buffer ())));
+
+	if (sym->redirect == SYMBOL_LOCALIZED
+	    || BUFFER_OBJFWDP (SYMBOL_FWD (sym)))
+	  {
+	    Lisp_Object where, cur_buf = Fcurrent_buffer ();
+
+	    /* For a local variable, record both the symbol and which
+	       buffer's or frame's value we are saving.  */
+	    if (!NILP (Flocal_variable_p (symbol, Qnil)))
+	      {
+		eassert (sym->redirect != SYMBOL_LOCALIZED
+			 || (BLV_FOUND (SYMBOL_BLV (sym))
+			     && EQ (cur_buf, SYMBOL_BLV (sym)->where)));
+		where = cur_buf;
+	      }
+	    else if (sym->redirect == SYMBOL_LOCALIZED
+		     && BLV_FOUND (SYMBOL_BLV (sym)))
+	      where = SYMBOL_BLV (sym)->where;
+	    else
+	      where = Qnil;
+
+	    /* We're not using the `unused' slot in the specbinding
+	       structure because this would mean we have to do more
+	       work for simple variables.  */
+	    /* FIXME: The third value `current_buffer' is only used in
+	       let_shadows_buffer_binding_p which is itself only used
+	       in set_internal for local_if_set.  */
+	    specpdl_ptr->symbol = Fcons (symbol, Fcons (where, cur_buf));
+
+	    /* If SYMBOL is a per-buffer variable which doesn't have a
+	       buffer-local value here, make the `let' change the global
+	       value by changing the value of SYMBOL in all buffers not
+	       having their own value.  This is consistent with what
+	       happens with other buffer-local variables.  */
+	    if (NILP (where)
+		&& sym->redirect == SYMBOL_FORWARDED)
+	      {
+		eassert (BUFFER_OBJFWDP (SYMBOL_FWD (sym)));
+		++specpdl_ptr;
+		Fset_default (symbol, value);
+		return;
+	      }
+	  }
+	else
+	  specpdl_ptr->symbol = symbol;
+
+	specpdl_ptr++;
+	set_internal (symbol, value, 0, 1);
+	break;
+      }
+    default: abort ();
     }
 }
 
@@ -3394,7 +3414,12 @@ unbind_to (count, value)
 	  if (NILP (where))
 	    Fset_default (symbol, this_binding.old_value);
 	  else if (BUFFERP (where))
-	    set_internal (symbol, this_binding.old_value, XBUFFER (where), 1);
+	    if (!NILP (Flocal_variable_p (symbol, where)))
+	      set_internal (symbol, this_binding.old_value, XBUFFER (where), 1);
+	    /* else if (!NILP (Fbuffer_live_p (where)))
+	      error ("Unbinding local %s to global!", symbol); */
+            else
+              ;
 	  else
 	    set_internal (symbol, this_binding.old_value, NULL, 1);
 	}
@@ -3403,8 +3428,9 @@ unbind_to (count, value)
 	  /* If variable has a trivial value (no forwarding), we can
 	     just set it.  No need to check for constant symbols here,
 	     since that was already done by specbind.  */
-	  if (!MISCP (SYMBOL_VALUE (this_binding.symbol)))
-	    SET_SYMBOL_VALUE (this_binding.symbol, this_binding.old_value);
+	  if (XSYMBOL (this_binding.symbol)->redirect == SYMBOL_PLAINVAL)
+	    SET_SYMBOL_VAL (XSYMBOL (this_binding.symbol),
+			    this_binding.old_value);
 	  else
 	    set_internal (this_binding.symbol, this_binding.old_value, 0, 1);
 	}

@@ -48,10 +48,18 @@ It can use `match-string' to get parts matched against
  1. issue kind (bug, patch, rfe &c)
  2. issue number.
 
-There is no default setting for this, it must be set per file.")
+There is no default setting for this, it must be set per file.
+If you set it to a symbol in the file Local Variables section,
+you need to add a `bug-reference-url-format' property to it:
+\(put 'my-bug-reference-url-format 'bug-reference-url-format t)
+so that it is considered safe, see `enable-local-variables'.")
 
 ;;;###autoload
-(put 'bug-reference-url-format 'safe-local-variable 'stringp)
+(put 'bug-reference-url-format 'safe-local-variable
+     (lambda (s)
+       (or (stringp s)
+           (and (symbolp s)
+                (get s 'bug-reference-url-format)))))
 
 (defconst bug-reference-bug-regexp
   "\\([Bb]ug ?#\\|[Pp]atch ?#\\|RFE ?#\\|PR [a-z-+]+/\\)\\([0-9]+\\)"
@@ -130,11 +138,6 @@ There is no default setting for this, it must be set per file.")
       (widen)
       (bug-reference-unfontify (point-min) (point-max)))))
 
-(defun turn-on-bug-reference-mode ()
-  "Unconditionally turn bug reference mode on."
-  (unless bug-reference-mode
-    (bug-reference-mode)))
-
 ;;;###autoload
 (define-minor-mode bug-reference-prog-mode
   "Like `bug-reference-mode', but only buttonize in comments and strings."
@@ -147,11 +150,6 @@ There is no default setting for this, it must be set per file.")
     (save-restriction
       (widen)
       (bug-reference-unfontify (point-min) (point-max)))))
-
-(defun turn-on-bug-reference-prog-mode ()
-  "Unconditionally turn bug reference prog mode on."
-  (unless bug-reference-prog-mode
-    (bug-reference-prog-mode)))
 
 ;; arch-tag: b138abce-e5c3-475e-bd58-7afba40387ea
 ;;; bug-reference.el ends here

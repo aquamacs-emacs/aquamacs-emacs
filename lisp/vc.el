@@ -63,11 +63,18 @@
 ;; although you might prefer to use C-c C-a (i.e. `log-edit-insert-changelog')
 ;; from the commit buffer instead or to set `log-edit-setup-invert'.
 ;;
-;; The vc code maintains some internal state in order to reduce expensive
-;; version-control operations to a minimum.  Some names are only computed
-;; once.  If you perform version control operations with the backend while
-;; vc's back is turned, or move/rename master files while vc is running,
-;; vc may get seriously confused.  Don't do these things!
+;; When using SCCS, RCS, CVS: be careful not to do repo surgery, or
+;; operations like registrations and deletions and renames, outside VC
+;; while VC is running. The support for these systems was designed
+;; when disks were much slower, and the code maintains a lot of
+;; internal state in order to reduce expensive operations to a
+;; minimum. Thus, if you mess with the repo while VC's back is turned,
+;; VC may get seriously confused.
+;;
+;; When using Subversion or a later system, anything you do outside VC
+;; *through the VCS tools* should safely interlock with VC
+;; operations. Under these VC does little state caching, because local
+;; operations are assumed to be fast.  The dividing line is
 ;;
 ;; ADDING SUPPORT FOR OTHER BACKENDS
 ;;
@@ -196,7 +203,7 @@
 ;;
 ;;   Return non-nil if FILE is unchanged from the working revision.
 ;;   This function should do a brief comparison of FILE's contents
-;;   with those of the repository master of the working revision.  If
+;;   with those of the repository copy of the working revision.  If
 ;;   the backend does not have such a brief-comparison feature, the
 ;;   default implementation of this function can be used, which
 ;;   delegates to a full vc-BACKEND-diff.  (Note that vc-BACKEND-diff
@@ -261,15 +268,12 @@
 ;;   Unregister FILE from this backend.  This is only needed if this
 ;;   backend may be used as a "more local" backend for temporary editing.
 ;;
-;; * checkin (files rev comment &optional extra-args)
+;; * checkin (files rev comment)
 ;;
-;;   Commit changes in FILES to this backend.  If REV is non-nil, that
-;;   should become the new revision number (not all backends do
-;;   anything with it).  COMMENT is used as a check-in comment.  The
-;;   implementation should pass the value of vc-checkin-switches to
-;;   the backend command.  (Note: in older versions of VC, this
-;;   command took a single file argument and not a list.)
-;;   EXTRA-ARGS should be passed to the backend command.
+;;   Commit changes in FILES to this backend.  REV is a historical artifact
+;;   and should be ignored.  COMMENT is used as a check-in comment.
+;;   The implementation should pass the value of vc-checkin-switches to
+;;   the backend command.
 ;;
 ;; * find-revision (file rev buffer)
 ;;
@@ -344,6 +348,16 @@
 ;;   If START-REVISION is given, then show the log starting from the
 ;;   revision.  At this point START-REVISION is only required to work
 ;;   in conjunction with LIMIT = 1.
+;;
+;; * log-outgoing (backend remote-location)
+;;
+;;   Insert in BUFFER the revision log for the changes that will be
+;;   sent when performing a push operation to REMOTE-LOCATION.
+;;
+;; * log-incoming (backend remote-location)
+;;
+;;   Insert in BUFFER the revision log for the changes that will be
+;;   received when performing a pull operation from REMOTE-LOCATION.
 ;;
 ;; - log-view-mode ()
 ;;
@@ -531,6 +545,12 @@
 ;;   makes it possible to provide menu entries for functionality that
 ;;   is specific to a backend and which does not map to any of the VC
 ;;   generic concepts.
+;;
+;; - conflicted-files (dir)
+;;
+;;   Return the list of files where conflict resolution is needed in
+;;   the project that contains DIR.
+;;   FIXME: what should it do with non-text conflicts?
 
 ;;; Todo:
 
@@ -774,7 +794,7 @@ is sensitive to blank lines."
 (defcustom vc-checkout-carefully (= (user-uid) 0)
   "Non-nil means be extra-careful in checkout.
 Verify that the file really is not locked
-and that its contents match what the master file says."
+and that its contents match what the repository version says."
   :type 'boolean
   :group 'vc)
 (make-obsolete-variable 'vc-checkout-carefully
@@ -1037,8 +1057,7 @@ merge in the changes into your working copy."
          (state (nth 3 vc-fileset))
          ;; The backend should check that the checkout-model is consistent
          ;; among all the `files'.
-	 (model (nth 4 vc-fileset))
-	 revision)
+	 (model (nth 4 vc-fileset)))
 
     ;; Do the right thing
     (cond
@@ -1053,11 +1072,13 @@ merge in the changes into your working copy."
       (cond
        (verbose
 	;; go to a different revision
-	(setq revision (read-string "Branch, revision, or backend to move to: "))
-	(let ((revision-downcase (downcase revision)))
+	(let* ((revision
+                (read-string "Branch, revision, or backend to move to: "))
+               (revision-downcase (downcase revision)))
 	  (if (member
 	       revision-downcase
-	       (mapcar (lambda (arg) (downcase (symbol-name arg))) vc-handled-backends))
+	       (mapcar (lambda (arg) (downcase (symbol-name arg)))
+                       vc-handled-backends))
 	      (let ((vsym (intern-soft revision-downcase)))
 		(dolist (file files) (vc-transfer-file file vsym)))
 	    (dolist (file files)
@@ -1102,8 +1123,8 @@ merge in the changes into your working copy."
 	    (message "No files remain to be committed")
 	  (if (not verbose)
 	      (vc-checkin ready-for-commit backend)
-	    (setq revision (read-string "New revision or backend: "))
-	    (let ((revision-downcase (downcase revision)))
+	    (let* ((revision (read-string "New revision or backend: "))
+                   (revision-downcase (downcase revision)))
 	      (if (member
 		   revision-downcase
 		   (mapcar (lambda (arg) (downcase (symbol-name arg)))
@@ -1348,7 +1369,7 @@ Type \\[vc-next-action] to check in changes.")
 (defun vc-checkin (files backend &optional rev comment initial-contents)
   "Check in FILES.
 The optional argument REV may be a string specifying the new revision
-level (if nil increment the current level).  COMMENT is a comment
+level (strongly deprecated).  COMMENT is a comment
 string; if omitted, a buffer is popped up to accept a comment.  If
 INITIAL-CONTENTS is non-nil, then COMMENT is used as the initial contents
 of the log entry buffer.
@@ -1362,28 +1383,30 @@ Runs the normal hooks `vc-before-checkin-hook' and `vc-checkin-hook'."
   (lexical-let
    ((backend backend))
    (vc-start-logentry
-    files rev comment initial-contents
+    files comment initial-contents
     "Enter a change comment."
     "*VC-log*"
     (lambda ()
       (vc-call-backend backend 'log-edit-mode))
-    (lambda (files rev comment extra-flags)
-      (message "Checking in %s..." (vc-delistify files))
-      ;; "This log message intentionally left almost blank".
-      ;; RCS 5.7 gripes about white-space-only comments too.
-      (or (and comment (string-match "[^\t\n ]" comment))
-	  (setq comment "*** empty log message ***"))
-      (with-vc-properties
-       files
-       ;; We used to change buffers to get local value of vc-checkin-switches,
-       ;; but 'the' local buffer is not a well-defined concept for filesets.
-       (progn
-	 (vc-call-backend backend 'checkin files rev comment extra-flags)
-	 (mapc 'vc-delete-automatic-version-backups files))
-       `((vc-state . up-to-date)
-	 (vc-checkout-time . ,(nth 5 (file-attributes file)))
-	 (vc-working-revision . nil)))
-      (message "Checking in %s...done" (vc-delistify files)))
+    (lexical-let ((rev rev))
+      (lambda (files comment)
+        (message "Checking in %s..." (vc-delistify files))
+        ;; "This log message intentionally left almost blank".
+        ;; RCS 5.7 gripes about white-space-only comments too.
+        (or (and comment (string-match "[^\t\n ]" comment))
+            (setq comment "*** empty log message ***"))
+        (with-vc-properties
+            files
+          ;; We used to change buffers to get local value of
+          ;; vc-checkin-switches, but 'the' local buffer is
+          ;; not a well-defined concept for filesets.
+          (progn
+            (vc-call-backend backend 'checkin files rev comment)
+            (mapc 'vc-delete-automatic-version-backups files))
+          `((vc-state . up-to-date)
+            (vc-checkout-time . ,(nth 5 (file-attributes file)))
+            (vc-working-revision . nil)))
+        (message "Checking in %s...done" (vc-delistify files))))
     'vc-checkin-hook)))
 
 ;;; Additional entry points for examining version histories
@@ -1508,7 +1531,7 @@ returns t if the buffer had changes, nil otherwise."
                   (not (string= (vc-working-revision file) "0")))
               (push file filtered)
             ;; This file is added but not yet committed;
-            ;; there is no master file to diff against.
+            ;; there is no repository version to diff against.
             (if (or rev1 rev2)
                 (error "No revisions of %s exist" file)
               ;; We regard this as "changed".
@@ -1642,9 +1665,14 @@ saving the buffer."
 	(error "Buffer is not version controlled"))
       (setq rootdir (vc-call-backend backend 'root default-directory))
       (setq working-revision (vc-working-revision rootdir))
-      (vc-diff-internal
-       t (list backend (list rootdir) working-revision) nil nil
-       (called-interactively-p 'interactive)))))
+      ;; VC diff for the root directory produces output that is
+      ;; relative to it.  Bind default-directory to the root directory
+      ;; here, this way the *vc-diff* buffer is setup correctly, so
+      ;; relative file names work.
+      (let ((default-directory rootdir))
+	(vc-diff-internal
+	 t (list backend (list rootdir) working-revision) nil nil
+	 (called-interactively-p 'interactive))))))
 
 ;;;###autoload
 (defun vc-revision-other-window (rev)
@@ -1750,13 +1778,14 @@ The headers are reset to their non-expanded form."
   ;; case the more general operation ever becomes meaningful.
   (let ((backend (vc-responsible-backend (car files))))
     (vc-start-logentry
-     files rev oldcomment t
+     files oldcomment t
      "Enter a replacement change comment."
      "*VC-log*"
      (lambda () (vc-call-backend backend 'log-edit-mode))
-     (lambda (files rev comment ignored)
-       (vc-call-backend backend
-                        'modify-change-comment files rev comment)))))
+     (lexical-let ((rev rev))
+       (lambda (files comment)
+         (vc-call-backend backend
+                          'modify-change-comment files rev comment))))))
 
 ;;;###autoload
 (defun vc-merge ()
@@ -1816,6 +1845,31 @@ See Info node `Merging'."
 
 ;;;###autoload
 (defalias 'vc-resolve-conflicts 'smerge-ediff)
+
+;; TODO: This is OK but maybe we could integrate it better.
+;; E.g. it could be run semi-automatically (via a prompt?) when saving a file
+;; that was conflicted (i.e. upon mark-resolved).
+;; FIXME: should we add an "other-window" version?  Or maybe we should
+;; hook it inside find-file so it automatically works for
+;; find-file-other-window as well.  E.g. find-file could use a new
+;; `default-next-file' variable for its default file (M-n), and
+;; we could then set it upon mark-resolve, so C-x C-s C-x C-f M-n would
+;; automatically offer the next conflicted file.
+(defun vc-find-conflicted-file ()
+  "Visit the next conflicted file in the current project."
+  (interactive)
+  (let* ((backend (or (if buffer-file-name (vc-backend buffer-file-name))
+                      (vc-responsible-backend default-directory)
+                      (error "No VC backend")))
+         (files (vc-call-backend backend
+                                 'conflicted-files default-directory)))
+    ;; Don't try and visit the current file.
+    (if (equal (car files) buffer-file-name) (pop files))
+    (if (null files)
+        (message "No more conflicted files")
+      (find-file (pop files))
+      (message "%s more conflicted files after this one"
+               (if files (length files) "No")))))
 
 ;; Named-configuration entry points
 
@@ -1886,6 +1940,29 @@ Not all VC backends support short logs!")
 (defvar log-view-vc-backend)
 (defvar log-view-vc-fileset)
 
+(defun vc-print-log-setup-buttons (working-revision is-start-revision limit pl-return)
+  (when (and limit (not (eq 'limit-unsupported pl-return))
+	     (not is-start-revision))
+    (goto-char (point-max))
+    (lexical-let ((working-revision working-revision)
+		  (limit limit))
+      (widget-create 'push-button
+		     :notify (lambda (&rest ignore)
+			       (vc-print-log-internal
+				log-view-vc-backend log-view-vc-fileset
+				working-revision nil (* 2 limit)))
+		     :help-echo "Show the log again, and double the number of log entries shown"
+		     "Show 2X entries")
+      (widget-insert "    ")
+      (widget-create 'push-button
+		     :notify (lambda (&rest ignore)
+			       (vc-print-log-internal
+				log-view-vc-backend log-view-vc-fileset
+				working-revision nil nil))
+		     :help-echo "Show the log again, showing all entries"
+		     "Show unlimited entries"))
+    (widget-setup)))
+
 (defun vc-print-log-internal (backend files working-revision
                                       &optional is-start-revision limit)
   ;; Don't switch to the output buffer before running the command,
@@ -1893,6 +1970,8 @@ Not all VC backends support short logs!")
   ;; buffer can be accessed by the command.
   (let ((dir-present nil)
 	(vc-short-log nil)
+	(buffer-name "*vc-change-log*")
+	type
 	pl-return)
     (dolist (file files)
       (when (file-directory-p file)
@@ -1901,43 +1980,63 @@ Not all VC backends support short logs!")
 	  (not (null (if dir-present
 			 (memq 'directory vc-log-short-style)
 		       (memq 'file vc-log-short-style)))))
+    (setq type (if vc-short-log 'short 'long))
+    (lexical-let
+	((working-revision working-revision)
+	 (limit limit)
+	 (shortlog vc-short-log)
+	 (is-start-revision is-start-revision))
+      (vc-log-internal-common
+       backend buffer-name files type
+       (lambda (bk buf type-arg files-arg)
+	 (vc-call-backend bk 'print-log files-arg buf
+			  shortlog (when is-start-revision working-revision) limit))
+       (lambda (bk files-arg ret)
+	 (vc-print-log-setup-buttons working-revision
+				     is-start-revision limit ret))
+       (lambda (bk)
+	 (vc-call-backend bk 'show-log-entry working-revision))))))
 
-    (setq pl-return (vc-call-backend
-		     backend 'print-log files "*vc-change-log*"
-		     vc-short-log (when is-start-revision working-revision) limit))
-    (pop-to-buffer "*vc-change-log*")
+(defvar vc-log-view-type nil
+  "Set this to differentiate the different types of logs.")
+(put 'vc-log-view-type 'permanent-local t)
+
+(defun vc-log-internal-common (backend
+			       buffer-name
+			       files
+			       type
+			       backend-func
+			       setup-buttons-func
+			       goto-location-func)
+  (let (retval)
+    (with-current-buffer (get-buffer-create buffer-name)
+      (set (make-local-variable 'vc-log-view-type) type))
+    (setq retval (funcall backend-func backend buffer-name type files))
+    (pop-to-buffer buffer-name)
     (let ((inhibit-read-only t))
       ;; log-view-mode used to be called with inhibit-read-only bound
       ;; to t, so let's keep doing it, just in case.
-      (vc-call-backend backend 'log-view-mode))
-    (set (make-local-variable 'log-view-vc-backend) backend)
-    (set (make-local-variable 'log-view-vc-fileset) files)
-
+      (vc-call-backend backend 'log-view-mode)
+      (set (make-local-variable 'log-view-vc-backend) backend)
+      (set (make-local-variable 'log-view-vc-fileset) files))
     (vc-exec-after
      `(let ((inhibit-read-only t))
-	(when (and ,limit (not ,(eq 'limit-unsupported pl-return))
-		   (not ,is-start-revision))
-	  (goto-char (point-max))
-	  (widget-create 'push-button
-			 :notify (lambda (&rest ignore)
-				   (vc-print-log-internal
-				    ',backend ',files ',working-revision nil (* 2 ,limit)))
-			 :help-echo "Show the log again, and double the number of log entries shown"
-			 "Show 2X entries")
-	  (widget-insert "    ")
-	  (widget-create 'push-button
-			 :notify (lambda (&rest ignore)
-				   (vc-print-log-internal
-				    ',backend ',files ',working-revision nil nil))
-			 :help-echo "Show the log again, showing all entries"
-			 "Show unlimited entries")
-	  (widget-setup))
-
+	(funcall ',setup-buttons-func ',backend ',files ',retval)
 	(shrink-window-if-larger-than-buffer)
-	;; move point to the log entry for the working revision
-	(vc-call-backend ',backend 'show-log-entry ',working-revision)
+	(funcall ',goto-location-func ',backend)
 	(setq vc-sentinel-movepoint (point))
 	(set-buffer-modified-p nil)))))
+
+(defun vc-incoming-outgoing-internal (backend remote-location buffer-name type)
+  (vc-log-internal-common
+   backend buffer-name nil type
+   (lexical-let
+       ((remote-location remote-location))
+     (lambda (bk buf type-arg files)
+       (vc-call-backend bk type-arg buf remote-location)))
+   (lambda (bk files-arg ret))
+   (lambda (bk)
+     (goto-char (point-min)))))
 
 ;;;###autoload
 (defun vc-print-log (&optional working-revision limit)
@@ -1997,6 +2096,32 @@ When called interactively with a prefix argument, prompt for LIMIT."
     (setq rootdir (vc-call-backend backend 'root default-directory))
     (setq working-revision (vc-working-revision rootdir))
     (vc-print-log-internal backend (list rootdir) working-revision nil limit)))
+
+;;;###autoload
+(defun vc-log-incoming (&optional remote-location)
+  "Show a log of changes that will be received with a pull operation from REMOTE-LOCATION."
+  (interactive "sRemote location (empty for default): ")
+  (let ((backend
+	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
+	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
+	       (vc-mode (vc-backend buffer-file-name))))
+	rootdir working-revision)
+    (unless backend
+      (error "Buffer is not version controlled"))
+    (vc-incoming-outgoing-internal backend remote-location "*vc-incoming*" 'log-incoming)))
+
+;;;###autoload
+(defun vc-log-outgoing (&optional remote-location)
+  "Show a log of changes that will be sent with a push operation to REMOTE-LOCATION."
+  (interactive "sRemote location (empty for default): ")
+  (let ((backend
+	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
+	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
+	       (vc-mode (vc-backend buffer-file-name))))
+	rootdir working-revision)
+    (unless backend
+      (error "Buffer is not version controlled"))
+    (vc-incoming-outgoing-internal backend remote-location "*vc-outgoing*" 'log-outgoing)))
 
 ;;;###autoload
 (defun vc-revert ()
@@ -2232,7 +2357,7 @@ backend to NEW-BACKEND, and unregister FILE from the current backend.
 		(if unmodified-file
 		    (copy-file unmodified-file file
 			       'ok-if-already-exists 'keep-date)
-		  (when (y-or-n-p "Get base revision from master? ")
+		  (when (y-or-n-p "Get base revision from repository? ")
 		    (vc-revert-file file))))
 	      (vc-call-backend new-backend 'receive-file file rev))
 	  (when modified-file
@@ -2319,7 +2444,7 @@ backend to NEW-BACKEND, and unregister FILE from the current backend.
 
 ;;;###autoload
 (defun vc-rename-file (old new)
-  "Rename file OLD to NEW, and rename its master file likewise."
+  "Rename file OLD to NEW in both work area and repository."
   (interactive "fVC rename file: \nFRename to: ")
   ;; in CL I would have said (setq new (merge-pathnames new old))
   (let ((old-base (file-name-nondirectory old)))

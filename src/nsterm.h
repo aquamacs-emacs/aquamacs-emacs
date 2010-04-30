@@ -105,7 +105,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
    ========================================================================== */
 
-@interface EmacsMenu : NSMenu  /* 10.6+: <NSMenuDelegate> */
+@interface EmacsMenu : NSMenu  <NSMenuDelegate>   /* 10.6 only */
 {
   struct frame *frame;
   unsigned long keyEquivModMask;

@@ -90,6 +90,24 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
  */
 
 #define HAVE_PTYS
+/* Run only once.  We need a `for'-loop because the code uses
+   `continue'.  */
+#define PTY_ITERATION	for (i = 0; i < 1; i++)
+#define PTY_NAME_SPRINTF	/* none */
+#define PTY_TTY_NAME_SPRINTF	/* none */
+/* Note that openpty may fork via grantpt on Mac OS X 10.4/Darwin 8.
+   But we don't have to block SIGCHLD because it is blocked in the
+   implementation of grantpt.  */
+#define PTY_OPEN						\
+  do								\
+    {								\
+      int slave;						\
+      if (openpty (&fd, &slave, pty_name, NULL, NULL) == -1)	\
+	fd = -1;						\
+      else							\
+	emacs_close (slave);					\
+    }								\
+  while (0)
 
 /**
  * PTYs only work correctly on Darwin 7 or higher.  So make the
@@ -165,9 +183,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    each); under Cocoa 31 commands are required.  */
 #define LD_SWITCH_SYSTEM_TEMACS -prebind LIBS_NSGUI -Xlinker -headerpad -Xlinker HEADERPAD_EXTRA
 
-#define C_SWITCH_SYSTEM_TEMACS -Dtemacs
-
-#ifdef temacs
+#ifdef emacs
 #define malloc unexec_malloc
 #define realloc unexec_realloc
 #define free unexec_free
@@ -188,9 +204,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Link this program just by running cc.  */
 #define ORDINARY_LINK
-
-/* Adding -lm confuses the dynamic linker, so omit it.  */
-#define LIB_MATH
 
 /* Define the following so emacs symbols will not conflict with those
    in the System framework.  Otherwise -prebind will not work.  */

@@ -110,11 +110,6 @@ extern void _XEditResCheckMessages ();
 
 extern LWLIB_ID widget_id_tick;
 
-#ifdef USE_LUCID
-/* This is part of a kludge--see lwlib/xlwmenu.c.  */
-extern XFontStruct *xlwmenu_default_font;
-#endif
-
 extern void free_frame_menubar ();
 extern double atof ();
 
@@ -3379,17 +3374,9 @@ This function is an internal primitive--use `make-frame' instead.  */)
       error ("Invalid frame font");
     }
 
-#ifdef USE_LUCID
-  /* Prevent lwlib/xlwmenu.c from crashing because of a bug
-     whereby it fails to get any font.  */
-  BLOCK_INPUT;
-  xlwmenu_default_font = XLoadQueryFont (FRAME_X_DISPLAY (f), "fixed");
-  UNBLOCK_INPUT;
-#endif
-
   /* Frame contents get displaced if an embedded X window has a border.  */
   if (! FRAME_X_EMBEDDED_P (f))
-    x_default_parameter (f, parms, Qborder_width, make_number (2),
+    x_default_parameter (f, parms, Qborder_width, make_number (0),
 			 "borderWidth", "BorderWidth", RES_TYPE_NUMBER);
 
   /* This defaults to 1 in order to match xterm.  We recognize either
@@ -4142,7 +4129,7 @@ select_visual (dpyinfo)
       vinfo_template.screen = XScreenNumberOfScreen (screen);
       vinfo = XGetVisualInfo (dpy, VisualIDMask | VisualScreenMask,
 			      &vinfo_template, &n_visuals);
-      if (n_visuals != 1)
+      if (n_visuals <= 0)
 	fatal ("Can't get proper X visual info");
 
       dpyinfo->n_planes = vinfo->depth;
@@ -4860,7 +4847,7 @@ x_create_tip_frame (dpyinfo, parms, text)
      needed to determine window geometry.  */
   x_default_font_parameter (f, parms);
 
-  x_default_parameter (f, parms, Qborder_width, make_number (2),
+  x_default_parameter (f, parms, Qborder_width, make_number (0),
 		       "borderWidth", "BorderWidth", RES_TYPE_NUMBER);
 
   /* This defaults to 2 in order to match xterm.  We recognize either
@@ -5241,7 +5228,7 @@ Text larger than the specified size is clipped.  */)
   clear_glyph_matrix (w->desired_matrix);
   clear_glyph_matrix (w->current_matrix);
   SET_TEXT_POS (pos, BEGV, BEGV_BYTE);
-  try_window (FRAME_ROOT_WINDOW (f), pos, 0);
+  try_window (FRAME_ROOT_WINDOW (f), pos, TRY_WINDOW_IGNORE_FONTS_CHANGE);
 
   /* Compute width and height of the tooltip.  */
   width = height = 0;
@@ -5258,15 +5245,15 @@ Text larger than the specified size is clipped.  */)
       /* Let the row go over the full width of the frame.  */
       row->full_width_p = 1;
 
+      row_width = row->pixel_width;
       /* There's a glyph at the end of rows that is used to place
 	 the cursor there.  Don't include the width of this glyph.  */
       if (row->used[TEXT_AREA])
 	{
 	  last = &row->glyphs[TEXT_AREA][row->used[TEXT_AREA] - 1];
-	  row_width = row->pixel_width - last->pixel_width;
+	  if (INTEGERP (last->object))
+	    row_width -= last->pixel_width;
 	}
-      else
-	row_width = row->pixel_width;
 
       height += row->height;
       width = max (width, row_width);
