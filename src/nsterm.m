@@ -5032,7 +5032,8 @@ ns_term_shutdown (int sig)
 
       if (flags & NSCommandKeyMask)
         {
-	  if (flags & NSLeftCommandKeyMask)
+	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
+	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
 	    {
 	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
@@ -5077,7 +5078,7 @@ ns_term_shutdown (int sig)
 
       if (flags & NSControlKeyMask)
 	{
-	  if (flags & NSLeftControlKeyMask)
+	  if (flags & NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier (ns_control_modifier);
 	  if (flags & NSRightControlKeyMask)
@@ -5119,7 +5120,7 @@ ns_term_shutdown (int sig)
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
 	}
-      if (flags & NSLeftAlternateKeyMask) /* default = meta */
+      if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && ! (flags & NSRightAlternateKeyMask))) /* default = meta */
 	{
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
