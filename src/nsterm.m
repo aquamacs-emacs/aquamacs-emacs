@@ -5306,23 +5306,17 @@ typedef struct
       if (flags & NSShiftKeyMask)
         emacs_event->modifiers |= shift_modifier;
 
-      if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
-        emacs_event->modifiers |= parse_solitary_modifier
-          (EQ (ns_right_command_modifier, Qleft)
-           ? ns_command_modifier
-           : ns_right_command_modifier);
-
-      if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask)
+      if (flags & NSCommandKeyMask)
         {
 	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
-	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
+	  if ((flags & NSLeftCommandKeyMask) == NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
 	    {
 	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
-	  if (flags & NSRightCommandKeyMask)
+	  if ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)
 	    {
 	      emacs_event->modifiers |= 
-		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qnone) ? 
+		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qleft) ? 
 					  ns_command_modifier : ns_right_command_modifier));
 	    }
 
@@ -5358,17 +5352,18 @@ typedef struct
             }
         }
 
-      if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
-          emacs_event->modifiers |= parse_solitary_modifier
-              (EQ (ns_right_control_modifier, Qleft)
-               ? ns_control_modifier
-               : ns_right_control_modifier);
+      if (flags & NSControlKeyMask)
+	{
+	  if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier (ns_control_modifier);
+	  if ((flags & NSRightControlKeyMask) == NSRightControlKeyMask)
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qleft) ? 
+					  ns_control_modifier : ns_right_control_modifier));
+	}
 
-      if ((flags & NSLeftControlKeyMask) == NSLeftControlKeyMask)
-        emacs_event->modifiers |= parse_solitary_modifier
-          (ns_control_modifier);
-
-      if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
+      if ((flags & NS_FUNCTION_KEY_MASK) == NS_FUNCTION_KEY_MASK && !fnKeysym)
           emacs_event->modifiers |=
             parse_solitary_modifier (ns_function_modifier);
 
