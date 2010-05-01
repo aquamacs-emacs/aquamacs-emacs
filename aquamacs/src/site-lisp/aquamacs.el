@@ -266,6 +266,10 @@ Separate paths from file names with --."
     (when (< aquamacs-customization-version-id 162)
       (aquamacs-import-frame-parameters-to-auto-faces))
     (when (< aquamacs-customization-version-id 208)
+      (setq aquamacs-tool-bar-user-customization
+	    (mapcar (lambda (x)
+		      (cons (logand ?\x3FFFFFF (car x)) (cdr x)))
+		    aquamacs-tool-bar-user-customization))
       (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
       (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
   

@@ -267,14 +267,15 @@ This variable is used in the AUCTeX configuration.")
      (visible-frame-list))))
 
 (defun tool-bar-hash ()
-  (sxhash (sort (apply #'append
-		       (mapcar
-			(lambda (m)
-			  (when (and (consp m)
-				     (not (equal (car-safe (cdr-safe (cdr-safe m)))
-						 "--")))
-			    (list (car m))))
-			tool-bar-map)) 'string<)))
+  (logand ?\x3FFFFFF  ;; ensure compatibility across machines
+	  (sxhash (sort (apply #'append
+			       (mapcar
+				(lambda (m)
+				  (when (and (consp m)
+					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+							 "--")))
+				    (list (car m))))
+				tool-bar-map)) 'string<))))
 
 (defconst tool-bar-user-visible t)
 (defconst tool-bar-user-invisible nil)
