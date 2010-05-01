@@ -875,7 +875,7 @@ and Return:
 	;; word is incorrect -- return
 	;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
 	;; GUESS-LIST built from known affixes is nil for NSSpellChecker
-	(list word (+1 offset) (ns-spellchecker-get-suggestions word) nil)
+	(list word (1+ offset) (ns-spellchecker-get-suggestions word) nil)
       ;; offset is nil: word is correct -- return t
       t)))
 
