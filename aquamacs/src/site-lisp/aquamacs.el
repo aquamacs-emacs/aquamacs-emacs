@@ -955,7 +955,9 @@ yes-or-no prompts - y or n will do."
 
      (enable-recursive-minibuffers t)
  
-     (longlines-wrap-follows-window-size t)
+     ;; menu strings
+     (buffer-menu-modified-string "\u25CF")
+     (buffer-menu-read-only-string "(read-only)")
 
      ;; do not allow user to mess with minibuffer prompt
 

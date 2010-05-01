@@ -524,7 +524,7 @@ OS X 10.4 and up only."
 	(if word
 	    (mac-spotlight-search word)))))
 
-
+;; (aquamacs-make-mouse-buffer-menu)
 (defun aquamacs-make-mouse-buffer-menu ( )
   "Return a menu keymap of buffers for selection with the mouse.
 This switches buffers in the window that you clicked on,
@@ -598,26 +598,28 @@ and selects that window."
 		     (setq subdivided-menus
 			   (cons (cons "Others" others-list)
 				 subdivided-menus)))))
-	  (setq menu (cons "Buffer Menu" (nreverse subdivided-menus))))
-      (progn
-	(setq alist (mouse-buffer-menu-alist buffers))
-	(setq menu (cons "Buffer Menu"
-			 (mouse-buffer-menu-split "Select Buffer" alist)))))
-  
-    (let ((km (make-sparse-keymap)))
-      (mapc (lambda (pair)
-	      (define-key km (vector (intern (car pair)))
-		`(menu-item ,(car pair) 
-			,(eval
-			  (list 'lambda () 
-				'(interactive)
+	  (aquamacs--keymap-from-alist subdivided-menus))
+       (aquamacs--keymap-from-alist (mouse-buffer-menu-alist buffers)))))
+
+(defun aquamacs--keymap-from-alist (alist)
+  (let ((km (make-sparse-keymap)))
+    (mapc (lambda (pair)
+	    (define-key km (vector (intern (car pair)))
+	      `(menu-item ,(car pair) 
+			  ,(if (consp (cdr pair))
+			       (aquamacs--keymap-from-alist (cdr pair))
+			     (eval
+			      (list 'lambda () 
+				    '(interactive)
 				`(let ((one-buffer-one-frame nil))
-				   (switch-to-buffer ,(cdr pair)))))
-	      ))) alist)
-      km
-	 )  )
-  )
- 
+				   (switch-to-buffer ,(cdr pair))))))
+			  ))) 
+	  (sort alist (lambda (a b) (string< (car b)
+					     (car a)))))
+    km))
+
+
+;; (aquamacs-update-context-menus t)
 
 (defun aquamacs-get-mouse-major-mode-menu ()
   "Pop up a mode-specific menu of mouse commands.
@@ -727,6 +729,7 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
   
     (popup-menu aquamacs-context-menu-map event prefix))
 
+;; (aquamacs-update-context-menus t)
 (defun aquamacs-update-context-menus (&optional force)
   "Update the buffer- and mode-specific items in
 `aquamacs-context-menu-map' if frame or buffer has changed.
@@ -739,7 +742,7 @@ Update unconditionally if optional argument FORCE is non-nil."
 	  ;; TO DO major mode might not work unless we switch buffer
 	  (define-key aquamacs-context-menu-map [mode-menu] 
 	    `(menu-item ,(aquamacs-pretty-mode-name major-mode) ,mode-menu :visible t))
-	(define-key aquamacs-context-menu-map [mode-menu] 
+	(define-key aquamacs-context-menu-map [mode-menu] mouse-buffer-menu
 	  '(menu-item nil :visible nil))))
 
     (define-key aquamacs-context-menu-map [switch-buffer] 

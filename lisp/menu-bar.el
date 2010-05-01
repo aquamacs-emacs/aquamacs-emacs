@@ -1738,6 +1738,12 @@ Buffers menu is regenerated."
   (raise-frame frame)
   (select-frame frame))
 
+
+;; FIXME: move these in common place 
+;; (shared with mouse.el)
+(defvar buffer-menu-modified-string "*")
+(defvar buffer-menu-read-only-string "%")
+
 (defun menu-bar-update-buffers-1 (elt)
   (let* ((buf (car elt))
 	 (file
@@ -1752,14 +1758,15 @@ Buffers menu is regenerated."
     (when (and file (> (length file) 20))
       (setq file (concat "..." (substring file -17))))
     (cons (if buffers-menu-show-status
-	      (let ((mod (if (buffer-modified-p buf) "\u25CF " ""))  ; on NS this indicates modification. To Do: show on the left
+	      (let ((mod (if (buffer-modified-p buf) buffer-menu-modified-string ""))  ; on NS this indicates modification. To Do: show on the left
 		    ;; (icon (if (buffer-modified-p buf) "\u2666 " ""))
-		    (ro (if (buffer-local-value 'buffer-read-only buf) "%" "")))
+		    (ro (if (buffer-local-value 'buffer-read-only buf) buffer-menu-read-only-string ""))
+		    )
 		(if file
-		    (format "%s  %s%s  --  %s" (cdr elt) mod ro file)
+		    (format "%s  %s%s    \t%s" (cdr elt) mod ro file)
 		  (format "%s  %s%s" (cdr elt) mod ro)))
 	    (if file
-		(format "%s  --  %s"  (cdr elt) file)
+		(format "%s    \t%s"  (cdr elt) file)
 	      (cdr elt)))
 	  buf)))
 
