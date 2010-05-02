@@ -122,19 +122,19 @@ The extent of the optional arguments is determined by the prefix argument and
 	 (totalheight
 	  (TeX-arg-maybe
 	   'totalheight incl-opts
-	   '(read-input
+	   '(read-string
 	     (concat "Total Height (" TeX-default-unit-for-image "): "))))
 	 (height
 	  (TeX-arg-maybe
 	   'height incl-opts
 	   ;; Either totalheight or height make sense:
 	   '(when (zerop (length totalheight))
-	      (read-input
+	      (read-string
 	       (concat "Figure height (" TeX-default-unit-for-image "): ")))))
 	 (width
 	  (TeX-arg-maybe
 	   'width incl-opts
-	   '(read-input
+	   '(read-string
 	     (concat "Figure width (" TeX-default-unit-for-image "): "))))
 	 (scale
 	  (TeX-arg-maybe
@@ -143,22 +143,22 @@ The extent of the optional arguments is determined by the prefix argument and
 	   '(when (zerop (+ (length totalheight)
 			    (length height)
 			    (length width)))
-	      (read-input "Scale: "))))
+	      (read-string "Scale: "))))
 	 (angle
 	  (TeX-arg-maybe
 	   'angle incl-opts
-	   '(read-input "Rotation angle: ")))
+	   '(read-string "Rotation angle: ")))
 	 (origin
 	  (TeX-arg-maybe
 	   'origin incl-opts
-	   '(read-input
+	   '(read-string
 	     (concat
 	      "Origin (any combination of `lcr' (horizontal) "
 	      "and `tcbB' (vertical)): "))))
 	 (page ;; Not in any table; Only for PDF.
 	  (TeX-arg-maybe
 	   'page incl-opts
-	   '(read-input "Page: ")))
+	   '(read-string "Page: ")))
 	 (bb
 	  (TeX-arg-maybe
 	   'bb incl-opts
@@ -235,29 +235,29 @@ The extent of the optional arguments is determined by the prefix argument and
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     (when bb
-      (setq llx (read-input "Bounding Box lower left x: "))
-      (setq lly (read-input "Bounding Box lower left y: "))
-      (setq urx (read-input "Bounding Box upper right x: "))
-      (setq ury (read-input "Bounding Box upper right y: "))
+      (setq llx (read-string "Bounding Box lower left x: "))
+      (setq lly (read-string "Bounding Box lower left y: "))
+      (setq urx (read-string "Bounding Box upper right x: "))
+      (setq ury (read-string "Bounding Box upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "bb=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     ;;
     (when viewport
-      (setq llx (read-input "Viewport lower left x: "))
-      (setq lly (read-input "Viewport lower left y: "))
-      (setq urx (read-input "Viewport upper right x: "))
-      (setq ury (read-input "Viewport upper right y: "))
+      (setq llx (read-string "Viewport lower left x: "))
+      (setq lly (read-string "Viewport lower left y: "))
+      (setq urx (read-string "Viewport upper right x: "))
+      (setq ury (read-string "Viewport upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "viewport=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     (when trim
-      (setq llx (read-input "Trim lower left x: "))
-      (setq lly (read-input "Trim lower left y: "))
-      (setq urx (read-input "Trim Upper right x: "))
-      (setq ury (read-input "Trim Upper right y: "))
+      (setq llx (read-string "Trim lower left x: "))
+      (setq lly (read-string "Trim lower left y: "))
+      (setq urx (read-string "Trim Upper right x: "))
+      (setq ury (read-string "Trim Upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "trim=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")

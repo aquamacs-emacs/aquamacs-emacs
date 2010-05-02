@@ -3,7 +3,7 @@
 ;; Harvard citation style is from Peter Williams
 ;; available on the CTAN servers
 
-;; Version: $Id: harvard.el,v 1.5 2008/02/25 18:02:09 davidswelt Exp $
+;; Version: $Id: harvard.el,v 1.10 2008/02/03 14:53:30 angeli Exp $
 
 ;; Copyright (C) 1994 Berwin Turlach <berwin@core.ucl.ac.be>
 ;; Copyright (C) 1997 Berwin Turlach <berwin.turlach@anu.edu.au>

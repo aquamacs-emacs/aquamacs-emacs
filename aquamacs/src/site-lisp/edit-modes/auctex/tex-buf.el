@@ -1,7 +1,7 @@
 ;;; tex-buf.el --- External commands for AUCTeX.
 
-;; Copyright (C) 1991, 1993, 1996, 2001, 2003, 2004,
-;;   2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+;; Copyright (C) 1991, 1993, 1996, 2001, 2003, 2004, 2005, 2006, 2007,
+;;   2008, 2009 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex, wp
@@ -26,11 +26,6 @@
 ;;; Commentary:
 
 ;; This file provides support for external commands.
-
-;; This file has been patched in Aquamacs to
-;; - not use `pop-to-buffer' when a local set-buffer should be used
-;; - and convert file to buffer line numbers when in longlines-mode
-;; David Reitter 01/2008
 
 ;;; Code:
 
@@ -563,6 +558,7 @@ Return the new process."
     (setq-default TeX-command-buffer command-buff)
     (get-buffer-create buffer)
     (set-buffer buffer)
+    (buffer-disable-undo)
     (erase-buffer)
     (set (make-local-variable 'line-number-display-limit) 0)
     (setq TeX-output-extension nil)
@@ -689,7 +685,8 @@ run of `TeX-run-TeX', use
 	(redraw-display))))
 
 (defun TeX-run-discard (name command file)
-  "Start process with second argument, discarding its output."
+  "Start COMMAND as process, discarding its output.
+NAME and FILE are ignored."
   (let ((default-directory (TeX-master-directory)))
     (call-process TeX-shell
 		  nil 0 nil
@@ -779,6 +776,14 @@ Parameters NAME and FILE are ignored."
   (let ((fun (car (read-from-string command))))
     (if (functionp fun) (funcall fun) (eval fun))))
 
+(defun TeX-run-discard-or-function (name command file)
+  "Start COMMAND as process or execute it as a Lisp function.
+If run as a process, the output is discarded.  COMMAND is
+expected to be a string.  NAME and FILE are ignored."
+  (if (functionp (car (read-from-string command)))
+      (TeX-run-function name command file)
+    (TeX-run-discard name command file)))
+
 (defun TeX-run-ispell-on-document (command ignored name)
   "Run ispell on all open files belonging to the current document.
 This function is *obsolete* and only here for compatibility
@@ -814,8 +819,10 @@ reasons.  Use `TeX-run-function' instead."
   "Process TeX command output buffer after the process dies."
   ;; Set `TeX-transient-master' here because `preview-parse-messages'
   ;; may open files and thereby trigger master file questions which we
-  ;; don't want and need because we already know the master.
-  (let* ((TeX-transient-master (TeX-active-master))
+  ;; don't want and need because we already know the master.  Use
+  ;; `TeX-master-file' instead of `TeX-active-master' to determine the
+  ;; master because the region file should never be the master.
+  (let* ((TeX-transient-master (TeX-master-file))
 	 (buffer (process-buffer process))
 	 (name (process-name process)))
     (cond ((null (buffer-name buffer))	; buffer killed
@@ -874,11 +881,11 @@ NAME is the name of the process.")
 (defun TeX-current-pages ()
   "Return string indicating the number of pages formatted."
   (cond ((null TeX-current-page)
-	 "some pages.")
+	 "some pages")
 	((string-match "[^0-9]1[^0-9]" TeX-current-page)
-	 (concat TeX-current-page " page."))
+	 (concat TeX-current-page " page"))
 	(t
-	 (concat TeX-current-page " pages."))))
+	 (concat TeX-current-page " pages"))))
 
 (defun TeX-TeX-sentinel-check (process name)
   "Cleanup TeX output buffer after running TeX.
@@ -932,38 +939,40 @@ Warnings can be indicated by LaTeX or packages."
   "Cleanup TeX output buffer after running LaTeX."
   (cond ((TeX-TeX-sentinel-check process name))
 	((and (save-excursion
-		(or
-		 (re-search-forward "^LaTeX Warning: Citation" nil t)
-		 (re-search-forward "^Package natbib Warning: Citation" nil t)))
+		(re-search-forward
+		 "^\\(?:LaTeX\\|Package natbib\\) Warning: Citation" nil t))
 	      (with-current-buffer TeX-command-buffer
 		(and (LaTeX-bibliography-list)
 		     (TeX-check-files (TeX-master-file "bbl")
 				      (TeX-style-list)
 				      (append TeX-file-extensions
 					      BibTeX-file-extensions)))))
-	 (message (concat "You should run BibTeX to get citations right, "
-			  (TeX-current-pages)))
+	 (message "%s%s" "You should run BibTeX to get citations right, "
+		  (TeX-current-pages))
 	 (setq TeX-command-next (with-current-buffer TeX-command-buffer
 				  TeX-command-BibTeX)))
-	((or
-	  (re-search-forward "^LaTeX Warning: Label(s)" nil t)
-	  (re-search-forward "^Package natbib Warning: Citation(s)" nil t))
-	 (message (concat "You should run LaTeX again "
-			  "to get references right, "
-			  (TeX-current-pages)))
+	((re-search-forward "^\\(?:LaTeX Warning: Label(s)\\|\
+Package natbib Warning: Citation(s)\\)" nil t)
+	 (message "%s%s" "You should run LaTeX again to get references right, "
+		  (TeX-current-pages))
 	 (setq TeX-command-next TeX-command-default))
 	((re-search-forward "^LaTeX Warning: Reference" nil t)
-	 (message (concat name ": there were unresolved references, "
-			  (TeX-current-pages)))
+	 (message "%s%s%s" name ": there were unresolved references, "
+		  (TeX-current-pages))
 	 (setq TeX-command-next TeX-command-Show))
-	((or
-	  (re-search-forward "^LaTeX Warning: Citation" nil t)
-	  (re-search-forward "^Package natbib Warning:.*undefined citations" nil t))
-	 (message (concat name ": there were unresolved citations, "
-			  (TeX-current-pages)))
+	((re-search-forward "^\\(?:LaTeX Warning: Citation\\|\
+Package natbib Warning:.*undefined citations\\)" nil t)
+	 (message "%s%s%s" name ": there were unresolved citations, "
+		  (TeX-current-pages))
 	 (setq TeX-command-next TeX-command-Show))
+	((re-search-forward "Package longtable Warning: Table widths have \
+changed\\. Rerun LaTeX\\." nil t)
+	 (message
+	  "%s" "You should run LaTeX again to get table formatting right")
+	 (setq TeX-command-next TeX-command-default))
 	((re-search-forward
-	  "^\\(\\*\\* \\)?J?I?p?\\(La\\|Sli\\)TeX\\(2e\\)? \\(Version\\|ver\\.\\|<[0-9/]*>\\)" nil t)
+	  "^\\(\\*\\* \\)?J?I?p?\\(La\\|Sli\\)TeX\\(2e\\)? \
+\\(Version\\|ver\\.\\|<[0-9/]*>\\)" nil t)
 	 (let* ((warnings (and TeX-debug-warnings
 			       (TeX-LaTeX-sentinel-has-warnings)))
 		(bad-boxes (and TeX-debug-bad-boxes
@@ -974,12 +983,11 @@ Warnings can be indicated by LaTeX or packages."
 				    (when (and warnings bad-boxes) " and ")
 				    (when bad-boxes "bad boxes")
 				    ")"))))
-	   (message (concat name ": successfully formatted "
-			    (TeX-current-pages) add-info)))
+	   (message "%s" (concat name ": successfully formatted "
+				 (TeX-current-pages) add-info)))
 	 (setq TeX-command-next TeX-command-Show))
 	(t
-	 (message (concat name ": problems after "
-			  (TeX-current-pages)))
+	 (message "%s%s%s" name ": problems after " (TeX-current-pages))
 	 (setq TeX-command-next TeX-command-default))))
 
 ;; should go into latex.el? --pg
@@ -1107,10 +1115,10 @@ command."
 	(while (> (point) pt)
 	  (end-of-line 0)
 	  (when (and (= (current-column) 79)
-		     ;; Heuristic: Don't delete the linebreak if there
-		     ;; is an empty line after the current one or
-		     ;; point is located after a period.
-		     (not (eq (char-after (1+ (point))) ?\n))
+		     ;; Heuristic: Don't delete the linebreak if the
+		     ;; next line is empty or starts with an opening
+		     ;; parenthesis or if point is located after a period.
+		     (not (memq (char-after (1+ (point))) '(?\n ?\()))
 		     (not (eq (char-before) ?.)))
 	    (delete-char 1)))
 	(goto-char (marker-position (process-mark process)))
@@ -1406,23 +1414,32 @@ You might want to examine and modify the free variables `file',
 
 (defun TeX-parse-error (old)
   "Goto next error.  Pop to OLD buffer if no more errors are found."
+  (let ((regexp
+	 (concat
+	  ;; TeX error
+	  "^\\(!\\|\\(.*?\\):[0-9]+:\\) \\|"
+	  ;; New file
+	  "(\\(\"[^\"]*?\"\\|/*\
+\\(?:\\.+[^()\r\n{} \\/]*\\|[^()\r\n{} .\\/]+\
+\\(?: [^()\r\n{} .\\/]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)\
+\\(?:[\\/]+\\(?:\\.+[^()\r\n{} \\/]*\\|[^()\r\n{} .\\/]+\
+\\(?: [^()\r\n{} .\\/]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)?\\)*\\)\
+)*\\(?: \\|\r?$\\)\\|"
+	  ;; End of file
+	  "\\()\\))*\\|"
+	  ;; Hook to change line numbers
+	  " !\\(?:offset(\\([---0-9]+\\))\\|"
+	  ;; Hook to change file name
+	  "name(\\([^)]+\\))\\)\\|"
+	  ;; LaTeX bad box
+	  "^\\(\\(?:Overfull\\|Underfull\\|Tight\\|Loose\\)\
+ \\\\.*?[0-9]+--[0-9]+\\)\\|"
+	  ;; LaTeX warning
+	  "^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z]+ \\)Warning:.*")))
     (while
 	(cond
-	 ((null (re-search-forward
-		 "\
-^\\(!\\|\\(.*?\\):[0-9]+:\\) \\|\
-\(\\(/*\
-\\(?:\\.+[^()\r\n{} /]*\\|[^()\r\n{} ./]+\
-\\(?: [^()\r\n{} ./]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)\
-\\(?:/+\\(?:\\.+[^()\r\n{} /]*\\|[^()\r\n{} ./]+\
-\\(?: [^()\r\n{} ./]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)?\\)*\\)\
-)*\\(?: \\|\r?$\\)\\|\
-\\()\\))*\\|\
- !\\(?:offset(\\([---0-9]+\\))\\|\
-name(\\([^)]+\\))\\)\\|\
-^\\(\\(?:Overfull\\|Underfull\\|Tight\\|Loose\\)\
- \\\\.*?[0-9]+--[0-9]+\\)\\|\
-^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z]+ \\)Warning:.*" nil t))
+	 ((null
+	   (re-search-forward regexp nil t))
 	  ;; No more errors.
 	  (message "No more errors.")
 	  (beep)
@@ -1440,7 +1457,7 @@ name(\\([^)]+\\))\\)\\|\
 	      t
 	    (TeX-error)
 	    nil))
-	 ;; LaTeX badbox
+	 ;; LaTeX bad box
 	 ((match-beginning 7)
 	  (if TeX-debug-bad-boxes
 	      (progn
@@ -1460,9 +1477,16 @@ name(\\([^)]+\\))\\)\\|\
 
 	 ;; New file -- Push on stack
 	 ((match-beginning 3)
-	  (push (TeX-match-buffer 3) TeX-error-file)
-	  (push nil TeX-error-offset)
-	  (goto-char (match-end 3))
+	  (let ((file (TeX-match-buffer 3))
+		(end (match-end 3)))
+	    ;; Strip quotation marks and remove newlines if necessary
+	    (when (or (eq (string-to-char file) ?\")
+		      (string-match "\n" file))
+	      (setq file
+		    (mapconcat 'identity (split-string file "[\"\n]+") "")))
+	    (push file TeX-error-file)
+	    (push nil TeX-error-offset)
+	    (goto-char end))
 	  t)
 	 
 	 ;; End of file -- Pop from stack
@@ -1476,14 +1500,14 @@ name(\\([^)]+\\))\\)\\|\
 	 ;; Hook to change line numbers
 	 ((match-beginning 5)
 	  (setq TeX-error-offset
-		(list (string-to-int (TeX-match-buffer 5))))
+		(list (string-to-number (TeX-match-buffer 5))))
 	  t)
 	 
 	 ;; Hook to change file name
 	 ((match-beginning 6)
 	  (setq TeX-error-file
 		(list (TeX-match-buffer 6)))
-	  t))))
+	  t)))))
 
 (defun TeX-error ()
   "Display an error."
@@ -1495,11 +1519,22 @@ name(\\([^)]+\\))\\)\\|\
 
 	 ;; And the context for the help window.
 	 (context-start (point))
+	 context-available
 
 	 ;; And the line number to position the cursor.
-	 (line (if (re-search-forward "l\\.\\([0-9]+\\)" nil t)
-		   (string-to-int (TeX-match-buffer 1))
-		 1))
+	 (line (cond
+		;; regular style
+		((re-search-forward "l\\.\\([0-9]+\\)" nil t)
+		 (setq context-available t)
+		 (string-to-number (TeX-match-buffer 1)))
+		;; file:line:error style
+		((save-excursion
+		   (re-search-backward ":\\([0-9]+\\): "
+				       (line-beginning-position) t))
+		 (string-to-number (TeX-match-buffer 1)))
+		;; nothing found
+		(t 1)))
+
 	 ;; And a string of the context to search for.
 	 (string (progn
 		   (beginning-of-line)
@@ -1507,10 +1542,14 @@ name(\\([^)]+\\))\\)\\|\
 		   (TeX-match-buffer 1)))
 
 	 ;; And we have now found to the end of the context.
-	 (context (buffer-substring context-start (progn
-						    (forward-line 1)
-						    (end-of-line)
-						    (point))))
+	 (context (if context-available
+		      (buffer-substring context-start (progn (forward-line 1)
+							     (end-of-line)
+							     (point)))
+		    ;; There is no real context available, so we
+		    ;; simply show the line with the error message.
+		    (buffer-substring (1- (line-beginning-position))
+				      context-start)))
 	 ;; We may use these in another buffer.
 	 (offset (or (car TeX-error-offset) 0))
 	 (file (car TeX-error-file)))
@@ -1533,10 +1572,7 @@ name(\\([^)]+\\))\\)\\|\
       ;; error to be displayed to the value it has in the current buffer.
       (with-current-buffer error-file-buffer
 	(set (make-local-variable 'TeX-command-buffer) command-buffer))
-      (if (fboundp 'buffer-line-number)
-	  ;; To Do: move buffer/file-line-number out of auctex-config
- 	  (goto-line (+ offset (buffer-line-number line)))
- 	(goto-line (+ offset line)))
+      (goto-line (+ offset line))
       (if (not (string= string " "))
 	  (search-forward string nil t))
       
@@ -1556,7 +1592,7 @@ name(\\([^)]+\\))\\)\\|\
   (let* ((error (concat "** " string))
 
 	 ;; bad-box is nil if this is a "LaTeX Warning"
-	 (bad-box (string-match "\\\\[vb]ox.*[0-9]*--[0-9]*" string))
+	 (bad-box (string-match "\\\\[vh]box.*[0-9]*--[0-9]*" string))
 	 ;; line-string: match 1 is beginning line, match 2 is end line
 	 (line-string (if bad-box " \\([0-9]*\\)--\\([0-9]*\\)"
 			"on input line \\([0-9]*\\)\\."))
@@ -1566,8 +1602,8 @@ name(\\([^)]+\\))\\)\\|\
 
 	 ;; Get error-line (warning)
 	 (line (when (re-search-backward line-string nil t)
-		 (string-to-int (TeX-match-buffer 1))))
-	 (line-end (if bad-box (string-to-int (TeX-match-buffer 2))
+		 (string-to-number (TeX-match-buffer 1))))
+	 (line-end (if bad-box (string-to-number (TeX-match-buffer 2))
 		     line))
 
 	 ;; Find the context
@@ -1613,10 +1649,7 @@ name(\\([^)]+\\))\\)\\|\
 	(set (make-local-variable 'TeX-command-buffer) command-buffer))
       ;; Find line and string
       (when line
-	(if (fboundp 'buffer-line-number)
-	    ;; To Do: move buffer/file-line-number out of auctex-config
-	    (goto-line (+ offset (buffer-line-number line)))
-	  (goto-line (+ offset line)))
+	(goto-line (+ offset line))
 	(beginning-of-line 0)
 	(let ((start (point)))
 	  (goto-line (+ offset line-end))
@@ -1658,32 +1691,30 @@ name(\\([^)]+\\))\\)\\|\
 	    "\n\n--- TeX said ---"
 	    output
 	    "\n--- HELP ---\n"
-	    (save-excursion
-	      (if (and (string= (cdr (nth TeX-error-pointer
-					  TeX-error-description-list))
-				"No help available")
-		       (let* ((log-buffer (find-buffer-visiting log-file)))
-			 (if log-buffer
-			     (progn
-			       (set-buffer log-buffer)
-			       (revert-buffer t t))
-			   (setq log-buffer
-				 (find-file-noselect log-file))
-			   (set-buffer log-buffer))
-			 (auto-save-mode nil)
-			 (setq buffer-read-only t)
-			 (goto-line (point-min))
-			 (search-forward error nil t 1)))
-		  (progn
-		    (re-search-forward "^l\\.")
-		    (re-search-forward "^ [^\n]+$")
-		    (forward-char 1)
-		    (let ((start (point)))
+	    (let ((help (cdr (nth TeX-error-pointer
+				  TeX-error-description-list))))
+	      (save-excursion
+		(if (and (string= help "No help available")
+			 (let* ((log-buffer (find-buffer-visiting log-file)))
+			   (if log-buffer
+			       (progn
+				 (set-buffer log-buffer)
+				 (revert-buffer t t))
+			     (setq log-buffer
+				   (find-file-noselect log-file))
+			     (set-buffer log-buffer))
+			   (auto-save-mode nil)
+			   (setq buffer-read-only t)
+			   (goto-line (point-min))
+			   (search-forward error nil t 1))
+			 (re-search-forward "^l\\." nil t)
+			 (re-search-forward "^ [^\n]+$" nil t))
+		    (let ((start (1+ (point))))
+		      (forward-char 1)
 		      (re-search-forward "^$")
 		      (concat "From the .log file...\n\n"
-			      (buffer-substring start (point)))))
-		(cdr (nth TeX-error-pointer
-			  TeX-error-description-list)))))
+			      (buffer-substring start (point))))
+		  help))))
     (goto-char (point-min))
     (TeX-pop-to-buffer old-buffer nil t)))
 

@@ -1,6 +1,6 @@
 ;;; dutch.el - Setup AUC TeX for editing Dutch text.
 
-;; $Id: dutch.el,v 1.5 2008/02/25 18:02:09 davidswelt Exp $
+;; $Id: dutch.el,v 1.2 1993/12/15 21:42:42 amanda Exp $
 
 ;;; Code:
 

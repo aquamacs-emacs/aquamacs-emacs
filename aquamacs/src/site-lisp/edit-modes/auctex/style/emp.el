@@ -43,9 +43,9 @@
 (defun LaTeX-env-emp-gen (environment-name)
    "Ask for file, width and length. Insert environment-name environment
 Used for emp, empdef, and empgraph environments."
-   (let ((emp-fig-name (read-input "figure name: " ""))
-	 (emp-fig-width (read-input "figure width: " "1" ))
-	 (emp-fig-height (read-input "figure height: " "1" ))
+   (let ((emp-fig-name (read-string "figure name: " ""))
+	 (emp-fig-width (read-string "figure width: " "1" ))
+	 (emp-fig-height (read-string "figure height: " "1" ))
 	 ;;; emp.sty demands a width and a height for each of the
 	 ;;; emp, empdef, and empgraph environments
 	 ;;; we give them 1 by default
@@ -65,7 +65,7 @@ Used for emp, empdef, and empgraph environments."
 
 (defun LaTeX-env-empfile (optional)
    "Ask for file. Insert empfile environment"
-   (let ((empfile (read-input "empfile: " "")))
+   (let ((empfile (read-string "empfile: " "")))
      (if (not (zerop (length empfile)))
 	 (progn 
 	   (setq LaTeX-emp-file-name (concat LaTeX-optop empfile LaTeX-optcl))

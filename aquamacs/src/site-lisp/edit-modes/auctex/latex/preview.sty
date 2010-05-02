@@ -26,12 +26,12 @@
 \NeedsTeXFormat{LaTeX2e} \def\reserved@a #1#2$#3:
 #4${\xdef#1{\reserved@c #2#4 $}} \def\reserved@c #1 #2${#1}
 \begingroup \catcode`\_=12
-\reserved@a\pr@version $Name: release_11_85 $ \ifx\pr@version\@empty
-\reserved@a\pr@version CVS-$Revision: 1.124 $ \endgroup \else
+\reserved@a\pr@version $Name: release_11_86 $ \ifx\pr@version\@empty
+\reserved@a\pr@version CVS-$Revision: 1.126 $ \endgroup \else
   \def\next release_{} \lccode`\_=`.
   \edef\next{\lowercase{\endgroup
     \def\noexpand\pr@version{\expandafter\next\pr@version}}} \next \fi
-\reserved@a\next $Date: 2008/02/03 14:53:31 $
+\reserved@a\next $Date: 2010/02/14 16:19:00 $
 \edef\next{\noexpand\ProvidesPackage{preview}%
   [\next\space \pr@version\space (AUCTeX/preview-latex)]}
 \next
@@ -77,6 +77,8 @@
         store}bind def end}}}}
 \DeclareOption{pdftex}{%
   \let\pr@graphicstype\tw@}
+\DeclareOption{xetex}{%
+  \let\pr@graphicstype\thr@@}
 \begingroup
 \catcode`\*=11
 \@firstofone{\endgroup
@@ -271,8 +273,10 @@ Please complain to your document class author}%
      }%
    \pr@ship@end
    {\let\protect\noexpand
-   \voffset=-\ht\pr@box
-   \hoffset=\z@
+   \ifx\pr@offset@override\@undefined
+     \voffset=-\ht\pr@box
+     \hoffset=\z@
+   \fi
    \c@page=\pr@snippet
    \pr@shipout
    \ifpr@fixbb\hbox{%
@@ -366,7 +370,13 @@ Please complain to your document class author}%
 \let\output\pr@output
 \def\pr@typeinfos{\typeout{Preview: Fontsize \f@size pt}%
   \ifnum\mag=\@m\else\typeout{Preview: Magnification \number\mag}\fi
-  \ifx\pdfoutput\@undefined \else
+  \ifx\pdfoutput\@undefined
+    \ifx\XeTeXversion\@undefined \else
+      % FIXME: The message should not be emitted if XeTeX does not produce
+      % PDF.  There does not seem to be a primitive for that, though.
+      \typeout{Preview: PDFoutput 1}%
+    \fi
+  \else
     \ifx\pdfoutput\relax \else
       \ifnum\pdfoutput>\z@
         \typeout{Preview: PDFoutput 1}%

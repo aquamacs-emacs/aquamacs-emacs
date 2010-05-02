@@ -152,38 +152,6 @@ Only checks once - subsequent calls will not result in any action."
 ;; 	    (setq count (1+ count))))
 ;;       count)))
 
-(defvar aquamacs-tex-pdf-viewer "Skim"
-  "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
-Aquamacs defines an AUCTeX command called `Jump to PDF', 
-which calls this viewer.")
-
-
-(defun aquamacs-call-viewer (line source)
-  "Display current output file as PDF at LINE (as in file SOURCE).
-Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
-  (let ((full-file-name 
-	 (expand-file-name
-	  ;; as in TeX-view
-	  ;; C-c C-c view uses %o (from TeX-expand-list), which
-	  ;; is the same.
-	  (TeX-active-master (TeX-output-extension))
-	  default-directory))
-	(full-source-name
-	 (expand-file-name 
-	  source 
-	  default-directory)))
-  (do-applescript
-  (format 
- "
- set theSink to POSIX file \"%s\" 
- set theSource to POSIX file \"%s\" 
- tell application \"%s\" 
-     activate 
-     open theSink 
-     tell front document to go to TeX line %d from theSource 
-  end tell
-" full-file-name full-source-name aquamacs-tex-pdf-viewer line))))
-
 
 (defun aquamacs-latex-crossref (ev)
   "Cross-reference in LaTeX"
@@ -337,7 +305,7 @@ Use Tools --> Install Command Line Tools to update."
 ;; This is duplicated from AUCTeX, unfortunately
 
 (aquamacs-set-defaults
- `((LaTeX-command "latex --file-line-error -synctex=1")
+ `(;; (LaTeX-command "latex --file-line-error -synctex=1")
    ;; Directories containing the sites TeX macro files and style files
    ;; AucTeX defines its own (TeX-macro-global), which serves the same function
    ;; (TeX-macro-global ,(aquamacs-latex-find-style-file-paths))

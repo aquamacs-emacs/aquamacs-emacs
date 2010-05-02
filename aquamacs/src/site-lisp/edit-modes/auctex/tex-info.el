@@ -56,7 +56,7 @@
   ;; Overwrite version from `texinfo.el'.
   (concat "^@\\("
 	  (mapconcat 'car Texinfo-environment-list "\\|")
-	  "\\|end\\)")
+	  "\\|end\\)\\>")
   "Regexp for environment-like Texinfo list commands.
 Subexpression 1 is what goes into the corresponding `@end' statement.")
 
@@ -472,6 +472,7 @@ value of `Texinfo-mode-hook'."
    '("kbd" "Keyboard characters")
    '("key" "Key name")
    '("kindex" (TeX-arg-literal " ") (TeX-arg-free "Entry"))
+   '("lowersections" 0)
    '("majorheading" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("menu")
    '("minus")
@@ -491,6 +492,7 @@ value of `Texinfo-mode-hook'."
    '("printindex" (TeX-arg-literal " ") (TeX-arg-free "Index name"))
    '("pxref" "Node name")
    '("r" "Text")
+   '("raisesections" 0)
    '("ref" "Node name")
    '("refill")
    '("result")

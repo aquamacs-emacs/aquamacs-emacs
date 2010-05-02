@@ -1,6 +1,6 @@
 ;;; toolbar-x.el --- fancy toolbar handling in Emacs and XEmacs
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2008 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -117,14 +117,15 @@
 (defvar toolbarx-image-path
   (nconc
    (delq nil (mapcar #'(lambda(x)
-			 (and (member
+			 (and x
+			      (member
 			       (file-name-nondirectory
 				(directory-file-name x))
 			       '("toolbar" "images"))
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images/")))
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -146,15 +147,13 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator)
-      "--"
-    (let* ((str (upcase-initials (symbol-name symbol)))
-	   (str2))
-      (dolist (i (append str nil))
-	(if (eq i 45)			; if dash, push space
-	    (push 32 str2)
-	  (push i str2)))			; else push identical
-      (concat (nreverse str2)))))
+  (let* ((str (upcase-initials (symbol-name symbol)))
+	 (str2))
+    (dolist (i (append str nil))
+      (if (eq i 45)			; if dash, push space
+	  (push 32 str2)
+	(push i str2)))			; else push identical
+    (concat (nreverse str2))))
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -504,10 +503,10 @@ documentation of function `toolbarx-process-symbol')."
 					    ; (defined with `defimage')
 			      (consp (eval val))
 			      (eq (car (eval val)) 'image))
-			 (and (sequencep val) ; or list or vector with 4 strings or
-					; image descriptors
+			 (and (listp val) ; or list with 4 strings or
+					  ; image descriptors
 			      (= (length val) 4)
-			      (dolist (i (append val nil) all-obj-ok)
+			      (dolist (i val all-obj-ok)
 				(setq all-obj-ok
 				      (and all-obj-ok
 					   (or (stringp i)
@@ -630,7 +629,6 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-	    (:title	      toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
 	    (:help	      toolbarx-test-string-or-nil)
@@ -1122,15 +1120,14 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
   ;; following should hopefully get us to all images ultimately.
 
   (let ((file))
-    (dolist (i '("" ".png" ".xpm" ".xbm" ".pbm"))
+    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type png :file ,(concat image ".png"))
-		      (:type xpm :file ,(concat image ".xpm"))
+	(find-image `((:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
 
@@ -1241,8 +1238,7 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-				(or (cadr (memq :title filtered-props)) 
-				    (toolbarx-make-string-from-symbol symbol))
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)
@@ -1629,14 +1625,12 @@ the lists are built reversed."
     ;; - remove all specifiers for toolbars witout buttons
     (if default
 	(progn
-	  (if (memq (default-toolbar-position) '(top bottom))
-	      (set-specifier default-toolbar-visible-p
-			     (not (not default)) locale)
-	    (set-specifier default-toolbar-visible-p
-			   (not (not default)) locale))
-	  (if (memq (default-toolbar-position) '(top bottom))
-	      (set-specifier default-toolbar-height default-height locale)
-	    (set-specifier default-toolbar-width default-width locale))
+	  ;; Only activate the tool bar if it is already visible.
+	  (when toolbar-visible-p
+	    (set-specifier default-toolbar-visible-p (not (not default)) locale)
+	    (if (memq (default-toolbar-position) '(top bottom))
+		(set-specifier default-toolbar-height default-height locale)
+	      (set-specifier default-toolbar-width default-width locale)))
 	  (set-specifier default-toolbar default locale))
       (remove-specifier default-toolbar locale)
       (remove-specifier default-toolbar-visible-p locale)
@@ -1980,15 +1974,30 @@ this button is ignored."
 
 
 (defconst toolbarx-default-toolbar-meaning-alist
-  '((separator :image "sep" :command t :enable nil :help "")
-    (open-file :image ["new" toolbar-file-icon]
-	       :command [find-file toolbar-open]
-	       :enable [(not (window-minibuffer-p
-			      (frame-selected-window menu-updating-frame)))
-			t]
-	       :help ["Read a file into an Emacs buffer" "Open a file"])
+  `((separator :image "sep" :command t :enable nil :help "")
 
-    (dired :image ["open" toolbar-folder-icon]
+    (,(if (and (not (featurep 'xemacs)) (>= emacs-major-version 22))
+	  'new-file
+	'open-file)
+     :image ["new" toolbar-file-icon]
+     :command [find-file toolbar-open]
+     :enable [(not (window-minibuffer-p
+		    (frame-selected-window menu-updating-frame)))
+	      t]
+     :help ["Specify a new file's name, to edit the file" "Visit new file"])
+
+    ,(when (and (not (featurep 'xemacs)) (>= emacs-major-version 22))
+       '(open-file :image ["open" toolbar-file-icon]
+		   :command [menu-find-file-existing toolbar-open]
+		   :enable [(not (window-minibuffer-p
+				  (frame-selected-window menu-updating-frame)))
+			    t]
+		   :help ["Read a file into an Emacs buffer" "Open a file"]))
+
+    (dired :image [,(if (>= emacs-major-version 22)
+			"diropen"
+		      "open")
+		   toolbar-folder-icon]
 	   :command [dired toolbar-dired]
 	   :help ["Read a directory, operate on its files" "Edit a directory"])
 
@@ -2119,11 +2128,11 @@ this button is ignored."
 The following buttons are available:
 
 * Both Emacs and XEmacs: `open-file', `dired', `save-buffer',
-`undo', `cut', `copy', `paste', `search-replace', `print-buffer',
-`spell-buffer', `info'.
+  `undo', `cut', `copy', `paste', `search-replace', `print-buffer',
+  `spell-buffer', `info'.
 
-* Emacs only: `write-file', `search-forward', `customize', `help',
-`kill-buffer', `exit-emacs'.
+* Emacs only: `new-file' (Emacs 22+) `write-file', `search-forward',
+  `customize', `help', `kill-buffer', `exit-emacs'.
 
 * XEmacs only: `mail', `compile', `debug', `news'.
 

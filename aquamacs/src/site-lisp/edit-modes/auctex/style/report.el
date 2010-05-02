@@ -1,6 +1,6 @@
 ;;; report.el - Special code for report style.
 
-;; $Id: report.el,v 1.5 2008/02/25 18:02:11 davidswelt Exp $
+;; $Id: report.el,v 1.3 2005/03/17 10:02:06 angeli Exp $
 
 ;;; Code:
 

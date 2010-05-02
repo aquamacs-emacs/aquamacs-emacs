@@ -1,6 +1,6 @@
 ;;; pdfsync.el --- AUCTeX style for `pdfsync.sty'
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2008 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -32,11 +32,13 @@
 
 (defun LaTeX-pdfsync-output-page ()
   "Return page number in output file corresponding to buffer position."
-  (let* ((file (file-name-sans-extension
-		(file-name-nondirectory (buffer-file-name))))
-	 (line (TeX-line-number-at-pos))
+  (let* ((line (TeX-line-number-at-pos))
 	 (master (TeX-active-master))
+	 (file (file-name-sans-extension
+		(file-relative-name (buffer-file-name)
+				    (file-name-directory master))))
 	 (pdfsync-file (concat master ".pdfsync"))
+	 (buf-live-p (get-file-buffer pdfsync-file))
 	 (sync-record "0")
 	 (sync-line "-1")
 	 (sync-page "1")
@@ -47,7 +49,7 @@
 	  (goto-char (point-min))
 	  ;; Narrow region to file in question.
 	  (when (not (string= file master))
-	    (re-search-forward (concat "^(" file "$") nil t)
+	    (re-search-forward (concat "^(" file "\\(.tex\\)?$") nil t)
 	    (let ((beg (match-beginning 0)))
 	      (goto-char beg)
 	      (narrow-to-region (line-beginning-position 2)
@@ -67,18 +69,23 @@
 			   last-match (match-beginning 0))))))
 	  ;; Look for the page number.
 	  (goto-char (or last-match (point-min)))
+	  ;; There might not be any p or s lines for the current file,
+	  ;; so make it possible to search further.
+	  (widen)
 	  (catch 'break
 	    (while (re-search-forward "^p \\([0-9]+\\)" nil t)
 	      (when (>= (string-to-number (match-string 1))
 			(string-to-number sync-record))
 		(re-search-backward "^s \\([0-9]+\\)" nil t)
 		(setq sync-page (match-string 1))
-		(throw 'break nil)))))))
+		(throw 'break nil)))))
+	;; Kill the buffer if it was loaded by us.
+	(unless buf-live-p (kill-buffer (current-buffer)))))
     sync-page))
 
 (TeX-add-style-hook
  "pdfsync"
  (lambda ()
-   (setq TeX-sync-output-page-function 'LaTeX-pdfsync-output-page)))
+   (setq TeX-source-correlate-output-page-function 'LaTeX-pdfsync-output-page)))
 
 ;;; pdfsync.el ends here

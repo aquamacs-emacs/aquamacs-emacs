@@ -1,8 +1,8 @@
 ;;; tex.el --- Support for TeX documents.
 
-;; Copyright (C) 1985, 1986, 1987, 1991, 1993, 1994, 1996, 1997, 1999, 2000,
-;;   2001, 2002, 2003, 2004, 2005, 2006, 2007,
-;;   2008 Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1986, 1987, 1991, 1993, 1994, 1996, 1997, 1999,
+;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -26,9 +26,7 @@
 
 ;;; Commentary:
 
-;; This file provides AUCTeX support for plain TeX as well as basic
-;; functions used by other AUCTeX modes (e.g. for LaTeX, Texinfo and
-;; ConTeXt).
+;; This file provides basic functions used by the AUCTeX modes.
 
 ;;; Code:
 
@@ -39,14 +37,6 @@
 (require 'tex-site)
 (eval-when-compile
   (require 'cl))
-
-(defgroup AUCTeX nil
-  "A (La)TeX environment."
-  :tag "AUCTeX"
-  :link '(custom-manual "(auctex)Top")
-  :link '(url-link :tag "Home Page" "http://www.gnu.org/software/auctex/")
-  :prefix "TeX-"
-  :group 'tex)
 
 (defgroup TeX-file nil
   "Files used by AUCTeX."
@@ -117,18 +107,20 @@ then customization is requested."
   :type 'string)
 
 (defcustom ConTeXt-engine nil
-  "Engine to use for --tex in the texexec command.
+  "Engine to use for --engine in the texexec command.
 If nil, none is specified."
   :group 'TeX-command
   :type '(choice (const :tag "Unspecified" nil)
 		 string))
 
 (defcustom ConTeXt-Omega-engine TeX-Omega-command
-  "Engine to use for --tex in the texexec command in Omega mode.
+  "Engine to use for --engine in the texexec command in Omega mode.
 If nil, none is specified."
   :group 'TeX-command
   :type '(choice (const :tag "Unspecified" nil)
 		 string))
+;; At least in TeXLive 2009 ConTeXt does not support an omega option anymore.
+(make-obsolete-variable 'ConTeXt-Omega-engine 'TeX-engine-alist)
 
 (defcustom TeX-queue-command "lpq -P%p"
   "*Command used to show the status of a printer queue.
@@ -157,7 +149,6 @@ the printer has no corresponding command."
 ;; TeX-expand-list for a description of the % escapes
 
 (defcustom TeX-command-list
-  ;; Changed to double quotes for Windows afflicted people.
   `(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t"
      TeX-run-TeX nil
      (plain-tex-mode ams-tex-mode texinfo-mode) :help "Run plain TeX")
@@ -165,9 +156,6 @@ the printer has no corresponding command."
      TeX-run-TeX nil
      (latex-mode doctex-mode) :help "Run LaTeX")
 	;; Not part of standard TeX.
-    ("XeLaTeX" "%`%l%(mode)%' %t"
-     TeX-run-TeX nil (latex-mode context-mode) 
-     :help (format "Run X%sLaTeX" (string (decode-char 'ucs #x258))))
     ("Makeinfo" "makeinfo %t" TeX-run-compile nil
      (texinfo-mode) :help "Run Makeinfo with Info output")
     ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
@@ -183,7 +171,7 @@ the printer has no corresponding command."
      (context-mode) :help "Run ConTeXt until completion")
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ,(if (or window-system (getenv "DISPLAY"))
-	'("View" "%V" TeX-run-discard t t :help "Run Viewer")
+	'("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
 	 :help "Run Text viewer"))
     ("Print" "%p" TeX-run-command t t :help "Print the file")
@@ -245,6 +233,10 @@ TeX-run-function: Execute the Lisp function or function call
 specified by the string in the second element.  Consequently,
 this hook does not start a process.
 
+TeX-run-discard-or-function: If the command is a Lisp function,
+execute it as such, otherwise start the command as a process,
+discarding its output.
+
 To create your own hook, define a function taking three arguments: The
 name of the command, the command string, and the name of the file to
 process.  It might be useful to use `TeX-run-command' in order to
@@ -277,6 +269,7 @@ Any additional elements get just transferred to the respective menu entries."
 				(function-item TeX-run-silent)
 				(function-item TeX-run-discard-foreground)
 				(function-item TeX-run-function)
+				(function-item TeX-run-discard-or-function)
 				(function :tag "Other"))
 			(boolean :tag "Prompt")
 			(choice :tag "Modes"
@@ -340,7 +333,7 @@ The executable `latex' is LaTeX version 2e."
   '(("" "%(PDF)%(latex) %S%(PDFout)"))
 "List of style options and LaTeX commands.
 
-If the first element (a regular expresion) matches the name of one of
+If the first element (a regular expression) matches the name of one of
 the style files, any occurrence of the string `%l' in a command in
 `TeX-command-list' will be replaced with the second element.  The first
 match is used, if no match is found the `%l' is replaced with the empty
@@ -392,89 +385,10 @@ get consulted."
   :group 'TeX-command
   :type 'string)
 
-;; You may want special options to the view command depending on the
-;; style options.  Only works if parsing is enabled.
-
-(defcustom TeX-view-style
-  `((,(concat
-      "^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
-     "%(o?)xdvi %dS -paper a4 %d")
-    (,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
-     "%(o?)xdvi %dS -paper a5 %d")
-    ("^b5paper$" "%(o?)xdvi %dS -paper b5 %d")
-    ("^letterpaper$" "%(o?)xdvi %dS -paper us %d")
-    ("^legalpaper$" "%(o?)xdvi %dS -paper legal %d")
-    ("^executivepaper$" "%(o?)xdvi %dS -paper 7.25x10.5in %d")
-    ("^landscape$" "%(o?)xdvi %dS -paper a4r -s 0 %d")
-    ;; The latest xdvi can show embedded postscript.  If you don't
-    ;; have that, uncomment next line.
-    ;; ("^epsf$" "ghostview %f")
-    ("." "%(o?)xdvi %dS %d"))
-  "List of style options and view options.
-
-If the first element (a regular expresion) matches the name of
-one of the style files, any occurrence of the string `%v' in a
-command in `TeX-command-list' will be replaced with the second
-element.  The first match is used, if no match is found the `%v'
-is replaced with the empty string.
-
-As a default, the \"View\" command in `TeX-command-list' is set
-to `%V'.  This means that `TeX-output-view-style' will be
-consulted before `TeX-view-style'.  Only if no match is found in
-`TeX-output-view-style' the settings in `TeX-view-style' will be
-considered.  If you want to bypass `TeX-output-view-style', which
-is not recommended because it is more powerful than
-`TeX-view-style', use `%v' in the \"View\" command."
-  :group 'TeX-command
-  :type '(repeat (group regexp (string :tag "Command"))))
-
-(defcustom TeX-output-view-style
-  `(("^dvi$" ("^landscape$" "^pstricks$\\|^pst-\\|^psfrag$")
-     "%(o?)dvips -t landscape %d -o && gv %f")
-    ("^dvi$" "^pstricks$\\|^pst-\\|^psfrag$" "%(o?)dvips %d -o && gv %f")
-    ("^dvi$" (,(concat
-		"^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
-	      "^landscape$")
-     "%(o?)xdvi %dS -paper a4r -s 0 %d")
-    ("^dvi$" ,(concat
-	       "^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
-     "%(o?)xdvi %dS -paper a4 %d")
-    ("^dvi$" (,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
-	      "^landscape$")
-     "%(o?)xdvi %dS -paper a5r -s 0 %d")
-    ("^dvi$" ,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
-     "%(o?)xdvi %dS -paper a5 %d")
-    ("^dvi$" "^b5paper$" "%(o?)xdvi %dS -paper b5 %d")
-    ("^dvi$" "^letterpaper$" "%(o?)xdvi %dS -paper us %d")
-    ("^dvi$" "^legalpaper$" "%(o?)xdvi %dS -paper legal %d")
-    ("^dvi$" "^executivepaper$" "%(o?)xdvi %dS -paper 7.25x10.5in %d")
-    ("^dvi$" "." "%(o?)xdvi %dS %d")
-    ("^pdf$" "." "xpdf -remote %s -raise %o %(outpage)")
-    ("^html?$" "." "netscape %o"))
-  "List of output file extensions and view options.
-
-If the first element (a regular expresion) matches the output
-file extension, and the second element (a regular expression)
-matches the name of one of the style options, any occurrence of
-the string `%V' in a command in `TeX-command-list' will be
-replaced with the third element.  The first match is used; if no
-match is found the `%V' is replaced with `%v'.  The outcome of `%v'
-is determined by the settings in `TeX-view-style' which therefore
-serves as a fallback for `TeX-output-view-style'.  The second
-element may also be a list of regular expressions, in which case
-all the regular expressions must match for the element to apply."
-  :group 'TeX-command
-  :type '(repeat (group
-		  (regexp :tag "Extension")
-		  (choice regexp (repeat :tag "List" regexp))
-		  (string :tag "Command"))))
-
-;;Same for printing.
-
 (defcustom TeX-print-style '(("^landscape$" "-t landscape"))
   "List of style options and print options.
 
-If the first element (a regular expresion) matches the name of one of
+If the first element (a regular expression) matches the name of one of
 the style files, any occurrence of the string `%r' in a command in
 `TeX-command-list' will be replaced with the second element.  The first
 match is used, if no match is found the `%r' is replaced with the empty
@@ -491,43 +405,51 @@ string."
     ("%q" (lambda ()
 	    (TeX-printer-query t)))
     ("%V" (lambda ()
+	    (TeX-source-correlate-start-server-maybe)
+	    (TeX-view-command-raw)))
+    ("%vv" (lambda ()
+	    (TeX-source-correlate-start-server-maybe)
 	    (TeX-output-style-check TeX-output-view-style)))
     ("%v" (lambda ()
+	    (TeX-source-correlate-start-server-maybe)
 	    (TeX-style-check TeX-view-style)))
     ("%r" (lambda ()
 	    (TeX-style-check TeX-print-style)))
     ("%l" (lambda ()
 	    (TeX-style-check LaTeX-command-style)))
     ("%(PDF)" (lambda ()
-		(if (and (not TeX-Omega-mode)
+		(if (and (eq TeX-engine 'default)
 			 (or TeX-PDF-mode
 			     TeX-DVI-via-PDFTeX))
 		    "pdf"
 		  "")))
     ("%(PDFout)" (lambda ()
-		   (if (and (not TeX-Omega-mode)
-			    (not TeX-PDF-mode)
-			    TeX-DVI-via-PDFTeX)
-		       " \"\\pdfoutput=0 \""
-		     "")))
+		   (cond ((and (eq TeX-engine 'xetex)
+			       (not TeX-PDF-mode))
+			  " -no-pdf")
+			 ((and (eq TeX-engine 'luatex)
+			       (not TeX-PDF-mode))
+			  " --output-format=dvi")
+			 ((and (eq TeX-engine 'default)
+			       (not TeX-PDF-mode)
+			       TeX-DVI-via-PDFTeX)
+			  " \"\\pdfoutput=0 \"")
+			 (t ""))))
     ("%(mode)" (lambda ()
 		 (if TeX-interactive-mode
 		     ""
 		   " -interaction=nonstopmode")))
-    ("%(o?)" (lambda () (if TeX-Omega-mode "o" "")))
-    ("%(tex)" (lambda () (if TeX-Omega-mode
-			     TeX-Omega-command
-			   TeX-command)))
-    ("%(latex)" (lambda () (if TeX-Omega-mode
-			       LaTeX-Omega-command
-			     LaTeX-command)))
+    ("%(o?)" (lambda () (if (eq TeX-engine 'omega) "o" "")))
+    ("%(tex)" (lambda () (eval (nth 2 (assq TeX-engine (TeX-engine-alist))))))
+    ("%(latex)" (lambda () (eval (nth 3 (assq TeX-engine (TeX-engine-alist))))))
     ("%(execopts)" ConTeXt-expand-options)
-    ("%S" TeX-source-specials-expand-options)
+    ("%S" TeX-source-correlate-expand-options)
     ("%dS" TeX-source-specials-view-expand-options)
     ("%cS" TeX-source-specials-view-expand-client)
-    ("%(outpage)" (lambda () (if TeX-sync-output-page-function
-				 (funcall TeX-sync-output-page-function)
-			       "")))
+    ("%(outpage)" (lambda ()
+		    (if TeX-source-correlate-output-page-function
+			(funcall TeX-source-correlate-output-page-function)
+		      "1")))
     ;; `file' means to call `TeX-master-file' or `TeX-region-file'
     ("%s" file nil t)
     ("%t" file t t)
@@ -644,17 +566,6 @@ but does nothing in Emacs."
 Also does other stuff."
     (TeX-maybe-remove-help menu)))
 
-(defconst AUC-TeX-version AUCTeX-version)
-(condition-case nil
-    (make-obsolete-variable 'AUC-TeX-version 'AUCTeX-version "11.50")
-  (wrong-number-of-arguments
-   (make-obsolete-variable 'AUC-TeX-version 'AUCTeX-version)))
-
-(defconst AUC-TeX-date AUCTeX-date)
-(condition-case nil
-    (make-obsolete-variable 'AUC-TeX-date 'AUCTeX-date "11.50")
-  (wrong-number-of-arguments
-   (make-obsolete-variable 'AUC-TeX-date 'AUCTeX-date)))
 
 ;;; Documentation for Info-goto-emacs-command-node and similar
 
@@ -671,8 +582,8 @@ Also does other stuff."
     ;; Instead of checking for each mode explicitely `minor-mode-list'
     ;; could be used.  But this may make the byte compiler pop up.
     (when (memq var '(TeX-PDF-mode
-		      TeX-source-specials-mode TeX-interactive-mode
-		      TeX-Omega-mode TeX-fold-mode LaTeX-math-mode))
+		      TeX-source-correlate-mode TeX-interactive-mode
+		      TeX-fold-mode LaTeX-math-mode))
       (if (symbol-value val) (funcall var 1) (funcall var 0)))))
 
 (defvar TeX-overlay-priority-step 16
@@ -917,13 +828,12 @@ If RESET is non-nil, `TeX-command-next' is reset to
     (if TeX-mode-p
 	(let ((trailing-flags
 	       (concat
-		(and TeX-Omega-mode "O")
 		(and (boundp 'TeX-fold-mode) TeX-fold-mode "F")
 		(and (boundp 'LaTeX-math-mode) LaTeX-math-mode "M")
+		(and TeX-PDF-mode "P")
 		(and TeX-interactive-mode "I")
-		(and TeX-source-specials-mode "S"))))
-	  (setq mode-name (concat (and TeX-PDF-mode "PDF")
-				  TeX-base-mode-name
+		(and TeX-source-correlate-mode "S"))))
+	  (setq mode-name (concat TeX-base-mode-name
 				  (when (> (length trailing-flags) 0)
 				    (concat "/" trailing-flags))))
 	  (when reset
@@ -941,53 +851,613 @@ If RESET is non-nil, `TeX-command-next' is reset to
 			   (texinfo-mode . "Texinfo")
 			   (context-mode . "ConTeXt")))))
 
-;;; Source Specials
+;;; Viewing
 
-(defgroup TeX-source-specials nil
-  "Controlling source specials in AUCTeX."
+(defgroup TeX-view nil
+  "Calling viewers from AUCTeX."
   :group 'TeX-command)
 
-(defvar TeX-source-specials-map
+(defcustom TeX-view-style
+  `((,(concat
+      "^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
+     "%(o?)xdvi %dS -paper a4 %d")
+    (,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
+     "%(o?)xdvi %dS -paper a5 %d")
+    ("^b5paper$" "%(o?)xdvi %dS -paper b5 %d")
+    ("^letterpaper$" "%(o?)xdvi %dS -paper us %d")
+    ("^legalpaper$" "%(o?)xdvi %dS -paper legal %d")
+    ("^executivepaper$" "%(o?)xdvi %dS -paper 7.25x10.5in %d")
+    ("^landscape$" "%(o?)xdvi %dS -paper a4r -s 0 %d")
+    ;; The latest xdvi can show embedded postscript.  If you don't
+    ;; have that, uncomment next line.
+    ;; ("^epsf$" "ghostview %f")
+    ("." "%(o?)xdvi %dS %d"))
+  "List of style options and view options.
+
+If the first element (a regular expression) matches the name of
+one of the style files, any occurrence of the string `%v' in a
+command in `TeX-command-list' will be replaced with the second
+element.  The first match is used, if no match is found the `%v'
+is replaced with the empty string.
+
+As a default, the \"View\" command in `TeX-command-list' is set
+to `%V'.  This means that `TeX-output-view-style' will be
+consulted before `TeX-view-style'.  Only if no match is found in
+`TeX-output-view-style' the settings in `TeX-view-style' will be
+considered.  If you want to bypass `TeX-output-view-style', which
+is not recommended because it is more powerful than
+`TeX-view-style', use `%v' in the \"View\" command."
+  :group 'TeX-view
+  :type '(repeat (group regexp (string :tag "Command"))))
+
+(defcustom TeX-output-view-style
+  `(("^dvi$" ("^landscape$" "^pstricks$\\|^pst-\\|^psfrag$")
+     "%(o?)dvips -t landscape %d -o && gv %f")
+    ("^dvi$" "^pstricks$\\|^pst-\\|^psfrag$" "%(o?)dvips %d -o && gv %f")
+    ("^dvi$" (,(concat
+		"^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
+	      "^landscape$")
+     "%(o?)xdvi %dS -paper a4r -s 0 %d")
+    ("^dvi$" ,(concat
+	       "^" (regexp-opt '("a4paper" "a4dutch" "a4wide" "sem-a4")) "$")
+     "%(o?)xdvi %dS -paper a4 %d")
+    ("^dvi$" (,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
+	      "^landscape$")
+     "%(o?)xdvi %dS -paper a5r -s 0 %d")
+    ("^dvi$" ,(concat "^" (regexp-opt '("a5paper" "a5comb")) "$")
+     "%(o?)xdvi %dS -paper a5 %d")
+    ("^dvi$" "^b5paper$" "%(o?)xdvi %dS -paper b5 %d")
+    ("^dvi$" "^letterpaper$" "%(o?)xdvi %dS -paper us %d")
+    ("^dvi$" "^legalpaper$" "%(o?)xdvi %dS -paper legal %d")
+    ("^dvi$" "^executivepaper$" "%(o?)xdvi %dS -paper 7.25x10.5in %d")
+    ("^dvi$" "." "%(o?)xdvi %dS %d")
+    ("^pdf$" "." "xpdf -remote %s -raise %o %(outpage)")
+    ("^html?$" "." "netscape %o"))
+  "List of output file extensions and view options.
+
+If the first element (a regular expression) matches the output
+file extension, and the second element (a regular expression)
+matches the name of one of the style options, any occurrence of
+the string `%V' in a command in `TeX-command-list' will be
+replaced with the third element.  The first match is used; if no
+match is found the `%V' is replaced with `%v'.  The outcome of `%v'
+is determined by the settings in `TeX-view-style' which therefore
+serves as a fallback for `TeX-output-view-style'.  The second
+element may also be a list of regular expressions, in which case
+all the regular expressions must match for the element to apply."
+  :group 'TeX-view
+  :type '(repeat (group
+		  (regexp :tag "Extension")
+		  (choice regexp (repeat :tag "List" regexp))
+		  (string :tag "Command"))))
+
+;;; Viewing (new implementation)
+
+(defvar TeX-view-predicate-list-builtin
+  '((output-dvi
+     (string-match "dvi" (TeX-output-extension)))
+    (output-pdf
+     (string-match "pdf" (TeX-output-extension)))
+    (output-html
+     (string-match "html" (TeX-output-extension)))
+    (style-pstricks
+     (TeX-match-style "^pstricks$\\|^pst-\\|^psfrag$"))
+    (engine-omega
+     (eq TeX-engine 'omega))
+    (engine-xetex
+     (eq TeX-engine 'xetex))
+    (mode-io-correlate
+     TeX-source-correlate-mode)
+    (paper-landscape
+     (TeX-match-style "\\`landscape\\'"))
+    (paper-portrait
+     (not (TeX-match-style "\\`landscape\\'")))
+    (paper-a4
+     (TeX-match-style "\\`a4paper\\|a4dutch\\|a4wide\\|sem-a4\\'"))
+    (paper-a5
+     (TeX-match-style "\\`a5paper\\|a5comb\\'"))
+    (paper-b5
+     (TeX-match-style "\\`b5paper\\'"))
+    (paper-letter
+     (TeX-match-style "\\`letterpaper\\'"))
+    (paper-legal
+     (TeX-match-style "\\`legalpaper\\'"))
+    (paper-executive
+     (TeX-match-style "\\`executivepaper\\'")))
+  "Alist of built-in predicates for viewer selection and invocation.
+See the doc string of `TeX-view-predicate-list' for a short
+description of each predicate.")
+
+(defcustom TeX-view-predicate-list nil
+  "Alist of predicates for viewer selection and invocation.
+The key of each list item is a symbol and the value a Lisp form
+to be evaluated.  The form should return nil if the predicate is
+not fulfilled.
+
+Built-in predicates provided in `TeX-view-predicate-list-builtin'
+can be overwritten by defining predicates with the same symbol.
+
+The following built-in predicates are available:
+  `output-dvi': The output is a DVI file.
+  `output-pdf': The output is a PDF file.
+  `output-html': The output is an HTML file.
+  `style-pstricks': The document loads a PSTricks package.
+  `engine-omega': The Omega engine is used for typesetting.
+  `engine-xetex': The XeTeX engine is used for typesetting.
+  `mode-io-correlate': TeX Source Correlate mode is active.
+  `paper-landscape': The document is typeset in landscape orientation.
+  `paper-portrait': The document is not typeset in landscape orientation.
+  `paper-a4': The paper format is A4.
+  `paper-a5': The paper format is A5.
+  `paper-b5': The paper format is B5.
+  `paper-letter': The paper format is letter.
+  `paper-legal': The paper format is legal.
+  `paper-executive': The paper format is executive."
+  :group 'TeX-view
+  :type '(alist :key-type symbol :value-type (group sexp)))
+
+(defvar TeX-view-program-list-builtin
+  (cond
+   ((eq system-type 'windows-nt)
+    '(("Yap" ("yap -1" (mode-io-correlate " -s %n%b") " %o"))
+      ("dvips and start" "dvips %d -o && start \"\" %f")
+      ("start" "start \"\" %o")))
+;; XXX: We need the advice of a Mac OS X user to configure this
+;; correctly and test it.
+;;    ((eq system-type 'darwin)
+;;     '(("Preview.app" "open -a Preview.app %o")
+;;       ("Skim" "open -a Skim.app %o")
+;;       ("displayline" "displayline %n %o %b")
+;;       ("open" "open %o")))
+   (t
+    '(("xdvi" ("%(o?)xdvi"
+	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
+	       ((paper-a4 paper-portrait) " -paper a4")
+	       ((paper-a4 paper-landscape) " -paper a4r")
+	       ((paper-a5 paper-portrait) " -paper a5")
+	       ((paper-a5 paper-landscape) " -paper a5r")
+	       (paper-b5 " -paper b5")
+	       (paper-letter " -paper us")
+	       (paper-legal " -paper legal")
+	       (paper-executive " -paper 7.25x10.5in")
+	       " %d"))
+      ("dvips and gv" "%(o?)dvips %d -o && gv %f")
+      ("gv" "gv %o")
+      ("xpdf" ("xpdf -remote %s -raise %o" (mode-io-correlate " %(outpage)")))
+      ("Evince" ("evince" (mode-io-correlate " -p %(outpage)") " %o"))
+      ("xdg-open" "xdg-open %o"))))
+  "Alist of built-in viewer specifications.
+This variable should not be changed by the user who can use
+`TeX-view-program-list' to add new viewers or overwrite the
+definition of built-in ones.  The latter variable also contains a
+description of the data format.")
+
+(defcustom TeX-view-program-list nil
+  "Alist of viewer specifications.
+This variable can be used to specify how a viewer is to be
+invoked and thereby add new viewers on top of the built-in list
+of viewers defined in `TeX-view-program-list-builtin' or override
+entries in the latter.
+
+The car of each item is a string with a user-readable name.  The
+second element can be a command line to be run as a process or a
+Lisp function to be executed.  The command line can either be
+specified as a single string or a list of strings and two-part
+lists.  The first element of the two-part lists is a symbol or a
+list of symbols referring to one or more of the predicates in
+`TeX-view-predicate-list' or `TeX-view-predicate-list-builtin'.
+The second part of the two-part lists is a command line part.
+The command line for the viewer is constructed by concatenating
+the command line parts.  Parts with a predicate are only
+considered if the predicate was evaluated with a positive result.
+Note that the command line can contain placeholders as defined in
+`TeX-expand-list' which are expanded before the viewer is called.
+
+The use of a function as the second element only works if the
+View command in `TeX-command-list' makes use of the hook
+`TeX-run-discard-or-function'.
+
+Note: Predicates defined in the current Emacs session will only
+show up in the customization interface for this variable after
+restarting Emacs."
+  :group 'TeX-view
+  :type
+  `(alist
+    :key-type (string :tag "Name")
+    :value-type
+    (choice
+     (group :tag "Command" (string :tag "Command"))
+     (group :tag "Command parts"
+	    (repeat
+	     :tag "Command parts"
+	     (choice
+	      (string :tag "Command part")
+	      (list :tag "Predicate and command part"
+		    ,(let (list)
+		       ;; Build the list of available predicates.
+		       (mapc (lambda (spec)
+			       (add-to-list 'list `(const ,(car spec))))
+			     (append TeX-view-predicate-list
+				     TeX-view-predicate-list-builtin))
+		       ;; Sort the list alphabetically.
+		       (setq list (sort list
+					(lambda (a b)
+					  (string<
+					   (downcase (symbol-name (cadr a)))
+					   (downcase (symbol-name (cadr b)))))))
+		       `(choice
+			 (choice :tag "Predicate" ,@list)
+			 (repeat :tag "List of predicates"
+				 (choice :tag "Predicate" ,@list))))
+		    (string :tag "Command part")))))
+     (group :tag "Function" function))))
+
+;; XXX: Regarding a possibility to (manually) run an update command,
+;; one could support this through `TeX-view' by letting it temporarily
+;; set a variable which is checked with a predicate in the viewer
+;; selection.  If the check is positive, the update command is run
+;; instead of the normal viewer command.  Direct support through the
+;; View command would require a predicate which knows when an update
+;; has to be done.
+(defcustom TeX-view-program-selection
+  (cond
+   ((eq system-type 'windows-nt)
+    '(((output-dvi style-pstricks) "dvips and start")
+      (output-dvi "Yap")
+      (output-pdf "start")
+      (output-html "start")))
+;; XXX: We need the advice of a Mac OS X user to configure this
+;; correctly and test it.
+;;    ((eq system-type 'darwin)
+;;     '((output-dvi "open")
+;;       (output-pdf "open")
+;;       (output-html "open")))
+   (t
+    '(((output-dvi style-pstricks) "dvips and gv")
+      (output-dvi "xdvi")
+      (output-pdf "Evince")
+      (output-html "xdg-open"))))
+  "Alist of predicates and viewers.
+Each entry consists of a list with two elements.  The first
+element is a symbol or list of symbols referring to predicates as
+defined in `TeX-view-predicate-list' or
+`TeX-view-predicate-list-builtin'.  The second element is a
+string referring to the name of a viewer as defined in
+`TeX-view-program-list' or `TeX-view-program-list-builtin'.
+\(Note: Viewers added to `TeX-view-program-list' in the current
+Emacs session will not show up in the customization interface of
+`TeX-view-program-selection' until you restart Emacs.)
+
+When a viewer is called for, the entries are evaluated in turn
+and the viewer related to the first entry all predicates of which
+are evaluated positively is chosen."
+  :group 'TeX-view
+  :type `(alist :key-type
+		;; Offer list of defined predicates.
+		,(let (list)
+		   (mapc (lambda (spec)
+			   (add-to-list 'list `(const ,(car spec))))
+			 (append TeX-view-predicate-list
+				 TeX-view-predicate-list-builtin))
+		   (setq list (sort list
+				    (lambda (a b)
+				      (string<
+				       (downcase (symbol-name (cadr a)))
+				       (downcase (symbol-name (cadr b)))))))
+		   `(choice (choice :tag "Single predicate" ,@list)
+			    (repeat :tag "Multiple predicates"
+				    (choice ,@list))))
+		:value-type
+		;; Offer list of defined viewers.
+		(group (choice :tag "Viewer"
+			       ,@(let (list)
+				   (mapc (lambda (spec)
+					   (add-to-list 'list
+							`(const ,(car spec))))
+				     (append TeX-view-program-list
+					     TeX-view-program-list-builtin))
+				   (sort list
+					 (lambda (a b)
+					   (string< (downcase (cadr a))
+						    (downcase (cadr b))))))))))
+
+(defun TeX-match-style (regexp)
+  "Check if a style matching REGEXP is active."
+  (TeX-member regexp (TeX-style-list) 'string-match))
+
+(defun TeX-view-match-predicate (predicate)
+  "Check if PREDICATE is true.
+PREDICATE can be a symbol or a list of symbols defined in
+`TeX-view-predicate-list-builtin' or `TeX-view-predicate-list'.
+In case of a single symbol, return t if the predicate is true,
+nil otherwise.  In case of a list of symbols, return t if all
+predicates are true, nil otherwise."
+  (let ((pred-symbols (if (listp predicate) predicate (list predicate)))
+	(pred-defs (append TeX-view-predicate-list
+			   TeX-view-predicate-list-builtin))
+	(result t)
+	elt)
+    (while (and (setq elt (pop pred-symbols)) result)
+      (unless (eval (cadr (assq elt pred-defs)))
+	(setq result nil)))
+    result))
+
+(defun TeX-view-command-raw ()
+  "Choose a viewer and return its unexpanded command string."
+  (let ((selection TeX-view-program-selection)
+	entry viewer spec command)
+    ;; Find the appropriate viewer.
+    (while (and (setq entry (pop selection)) (not viewer))
+      (when (TeX-view-match-predicate (car entry))
+	(setq viewer (cadr entry))))
+    (unless viewer
+      (error "No matching viewer found"))
+    ;; Get the command line or function spec.
+    (setq spec (cadr (assoc viewer (append TeX-view-program-list
+					   TeX-view-program-list-builtin))))
+    (cond ((functionp spec)
+	   ;; Converting the function call to a string is ugly, but
+	   ;; the backend currently only supports strings.
+	   (prin1-to-string spec))
+	  ((stringp spec)
+	   spec)
+	  (t
+	   ;; Build the unexpanded command line.  Pieces with predicates are
+	   ;; only added if the predicate is evaluated positively.
+	   (dolist (elt spec)
+	     (cond ((stringp elt)
+		    (setq command (concat command elt)))
+		   ((listp elt)
+		    (when (TeX-view-match-predicate (car elt))
+		      (setq command (concat command (cadr elt)))))))
+	   command))))
+
+;;; Engine
+
+(defvar TeX-engine-alist-builtin
+  '((default "Default" TeX-command LaTeX-command ConTeXt-engine)
+    (xetex "XeTeX" "xetex" "xelatex" "xetex")
+    (luatex "LuaTeX" "luatex" "lualatex" "luatex")
+    (omega "Omega" TeX-Omega-command LaTeX-Omega-command ConTeXt-Omega-engine))
+  "Alist of built-in TeX engines and associated commands.
+For a description of the format see `TeX-engine-alist'.")
+
+(defcustom TeX-engine-alist nil
+  "Alist of TeX engines and associated commands.
+Each entry is a list with a maximum of five elements.  The first
+element is a symbol used to identify the engine.  The second is a
+string describing the engine.  The third is the command to be
+used for plain TeX.  The fourth is the command to be used for
+LaTeX.  The fifth is the command to be used for the --engine
+parameter of ConTeXt's texexec program.  Each command can either
+be a variable or a string.  An empty string or nil means there is
+no command available.
+
+You can override a built-in engine defined in the variable
+`TeX-engine-alist-builtin' by adding an entry beginning with the
+same symbol as the built-in entry to `TeX-engine-alist'."
+  :group 'TeX-command
+  :type '(repeat (group symbol
+			(string :tag "Name")
+			(choice :tag "Plain TeX command" string variable)
+			(choice :tag "LaTeX command" string variable)
+			(choice :tag "ConTeXt command" string variable))))
+
+(defun TeX-engine-alist ()
+  "Return an alist of TeX engines.
+The function appends the built-in engine specs from
+`TeX-engine-alist-builtin' and the user-defined engines from
+`TeX-engine-alist' and deletes any entries from the built-in part
+where an entry with the same car exists in the user-defined part."
+  (TeX-delete-dups-by-car (append TeX-engine-alist TeX-engine-alist-builtin)))
+
+(defcustom TeX-engine 'default
+  (concat "Type of TeX engine to use.
+It should be one of the following symbols:\n\n"
+	  (mapconcat (lambda (x) (format "* `%s'" (car x)))
+		     (TeX-engine-alist) "\n"))
+  :group 'TeX-command
+  :type `(choice ,@(mapcar (lambda (x)
+			     `(const :tag ,(nth 1 x) ,(car x)))
+			   (TeX-engine-alist))))
+(make-variable-buffer-local 'TeX-engine)
+(put 'TeX-engine 'safe-local-variable
+     (lambda (arg) (memq arg (mapcar 'car TeX-engine-alist-builtin))))
+
+(defun TeX-engine-set (type)
+  (concat "Set TeX engine to TYPE.
+TYPE can be one of the following symbols:\n"
+	  (mapconcat (lambda (x) (format "* `%s'" (car x)))
+		     (TeX-engine-alist) "\n"))
+  (interactive (list (completing-read "Engine: "
+				      (mapcar (lambda (x)
+						(symbol-name (car x)))
+					      (TeX-engine-alist))
+				      nil t)))
+  (when (stringp type)
+    (setq type (intern type)))
+  (setq TeX-engine type)
+  ;; Automatically enable or disable TeX PDF mode as a convenience
+  (cond ((eq type 'xetex) (TeX-PDF-mode 1))
+	((eq type 'omega) (TeX-PDF-mode 0))))
+
+(define-minor-mode TeX-Omega-mode
+  "Minor mode for using the Omega engine."
+  nil nil nil
+  :group 'TeX-command
+  (TeX-engine-set (if TeX-Omega-mode 'omega 'default)))
+(defalias 'tex-omega-mode 'TeX-Omega-mode)
+(make-obsolete 'TeX-Omega-mode 'TeX-engine-set)
+(make-obsolete-variable 'TeX-Omega-mode 'TeX-engine)
+
+;;; Forward and inverse search
+
+(defcustom TeX-source-correlate-method 'auto
+  "Method to use for enabling forward and inverse search.
+This can be `source-specials' if source specials should be used,
+`synctex' if SyncTeX should be used, or`auto' if AUCTeX should
+decide.
+
+Setting this variable does not take effect if TeX Source
+Correlate mode has already been active.  Restart Emacs in this
+case."
+  :type '(choice (const auto) (const synctex) (const source-specials))
+  :group 'TeX-view)
+
+(defvar TeX-source-correlate-method-active nil
+  "Method actually used for forward and inverse search.")
+
+(defvar TeX-source-correlate-output-page-function nil
+  "Symbol of function returning an output page relating to buffer position.
+The function should take no arguments and return the page numer
+as a string.")
+(make-variable-buffer-local 'TeX-source-correlate-output-page-function)
+
+(defcustom TeX-source-correlate-start-server 'ask
+  "Control if server should be started for inverse search."
+  :type '(choice (const :tag "Always" t)
+		 (const :tag "Never" nil)
+		 (const :tag "Ask" ask))
+  :group 'TeX-view)
+(when (fboundp 'defvaralias)
+  (defvaralias 'TeX-source-specials-view-start-server
+    'TeX-source-correlate-start-server))
+
+(defvar TeX-source-correlate-start-server-asked nil
+  "Keep track if question about server start search was asked.")
+
+(defvar TeX-source-correlate-start-server-flag nil
+  "If non-nil, `TeX-source-correlate-start-server-maybe' will start a server.
+Code related to features requiring a server, e.g. for inverse
+search, can set the variable.")
+
+(defun TeX-source-correlate-gnuserv-p ()
+  "Guess whether to use gnuserv when a server is requested."
+  (cond ((and (boundp 'gnuserv-process)
+	      (processp gnuserv-process)))
+	((and (boundp 'server-process)
+	      (processp server-process))
+	 nil)
+	((featurep 'xemacs))))
+
+(defun TeX-source-correlate-server-enabled-p ()
+  "Return non-nil if Emacs server or gnuserv is enabled."
+  (let* ((gnuserv-p (TeX-source-correlate-gnuserv-p))
+	 (process (if gnuserv-p 'gnuserv-process 'server-process)))
+    (and (boundp process) (processp (symbol-value process)))))
+
+(defun TeX-source-correlate-start-server-maybe ()
+  "Start Emacs server or gnuserv if a feature using it is enabled.
+This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
+  (when (and TeX-source-correlate-start-server-flag
+	     (not (TeX-source-correlate-server-enabled-p)))
+    (let* ((gnuserv-p (TeX-source-correlate-gnuserv-p))
+	   (start (if gnuserv-p 'gnuserv-start 'server-start)))
+      (cond
+       ;; Server should be started unconditionally
+       ((eq TeX-source-correlate-start-server t)
+	(funcall start))
+       ;; Ask user if server is to be started
+       ((and (eq TeX-source-correlate-start-server 'ask)
+	     (not TeX-source-correlate-start-server-asked)
+	     (prog1
+		 (y-or-n-p (format "Start %s for inverse search in viewer? "
+				   (if gnuserv-p
+				       "gnuserv"
+				     "Emacs server")))
+	       (setq TeX-source-correlate-start-server-asked t)))
+	(funcall start))))))
+
+(defun TeX-source-correlate-determine-method ()
+  "Determine which method is available for forward and inverse search."
+  (let ((help (condition-case nil
+		  (with-output-to-string
+		    (call-process LaTeX-command
+				  nil (list standard-output nil) nil "--help"))
+		(error ""))))
+    (if (string-match "^[ ]*-synctex" help)
+	'synctex
+      'source-specials)))
+
+(defun TeX-source-correlate-expand-options ()
+  "Return TeX engine command line option for forward search facilities.
+The return value depends on the value of `TeX-source-correlate-mode'.
+If this is nil, an empty string will be returned."
+  (if TeX-source-correlate-mode
+      (if (eq TeX-source-correlate-method-active 'source-specials)
+	  (concat TeX-source-specials-tex-flags
+		  (if TeX-source-specials-places
+		      ;; -src-specials=WHERE: insert source specials
+		      ;; in certain places of the DVI file. WHERE is a
+		      ;; comma-separated value list: cr display hbox
+		      ;; math par parend vbox
+		      (concat "=" (mapconcat 'identity
+					     TeX-source-specials-places ","))))
+	TeX-synctex-tex-flags)
+    ""))
+
+(defvar TeX-source-correlate-map
   (let ((map (make-sparse-keymap)))
     ;; (if (featurep 'xemacs)
     ;;	   (define-key map [(control button1)] #'TeX-view-mouse)
     ;;   (define-key map [C-down-mouse-1] #'TeX-view-mouse))
     map)
-  "Keymap for `TeX-source-specials-mode'.
+  "Keymap for `TeX-source-correlate-mode'.
 You could use this for unusual mouse bindings.")
 
-(define-minor-mode TeX-source-specials-mode
-  "Minor mode for generating and using LaTeX source specials.
+(define-minor-mode TeX-source-correlate-mode
+  "Minor mode for forward and inverse search.
 
-If enabled, an option that inserts source specials into the DVI
-file is added to the LaTeX commmand line and the DVI viewer is
-called with an appropriate option, so that it shows the the point
-in the DVI file corresponding to the point in the Emacs buffer.
+If enabled, the viewer can be advised to show the output page
+corresponding to the point in the source and vice versa.
 
-See the the AUCTeX manual for details."
-  :group 'TeX-source-specials
+The method to be used can be controlled with the variable
+`TeX-source-correlate-method'.  Currently source specials or
+SyncTeX are recognized."
+  :group 'TeX-view
+  ;; Since this is a global minor mode and we don't want to require
+  ;; tex.el when the mode variable is set, the mode function is called
+  ;; explicitely (if necessary) in `VirTeX-common-initialization'.  We
+  ;; do it there because otherwise `kill-all-local-variables' would
+  ;; reset `TeX-source-correlate-output-page-function' which is
+  ;; buffer-local.
   :global t
-  (set-keymap-parent TeX-mode-map
-		     (and TeX-source-specials-mode
-			  TeX-source-specials-map))
-  (TeX-set-mode-name 'TeX-source-specials-mode t t))
-(defalias 'tex-source-specials-mode 'TeX-source-specials-mode)
+  (set-keymap-parent TeX-mode-map (and TeX-source-correlate-mode
+				       TeX-source-correlate-map))
+  (TeX-set-mode-name 'TeX-source-correlate-mode t t)
+  (setq TeX-source-correlate-start-server-flag TeX-source-correlate-mode)
+  (unless TeX-source-correlate-method-active
+    (setq TeX-source-correlate-method-active
+	  (if (eq TeX-source-correlate-method 'auto)
+	      (TeX-source-correlate-determine-method)
+	    TeX-source-correlate-method)))
+  (when (eq TeX-source-correlate-method-active 'synctex)
+    (setq TeX-source-correlate-output-page-function
+	  (when TeX-source-correlate-mode
+	    'TeX-synctex-output-page))))
+(defalias 'TeX-source-specials-mode 'TeX-source-correlate-mode)
+(make-obsolete 'TeX-source-specials-mode 'TeX-source-correlate-mode)
+(defalias 'tex-source-correlate-mode 'TeX-source-correlate-mode)
+(put 'TeX-source-correlate-mode 'safe-local-variable 'TeX-booleanp)
+;; We do not want the custom variable to require tex.el.  This is only
+;; necessary if AUCTeX was compiled with Emacs 21.
+(put 'TeX-source-correlate-mode 'custom-requests nil)
+(setq minor-mode-map-alist
+      (delq (assq 'TeX-source-correlate-mode minor-mode-map-alist)
+	    minor-mode-map-alist))
 
-(put 'TeX-source-specials-mode 'safe-local-variable 'TeX-booleanp)
 
-(setq minor-mode-map-alist (delq
-		       (assq 'TeX-source-specials-mode minor-mode-map-alist)
-		       minor-mode-map-alist))
+;;; Source Specials
 
 (defcustom TeX-source-specials-tex-flags "-src-specials"
   "Extra flags to pass to TeX commands to generate source specials."
-  :group 'TeX-source-specials
-  :type '(choice string (repeat string)))
+  :group 'TeX-view
+  :type 'string)
 
 (defcustom TeX-source-specials-places nil
   "List of places where to insert source specials into the DVI file.
 If nil, use (La)TeX's defaults."
-  :group 'TeX-source-specials
+  :group 'TeX-view
   :type '(list (set :inline t
 		    ;; :tag "Options known to work"
 		    ;; cr display hbox math par parend vbox
@@ -1001,74 +1471,36 @@ If nil, use (La)TeX's defaults."
 	       (repeat :inline t
 		       :tag "Other options"
 		       (string))))
-;; From latex(1):
-;; -src-specials            insert source specials into the DVI file
-;; -src-specials=WHERE      insert source specials in certain places of
-;;                          the DVI file. WHERE is a comma-separated value
-;;                          list: cr display hbox math par parend vbox
-
-(defun TeX-source-specials-expand-options ()
-  "Return source specials command line option for TeX commands.
-The return value depends on the value of `TeX-source-specials-mode'.
-If this is nil, an empty string will be returned."
-  (if TeX-source-specials-mode
-      (concat
-       TeX-source-specials-tex-flags
-       (if TeX-source-specials-places
-	   (concat
-	    "="
-	    (mapconcat 'identity
-		       TeX-source-specials-places
-		       ","))))
-    ""))
-
-(defcustom TeX-source-specials-view-start-server 'ask
-  "Determine if server should be started upon starting a DVI viewer."
-  :type '(choice (const :tag "Always" t)
-		 (const :tag "Never" nil)
-		 (const :tag "Ask" ask))
-  :group 'TeX-source-specials)
 
 (defcustom TeX-source-specials-view-position-flags
   "-sourceposition \"%n %b\""
   "Flags to pass to the DVI viewer commands for the position in the source."
-  :group 'TeX-source-specials
+  :group 'TeX-view
   :type 'string)
 
 (defcustom TeX-source-specials-view-editor-flags
   "-editor \"%cS\""
   "Flags to pass to DVI viewer commands for inverse search."
-  :group 'TeX-source-specials
+  :group 'TeX-view
   :type 'string)
 
 (defcustom TeX-source-specials-view-gnuclient-flags
   "-q +%%l %%f"
   "Flags to pass to gnuclient for inverse search."
-  :group 'TeX-source-specials
+  :group 'TeX-view
   :type 'string)
 
 (defcustom TeX-source-specials-view-emacsclient-flags
   "--no-wait +%%l %%f"
   "Flags to emacsclient for inverse search."
-  :group 'TeX-source-specials
+  :group 'TeX-view
   :type 'string)
 
-(defvar TeX-source-specials-view-start-server-asked nil
-  "Keep track if question about server start for inverse search was asked.")
-
-(defun TeX-source-specials-view-gnuserv-p ()
-  "Guess whether to use gnuserv for inverse search."
-  (cond ((and (boundp 'gnuserv-process)
-	      (processp gnuserv-process)))
-	((and (boundp 'server-process)
-	      (processp server-process))
-	 nil)
-	((featurep 'xemacs))))
-
+;; FIXME: Make client binaries configurable.
 (defun TeX-source-specials-view-expand-client ()
   "Return gnuclient or emacslient executable with options.
 Return the full path to the executable if possible."
-  (let* ((gnuserv-p (TeX-source-specials-view-gnuserv-p))
+  (let* ((gnuserv-p (TeX-source-correlate-gnuserv-p))
 	 (client-base (if gnuserv-p
 			  "gnuclient"
 			"emacsclient"))
@@ -1084,45 +1516,43 @@ Return the full path to the executable if possible."
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.
-The return value depends on the value of `TeX-source-specials-mode'.
-If this is nil, an empty string will be returned."
-  (if TeX-source-specials-mode
-      (let* ((gnuserv-p (TeX-source-specials-view-gnuserv-p))
-	     (process (if gnuserv-p 'gnuserv-process 'server-process))
-	     (start (if gnuserv-p 'gnuserv-start 'server-start))
-	     (server-enabled
-	      (cond
-	       ;; Server is already running
-	       ((and (boundp process) (processp (symbol-value process))))
-	       ;; Server is not running but should be started unconditionally
-	       ((eq TeX-source-specials-view-start-server t)
-		(funcall start)
-		t)
-	       ;; Server is not running and we have to ask if it is to
-	       ;; be started
-	       ((and (eq TeX-source-specials-view-start-server 'ask)
-		     (not TeX-source-specials-view-start-server-asked)
-		     (prog1
-			 (y-or-n-p
-			  (format "Start %s for inverse search in viewer? "
-				  (if gnuserv-p
-				      "gnuserv"
-				    "Emacs server")))
-		       (setq TeX-source-specials-view-start-server-asked t)))
-		(funcall start)
-		t))))
-	(concat TeX-source-specials-view-position-flags
-		(when server-enabled
-		  (concat " " TeX-source-specials-view-editor-flags))))
+The return value depends on the values of
+`TeX-source-correlate-mode' and
+`TeX-source-correlate-method-active'.  If those are nil or not
+`source-specials' respectively, an empty string will be
+returned."
+  (if (and TeX-source-correlate-mode
+	   (eq TeX-source-correlate-method-active 'source-specials))
+      (concat TeX-source-specials-view-position-flags
+	      (when (TeX-source-correlate-server-enabled-p)
+		(concat " " TeX-source-specials-view-editor-flags)))
     ""))
 
-(defvar TeX-sync-output-page-function nil
-  "Symbol of function returning an output page relating to buffer position.
-The function should take no arguments and return the page numer
-as a string.")
-(make-variable-buffer-local 'TeX-sync-output-page-function)
+;;; SyncTeX
 
-;;;
+(defvar TeX-synctex-tex-flags "--synctex=1"
+  "Extra flags to pass to TeX commands to enable SyncTeX.")
+
+(defun TeX-synctex-output-page ()
+  "Return the page corresponding to the current source position.
+This method assumes that the document was compiled with SyncTeX
+enabled and the `synctex' binary is available."
+  (let ((synctex-output
+	 (with-output-to-string
+	   (call-process "synctex" nil (list standard-output nil) nil "view"
+			 "-i" (format "%s:%s:%s" (line-number-at-pos)
+				      (current-column)
+				      ;; The file name relative to the
+				      ;; directory of the master file.
+				      (file-relative-name
+				       (buffer-file-name)
+				       (file-name-directory
+					(TeX-active-master))))
+			 "-o" (TeX-active-master (TeX-output-extension))))))
+    (when (string-match "Page:\\([0-9]+\\)" synctex-output)
+      (match-string 1 synctex-output))))
+
+;;; Miscellaneous minor modes
 
 (defvar TeX-mode-p nil
   "This indicates a TeX mode being active.")
@@ -1145,12 +1575,13 @@ If enabled, PDFTeX will be used as an executable by default.
 You can customize an initial value, and you can use the
 function `TeX-global-PDF-mode' for toggling this value."
   :group 'TeX-command
-  (when TeX-Omega-mode
+  (when (eq TeX-engine 'omega)
     (setq TeX-PDF-mode nil))
   (setq TeX-PDF-mode-parsed nil)
   (TeX-set-mode-name nil nil t)
   (setq TeX-output-extension
 	(if TeX-PDF-mode "pdf" "dvi")))
+(add-to-list 'minor-mode-alist '(TeX-PDF-mode ""))
 
 (defun TeX-global-PDF-mode (&optional arg)
   "Toggle default for `TeX-PDF-mode'."
@@ -1206,20 +1637,7 @@ already established, don't do anything."
   :group 'TeX-command
   (TeX-set-mode-name 'TeX-interactive-mode t t))
 (defalias 'tex-interactive-mode 'TeX-interactive-mode)
-
-(defcustom TeX-Omega-mode nil nil
-  :group 'TeX-command
-  :set 'TeX-mode-set
-  :type 'boolean)
-
-(define-minor-mode TeX-Omega-mode
-  "Minor mode for using the Omega engine."
-  nil nil nil
-  :group 'TeX-command
-  (when TeX-Omega-mode
-    (TeX-PDF-mode 0))
-  (TeX-set-mode-name 'TeX-Omega-mode t t))
-(defalias 'tex-omega-mode 'TeX-Omega-mode)
+(add-to-list 'minor-mode-alist '(TeX-interactive-mode ""))
 
 ;;; Commands
 
@@ -1271,12 +1689,12 @@ Must be the car of an entry in `TeX-command-list'."
   '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot"
     "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind"
     "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out"
-    "\\.snm" "\\.toc" "\\.url")
+    "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz")
   "List of regexps matching suffixes of files to be cleaned.
 Used as a default in TeX, LaTeX and docTeX mode.")
 
 (defvar TeX-clean-default-output-suffixes
-  '("\\.dvi" "\\.pdf" "\\.ps")
+  '("\\.dvi" "\\.pdf" "\\.ps" "\\.xdv")
   "List of regexps matching suffixes of files to be cleaned.
 Used as a default in TeX, LaTeX and docTeX mode.")
 
@@ -1303,7 +1721,7 @@ output files."
 	 (master (TeX-active-master))
 	 (master-dir (file-name-directory master))
 	 (regexp (concat "\\("
-			 (file-name-nondirectory master) "\\|"
+			 (regexp-quote (file-name-nondirectory master)) "\\|"
 			 (TeX-region-file nil t)
 			 "\\)"
 			 "\\("
@@ -1329,6 +1747,38 @@ output files."
 
 ;;; Master File
 
+(defcustom TeX-master t
+  "*The master file associated with the current buffer.
+If the file being edited is actually included from another file, you
+can tell AUCTeX the name of the master file by setting this variable.
+If there are multiple levels of nesting, specify the top level file.
+
+If this variable is nil, AUCTeX will query you for the name.
+
+If the variable is t, AUCTeX will assume the file is a master file
+itself.
+
+If the variable is 'shared, AUCTeX will query for the name, but not
+change the file.
+
+If the variable is 'dwim, AUCTeX will try to avoid querying by
+attempting to `do what I mean'; and then change the file.
+
+It is suggested that you use the File Variables (see the info node in
+the Emacs manual) to set this variable permanently for each file."
+  :group 'TeX-command
+  :group 'TeX-parse
+  :type '(choice (const :tag "Query" nil)
+		 (const :tag "This file" t)
+		 (const :tag "Shared" shared)
+		 (const :tag "Dwim" dwim)
+		 (string :format "%v")))
+(make-variable-buffer-local 'TeX-master)
+(put 'TeX-master 'safe-local-variable
+     '(lambda (x)
+	(or (stringp x)
+	    (member x (quote (t nil shared dwim))))))
+
 (defcustom TeX-one-master "\\.\\(texi?\\|dtx\\)$"
   "*Regular expression matching ordinary TeX files.
 
@@ -1341,6 +1791,10 @@ If you dislike AUCTeX automatically modifying your files, you can set
 this variable to \"<none>\"."
   :group 'TeX-command
   :type 'regexp)
+
+(defvar TeX-convert-master t
+  "*If not nil, automatically convert ``Master:'' lines to file variables.
+This will be done when AUCTeX first try to use the master file.")
 
 ;; Can be let-bound temporarily in order to inhibit the master file question
 ;; by using its value instead in case `TeX-master' is nil or 'shared.
@@ -1493,42 +1947,6 @@ the beginning of the file, but that feature will be phased out."
       (and buffer-file-name
 	   (file-name-directory buffer-file-name)))))))
 
-(defcustom TeX-master t
-  "*The master file associated with the current buffer.
-If the file being edited is actually included from another file, you
-can tell AUCTeX the name of the master file by setting this variable.
-If there are multiple levels of nesting, specify the top level file.
-
-If this variable is nil, AUCTeX will query you for the name.
-
-If the variable is t, AUCTeX will assume the file is a master file
-itself.
-
-If the variable is 'shared, AUCTeX will query for the name, but not
-change the file.
-
-If the variable is 'dwim, AUCTeX will try to avoid querying by
-attempting to `do what I mean'; and then change the file.
-
-It is suggested that you use the File Variables (see the info node in
-the Emacs manual) to set this variable permanently for each file."
-  :group 'TeX-command
-  :group 'TeX-parse
-  :type '(choice (const :tag "Query" nil)
-		 (const :tag "This file" t)
-		 (const :tag "Shared" shared)
-		 (const :tag "Dwim" dwim)
-		 (string :format "%v")))
-(make-variable-buffer-local 'TeX-master)
-(put 'TeX-master 'safe-local-variable
-     '(lambda (x)
-	(or (stringp x)
-	    (member x (quote (t nil shared dwim))))))
-
-(defvar TeX-convert-master t
-  "*If not nil, automatically convert ``Master:'' lines to file variables.
-This will be done when AUCTeX first try to use the master file.")
-
 (defun TeX-add-local-master ()
   "Add local variable for `TeX-master'."
   (when (and (buffer-file-name)
@@ -1638,26 +2056,30 @@ If REGEXP is nil, or \"\", an error will occur."
 
 (defun TeX-macro-global ()
   "Return directories containing the site's TeX macro and style files."
-  (TeX-macro-global-internal "latex" '("/tex/" "/bibtex/bst/")
-			     '("/usr/share/texmf/tex/" "/usr/share/texmf/bibtex/bst/")))
+  (or (TeX-tree-expand '("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST")
+		       "latex" '("/tex/" "/bibtex/bst/"))
+      '("/usr/share/texmf/tex/" "/usr/share/texmf/bibtex/bst/")))
 
-(defun TeX-macro-global-internal (latex search default)
-  "Return directories containing the site's TeX macro and style files.
-LATEX: latex command
-SEARCH: search path under system texmf tree
-DEFAULT: fallback path list"
-  (let ((tree-list '("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST"))
-	path-list path exit-status input-dir-list)
+(defun TeX-macro-private ()
+  "Return directories containing the user's TeX macro and style files."
+  (TeX-tree-expand '("$TEXMFHOME") "latex" '("/tex/" "/bibtex/bst/")))
+
+(defun TeX-tree-expand (trees program subdirs)
+  "Return directories corresponding to the TeX trees TREES.
+This is done calling `kpsewhich' where PROGRAM is passed as the
+parameter for --progname.  SUBDIRS are subdirectories which are
+appended to the directories of the TeX trees."
+  (let (path-list path exit-status input-dir-list)
     (condition-case nil
 	(catch 'success
-	  (dotimes (i (safe-length tree-list))
+	  (dotimes (i (safe-length trees))
 	    (setq path (with-output-to-string
 			 (setq exit-status
 			       (call-process
 				"kpsewhich"  nil
 				(list standard-output nil) nil
-				"--progname" latex
-				"--expand-braces" (nth i tree-list)))))
+				"--progname" program
+				"--expand-braces" (nth i trees)))))
 	    (if (zerop exit-status)
 		(progn (add-to-list 'path-list path)
 		       (when (zerop i) (throw 'success nil)))
@@ -1666,8 +2088,8 @@ DEFAULT: fallback path list"
 				 (call-process
 				  "kpsewhich"  nil
 				  (list standard-output nil) nil
-				  "--progname" latex
-				  "--expand-path" (nth i tree-list)))))
+				  "--progname" program
+				  "--expand-path" (nth i trees)))))
 	      (when (zerop exit-status) (add-to-list 'path-list path)))))
       (error nil))
     (dolist (elt path-list)
@@ -1682,27 +2104,29 @@ DEFAULT: fallback path list"
 	    (setq item (substring item (match-end 0) (length item))))
 	  (when (string-match "/+$" item)
 	    (setq item (substring item 0 (match-beginning 0))))
-	  (dolist (subdir search)
+	  (dolist (subdir subdirs)
 	    (when (file-exists-p (file-name-as-directory (concat item subdir)))
 	      (add-to-list 'input-dir-list (concat item subdir)))))))
-    (or input-dir-list default)))
+    input-dir-list))
 
 (defcustom TeX-macro-global (TeX-macro-global)
   "Directories containing the site's TeX macro and style files."
   :group 'TeX-file
   :type '(repeat (directory :format "%v")))
 
-(defcustom TeX-macro-private (append (TeX-parse-path "TEXINPUTS")
-				     (TeX-parse-path "BIBINPUTS"))
+(defcustom TeX-macro-private (or (append (TeX-parse-path "TEXINPUTS")
+					 (TeX-parse-path "BIBINPUTS"))
+				 (TeX-macro-private))
   "Directories where you store your personal TeX macros."
   :group 'TeX-file
   :type '(repeat (file :format "%v")))
 
-(defcustom TeX-auto-private (mapcar (lambda (entry)
-				      (expand-file-name TeX-auto-local entry))
-				    TeX-macro-private)
-  "List of directories containing automatically generated information.
-Must end with a slash.
+(defcustom TeX-auto-private
+  (list (expand-file-name TeX-auto-local
+			  (or (and (boundp 'user-emacs-directory)
+				   (concat user-emacs-directory "auctex/"))
+			      "~/.emacs.d/auctex/")))
+  "List of directories containing automatically generated AUCTeX style files.
 
 These correspond to the personal TeX macros."
   :group 'TeX-file
@@ -1711,11 +2135,12 @@ These correspond to the personal TeX macros."
 (if (stringp TeX-auto-private)		;Backward compatibility
     (setq TeX-auto-private (list TeX-auto-private)))
 
-(defcustom TeX-style-private (mapcar (lambda (entry)
-				       (expand-file-name
-					TeX-style-local entry))
-				     TeX-macro-private)
-  "List of directories containing hand generated information.
+(defcustom TeX-style-private
+  (list (expand-file-name TeX-style-local
+			  (or (and (boundp 'user-emacs-directory)
+				   (concat user-emacs-directory "auctex/"))
+			      "~/.emacs.d/auctex/")))
+  "List of directories containing hand-generated AUCTeX style files.
 
 These correspond to the personal TeX macros."
   :group 'TeX-file
@@ -1726,12 +2151,17 @@ These correspond to the personal TeX macros."
 
 (defcustom TeX-style-path
   (let ((path))
-    (mapcar (lambda (file) (if file (setq path (cons file path))))
+    ;; Put directories in an order where the more local files can
+    ;; override the more global ones.
+    (mapcar (lambda (file) (when file (add-to-list 'path file t)))
 	    (append (list TeX-auto-global TeX-style-global)
 		    TeX-auto-private TeX-style-private
 		    (list TeX-auto-local TeX-style-local)))
     path)
-  "List of directories to search for AUCTeX style files."
+  "List of directories to search for AUCTeX style files.
+Per default the list is built from the values of the variables
+`TeX-auto-global', `TeX-style-global', `TeX-auto-private',
+`TeX-style-private', `TeX-auto-local', and `TeX-style-local'."
   :group 'TeX-file
   :type '(repeat (file :format "%v")))
 
@@ -1925,18 +2355,6 @@ FORCE is not nil."
 
 (defvar TeX-grcl "}" "The TeX group closing character.")
  (make-variable-buffer-local 'TeX-grcl)
-
-(defcustom plain-TeX-enable-toolbar t
-  "Enable TeX tool bar in plain TeX mode."
-  :group 'TeX-tool-bar
-  :type 'boolean)
-
-(defun plain-TeX-maybe-install-toolbar ()
-  "Conditionally install tool bar buttons for plain TeX mode.
-Install tool bar if `plain-TeX-enable-toolbar' is non-nil."
-  (when plain-TeX-enable-toolbar
-    ;; Defined in `tex-bar.el':
-    (TeX-install-toolbar)))
 
 ;;; Symbols
 
@@ -2241,9 +2659,7 @@ See `TeX-parse-macro' for details."
 			     (prin1-to-string head))))))
 	  (t (error "Unknown argument type %s" (prin1-to-string arg))))
     (when (and insert-flag (not optional) (TeX-active-mark))
-      (if (featurep 'xemacs)
-	  (zmacs-deactivate-region)
-	(deactivate-mark)))))
+      (TeX-deactivate-mark))))
 
 (defun TeX-argument-insert (name optional &optional prefix)
   "Insert NAME surrounded by curly braces.
@@ -2326,7 +2742,8 @@ Choose `ignore' if you don't want AUCTeX to install support for font locking."
 
 (defvar TeX-format-list
   '(("JLATEX" japanese-latex-mode
-     "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
+     "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\
+\\(article\\|report\\|book\\|slides\\)")
     ("JTEX" japanese-plain-tex-mode
      "-- string likely in Japanese TeX --")
     ("AMSTEX" ams-tex-mode
@@ -2338,7 +2755,8 @@ component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
 \\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
 \\)\\|%.*?interface=")
     ("LATEX" latex-mode
-     "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
+     "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
+documentclass\\)\\b")
     ("TEX" plain-tex-mode "."))
   "*List of format packages to consider when choosing a TeX mode.
 
@@ -2471,6 +2889,10 @@ The algorithm is as follows:
   (make-local-variable 'TeX-auto-update)
   (setq TeX-auto-update t)
 
+  ;; Minor modes
+  (when TeX-source-correlate-mode
+    (TeX-source-correlate-mode 1))
+
   ;; Let `TeX-master-file' be called after a new file was opened and
   ;; call `TeX-update-style' on any file opened.  (The addition to the
   ;; hook has to be made here because its local value will be deleted
@@ -2495,79 +2917,6 @@ The algorithm is as follows:
 		(TeX-master-file nil nil t))
 	      (TeX-update-style t)) nil t))
 
-;;; Plain TeX mode
-
-(defcustom plain-TeX-mode-hook nil
-  "A hook run in plain TeX mode buffers."
-  :type 'hook
-  :group 'TeX-misc)
-
-;;;###autoload
-(defun TeX-plain-tex-mode ()
-  "Major mode in AUCTeX for editing plain TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{plain-TeX-mode-map}
-
-Entering `plain-tex-mode' calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of plain-TeX-mode-hook."
-  (interactive)
-  (plain-TeX-common-initialization)
-  (setq major-mode 'plain-tex-mode)
-  (use-local-map plain-TeX-mode-map)
-  (easy-menu-add plain-TeX-mode-menu plain-TeX-mode-map)
-  (easy-menu-add plain-TeX-mode-command-menu plain-TeX-mode-map)
-  (setq TeX-base-mode-name "TeX")
-  (setq TeX-command-default "TeX")
-  (setq TeX-sentinel-default-function 'TeX-TeX-sentinel)
-  (add-hook 'tool-bar-mode-on-hook 'plain-TeX-maybe-install-toolbar nil t)
-  (when (if (featurep 'xemacs)
-	    (featurep 'toolbar)
-	  (and (boundp 'tool-bar-mode) tool-bar-mode))
-    (plain-TeX-maybe-install-toolbar))
-  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'plain-TeX-mode-hook)
-  (TeX-set-mode-name))
-
-(defun plain-TeX-common-initialization ()
-  "Common initialization for plain TeX like modes."
-  (VirTeX-common-initialization)
-  (set-syntax-table TeX-mode-syntax-table)
-  (setq paragraph-start
-	(concat
-	 "\\(^[ \t]*$"
-	 "\\|" (regexp-quote TeX-esc) "par\\|"
-	 "^[ \t]*"
-	 (regexp-quote TeX-esc)
-	 "\\("
-	 "begin\\|end\\|part\\|chapter\\|"
-	 "section\\|subsection\\|subsubsection\\|"
-	 "paragraph\\|include\\|includeonly\\|"
-	 "tableofcontents\\|appendix\\|label\\|caption\\|"
-	 "\\[\\|\\]"			; display math delimitors
-	 "\\)"
-	 "\\|"
-	 "^[ \t]*\\$\\$"		; display math delimitor
-	 "\\)" ))
-  (setq paragraph-separate
-	(concat
-	 "\\("
-	 (regexp-quote TeX-esc)
-	 "par\\|"
-	 "^[ \t]*$\\|"
-	 "^[ \t]*"
-	 (regexp-quote TeX-esc)
-	 "\\("
-	 "begin\\|end\\|label\\|caption\\|part\\|chapter\\|"
-	 "section\\|subsection\\|subsubsection\\|"
-	 "paragraph\\|include\\|includeonly\\|"
-	 "tableofcontents\\|appendix\\|" (regexp-quote TeX-esc)
-	 "\\)"
-	 "\\)"))
-  (setq TeX-header-end (regexp-quote "%**end of header"))
-  (setq TeX-trailer-start (regexp-quote (concat TeX-esc "bye")))
-  (TeX-run-style-hooks "TEX"))
 
 ;;; Hilighting
 
@@ -2804,8 +3153,8 @@ If TEX is a directory, generate style files for all files in the directory."
     (make-directory TeX-auto-global))
   (let ((TeX-file-extensions '("cls" "sty"))
 	(BibTeX-file-extensions nil))
-    (mapcar (lambda (macro) (TeX-auto-generate macro TeX-auto-global))
-	    TeX-macro-global))
+    (mapc (lambda (macro) (TeX-auto-generate macro TeX-auto-global))
+	  TeX-macro-global))
   (byte-recompile-directory TeX-auto-global 0))
 
 (defun TeX-auto-store (file)
@@ -2820,9 +3169,8 @@ If TEX is a directory, generate style files for all files in the directory."
 	  (erase-buffer)
 	  (insert "(TeX-add-style-hook \"" style "\"\n"
 		  " (lambda ()")
-	  (mapcar (lambda (el)
-		    (TeX-auto-insert el style))
-		  TeX-auto-parser)
+	  (mapc (lambda (el) (TeX-auto-insert el style))
+		TeX-auto-parser)
 	  (insert "))\n\n")
 	  (write-region (point-min) (point-max) file nil 'silent)
 	  (kill-buffer (current-buffer))))
@@ -2884,17 +3232,21 @@ alter the numbering of any ordinary, non-shy groups.")
 
 (defvar plain-TeX-auto-regexp-list
   (let ((token TeX-token-char))
-    `((,(concat "\\\\def\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
-      (,(concat "\\\\let\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
+    `((,(concat "\\\\def\\\\\\(" token "+\\)[^a-zA-Z@]")
+       1 TeX-auto-symbol-check)
+      (,(concat "\\\\let\\\\\\(" token "+\\)[^a-zA-Z@]")
+       1 TeX-auto-symbol-check)
       (,(concat "\\\\font\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
       (,(concat "\\\\chardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
-      (,(concat "\\\\new\\(?:count\\|dimen\\|muskip\\|skip\\)\\\\\\(" token "+\\)[^a-zA-Z@]")
+      (,(concat "\\\\new\\(?:count\\|dimen\\|muskip\\|skip\\)\\\\\\(" token
+		"+\\)[^a-zA-Z@]")
        1 TeX-auto-symbol)
       (,(concat "\\\\newfont{?\\\\\\(" token "+\\)}?") 1 TeX-auto-symbol)
       (,(concat "\\\\typein\\[\\\\\\(" token "+\\)\\]") 1 TeX-auto-symbol)
       ("\\\\input +\\(\\.*[^#%\\\\\\.\n\r]+\\)\\(\\.[^#%\\\\\\.\n\r]+\\)?"
        1 TeX-auto-file)
-      (,(concat "\\\\mathchardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)))
+      (,(concat "\\\\mathchardef\\\\\\(" token "+\\)[^a-zA-Z@]")
+       1 TeX-auto-symbol)))
   "List of regular expression matching common LaTeX macro definitions.")
 
 (defvar TeX-auto-full-regexp-list plain-TeX-auto-regexp-list
@@ -3010,7 +3362,7 @@ functions in `TeX-auto-cleanup-hook' after parsing."
 
   (let ((case-fold-search nil))
 
-    (mapcar 'TeX-auto-clear-entry TeX-auto-parser)
+    (mapc 'TeX-auto-clear-entry TeX-auto-parser)
     (run-hooks 'TeX-auto-prepare-hook)
 
     (save-excursion
@@ -3398,6 +3750,15 @@ to look backward for."
     (skip-chars-backward " \t\n")
     (bobp)))
 
+(defun TeX-deactivate-mark ()
+  "Deactivate the mark.
+This is a compatibility function which works both in Emacs and
+XEmacs.  In XEmacs the region is deactivated instead of the
+mark which is sort of equivalent."
+  (if (featurep 'xemacs)
+      (zmacs-deactivate-region)
+    (deactivate-mark)))
+
 (defalias 'TeX-run-mode-hooks
   (if (fboundp 'run-mode-hooks) 'run-mode-hooks 'run-hooks))
 
@@ -3578,10 +3939,9 @@ Brace insertion is only done if point is in a math construct and
     (define-key map "\C-c;"    'TeX-comment-or-uncomment-region)
     (define-key map "\C-c%"    'TeX-comment-or-uncomment-paragraph)
     
-    (define-key map "\C-c\C-t\C-o"   'TeX-Omega-mode)
     (define-key map "\C-c\C-t\C-p"   'TeX-PDF-mode)
     (define-key map "\C-c\C-t\C-i"   'TeX-interactive-mode)
-    (define-key map "\C-c\C-t\C-s"   'TeX-source-specials-mode)
+    (define-key map "\C-c\C-t\C-s"   'TeX-source-correlate-mode)
     (define-key map "\C-c\C-t\C-r"   'TeX-pin-region)
     (define-key map "\C-c\C-w"       'TeX-toggle-debug-bad-boxes); to be removed
     (define-key map "\C-c\C-t\C-b"   'TeX-toggle-debug-bad-boxes)
@@ -3613,12 +3973,6 @@ Brace insertion is only done if point is in a math construct and
     map)
   "Keymap for common TeX and LaTeX commands.")
 
-(defvar plain-TeX-mode-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map TeX-mode-map)
-    map)
-  "Keymap used in plain TeX mode.")
-
 (defun TeX-mode-specific-command-menu (mode)
   "Return a Command menu specific to the major MODE."
   ;; COMPATIBILITY for Emacs < 21
@@ -3635,7 +3989,7 @@ Brace insertion is only done if point is in a math construct and
   "Return the entries for a Command menu specific to the major MODE."
   (append
    (TeX-menu-with-help
-    '(["Command on" nil :active nil]
+    `("Command on"
       [ "Master File" TeX-command-select-master
 	:keys "C-c C-c" :style radio
 	:selected (eq TeX-command-current 'TeX-command-master)
@@ -3654,11 +4008,11 @@ Brace insertion is only done if point is in a math construct and
 		      (and (boundp 'TeX-command-region-begin)
 			   (markerp TeX-command-region-begin)))
 		    (TeX-mark-active))
-	;; :visible (eq TeX-command-current 'TeX-command-region)
+	;;:visible (eq TeX-command-current 'TeX-command-region)
 	:style toggle
 	:selected (and (boundp 'TeX-command-region-begin)
 		       (markerp TeX-command-region-begin))
-	:help "Fix the region for \"Command on Region\"" ]
+	:help "Fix the region for \"Command on Region\""]
       "-"
       ["Recenter Output Buffer" TeX-recenter-output-buffer
        :help "Show the output of current TeX process"]
@@ -3670,25 +4024,29 @@ Brace insertion is only done if point is in a math construct and
        :help "Start a viewer without prompting"]
       "-"
       ("TeXing Options"
-       [ "Use Omega" TeX-Omega-mode
-	 :style toggle :selected TeX-Omega-mode
-	 :help "Use the Omega engine for compiling"]
-       [ "PDF Mode" TeX-PDF-mode
+       ,@(mapcar (lambda (x)
+		   (let ((symbol (car x)) (name (nth 1 x)))
+		     `[ ,(format "Use %s engine" name) (TeX-engine-set ',symbol)
+			:style radio :selected (eq TeX-engine ',symbol)
+			:help ,(format "Use %s engine for compiling" name) ]))
+		 (TeX-engine-alist))
+       "-"
+       [ "Generate PDF" TeX-PDF-mode
 	 :style toggle :selected TeX-PDF-mode
-	 :active (not TeX-Omega-mode)
+	 :active (not (eq TeX-engine 'omega))
 	 :help "Use PDFTeX to generate PDF instead of DVI"]
        [ "Run Interactively" TeX-interactive-mode
 	 :style toggle :selected TeX-interactive-mode :keys "C-c C-t C-i"
 	 :help "Stop on errors in a TeX run"]
-       [ "Source Specials" TeX-source-specials-mode
-	 :style toggle :selected TeX-source-specials-mode
+       [ "Correlate I/O" TeX-source-correlate-mode
+	 :style toggle :selected TeX-source-correlate-mode
 	 :help "Enable forward and inverse search in the previewer"]
        ["Debug Bad Boxes" TeX-toggle-debug-bad-boxes
 	:style toggle :selected TeX-debug-bad-boxes :keys "C-c C-t C-b"
 	:help "Make \"Next Error\" show overfull and underfull boxes"]
        ["Debug Warnings" TeX-toggle-debug-warnings
 	:style toggle :selected TeX-debug-warnings
-	:help "Make \"Next Error\" show warnings"] )))
+	:help "Make \"Next Error\" show warnings"])))
    (let ((file 'TeX-command-on-current));; is this actually needed?
      (TeX-maybe-remove-help
       (delq nil
@@ -3718,59 +4076,41 @@ Brace insertion is only done if point is in a math construct and
      "-"
      ["Hide All in Current Buffer" TeX-fold-buffer
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-b"
       :help "Hide all configured TeX constructs in the current buffer"]
      ["Hide All in Current Region" TeX-fold-region
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-r"
       :help "Hide all configured TeX constructs in the marked region"]
      ["Hide All in Current Paragraph" TeX-fold-paragraph
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-p"
       :help "Hide all configured TeX constructs in the paragraph containing point"]
      ["Hide Current Macro" TeX-fold-macro
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-m"
       :help "Hide the macro containing point"]
      ["Hide Current Environment" TeX-fold-env
       :visible (not (eq major-mode 'plain-tex-mode))
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-e"
       :help "Hide the environment containing point"]
      ["Hide Current Comment" TeX-fold-comment
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-c"
       :help "Hide the comment containing point"]
      "-"
      ["Show All in Current Buffer" TeX-fold-clearout-buffer
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o b"
       :help "Permanently show all folded content again"]
      ["Show All in Current Region" TeX-fold-clearout-region
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o r"
       :help "Permanently show all folded content in marked region"]
      ["Show All in Current Paragraph" TeX-fold-clearout-paragraph
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o p"
       :help "Permanently show all folded content in paragraph containing point"]
      ["Show Current Item" TeX-fold-clearout-item
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o i"
       :help "Permanently show the item containing point"]
      "-"
      ["Hide or Show Current Item" TeX-fold-dwim
       :active (and (boundp 'TeX-fold-mode) TeX-fold-mode)
-      :keys "C-c C-o C-o"
       :help "Hide or show the item containing point"]))
    "Menu definition for commands from tex-fold.el.")
-
-
-;;; Menus for plain TeX mode
-(easy-menu-define plain-TeX-mode-command-menu
-    plain-TeX-mode-map
-    "Command menu used in TeX mode."
-    (TeX-mode-specific-command-menu 'plain-tex-mode))
 
 (defvar TeX-customization-menu nil)
 
@@ -3799,7 +4139,9 @@ Brace insertion is only done if point is in a math construct and
       ["Extend this Menu"
        (progn
 	 (easy-menu-add-item
-	  nil (list TeX-base-mode-name)
+	  nil
+	  ;; Ugly hack because docTeX mode uses the LaTeX menu.
+	  (list (if (eq major-mode 'doctex-mode) "LaTeX" TeX-base-mode-name))
 	  (or TeX-customization-menu
 	      (setq TeX-customization-menu
 		    (customize-menu-create 'AUCTeX "Customize AUCTeX")))))
@@ -3808,90 +4150,20 @@ Brace insertion is only done if point is in a math construct and
       :help ,(format "Problems with AUCTeX %s? Mail us!"
 		     AUCTeX-version)])))
 
-(defvar plain-TeX-menu-entries
-  (TeX-menu-with-help
-   `(["Macro..." TeX-insert-macro
-      :help "Insert a macro and possibly arguments"]
-     ["Complete" TeX-complete-symbol
-      :help "Complete the current macro"]
-     "-"
-     ("Insert Font"
-      ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
-      ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
-      ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
-      ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
-      ["Sans Serif" (TeX-font nil ?\C-f) :keys "C-c C-f C-f"]
-      ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
-      ["Slanted"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
-      ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"]
-      ["Calligraphic" (TeX-font nil ?\C-a) :keys "C-c C-f C-a"])
-     ("Replace Font"
-      ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
-      ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
-      ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
-      ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
-      ["Sans Serif" (TeX-font t ?\C-f) :keys "C-u C-c C-f C-f"]
-      ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
-      ["Slanted"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
-      ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"]
-      ["Calligraphic" (TeX-font t ?\C-a) :keys "C-u C-c C-f C-a"])
-     ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
-     "-"
-     ["Comment or Uncomment Region" TeX-comment-or-uncomment-region
-      :help "Comment or uncomment the currently selected region"]
-     ["Comment or Uncomment Paragraph" TeX-comment-or-uncomment-paragraph
-      :help "Comment or uncomment the paragraph containing point"]
-     ,TeX-fold-menu
-     "-" . ,TeX-common-menu-entries)))
 
-(easy-menu-define plain-TeX-mode-menu
-    plain-TeX-mode-map
-    "Menu used in plain TeX mode."
-    (cons "TeX" plain-TeX-menu-entries))
+;;; Verbatim constructs
 
-;;; AmSTeX
+(defvar TeX-verbatim-p-function nil
+  "Mode-specific function to be called by `TeX-verbatim-p'.")
+(make-variable-buffer-local 'TeX-verbatim-p-function)
 
-(defvar AmSTeX-mode-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map TeX-mode-map)
-    map)
-  "Keymap used in `AmSTeX-mode'.")
-
-;; Menu for AmSTeX mode
-(easy-menu-define AmSTeX-mode-command-menu
-    AmSTeX-mode-map
-    "Command menu used in AmsTeX mode."
-    (TeX-mode-specific-command-menu 'ams-tex-mode))
-
-(easy-menu-define AmSTeX-mode-menu
-  AmSTeX-mode-map
-  "Menu used in AMS-TeX mode."
-  (cons "AmS-TeX" plain-TeX-menu-entries))
-
-;;;###autoload
-(defun ams-tex-mode ()
-  "Major mode in AUCTeX for editing AmS-TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{AmSTeX-mode-map}
-
-Entering AmS-tex-mode calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of `AmS-TeX-mode-hook'."
-  (interactive)
-  (plain-TeX-common-initialization)
-  (setq major-mode 'ams-tex-mode)
-  (use-local-map AmSTeX-mode-map)
-
-  ;; Menu
-  (easy-menu-add AmSTeX-mode-menu AmSTeX-mode-map)
-  (easy-menu-add AmSTeX-mode-command-menu AmSTeX-mode-map)
-
-  (setq TeX-base-mode-name "AmS-TeX")
-  (setq TeX-command-default "AmSTeX")
-  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'AmS-TeX-mode-hook)
-  (TeX-set-mode-name))
+;; XXX: We only have an implementation for LaTeX mode at the moment (Oct 2009).
+(defun TeX-verbatim-p (&optional pos)
+  "Return non-nil if position POS is in a verbatim-like construct.
+A mode-specific implementation is required.  If it is not
+available, the function always returns nil."
+  (when TeX-verbatim-p-function
+    (funcall TeX-verbatim-p-function)))
 
 
 ;;; Comments
@@ -3999,10 +4271,12 @@ comment characters instead."
 	  (eq (preceding-char) ?\r))
       nil
     (save-excursion
-      (let ((pos (point)))
-	(re-search-backward "^\\|\r" nil t)
-	(or (looking-at comment-start-skip)
-	    (re-search-forward comment-start-skip pos t))))))
+      (save-match-data
+	(let ((pos (point)))
+	  (beginning-of-line)
+	  (and (or (looking-at comment-start-skip)
+		   (re-search-forward comment-start-skip pos t))
+	       (not (TeX-verbatim-p))))))))
 
 (defun TeX-in-commented-line ()
   "Return non-nil if point is in a line consisting only of a comment.
@@ -4034,8 +4308,9 @@ If there are no comment starters after potential whitespace at
 the beginning of the line, return nil."
   (save-excursion
     (beginning-of-line)
-    (when (looking-at (concat "\\([ \t]*" TeX-comment-start-regexp "+\\)+"))
-      (match-string 0))))
+    (save-match-data
+      (when (looking-at (concat "\\([ \t]*" TeX-comment-start-regexp "+\\)+"))
+	(match-string 0)))))
 
 (defun TeX-forward-comment-skip (&optional count limit)
   "Move forward to the next comment skip.
@@ -4151,8 +4426,8 @@ regardless of its data type."
   (save-excursion
     (let ((count 0) (limit (line-end-position)) char)
       (while (progn
-	       (skip-chars-forward "^%{}\\\\" limit)
-	       (when (< (point) limit)
+	       (skip-chars-forward "^{}\\\\" limit)
+	       (when (and (< (point) limit) (not (TeX-in-comment)))
 		 (setq char (char-after))
 		 (forward-char)
 		 (cond ((eq char ?\{)
@@ -4186,12 +4461,13 @@ It should be accessed through the function `TeX-search-syntax-table'.")
   "Return a syntax table for searching purposes.
 ARGS may be a list of characters.  For each of them the
 respective predefined syntax is set.  Currently the parenthetical
-characters ?{, ?}, ?[, and ?] are supported.  The syntax of each
-of these characters not specified will be reset to \" \"."
-  (let ((char-syntax-alist '((?\{ . "(}")
-			     (?\} . "){")
-			     (?\[ . "(]")
-			     (?\] . ")["))))
+characters ?{, ?}, ?[, ?], ?\(, ?\), ?<, and ?> are supported.
+The syntax of each of these characters not specified will be
+reset to \" \"."
+  (let ((char-syntax-alist '((?\{ . "(}") (?\} . "){")
+			     (?\[ . "(]") (?\] . ")[")
+			     (?\( . "()") (?\) . ")(")
+			     (?\< . "(>") (?\> . ")<"))))
     ;; Clean entries possibly set before.
     (modify-syntax-entry ?\\ " " TeX-search-syntax-table)
     (modify-syntax-entry ?@ " " TeX-search-syntax-table)
@@ -4206,6 +4482,7 @@ of these characters not specified will be reset to \" \"."
       (modify-syntax-entry (car elt) " " TeX-search-syntax-table))
     ;; Now set what we got.
     (dolist (elt args)
+      (unless (assoc elt char-syntax-alist) (error "Char not supported"))
       (modify-syntax-entry elt (cdr (assoc elt char-syntax-alist))
 			   TeX-search-syntax-table))
     ;; Return the syntax table.
@@ -4658,22 +4935,17 @@ sign.  With optional ARG, insert that many dollar signs."
     (insert "$")))
   (TeX-math-input-method-off))
 
+(defvar TeX-math-input-method-off-regexp
+  "^\\(chinese\\|japanese\\|korean\\bulgarian\\russian\\)"
+  "Regexp matching input methods to be deactivated when entering math mode.")
+
 (defun TeX-math-input-method-off ()
   "Toggle off input method when entering math mode."
   (and TeX-math-toggle-off-input-method
        (texmathp)
-       (TeX-toggle-off-input-method)))
-
-(defun TeX-toggle-off-input-method ()
-  "Toggle off input methods.
-Currently, only support CJK input methods provided by LEIM package."
-  (cond
-   ;; LEIM Package
-   ((and (boundp 'current-input-method) current-input-method
-	 (string-match "^\\(chinese\\|japanese\\|korean\\)" current-input-method))
-    (inactivate-input-method))
-   (t );; do nothing
-   ))
+       (boundp 'current-input-method) current-input-method
+       (string-match TeX-math-input-method-off-regexp current-input-method)
+       (inactivate-input-method)))
 
 ;;; Simple Commands
 
@@ -4927,11 +5199,10 @@ Your bug report will be posted to the AUCTeX bug reporting list.
 		 ;; Explicitely supply doc directory for
 		 ;; non-kpathsea-based TeX systems.
 		 (unless (stringp TeX-kpathsea-path-delimiter)
-		   (TeX-macro-global-internal
-		    "latex" '("/doc/")
-		    ;; This likely won't improve the outcome but does
-		    ;; not make the situation worse than in the nil case.
-		    `(,@TeX-macro-global ,@TeX-macro-private)))
+		   (or (TeX-tree-expand
+			'("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST")
+			"latex" '("/doc/"))
+		       `(,@TeX-macro-global ,@TeX-macro-private)))
 		 '("dvi" "pdf" "ps" "txt" "html") t t)))
 	    (lambda (doc)
 	      ;; texdoc in MiKTeX requires --view in order to start
@@ -4998,7 +5269,13 @@ NAME may be a package, a command, or a document."
 	  (unless (null completions)
 	    (add-to-list 'docs (cons completions (nth 0 elt)))))))
     (if (null docs)
-	(message "No documentation found")
+	(progn
+	  (if (executable-find "texdoc")
+	      ;; Fallback if we did not find anything via the backend list.
+	      (let ((doc (read-from-minibuffer "Input for `texdoc': ")))
+		(when doc (call-process "texdoc" nil 0 nil "--view" doc)))
+	    ;; Give up.
+	    (message "No documentation found")))
       ;; Ask the user about the package, command, or document.
       (when (and (interactive-p)
 		 (or (not name) (string= name "")))
@@ -5105,8 +5382,7 @@ NAME may be a package, a command, or a document."
 ;; buffer-local values of it.
 (eval-after-load "desktop"
   '(progn
-     (dolist (elt '(TeX-master TeX-PDF-mode TeX-interactive-mode
-			       TeX-Omega-mode))
+     (dolist (elt '(TeX-master))
        (unless (member elt (default-value 'desktop-locals-to-save))
 	 (setq-default desktop-locals-to-save
 		       (cons elt (default-value 'desktop-locals-to-save)))))
@@ -5118,7 +5394,6 @@ NAME may be a package, a command, or a document."
 (put 'TeX-insert-dollar 'delete-selection t)
 (put 'TeX-insert-quote 'delete-selection t)
 (put 'TeX-insert-backslash 'delete-selection t)
-
 
 (provide 'tex)
 

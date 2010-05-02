@@ -44,7 +44,7 @@
 		 (> depth 20))
 	(setq depth (if (fboundp 'read-number)
 			(read-number "Ordinal depth: ")
-		      (string-to-number (read-input "Ordinal depth: "))))
+		      (string-to-number (read-string "Ordinal depth: "))))
 	(when (or (< depth 0)
 		  (> depth 20))
 	  (message "Ordinal depth must be between 0 and 20")

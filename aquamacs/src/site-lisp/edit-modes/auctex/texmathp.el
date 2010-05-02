@@ -233,14 +233,15 @@ it points to the limit used for searches, usually two paragraphs up.")
 
 ;; We need our own syntax table to play with the syntax of () [] and {}
 ;; For speed reasons we define it statically instead of copying it each time.
-(defvar texmathp-syntax-table (make-syntax-table)
+(defvar texmathp-syntax-table
+  (let ((table (make-syntax-table)))
+    (mapc (lambda (x) (modify-syntax-entry (car x) (cdr x) table))
+	  '((?\\ . "\\") (?\f .">")  (?\n . ">")  (?% . "<")
+	    (?\[ . ".")  (?\] . ".") (?\{ . "(}") (?\} . "){")
+	    (?\( . ".")  (?\) . ".") (?\" . ".")  (?& . ".")   (?_ . ".")
+	    (?@ . "_")   (?~ . " ")  (?$ . "$")   (?' . "w")))
+    table)
   "Syntax table used while texmathp is parsing.")
-(mapcar (lambda (x) (modify-syntax-entry (car x) (cdr x) texmathp-syntax-table))
-	'((?\\ . "\\") (?\f .">")  (?\n . ">")  (?% . "<")
-	  (?\[ . ".")  (?\] . ".") (?\{ . "(}") (?\} . "){")
-	  (?\( . ".")  (?\) . ".") (?\" . ".")  (?& . ".")   (?_ . ".")
-	  (?@ . "_")   (?~ . " ")  (?$ . "$")   (?' . "w")
-	  ))
 
 ;;;###autoload
 (defun texmathp ()
