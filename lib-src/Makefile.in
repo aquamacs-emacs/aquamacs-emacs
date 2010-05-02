@@ -34,6 +34,8 @@ CFLAGS=@CFLAGS@
 version=@version@
 configuration=@configuration@
 EXEEXT=@EXEEXT@
+C_SWITCH_SYSTEM=@c_switch_system@
+C_SWITCH_MACHINE=@c_switch_machine@
 
 # Program name transformation.
 TRANSFORM = @program_transform_name@
@@ -150,6 +152,12 @@ LIBS_MAIL=@LIBS_MAIL@
 ## Extra libraries to use when linking movemail.
 LIBS_MOVE = $(LIBS_MAIL) $(KRB4LIB) $(DESLIB) $(KRB5LIB) $(CRYPTOLIB) $(COM_ERRLIB) $(LIBHESIOD) $(LIBRESOLV)
 
+# Those files shared with other GNU utilities need HAVE_CONFIG_H
+# defined before they know they can take advantage of the information
+# in ../src/config.h.
+ALL_CFLAGS = $(C_SWITCH_SYSTEM) $(C_SWITCH_MACHINE) -DHAVE_CONFIG_H -I. -I../src -I${srcdir} -I${srcdir}/../src ${LDFLAGS} ${CPPFLAGS} ${CFLAGS}
+LINK_CFLAGS = $(C_SWITCH_SYSTEM) $(C_SWITCH_MACHINE) -DHAVE_CONFIG_H -I. -I../src -I${srcdir} -I${srcdir}/../src ${LDFLAGS} ${CFLAGS}
+CPP_CFLAGS = $(C_SWITCH_SYSTEM) $(C_SWITCH_MACHINE) -DHAVE_CONFIG_H -I. -I../src -I${srcdir} -I${srcdir}/../src ${CPPFLAGS} ${CFLAGS}
 
 # ========================== start of cpp stuff =======================
 /* From here on, comments must be done in C syntax.  */
@@ -161,19 +169,6 @@ LIBS_MOVE = $(LIBS_MAIL) $(KRB4LIB) $(DESLIB) $(KRB5LIB) $(CRYPTOLIB) $(COM_ERRL
 /* Some s/SYSTEM.h files define this to request special libraries.  */
 #ifndef LIBS_SYSTEM
 #define LIBS_SYSTEM
-#endif
-
-/* Some m/MACHINE.h files define this to request special libraries.  */
-#ifndef LIBS_MACHINE
-#define LIBS_MACHINE
-#endif
-
-#ifndef C_SWITCH_SYSTEM
-#define C_SWITCH_SYSTEM
-#endif
-
-#ifndef C_SWITCH_MACHINE
-#define C_SWITCH_MACHINE
 #endif
 
 #undef MOVEMAIL_NEEDS_BLESSING
@@ -189,17 +184,8 @@ LIBS_MOVE = $(LIBS_MAIL) $(KRB4LIB) $(DESLIB) $(KRB5LIB) $(CRYPTOLIB) $(COM_ERRL
 #define BLESSMAIL
 #endif
 
-LOADLIBES=LIBS_SYSTEM LIBS_MACHINE
+LOADLIBES=LIBS_SYSTEM
 
-/* Those files shared with other GNU utilities need HAVE_CONFIG_H
-   defined before they know they can take advantage of the information
-   in ../src/config.h.  */
-ALL_CFLAGS = C_SWITCH_SYSTEM C_SWITCH_MACHINE -DHAVE_CONFIG_H \
-   -I. -I../src -I${srcdir} -I${srcdir}/../src ${LDFLAGS} ${CPPFLAGS} ${CFLAGS}
-LINK_CFLAGS = C_SWITCH_SYSTEM C_SWITCH_MACHINE -DHAVE_CONFIG_H \
-   -I. -I../src -I${srcdir} -I${srcdir}/../src ${LDFLAGS} ${CFLAGS}
-CPP_CFLAGS = C_SWITCH_SYSTEM C_SWITCH_MACHINE -DHAVE_CONFIG_H \
-   -I. -I../src -I${srcdir} -I${srcdir}/../src ${CPPFLAGS} ${CFLAGS}
 
 .SUFFIXES: .m
 

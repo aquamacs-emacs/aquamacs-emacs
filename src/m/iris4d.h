@@ -23,11 +23,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define WORDS_BIG_ENDIAN
 
-/* Define NO_ARG_ARRAY if you cannot take the address of the first of a
- * group of arguments and treat it as an array of the arguments.  */
-
-#define NO_ARG_ARRAY
-
 /* Define EXPLICIT_SIGN_EXTEND if XINT must explicitly sign-extend
    the bit field into an int.  In other words, if bit fields
    are always unsigned.
@@ -35,12 +30,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    This flag only matters if you use USE_LISP_UNION_TYPE.  */
 
 #define EXPLICIT_SIGN_EXTEND
-
-/* This machine requires completely different unexec code
-   which lives in a separate file.  Specify the file name.  */
-
-#undef UNEXEC
-#define UNEXEC unexelf.o
 
 #define TEXT_START 0x400000
 
