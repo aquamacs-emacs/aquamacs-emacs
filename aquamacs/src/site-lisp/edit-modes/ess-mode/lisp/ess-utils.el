@@ -28,7 +28,7 @@
 (defun ess-inside-string-or-comment-p (pos)
   "Return non-nil if POSition [defaults to (point)] is inside string or comment
  (according to syntax). NOT OKAY for multi-line comments!!"
-  ;;FIXME (defun S-calculate-indent ..) in ./essl-s.el can do that ...
+  ;;FIXME (defun S-calculate-indent ..) in ./ess-s-l.el can do that ...
   (interactive "d");point by default
   (let ((pps (save-excursion
 	       (parse-partial-sexp
@@ -449,10 +449,6 @@ This function will work even if LIST is unsorted.  See also `uniq'."
   "Drop all entries that do not \"look like\" directories."
   (ess-flatten-list (mapcar 'file-name-directory file-strings)))
 
-(defun ess-chop1 (string)
-  "chop last character; typically to remove trailing \"/\"."
- (substring string 0 -1))
-
 
 (defun ess-flatten-list (&rest list)
   "Take the arguments and flatten them into one long list.
@@ -676,5 +672,18 @@ Copied almost verbatim from gnus-utils.el (but with test for mac added)."
 		(setq ess-temp-replacement-diff (- ess-temp-replacement-diff 1)))
 
            (replace-match ess-temp-replacement-string))))))
+
+(defun ess-num-or-zero (arg)
+"*If a number, then return that number, otherwise return 0."
+(or (and (numberp arg) arg) 0))
+
+(defun ess-change-directory (path)
+  "Set the current working directory to PATH for both *R* and Emacs."
+  (interactive "DDirectory to change to: ")
+
+  (when (file-exists-p path)
+    (ess-command (concat "setwd(\"" path "\")\n"))
+    ;; use file-name-as-directory to ensure it has trailing /
+    (setq default-directory (file-name-as-directory path))))
 
 (provide 'ess-utils)

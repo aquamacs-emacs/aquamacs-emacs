@@ -1,6 +1,6 @@
-This is ess.info, produced by makeinfo version 4.8 from ess.texi.
-
 ESS -- Emacs Speaks Statistics
+This is ess.info, produced by makeinfo version 4.13 from ess.texi.
+
 ******************************
 
 INFO-DIR-SECTION Emacs
@@ -14,14 +14,16 @@ File: ess.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 ESS: Emacs Speaks Statistics
 ****************************
 
-ESS version 5.3.10
+ESS version 5.8
 
      by  A.J. Rossini,
          R.M. Heiberger,
          K. Hornik,
          M. Maechler,
-         R.A. Sparapani
-     and S.J. Eglen.
+         R.A. Sparapani,
+         S.J. Eglen,
+         S.P. Luque
+     and H. Redestig.
 
      Emacs Speaks Statistics (ESS) provides an intelligent, consistent
      interface between the user and the software.  ESS interfaces with
@@ -206,719 +208,819 @@ File: ess.info,  Node: New features,  Next: Credits,  Prev: Features,  Up: Intro
 1.2 New features in ESS
 =======================
 
-Changes/New Features in 5.3.10:
-   * Fixed noweb-mode bug accidentally introduced into 5.3.9
+     Changes/New Features in 5.8:
+        * ESS[R]: New ess-rutils.el with utilities for listing, loading,
+          installing, and updating packages, as well as object
+          manipulation (listing, viewing, and deleting).  It also
+          provides an alternative to RSiteSearch() that uses the
+          browse-url function, so results can be viewed in an Emacs web
+          browser.
 
-   * In noweb-mode, e.g., Rnw-mode, electric "<" also inserts closing
-     "@".   Further, the code chunk boundaries are better kept
-     up-to-date, such that  code[R] <-> text[LaTeX] minor mode
-     switching should happen more reliably.
+        * ESS[R]: much more extensive Roxygen interface, via ess-roxy.el
+          from Henning Redestig. Ess-roxy supports filling of roxygen
+          fields,  generation and updating roxygen templates,
+          completion of roxygen tags,  basic navigation (marking and
+          moving between entries), foling using  hs-minor-mode and
+          preview of the Rd file.
+
+        * Emacs lisp files have got better names (partly, for now).
+
+     Changes/New Features in 5.7:
+        * ESS[R]: loading a source file (`C-c C-l') now works in
+          Windows, similarly to other platforms;  (further; it had
+          accidentally been broken in ESS 5.6 on all platforms)
+
+     Changes/New Features in 5.6:
+        * ESS[R]: help() calls have to differ from old default, with
+          newer  versions of R; currently via .help.ESS <-
+          function(...) hack.
+
+     Changes/New Features in 5.4:
+        * ESS[SAS]: The long overdue change from `make-regexp' to
+          `regexp-opt' for font-locking is complete.  The new
+          `regexp-opt' is now the default since it is better than the
+          old code in many ways (and especially more maintainable).
+          However, there are certainly some special cases missed (bug
+          reports and patches welcome!).  Setting
+          `ess-sas-run-regexp-opt' to `nil' will result in the old code
+          being used.
+
+        * ESS[BUGS] and ESS[JAGS]: typing `=' now results in  `<-'.
+
+        * ESS[R] function arguments "show" `(ess-r-args-show)' now
+          uses the new `(tooltip-show-at-point)' contributed by Erik
+          Iverson.
+
+        * Toolbar icons now also work in (beta) Emacs 23.
+
+        * ESS[S]: New function `ess-change-directory' for setting both
+          emacs' current directory and the directory of an *R* or *S*
+          buffer.
+
+        * ESS[S] when transient-mark-mode is true, the mark is now kept,
+          rather than deactivated, thanks to a patch from David Reitter.
+
+     Changes/New Features in 5.3.11:
+        * ESS[SAS]: work around bug in Emacs 22.2 & 22.3 which fails to
+          set case-fold fontification automatically.
+
+        * Rd mode: support new keyword 'Rdversion'
+
+        * ESS[R]: now again works with Emacs 21.x
+
+     Changes/New Features in 5.3.10:
+        * Fixed noweb-mode bug accidentally introduced into 5.3.9
+
+        * In noweb-mode, e.g., Rnw-mode, electric "<" also inserts
+          closing "@".   Further, the code chunk boundaries are better
+          kept up-to-date, such that  code[R] <-> text[LaTeX] minor
+          mode switching should happen more reliably.
+
+        * In noweb-mode, fix a buglet in rare [Enter] or [Tab]
+          behavior; further,  by default disable the former `[[' ..
+          `]]'  code-protection-when-filling  behavior which has been
+          found to be buggy.
+
+     Changes/New Features in 5.3.9:
+        * ESS[SAS]: evince PDF viewer now supported as well; search
+          order: evince, Xpdf, Adobe/Acrobat Reader
+
+        * ESS[R]: added support for Roxygen, potentially to be extended.
+
+        * ESS[S] (and R): inferior (`*R*') and transcript modes no
+          longer fontify language keywords (such as `for', `in', etc).
+
+        * iESS[Stata]: Customize the `ess-sta-delimiter-friendly'
+          setting to `t' to convert embedded semi-colons to newlines
+          for Stata processing.
+
+        * Sweave fix for embedded blanks in PDF reader and PDF files
+
+        * Several fixes for Major Mode Convention violations in
+          `ess-mode' and `noweb-mode'.
+
+        * ESS[JAGS]: `M-x comment-region' now available!
+
+        * ESS[S] The `ess-swv-*' commands (and keybindings) are now in
+          a submenu of the "Noweb" menu, when editing Sweave files.
+
+     Changes/New Features in 5.3.8:
+        * ESS[JAGS]: more separation from ESS[BUGS] (as much as is
+          currently planned); now `C-c C-c' on an empty `.jmd' creates
+          a template as it should; symbolic links are created for CODA
+          output so BOA is happy: from `index.txt' to `.ind' and
+          `chain#.txt' to `#.out'
+
+        * ESS[SAS]: buffer-local `ess-sas-submit-command' and
+          `ess-sas-submit-command-options' now recognized by
+          `ess-sas-submit-region'
+
+        * ESS[S]: When trying to evaluate code in an S language buffer
+          and  there is no associated process, now start R
+          automatically instead of  signalling an error.  Also, restart
+          R if there is an associated process  which is not running.
+          However, do not start R just via the "electric"  `('
+          (`ess-r-args-auto-show').
+
+        * ESS[S]: For (one-line) functions withOUT '{ .. }' bodys, the
+          end  of function is now correctly found more often.  This
+          notably improves  `C-c C-c'
+          (`ess-eval-function-or-paragraph-and-step').
+
+        * ESS[JAGS]: cleanup/re-organization of elisp code; symbolic
+          links for CODA output are now only created by the new JAGS
+          `system' command in version 1.0.3; specify whether this
+          command is available via `ess-jags-system'; if not present,
+          then no links are created so that the `*shell*' buffer does
+          not become unresponsive during the batch run
+
+     Changes/New Features in 5.3.7:
+        * ESS: `ess-default-style' now *is* customizable, i.e.,
+          changing its value in `~/.emacs' now does have the desired
+          effect.
+
+        * ESS: `ess-font-lock-mode' is a new variable (default: t)
+          which controls whether font-locking is enabled in ESS buffers.
+
+        * ESS[R]: for XEmacs on Windows; another tweak to find R
+          versions
+
+        * ESS[SAS]: font-locking updated for ODS and SAS Bayesian
+          Procedures; a more consistent handling of SAS options by
+          `ess-sas-submit-command-options' which is buffer-local;
+          portable snooze for MS Windows via customize-able
+          `ess-sleep-for' (floats welcome); Xpdf now supported as a PDF
+          viewer
+
+        * ESS[Rnw]: now also works with "emacs -nw" and Emacs 22.
+
+        * ESS[JAGS]: now requires JAGS 1.0 (see the new ESS for JAGS
+          help section for more information): both need work;
+          suggestions welcome
+
+        * ESS[R]: [TAB] completion now uses the R-internal completion
+          mechanism (for R >= 2.5.0).
+
+        * ESS[R] ([S]): interpretation of "_" as assignment has been
+          removed in `ess-continued-statement-p' for R and S.
+
+        * several internal code cleanups.
+
+        * ESS[R]: An experimental version of a new command `Rgui' on MS
+          Windows to send lines directly from emacs to `Rgui' is
+          available in file `lisp/essd-rgui.el'.  Preliminary
+          documentation is in file `doc/rgui-doc.txt'.
+
+     Changes/New Features in 5.3.6:
+        * ESS: for XEmacs, using "gnuclient" (without a "-q") works for
+          things like fix() after M-x gnuserv-start has been done.
+
+        * ESS[R]: M-x R-newest should now work in more situations on MS
+          Windows, e.g., when R has been installed in a non-default
+          "ProgramFiles"  directory tree.  In these cases, there's no
+          need to specify the name (and  full path) of the R program
+          anymore.
+
+        * ESS[R]: For XEmacs, startup (with new tooltip code) works
+          again.
+
+     Changes/New Features in 5.3.5:
+        * ESS[R] a new defun is available, `M-x R-newest', which will
+          start the newest version of R that it can find on your system.
+
+        * ESS[R] add Sven Hartenstein's "R function arguments tips"
+          functionality, via new file `../lisp/essd-r-args.el'.   Note
+          that this includes an "electric "("" behavior inside `R-mode'
+          which is _active by default_ and can be customized via
+          `ess-r-args-electric-paren'; i.e., use `(setq
+          ess-r-args-electric-paren nil)' to turn it off.  Further,
+          `ess-r-args-show-as' allows to switch to the "tooltip" mode.
+
+        * ESS: functions `ess-get-pdf-viewer' and *-ps-viewer; built on
+          new  customizable variables `ess-pdf-viewer-pref' and
+          `ess-ps-viewer-pref'; currently used in `ess-swv-PDF' and
+          `*-PS'.
+
+        * ESS[R] Improved `ess-swv-PDF' to run pdf viewer only if
+          pdflatex was ok
+
+        * ESS[R] Improved `ess-swv-weave' to start R automatically if
+          none is running.
+
+        * ESS: Do no longer ask _which_ ESS process to use if there  is
+          only one.
+
+     Changes/New Features in 5.3.4:
+        * ESS[R] now better work with options(error=recover); and the
+          new default of CHM help files on windows.
+
+        * ESS[R] some more cleanup in the "sweave" functions
+
+        * miscellaneous fixes
+
+     Changes/New Features in 5.3.3:
+        * ESS[S] fix buglet (5.3.2 only) which left command prompt in
+          "execute buffer" and hence help files.
+
+        * new customizable variable `ess-display-buffer-reuse-frames'
+          set to true (which changes default behavior) such that
+          execution or help *frames* are reused.
+
+     Changes/New Features in 5.3.2:
+        * Classic BUGS now supported by `(require 'essd-bugs)' with
+          ESS[BUGS]       and JAGS by `(require 'essd-jags)' with
+          ESS[JAGS].  But, only one       of them can be used at a time
+          since they don't play nice together.  Also,       `C-c C-c'
+          is now bound to the function `ess-bugs-next-action'
+          (`F12' has been retired).  And finally, note that
+          `essl-bug.el'       is deprecated and the replacement is
+          `essl-bugs.el'.
+
+        * ESS[R] Improved some of the "Sweave-make"  functions (yet
+          scarcely documented) in `ess-swv.el'.
+
+        * ESS[S] No longer mess with .Last.value (nor in other
+          "languages").
+
+     Changes/New Features in 5.3.1:
+        * See the docs for 2 ways to install ESS for XEmacs
+            1. by uncommenting the XEmacs part of             Section 1
+               of `Makeconf' and performing `make install'
+
+            2. by unpacking either             `ess-5.3.1.tgz' or
+               `ess-5.3.1.zip' into
+               `PREFIX/lib/xemacs/site-packages' on unix or
+               `PREFIX\XEmacs\site-packages' on windows
+
+        * ESS[R]: fixed bugs so that Rterm.exe can be found by XEmacs
+
+        * ESS[S]: `ess-toggle-S-assign-key' is slightly changed; in
+          particular, the default `ess-assign-key' is now `C-x ='.
+
+        * ESS[R]: `M-x R-site-search' is a new (slightly experimental)
+          utility similar to R's `RSiteSearch(..)' but with the
+          advantage of  using Emacs' preferred browser, see
+          `browse-url-browser-function'
+
+     Changes/New Features in 5.3.0:
+        * ESS[BUGS]: sanely re-format statistical output, `.bog', from
+          scientific notation to numbers rounded with 4 decimal places
+          with `M-x ess-bugs-sci-round-to-4-dp'.
+
+        * The keys for navigating among section headings in help buffers
+          worked, but only for one language per session; they should
+          now work for multiple languages.  (They were also broken on
+          Windows machines.)
+
+        * ESS[S] long standing buglets in the internal logic for loading
+          lisp code on Windows.  Particularly fixed behavior in help
+          mode with S-plus GUI.
+
+        * New variable, `ess-use-inferior-program-name-in-buffer-name',
+          which enables using the executable name instead of the
+          dialect name for R. Feature request.
+
+        * ESS[S] `ess-execute-screen-options' now also works correctly
+          when there is more than one window *side-by-side* in the same
+          frame and runs in the correct buffer also when there is more
+          than one S buffer.
+
+        * iESS[S] new functions `ess-eval-paragraph-and-step' and
+          `ess-eval-function-or-paragraph-and-step' are bound to keys
+          `C-c C-p' and `C-c C-c' respectively and to the menu in
+          ESS-mode; also bound in the help mode (for evaluating
+          examples).
+
+        * ESS[S] new function `ess-toggle-S-assign-key' allows to
+          assign the " <- " insertion to an arbitrary key.
+
+
+     Changes/New Features in 5.2.12:
+        * ESS[SAS]: `M-;' fixed, but the XEmacs function `comment-dwim'
+          may be broken, if so, use `M-x comment-region' and `M-x
+          uncomment-region' instead; only valid PROCs are fontified
+          which is very helpful finding syntax errors (currently
+          supported: BASE, ETS, FSP, GRAPH, IML, INSIGHT and STAT); the
+          "feature" where `F'-keys take you to an empty buffer when the
+          requested destination is a file that does not exist has been
+          fixed, now the request results in a no-op.  Further, sas-mode
+          now also works in simple terminals.
+
+        * Rterm/Cygwin combination works under Microsoft Windows.
+
+        * ESS[R]: internal calls use baseenv() instead of NULL and
+          define 'baseenv' where needed.
+
+        * New experimental support for installing ESS.  See the file
+          `lisp/ess-install.el'.
+
+     Changes/New Features in 5.2.11:
+        * ESS Info entry and `dir' handled more effectively for GNU
+          Emacs users
+
+        * ESS[SAS]: temporary files created for batch submission of a
+          region are now named based on the current file; see
+          `ess-sas-file-root' for details; all `lag' and `dif'
+          functions now fontified correctly
+
+        * iESS[SAS]: fixed a few nagging bugs, however, still does not
+          appear to work at this time; please let us know if you have
+          any ideas.
+
+        * ESS[S]: Support for running other versions of Splus has been
+          added for unix.  Two new variables, `ess-s-versions' and
+          `ess-s-versions-list', are used to tell ESS what other
+          versions of Splus you would like to run.
+
+     Changes/New Features in 5.2.10:
+        * ESS[R]: ess-r-versions can no longer be customized (since the
+          customization was not taking effect unless customizations
+          were loaded before ESS).  Its value has been changed so that
+          it will also find R executables beginning "R-devel" and
+          "R-patched".  If you wish to change this variable, it must be
+          set in your `.emacs' before ESS is loaded.
+
+        * Installation with GNU Make enhanced:  unix and unix-like
+          operating systems will now be able to install ESS for all
+          users in either a GNU Emacs site-lisp or an XEmacs package
+          configuration by editing `lisp/ess-site.el' and `Makeconf'
+          accordingly, then issuing `make install'
+
+        * ESS[S]: Filename completion (inside strings) now also works in
+          XEmacs for R and S-plus.
+
+     Changes/New Features in 5.2.9:
+        * ESS[R] for Windows:  the \ directory character bug with
+          respect to ess-load-file has been eradicated.
+
+        * iESS[SAS]: `C-c C-r' and `C-c C-b' once again work as
+          intended and documented.
+
+        * ESS[S]: M-x ess-fix-EQ-assign is a bit more agressive.
+
+        * ESS[S]: Imenu now also shows setAs(), etc.
+
+        * ESS[R]: R function pattern enhanced with underlying code such
+          that  `M-C-a' (`ess-beginning-of-function') etc now work for
+          many more  cases, including S4 method definitions.
+
+        * iESS[R]: myOwnhelp(1) no longer wrongly triggers help(1).
+
+        * ESS[R]: Improved detection of bogus help buffers: valid help
+          buffers containing with the string "no documentation"(e.g.
+          contour)  were being treated as bogus.
+
+        * ESS[R]: In R help buffers, if
+          `options("help.try.all.packages" =  TRUE)' then `?rlm' will
+          list which packages rlm is defined in.  This help  buffer is
+          not bogus, but instead is now relabelled "*help[R](rlm in
+          packages)*".
+
+        * ESS[STA]: add "//" as comment starting character to
+          syntax-table.
+
+     Changes/New Features in 5.2.8:
+        * iESS: [Tab] completes *file* names "inside string" as in
+          earlier (<= 5.2.3) ESS versions.
+
+     Changes/New Features in 5.2.7:
+        * If you use Custom to change the variable ess-toolbar-items,
+          the new toolbar is used in all subsequent ESS buffers.
+
+        * ESS[SAS]: new feature:  if ess-sas-log-max >0 and your .log
+          grows to more than ess-sas-log-max bytes, just the first
+          ess-sas-log-max bytes are refreshed; this is helpful when
+          your .sas program generates lots of error messages and gets
+          too big for emacs to display
+
+        * ESS[R/S]: `M-;' in R/S editing modes will now indent with
+          either one or two hashes depending on context.
+
+        * ESS[R]: David Whiting's Sweave extensions (to 'noweb') are
+          now available (from ess-swv.el loaded by default).
+
+     Changes/New Features in 5.2.6:
+        * Removed non-ASCII characters in a few files.
+
+        * ESS[R]: now works better when UTF-8 locale is active; in
+          particular, you get correct directional quotes in R's startup
+          message  for R-devel (unstable development version of R
+          2.1.0) when using  environment variables LANGUAGE=en@quot
+          LC_ALL=en_US.UTF-8
+
+        * ESS[SAS]: toggling of .log mode improved (`F10'); toggling of
+          .lst mode now also available (`C-F10'); killing all buffers
+          associated with .sas program no longer bound to `C-F10' since
+          its a bit overzealous.
+
+        * S-Plus 7 for Windows is now recognized.
+
+        * ESS[S] (incl. R): in auto-fill mode, strings are not wrapped
+          anymore.
+
+        * ESS[S] (incl. R): font-lock now correctly differs between R
+          and S, e.g., for "_"; both now fontify warning(.) and S does
+          terminate() additionally.
+
+        * Support for `bell' aka `beep' aka `ding' aka `alarm' in all
+          inferior modes: When \a is output "to the the console" at the
+          beginning of a line, the bell is rung.
+
+     Changes/New Features in 5.2.5:
+        * ESS[R]: `C-c C-q' or `Quit S' from the menu now should work
+          (again and less klunkily) and do not append `-exited' to the
+          buffer name.  Further, the behavior of `(ess-cleanup)',
+          called from ess-quit, now depends on the new customizable
+          variable `ess-S-quit-kill-buffers-p' which defaults to `nil'.
+          Consequently, the question _"Delete all buffers associated
+          with ..?"_ will not be asked anymore by default.
+
+        * ESS[SAS] - ess-ebcdic-to-ascii-search-and-replace will now
+          work with the `recode' application as well which is available
+          on many platforms
+
+        * ESS[S] (incl. R): Name completion for slots of S4 objects now
+          works!
+
+     Changes/New Features in 5.2.4:
+        * The documentation now includes an overview of how to use the
+          emacs TAGS facility for S functions.  (The distribution also
+          used to contain a directory `etc/other/Tags' where a ~1990
+          version of `etags.c' was distributed; this is no longer
+          relevant and so has been deleted.)
+
+        * ESS[SAS] - When you are working with EBCDIC files on an ASCII
+          platform, .log NOTEs may display as gibberish since the EBCDIC
+          characters are not converted to ASCII prior to their display.
+          So, the function ess-ebcdic-to-ascii-search-and-replace is
+          provided for convenience and is bound to `C-F11'.  This
+          function requires the `dd' command (only available on unix or
+          unix-like platforms).
+
+        * ESS: Completion of object names is now always done
+          dynamically rather than allowing the option of using a
+          pre-computed database (by `ess-create-object-name-db') since
+          modern computers seem fast enough for dynamic completion.
+          (We expect few users, if any, have been using the
+          pre-computed database method.)
+
+        * ESS: object completion in iESS buffers running on Windows was
+          very slow (for GNU Emacs, but not XEmacs) and has now been
+          fixed.  Further, it was more or less broken for all versions
+          of S-plus 6.x, and has been fixed to work everywhere but with
+          the Windows' GUI of S-plus.  The list of objects now shows
+          unique names also when an object appears more than once in
+          the search path.
+
+        * ESS[R]: Completion of object names now also includes those
+          starting with ".".
+
+     Changes/New Features in 5.2.3:
+        * ESS: When new inferior ESS processes are created, by default
+          they will replace the current buffer (this restores behavior
+          from pre 5.2.0). If you wish new ESS processes to start in
+          another window of the current frame, set
+          inferior-ess-same-window to nil.
+
+        * New variables inferior-Splus-args and inferior-R-args provide
+          a way to pass command line arguments to starting S and R
+          processes.
+
+     Changes/New Features in 5.2.2:
+        * bug-fixes for 5.2.1 (require 'executable), html docs, etc.
+
+        * ess-lisp-directory/../doc/info added to Info-directory-list
+          if ess-info not found by info
+
+        * ESS[R]: If you have other versions of R on your exec-path,
+          such as "R-1.8.1" with Unix or "rw1081" with Windows, ESS
+          will find them and create appropriate functions, such as `M-x
+          R-1.8.1' or `M-x rw1081', for calling them.  By default only
+          Unix programs beginning "R-1" and "R-2" and Windows programs
+          parallel to the version of R in your exec-path will be found,
+          but see ess-r-versions and ess-rterm-versions for ways to
+          find other versions of R.
+
+        * ESS[R]: Other versions of R, such as "R-1.8.1" on Unix and
+          "rw1081" on Windows, are added to the "ESS / Start Process /
+          Other" menu.
+
+        * ESS[S]: If you have other versions of S-Plus on your Windows
+          computer, such as S-Plus 6.1 or S-Plus 4.5, ESS will find
+          them and create appropriate functions, such as `M-x splus61',
+          for calling the console version (Sqpe) inside an emacs
+          buffer.  By default only programs installed in the default
+          location will be found, but see ess-SHOME-versions for ways
+          to find other versions of S-Plus.
+
+        * ESS[S]: Other versions of Sqpe on Windows, such as "splus61",
+          are added to the "ESS / Start Process / Other" menu.
+
+        * ESS[R]: (bug fix) ess-quit (bound to `C-c C-q') should now
+          quit the inferior R process, when issued from either the
+          inferior buffer, or from a .R buffer.
+
+     Changes/New Features in 5.2.1:
+        * ESS[S] (R and S-plus): now have toolbar support with icons to
+          evaluate code in the inferior process or to switch there.
+          This code is experimental and likely to change as XEmacs/Emacs
+          issues get resolved. The toolbar should be enabled if your
+          Emacs displays images, but can be disabled with the variable
+          ess-use-toolbar.  Thanks to David Smith from Insightful for
+          the S-plus logo.
+
+        * ESS[SAS]: ess-sas-graph-view (`F12') enhanced; you can specify
+          external file viewers for each graphics file type via the
+          alist ess-sas-graph-view-viewer-alist; also .jpg/.gif are now
+          handled by image-mode on XEmacs, if available, otherwise by
+          graphics primitives as before
+
+     Changes/New Features in 5.2.0:
+        * ESS[BUGS]:  new info documentation!  now supports interactive
+          processing thanks to Aki Vehtari (mailto:Aki.Vehtari@hut.fi);
+          new architecture-independent unix support as well as support
+          for BUGS v. 0.5
+
+        * ESS[SAS]:  convert .log to .sas with ess-sas-transcript; info
+          documentation improved; Local Variable bug fixes; SAS/IML
+          statements/functions now highlighted; files edited remotely
+          by ange-ftp/EFS/tramp are recognized and pressing SUBMIT
+          opens a buffer on the remote host via the local variable
+          ess-sas-shell-buffer-remote-init which defaults to "ssh";
+          changed the definition of the variable
+          ess-sas-edit-keys-toggle to boolean rather than 0/1; added
+          the function ess-electric-run-semicolon which automatically
+          reverse indents lines containing only "run;"; `C-F1' creates
+          MS RTF portrait from the current buffer; `C-F2' creates MS
+          RTF landscape from the current buffer; `C-F9' opens a SAS
+          DATASET with PROC INSIGHT rather than PROC FSVIEW; "inferior"
+          aliases for SAS batch:  `C-c C-r' for submit region, `C-c
+          C-b' for submit buffer, `C-c C-x' for goto .log; `C-c C-y'
+          for goto .lst
+
+        * ESS[S]: Pressing underscore ("_") once inserts " <- " (as
+          before); pressing underscore twice inserts a literal
+          underscore.  To stop this smart behaviour, add
+          "(ess-toggle-underscore nil)" to your .emacs after ess-site
+          has been loaded; ess-dump-filename-template-proto (new name!)
+          now can be customized successfully (for S language dialects);
+          Support for Imenu has been improved; set ess-imenu-use-S to
+          non-nil to get an "Imenu-S" item on your menubar; ess-help:
+          Now using nice underlines (instead of `nuke-* ^H_')
+
+        * ESS[R]:  After (require 'essa-r), `M-x ess-r-var' allows to
+          load numbers from any Emacs buffer into an existing *R*
+          process; `M-x ess-rdired' gives a "directory editor" of R
+          objects; fixed ess-retr-lastvalue-command, i.e. .Last.value
+          bug (thanks to David Brahm)
+
+        * ESS: Support for creating new window frames has been added to
+          ESS.  Inferior ESS processes can be created in dedicated
+          frames by setting inferior-ess-own-frame to t.  ESS help
+          buffers can also open in new frames; see the documentation
+          for ess-help-own-frame for details.  (Thanks to Kevin Rodgers
+          for contributing code.)
+
+     Changes/New Features in 5.1.24:
+        * The version number is now correct even inside ESS/Emacs
+
+     Changes/New Features in 5.1.23:
+        * Minor more Makefile clean up.
+
+     Changes/New Features in 5.1.22:
+        * Besides info documentation, PDF and HTML documentation are
+          also provided (instead of built using "make") and available
+          on the web as well; see ESS web page
+          (http://ess.r-project.org/) and StatLib
+          (http://lib.stat.cmu.edu/general/ESS/doc)
+
+        * Now that info documentation is available, the README.* files
+          are no longer supported.  However, they are still distributed
+          for what it's worth.
+
+        * ESS is now an XEmacs package!  See XEmacs Installation HOWTO
+          (http://www.xemacs.org/Install/index.html) for details
+          (specifically, items 10-15).
+
+        * ESS[SAS]: more user-friendly enhancements for remote SAS
+          batch jobs with Kermit file transfers (LOG and OUTPUT
+          function key features now supported).  Multiple shells now
+          supported so you can run SAS on different computers from
+          different buffers by setting the buffer-local variable
+          ess-sas-shell-buffer to unique buffer names.
+
+        * Major re-vamping of Makefile/Makeconf.
+
+     Changes/New Features in 5.1.21:
+        * ESS[SAS]: info documentation now available!, see ESS->Help
+          for SAS; `F12' opens GSASFILE nearest point for viewing
+          either within emacs, when available, or via an external
+          viewer; more syntax highlighting keywords; more enhancements
+          for remote SAS batch jobs with Kermit; new framework for
+          remote SAS interactive jobs, see ess-remote
+
+        * ESS[S]: info documentation now available!, see ESS->Help for
+          the S family
+
+        * Makefile: tag now independent of rel; info files made by
+          doc/Makefile and installed in new info sub-directory
+
+     Changes/New Features in 5.1.20:
+        * New `options()$STERM' in the S dialects (S, S-Plus, R).  The
+          S program can determine the environment in which it is
+          currently running.  ESS sets the option to `iESS' or `ddeESS'
+          when it starts an S language process.  We recommend other
+          specific values for S language processes that ESS does not
+          start.
+
+        * New `ess-mouse-me' function, assigned to S-mouse-3 by default.
+          User may click on a word or region and then choose from the
+          menu to display the item, or a summary, or a plot, etc.  This
+          feature is still under development.
+
+        * GNU Emacs 21.1 is now supported (fixed for S dialects, SAS &
+          BUGS), (some from Stephen Eglen).
+
+        * XEmacs 21.x is now supported (fixed w32-using-nt bug)
+
+        * XEmacs on Win (NT) is better supported.
+
+        * Workaround for bug in Sqpe+6 (S-PLUS 6 for Win).
+
+        * should now work even when imenu is not available (for old
+          XEmacsen).
+
+        * ESS[SAS]: XEmacs-Imenu fix; `C-TAB' is globalized along with
+          your function-key definitions, if specified; you can specify
+          your SAS library definitions outside of autoexec.sas for
+          ess-sas-data-view with SAS code placed in the variable
+          ess-sas-data-view-libname, also the dataset name is defaulted
+          to the nearest permanent dataset to point; Speedbar support
+          now works for permanent datasets, please ignore first./last.;
+          new font-locking is now the default with more improvements
+          for font-locking PROCs, macro statements, * ; and %* ;
+          comments; you can toggle sas-log-mode with `F10' which will
+          font-lock your .log (if it isn't too big); submit remote .sas
+          files accessed with ange-ftp, EFS or Tramp (Kermit is
+          experimental) by setting ess-sas-submit-method to 'sh;
+          ess-sas-submit-command and ess-sas-submit-command-options are
+          buffer-local so you can have local file variable sections at
+          the end of your .sas files to request different executables
+          or specify special options and the local file variables are
+          re-read at submit instead of only at file open so that if you
+          make a change it is picked up immediately;
+
+        * ESS[BUGS]: font-lock with `in' fixed.
+
+        * for STATA: font-lock bug fixed.
+
+        * for Rd mode: `C-c C-v' and `switch-process' in menu.
+          further, `C-c C-f' prefix (Rd-font) for inserting or
+          surrounding a word by things such as \code{.},
+          \code{\link{.}}, \emph{.} etc.
+
+        * new functions (ess-directory-function) and
+          (ess-narrow-to-defun) ess-directory <-> default-directory
+          logic (Jeff Mincy).
+
+        * Re-organized Makefile and fixed a few bugs.
+
+     Changes/New Features in 5.1.19:
+        * S+6 now supported (Tony Rossini (Unix) and Rich Heiberger
+          (Windows))
+
+        * New BUGS support through ESS[BUGS] mode (Rodney Sparapani)
+          Templates assist you in writing .bug and .cmd code (.cmd and
+          .log are replaced by .bmd and .bog to avoid emacs extension
+          collisions).  Substitution" parameters facilitate "automagic"
+          generation of data...in" and "init...in" filenames, "const
+          N=" from your data file and "monitor()/stats()" commands.
+          Activated by pressing `F12'.
+
+        * Fixes for `ess-smart-underscore' SAS breakage (Rich Heiberger)
+
+        * You can change between PC and Unix, local and global SAS
+          function-key definitions interactively (Rich Heiberger)
+
+        * `C-Submit' a highlighted region to SAS batch (Rodney
+          Sparapani)
+
+        * New and improved SAS syntax highlighting (Rodney Sparapani)
+          To get the new functionality, set ess-sas-run-make-regexp to
+          nil.  Also available in .log files via `F10'.
+
+        * Open a permanent SAS dataset for viewing via `F9' (Rodney
+          Sparapani) You must have the library defined in autoexec.sas
+          for it to work.
+
+        * User-friendly defaults for `sas-program',
+          `ess-sas-batch-pre-command' and `ess-sas-batch-post-command'
+          as well Customize support for these and other ESS[SAS]
+          variables (Rodney Sparapani)
+
+        * `ess-sas-suffix-2' now defaults to .dat via `F11' (Rodney
+          Sparapani)
+
+        * Emacs/XEmacs, Unix/Windows issues collectively handled in
+          ess-emcs.el
+
+        * defadvice solves problem of missing *ESS* (thanks to Jeff
+          Mincy)
+
+        * Improved manual a bit by including things that were only in
+          `README'.
+
+     Changes/New Features in 5.1.18:
+        * New `ess-smart-underscore' function, now assigned to "_" by
+          default.  Inserts `ess-S-assign' (customizable " <- "),
+          unless inside string and comments where plain "_" is used
+          instead. (MM)
+
+        * Fixes for longstanding interactive SAS breakage (RMH)
+
+     Changes/New Features in 5.1.17:
+        * Documentation for Windows Installation (Rich Heiberger)
+
+        * removal of ess-vars, finalization of customize support (in the
+          sense that there is no more use of ess-vars, but that we need
+          to fix ess-cust) (AJ Rossini)
+
+        * Many small (and large) fixes/contributions (MMaechler)
+
+        * addition of the "S-equal" variable and provide `M-x
+          ess-add-MM-keys' a way to remap "_" to `ess-S-assign',
+          typically " <- ", but customizable. (MMaechler)
+
+     Changes/New Features in 5.1.16:
+        * BUG FIXES
+
+        * Better SAS support
+
+     Changes/New Features in 5.1.15:
+        * BUG FIXES
+
+     Changes/New Features in 5.1.14:
+        * Yet more fixes to SAS mode, (Rich Heiberger and Rodney
+          Sparapani)
+
+        * Customize support (for most Emacsen which support it)
+          (AJRossini)
+
+        * ARC and ViSta support out of the box, and fixes for XLispStat
+          (AJRossini)
+
+     Changes/New Features in 5.1.13:
+        * Version numbering finally all depending on the ./VERSION file,
+          thanks to Martin Maechler.
+
+        * Yet more fixes to SAS mode, thanks to Rich Heiberger.
+
+     Changes/New Features in 5.1.12:
+        * Splus 5.1 stabilized, thanks to Martin Maechler, Bill
+          Venables, Chuck Taylor, and others.
+
+        * More fixes to SAS mode, thanks to Rodney Sparapani and Rich
+          Heiberger.
+
+     Changes/New Features in 5.1.11:
+        * More fixes to Stata mode, thanks to Brendan Halpin
+          (mailto:brendan@essex.ac.uk).
+
+        * fixed bugs in ESS-elsewhere, thanks to many testers
+
+        * README.SPLUS4WIN has DETAILED instructions for S-PLUS 2000,
+          thanks to David Brahm (mailto:brahm@alum.mit.edu).
+
+        * Fixes to SAS mode, thanks to Rodney Sparapani
+
+     Changes/New Features in 5.1.10:
+        * More fixes to Stata mode
+
+        * primitive generic version of ESS-elsewhere
+
+        * Small fixes to SAS/Stata.
+
+     Changes/New Features in 5.1.9:
+        * Stata mode works
+
+        * Literate Data Analysis using Noweb works
+
+     Changes/New Features in 5.1.8:
+        * Bug fixes
+
+        * R documentation mode defaults changed
+
+     Changes/New Features in 5.1.2:
+        * able to use inferior iESS mode to communicate directly with a
+          running S-Plus 4.x process using the Microsoft DDE protocol.
+          We use the familiar (from Unix ESS) `C-c C-n' and related key
+          sequences to send lines from the S-mode file to the inferior
+          S process.  We continue to edit S input files in ESS[S] mode
+          and transcripts of previous S sessions in ESS Transcript
+          mode.  All three modes know the S language, syntax, and
+          indentation patterns and provide the syntactic highlighting
+          that eases the programming tasks.
 
-   * In noweb-mode, fix a buglet in rare [Enter] or [Tab] behavior;
-     further,  by default disable the former `[[' .. `]]'
-     code-protection-when-filling  behavior which has been found to be
-     buggy.
-
-   Changes/New Features in 5.3.9:
-   * ESS[SAS]: evince PDF viewer now supported as well; search order:
-     evince, Xpdf, Adobe/Acrobat Reader
-
-   * ESS[R]: added support for Roxygen, potentially to be extended.
-
-   * ESS[S] (and R): inferior (`*R*') and transcript modes no longer
-     fontify language keywords (such as `for', `in', etc).
-
-   * iESS[Stata]: Customize the `ess-sta-delimiter-friendly' setting to
-     t to convert embedded semi-colons to newlines for Stata processing.
-
-   * Sweave fix for embedded blanks in PDF reader and PDF files
-
-   * Several fixes for Major Mode Convention violations in `ess-mode'
-     and `noweb-mode'.
-
-   * ESS[JAGS]: `M-x comment-region' now available!
-
-   * ESS[S] The `ess-swv-*' commands (and keybindings) are now in a
-     submenu of the "Noweb" menu, when editing Sweave files.
-
-   Changes/New Features in 5.3.8:
-   * ESS[JAGS]: more separation from ESS[BUGS] (as much as is currently
-     planned); now `C-c C-c' on an empty `.jmd' creates a template as
-     it should; symbolic links are created for CODA output so BOA is
-     happy: from `index.txt' to `.ind' and `chain#.txt' to `#.out'
-
-   * ESS[SAS]: buffer-local `ess-sas-submit-command' and
-     `ess-sas-submit-command-options' now recognized by
-     `ess-sas-submit-region'
-
-   * ESS[S]: When trying to evaluate code in an S language buffer and
-     there is no associated process, now start R automatically instead
-     of  signalling an error.  Also, restart R if there is an
-     associated process  which is not running.  However, do not start R
-     just via the "electric"  `(' (`ess-r-args-auto-show').
-
-   * ESS[S]: For (one-line) functions withOUT '{ .. }' bodys, the end
-     of function is now correctly found more often.  This notably
-     improves  `C-c C-c' (`ess-eval-function-or-paragraph-and-step').
-
-   * ESS[JAGS]: cleanup/re-organization of elisp code; symbolic links
-     for CODA output are now only created by the new JAGS `system'
-     command in version 1.0.3; specify whether this command is
-     available via `ess-jags-system'; if not present, then no links are
-     created so that the `*shell*' buffer does not become unresponsive
-     during the batch run
-
-   Changes/New Features in 5.3.7:
-   * ESS: `ess-default-style' now *is* customizable, i.e.,   changing
-     its value in `~/.emacs' now does have the desired effect.
-
-   * ESS: `ess-font-lock-mode' is a new variable (default: t) which
-     controls whether font-locking is enabled in ESS buffers.
-
-   * ESS[R]: for XEmacs on Windows; another tweak to find R versions
-
-   * ESS[SAS]: font-locking updated for ODS and SAS Bayesian Procedures;
-     a more consistent handling of SAS options by
-     `ess-sas-submit-command-options' which is buffer-local; portable
-     snooze for MS Windows via customize-able `ess-sleep-for' (floats
-     welcome); Xpdf now supported as a PDF viewer
-
-   * ESS[Rnw]: now also works with "emacs -nw" and Emacs 22.
-
-   * ESS[JAGS]: now requires JAGS 1.0 (see the new ESS for JAGS help
-     section for more information): both need work; suggestions welcome
-
-   * ESS[R]: [TAB] completion now uses the R-internal completion
-     mechanism (for R >= 2.5.0).
-
-   * ESS[R] ([S]): interpretation of "_" as assignment has been removed
-     in `ess-continued-statement-p' for R and S.
-
-   * several internal code cleanups.
-
-   * ESS[R]: An experimental version of a new command `Rgui' on MS
-     Windows to send lines directly from emacs to `Rgui' is available
-     in file `lisp/essd-rgui.el'.  Preliminary documentation is in file
-     `doc/rgui-doc.txt'.
-
-   Changes/New Features in 5.3.6:
-   * ESS: for XEmacs, using "gnuclient" (without a "-q") works for
-     things like fix() after M-x gnuserv-start has been done.
-
-   * ESS[R]: M-x R-newest should now work in more situations on MS
-     Windows, e.g., when R has been installed in a non-default
-     "ProgramFiles"  directory tree.  In these cases, there's no need
-     to specify the name (and  full path) of the R program anymore.
-
-   * ESS[R]: For XEmacs, startup (with new tooltip code) works again.
-
-   Changes/New Features in 5.3.5:
-   * ESS[R] a new defun is available, `M-x R-newest', which will start
-     the newest version of R that it can find on your system.
-
-   * ESS[R] add Sven Hartenstein's "R function arguments tips"
-     functionality, via new file `../lisp/essd-r-args.el'.   Note that
-     this includes an "electric "("" behavior inside `R-mode'  which is
-     _active by default_ and can be customized via
-     `ess-r-args-electric-paren'; i.e., use `(setq
-     ess-r-args-electric-paren nil)' to turn it off.  Further,
-     `ess-r-args-show-as' allows to switch to the "tooltip" mode.
-
-   * ESS: functions `ess-get-pdf-viewer' and *-ps-viewer; built on new
-     customizable variables `ess-pdf-viewer-pref' and
-     `ess-ps-viewer-pref'; currently used in `ess-swv-PDF' and  `*-PS'.
-
-   * ESS[R] Improved `ess-swv-PDF' to run pdf viewer only if  pdflatex
-     was ok
-
-   * ESS[R] Improved `ess-swv-weave' to start R automatically if  none
-     is running.
-
-   * ESS: Do no longer ask _which_ ESS process to use if there  is only
-     one.
-
-   Changes/New Features in 5.3.4:
-   * ESS[R] now better work with options(error=recover); and the new
-     default of CHM help files on windows.
-
-   * ESS[R] some more cleanup in the "sweave" functions
-
-   * miscellaneous fixes
-
-   Changes/New Features in 5.3.3:
-   * ESS[S] fix buglet (5.3.2 only) which left command prompt in
-     "execute buffer" and hence help files.
-
-   * new customizable variable `ess-display-buffer-reuse-frames' set to
-     true (which changes default behavior) such that execution or help
-     *frames* are reused.
-
-   Changes/New Features in 5.3.2:
-   * Classic BUGS now supported by `(require 'essd-bugs)' with ESS[BUGS]
-          and JAGS by `(require 'essd-jags)' with ESS[JAGS].  But,
-     only one       of them can be used at a time since they don't play
-     nice together.  Also,       `C-c C-c' is now bound to the function
-     `ess-bugs-next-action'       (`F12' has been retired).  And
-     finally, note that `essl-bug.el'       is deprecated and the
-     replacement is `essl-bugs.el'.
-
-   * ESS[R] Improved some of the "Sweave-make"  functions (yet scarcely
-     documented) in `ess-swv.el'.
-
-   * ESS[S] No longer mess with .Last.value (nor in other "languages").
-
-   Changes/New Features in 5.3.1:
-   * See the docs for 2 ways to install ESS for XEmacs
-       1. by uncommenting the XEmacs part of             Section 1 of
-          `Makeconf' and performing `make install'
-
-       2. by unpacking either             `ess-5.3.1.tgz' or
-          `ess-5.3.1.zip' into
-          `PREFIX/lib/xemacs/site-packages' on unix or
-          `PREFIX\XEmacs\site-packages' on windows
-
-   * ESS[R]: fixed bugs so that Rterm.exe can be found by XEmacs
-
-   * ESS[S]: `ess-toggle-S-assign-key' is slightly changed; in
-     particular, the default `ess-assign-key' is now `C-x ='.
-
-   * ESS[R]: `M-x R-site-search' is a new (slightly experimental)
-     utility similar to R's `RSiteSearch(..)' but with the advantage of
-     using Emacs' preferred browser, see `browse-url-browser-function'
-
-   Changes/New Features in 5.3.0:
-   * ESS[BUGS]: sanely re-format statistical output, `.bog', from
-     scientific notation to numbers rounded with 4 decimal places with
-     `M-x ess-bugs-sci-round-to-4-dp'.
-
-   * The keys for navigating among section headings in help buffers
-     worked, but only for one language per session; they should now
-     work for multiple languages.  (They were also broken on Windows
-     machines.)
-
-   * ESS[S] long standing buglets in the internal logic for loading
-     lisp code on Windows.  Particularly fixed behavior in help mode
-     with S-plus GUI.
-
-   * New variable, `ess-use-inferior-program-name-in-buffer-name',
-     which enables using the executable name instead of the dialect
-     name for R. Feature request.
-
-   * ESS[S] `ess-execute-screen-options' now also works correctly when
-     there is more than one window *side-by-side* in the same frame and
-     runs in the correct buffer also when there is more than one S
-     buffer.
-
-   * iESS[S] new functions `ess-eval-paragraph-and-step' and
-     `ess-eval-function-or-paragraph-and-step' are bound to keys  `C-c
-     C-p' and `C-c C-c' respectively and to the menu in  ESS-mode; also
-     bound in the help mode (for evaluating examples).
-
-   * ESS[S] new function `ess-toggle-S-assign-key' allows to assign the
-     " <- " insertion to an arbitrary key.
-
-   Changes/New Features in 5.2.12:
-   * ESS[SAS]: `M-;' fixed, but the XEmacs function `comment-dwim' may
-     be broken, if so, use `M-x comment-region' and `M-x
-     uncomment-region' instead; only valid PROCs are fontified which is
-     very helpful finding syntax errors (currently supported: BASE,
-     ETS, FSP, GRAPH, IML, INSIGHT and STAT); the "feature" where
-     `F'-keys take you to an empty buffer when the requested
-     destination is a file that does not exist has been fixed, now the
-     request results in a no-op.  Further, sas-mode now also works in
-     simple terminals.
-
-   * Rterm/Cygwin combination works under Microsoft Windows.
-
-   * ESS[R]: internal calls use baseenv() instead of NULL and define
-     'baseenv' where needed.
-
-   * New experimental support for installing ESS.  See the file
-     `lisp/ess-install.el'.
-
-   Changes/New Features in 5.2.11:
-   * ESS Info entry and `dir' handled more effectively for GNU Emacs
-     users
-
-   * ESS[SAS]: temporary files created for batch submission of a region
-     are now named based on the current file; see `ess-sas-file-root'
-     for details; all `lag' and `dif' functions now fontified correctly
-
-   * iESS[SAS]: fixed a few nagging bugs, however, still does not
-     appear to work at this time; please let us know if you have any
-     ideas.
-
-   * ESS[S]: Support for running other versions of Splus has been added
-     for unix.  Two new variables, `ess-s-versions' and
-     `ess-s-versions-list', are used to tell ESS what other versions of
-     Splus you would like to run.
-
-   Changes/New Features in 5.2.10:
-   * ESS[R]: ess-r-versions can no longer be customized (since the
-     customization was not taking effect unless customizations were
-     loaded before ESS).  Its value has been changed so that it will
-     also find R executables beginning "R-devel" and "R-patched".  If
-     you wish to change this variable, it must be set in your `.emacs'
-     before ESS is loaded.
-
-   * Installation with GNU Make enhanced:  unix and unix-like operating
-     systems will now be able to install ESS for all users in either a
-     GNU Emacs site-lisp or an XEmacs package configuration by editing
-     `lisp/ess-site.el' and `Makeconf' accordingly, then issuing `make
-     install'
-
-   * ESS[S]: Filename completion (inside strings) now also works in
-     XEmacs for R and S-plus.
-
-   Changes/New Features in 5.2.9:
-   * ESS[R] for Windows:  the \ directory character bug with respect to
-     ess-load-file has been eradicated.
-
-   * iESS[SAS]: `C-c C-r' and `C-c C-b' once again work as intended and
-     documented.
-
-   * ESS[S]: M-x ess-fix-EQ-assign is a bit more agressive.
-
-   * ESS[S]: Imenu now also shows setAs(), etc.
-
-   * ESS[R]: R function pattern enhanced with underlying code such that
-     `M-C-a' (`ess-beginning-of-function') etc now work for many more
-     cases, including S4 method definitions.
-
-   * iESS[R]: myOwnhelp(1) no longer wrongly triggers help(1).
-
-   * ESS[R]: Improved detection of bogus help buffers: valid help
-     buffers containing with the string "no documentation"(e.g. contour)
-     were being treated as bogus.
-
-   * ESS[R]: In R help buffers, if `options("help.try.all.packages" =
-     TRUE)' then `?rlm' will list which packages rlm is defined in.
-     This help  buffer is not bogus, but instead is now relabelled
-     "*help[R](rlm in  packages)*".
-
-   * ESS[STA]: add "//" as comment starting character to syntax-table.
-
-   Changes/New Features in 5.2.8:
-   * iESS: [Tab] completes *file* names "inside string" as in earlier
-     (<= 5.2.3) ESS versions.
-
-   Changes/New Features in 5.2.7:
-   * If you use Custom to change the variable ess-toolbar-items, the
-     new toolbar is used in all subsequent ESS buffers.
-
-   * ESS[SAS]: new feature:  if ess-sas-log-max >0 and your .log grows
-     to more than ess-sas-log-max bytes, just the first ess-sas-log-max
-     bytes are refreshed; this is helpful when your .sas program
-     generates lots of error messages and gets too big for emacs to
-     display
-
-   * ESS[R/S]: `M-;' in R/S editing modes will now indent with either
-     one or two hashes depending on context.
-
-   * ESS[R]: David Whiting's Sweave extensions (to 'noweb') are now
-     available (from ess-swv.el loaded by default).
-
-   Changes/New Features in 5.2.6:
-   * Removed non-ASCII characters in a few files.
-
-   * ESS[R]: now works better when UTF-8 locale is active; in
-     particular, you get correct directional quotes in R's startup
-     message  for R-devel (unstable development version of R 2.1.0)
-     when using  environment variables LANGUAGE=en@quot
-     LC_ALL=en_US.UTF-8
-
-   * ESS[SAS]: toggling of .log mode improved (`F10'); toggling of .lst
-     mode now also available (`C-F10'); killing all buffers associated
-     with .sas program no longer bound to `C-F10' since its a bit
-     overzealous.
-
-   * S-Plus 7 for Windows is now recognized.
-
-   * ESS[S] (incl. R): in auto-fill mode, strings are not wrapped
-     anymore.
-
-   * ESS[S] (incl. R): font-lock now correctly differs between R and S,
-     e.g., for "_"; both now fontify warning(.) and S does terminate()
-     additionally.
-
-   * Support for `bell' aka `beep' aka `ding' aka `alarm' in all
-     inferior modes: When \a is output "to the the console" at the
-     beginning of a line, the bell is rung.
-
-   Changes/New Features in 5.2.5:
-   * ESS[R]: `C-c C-q' or `Quit S' from the menu now should work (again
-     and less klunkily) and do not append `-exited' to the buffer name.
-     Further, the behavior of `(ess-cleanup)', called from ess-quit,
-     now depends on the new customizable variable
-     `ess-S-quit-kill-buffers-p' which defaults to `nil'.
-     Consequently, the question _"Delete all buffers associated with
-     ..?"_ will not be asked anymore by default.
-
-   * ESS[SAS] - ess-ebcdic-to-ascii-search-and-replace will now work
-     with the `recode' application as well which is available on many
-     platforms
-
-   * ESS[S] (incl. R): Name completion for slots of S4 objects now
-     works!
-
-   Changes/New Features in 5.2.4:
-   * The documentation now includes an overview of how to use the emacs
-     TAGS facility for S functions.  (The distribution also used to
-     contain a directory `etc/other/Tags' where a ~1990 version of
-     `etags.c' was distributed; this is no longer relevant and so has
-     been deleted.)
-
-   * ESS[SAS] - When you are working with EBCDIC files on an ASCII
-     platform, .log NOTEs may display as gibberish since the EBCDIC
-     characters are not converted to ASCII prior to their display.  So,
-     the function ess-ebcdic-to-ascii-search-and-replace is provided for
-     convenience and is bound to `C-F11'.  This function requires the
-     `dd' command (only available on unix or unix-like platforms).
-
-   * ESS: Completion of object names is now always done dynamically
-     rather than allowing the option of using a pre-computed database
-     (by `ess-create-object-name-db') since modern computers seem fast
-     enough for dynamic completion.  (We expect few users, if any, have
-     been using the pre-computed database method.)
-
-   * ESS: object completion in iESS buffers running on Windows was very
-     slow (for GNU Emacs, but not XEmacs) and has now been fixed.
-     Further, it was more or less broken for all versions of S-plus 6.x,
-     and has been fixed to work everywhere but with the Windows' GUI of
-     S-plus.  The list of objects now shows unique names also when an
-     object appears more than once in the search path.
-
-   * ESS[R]: Completion of object names now also includes those
-     starting with ".".
-
-   Changes/New Features in 5.2.3:
-   * ESS: When new inferior ESS processes are created, by default they
-     will replace the current buffer (this restores behavior from pre
-     5.2.0). If you wish new ESS processes to start in another window
-     of the current frame, set inferior-ess-same-window to nil.
-
-   * New variables inferior-Splus-args and inferior-R-args provide a
-     way to pass command line arguments to starting S and R processes.
-
-   Changes/New Features in 5.2.2:
-   * bug-fixes for 5.2.1 (require 'executable), html docs, etc.
-
-   * ess-lisp-directory/../doc/info added to Info-directory-list if
-     ess-info not found by info
-
-   * ESS[R]: If you have other versions of R on your exec-path, such as
-     "R-1.8.1" with Unix or "rw1081" with Windows, ESS will find them
-     and create appropriate functions, such as `M-x R-1.8.1' or `M-x
-     rw1081', for calling them.  By default only Unix programs
-     beginning "R-1" and "R-2" and Windows programs parallel to the
-     version of R in your exec-path will be found, but see
-     ess-r-versions and ess-rterm-versions for ways to find other
-     versions of R.
-
-   * ESS[R]: Other versions of R, such as "R-1.8.1" on Unix and
-     "rw1081" on Windows, are added to the "ESS / Start Process /
-     Other" menu.
-
-   * ESS[S]: If you have other versions of S-Plus on your Windows
-     computer, such as S-Plus 6.1 or S-Plus 4.5, ESS will find them and
-     create appropriate functions, such as `M-x splus61', for calling
-     the console version (Sqpe) inside an emacs buffer.  By default only
-     programs installed in the default location will be found, but see
-     ess-SHOME-versions for ways to find other versions of S-Plus.
-
-   * ESS[S]: Other versions of Sqpe on Windows, such as "splus61", are
-     added to the "ESS / Start Process / Other" menu.
-
-   * ESS[R]: (bug fix) ess-quit (bound to `C-c C-q') should now quit the
-     inferior R process, when issued from either the inferior buffer,
-     or from a .R buffer.
-
-   Changes/New Features in 5.2.1:
-   * ESS[S] (R and S-plus): now have toolbar support with icons to
-     evaluate code in the inferior process or to switch there.  This
-     code is experimental and likely to change as XEmacs/Emacs issues
-     get resolved. The toolbar should be enabled if your Emacs displays
-     images, but can be disabled with the variable ess-use-toolbar.
-     Thanks to David Smith from Insightful for the S-plus logo.
-
-   * ESS[SAS]: ess-sas-graph-view (`F12') enhanced; you can specify
-     external file viewers for each graphics file type via the alist
-     ess-sas-graph-view-viewer-alist; also .jpg/.gif are now handled by
-     image-mode on XEmacs, if available, otherwise by graphics
-     primitives as before
-
-   Changes/New Features in 5.2.0:
-   * ESS[BUGS]:  new info documentation!  now supports interactive
-     processing thanks to Aki Vehtari (mailto:Aki.Vehtari@hut.fi); new
-     architecture-independent unix support as well as support for BUGS
-     v. 0.5
-
-   * ESS[SAS]:  convert .log to .sas with ess-sas-transcript; info
-     documentation improved; Local Variable bug fixes; SAS/IML
-     statements/functions now highlighted; files edited remotely by
-     ange-ftp/EFS/tramp are recognized and pressing SUBMIT opens a
-     buffer on the remote host via the local variable
-     ess-sas-shell-buffer-remote-init which defaults to "ssh"; changed
-     the definition of the variable ess-sas-edit-keys-toggle to boolean
-     rather than 0/1; added the function ess-electric-run-semicolon
-     which automatically reverse indents lines containing only "run;";
-     `C-F1' creates MS RTF portrait from the current buffer; `C-F2'
-     creates MS RTF landscape from the current buffer; `C-F9' opens a
-     SAS DATASET with PROC INSIGHT rather than PROC FSVIEW; "inferior"
-     aliases for SAS batch:  `C-c C-r' for submit region, `C-c C-b' for
-     submit buffer, `C-c C-x' for goto .log; `C-c C-y' for goto .lst
-
-   * ESS[S]: Pressing underscore ("_") once inserts " <- " (as before);
-     pressing underscore twice inserts a literal underscore.  To stop
-     this smart behaviour, add "(ess-toggle-underscore nil)" to your
-     .emacs after ess-site has been loaded;
-     ess-dump-filename-template-proto (new name!) now can be customized
-     successfully (for S language dialects); Support for Imenu has been
-     improved; set ess-imenu-use-S to non-nil to get an "Imenu-S" item
-     on your menubar; ess-help: Now using nice underlines (instead of
-     `nuke-* ^H_')
-
-   * ESS[R]:  After (require 'essa-r), `M-x ess-r-var' allows to load
-     numbers from any Emacs buffer into an existing *R* process; `M-x
-     ess-rdired' gives a "directory editor" of R objects; fixed
-     ess-retr-lastvalue-command, i.e. .Last.value bug (thanks to David
-     Brahm)
-
-   * ESS: Support for creating new window frames has been added to ESS.
-     Inferior ESS processes can be created in dedicated frames by
-     setting inferior-ess-own-frame to t.  ESS help buffers can also
-     open in new frames; see the documentation for ess-help-own-frame
-     for details.  (Thanks to Kevin Rodgers for contributing code.)
-
-   Changes/New Features in 5.1.24:
-   * The version number is now correct even inside ESS/Emacs
-
-   Changes/New Features in 5.1.23:
-   * Minor more Makefile clean up.
-
-   Changes/New Features in 5.1.22:
-   * Besides info documentation, PDF and HTML documentation are also
-     provided (instead of built using "make") and available on the web
-     as well; see ESS web page (http://ess.r-project.org/) and StatLib
-     (http://lib.stat.cmu.edu/general/ESS/doc)
-
-   * Now that info documentation is available, the README.* files are
-     no longer supported.  However, they are still distributed for what
-     it's worth.
-
-   * ESS is now an XEmacs package!  See XEmacs Installation HOWTO
-     (http://www.xemacs.org/Install/index.html) for details
-     (specifically, items 10-15).
-
-   * ESS[SAS]: more user-friendly enhancements for remote SAS batch
-     jobs with Kermit file transfers (LOG and OUTPUT function key
-     features now supported).  Multiple shells now supported so you can
-     run SAS on different computers from different buffers by setting
-     the buffer-local variable ess-sas-shell-buffer to unique buffer
-     names.
-
-   * Major re-vamping of Makefile/Makeconf.
-
-   Changes/New Features in 5.1.21:
-   * ESS[SAS]: info documentation now available!, see ESS->Help for
-     SAS; `F12' opens GSASFILE nearest point for viewing either within
-     emacs, when available, or via an external viewer; more syntax
-     highlighting keywords; more enhancements for remote SAS batch jobs
-     with Kermit; new framework for remote SAS interactive jobs, see
-     ess-remote
-
-   * ESS[S]: info documentation now available!, see ESS->Help for the S
-     family
-
-   * Makefile: tag now independent of rel; info files made by
-     doc/Makefile and installed in new info sub-directory
-
-   Changes/New Features in 5.1.20:
-   * New `options()$STERM' in the S dialects (S, S-Plus, R).  The S
-     program can determine the environment in which it is currently
-     running.  ESS sets the option to `iESS' or `ddeESS' when it starts
-     an S language process.  We recommend other specific values for S
-     language processes that ESS does not start.
-
-   * New `ess-mouse-me' function, assigned to S-mouse-3 by default.
-     User may click on a word or region and then choose from the menu
-     to display the item, or a summary, or a plot, etc.  This feature
-     is still under development.
-
-   * GNU Emacs 21.1 is now supported (fixed for S dialects, SAS & BUGS),
-     (some from Stephen Eglen).
-
-   * XEmacs 21.x is now supported (fixed w32-using-nt bug)
-
-   * XEmacs on Win (NT) is better supported.
-
-   * Workaround for bug in Sqpe+6 (S-PLUS 6 for Win).
-
-   * should now work even when imenu is not available (for old
-     XEmacsen).
-
-   * ESS[SAS]: XEmacs-Imenu fix; `C-TAB' is globalized along with your
-     function-key definitions, if specified; you can specify your SAS
-     library definitions outside of autoexec.sas for ess-sas-data-view
-     with SAS code placed in the variable ess-sas-data-view-libname,
-     also the dataset name is defaulted to the nearest permanent dataset
-     to point; Speedbar support now works for permanent datasets, please
-     ignore first./last.; new font-locking is now the default with more
-     improvements for font-locking PROCs, macro statements, * ; and %* ;
-     comments; you can toggle sas-log-mode with `F10' which will
-     font-lock your .log (if it isn't too big); submit remote .sas
-     files accessed with ange-ftp, EFS or Tramp (Kermit is
-     experimental) by setting ess-sas-submit-method to 'sh;
-     ess-sas-submit-command and ess-sas-submit-command-options are
-     buffer-local so you can have local file variable sections at the
-     end of your .sas files to request different executables or specify
-     special options and the local file variables are re-read at submit
-     instead of only at file open so that if you make a change it is
-     picked up immediately;
-
-   * ESS[BUGS]: font-lock with `in' fixed.
-
-   * for STATA: font-lock bug fixed.
-
-   * for Rd mode: `C-c C-v' and `switch-process' in menu.  further,
-     `C-c C-f' prefix (Rd-font) for inserting or surrounding a word by
-     things such as \code{.}, \code{\link{.}}, \emph{.} etc.
-
-   * new functions (ess-directory-function) and (ess-narrow-to-defun)
-     ess-directory <-> default-directory logic (Jeff Mincy).
-
-   * Re-organized Makefile and fixed a few bugs.
-
-   Changes/New Features in 5.1.19:
-   * S+6 now supported (Tony Rossini (Unix) and Rich Heiberger
-     (Windows))
-
-   * New BUGS support through ESS[BUGS] mode (Rodney Sparapani)
-     Templates assist you in writing .bug and .cmd code (.cmd and .log
-     are replaced by .bmd and .bog to avoid emacs extension collisions).
-     Substitution" parameters facilitate "automagic" generation of
-     data...in" and "init...in" filenames, "const N=" from your data
-     file and "monitor()/stats()" commands.  Activated by pressing
-     `F12'.
-
-   * Fixes for `ess-smart-underscore' SAS breakage (Rich Heiberger)
-
-   * You can change between PC and Unix, local and global SAS
-     function-key definitions interactively (Rich Heiberger)
-
-   * `C-Submit' a highlighted region to SAS batch (Rodney Sparapani)
-
-   * New and improved SAS syntax highlighting (Rodney Sparapani) To get
-     the new functionality, set ess-sas-run-make-regexp to nil.  Also
-     available in .log files via `F10'.
-
-   * Open a permanent SAS dataset for viewing via `F9' (Rodney
-     Sparapani) You must have the library defined in autoexec.sas for
-     it to work.
-
-   * User-friendly defaults for `sas-program',
-     `ess-sas-batch-pre-command' and `ess-sas-batch-post-command' as
-     well Customize support for these and other ESS[SAS] variables
-     (Rodney Sparapani)
-
-   * `ess-sas-suffix-2' now defaults to .dat via `F11' (Rodney
-     Sparapani)
-
-   * Emacs/XEmacs, Unix/Windows issues collectively handled in
-     ess-emcs.el
-
-   * defadvice solves problem of missing *ESS* (thanks to Jeff Mincy)
-
-   * Improved manual a bit by including things that were only in
-     `README'.
-
-   Changes/New Features in 5.1.18:
-   * New `ess-smart-underscore' function, now assigned to "_" by
-     default.  Inserts `ess-S-assign' (customizable " <- "), unless
-     inside string and comments where plain "_" is used instead. (MM)
-
-   * Fixes for longstanding interactive SAS breakage (RMH)
-
-   Changes/New Features in 5.1.17:
-   * Documentation for Windows Installation (Rich Heiberger)
-
-   * removal of ess-vars, finalization of customize support (in the
-     sense that there is no more use of ess-vars, but that we need to
-     fix ess-cust) (AJ Rossini)
-
-   * Many small (and large) fixes/contributions (MMaechler)
-
-   * addition of the "S-equal" variable and provide `M-x
-     ess-add-MM-keys' a way to remap "_" to `ess-S-assign', typically "
-     <- ", but customizable. (MMaechler)
-
-   Changes/New Features in 5.1.16:
-   * BUG FIXES
-
-   * Better SAS support
-
-   Changes/New Features in 5.1.15:
-   * BUG FIXES
-
-   Changes/New Features in 5.1.14:
-   * Yet more fixes to SAS mode, (Rich Heiberger and Rodney Sparapani)
-
-   * Customize support (for most Emacsen which support it) (AJRossini)
-
-   * ARC and ViSta support out of the box, and fixes for XLispStat
-     (AJRossini)
-
-   Changes/New Features in 5.1.13:
-   * Version numbering finally all depending on the ./VERSION file,
-     thanks to Martin Maechler.
-
-   * Yet more fixes to SAS mode, thanks to Rich Heiberger.
-
-   Changes/New Features in 5.1.12:
-   * Splus 5.1 stabilized, thanks to Martin Maechler, Bill Venables,
-     Chuck Taylor, and others.
-
-   * More fixes to SAS mode, thanks to Rodney Sparapani and Rich
-     Heiberger.
-
-   Changes/New Features in 5.1.11:
-   * More fixes to Stata mode, thanks to Brendan Halpin
-     (mailto:brendan@essex.ac.uk).
-
-   * fixed bugs in ESS-elsewhere, thanks to many testers
-
-   * README.SPLUS4WIN has DETAILED instructions for S-PLUS 2000, thanks
-     to David Brahm (mailto:brahm@alum.mit.edu).
-
-   * Fixes to SAS mode, thanks to Rodney Sparapani
-
-   Changes/New Features in 5.1.10:
-   * More fixes to Stata mode
-
-   * primitive generic version of ESS-elsewhere
-
-   * Small fixes to SAS/Stata.
-
-   Changes/New Features in 5.1.9:
-   * Stata mode works
-
-   * Literate Data Analysis using Noweb works
-
-   Changes/New Features in 5.1.8:
-   * Bug fixes
-
-   * R documentation mode defaults changed
-
-   Changes/New Features in 5.1.2:
-   * able to use inferior iESS mode to communicate directly with a
-     running S-Plus 4.x process using the Microsoft DDE protocol.  We
-     use the familiar (from Unix ESS) `C-c C-n' and related key
-     sequences to send lines from the S-mode file to the inferior S
-     process.  We continue to edit S input files in ESS[S] mode and
-     transcripts of previous S sessions in ESS Transcript mode.  All
-     three modes know the S language, syntax, and indentation patterns
-     and provide the syntactic highlighting that eases the programming
-     tasks.
 
 
 File: ess.info,  Node: Credits,  Next: Latest version,  Prev: New features,  Up: Introduction
@@ -1000,6 +1102,10 @@ for Unix and Windows.
 
    * Stephen Eglen (mailto:stephen@gnu.org)
 
+   * Sebastian P. Luque (mailto:spluque@gmail.com)
+
+   * Henning Redestig (mailto:henning.red@googlemail.com)
+
 
 File: ess.info,  Node: Latest version,  Next: Manual,  Prev: Credits,  Up: Introduction
 
@@ -1046,7 +1152,7 @@ File: ess.info,  Node: Manual,  Prev: Latest version,  Up: Introduction
 1.5 How to read this manual
 ===========================
 
-If you need to install ESS, read *Note Installation:: for details on
+If you need to install ESS, read *note Installation:: for details on
 what needs to be done before proceeding to the next chapter.
 
    In this manual we use the standard notation for describing the
@@ -1084,7 +1190,7 @@ from the flexible nature of lisp.  In particular, many aspects of ESS
 behaviour can be changed by suitable customization of lisp variables.
 This manual mentions some of the most frequent variables.  A full list
 of them however is available by using the Custom facility within emacs.
-(Type `M-x customize-group RET ess RET' to get started.)  *Note
+(Type `M-x customize-group RET ess RET' to get started.)  *note
 Customization:: provides details of common user variables you can
 change to customize ESS to your taste, but it is recommended that you
 defer this section until you are more familiar with ESS.
@@ -1110,54 +1216,89 @@ File: ess.info,  Node: Unix installation,  Next: Microsoft Windows installation,
 2.1 Unix installation
 =====================
 
-  1.  `cd' to a directory where you keep emacs lisp files, or create a
-     new directory (for example, `$HOME/emacs') to hold the
-     distribution.  This directory will be referred to below as "the
-     ESS distribution directory".
+For a Unix or Unix-like installation, please follow the next steps.
+Retrieve the latest tgz file (`ess-VERSION.tgz') from ESS downloads
+area (http://ess.r-project.org/index.php?Section=download).
 
-     _Note for XEmacs packages:_ ESS is no longer available as an
-     XEmacs package.  But, you can still install ESS into the XEmacs
-     package system by choosing
-     `ESSDIR'=`PREFIX/lib/xemacs/site-packages'.  ESS requires that the
-     XEmacs sumo tarball (all XEmacs packages combined) also be
-     installed.  For information on installing XEmacs packages, follow
-     this link: Quickstart Package Guide
-     (http://www.xemacs.org/Documentation/packageGuide.html).
+   _GNU Emacs Simple Instructions:_ for recent versions of Emacs (22.x
+or higher) and ESS, the installation process is simple.
 
-  2. Retrieve the latest version from ESS downloads area
-     (http://ess.r-project.org/downloads/ess) to `ESSDIR'.
+  1. Extract all the files from `ess-VERSION.tgz' when you are in the
+     current working directory of `/usr/local/share/emacs/site-lisp'
+     which exists for packages like ESS (and for Mac OS X create a link
+     to it from the directory
+     `/Applications/Emacs.app/Contents/Resources/site-lisp'):
+          %prompt gtar zxf ess-VERSION.tgz            # for GNU tar
+          %prompt gunzip < ess-VERSION.tgz | tar xf - # for Unix tar
 
-  3. Extract the files from the disribution.
-          If you are using GNU tar, `tar zxf ess-VERSION.tgz'.
-          Otherwise, `gunzip < ess-VERSION.tgz | tar xf -',
-
-     The `tar' command will create the subdirectory `ess-VERSION' and
-     install the files there.
-
-  4. Edit the file `ESSDIR/ess-VERSION/lisp/ess-site.el' as explained
-     in the comments section of that file.
-
-  5. If you are using GNU Emacs add the line
-          (load "ESSDIR/ess-VERSION/lisp/ess-site")
-     to `$HOME/.emacs'.  For XEmacs, if you followed the XEmacs package
-     system installation advice, add the line
+  2. Then, add the line
           (require 'ess-site)
-     to `$HOME/.xemacs/init.el'.  Otherwise, for XEmacs, add the line
-          (load "ESSDIR/ess-VERSION/lisp/ess-site")
-     to `$HOME/.xemacs/init.el'.
+     to `~/.emacs' and restart Emacs.
 
-  6. That's it!  ESS is now ready to use.  (The remaining step below is
-     only for a custom installation.)  To edit statistical programs,
-     just open files with the requisite extensions (`.R' for R, `.sas'
-     for SAS, `.bug' for BUGS, etc.).  To start a statistical process
-     within emacs, such as R, type `M-x R'.
+  3. If you see a buffer named `*ESS*', then the simple instructions
+     were most likely successful.  If not, then read further.
 
-  7. (OPTIONAL) READ THIS ITEM THOROUGHLY BEFORE STARTING:
+  4. It could be that you have an older version of Emacs, some other
+     problem with your installation or you are not a sysadmin.
+     Whatever the case, you may need to edit `ess-site.el' manually.
+     If that is the case, then you should create a directory just for
+     ESS like `~/ess' or `/usr/local/ess' and unpack ESS there.  That
+     way, your changes to `ess-site.el' will not be lost if you update
+     Emacs later.
 
-     If you want to place the compiled files in other locations edit the
-     `LISPDIR', `INFODIR' and `ETCDIR' entries in Section 1 of
-     `Makeconf' in the `ESSDIR/ess-VERSION' directory (if you are using
-     XEmacs, then uncomment the XEmacs subsection in Section 1).
+  5. Replace the line above with
+          (load "~/ess/ess-VERSION/lisp/ess-site")
+     in `~/.emacs' and restart Emacs.
+
+  6. If you see a buffer named `*ESS*', then the manual instructions
+     were most likely successful.  If not, then send a query to
+     <ess-help@stat.math.ethz.ch> explicitly describing your problem
+     and your environment including operating system, Emacs version,
+     ESS version, etc.
+
+   _XEmacs Simple Instructions:_ for recent versions of XEmacs (21.x or
+higher) and ESS, the installation process is simple.
+
+  1. Extract all the files from `ess-VERSION.tgz' when you are in the
+     current working directory of
+     `/usr/local/LOCATION/xemacs/site-packages' which exists for
+     packages like ESS where `LOCATION' is `lib' for legacy
+     installations and `share' now (and for Mac OS X create a link to
+     it from the directory
+     `/Applications/XEmacs.app/Contents/Resources/site-lisp'):
+          %prompt gtar zxf ess-VERSION.tgz            # for GNU tar
+          %prompt gunzip < ess-VERSION.tgz | tar xf - # for Unix tar
+
+  2. Then, add the line
+          (require 'ess-site)
+     to `~/.xemacs/init.el' and restart XEmacs.
+
+  3. If you see a buffer named `*ESS*', then the simple instructions
+     were most likely successful.  If not, then read further.
+
+  4. It could be that you have an older version of XEmacs, some other
+     problem with your installation or you are not a sysadmin.
+     Whatever the case, you may need to edit `ess-site.el' manually.
+     If that is the case, then you should create a directory just for
+     ESS like `~/ess' or `/usr/local/ess' and unpack ESS there.  That
+     way, your changes to `ess-site.el' will not be lost if you update
+     XEmacs later.
+
+  5. Replace the line above with
+          (load "~/ess/ess-VERSION/lisp/ess-site")
+     in `~/.xemacs/init.el' and restart XEmacs.
+
+  6. If you see a buffer named `*ESS*', then the manual instructions
+     were most likely successful.  If not, then send a query to
+     <ess-help@stat.math.ethz.ch> explicitly describing your problem
+     and your environment including operating system, XEmacs version,
+     ESS version, etc.
+
+  1. (OPTIONAL) COMPILING E-LISP:
+
+     Edit the default locations of `LISPDIR', `INFODIR' and `ETCDIR' in
+     Section 1 of `Makeconf' (if you are using XEmacs, then edit the
+     XEmacs subsection in Section 1).
 
      You can compile those files by:
           make all
@@ -1173,158 +1314,196 @@ File: ess.info,  Node: Microsoft Windows installation,  Next: Requirements,  Pre
 ==================================
 
 For Microsoft Windows installation, please follow the next steps.
+Retrieve the latest zip file (`ess-VERSION.zip') from ESS downloads
+area (http://ess.r-project.org/index.php?Section=download).
 
-  1. `cd' to a directory where you keep emacs lisp files, or create a
-     new directory (for example, `c:\emacs\') to hold the distribution.
-     This directory will be referred to below as "the ESS distribution
-     directory".
+   _GNU Emacs Simple Instructions:_ for recent versions of Emacs (22.x
+or higher) and ESS, the installation process is simple.
 
-     _Note for XEmacs packages:_ ESS is no longer available as an XEmacs
-     package. But, you can still install ESS into the XEmacs package
-     system by choosing `ESSDIR'=`PREFIX\XEmacs\site-packages'.  ESS
-     requires that the XEmacs sumo tarball (all XEmacs packages
-     combined) also be installed.  For information on installing XEmacs
-     packages, follow this link: Quickstart Package Guide
-     (http://www.xemacs.org/Documentation/packageGuide.html).
+  1. Extract all the files from `ess-VERSION.zip' (by double clicking
+     on it and selecting "Extract all files" which launches the Folders
+     Extraction Wizard) into the `site-lisp' directory that exists for
+     packages like ESS.  If GNU Emacs was installed in the default
+     location, then this directory can be found somewhere like
+     `C:\Program Files\GNU Emacs\emacs-22.x\site-lisp'.
 
-  2. Retrieve the latest zip file (`ess-VERSION.zip') from ESS
-     downloads area (http://ess.r-project.org/downloads/ess) and store
-     it in the ESS distribution directory.  Be aware that http browsers
-     on Windows frequently change the "." and "-" characters in
-     filenames to other punctuation.  Please change the names back to
-     their original form.
-
-  3. Extract all the files from `ess-VERSION.zip' into the ESS
-     distribution directory as `c:\emacs\ess-VERSION\'.  (It is possible
-     to unpack the zip archive in Windows Explorer by double clicking
-     on the folder; you should then see a new folder called
-     `ess-VERSION'.  Drag that folder into your ESS distribution
-     directory.)
-
-  4. If you are using GNU Emacs add the line
-          (load "ESSDIR/ess-VERSION/lisp/ess-site")
-     to `%HOME%/.emacs'.  For XEmacs, if you followed the XEmacs
-     package system installation advice, add the line
+  2. Add the line
           (require 'ess-site)
-     to `%HOME%/.xemacs/init.el'.  Otherwise, for XEmacs, add the line
-          (load "ESSDIR/ess-VERSION/lisp/ess-site")
-     to `%HOME%/.xemacs/init.el'.  _Note:_ Both GNU Emacs and XEmacs
-     require that the HOME environment variable be set on your system,
-     otherwise, your initialization file will not be utilized, and
-     therefore, ESS will not work.
+     to `~/.emacs' and restart Emacs.
 
-     After saving your initialization file, ESS is now installed.
-     Start a new emacs and you should be ready to use ESS.  For
-     example, to edit statistical programs, load the files with the
-     requisite extensions (".sas" for SAS, ".S" or "s" or "q" or "Q"
-     for S-PLUS, ".r" or ".R" for R, and ".lsp" for XLispStat).  One
-     further step is needed if you wish to run statistical processes,
-     see below.
+  3. If you see a buffer named `*ESS*', then the simple instructions
+     were most likely successful.  If not, then read further.
 
-  5. To run statistical processes under ESS, Windows users will need to
-     make sure that the directories for the software they will be using
-     is in the PATH environment variable.  On Windows 9x, add lines
-     similar to the following to your `c:\autoexec.bat' file:
-          path=%PATH%;c:\progra~1\insightful\splus70\cmd
-     On Windows NT/2000/XP, add the directories to the PATH using the
-     `My Computer/Control Panel/System/Advanced/Environment Variables'
-     menu.  Note that the directory containing the program is added to
-     the PATH, not the program itself.  One such line is needed for
-     each software program.  Be sure to use the abbreviation `progra~1'
-     and not the long version with embedded blanks.  Use backslashes
-     "`\'".
+  4. It could be you have an older version of Emacs or some other
+     problem with your installation.  Either way, you may need to edit
+     `C:\ess\ess-VERSION\lisp\ess-site.el' manually.  If that is the
+     case, then you should create a directory just for ESS like
+     `C:\ess' and unpack ESS there.  That way, your changes to
+     `C:\ess\ess-VERSION\lisp\ess-site.el' will not be lost if you
+     update Emacs later.
 
-     An alternative, for R users, is that rather than adjusting the PATH
-     variable, you can add the following to your emacs initialization
-     file (and restart emacs):
-          (setq inferior-R-program-name "C:/progra~1/R/R-2.2.1/bin/Rterm.exe")
-     This assumes that you have installed R-2.2.1 in the default
-     location.  Change the path otherwise to point to other locations.
+  5. Replace the line above with
+          (load "C:/ess/ess-VERSION/lisp/ess-site")
+     in `~/.emacs' and restart Emacs.
 
-     Windows users who place S-PLUS anywhere other than the default
-     location will also need to add the following three lines (properly
-     adjusted for their location) to their `%HOME%/.emacs' or
-     `%HOME%/.xemacs/init.el' file:
-          (setq-default inferior-S+6-program-name
-              "c:/progra~1/Insightful/SPLUS70/cmd/Splus")
-          (setq-default inferior-Sqpe+6-SHOME-name
-              "c:/progra~1/Insightful/SPLUS70")
-          (setq-default inferior-Sqpe+6-program-name
-              "c:/progra~1/Insightful/SPLUS70/cmd/Sqpe.exe")
-     The above example uses the default location of S-PLUS in
-     `c:/progra~1/Insightful'.  Please note that ESS considers S-PLUS
-     6, 7, and 8 to be variants of S+6.
+  6. If you see a buffer named `*ESS*', then the manual instructions
+     were most likely successful.  If not, then send a query to
+     <ess-help@stat.math.ethz.ch> explicitly describing your problem
+     and your environment including operating system, Emacs version,
+     ESS version, etc.
 
-     These users may also need to modify the emacs variable
-     `ess-SHOME-versions' to match their installation in order to get
-     the full set of S-PLUS versions on their machine into the `ESS'
-     menu.
+   _XEmacs Simple Instructions:_ for recent versions of XEmacs (21.x or
+higher), the installation process is much simpler.  Hopefully, these
+simple instructions will work for you.  If not, then more detailed,
+manual instructions follow.
 
-     To start the S-PLUS [678].x GUI from ESS under emacs:
-       1. If you use Cygwin bash as your primary shell, then
-               M-x S
-               (or `M-x S+6').
+  1. Extract all the files from `ess-VERSION.zip' (by double clicking
+     on it and selecting "Extract all files" which launches the Folders
+     Extraction Wizard) into the `site-packages' directory that exists
+     for packages like ESS.  If XEmacs was installed in the default
+     location, then this directory can be found at `C:\Program
+     Files\XEmacs\site-packages'.
 
-       2. If you use the MSDOS prompt window as your primary shell, then
-               M-x S+6-msdos
-          You will then be asked for a pathname ("S starting data
-     directory?"), from which to start the process.  The prompt will
-     propose your current directory as the default.  ESS will start the
-     S-PLUS GUI.  There will be slight delay during which emacs is
-     temporarily frozen.  ESS will arrange for communication with the
-     S-PLUS GUI using the DDE protocol.  Send lines or regions from the
-     emacs buffer containing your S program (for example, `myfile.s')
-     to the S-PLUS Commands Window with the `C-c C-n' or `C-c C-r' keys.
-     (If you are still using S-PLUS 4.x or 2000,\ then use `M-x S+4' or
-     `M-x S+4-msdos'.)
+  2. XEmacs requires the `HOME' environment variable to be defined.
+     You can create it by visiting the following dialog: `My
+     Computer->Control Panel->System->Advanced->Environment Variables'
+     In the User variables window, press New.  And create a variable
+     named `HOME' with a value something like (you must use forward
+     slashes `/' rather than backslashes `\') `c:/Documents and
+     Settings/%USERNAME%/Application Data'.  Then press OK for that
+     window and press OK for the main window.  _If you also have GNU
+     Emacs installed, GNU Emacs will recognize `HOME' and expand `~'
+     accordingly._
 
-     To start an S-PLUS [678].x session inside an emacs buffer--and
-     without the S-PLUS GUI:
-          M-x Sqpe
-          (or `M-x Sqpe+6').
-     This works with both the bash and msdos shells.  You will then be
-     asked for a pathname ("S starting data directory?"), from which to
-     start the process.  The prompt will propose your current directory
-     as the default.  You get Unix-like behavior, in particular the
-     entire transcript is available for emacs-style search commands.
-     Send lines or regions from the emacs buffer containing your S
-     program (for example, `myfile.s') to the *S+6* buffer with the
-     `C-c C-n' or `C-c C-r' keys.  Interactive graphics are available
-     with Sqpe by using the java library supplied with S-PLUS 6.1 and
-     newer releases.  Enter the commands:
-          library(winjava)
-          java.graph()
-     Graphs can be saved from the `java.graph' device in several
-     formats, but not PostScript.   If you need a PostScript file you
-     will need to open a separate `postscript' device.  (If you are
-     still using S-PLUS 4.x or 2000, then use `M-x Sqpe+4'.)
+  3. Now launch XEmacs and do a `C-x C-f' followed by a `~'.  From the
+     Subdir menu, select Create Directory, and enter `.xemacs'
 
-     To connect to an already running S-PLUS GUI (started, for example,
-     from the S-PLUS icon):
-          M-x S+6-existing
-     or
-          M-x S+6-msdos-existing
+  4. Add the line
+          (require 'ess-site)
+     to `~/.xemacs/init.el' and restart XEmacs.
+
+  5. If you see a buffer named `*ESS*', then the simple instructions
+     were most likely successful.  If not, then read further.
+
+  6. It could be you have an older version of XEmacs or some other
+     problem with your installation.  Either way, you may need to edit
+     `C:\ess\ess-VERSION\lisp\ess-site.el' manually.  If that is the
+     case, then you should create a directory just for ESS like
+     `C:\ess' and unpack ESS there.  That way, your changes to
+     `C:\ess\ess-VERSION\lisp\ess-site.el' will not be lost if you
+     update XEmacs later.
+
+  7. Replace the line above with
+          (load "C:/ess/ess-VERSION/lisp/ess-site")
+     in `~/.xemacs/init.el' and restart XEmacs.
+
+  8. If you see a buffer named `*ESS*', then the manual instructions
+     were most likely successful.  If not, then send a query to
+     <ess-help@stat.math.ethz.ch> explicitly describing your problem
+     and your environment including operating system, XEmacs version,
+     ESS version, etc.
+
+   Now, you should be ready to use ESS.  For example, to edit
+statistical programs, load the files with the requisite extensions
+(".sas" for SAS, ".S" or "s" or "q" or "Q" for S-PLUS, ".r" or ".R" for
+R, and ".lsp" for XLispStat).  One further step is needed if you wish to
+run statistical processes, see below.
+
+   To run statistical processes under ESS, Windows users will need to
+make sure that the directories for the software they will be using is
+in the PATH environment variable.
+
+   On Windows NT/2000/XP, add the directories to the PATH using the `My
+Computer->Control Panel->System->Advanced->Environment Variables' menu.
+Note that the directory containing the program is added to the PATH,
+not the program itself.  One such line is needed for each software
+program.  Be sure to use the abbreviation `progra~1' and not the long
+version with embedded blanks as this may cause problems.  Also, make
+sure to use backslashes `\' since Windows requires them.
+
+   An alternative, for R users, is that rather than adjusting the PATH
+variable, you can add the following to your emacs initialization file
+(and restart emacs):
+     (setq inferior-R-program-name "c:/progra~1/R/R-2.2.1/bin/Rterm.exe")
+   This assumes that you have installed R-2.2.1 in the default location.
+Change the path otherwise to point to other locations.
+
+   Windows users who place S-PLUS anywhere other than the default
+location will also need to add the following three lines (properly
+adjusted for their location):
+     (setq-default inferior-S+6-program-name
+         "c:/progra~1/Insightful/SPLUS70/cmd/Splus")
+     (setq-default inferior-Sqpe+6-SHOME-name
+         "c:/progra~1/Insightful/SPLUS70")
+     (setq-default inferior-Sqpe+6-program-name
+         "c:/progra~1/Insightful/SPLUS70/cmd/Sqpe.exe")
+   The above example uses the default location of S-PLUS in
+`c:\progra~1\Insightful'.  Please note that ESS considers S-PLUS 6, 7,
+and 8 to be variants of S+6.
+
+   These users may also need to modify the emacs variable
+`ess-SHOME-versions' to match their installation in order to get the
+full set of S-PLUS versions on their machine into the ESS menu.
+
+   To start the S-PLUS [678].x GUI from ESS under emacs:
+  1. If you use Cygwin bash as your primary shell, then
+          M-x S
+          (or `M-x S+6').
+
+  2. If you use the MSDOS prompt window as your primary shell, then
+          M-x S+6-msdos
      You will then be asked for a pathname ("S starting data
-     directory?"), from which to start the process.  The prompt will
-     propose your current directory as the default.  ESS will arrange
-     for communication with the already running S-PLUS GUI using the
-     DDE protocol.  Send lines or regions from the emacs buffer
-     containing your S program (for example, `myfile.s') to the S-PLUS
-     Commands Window with the `C-c C-n' or `C-c C-r' keys.  (If you are
-     still using S-PLUS 4.x or 2000,  then use `M-x S+4-existing' or
-     `M-x S+4-msdos-existing'.)
+directory?"), from which to start the process.  The prompt will propose
+your current directory as the default.  ESS will start the S-PLUS GUI.
+There will be slight delay during which emacs is temporarily frozen.
+ESS will arrange for communication with the S-PLUS GUI using the DDE
+protocol.  Send lines or regions from the emacs buffer containing your
+S program (for example, `myfile.s') to the S-PLUS Commands Window with
+the `C-c C-n' or `C-c C-r' keys.  (If you are still using S-PLUS 4.x or
+2000,\ then use `M-x S+4' or `M-x S+4-msdos'.)
 
-     If you wish to run R, you can start it with:
-          M-x R
+   To start an S-PLUS [678].x session inside an emacs buffer--and
+without the S-PLUS GUI:
+     M-x Sqpe
+     (or `M-x Sqpe+6').
+   This works with both the bash and msdos shells.  You will then be
+asked for a pathname ("S starting data directory?"), from which to
+start the process.  The prompt will propose your current directory as
+the default.  You get Unix-like behavior, in particular the entire
+transcript is available for emacs-style search commands.  Send lines or
+regions from the emacs buffer containing your S program (for example,
+`myfile.s') to the *S+6* buffer with the `C-c C-n' or `C-c C-r' keys.
+Interactive graphics are available with Sqpe by using the java library
+supplied with S-PLUS 6.1 and newer releases.  Enter the commands:
+     library(winjava)
+     java.graph()
+   Graphs can be saved from the `java.graph' device in several formats,
+but not PostScript.   If you need a PostScript file you will need to
+open a separate `postscript' device.  (If you are still using S-PLUS
+4.x or 2000, then use `M-x Sqpe+4'.)
 
-     XLispStat can not currently be run with
-          M-x XLS
-     Hopefully, this will change.  However, you can still edit with
-     emacs, and cut and paste the results into the XLispStat *Listener*
-     Window under Microsoft Windows.
+   To connect to an already running S-PLUS GUI (started, for example,
+from the S-PLUS icon):
+     M-x S+6-existing
+   or
+     M-x S+6-msdos-existing
+   You will then be asked for a pathname ("S starting data
+directory?"), from which to start the process.  The prompt will propose
+your current directory as the default.  ESS will arrange for
+communication with the already running S-PLUS GUI using the DDE
+protocol.  Send lines or regions from the emacs buffer containing your
+S program (for example, `myfile.s') to the S-PLUS Commands Window with
+the `C-c C-n' or `C-c C-r' keys.  (If you are still using S-PLUS 4.x or
+2000,  then use `M-x S+4-existing' or `M-x S+4-msdos-existing'.)
 
-  6. That's it!
+   If you wish to run R, you can start it with:
+     M-x R
 
+   XLispStat can not currently be run with
+     M-x XLS
+   Hopefully, this will change.  However, you can still edit with
+emacs, and cut and paste the results into the XLispStat *Listener*
+Window under Microsoft Windows.
 
 
 File: ess.info,  Node: Requirements,  Prev: Microsoft Windows installation,  Up: Installation
@@ -1332,44 +1511,13 @@ File: ess.info,  Node: Requirements,  Prev: Microsoft Windows installation,  Up:
 2.3 Requirements
 ================
 
-ESS has been tested with
+ESS is most likely to work with current/recent versions of the following
+statistical packages: R/S-PLUS, SAS, Stata and JAGS. The one exception
+is BUGS which is quite old, but should still work.
 
-   * R >=0.49
-
-   * S-PLUS 3.3-4, 4.5, 2000, 5.0-1, 6.0-2, 7.0, 8.0
-
-   * S4
-
-   * SAS >=6.12
-
-   * BUGS 0.5, 0.6
-
-   * JAGS 1.0
-
-   * Stata >=6.0 (command line only)
-
-   on the following platforms
-
-   * Linux/x86 (all)
-
-   * Solaris (all)
-
-   * MS Windows 98/NT/2000/XP (R, S-PLUS, SAS interactive only, and
-     BUGS)
-
-   * Apple Mac OS X 10.4-5 (R, JAGS, Stata)
-
-   with the following versions of emacs
-
-   * GNU Emacs 20.3-7, 21.1, 21.3-4, 22.1
-
-   * XEmacs 21.4.0-8, 21.4.9-13(1), 21.4.14-15, 21.4.17-21 (betas not
-     supported, but 21.5.23+ may work)
-
-   ---------- Footnotes ----------
-
-   (1) require the files.el patch to revert-buffer for the Local
-Variables updating problem
+   ESS supports current/recent versions of GNU Emacs and XEmacs.  Most
+notably, the GNU Emacs 22 series and XEmacs 21.4.14 or higher
+(beta/pre-release versions are NOT SUPPORTED).
 
 
 File: ess.info,  Node: Interactive ESS,  Next: Entering commands,  Prev: Installation,  Up: Top
@@ -1856,7 +2004,7 @@ Note that these two commands are analogous to `C-p' and `C-n' but apply
 to command lines rather than text lines.  And just like `C-p' and
 `C-n', passing a prefix argument to these commands means to move to the
 ARG'th next (or previous) command.  (These commands are also discussed
-in *Note Shell History Copying: (emacs)Shell History Copying.)
+in *note Shell History Copying: (emacs)Shell History Copying.)
 
    There are also two similar commands (not bound to any keys by
 default) which move to preceding or succeeding commands, but which
@@ -1919,7 +2067,7 @@ go).  If the current line does not begin with a prompt, an error is
 signalled.  This feature, coupled with the command-based motion
 commands described above, could be used as a primitive history
 mechanism.  ESS provides a more sophisticated mechanism, however, which
-is described in *Note Command History::.
+is described in *note Command History::.
 
 
 File: ess.info,  Node: Saving transcripts,  Prev: Transcript resubmit,  Up: Transcript
@@ -1934,7 +2082,7 @@ name of the file, but this is not a problem.  You can still use S as
 usual; just remember to save the file before you quit Emacs with `C-x
 C-s'.  You can make ESS prompt you for a filename in which to save the
 transcript every time you start S by setting the variable `ess-ask-about-transfile'
-to `t'; see *Note Customizing startup::.  We recommend you save your
+to `t'; see *note Customizing startup::.  We recommend you save your
 transcripts with filenames that end in `.St'.  There is a special mode
 (ESS transcript mode -- *note Transcript Mode::) for editing transcript
 files which is automatically selected for files with this suffix.
@@ -2160,7 +2308,7 @@ process buffer or in a separate buffer, as indicated:
      Checking::, for more details.
 
    * `C-c C-v' (`ess-display-help-on-object')
-     Pops up a help buffer for an S object or function.  See *Note
+     Pops up a help buffer for an S object or function.  See *note
      Help:: for more details.
 
    * `C-c C-q' (`ess-quit')
@@ -2250,7 +2398,7 @@ The following commands are also provided in the process buffer:
      Prompts for an object to be edited in an edit buffer.  *Note
      Editing::.
 
-   Other commands available in Inferior S mode are discussed in *Note
+   Other commands available in Inferior S mode are discussed in *note
 Shell Mode: (emacs)Shell Mode.
 
 
@@ -2385,8 +2533,7 @@ processes (programs).  This mode handles:
      executing process with a single keystroke [RET].
 
    -  The ability to request help from the current process for variables
-     and functions, and to have the results sent into a separate
-     buffer.
+     and functions, and to have the results sent into a separate buffer.
 
    -  completion of object names and file names.
 
@@ -2426,43 +2573,45 @@ wish to always call R with certain arguments, set the variable
 `inferior-R-args' accordingly.
 
    If you have other versions of R or S-Plus available on the system,
-ESS is also able to start those versions.  How this works depend on
-which OS you are using:
+ESS is also able to start those versions.  How this exactly works
+depend on which OS you are using, as described in the following
+paragraphs.  The general principle, regardless of OS, is that ESS
+searches the paths listed in the variable `exec-path' for R binaries.
+If ESS cannot find your R binaries, on Unix you can change the unix
+environment variable `PATH', as this variable is used to set
+`exec-path'.
 
    R on Unix systems: If you have "R-1.8.1" on your `exec-path', it can
 be started using `M-x R-1.8.1'.  By default, ESS will find versions of
 R beginning "R-1" or "R-2".  If your versions of R are called other
 names, consider renaming them with a symbolic link or change the
-variable `ess-r-versions'.  To see which defuns have been created for
-starting different versions of R, type `M-x R-' and then hit [Tab].
-You will then see if any defuns for particular versions of R have been
-created.  These other versions of R can also be started from the
-"ESS->Start Process->Other" menu.
+variable `ess-r-versions'.  To see which functions have been created
+for starting different versions of R, type `M-x R-' and then hit [Tab].
+These other versions of R can also be started from the "ESS->Start
+Process->Other" menu.
 
    R on Windows systems: If you have "rw1081" on your `exec-path', it
 can be started using `M-x rw1081'.  By default, ESS will find versions
 of R located in directories parallel to the version of R in your
 `PATH'.  If your versions of R are called other names, you will need to
-change the variable `ess-rterm-versions'.  To see which defuns have
+change the variable `ess-rterm-versions'.  To see which functions have
 been created for starting different versions of R, type `M-x rw' and
-then hit [Tab].  You will then see if any defuns for particular
-versions of R have been created.  These other versions of R can also be
-started from the "ESS->Start Process->Other" menu.
+then hit [Tab].  These other versions of R can also be started from the
+"ESS->Start Process->Other" menu.
 
    Once ESS has found these extra versions of R, it will then create a
-new defun, called `M-x R-newest', which will call the newest version of
-R that it found.  (ESS examines the date in the first line of
+new function, called `M-x R-newest', which will call the newest version
+of R that it found.  (ESS examines the date in the first line of
 information from `R --version' to determine which is newest.)
 
    S on Unix systems: If you have "Splus7" on your `exec-path', it can
 be started using `M-x Splus7'.  By default, ESS will find all
 executables beginning "Splus" on your path.  If your versions of S are
 called other names, consider renaming them with a symbolic link or
-change the variable `ess-s-versions'.  To see which defuns have been
+change the variable `ess-s-versions'.  To see which functions have been
 created for starting different versions of Splus, type `M-x Splus' and
-then hit [Tab].  You will then see if any defuns for particular
-versions of Splus have been created.  These other versions of Splus can
-also be started from the "ESS->Start Process->Other" menu.
+then hit [Tab].  These other versions of Splus can also be started from
+the "ESS->Start Process->Other" menu.
 
    A second mechanim is also available for running other versions of
 Splus.  The variable `ess-s-versions-list' is a list of lists; each
@@ -2486,13 +2635,12 @@ is loaded.
 you have an older version of S-Plus (S-Plus 6.1 for example) on your
 system, ir can be started inside an emacs buffer with `M-x splus61'.  By
 default, ESS will find versions of S-Plus located in the installation
-directories that Insightful uses by default.  If your versions of
-S-Plus are anywhere else, you will need to change the variable
-`ess-SHOME-versions'.  To see which defuns have been created for
+directories that Insightful uses by default.  If your versions of S-Plus
+are anywhere else, you will need to change the variable
+`ess-SHOME-versions'.  To see which functions have been created for
 starting different versions of S-Plus, type `M-x spl' and then hit
-[Tab].  You will then see if any defuns for particular versions of
-S-Plus have been created.  These other versions of S-Plus can also be
-started from the "ESS->Start Process->Other" menu.
+[Tab].  These other versions of S-Plus can also be started from the
+"ESS->Start Process->Other" menu.
 
 
 File: ess.info,  Node: ESS-help--assistance with viewing help,  Next: Philosophies for using ESS(S),  Prev: iESS(S)--Inferior ESS processes,  Up: ESS for the S family
@@ -2673,11 +2821,19 @@ in your .emacs file, the line:
       )
 
    3. Fontlocking sometimes fails to behave nicely upon errors.  When
-Splus dumps, a mis-matched "  (double-quote) can result in the
-wrong font-lock face being used for the remainder of the buffer.
+Splus dumps, a mis-matched "  (double-quote) can result in the    wrong
+font-lock face being used for the remainder of the buffer.
 
    Solution: add a " at the end of the "Dumped..." statement, to
 revert the font-lock face back to normal.
+
+   4. When you change directory within a *R* or *S* session using the
+setwd() command, emacs does not recognise that you have changed the
+current directory.
+
+   Solution: Use `M-x ess-change-directory'.  This will ensure that
+Emacs will know that you have changed the directory, and update the
+emacs variable `default-directory'.
 
 
 File: ess.info,  Node: Editing,  Next: Editing R documentation files,  Prev: ESS for the S family,  Up: Top
@@ -3668,7 +3824,7 @@ UNIX     PC       Nickname
 <F3>     <F8>     `SUBMIT'
                   save the current `.sas' file (which is either the `.sas'
                   file in the current buffer or the `.sas' file associated
-                   with the `.lst' or `.log' file in the current buffer)
+                  with the `.lst' or `.log' file in the current buffer)
                   and submit the file as a batch SAS job
 <F4>     <F5>     `PROGRAM'
                   switch buffer to `.sas' file
@@ -3976,12 +4132,13 @@ File: ess.info,  Node: ESS(BUGS)--Model files,  Next: ESS(BUGS)--Command files, 
 
 Model files with the `.bug' extension are edited in ESS[BUGS] mode if
 `(require 'essd-bugs)' was performed or edited in ESS[JAGS] mode if
-`(require 'essd-jags)'.  Two keys are bound for your use in ESS[BUGS],
-`F2' and `C-c C-c'.  `F2' performs the same action as it does in
-ESS[SAS], *Note ESS(SAS)--Function keys for batch processing::.  `C-c
-C-c' performs the function `ess-bugs-next-action' which you will use a
-lot.  Pressing it in an empty buffer for a model file will produce a
-template for you.
+`(require 'essd-jags)'.  Three keys are bound for your use in
+ESS[BUGS], `F2', `C-c C-c' and `='.  `F2' performs the same action as
+it does in ESS[SAS], *Note ESS(SAS)--Function keys for batch
+processing::.  `C-c C-c' performs the function `ess-bugs-next-action'
+which you will use a lot.  Pressing it in an empty buffer for a model
+file will produce a template for you.  `=' inserts the set operator,
+`<-'.
 
    ESS[BUGS] supports "replacement" variables.  These variables are
 created as part of the template, i.e. with the first press of `C-c C-c'
@@ -4100,12 +4257,13 @@ File: ess.info,  Node: ESS(JAGS)--Model files,  Next: ESS(JAGS)--Command files, 
 
 Model files with the `.bug' extension are edited in ESS[BUGS] mode if
 `(require 'essd-bugs)' was performed or edited in ESS[JAGS] mode if
-`(require 'essd-jags)'.  Two keys are bound for your use in ESS[JAGS],
-`F2' and `C-c C-c'.  `F2' performs the same action as it does in
-ESS[SAS], *Note ESS(SAS)--Function keys for batch processing::.  `C-c
-C-c' performs the function `ess-bugs-next-action' which you will use a
-lot.  Pressing it in an empty buffer for a model file will produce a
-template for you.
+`(require 'essd-jags)'.  Three keys are bound for your use in
+ESS[BUGS], `F2', `C-c C-c' and `='.  `F2' performs the same action as
+it does in ESS[SAS], *Note ESS(SAS)--Function keys for batch
+processing::.  `C-c C-c' performs the function `ess-bugs-next-action'
+which you will use a lot.  Pressing it in an empty buffer for a model
+file will produce a template for you.  `=' inserts the set operator,
+`<-'.
 
    ESS[JAGS] does not support "replacement" variables which were part of
 ESS[BUGS].  Although, "replacement" variables are an extremely
@@ -4114,10 +4272,10 @@ challenging.  So, a more elisp-ish approach was adopted for ESS[JAGS]:
 elisp local variables.  These variables are created as part of the
 template, i.e. with the first press of `C-c C-c' in an empty buffer.
 For your `.bug' file, they are named `ess-jags-chains',
-`ess-jags-monitor' and `ess-jags-thin', and they appear in the `Local
-Variables' section.  When you are finished editing your model file,
-pressing `C-c C-c' will perform the necessary actions to build your
-command file for you.
+`ess-jags-monitor', `ess-jags-thin', `ess-jags-burnin' and
+`ess-jags-update'; they appear in the `Local Variables' section.  When
+you are finished editing your model file, pressing `C-c C-c' will
+perform the necessary actions to build your command file for you.
 
    The `ess-jags-chains' variable is the number of chains that you want
 to initialize and sample from; defaults to 1.  The `ess-jags-monitor'
@@ -4127,7 +4285,13 @@ statements are created in the command file to monitor the list of
 variables.  By default, no variables are explicitly monitored which
 means JAGS will implicitly monitor all "default" variables.  The
 `ess-jags-thin' variable is the thinning parameter.  By default, the
-thinning parameter is set to 1, i.e. no thinning.
+thinning parameter is set to 1, i.e. no thinning.  The
+`ess-jags-burnin' variable is the number of initial samples to discard.
+By default, the burnin parameter is set to 10000.  The
+`ess-jags-update' variable is the number of post-burnin samples to
+keep.  By default, the update parameter is set to 10000.  Both
+`ess-jags-burnin' and `ess-jags-update' are multiplied by
+`ess-jags-thin' since JAGS does not do it automatically.
 
 
 File: ess.info,  Node: ESS(JAGS)--Command files,  Next: ESS(JAGS)--Log files,  Prev: ESS(JAGS)--Model files,  Up: ESS for JAGS
@@ -4151,8 +4315,8 @@ File: ess.info,  Node: ESS(JAGS)--Log files,  Prev: ESS(JAGS)--Command files,  U
 12.3 ESS[JAGS]-Log files
 ========================
 
-The `.out' extension is used for JAGS log files.  You may find `F2'
-useful to refresh the `.out' if the batch process over-writes or
+The `.jog' extension is used for JAGS log files.  You may find `F2'
+useful to refresh the `.jog' if the batch process over-writes or
 appends it.
 
 
@@ -4341,6 +4505,14 @@ should be appropriate.
 
    with the function name starting in column 0.  Windows users may need
 to change the single quotes to double quotes.
+
+   R version 2.9.0 introduced a front-end script for finding R tags,
+which calls the `rtags()' function).  By default, this script will
+recursively search the directories for relevant tags in R/C/Rd files.
+To use this script from the command line, try the following to get
+started:
+
+     R CMD rtags --help
 
 
 File: ess.info,  Node: Rdired,  Prev: TAGS,  Up: Miscellaneous
@@ -4542,7 +4714,7 @@ Concept Index
 * comint:                                Credits.             (line   6)
 * command history:                       Command History.     (line   6)
 * command line arguments:                iESS(S)--Inferior ESS processes.
-                                                              (line  39)
+                                                              (line  38)
 * command-line completion:               Completion.          (line   6)
 * command-line editing:                  Command-line editing.
                                                               (line   6)
@@ -4771,98 +4943,97 @@ Variable and command index
 
 
 Tag Table:
-Node: Top277
-Node: Introduction2104
-Node: Features5086
-Node: New features8507
-Node: Credits39469
-Node: Latest version42850
-Node: Manual44634
-Node: Installation47176
-Node: Unix installation47654
-Node: Microsoft Windows installation50226
-Node: Requirements58166
-Ref: Requirements-Footnote-158920
-Node: Interactive ESS59013
-Node: Starting up59867
-Node: Multiple ESS processes60678
-Node: ESS processes on Remote Computers61713
-Node: S+elsewhere and ESS-elsewhere64863
-Node: Customizing startup67626
-Node: Entering commands70306
-Node: Command-line editing71605
-Node: Completion72889
-Node: Completion details75658
-Ref: Completion details-Footnote-177064
-Node: Transcript77344
-Node: Last command79119
-Node: Process buffer motion80609
-Node: Transcript resubmit82130
-Node: Saving transcripts84739
-Node: Command History86785
-Node: History expansion89409
-Node: Hot keys92617
-Node: Statistical Process running in ESS?96084
-Node: Emacsclient97389
-Node: Other98196
-Node: Transcript Mode99242
-Node: Resubmit100398
-Node: Clean101482
-Node: ESS for the S family102201
-Node: ESS(S)--Editing files102608
-Node: iESS(S)--Inferior ESS processes103660
-Node: ESS-help--assistance with viewing help109358
-Node: Philosophies for using ESS(S)109688
-Node: Scenarios for use (possibilities--based on actual usage)110824
-Node: Customization Examples and Solutions to Problems115515
-Node: Editing116801
-Node: Edit buffer117988
-Node: Loading120022
-Node: Error Checking121073
-Node: Evaluating code122119
-Node: Indenting125554
-Node: Other edit buffer commands128805
-Node: Source Files130722
-Node: Source Directories135252
-Node: Editing R documentation files138391
-Node: Help142240
-Node: ESS for SAS146570
-Node: ESS(SAS)--Design philosophy147292
-Node: ESS(SAS)--Editing files148246
-Node: ESS(SAS)--TAB key150106
-Node: ESS(SAS)--Batch SAS processes151404
-Node: ESS(SAS)--Function keys for batch processing156428
-Node: iESS(SAS)--Interactive SAS processes166020
-Node: iESS(SAS)--Common problems169770
-Node: ESS(SAS)--Graphics171302
-Node: ESS(SAS)--Windows172085
-Node: ESS for BUGS172664
-Node: ESS(BUGS)--Model files173684
-Node: ESS(BUGS)--Command files176810
-Node: ESS(BUGS)--Log files178126
-Node: ESS for JAGS178676
-Node: ESS(JAGS)--Model files179655
-Node: ESS(JAGS)--Command files181631
-Node: ESS(JAGS)--Log files182407
-Node: Miscellaneous182703
-Node: Highlighting183349
-Node: Parens184764
-Node: Graphics185352
-Node: printer185868
-Node: X11186641
-Node: winjava187172
-Node: Imenu187585
-Node: Toolbar188433
-Node: TAGS188848
-Node: Rdired189827
-Node: Mailing lists/bug reports191083
-Node: Bugs191348
-Node: Reporting Bugs193011
-Node: Mailing Lists193824
-Node: Help with emacs194589
-Node: Customization195143
-Node: Key Index195908
-Node: Concept Index196063
-Node: Variable and command index204153
+Node: Top278
+Node: Introduction2145
+Node: Features5127
+Node: New features8548
+Node: Credits45099
+Node: Latest version48591
+Node: Manual50375
+Node: Installation52917
+Node: Unix installation53395
+Node: Microsoft Windows installation57496
+Node: Requirements66937
+Node: Interactive ESS67446
+Node: Starting up68300
+Node: Multiple ESS processes69111
+Node: ESS processes on Remote Computers70146
+Node: S+elsewhere and ESS-elsewhere73296
+Node: Customizing startup76059
+Node: Entering commands78739
+Node: Command-line editing80038
+Node: Completion81322
+Node: Completion details84091
+Ref: Completion details-Footnote-185497
+Node: Transcript85777
+Node: Last command87552
+Node: Process buffer motion89042
+Node: Transcript resubmit90563
+Node: Saving transcripts93172
+Node: Command History95218
+Node: History expansion97842
+Node: Hot keys101050
+Node: Statistical Process running in ESS?104517
+Node: Emacsclient105822
+Node: Other106629
+Node: Transcript Mode107675
+Node: Resubmit108831
+Node: Clean109915
+Node: ESS for the S family110634
+Node: ESS(S)--Editing files111041
+Node: iESS(S)--Inferior ESS processes112093
+Node: ESS-help--assistance with viewing help117784
+Node: Philosophies for using ESS(S)118114
+Node: Scenarios for use (possibilities--based on actual usage)119250
+Node: Customization Examples and Solutions to Problems123941
+Node: Editing125561
+Node: Edit buffer126748
+Node: Loading128782
+Node: Error Checking129833
+Node: Evaluating code130879
+Node: Indenting134314
+Node: Other edit buffer commands137565
+Node: Source Files139482
+Node: Source Directories144012
+Node: Editing R documentation files147151
+Node: Help151000
+Node: ESS for SAS155330
+Node: ESS(SAS)--Design philosophy156052
+Node: ESS(SAS)--Editing files157006
+Node: ESS(SAS)--TAB key158866
+Node: ESS(SAS)--Batch SAS processes160164
+Node: ESS(SAS)--Function keys for batch processing165188
+Node: iESS(SAS)--Interactive SAS processes174779
+Node: iESS(SAS)--Common problems178529
+Node: ESS(SAS)--Graphics180061
+Node: ESS(SAS)--Windows180844
+Node: ESS for BUGS181423
+Node: ESS(BUGS)--Model files182443
+Node: ESS(BUGS)--Command files185613
+Node: ESS(BUGS)--Log files186929
+Node: ESS for JAGS187479
+Node: ESS(JAGS)--Model files188458
+Node: ESS(JAGS)--Command files190889
+Node: ESS(JAGS)--Log files191665
+Node: Miscellaneous191961
+Node: Highlighting192607
+Node: Parens194022
+Node: Graphics194610
+Node: printer195126
+Node: X11195899
+Node: winjava196430
+Node: Imenu196843
+Node: Toolbar197691
+Node: TAGS198106
+Node: Rdired199393
+Node: Mailing lists/bug reports200649
+Node: Bugs200914
+Node: Reporting Bugs202577
+Node: Mailing Lists203390
+Node: Help with emacs204155
+Node: Customization204709
+Node: Key Index205474
+Node: Concept Index205629
+Node: Variable and command index213719
 
 End Tag Table
