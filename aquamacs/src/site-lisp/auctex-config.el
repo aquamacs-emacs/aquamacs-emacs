@@ -255,7 +255,7 @@ If nil Aquamacs uses Skim if and only if it has been running."
   (let ((emacsclient-min-version "23.0")
 	emacsclient-version)
     (with-temp-buffer
-      (call-process "emacsclient" nil t nil "-V")
+      (call-process "emacsclient" nil t nil "-v")
       (goto-char (point-min))
       (setq emacsclient-version
 	    (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
