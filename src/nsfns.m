@@ -1549,7 +1549,7 @@ for buffer BUFFER */)
 }
 
 
-DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spellingg, Sns_spellchecker_check_spelling,
+DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
        1, 2, 0,
        doc: /* Check spelling of STRING
 Returns the location of the first misspelled word in a 
