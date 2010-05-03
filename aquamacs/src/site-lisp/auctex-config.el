@@ -281,10 +281,16 @@ no reference is found, execute the LaTeX View command."
 ; (setq aquamacs-tex-pdf-viewer "Skim")
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.")
+(defvar aquamacs-skim-show-reading-bar t
+  "Show Skim's `reading bar' when syncronizing LaTeX/PDF files.
+This will increase visibility.
+Set to t to unconditionally show it.  Set to nil to never show it.
+Otherwise, leave it to Skim.")
 
 (defun aquamacs-call-viewer (line source)
   "Display current output file as PDF at LINE (as in file SOURCE).
-Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
+Calls `aquamacs-tex-pdf-viewer' to display the PDF file using the
+Skim AppleScript protocol."
   (let ((full-file-name 
 	 (expand-file-name
 	  ;; as in TeX-view
@@ -304,9 +310,15 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
  tell application \"%s\" 
      activate 
      open theSink 
-     tell front document to go to TeX line %d from theSource 
+     tell front document to go to TeX line %d from theSource%s
   end tell
-" full-file-name full-source-name aquamacs-tex-pdf-viewer line))))
+" full-file-name full-source-name aquamacs-tex-pdf-viewer line
+;; do not say "showing reading bar false" so users can override in future
+(cond ((eq t aquamacs-skim-show-reading-bar)
+       " showing reading bar true")
+      ((eq nil aquamacs-skim-show-reading-bar)
+       " showing reading bar false")
+      (t ""))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
