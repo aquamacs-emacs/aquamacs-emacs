@@ -1593,7 +1593,7 @@ words are spelled as in the dictionary.*/)
 
     // }
   UNBLOCK_INPUT;
-  if (first_word.location == NSNotFound)
+  if (first_word.location == NSNotFound || (int) first_word.location < 0)
     return Qnil;
   else
     return Fcons (make_number (first_word.location), make_number (first_word.length));
