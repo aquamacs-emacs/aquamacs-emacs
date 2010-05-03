@@ -10,6 +10,9 @@ AQUAMACS_ROOT=`pwd`/aquamacs
 rm aquamacs-build.log
 date >>aquamacs-build.log
 
+# make doc often creates stuff, which subsequent "git-pull" refuses to overwrite
+git clean -f aquamacs/doc/  >>aquamacs-build.log  2>>aquamacs-build.log
+
 git checkout -f master >>aquamacs-build.log  2>>aquamacs-build.log
 git pull origin master  >>aquamacs-build.log  2>>aquamacs-build.log
 
