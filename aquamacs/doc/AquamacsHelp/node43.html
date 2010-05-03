@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.x dev</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.x dev">
+<TITLE>Major User Interface Improvements</TITLE>
+<META NAME="description" CONTENT="Major User Interface Improvements">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,82 +21,121 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node44.html">
 <LINK REL="previous" HREF="node42.html">
-<LINK REL="up" HREF="node41.html">
+<LINK REL="up" HREF="node42.html">
 <LINK REL="next" HREF="node44.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html734"
+<A NAME="tex2html743"
   HREF="node44.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html730"
-  HREF="node41.html">
+<A NAME="tex2html739"
+  HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html724"
+<A NAME="tex2html733"
   HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html732"
+<A NAME="tex2html741"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html735"
-  HREF="node44.html">Changes  1.9</A>
-<B> Up:</B> <A NAME="tex2html731"
-  HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html725"
+<B> Next:</B> <A NAME="tex2html744"
+  HREF="node44.html">Key Bindings</A>
+<B> Up:</B> <A NAME="tex2html740"
   HREF="node42.html">Changes  2.0 preview</A>
- &nbsp; <B>  <A NAME="tex2html733"
+<B> Previous:</B> <A NAME="tex2html734"
+  HREF="node42.html">Changes  2.0 preview</A>
+ &nbsp; <B>  <A NAME="tex2html742"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000142000000000000000">
-Changes-- 1.x dev</A>
-</H2>
+<H4><A NAME="SECTION000141010000000000000">
+Major User Interface Improvements</A>
+</H4>
 
 <P>
 
 <UL>
-<LI>Auto Save files are now stored in&nbsp;/Library/Caches/Aquamacs Emacs.  This way, they survive reboots such as after system crashes (kernel panics, etc.).
-Reported by Neil Best, Justin Pitts and Richard Busby.
+<LI><I>Aquamacs is now based on Emacs 23 and the Cocoa NextStep port.  There are many changes under the hood associated with this, but also a plethora of visible improvements.  Major ones, and those pertaining to Aquamacs specifically, are listed here.  Further changes can be found in the NEWS file for Emacs 23.</I>
 
 <P>
 </LI>
-<LI>Auto Save files and Session files are purged after 31 days.
+<LI>Spell-checking now uses the system-wide dictionaries in all the languages supported on OS X.  The standard spelling user interface is available as well as the traditional Emacs `ispell' interface (which also uses the system-wide spelling mechanism).  Configure the use of GNU `aspell' through the `ispell-program-name' variable if desired. 
+Code by Nathaniel Cunningham.
 
 <P>
 </LI>
-<LI>TeX / LaTeX macros are now found more reliably when using TeXLive (`TeX-macro-global' is configured differently).
-Reported by Wolfgang Meiners.
+<LI>Aquamacs has a new icon in the Dock, designed by graphic designer Jessica Walker (jekawacaneer@gmail.com).
 
 <P>
 </LI>
-<LI>Improved Skim support: If Skim is running, or if the new customization variable `aquamacs-always-use-skim' is non-nil, Aquamacs and AUCTeX (latex-mode) will suggest to use the `Jump to PDF' command (renamed), which shows the corresponding PDF document in Skim at cursor position.  
+<LI>The Aquamacs application has been renamed to <I>Aquamacs.app</I> (from Aquamacs Emacs.app).
 
 <P>
 </LI>
-<LI>LaTeX master files in different directories are now found reliably when calling `Jump to PDF'.
-Reported buy Mac Pigman.
+<LI>Dialogs have been vastly improved: they appear as sheets over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.  ``File Save'' panels also appear as sheets. 
 
 <P>
 </LI>
-<LI>In some circumstances, point position was changed when switching back and forth between tabs directly and also via other buffer-switching mechanisms such as opening new files.
+<LI>Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
+The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or <TT>Preferences.el</TT> to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
+
+<P>
+</LI>
+<LI>Fonts and colors of all (mode-specific) faces can now be configured using the standard font and color panels.  The Options / Appearance menu provides a function to show the font panel, which leads to buttons for foreground and background colors.   We also have a menu item for the color panel separately, from where colors can be dragged&amp;dropped directly onto any piece of text to customize its face.  Holding down the Option key will, instead, set the face's background color. 
+
+<P>
+</LI>
+<LI>The printing system has been revised; the standard print and page setup dialogs are used inside the application.  The print dialog now appears more quickly.  (Note: over-long lines will always be wrapped at word boundaries when printing. Clipping or horizontal pagination are not supported at this time.)
+
+<P>
+</LI>
+<LI>Line wrapping is now set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under <I>Options / Line Wrapping</I> for the current buffer.  A <I>Set as Default</I> will set it as default for all buffers that have no explicit line wrap setting.  As before, there is also a setting to detect word wrap in text files.  When it is on, Aquamacs detects the wrapping style of text-mode buffers automatically, but prefers word wrapping (see the customization variable `auto-word-wrap-default-function').
+<FONT SIZE="-1">Word Wrapping translates to `visual-line-mode' internally now, and the former Aquamacs 1.x mode of the same name now corresponds to a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is obsolete.   Users with manual customizations should adjust their settings.  Fine control can be achieved by customizing `visual-line-mode', `word-wrap', `truncate-lines', and `auto-fill-mode'.</FONT>
 
 <P>
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html743"
+  HREF="node44.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html739"
+  HREF="node42.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html733"
+  HREF="node42.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html741"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html744"
+  HREF="node44.html">Key Bindings</A>
+<B> Up:</B> <A NAME="tex2html740"
+  HREF="node42.html">Changes  2.0 preview</A>
+<B> Previous:</B> <A NAME="tex2html734"
+  HREF="node42.html">Changes  2.0 preview</A>
+ &nbsp; <B>  <A NAME="tex2html742"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-05-02</I>
+<BR><I>2010-05-03</I>
 </ADDRESS>
 </BODY>
 </HTML>

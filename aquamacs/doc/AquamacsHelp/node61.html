@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Interface/Usability Improvements--0.9.5</TITLE>
-<META NAME="description" CONTENT="Interface/Usability Improvements--0.9.5">
+<TITLE>Changes--0.9.8</TITLE>
+<META NAME="description" CONTENT="Changes--0.9.8">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,146 +27,155 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html950"
+<A NAME="tex2html957"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html946"
+<A NAME="tex2html953"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html940"
+<A NAME="tex2html947"
   HREF="node60.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html948"
+<A NAME="tex2html955"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html951"
-  HREF="node62.html">New and Updated Major</A>
-<B> Up:</B> <A NAME="tex2html947"
+<B> Next:</B> <A NAME="tex2html958"
+  HREF="node62.html">Changes 0.9.7</A>
+<B> Up:</B> <A NAME="tex2html954"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html941"
-  HREF="node60.html">Changes 0.9.6</A>
- &nbsp; <B>  <A NAME="tex2html949"
+<B> Previous:</B> <A NAME="tex2html948"
+  HREF="node60.html">Changes 0.9.9a</A>
+ &nbsp; <B>  <A NAME="tex2html956"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION0001420000000000000000">
-Interface/Usability Improvements--0.9.5</A>
+<H2><A NAME="SECTION0001416000000000000000">
+Changes--0.9.8</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>The application is now called Aquamacs Emacs.
+<LI>Meta/Option key: New minor modes allow users of various
+	keyboard layouts (German, French, Italian, GB/US) to use the
+	Option key as Meta modifier under Emacs (as it is the
+	default), but still be able to input characters such as [ ] 
+	 | and @. This works for common characters (not all). Some
+	rarely used Emacs key bindings such as M-4 on Italian
+	keyboards are overridden by these modes. Activate them via the
+	Options menu ("Option Key"), or with M-x
+	emulate-mac-french-keyboard-mode (substitute 'french' with
+	a keyboard layout in lower case).
+	The following keyboard layouts are known:
+
+<P>
+German, Italian, Italian-Pro, French, US, British
+
+<P>
+You may define your own mappings. (Please publish them.)
 
 <P>
 </LI>
-<LI>The menu of Recent Files will abbreviate long paths now.
+<LI>Bug reporting: Use standard GNU Emacs bug reporting facility
+ 	(but go through the mail client when necessary.)
 
 <P>
 </LI>
-<LI>Renamed ``Option key produces only special characters'' to
-  ``Option key for Meta (not for extra characters).''
+<LI>One-Buffer-One-Frame: Change in the decision-making process
+	about when to show a buffer in a new frame. Generally, all buffers
+	with names in *'s (such as *vc*) will be shown in the same
+	frame (as directed by `obof-same-frame-regexps'), with the
+	exception of Messages, Help and Customize buffers (as listed in
+	`obof-other-frame-regexps'). This means that more buffers will
+	open as a "small" window inside the current frame. Please report
+	back to us in case you have any unwanted results with this.
 
 <P>
 </LI>
-<LI>C-x C-f  (find-file) will bring up a window first before asking for the
-	name of the file to be loaded.
+<LI>Special-Display-Frames such as the one with the *Help* buffer
+	can now show *Completions* buffers and other ones in a second
+	window inside the frame, just like other frames can.
+ 	(`unsplittable' property in `special-display-frame-alist').
 
 <P>
 </LI>
-<LI>Files saved with Aquamacs have a nice file icon now.
+<LI>Drag&amp;Drop of files in buffers with HTML/LaTeX/C modes results in
+	the appropriate code (such as IMG SRC=... or
+	includegraphics...) being inserted.
+	Patches by Seiji Zenitani
 
 <P>
 </LI>
-<LI>Text is now nicely shown a little to the right in windows. In
-	the left "fringe", you can see small dots indicating the end of
-	the buffer, and a small triangle indicating continued lines. If
-	you cannot see them, your Frame / default style overwrites
-	it. Select "Options / Frame Appearance Styles / Reset all styles"
-	to make the fringes appear.
+<LI>AUCTeX/PDF: TeX-PDF-mode is now the default via the default of
+	its mode variable `TeX-PDF-mode' rather than an entry in
+	`LaTeX-mode-hook', making configuring the default in the
+	customization buffer (or in .emacs) easier. Updated to AUCTeX 11.82.
 
 <P>
 </LI>
-<LI>The "frame appearance styles" system has been revised. *Messages* now has
-	a distinctive colored background. To change this background (or
-	the one for *Help* buffers), customize the variable 
-	`aquamacs-buffer-specific-frame-styles. Also, you can turn Frame Appearance Styles on and off with a menu
-	item.  
+<LI>DONATE: If you like the new version, please donate so we can
+	keep the development efforts going throughout 2006. Have a great
+	new year!
+</LI>
+</UL>	
+
+<P>
+Bugfixes:
+
+<P>
+
+<UL>
+<LI>Browsing a URL (as in Help menu functions, mouse clicks in Gnus
+	etc. could fail in rare circumstances.
+	Reported by Count L&#225;szl&#243; de Alm&#225;sy
 
 <P>
 </LI>
-<LI>Setting the frame font gives a warning now (that the font
-	is only set for the current frame), or sets it as default if Frame
-	Appearance Styles are off.
+<LI>Tcsh environments will be correctly imported into Aquamacs now.
+	Reported by Michael Kohlhase
 
 <P>
 </LI>
-<LI>Frame-related functions from File menu are now in Buffers menu.
+<LI>AUCTeX and RSS documentation (info) are now included.
+	Reported by Arthur Ogus and Jos&#233; Figueroa-O'Farrill
 
 <P>
 </LI>
-<LI>1on1-* customization variables are gone--most of them were not in working
-	order (in Aquamacs) anyways due to the way we were using the
-	Oneonone package. This gets rid of quite a bit of doubly
-	implemented functionality.
+<LI>Avoid the Dock when opening or automatically resizing frames in
+	most situations. 
 
 <P>
 </LI>
-<LI>You can switch the Option key from its Emacs-specific
-	Meta meaning to its Mac typical use (composing keys such as &#252;
-	 (Engl. keyboard) or the backslash (German keyboard) by typing Apple-; - this
-	is equivalent to the Options menu entry ``Option key for Meta.''
+<LI>Up/down movements of the cursor: subtle tweak (jumping to
+	temporary goal column only in series of up/down movements.)
 
 <P>
 </LI>
-<LI>The customization variable aquamacs-auto-frame-parameters allows you to
-	turn off mode-specific styles--your frames stay the same, no
-	matter what major mode you switch to. 
+<LI>`mouse-save-then-kill' for `osx-key-mode-mouse-3-behavior' set
+	to now works fine for double clicks (deleting the selected region)
+	Reported by Konrad Podczeck
 
 <P>
 </LI>
-<LI>Frame Appearance Styles have a better menu structure now in the Options
-	menu. Also, there is a new function ``Delete all mode-specific
-	styles''. 
+<LI>Tcl-mode back in the "New Buffer" menu.
+	Patch by Kevin Walzer
 
 <P>
 </LI>
-<LI>Many menu items are now greyed out (cannot be selected) when no frame is visible.
+<LI>CPerl mode is still the default for perl files, but perl-mode is
+	not an alias any more for cperl-mode.
 
 <P>
 </LI>
-<LI>Help (Aquamacs Manual) has been revised.
-
-<P>
-</LI>
-<LI>(Even) speedier startup.
-
-<P>
-</LI>
-<LI>Every Aquamacs frame has a toolbar-button now. Use it to turn the
-	toolbar in the given frame on and off. 
-
-<P>
-</LI>
-<LI>Improvement when working with multiple frames: when no frame is visible,
-	Aquamacs no longer raises some other frame as soon as a file is
-	loaded.	
-
-<P>
-</LI>
-<LI>Mode-specific styles revised: the full set of parameters coming from 
-	color themes is now supported, in addition to the font and toolbar setting.
-
-<P>
-</LI>
-<LI>Menu item to delete the mode-specific style for the current major mode.
+<LI>Environment import (from the default login shell) works better
+	now for users of tcsh, zsh and ksh.
 
 <P>
 </LI>
@@ -175,35 +184,35 @@ Interface/Usability Improvements--0.9.5</A>
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html950"
+<A NAME="tex2html957"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html946"
+<A NAME="tex2html953"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html940"
+<A NAME="tex2html947"
   HREF="node60.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html948"
+<A NAME="tex2html955"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html951"
-  HREF="node62.html">New and Updated Major</A>
-<B> Up:</B> <A NAME="tex2html947"
+<B> Next:</B> <A NAME="tex2html958"
+  HREF="node62.html">Changes 0.9.7</A>
+<B> Up:</B> <A NAME="tex2html954"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html941"
-  HREF="node60.html">Changes 0.9.6</A>
- &nbsp; <B>  <A NAME="tex2html949"
+<B> Previous:</B> <A NAME="tex2html948"
+  HREF="node60.html">Changes 0.9.9a</A>
+ &nbsp; <B>  <A NAME="tex2html956"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-05-02</I>
+<BR><I>2010-05-03</I>
 </ADDRESS>
 </BODY>
 </HTML>

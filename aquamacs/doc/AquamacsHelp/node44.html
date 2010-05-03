@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.9</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.9">
+<TITLE>Key Bindings</TITLE>
+<META NAME="description" CONTENT="Key Bindings">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,87 +21,125 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node45.html">
 <LINK REL="previous" HREF="node43.html">
-<LINK REL="up" HREF="node41.html">
+<LINK REL="up" HREF="node42.html">
 <LINK REL="next" HREF="node45.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html746"
+<A NAME="tex2html755"
   HREF="node45.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html742"
-  HREF="node41.html">
+<A NAME="tex2html751"
+  HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html736"
+<A NAME="tex2html745"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html744"
+<A NAME="tex2html753"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html747"
-  HREF="node45.html">Changes  1.8c</A>
-<B> Up:</B> <A NAME="tex2html743"
-  HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html737"
-  HREF="node43.html">Changes  1.x dev</A>
- &nbsp; <B>  <A NAME="tex2html745"
+<B> Next:</B> <A NAME="tex2html756"
+  HREF="node45.html">Editing and Major Modes</A>
+<B> Up:</B> <A NAME="tex2html752"
+  HREF="node42.html">Changes  2.0 preview</A>
+<B> Previous:</B> <A NAME="tex2html746"
+  HREF="node43.html">Major User Interface Improvements</A>
+ &nbsp; <B>  <A NAME="tex2html754"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000143000000000000000">
-Changes-- 1.9</A>
-</H2>
+<H4><A NAME="SECTION000141020000000000000">
+Key Bindings</A>
+</H4>
 
 <P>
 
 <UL>
-<LI>Copy (Command-c) works again reliably for text selected by mouse.   However, the previous improvement avoiding duplicate entries in the kill ring has been reverted.
-Reported by Tom van Vleck.
+<LI>It is now possible to customize behavior of right Option/Alternate, Command and Control modifiers independently of the left ones using new entries in the (renamed) ``Option, Command, Meta keys'' menu (in Options) or the new customization variables named `ns-right-alternate-modifier' (etc).  
+Patch by Marcin Koziej.
 
 <P>
 </LI>
-<LI>Jumping to a LaTeX error after compilation works more reliably now.  The LaTeX-command setting has been changed to include `file-line-error' style.
-Suggested by Enrico Franconi.
+<LI>Even when the Option modifier keys are set up to be handled by the system (rather than being Meta - see Options - Option Key menu), Option-Arrow and Option-Delete key combinations lead to wordwise operations (they are recognized as Meta).  (Set the new `ns-alternate-meta-special-codes'  to nil to disable.)
 
 <P>
 </LI>
-<LI>Recognize Objective C files (extensions .m and .h) by their content.
-Patch by Kendall Gelner and D.R.
+<LI>Note that Word Wrapping (`visual-line-mode') affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
+
+<UL>
+<LI>In Word Wrapping (visual-line-mode), C-aenp and arrow keys move according to visual lines.
+</LI>
+<LI>Without Word Wrapping (visual-line-mode off), arrow keys move visually, but C-aenp move non-visually according to buffer lines as in Emacs 22 and Aquamacs 1.x.
+</LI>
+</UL>
+Users may configure this behavior via the (new) `line-move-visual' customization variable.  Set it to <I>t</I> for unconditional visual movement of all keys, and <I>nil</I> for unconditional logical (buffer) movement of all keys.
 
 <P>
 </LI>
-<LI>Automatic word wrapping works better in large hard-wrapped (auto-fill-mode) documents with occasional (6+) over-long lines.
+<LI>Keyboard bindings are displayed more consistently in the menus now.  Throughout Aquamacs,  Mac standard key descriptions are used (this may be configured using the variable `ns-use-mac-modifier-symbols').  Users should be aware that manuals and tutorials will often refer to keys such as <TT>C-x</TT> (<TT>X</TT> or Control X), and that keys like <TT>M-q</TT> correspond to the chosen Meta key modifier, normally the Option key. 
 
 <P>
 </LI>
-<LI>The Apple Help books (for Aquamacs, Emacs and the Emacs Lisp Reference) now work on 10.6 ``Snow Leopard''.
-Reported by Philippe Sismondi.
+<LI>Tabs are now available via the A-1..9 (Command-1..9) keybindings.  `Split-window-vertically' is now bound to A-M-2 (Command Option 2), `split-window-horizontally' is A-M-3 (Command Option 3).
 
 <P>
 </LI>
-<LI>Aquamacs now by default enables synctex when compiling latex documents.  
+<LI>Command-&#241;ow cycles backward to the previously selected frame (`raise-previous-frame').
+Patch by Matthew Dempsky.
 
 <P>
 </LI>
-<LI>CSS-Mode has been revised to match the GNU Emacs 22/23 CSS mode.
+<LI>Command-PageUp/PageDown now jump to the beginning or end of the buffer, respectively (`beginning-of-buffer', `end-of-buffer').
+
+<P>
+</LI>
+<LI>When `osx-key-mode' is switched off, `x-select-enable-clipboard' is restored to its (new) default value, <I>t</I>. That means that kill and yank operations (C-w, C-y, mouse text selection and more) are integrated with the Mac pasteboard.  When `osx-key-mode' is on (as is default), everything is as in previous Aquamacs versions: the standard copy&amp;paste operations (A-c, A-v) use the system pasteboard, while the killring operations from traditional Emacs do not.
+Suggested by Jos&#233; M Figueroa-O'Farrill.
 
 <P>
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html755"
+  HREF="node45.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html751"
+  HREF="node42.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html745"
+  HREF="node43.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html753"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html756"
+  HREF="node45.html">Editing and Major Modes</A>
+<B> Up:</B> <A NAME="tex2html752"
+  HREF="node42.html">Changes  2.0 preview</A>
+<B> Previous:</B> <A NAME="tex2html746"
+  HREF="node43.html">Major User Interface Improvements</A>
+ &nbsp; <B>  <A NAME="tex2html754"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-05-02</I>
+<BR><I>2010-05-03</I>
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--1.4</TITLE>
-<META NAME="description" CONTENT="Changes--1.4">
+<TITLE>Changes-- 1.7</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.7">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,240 +27,166 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html806"
+<A NAME="tex2html813"
   HREF="node50.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html802"
+<A NAME="tex2html809"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html796"
+<A NAME="tex2html803"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html804"
+<A NAME="tex2html811"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html807"
-  HREF="node50.html">Changes 1.3b</A>
-<B> Up:</B> <A NAME="tex2html803"
+<B> Next:</B> <A NAME="tex2html814"
+  HREF="node50.html">Changes  1.6</A>
+<B> Up:</B> <A NAME="tex2html810"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html797"
-  HREF="node48.html">Changes 1.5</A>
- &nbsp; <B>  <A NAME="tex2html805"
+<B> Previous:</B> <A NAME="tex2html804"
+  HREF="node48.html">Changes  1.8c</A>
+ &nbsp; <B>  <A NAME="tex2html812"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000148000000000000000">
-Changes--1.4</A>
+<H2><A NAME="SECTION000144000000000000000">
+Changes-- 1.7</A>
 </H2>
 
 <P>
 
 <UL>
-<LI><B>Aquamacs has tabs</B>. Press Apple-T to create one. You can switch the general use of tabs on in the Options menu. (Note that while the `tabbar' package is provided and used internally, the actual functionality is different.)
-Concept and Code by Nathaniel Cunningham, David&nbsp;Ponce and David Reitter.
+<LI>Aquamacs now makes it easier for users to copy, cut and paste (and kill and yank) whole words, phrases or sentences by managing the spaces between words for them.  Spaces are removed and automatically inserted where needed, whenever the new `smart-spacing-mode' is turned on.  The Options menu provides a setting to turn it on automatically for all <EM>text-mode</EM> and related buffers.  To set a default for all buffers, configure the option `global-smart-spacing-mode' using the customization interface.
 
 <P>
 </LI>
-<LI><B>``Frame Styles'' are turned off</B> by default now. This means that there are no major mode specific settings (fonts, colors)  unless the styles are turned back on (Options menu).   There is a  new ``Clear All Styles'' menu item, and the wording has been improved. There should be less flicker when  switching buffers. The frame size and position are not changed,  even if the frame leaves the screen.
+<LI>A problem that caused error messages upon startup and, sometimes, a failure to quit for some users (and only if Aquamacs was installed for the first time) was fixed. 
+Reported by William Triplett, Kevin Brubeck Unhammer and Jean-Christophe Helary.
 
 <P>
 </LI>
-<LI><B>Revised word wrapping</B>: Soft and hard wrapping can now be recognized automatically (Options / Auto Word Wrap for Text Modes). Also, Soft and Hard wrap modes are now enabled just for the current buffer.  (The former option to automatically enable this is still available via customization of the `text-mode-hook' setting.)
+<LI>Aquamacs now quits faster in some situations.
 
 <P>
 </LI>
-<LI><B>Full screen editing</B>: Press Apple-Shift-Return to get into full screen mode. (There are some known problems with this in  conjunction with changing the frame's fonts. These will be addressed  in the future.)
-Code by Joel Stanley and David Reitter. 
+<LI>JDEE, the Java Development Environment for Emacs is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  This reduces the size of the Aquamacs distribution, while maintaining an easy way for Java programmers to install the package.  Note that JDEE also includes CEDET.
 
 <P>
 </LI>
-<LI><B>Aquamacs does not create backup files (foo.bar&nbsp;) any longer</B> by default. This way, no unnecessary files won't get in your way any longer. (No Mac application creates these. Use Time Machine or a dedicated backup solution for backup needs.) There is an Option in the ``Options'' menu which will turn backups on again. 
+<LI>Tabs showing a buffer that is mirrored in other windows will retain their position of point.
 
 <P>
 </LI>
-<LI><B>The *scratch* buffer is now persistent</B> across sessions.
-  It is saved to an internal file, but File / Save As  (or
-  Apple-Shift-S or C-x C-w) still allow users to save the file elsewhere.
-(To switch this off, customize the `aquamacs-scratch-file' variable to nil.)
+<LI>With soft wrapping on (Options menu), M-q now calls `unfill-paragraph-or-region', which has the same semantics as `fill-paragraph-or-region' for hard wrapped text.
 
 <P>
 </LI>
-<LI>The position (and height and width) of the (main) frame is now persistent across sessions.  (Customize `initial-frame-alist' as documented to open the first frame somewhere else.)  `default-frame-alist' settings for the frame position and extent of subsequent frames are now respected by default.  Aquamacs will not, however, open frames off the screen.
+<LI>C-z is no longer bound to minimize the frame.  Users who require this feature can add the key binding in their <TT>Preferences.el</TT> file:
+<TT>(define-key osx-key-mode-map `[(control z)] 'iconify-or-deiconify-frame)</TT>
+(If you have bound C-z to something else using `global-set-key', note that the new `ignore' binding in `osx-key-mode-map' will shadow this.  You need to use `define-key' as above.)
 
 <P>
 </LI>
-<LI>The tool bar looks like other toolbars on OS X now. Code by Yamamoto Mitsuharu.
+<LI>Cursor movement is no longer sluggish when multiple windows are visible.  Generally, Aquamacs should feel  faster.
+Reported by Drew Hess.
 
 <P>
 </LI>
-<LI>We've got better-looking icons (``alpha channel'') for the tool bar, and labels under the icons like in other OS X programs. (You can save the space for that by customizing `mac-tool-bar-display-mode' to `icons'.)
+<LI>When clicking into an (unselected) window, Aquamacs no longer sets the mark and marks a region in the buffer in certain circumstances. 
+Reported by Konrad Podczeck.
 
 <P>
 </LI>
-<LI>Toolbar items of other modes (such as for LaTeX editing) can be configured via Options / Show/Hide / Toolbar items.
+<LI>Resolved a problem where clicking in the fringe to set a breakpoint when using C-mode in conjunction with `gdb' (in the Emacs debugger) caused Aquamacs to crash. 
+Reported by Eric Martin.
 
 <P>
 </LI>
-<LI>Multi-lingual CocoAspell support: installed dictionaries can now be changed from within Aquamacs.
-Code by Nathaniel Cunningham
+<LI>`gdb' and possibly other packages no longer fail to open certain additional `special display' windows.
+Reported by Eric Martin.
 
 <P>
 </LI>
-<LI>``Check Spelling as You Type" can now be set as the default for all text modes, in the Edit / Spelling menu.
+<LI>Aquamacs no longer opens additional windows when it opens files per drag&amp;drop or as directed by another application (such as Finder), if these files are already shown in a buffer.
+Reported by Tim Hsu.
 
 <P>
 </LI>
-<LI>Aquamacs generally will not show graphical dialog boxes for confirmation questions (unless the mouse has been used last) any longer.  This ensures greater consistency on multi-screen setups and when the frame was off the visible area of the screen.
+<LI>Aquamacs no longer de-minimizes frames (from the Dock) when opening new files while all its frames are hidden.
+Reported by Tim Hsu.
 
 <P>
 </LI>
-<LI>Before any minibuffer interaction takes place, Aquamacs will attempt to ensure that the minibuffer is actually visible: this may involve moving frames into a visible area of the screen.  (To turn this behavior off, try M-x smart-frame-positioning-mode RET, or customize the variable of the same name.)
+<LI>Documents printed or exported to HTML with soft word wrapping turned on will now also exhibit soft wrapping in HTML, and wrap as expected at the page boundary on printed pages.
+Reported by Enrico Indiogine.
 
 <P>
 </LI>
-<LI>Aquamacs now knows more about multi-screen setups (when it comes to frame positioning). 
+<LI>OS X will now more reliably recognize the latest installed Aquamacs version in order to open documents.
 
 <P>
 </LI>
-<LI>Preferences and other code defined in Preferences.el now override any customizations: the customization file (`custom-file', i.e. customizations.el) is now loaded before the Emacs Lisp code in Preferences.el.  This may have consequences for individual configurations, but it ultimately allows users to override any semi-automatic customizations in their Emacs Lisp code. (Note that&nbsp;/.emacs is still loaded before the customization file in order to maintain compatibility with GNU Emacs.)
+<LI>Aquamacs now remembers more and longer undo steps (maximum undo memory and number of steps increased four-fold).  
 
 <P>
 </LI>
-<LI><B>Improved LaTeX support</B>: AUCTeX 11.85 included. This brings a number of advantages for LaTeX users, in particular:
-
-<UL>
-<LI>Better analysis of errors reported by the LaTeX compiler.
-</LI>
-<LI>Improved syntax highlighting when editing .tex documents.
-</LI>
-</UL>
-Code by Ralf Angeli, David Kastrup and others.
+<LI>The ``dialog from hell'', asking users whether they want to save a file, or all, or none, or view the file or the differences, is now less ridiculous and has a Cancel button.  Whether the dialog is shown or the minibuffer is used,  Aquamacs always shows the buffer that is up for saving. 
 
 <P>
 </LI>
-<LI>Searching with Apple-F and Apple-G (isearch) is now more
-  comfortable: it will not normally extend a region (unless started
-  with C-Space). Apple-G (repeat the search) will always set the mark
-  to the beginning of the match so that the region captures the match.
-  This allows users to replace the text of the match with something
-  else easily. 
+<LI>The command line tool (installed with the Tools menu) will now find Aquamacs whereever it is installed in the system.  It will always use the latest Aquamacs Emacs that is known to the system.  (As a side-effect, you cannot use the command in connection with ``sudo'' any longer.  We recommend using Tramp.)
+Reported by Jean-Christophe Helary.
 
 <P>
 </LI>
-<LI>When the mark is set with C-Space, it is more persistent than
-  before: clicking somewhere will not disable it, but extend the
-  region, just like moving the point with arrow keys (and other
-  movement keys) would do.
+<LI>Bug reporting, and generally, sending e-mail, works now for users whose default Email client is Gmail.  Gmail receives special treatment because of a bug on Google's server. 
 
 <P>
 </LI>
-<LI>LaTeX mode comes with more appropriate icons now.
+<LI>Charsets are given in HTML generated with ``Export to HTML''.  Documents now validate as HTML 4.01 Strict.
 
 <P>
 </LI>
-<LI>Color Themes updated to version 6.6.0.
-Code by Xavier Maillard and Jonadab the Unsightly One.
+<LI>A rare display problem was fixed in cases of vertically split windows, with fringes and scroll bars turned off.
+Reported by Rolf Hanson.
 
 <P>
 </LI>
-<LI>The ``Buffers'' menu can now be found on the right hand side of the menu bar.  It is called ``Window''.
+<LI>Autoface mode works better with major modes derived from other ones.
 
 <P>
 </LI>
-<LI>The mode line (at the bottom of each frame) now uses the
-  system's standard font.
+<LI>More key bindings are now shown correctly in the menus (e.g., Undo/Redo).
 
 <P>
 </LI>
-<LI>Control-left and Control-right will now move to the beginning or
-  end of the line, respectively, as is standard in OS X.  Similarly, 
-Meta-left and Meta-right will now move forward or back by single
-words (this is usually Option-left or Option-right).  (`forward-'
-and `backward-sexp-nomark' can now be invoked via C-M-right or -left.)
-Suggested by Jean-Christophe Helary.
+<LI>Python-mode updated to version 5.1.0.  See also: <TT><A NAME="tex2html38"
+  HREF="https://launchpad.net/python-mode/+announcements">https://launchpad.net/python-mode/+announcements</A></TT>.
 
 <P>
 </LI>
-<LI>Apple-[ and Apple-] switch between Emacs windows (i.e., within a
-  frame).
- Suggested by Jean-Christophe Helary.
+<LI>Haskell Mode updated to version 2.4.   We also provide better integration of the mode (recognition of various file types).
+Maintained by Stefan Monnier.
 
 <P>
 </LI>
-<LI>C-backspace deletes a whole file name (i.e., one part of a path)
-  instead of just a word in the minibuffer when a file is selected.
-  M-backspace (usually Option-backspace) deletes the portion of the word to the left, as is
-  standard, while M-delete (usually Option-delete) the one to the right.  If a region is
-  marked, that is deleted.
+<LI>Prolog Mode 1.18 included with vast improvements (and some pre-configuration for Aquamacs).  
+Suggested by Kevin Brubeck Unhammer.  Code by Stefan Bruda et al.
 
 <P>
 </LI>
-<LI>M-e (forward-sentence) and M-a (backward-sentence) do the right
-  thing now even if the text does not have two spaces after each
-  sentence. (New customization variable `sentence-end-double-space-for-recognition'.)
+<LI>ACT-R major mode improved: it inherits `lisp-mode' key bindings now.  <TT>.actr</TT> files are recognized automatically.
 
 <P>
 </LI>
-<LI>Apple-F and Apple-G (search, repeat the search) will now mark
-  the found text as region as is standard. 
-
-<P>
-</LI>
-<LI>Apple-V can now me used immediately after entering isearch (Apple-F) in order to look for the text stored in the pasteboard.
-Suggested by Nathaniel Cunningham.
-
-<P>
-</LI>
-<LI>Apple-2 (split window) will now select the newly created window. 
-
-<P>
-</LI>
-<LI>Improved usability in the Options menu: Wrap options greyed out when not in a text mode, and no more ``save places'' option.
-
-<P>
-</LI>
-<LI>There's a new ``Check for Updates'' menu item in the Aquamacs
-  menu.  If a new version is available, it can be downloaded using a
-  key binding (C-h u). 
-
-<P>
-</LI>
-<LI>Undo/Redo toolbar and menu items are disabled/enabled at the right times (i.e., when there is something to undo/redo).
-
-<P>
-</LI>
-<LI>``Search'' toolbar item is not shown by default.   ``History'' and ``Redo'' items are shown by default. (Use   the Options / Show/Hide / Toolbar menu to configure.)
-
-<P>
-</LI>
-<LI>The context menu now allows to ``search on this Mac'' with Spotlight (on OS X 10.4 or newer).
-
-<P>
-</LI>
-<LI>Font settings for a frame do not affect the mode-line   any longer. You can M-x customize-face mode-line,   specifying a standard OS X font as ``Font family'' (such   as Monaco).
-
-<P>
-</LI>
-<LI>Files are loaded (visited) a little faster now.  `default-major-mode' now defaults to `fundamental-mode' rather than `text-mode', which should have no practical consequences apart from the speed-up. 
-
-<P>
-</LI>
-<LI>Worked around a bug in OS X that caused occasional, very slow program start on some systems.
-
-<P>
-</LI>
-<LI>User-supplied settings of `fill-column' should now be   respected (used for hard word wrapping as enabled in the   Options menu). Reported by Ivan Werning.
-
-<P>
-</LI>
-<LI>Some commands (such as M-x shell) will use the current window rather than showing a new one, unless `one-buffer-one-frame-mode' (Options / Show Buffers in New Frames) is enabled.  Suggested by Jean-Christophe Helary.
+<LI>The Enhanced Carbon Emacs plugin is no longer loaded from <TT>ec-emacs</TT> directories, because it is incompatible with the latest Aquamacs versions.
 
 <P>
 </LI>
@@ -269,35 +195,35 @@ Suggested by Nathaniel Cunningham.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html806"
+<A NAME="tex2html813"
   HREF="node50.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html802"
+<A NAME="tex2html809"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html796"
+<A NAME="tex2html803"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html804"
+<A NAME="tex2html811"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html807"
-  HREF="node50.html">Changes 1.3b</A>
-<B> Up:</B> <A NAME="tex2html803"
+<B> Next:</B> <A NAME="tex2html814"
+  HREF="node50.html">Changes  1.6</A>
+<B> Up:</B> <A NAME="tex2html810"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html797"
-  HREF="node48.html">Changes 1.5</A>
- &nbsp; <B>  <A NAME="tex2html805"
+<B> Previous:</B> <A NAME="tex2html804"
+  HREF="node48.html">Changes  1.8c</A>
+ &nbsp; <B>  <A NAME="tex2html812"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-05-02</I>
+<BR><I>2010-05-03</I>
 </ADDRESS>
 </BODY>
 </HTML>

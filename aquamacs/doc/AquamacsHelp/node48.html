@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--1.5</TITLE>
-<META NAME="description" CONTENT="Changes--1.5">
+<TITLE>Changes-- 1.8c</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.8c">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,239 +27,170 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html794"
+<A NAME="tex2html801"
   HREF="node49.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html790"
+<A NAME="tex2html797"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html784"
+<A NAME="tex2html791"
   HREF="node47.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html792"
+<A NAME="tex2html799"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html795"
-  HREF="node49.html">Changes 1.4</A>
-<B> Up:</B> <A NAME="tex2html791"
+<B> Next:</B> <A NAME="tex2html802"
+  HREF="node49.html">Changes  1.7</A>
+<B> Up:</B> <A NAME="tex2html798"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html785"
-  HREF="node47.html">Changes  1.6</A>
- &nbsp; <B>  <A NAME="tex2html793"
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="node47.html">Changes  1.9</A>
+ &nbsp; <B>  <A NAME="tex2html800"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000147000000000000000">
-Changes--1.5</A>
+<H2><A NAME="SECTION000143000000000000000">
+Changes-- 1.8c</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Aquamacs now handles paragraphs better that are stored as single lines in the buffer: these very long ``lines'' are shown as paragraphs, with words wrapped were appropriate.  The wrap functions in the Options menu will use the new technique.  As a result, line numbers shown in Aquamacs correspond to line numbers in the file.  Also, word wrap will work better now with variable-width fonts.  Syntax highlighting is now correct in all situations, because it is based on the line separation in the underlying file and not on what's displayed  (`longlines-mode' is not used any longer; a new variable `word-wrap' controls the display-time word wrapping.)
-Code by Kim F. Storm, Chong Yidong, David Reitter.
+<LI>Tabs are now directly accessible using keys A-M-1,2,3...9,0 (normally: Command-Option-1,2,3...9,0).  The number of each tabs is marked.  For configuration, see the new customization variable `tabbar-show-key-bindings' and the function `tabbar-define-access-keys'.   For instance, use <TT>(tabbar-define-access-keys '(alt))</TT> in your <TT>Preferences.el</TT> file to use Command-1,2,3.. bindings.
 
 <P>
 </LI>
-<LI>The end of file lines (newlines) or paragraph endings in soft word wrapping can be visualized via Option / Show/Hide / Show Newlines (`global-show-newlines-mode').
+<LI>Aquamacs now asks for confirmation when printing is requested via A-p.  This helps avoid long waits for rendering with large buffers when A-p is pressed by mistake.
 
 <P>
 </LI>
-<LI>Symbols in the fringes have been adapted to look less conspicuous. (These are the indicators to the left and right of text lines.)
-Code by Kim F. Storm.
+<LI>On systems with faulty LaTeX installations, Aquamacs will now do a better job at choosing the right TeXLive (or legacy teTeX) binaries.
 
 <P>
 </LI>
-<LI>The ``small left fringe'' setting in the Show/Hide menu works again as intended.
+<LI>When scrolling back and forth page-wise, the point will now end up in its previous position.
 
 <P>
 </LI>
-<LI>Automatic wrapping detection (hard word wrap = auto-fill, vs.&nbsp;soft word wrap) improved.  A new customization option `auto-word-wrap-default-function' may be used to configure the default, which is hard word wrapping.
+<LI>Command-, can now be re-bound via the normal Aquamacs key maps (`osx-key-mode-map') .  (Note that even if rebound, the application menu will still show the A-q and A-, key bindings for Quit and Preferences, respectively).  A-h remains unmappable for now.
+Reported by Chris Bernard.
 
 <P>
 </LI>
-<LI>Navigation in buffers (up/down) optimized and improved.  This is also a new buffer-local mode (`visual-line-mode'), which is enabled globally (`global-visual-line-mode').  That's also what the ``vl'' mode line indicator stands for.
+<LI>The mark is now deactivated when point is restored while switching tabs (in transient-mark-mode, which is on by default).
 
 <P>
 </LI>
-<LI>Command-Backspace will remove the whole visual line now (`kill-whole-visual-line'), while Command-Shift-Backspace will remove the entire buffer line (which may be a paragraph, when soft wrap is on). 
+<LI>Command-C (clipboard-kill-ring-save) will take care not to create duplicate entries in the kill ring.
+Reported by Konrad Podczeck.
 
 <P>
 </LI>
-<LI>Environment variables are imported again in most situations despite bugs in OS X / Emacs.  This issue could cause LaTeX calls to fail. The *Messages* buffer contains helpful notices. Reported by Thomas S. Dye and others.
+<LI>Fixed a rare failure of dired to view directories.
+Reported by Uwe Pieczynski.
 
 <P>
 </LI>
-<LI>An issue where pressing M-Backspace (especially in the minibuffer) could lead to an error message has been resolved.
+<LI>Fixed a startup failure when environment variables with values where used that could no be encoded with the coding system assigned to the system's ``input source'' language.  (`locale-coding-system' is now set according to the locale in the default login shell.)
+Reported by Andr&#233; Berg.
 
 <P>
 </LI>
-<LI>An issue where the Mac (system) input method would automatically switch to US or Romaji (in Japanese modes) has been resolved.
+<LI>Fixed an error when deleting the whole buffer contents while smart-spacing-mode was on.
+Patch by Jon Shea.
 
 <P>
 </LI>
-<LI>An issue where a ``buffer is read-only'' message appeared when quitting Aquamacs after some buffer was printed has been resolved.
+<LI>Fixed a potential security hole in smtpmail.
+Code by Simon Josefsson.
 
 <P>
 </LI>
-<LI>The frame size, which is retained across sessions, is not limited to what is available on the screen: frames cannot be bigger any longer.
+<LI>`LaTex-mode-hook' can now be customized and saved through the
+  customization interface.
+Reported by Bruno Cadonna.
 
 <P>
 </LI>
-<LI>A toolbar item to revert the buffer (M-x revert-buffer) is now available (configure with Options / Show/Hide / Toolbar items)
+<LI>ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.  
 
 <P>
 </LI>
-<LI>isearch, when entered with C-s or C-r, will not cause the region to be
-set to the search match any longer; the region is, however, set when
-isearch is entered with A-f, A-g or A-G.  The behavior can be
-controlled with the new customization variable
-`set-region-to-isearch-match'.
+<LI>In the keyboard emulation modes that allow the mac-native use of Option on various keyboard layouts, while retaining Option as Meta key for Emacs, ESC key sequences always act as Meta sequences.  For instance, with the German layout, ESC-l  acts as `downcase-word' (the original M-l binding), while Option-l inserts the @ sign.
 
 <P>
 </LI>
-<LI>The Help menu (in ``Diagnose and Report Bug'') provides a way to start another Aquamacs Emacs instance without any personal customizations.  This should be used to reproduce any potential bugs before reporting them.
+<LI>Adopting fonts as default fonts for frames: keep frames inside screen.
+Reported by Stefan Vollmar.
 
 <P>
 </LI>
-<LI>LaTeX configuration (standard paths) simplified.
+<LI>The Aquamacs application bundle has shrunk by about 17 MB thanks to compression.
 
 <P>
 </LI>
-<LI>Auto Frame Styles are turned on automatically when the user chooses to retain frame settings (colors, fonts) for a mode or as a default.
+<LI>Version 1.8b: Show more buffers in Window menu.
 
 <P>
 </LI>
-<LI>After deleting a tab, the previously selected buffer in a window is selected when possible, rather than the rightmost tab.  This resembles tabs in Firefox rather than tabs in Safari.  It is more consistent with Emacs and makes life easier for users of packages that expect the previous buffer on the stack to be selected rather than what's in the tab that happens to be at the right edge.
+<LI>Version 1.8b: Avoid slow-down of editing when Tramp is used to access a remote file.
+Reported by Alison Lister.
 
 <P>
 </LI>
-<LI>Tabs and Windows can now be removed without killing the buffer shown (Window or tab context menu: Hide Tab, Emacs function `tabbar-delete-current-tab').
+<LI>Version 1.8b: Avoid hang during startup when remote, now inaccessible files were edited during a previous session.
+Reported by Christopher Menzel.
 
 <P>
 </LI>
-<LI>Command-W (`close-window') will now delete the selected window and, if there is only one window in the frame, the frame.  When `one-buffer-one-frame-mode' and 'tabbar-mode' are off, it will not kill the buffer (or even ask to save it).   The frame's red ``close'' button will close all windows in the frame.  This should be convenient for traditional Emacs users.  <I>Note that C-x k can still be used to just kill a buffer without affecting its window.</I> 
+<LI>Version 1.8b: org-mode is now used automatically for all <TT>.org</TT> files.
 
 <P>
 </LI>
-<LI>Clicking the red `close' button will now attempt to kill all buffers shown and remove the frame when `one-buffer-one-frame-mode' or 'tabbar-mode' are on.   Because the mouse was used to start the action, dialog boxes are now shown in this situation to ask about saving the buffers, rather than minibuffer prompts. 
-
-<P>
-</LI>
-<LI>When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer (e.g., with C-x k) will now not remove the window and frame any longer (unless Command-W (`close-window') is used.  
-Reported by Ian Eure.
-
-<P>
-</LI>
-<LI>Burying buffers does not always lead to deleting a window any longer when `one-buffer-one-frame-mode' is turned on.
-
-<P>
-</LI>
-<LI>`find-alternate-file' (C-x C-v) now works correctly when tabs are used.  Reported by Ian Eure.
-
-<P>
-</LI>
-<LI>Command-Backspace (`kill-whole-visual-line') will not work in Comint and related modes that display a read-only prompt at the beginning of the line.
-
-<P>
-</LI>
-<LI>When applied to a region, `unfill' (Edit menu, `unfill-paragraph-or-region') will be more flexible in recognizing paragraph boundaries.  Specifically, paragraphs with indented lines will be correctly recognized.  Just mark the paragraph before pressing M-Q!
-
-<P>
-</LI>
-<LI>Searching for keywords in the Help menu now includes the Emacs Manual and the Emacs Lisp Reference.
-
-<P>
-</LI>
-<LI>Improvements for Aquamacs calls from the command line: files to be opened do not need to exist, and they are now shown in the most appropriate window available (or in a new one).
-
-<P>
-</LI>
-<LI>The ``Text properties'' submenu has been remove from the Edit menu.  (Among the issues: its entries were misleading; text properties aren't saved in files.)
-
-<P>
-</LI>
-<LI>Structure of Help menu revised.
-
-<P>
-</LI>
-<LI>in SLIME (Lisp mode) and ERC, the Aquamacs tabs work again. (`slime-header-line-p' and `erc-header-line-format' now default to nil. `erc-mode-line-format' has a new default value. Customize these variables to revert to the old behavior.)
-
-<P>
-</LI>
-<LI>Incompatibility with VM (an optional install)  removed.
-Reported by Jos&#233; Figueroa-O'Farrill.
-
-<P>
-</LI>
-<LI>Internal change: Full-screen editing is now handled via the
-  frame parameter `fullscreen'.
-
-<P>
-</LI>
-<LI>Page-wise scrolling where a single line filled more than a screen page has been fixed.
-Reported by Mac Pigman.
-
-<P>
-</LI>
-<LI>Command-Shift-S (A-S) now leads to a file selector dialog that shows the file name associated with the current buffer, as the menu item has done all along.
-Reported by Nathaniel Cunningham.
-
-<P>
-</LI>
-<LI>Further minor bug fixes.
-
-<P>
-</LI>
-<LI>Many thanks for your donations since the last version was published.  Specifically, we would like to thank William Ziemer for donating a Mac Mini as our project server.  
-
-<P>
-If you haven't done so lately, please consider making a donation to the project at <TT><A NAME="tex2html40"
-  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>. Your donations are essential in keeping the project going-we have no other source of income from Aquamacs.  We'd like to do great things with Aquamacs, but that'll only happen with your support. 
-
-<P>
+<LI>Version 1.8c: AUCTeX is used again as latex-mode
+Reported by Herbert Kort&#233;.
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html794"
+<A NAME="tex2html801"
   HREF="node49.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html790"
+<A NAME="tex2html797"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html784"
+<A NAME="tex2html791"
   HREF="node47.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html792"
+<A NAME="tex2html799"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html795"
-  HREF="node49.html">Changes 1.4</A>
-<B> Up:</B> <A NAME="tex2html791"
+<B> Next:</B> <A NAME="tex2html802"
+  HREF="node49.html">Changes  1.7</A>
+<B> Up:</B> <A NAME="tex2html798"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html785"
-  HREF="node47.html">Changes  1.6</A>
- &nbsp; <B>  <A NAME="tex2html793"
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="node47.html">Changes  1.9</A>
+ &nbsp; <B>  <A NAME="tex2html800"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-05-02</I>
+<BR><I>2010-05-03</I>
 </ADDRESS>
 </BODY>
 </HTML>
