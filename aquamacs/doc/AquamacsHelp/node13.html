@@ -27,30 +27,30 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html342"
+<A NAME="tex2html349"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html338"
+<A NAME="tex2html345"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html332"
+<A NAME="tex2html339"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html340"
+<A NAME="tex2html347"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html343"
+<B> Next:</B> <A NAME="tex2html350"
   HREF="node14.html">Using the Options key</A>
-<B> Up:</B> <A NAME="tex2html339"
+<B> Up:</B> <A NAME="tex2html346"
   HREF="node12.html">Options</A>
-<B> Previous:</B> <A NAME="tex2html333"
+<B> Previous:</B> <A NAME="tex2html340"
   HREF="node12.html">Options</A>
- &nbsp; <B>  <A NAME="tex2html341"
+ &nbsp; <B>  <A NAME="tex2html348"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -61,13 +61,30 @@ Line wrapping</A>
 </H3>
 
 <P>
-Text is usually shown and read line by line.  Several lines commonly form a paragraph.   However, text is not necessarily stored this way in a file:  sometimes, a <I>line</I> stored in a file is much wider than what would fit on a computer screen, and is really a paragraph.  This makes sense: authors of documents do not know how wide the reader's computer screen is, or how wide the window is going to be that is used to read and edit the text.  Aquamacs supports this mode of editing with <I>word wrapping</I>: lines are wrapped at word boundaries.  This way, a buffer line is displayed as a paragraph (several visual lines) on the screen.  In Aquamacs, this mode of operation is called <B>soft word wrap</B> and is available from the Options menu.<A NAME="tex2html7"
-  HREF="footnode.html#foot74"><SUP>2</SUP></A>
+Text is usually shown and read line by line.  Several lines commonly form a paragraph.   However, text is not necessarily stored this way in a file:  sometimes, a <I>line</I> stored in a file is much wider than what would fit on a computer screen, and is really a paragraph.  This makes sense: authors of documents do not know how wide the reader's computer screen is, or how wide the window is going to be that is used to read and edit the text.  Aquamacs supports this mode of editing with <I>word wrapping</I>: lines are wrapped at word boundaries.  This way, a buffer line is displayed as a paragraph (several visual lines) on the screen.  In Aquamacs, this mode of operation is called <B> word wrap</B> and is available from the Options menu.  Internally, word wrapping enables <I>Visual Line Mode</I>.<A NAME="tex2html7"
+  HREF="footnode.html#foot75"><SUP>2</SUP></A>
 <P>
-What's the alternative?  <B>Hard word wrap</B> means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.  If a line is too long, it can either be <B>truncated</B> (cut off) or be continued on the next line. (The difference between hard and soft word wrap is technically whether lines are continued only at word boundaries.)
+What's the alternative?  <B>Hard line breaking</B> means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.   Line Breaking, called <I>Auto Fill</I> in classical Emacs, changes the actual buffer and file contents, unlike all the other options discussed here.
 
 <P>
-Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Auto Word Wrap in Text Modes'' function.  (You can control the default, e.g.,&nbsp;for new files, by setting `auto-word-wrap-default-function' to `turn-on-word-wrap' using Options / Customize Emacs / Specific Options.)
+Long lines can also be <B>truncated</B> (cut off) or be continued (<B>wrap</B>) on the next line.
+
+<P>
+Line wrapping can be set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under <I>Options / Line Wrapping</I> for the current buffer.  A <I>Set as Default</I> will set it as default for all buffers that have no explicit line wrap setting.  
+
+<P>
+Note that Word Wrapping (`visual-line-mode') affects the function of the cursor movement keys (arrows, and C-a, C-e, C-p and C-n).  In Aquamacs, this can be easily customized.  The default is as such:  
+
+<UL>
+<LI>In Word Wrapping (visual-line-mode), C-aenp and arrow keys move according to visual lines.
+</LI>
+<LI>Without Word Wrapping (visual-line-mode off), arrow keys move visually, but C-aenp move non-visually according to buffer lines as in Emacs 22 and Aquamacs 1.x.
+</LI>
+</UL>
+ou may configure this behavior via the `line-move-visual' customization variable.  Set it to <I>t</I> for unconditional visual movement of all keys, and <I>nil</I> for unconditional logical (buffer) movement of all keys.
+
+<P>
+Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Detect Line Wrap in Text Files'' function.  (You can control the default, e.g.,&nbsp;for new files, by setting `auto-word-wrap-default-function' to `set-word-wrap' using Options / Customize Aquamacs / Specific Option.)
 
 <P>
 A useful function to convert hard wrapped text into soft wrapped text can be found in the Edit menu: <I>Remove Hard Line Breaks</I> will turn (non-indented!) paragraphs into soft-wrapped lines (turn on soft wrapping to see). 
@@ -78,35 +95,35 @@ Similarly, to manually reformat text that is laid out line by line, using hard l
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html342"
+<A NAME="tex2html349"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html338"
+<A NAME="tex2html345"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html332"
+<A NAME="tex2html339"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html340"
+<A NAME="tex2html347"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html343"
+<B> Next:</B> <A NAME="tex2html350"
   HREF="node14.html">Using the Options key</A>
-<B> Up:</B> <A NAME="tex2html339"
+<B> Up:</B> <A NAME="tex2html346"
   HREF="node12.html">Options</A>
-<B> Previous:</B> <A NAME="tex2html333"
+<B> Previous:</B> <A NAME="tex2html340"
   HREF="node12.html">Options</A>
- &nbsp; <B>  <A NAME="tex2html341"
+ &nbsp; <B>  <A NAME="tex2html348"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

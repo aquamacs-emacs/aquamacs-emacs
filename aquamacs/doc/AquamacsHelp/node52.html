@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--0.9.9d</TITLE>
-<META NAME="description" CONTENT="Changes--0.9.9d">
+<TITLE>Changes--1.1</TITLE>
+<META NAME="description" CONTENT="Changes--1.1">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,170 +21,158 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node53.html">
 <LINK REL="previous" HREF="node51.html">
-<LINK REL="up" HREF="node39.html">
+<LINK REL="up" HREF="node41.html">
 <LINK REL="next" HREF="node53.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html833"
+<A NAME="tex2html842"
   HREF="node53.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html829"
-  HREF="node39.html">
+<A NAME="tex2html838"
+  HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html823"
+<A NAME="tex2html832"
   HREF="node51.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html831"
+<A NAME="tex2html840"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html834"
-  HREF="node53.html">Changes 0.9.9c</A>
-<B> Up:</B> <A NAME="tex2html830"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html824"
-  HREF="node51.html">Changes 1.0b</A>
- &nbsp; <B>  <A NAME="tex2html832"
+<B> Next:</B> <A NAME="tex2html843"
+  HREF="node53.html">Changes 1.0b</A>
+<B> Up:</B> <A NAME="tex2html839"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html833"
+  HREF="node51.html">Changes 1.2</A>
+ &nbsp; <B>  <A NAME="tex2html841"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION0001413000000000000000">
-Changes--0.9.9d</A>
+<H2><A NAME="SECTION0001411000000000000000">
+Changes--1.1</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Frames (windows) now have a little icon in the title bar for the
-	selected buffer, and you can drag&amp;drop this to other applications.
-	Patch by  Mitsuharu Yamamoto
+<LI>Based on GNU Emacs 22.1.
 
 <P>
 </LI>
-<LI>Clicking the Dock icon of Aquamacs will now bring up a minimized
-	frame, if there is no other frame to be shown - just like in any
-	OS X application.
-	Suggested by Frank Atanassow
+<LI>Aquamacs is now much faster when opening new frames (windows).
 
 <P>
 </LI>
-<LI>Fonts can now be selected comfortably with the OS X standard
-	font selector, accessible via "Options - Show Fonts".
-	Remember  - to make a setting stick, use the "Frame Appearance
-	Styles". Set the new style either for the given major mode, or as
-	a default.
-	Patch by  Mitsuharu Yamamoto
+<LI>The Aquamacs binary now starts fine from the command-line on certain Intel machines.
 
 <P>
 </LI>
-<LI>C-n and C-p are now mapped to `next-line' / `previous-line'
-	again, so they may be used to jump full lines (as defined by
-	carriage returns) - even if the lines are wrapped around. The
-	arrow keys move the cursor visually as before. 
-	Suggested by Tom van Vleck
+<LI>Preference file loading has been revised.  Aquamacs now
+  displays helpful error messages if one of the Preferences files
+  causes problems. M-x aquamacs-load-preferences allows users to test
+  their preference files. Starting from a Terminal window by calling
+  the ``Aquamacs Emacs'' binary with a ``-q'' argument will prevent
+  Aquamacs from loading any preference files, not just .emacs.
+(Note that customizations.el is not meant to be edited by users.)
 
 <P>
 </LI>
-<LI>Apple-` now cycles through all the frames, not just the topmost two.
-	Reported by William Henney
+<LI>Aquamacs now starts up faster.
 
 <P>
 </LI>
-<LI>Apple-: now spell-checks the buffer, provided ispell is installed.
-	Suggested by Jean-Christophe Helary
+<LI>Aquamacs does not define a number of fontsets any longer on
+  startup. Since the font selection dialog can be used (Apple-T),
+  fonts can be chosen freely and fontsets only need to be defined to
+  combine fonts, which is rarely needed. Users may define their
+  fontsets as before - Aquamacs just doesn't do it for them (unless
+  such fontsets are used in customizations).
+  Call (aquamacs-create-standard-fontsets) from Preferences.el should
+  any problem occur.
 
 <P>
 </LI>
-<LI>Apple-Shift-S will now bring up a file selector rather than
-	prompting for a file name in the minibuffer. If you prefer the
-	Emacs-style prompt, you should use the Emacs-style key binding:
-	C-x C-w.
-	Suggested by Jean-Christophe Helary
+<LI>Emacs 22 Manuals (man / info, available from the Help menu)  are
+  now displayed on all systems.
+  Reported by Eric Martin.
 
 <P>
 </LI>
-<LI>Emulate-Mac-Keyboard-Mode: improved support for French keyboard
-	layouts
+<LI>Customization groups are not shown in separate windows any longer.
 
 <P>
 </LI>
-<LI>ESS 5.3.0 included
+<LI>Plugins may now contain `info' files, which will automatically
+  be found by Aquamacs (and M-x info).
+Reported by Wei Tang.
 
 <P>
 </LI>
-<LI>SLIME - the Superior Lisp Interaction Mode is now available with
-	Aquamacs. It's pre-configured for you. Use `lisp-mode' for your
-	Lisp editing, and run M-x slime to start a lisp inferior
-	process. You may need to set the variable `inferior-lisp-program'
-	via customization or in your Preferences.el as follows:
-
-<P>
-<PRE>
-	(setq inferior-lisp-program "path to lisp")
-</PRE>
+<LI>An issue with the font size on some pages of the Aquamacs manual
+  (as available from the Help menu) has been addressed.
+Reported by David Romano.
 
 <P>
 </LI>
-<LI>C++ Mode is used automatically for .cp files.
+<LI>The ``Emulate Some Italian Option key combinations'' mode   (emulate-mac-italian-keyboard-mode) allows users to type ``m'' again.   Reported by Domenico Prattichizzo.
 
 <P>
 </LI>
-<LI>Keyboard bug-fix: certain keys could not be successfully input
-	on certain keyboard layouts, most notably the key combination 
-	C-c ` as used in LaTeX mode (AUCTeX) was not available on German
-	keyboards.
-	Patch by Taiichi Hashimoto
+<LI>X Resources specified via the OS X defaults system (plist) are
+  not supported any longer.
 
 <P>
 </LI>
-<LI>Ispell/LaTeX bug-fix: ispell will now ignore TeX commands in
-	such buffers.
-	Patch by Bill Rising
+<LI>Thank you to all users who have donated
+        (<TT><A NAME="tex2html42"
+  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>). Those who haven't had the
+        chance to support the Aquamacs project, please consider a
+        contribution now!
 
 <P>
 </LI>
-</UL>	
+</UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html833"
+<A NAME="tex2html842"
   HREF="node53.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html829"
-  HREF="node39.html">
+<A NAME="tex2html838"
+  HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html823"
+<A NAME="tex2html832"
   HREF="node51.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html831"
+<A NAME="tex2html840"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html834"
-  HREF="node53.html">Changes 0.9.9c</A>
-<B> Up:</B> <A NAME="tex2html830"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html824"
-  HREF="node51.html">Changes 1.0b</A>
- &nbsp; <B>  <A NAME="tex2html832"
+<B> Next:</B> <A NAME="tex2html843"
+  HREF="node53.html">Changes 1.0b</A>
+<B> Up:</B> <A NAME="tex2html839"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html833"
+  HREF="node51.html">Changes 1.2</A>
+ &nbsp; <B>  <A NAME="tex2html841"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

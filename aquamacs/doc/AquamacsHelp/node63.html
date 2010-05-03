@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Bug Fixes--0.9.3a and 0.9.3b</TITLE>
-<META NAME="description" CONTENT="Bug Fixes--0.9.3a and 0.9.3b">
+<TITLE>Bug Fixes--0.9.5</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.5">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,70 +21,150 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node64.html">
 <LINK REL="previous" HREF="node62.html">
-<LINK REL="up" HREF="node39.html">
+<LINK REL="up" HREF="node41.html">
 <LINK REL="next" HREF="node64.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html965"
+<A NAME="tex2html974"
   HREF="node64.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html961"
-  HREF="node39.html">
+<A NAME="tex2html970"
+  HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html955"
+<A NAME="tex2html964"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html963"
+<A NAME="tex2html972"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html966"
-  HREF="node64.html">Bug Fixes, Features and</A>
-<B> Up:</B> <A NAME="tex2html962"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html956"
-  HREF="node62.html">Bug Fixes 0.9.4</A>
- &nbsp; <B>  <A NAME="tex2html964"
+<B> Next:</B> <A NAME="tex2html975"
+  HREF="node64.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html971"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html965"
+  HREF="node62.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html973"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION0001424000000000000000">
-Bug Fixes--0.9.3a and 0.9.3b</A>
+<H2><A NAME="SECTION0001422000000000000000">
+Bug Fixes--0.9.5</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Fixed ``wrong argument type'' problem (version check),
-    which could occur in new installations or those updated from 0.9.1.
+<LI>Font ``Bitstream Vera Sans'' works again.  	
 
 <P>
 </LI>
-<LI>Monaco 18 font present (suggestion: David M. Cook).
+<LI>Exiting view mode (e.g. help) with 'q' deletes the frame instead of
+	iconifying it.
 
 <P>
 </LI>
-<LI>Emacs Manual available again.
+<LI>The (Apple Help) manuals work now on systems where tcsh
+	is the default shell.  (Reported by Arthur Ogus)
 
 <P>
 </LI>
-<LI>Save mac-pass-option-to-system when saving options.
+<LI>Startup with arguments -nw (tty / in terminal) revised.
+
+<P>
+</LI>
+<LI>You can now redefine Aquamacs keys like this:
+
+<P>
+<TT>(define-key osx-key-mode-map [end] 'end-of-line)</TT>
+
+<P>
+(Thanks for reporting: Andreas Hess.)
+
+<P>
+</LI>
+<LI>If the user changes mac-command-modifier, it may be advisable to call
+
+<P>
+<TT>(osx-key-reset-mode-map)</TT>
+
+<P>
+This will ensure that the keymap is updated and Aquamacs installs
+	its Mac-like keyboard commands (provided you want this).
+
+<P>
+</LI>
+<LI>New frames will not open behind the Dock any more.
+
+<P>
+</LI>
+<LI>An error message (harmless) when clicking on "Finish" in customize is gone.
+
+<P>
+</LI>
+<LI>Error message during version check on startup removed (occurred in
+	certain cases where users had upgraded their system.)
+
+<P>
+</LI>
+<LI>In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+</LI>
+<LI>Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
+	Frames'') is turned off. 
+</LI>
+<LI>Option-up/down (if Option is meta) now scrolls page-wise.
+
+<P>
+</LI>
+<LI>Other bug-fixes.
+
+<P>
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html974"
+  HREF="node64.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html970"
+  HREF="node41.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html964"
+  HREF="node62.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html972"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html975"
+  HREF="node64.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html971"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html965"
+  HREF="node62.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html973"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

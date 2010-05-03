@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.8c</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.8c">
+<TITLE>Changes-- 1.x dev</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.x dev">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,176 +21,82 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node44.html">
 <LINK REL="previous" HREF="node42.html">
-<LINK REL="up" HREF="node39.html">
+<LINK REL="up" HREF="node41.html">
 <LINK REL="next" HREF="node44.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html725"
+<A NAME="tex2html734"
   HREF="node44.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html721"
-  HREF="node39.html">
+<A NAME="tex2html730"
+  HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html715"
+<A NAME="tex2html724"
   HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html723"
+<A NAME="tex2html732"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html726"
-  HREF="node44.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html722"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html716"
-  HREF="node42.html">Changes  1.9</A>
- &nbsp; <B>  <A NAME="tex2html724"
+<B> Next:</B> <A NAME="tex2html735"
+  HREF="node44.html">Changes  1.9</A>
+<B> Up:</B> <A NAME="tex2html731"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html725"
+  HREF="node42.html">Changes  2.0 preview</A>
+ &nbsp; <B>  <A NAME="tex2html733"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000144000000000000000">
-Changes-- 1.8c</A>
+<H2><A NAME="SECTION000142000000000000000">
+Changes-- 1.x dev</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Tabs are now directly accessible using keys A-M-1,2,3...9,0 (normally: Command-Option-1,2,3...9,0).  The number of each tabs is marked.  For configuration, see the new customization variable `tabbar-show-key-bindings' and the function `tabbar-define-access-keys'.   For instance, use <TT>(tabbar-define-access-keys '(alt))</TT> in your <TT>Preferences.el</TT> file to use Command-1,2,3.. bindings.
+<LI>Auto Save files are now stored in&nbsp;/Library/Caches/Aquamacs Emacs.  This way, they survive reboots such as after system crashes (kernel panics, etc.).
+Reported by Neil Best, Justin Pitts and Richard Busby.
 
 <P>
 </LI>
-<LI>Aquamacs now asks for confirmation when printing is requested via A-p.  This helps avoid long waits for rendering with large buffers when A-p is pressed by mistake.
+<LI>Auto Save files and Session files are purged after 31 days.
 
 <P>
 </LI>
-<LI>On systems with faulty LaTeX installations, Aquamacs will now do a better job at choosing the right TeXLive (or legacy teTeX) binaries.
+<LI>TeX / LaTeX macros are now found more reliably when using TeXLive (`TeX-macro-global' is configured differently).
+Reported by Wolfgang Meiners.
 
 <P>
 </LI>
-<LI>When scrolling back and forth page-wise, the point will now end up in its previous position.
+<LI>Improved Skim support: If Skim is running, or if the new customization variable `aquamacs-always-use-skim' is non-nil, Aquamacs and AUCTeX (latex-mode) will suggest to use the `Jump to PDF' command (renamed), which shows the corresponding PDF document in Skim at cursor position.  
 
 <P>
 </LI>
-<LI>Command-, can now be re-bound via the normal Aquamacs key maps (`osx-key-mode-map') .  (Note that even if rebound, the application menu will still show the A-q and A-, key bindings for Quit and Preferences, respectively).  A-h remains unmappable for now.
-Reported by Chris Bernard.
+<LI>LaTeX master files in different directories are now found reliably when calling `Jump to PDF'.
+Reported buy Mac Pigman.
 
 <P>
 </LI>
-<LI>The mark is now deactivated when point is restored while switching tabs (in transient-mark-mode, which is on by default).
+<LI>In some circumstances, point position was changed when switching back and forth between tabs directly and also via other buffer-switching mechanisms such as opening new files.
 
 <P>
-</LI>
-<LI>Command-C (clipboard-kill-ring-save) will take care not to create duplicate entries in the kill ring.
-Reported by Konrad Podczeck.
-
-<P>
-</LI>
-<LI>Fixed a rare failure of dired to view directories.
-Reported by Uwe Pieczynski.
-
-<P>
-</LI>
-<LI>Fixed a startup failure when environment variables with values where used that could no be encoded with the coding system assigned to the system's ``input source'' language.  (`locale-coding-system' is now set according to the locale in the default login shell.)
-Reported by Andr&#233; Berg.
-
-<P>
-</LI>
-<LI>Fixed an error when deleting the whole buffer contents while smart-spacing-mode was on.
-Patch by Jon Shea.
-
-<P>
-</LI>
-<LI>Fixed a potential security hole in smtpmail.
-Code by Simon Josefsson.
-
-<P>
-</LI>
-<LI>`LaTex-mode-hook' can now be customized and saved through the
-  customization interface.
-Reported by Bruno Cadonna.
-
-<P>
-</LI>
-<LI>ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.  
-
-<P>
-</LI>
-<LI>In the keyboard emulation modes that allow the mac-native use of Option on various keyboard layouts, while retaining Option as Meta key for Emacs, ESC key sequences always act as Meta sequences.  For instance, with the German layout, ESC-l  acts as `downcase-word' (the original M-l binding), while Option-l inserts the @ sign.
-
-<P>
-</LI>
-<LI>Adopting fonts as default fonts for frames: keep frames inside screen.
-Reported by Stefan Vollmar.
-
-<P>
-</LI>
-<LI>The Aquamacs application bundle has shrunk by about 17 MB thanks to compression.
-
-<P>
-</LI>
-<LI>Version 1.8b: Show more buffers in Window menu.
-
-<P>
-</LI>
-<LI>Version 1.8b: Avoid slow-down of editing when Tramp is used to access a remote file.
-Reported by Alison Lister.
-
-<P>
-</LI>
-<LI>Version 1.8b: Avoid hang during startup when remote, now inaccessible files were edited during a previous session.
-Reported by Christopher Menzel.
-
-<P>
-</LI>
-<LI>Version 1.8b: org-mode is now used automatically for all <TT>.org</TT> files.
-
-<P>
-</LI>
-<LI>Version 1.8c: AUCTeX is used again as latex-mode
-Reported by Herbert Kort&#233;.
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html725"
-  HREF="node44.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next.png"></A> 
-<A NAME="tex2html721"
-  HREF="node39.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="./up.png"></A> 
-<A NAME="tex2html715"
-  HREF="node42.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="./prev.png"></A> 
-<A NAME="tex2html723"
-  HREF="node1.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
- SRC="./contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html726"
-  HREF="node44.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html722"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html716"
-  HREF="node42.html">Changes  1.9</A>
- &nbsp; <B>  <A NAME="tex2html724"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

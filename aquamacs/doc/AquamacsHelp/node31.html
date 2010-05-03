@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changing Aquamacs source files</TITLE>
-<META NAME="description" CONTENT="Changing Aquamacs source files">
+<TITLE>Load path</TITLE>
+<META NAME="description" CONTENT="Load path">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,67 +19,80 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
+<LINK REL="next" HREF="node32.html">
 <LINK REL="previous" HREF="node30.html">
-<LINK REL="up" HREF="node27.html">
+<LINK REL="up" HREF="node29.html">
 <LINK REL="next" HREF="node32.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html557"
+<A NAME="tex2html568"
   HREF="node32.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html553"
-  HREF="node27.html">
+<A NAME="tex2html564"
+  HREF="node29.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html549"
+<A NAME="tex2html558"
   HREF="node30.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html555"
+<A NAME="tex2html566"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html558"
-  HREF="node32.html">Getting Help</A>
-<B> Up:</B> <A NAME="tex2html554"
-  HREF="node27.html">Extending Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html550"
-  HREF="node30.html">Disabling a plug-in or</A>
- &nbsp; <B>  <A NAME="tex2html556"
+<B> Next:</B> <A NAME="tex2html569"
+  HREF="node32.html">Disabling a plug-in or</A>
+<B> Up:</B> <A NAME="tex2html565"
+  HREF="node29.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html559"
+  HREF="node30.html">Plug-in Interface</A>
+ &nbsp; <B>  <A NAME="tex2html567"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00064000000000000000">
-Changing Aquamacs source files</A>
+<H2><A NAME="SECTION00062000000000000000">
+Load path</A>
 </H2>
 
 <P>
-If you'd like to tinker with the Emacs lisp source files that come with Aquamacs, you can do so quite easily. When activaten a new function or evaluate an expression, C-x C-e is your friend.
+Aquamacs is able to find configuration files and Emacs packages
+from any of the following locations (load-path). 
+<A NAME="standardpaths"></A>
+<P>
+
+<UL>
+<LI><TT>/Library/Application Support/Aquamacs Emacs/</TT>
+</LI>
+<LI><TT>/Users/User Name/Library/Preferences/Aquamacs Emacs/ </TT>
+</LI>
+</UL>
+The following paths are available in the load-path for individual preference settings. <I>They should 
+not be used if you distribute a point-and-click installer package.</I>
+
+<UL>
+<LI><TT>/Library/Preferences/Aquamacs Emacs/ </TT>
+</LI>
+<LI><TT>/Users/User Name/Library/Preferences/Aquamacs Emacs/ </TT>
+</LI>
+</UL>
 
 <P>
-However, you may notice that some of your changes aren't active after you've saved your work (into the Aquamacs application bundle) and restart. That is because some of the code is precompiled into the Aquamacs binary and not loaded from the source (or .elc / .el.gz) files. To alleviate that problem, create a
-file
-<BR><TT>/Users/User Name/Library/Application Support/Aquamacs Emacs/site-prestart.el</TT> 
+All subsequent directories are added recursively, so Aquamacs will
+find any path that starts below. Type <TT>C-h v load-path</TT> for more
+information.<A NAME="tex2html25"
+  HREF="footnode.html#foot256"><SUP>7</SUP></A>
 <BR>
-with the following content:
-
-<P>
-<TT>(setq aquamacs-reload-preloaded-files t)</TT>
-
-<P>
-This will cause to re-read the otherwise preloaded files from disk.
-
 <P>
 <BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

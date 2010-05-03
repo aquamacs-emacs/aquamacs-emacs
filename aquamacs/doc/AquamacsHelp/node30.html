@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Disabling a plug-in or a load-path</TITLE>
-<META NAME="description" CONTENT="Disabling a plug-in or a load-path">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,54 +21,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node31.html">
 <LINK REL="previous" HREF="node29.html">
-<LINK REL="up" HREF="node27.html">
+<LINK REL="up" HREF="node29.html">
 <LINK REL="next" HREF="node31.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html547"
+<A NAME="tex2html556"
   HREF="node31.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html543"
-  HREF="node27.html">
+<A NAME="tex2html552"
+  HREF="node29.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html537"
+<A NAME="tex2html546"
   HREF="node29.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html545"
+<A NAME="tex2html554"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html548"
-  HREF="node31.html">Changing Aquamacs source files</A>
-<B> Up:</B> <A NAME="tex2html544"
-  HREF="node27.html">Extending Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html538"
-  HREF="node29.html">Load path</A>
- &nbsp; <B>  <A NAME="tex2html546"
+<B> Next:</B> <A NAME="tex2html557"
+  HREF="node31.html">Load path</A>
+<B> Up:</B> <A NAME="tex2html553"
+  HREF="node29.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html547"
+  HREF="node29.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html555"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00063000000000000000">
-Disabling a plug-in or a load-path</A>
+<H2><A NAME="SECTION00061000000000000000">
+Plug-in Interface</A>
 </H2>
 
 <P>
-If an (emtpy) file named <I>.ignore</I> exists in a specific path, Aquamacs does not load any <I>site-start</I> and <I>site-prestart</I> source files in this or descending paths and does not add that or 
-subsequent paths to the load-path. 
+All files named <I>site-start.el</I> anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in 
+<BR><TT>/Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin</TT>. 
+
+<P>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node31.html#standardpaths">5.2</A>).
+
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs- specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file <I>site-prestart.el</I> anywhere in the load-path.
+
+<P>
+Info files (M-x info) can be provided in a directory called <TT>info</TT> inside the plugin directory. Aquamacs will automatically add this path to `Info-default-directory-list'. Plugins should provide a <TT>dir</TT> file inside the <TT>info</TT> directory containing an overview (see the Emacs documentation for `info').
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
 
 <P>
 <BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-03-09</I>
+<BR><I>2010-05-02</I>
 </ADDRESS>
 </BODY>
 </HTML>

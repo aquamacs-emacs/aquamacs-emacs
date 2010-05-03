@@ -7,15 +7,15 @@ $ref_files{$key} = "$dir".q|node18.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/tab:variables/;
-$ref_files{$key} = "$dir".q|node23.html|; 
-$noresave{$key} = "$nosave";
-
-$key = q/aquamacs-tex/;
 $ref_files{$key} = "$dir".q|node24.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/aquamacs-tex/;
+$ref_files{$key} = "$dir".q|node25.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/tab:command/;
-$ref_files{$key} = "$dir".q|node22.html|; 
+$ref_files{$key} = "$dir".q|node23.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/Look/;
@@ -23,7 +23,7 @@ $ref_files{$key} = "$dir".q|node17.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/tab:shortcuts/;
-$ref_files{$key} = "$dir".q|node22.html|; 
+$ref_files{$key} = "$dir".q|node23.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/aquamacs-screenshot.jpg/;
@@ -43,7 +43,7 @@ $ref_files{$key} = "$dir".q|node17.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/standardpaths/;
-$ref_files{$key} = "$dir".q|node29.html|; 
+$ref_files{$key} = "$dir".q|node31.html|; 
 $noresave{$key} = "$nosave";
 
 1;
