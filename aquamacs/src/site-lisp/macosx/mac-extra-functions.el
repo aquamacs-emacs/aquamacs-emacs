@@ -26,7 +26,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
 
 ;; The following  function needs to be loaded at runtime. 
 
@@ -38,7 +38,7 @@
 	 "/Contents/MacOS" "" 
 	 (directory-file-name (file-name-directory
 			       (file-truename invocation-directory))))
-      "/Applications/Aquamacs Emacs.app")
+      "/Applications/Aquamacs.app")
     "The path to the Aquamacs application bundle.")) ;; default
 
 
@@ -436,10 +436,15 @@ specified in `shell-file-name'."
 	  (error nil))))
 
 ; Call up help book
+
+(defun aquamacs-help-book-name ()
+  (format "Aquamacs Help (%s)"
+	  aquamacs-version))
+
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
-  (ns-open-help-anchor "index" "Aquamacs Help"))
+  (ns-open-help-anchor "index" (aquamacs-help-book-name)))
 
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"
@@ -460,18 +465,16 @@ specified in `shell-file-name'."
 ;; 	</array>
 ;; 	 <key>CFBundleHelpBookName</key>
 ;; 	 <array>
-;; 	   <string>Aquamacs Help</string>
+;; 	   <string>Aquamacs Help (VERSION)</string>
 ;; 	   <string>Emacs Manual</string>
 ;; 	</array>
-;; it is vital that the folder name ("Aquamacs Help") is the same as
-;; given above, and that it is also in a META tag in the help file.
-;; spelling of the META tag (upper case) might be important.
 
 ; Call up help book
 ; (aquamacs-show-change-log)
 (defun aquamacs-show-change-log ()
   (interactive)
-  (ns-open-help-anchor "changelog-top" "Aquamacs Help"))
+  (ns-open-help-anchor "changelog-top" 
+		       (aquamacs-help-book-name)))
 
 
 (defun gmail-mailclient-p ()

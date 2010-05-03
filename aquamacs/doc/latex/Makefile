@@ -8,6 +8,9 @@ newdir=$(srcdir)/aquamacs
 destdir=$(srcdir)/../AquamacsHelp
 indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
 
+AQUAMACS_DIR=$(srcdir)/../..
+AQUAMACS_VERSION=$(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
+
 phrase=''
 newphrase=''
 
@@ -36,7 +39,7 @@ html: aquamacs.tex *.pdf
 	echo "Applying Apple Help tags..."					     ; \
 	echo "Apple Help tags applied. HTML conversion completed."		     ; \
 	echo $(phrase) ; \
-	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
+	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
 	mv $(newdir)/index2.html $(newdir)/index.html 
 	sed 's|<BODY >|<BODY ><a name="index"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \

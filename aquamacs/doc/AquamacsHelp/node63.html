@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--0.9.6</TITLE>
-<META NAME="description" CONTENT="Changes--0.9.6">
+<TITLE>Bug Fixes--0.9.4</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.4">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,124 +27,158 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html981"
+<A NAME="tex2html971"
   HREF="node64.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html977"
+<A NAME="tex2html967"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html971"
+<A NAME="tex2html961"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html979"
+<A NAME="tex2html969"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html982"
-  HREF="node64.html">Interface/Usability Improvements 0.9.5</A>
-<B> Up:</B> <A NAME="tex2html978"
+<B> Next:</B> <A NAME="tex2html972"
+  HREF="node64.html">Bug Fixes 0.9.3a and</A>
+<B> Up:</B> <A NAME="tex2html968"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html972"
-  HREF="node62.html">Changes 0.9.7</A>
- &nbsp; <B>  <A NAME="tex2html980"
+<B> Previous:</B> <A NAME="tex2html962"
+  HREF="node62.html">Bug Fixes 0.9.5</A>
+ &nbsp; <B>  <A NAME="tex2html970"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION0001418000000000000000">
-Changes--0.9.6</A>
+<H2><A NAME="SECTION0001422000000000000000">
+Bug Fixes--0.9.4</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Aquamacs now provides extended input methods for 
-	Korean, Japanese and Chinese (GB/BIG5). You can select them in 
-	the Options menu, under "Aquamacs Multilingual Environment" / 
-	"Set Language Environment" - everything is integrated with
-	Mule.   
-
-<P>
-In order to load more fixed-width fonts suitable for use with
-	Asian languages, you may want to load the carbon-font package,
-	which is included (but not activated) in Aquamacs. Just add the
-	following to the file 
-	&nbsp;/Library/Preferences/Aquamacs Emacs/Preferences.el:
-
-<P>
-(require 'carbon-font)
-
-<P>
-(maintained by   Mahn-Soo Choi.)
+<LI>Bug reports contain the subject line that the user entered.
 
 <P>
 </LI>
-<LI>CSS-Mode fixed. 
-	(First reported by Kris Khaira and Michael Jakl.)
+<LI>No more (delay due to) tramp mode on startup in cases where tramp
+    mode had been used before (recentf).
 
 <P>
 </LI>
-<LI>Dual-head setups (two screens) with one screen on the left, 
-	the system menu on the right and Aquamacs frames on the left 
-	caused problems.	
-	(reported by Otto Karl Florian Diesenbacher)
+<LI>Files on externally mounted volumes are not checked for readability
+    any more for exclusion from recent files list.
+    (Reported by Bill Clementson)
 
 <P>
 </LI>
-<LI>osx-key-mode-map can now be changed to modify key
-	assignments, in particular those of Apple Command keys
-	 (implemented in Emacs as Hyper = H- keys.)
-	(reported by William Ziemer)
+<LI>No more warnings when fonts are missing (on startup).
 
 <P>
 </LI>
-<LI>"font-lock-keywords ... void" message used to appear when
-	attempting to load a new file. This bug in the underlying GNU
-	Emacs has been fixed.
+<LI>Drag and Drop while in minibuffer works again.
 
 <P>
 </LI>
-<LI>Apple-Q and iconized frames: When all frames where
-        iconized and one attempted to quit Aquamacs, the application
-        seemed to hang (because it was showing a minibuffer prompt in
-        an iconized frame.)
+<LI>Mouse-2 works again.
 
 <P>
+</LI>
+<LI>default-major-mode and initial-major-mode are respected now.
+    initial-frame-alist is not modified any more.
+    Note that other than in any standard Emacs, mode-specific settings
+    always take precedence over default-frame-alist (but not over
+    initial-frame-alist).
+    (Reported by Rick Zaccone, Joe Davison and Peter Dyballa)
+
+<P>
+</LI>
+<LI>No more warnings in customization buffers that the values have
+    been changed outside customize (for certain variables).
+
+<P>
+</LI>
+<LI>Gnus articles (newsreader) open in same frame now.
+
+<P>
+</LI>
+<LI>Gnus has a useful (free) nntp server set so you can start right
+    away.
+
+<P>
+</LI>
+<LI>Send Email with Sendmail is gone from menu (doesn't usually work
+    on  OS X).
+
+<P>
+</LI>
+<LI>Fonts corrected: Some glyphs in some fonts turned out wrong when
+    in bold or italic. Also, font sizes are correct again (Lucida 14
+    is Lucida Grande 14, not 12 or so). The default font size for
+    text-mode (and similar ones) is set to Lucida 13 to make up for
+    the change.  Apologies for any inconvenience this may cause with
+    your default settings. (Reported by William Henney)
+
+<P>
+</LI>
+<LI>Better customization for aquamacs-mode-specific-default-themes
+
+<P>
+</LI>
+<LI>The customizations file (customizations.el) doesn't grow any more.
+    (Reported by Alastair Rankine.)
+
+<P>
+</LI>
+<LI>Various corrections in the Aquamacs Manual.
+
+<P>
+</LI>
+<LI>Plugin support: All files named site-start.el anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+&nbsp;/Library/Application Support/Aquamacs Emacs/myPlugin. This
+    feature enables support for easily installable plugins.
+
+<P>
+</LI>
+<LI>We anticipate shorter startup times in the next release. Stay tuned.
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html981"
+<A NAME="tex2html971"
   HREF="node64.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html977"
+<A NAME="tex2html967"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html971"
+<A NAME="tex2html961"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html979"
+<A NAME="tex2html969"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html982"
-  HREF="node64.html">Interface/Usability Improvements 0.9.5</A>
-<B> Up:</B> <A NAME="tex2html978"
+<B> Next:</B> <A NAME="tex2html972"
+  HREF="node64.html">Bug Fixes 0.9.3a and</A>
+<B> Up:</B> <A NAME="tex2html968"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html972"
-  HREF="node62.html">Changes 0.9.7</A>
- &nbsp; <B>  <A NAME="tex2html980"
+<B> Previous:</B> <A NAME="tex2html962"
+  HREF="node62.html">Bug Fixes 0.9.5</A>
+ &nbsp; <B>  <A NAME="tex2html970"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>

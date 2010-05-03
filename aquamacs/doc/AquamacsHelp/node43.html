@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Major User Interface Improvements</TITLE>
-<META NAME="description" CONTENT="Major User Interface Improvements">
+<TITLE>Changes-- 1.9</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.9">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,118 +21,84 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node44.html">
 <LINK REL="previous" HREF="node42.html">
-<LINK REL="up" HREF="node42.html">
+<LINK REL="up" HREF="node41.html">
 <LINK REL="next" HREF="node44.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html743"
+<A NAME="tex2html731"
   HREF="node44.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html739"
-  HREF="node42.html">
+<A NAME="tex2html727"
+  HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html733"
+<A NAME="tex2html721"
   HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html741"
+<A NAME="tex2html729"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html744"
-  HREF="node44.html">Key Bindings</A>
-<B> Up:</B> <A NAME="tex2html740"
+<B> Next:</B> <A NAME="tex2html732"
+  HREF="node44.html">Changes  1.8c</A>
+<B> Up:</B> <A NAME="tex2html728"
+  HREF="node41.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html722"
   HREF="node42.html">Changes  2.0 preview</A>
-<B> Previous:</B> <A NAME="tex2html734"
-  HREF="node42.html">Changes  2.0 preview</A>
- &nbsp; <B>  <A NAME="tex2html742"
+ &nbsp; <B>  <A NAME="tex2html730"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H4><A NAME="SECTION000141010000000000000">
-Major User Interface Improvements</A>
-</H4>
+<H2><A NAME="SECTION000142000000000000000">
+Changes-- 1.9</A>
+</H2>
 
 <P>
 
 <UL>
-<LI><I>Aquamacs is now based on Emacs 23 and the Cocoa NextStep port.  There are many changes under the hood associated with this, but also a plethora of visible improvements.  Major ones, and those pertaining to Aquamacs specifically, are listed here.  Further changes can be found in the NEWS file for Emacs 23.</I>
+<LI>Copy (Command-c) works again reliably for text selected by mouse.   However, the previous improvement avoiding duplicate entries in the kill ring has been reverted.
+Reported by Tom van Vleck.
 
 <P>
 </LI>
-<LI>Spell-checking now uses the system-wide dictionaries in all the languages supported on OS X.  The standard spelling user interface is available as well as the traditional Emacs `ispell' interface (which also uses the system-wide spelling mechanism).  Configure the use of GNU `aspell' through the `ispell-program-name' variable if desired. 
-Code by Nathaniel Cunningham.
+<LI>Jumping to a LaTeX error after compilation works more reliably now.  The LaTeX-command setting has been changed to include `file-line-error' style.
+Suggested by Enrico Franconi.
 
 <P>
 </LI>
-<LI>Aquamacs has a new icon in the Dock, designed by graphic designer Jessica Walker (jekawacaneer@gmail.com).
+<LI>Recognize Objective C files (extensions .m and .h) by their content.
+Patch by Kendall Gelner and D.R.
 
 <P>
 </LI>
-<LI>The Aquamacs application has been renamed to <I>Aquamacs.app</I> (from Aquamacs Emacs.app).
+<LI>Automatic word wrapping works better in large hard-wrapped (auto-fill-mode) documents with occasional (6+) over-long lines.
 
 <P>
 </LI>
-<LI>Dialogs have been vastly improved: they appear as sheets over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.  ``File Save'' panels also appear as sheets. 
+<LI>The Apple Help books (for Aquamacs, Emacs and the Emacs Lisp Reference) now work on 10.6 ``Snow Leopard''.
+Reported by Philippe Sismondi.
 
 <P>
 </LI>
-<LI>Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
-The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or <TT>Preferences.el</TT> to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
+<LI>Aquamacs now by default enables synctex when compiling latex documents.  
 
 <P>
 </LI>
-<LI>Fonts and colors of all (mode-specific) faces can now be configured using the standard font and color panels.  The Options / Appearance menu provides a function to show the font panel, which leads to buttons for foreground and background colors.   We also have a menu item for the color panel separately, from where colors can be dragged&amp;dropped directly onto any piece of text to customize its face.  Holding down the Option key will, instead, set the face's background color. 
-
-<P>
-</LI>
-<LI>The printing system has been revised; the standard print and page setup dialogs are used inside the application.  The print dialog now appears more quickly.  (Note: over-long lines will always be wrapped at word boundaries when printing. Clipping or horizontal pagination are not supported at this time.)
-
-<P>
-</LI>
-<LI>Line wrapping is now set to Truncate, Wrap, Word Wrap and Line Breaking (auto fill) under <I>Options / Line Wrapping</I> for the current buffer.  A <I>Set as Default</I> will set it as default for all buffers that have no explicit line wrap setting.  As before, there is also a setting to detect word wrap in text files.  When it is on, Aquamacs detects the wrapping style of text-mode buffers automatically, but prefers word wrapping (see the customization variable `auto-word-wrap-default-function').
-<FONT SIZE="-1">Word Wrapping translates to `visual-line-mode' internally now, and the former Aquamacs 1.x mode of the same name now corresponds to a customization variable called `line-move-visual', which is enabled by default.  `Longlines-mode' is obsolete.   Users with manual customizations should adjust their settings.  Fine control can be achieved by customizing `visual-line-mode', `word-wrap', `truncate-lines', and `auto-fill-mode'.</FONT>
+<LI>CSS-Mode has been revised to match the GNU Emacs 22/23 CSS mode.
 
 <P>
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html743"
-  HREF="node44.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next.png"></A> 
-<A NAME="tex2html739"
-  HREF="node42.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="./up.png"></A> 
-<A NAME="tex2html733"
-  HREF="node42.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="./prev.png"></A> 
-<A NAME="tex2html741"
-  HREF="node1.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
- SRC="./contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html744"
-  HREF="node44.html">Key Bindings</A>
-<B> Up:</B> <A NAME="tex2html740"
-  HREF="node42.html">Changes  2.0 preview</A>
-<B> Previous:</B> <A NAME="tex2html734"
-  HREF="node42.html">Changes  2.0 preview</A>
- &nbsp; <B>  <A NAME="tex2html742"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 <I>David</I>
 <BR><I>2010-05-03</I>
