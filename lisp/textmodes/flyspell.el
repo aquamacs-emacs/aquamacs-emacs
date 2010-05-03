@@ -319,8 +319,7 @@ effect, marks the misspelled word (if found) with face flyspell-incorrect."
 	(setq done t))
       (unless done
 	;; check remainder of string
-	(if misspell-location
-	    (setq pos misspell-end))))
+	(setq pos misspell-end)))
     ;; if a misspelling has been found, report is location (otherwise nil)
     (when misspell-location
       (cons (+ pos (car misspell-location)) misspell-end))

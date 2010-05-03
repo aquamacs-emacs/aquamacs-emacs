@@ -203,19 +203,6 @@ no reference is found, execute the LaTeX View command."
 	(if (eq 'control mac-emulate-three-button-mouse) 
 	    " (Shift-Apple-Click)" ""))))))
   
-(defun aquamacs-check-emacsclient-version ()
-  (let ((emacsclient-min-version "23.0")
-	emacsclient-version)
-    (with-temp-buffer
-      (call-process "emacsclient" nil t nil "-V")
-      (goto-char (point-min))
-      (setq emacsclient-version
-	    (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
-		 (match-string 1))))
-    (if (version< emacsclient-version emacsclient-min-version)
-	(message "Warning - emacsclient version (%s) too low; must be >= %s for Skim support.
-Use Tools --> Install Command Line Tools to update."
-		 emacsclient-version emacsclient-min-version))))
 
 ;; (defun turn-on-TeX-source-correlate-mode ()
 ;;   "Turn on `TeX-source-correlate-mode'.
@@ -244,10 +231,8 @@ Use Tools --> Install Command Line Tools to update."
   (unless aquamacs-skim-timer ;; just once per session
     (setq aquamacs-skim-timer 
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
-
   (TeX-source-correlate-mode 1) ;; FIXME: this is a global mode.  Should start in auctex.el?
   ;; This may start a latex process to determine whether to use synctex.
-
   (unless server-process
     (server-force-delete)
     ;; start server to make emacsclient work
@@ -297,18 +282,9 @@ Use Tools --> Install Command Line Tools to update."
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.")
 
-(defvar aquamacs-check-emacsclient-version-checked nil)
-
 (defun aquamacs-call-viewer (line source)
   "Display current output file as PDF at LINE (as in file SOURCE).
 Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
-
-  ;; warn if emacsclient version is too low to work with Aquamacs"
-  ;; use idle timer to ensure that message can be seen in echo area
-  (unless aquamacs-check-emacsclient-version-checked
-    (setq aquamacs-check-emacsclient-version-checked 1)
-    (run-with-idle-timer 1 nil 'aquamacs-check-emacsclient-version))
-  
   (let ((full-file-name 
 	 (expand-file-name
 	  ;; as in TeX-view
