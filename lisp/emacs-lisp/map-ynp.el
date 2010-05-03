@@ -110,10 +110,8 @@ Returns the number of actions taken."
 	      (objects (if help (capitalize (nth 1 help))))
 	      (action (if help (capitalize (nth 2 help)))))
 	  (setq map `((("Yes" . ?y) . act) 
-		      ((,(format "%s this and all other%s."
-				 (if help action
-				     "Apply to")
-				 (if help (concat " " objects)
+		      ((,(format "Do the same with all other%s."
+				 (if help (concat " " (downcase objects))
 				   "s"))
 			. ?!) . suppress)
 		      cancel
