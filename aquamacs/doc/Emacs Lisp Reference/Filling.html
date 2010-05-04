@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+<title>Filling - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Maintaining-Undo.html#Maintaining-Undo" title="Maintaining Undo">
+<link rel="next" href="Margins.html#Margins" title="Margins">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Filling"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Margins.html#Margins">Margins</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Maintaining-Undo.html#Maintaining-Undo">Maintaining Undo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">32.11 Filling</h3>
+
+<p><a name="index-filling-text-2477"></a>
+  <dfn>Filling</dfn> means adjusting the lengths of lines (by moving the line
+breaks) so that they are nearly (but no greater than) a specified
+maximum width.  Additionally, lines can be <dfn>justified</dfn>, which means
+inserting spaces to make the left and/or right margins line up
+precisely.  The width is controlled by the variable <code>fill-column</code>. 
+For ease of reading, lines should be no longer than 70 or so columns.
+
+   <p>You can use Auto Fill mode (see <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>) to fill text
+automatically as you insert it, but changes to existing text may leave
+it improperly filled.  Then you must fill the text explicitly.
+
+   <p>Most of the commands in this section return values that are not
+meaningful.  All the functions that do filling take note of the current
+left margin, current right margin, and current justification style
+(see <a href="Margins.html#Margins">Margins</a>).  If the current justification style is
+<code>none</code>, the filling functions don't actually do anything.
+
+   <p>Several of the filling functions have an argument <var>justify</var>. 
+If it is non-<code>nil</code>, that requests some kind of justification.  It
+can be <code>left</code>, <code>right</code>, <code>full</code>, or <code>center</code>, to
+request a specific style of justification.  If it is <code>t</code>, that
+means to use the current justification style for this part of the text
+(see <code>current-justification</code>, below).  Any other value is treated
+as <code>full</code>.
+
+   <p>When you call the filling functions interactively, using a prefix
+argument implies the value <code>full</code> for <var>justify</var>.
+
+<div class="defun">
+&mdash; Command: <b>fill-paragraph</b><var> justify<a name="index-fill_002dparagraph-2478"></a></var><br>
+<blockquote><p>This command fills the paragraph at or after point.  If
+<var>justify</var> is non-<code>nil</code>, each line is justified as well. 
+It uses the ordinary paragraph motion commands to find paragraph
+boundaries.  See <a href="../emacs/Paragraphs.html#Paragraphs">Paragraphs</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>fill-region</b><var> start end &amp;optional justify nosqueeze to-eop<a name="index-fill_002dregion-2479"></a></var><br>
+<blockquote><p>This command fills each of the paragraphs in the region from <var>start</var>
+to <var>end</var>.  It justifies as well if <var>justify</var> is
+non-<code>nil</code>.
+
+        <p>If <var>nosqueeze</var> is non-<code>nil</code>, that means to leave whitespace
+other than line breaks untouched.  If <var>to-eop</var> is non-<code>nil</code>,
+that means to keep filling to the end of the paragraph&mdash;or the next hard
+newline, if <code>use-hard-newlines</code> is enabled (see below).
+
+        <p>The variable <code>paragraph-separate</code> controls how to distinguish
+paragraphs.  See <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>fill-individual-paragraphs</b><var> start end &amp;optional justify citation-regexp<a name="index-fill_002dindividual_002dparagraphs-2480"></a></var><br>
+<blockquote><p>This command fills each paragraph in the region according to its
+individual fill prefix.  Thus, if the lines of a paragraph were indented
+with spaces, the filled paragraph will remain indented in the same
+fashion.
+
+        <p>The first two arguments, <var>start</var> and <var>end</var>, are the beginning
+and end of the region to be filled.  The third and fourth arguments,
+<var>justify</var> and <var>citation-regexp</var>, are optional.  If
+<var>justify</var> is non-<code>nil</code>, the paragraphs are justified as
+well as filled.  If <var>citation-regexp</var> is non-<code>nil</code>, it means the
+function is operating on a mail message and therefore should not fill
+the header lines.  If <var>citation-regexp</var> is a string, it is used as
+a regular expression; if it matches the beginning of a line, that line
+is treated as a citation marker.
+
+        <p>Ordinarily, <code>fill-individual-paragraphs</code> regards each change in
+indentation as starting a new paragraph.  If
+<code>fill-individual-varying-indent</code> is non-<code>nil</code>, then only
+separator lines separate paragraphs.  That mode can handle indented
+paragraphs with additional indentation on the first line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>fill-individual-varying-indent</b><var><a name="index-fill_002dindividual_002dvarying_002dindent-2481"></a></var><br>
+<blockquote><p>This variable alters the action of <code>fill-individual-paragraphs</code> as
+described above. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>fill-region-as-paragraph</b><var> start end &amp;optional justify nosqueeze squeeze-after<a name="index-fill_002dregion_002das_002dparagraph-2482"></a></var><br>
+<blockquote><p>This command considers a region of text as a single paragraph and fills
+it.  If the region was made up of many paragraphs, the blank lines
+between paragraphs are removed.  This function justifies as well as
+filling when <var>justify</var> is non-<code>nil</code>.
+
+        <p>If <var>nosqueeze</var> is non-<code>nil</code>, that means to leave whitespace
+other than line breaks untouched.  If <var>squeeze-after</var> is
+non-<code>nil</code>, it specifies a position in the region, and means don't
+canonicalize spaces before that position.
+
+        <p>In Adaptive Fill mode, this command calls <code>fill-context-prefix</code> to
+choose a fill prefix by default.  See <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>justify-current-line</b><var> &amp;optional how eop nosqueeze<a name="index-justify_002dcurrent_002dline-2483"></a></var><br>
+<blockquote><p>This command inserts spaces between the words of the current line so
+that the line ends exactly at <code>fill-column</code>.  It returns
+<code>nil</code>.
+
+        <p>The argument <var>how</var>, if non-<code>nil</code> specifies explicitly the style
+of justification.  It can be <code>left</code>, <code>right</code>, <code>full</code>,
+<code>center</code>, or <code>none</code>.  If it is <code>t</code>, that means to do
+follow specified justification style (see <code>current-justification</code>,
+below).  <code>nil</code> means to do full justification.
+
+        <p>If <var>eop</var> is non-<code>nil</code>, that means do only left-justification
+if <code>current-justification</code> specifies full justification.  This is
+used for the last line of a paragraph; even if the paragraph as a
+whole is fully justified, the last line should not be.
+
+        <p>If <var>nosqueeze</var> is non-<code>nil</code>, that means do not change interior
+whitespace. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>default-justification</b><var><a name="index-default_002djustification-2484"></a></var><br>
+<blockquote><p>This variable's value specifies the style of justification to use for
+text that doesn't specify a style with a text property.  The possible
+values are <code>left</code>, <code>right</code>, <code>full</code>, <code>center</code>, or
+<code>none</code>.  The default value is <code>left</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-justification</b><var><a name="index-current_002djustification-2485"></a></var><br>
+<blockquote><p>This function returns the proper justification style to use for filling
+the text around point.
+
+        <p>This returns the value of the <code>justification</code> text property at
+point, or the variable <var>default-justification</var> if there is no such
+text property.  However, it returns <code>nil</code> rather than <code>none</code>
+to mean &ldquo;don't justify&rdquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>sentence-end-double-space</b><var><a name="index-sentence_002dend_002ddouble_002dspace-2486"></a></var><br>
+<blockquote><p><a name="Definition-of-sentence_002dend_002ddouble_002dspace"></a>
+If this variable is non-<code>nil</code>, a period followed by just one space
+does not count as the end of a sentence, and the filling functions
+avoid breaking the line at such a place. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>sentence-end-without-period</b><var><a name="index-sentence_002dend_002dwithout_002dperiod-2487"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, a sentence can end without a
+period.  This is used for languages like Thai, where sentences end
+with a double space but without a period. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>sentence-end-without-space</b><var><a name="index-sentence_002dend_002dwithout_002dspace-2488"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it should be a string of
+characters that can end a sentence without following spaces. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>fill-paragraph-function</b><var><a name="index-fill_002dparagraph_002dfunction-2489"></a></var><br>
+<blockquote><p>This variable provides a way for major modes to override the filling of
+paragraphs.  If the value is non-<code>nil</code>, <code>fill-paragraph</code> calls
+this function to do the work.  If the function returns a non-<code>nil</code>
+value, <code>fill-paragraph</code> assumes the job is done, and immediately
+returns that value.
+
+        <p>The usual use of this feature is to fill comments in programming
+language modes.  If the function needs to fill a paragraph in the usual
+way, it can do so as follows:
+
+     <pre class="example">          (let ((fill-paragraph-function nil))
+            (fill-paragraph arg))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>use-hard-newlines</b><var><a name="index-use_002dhard_002dnewlines-2490"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, the filling functions do not delete
+newlines that have the <code>hard</code> text property.  These &ldquo;hard
+newlines&rdquo; act as paragraph separators. 
+</p></blockquote></div>
+
+   </body></html>
+

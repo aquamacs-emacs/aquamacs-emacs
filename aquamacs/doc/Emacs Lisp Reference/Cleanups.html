@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Cleanups - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
+<link rel="prev" href="Errors.html#Errors" title="Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Cleanups"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Errors.html#Errors">Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.5.4 Cleaning Up from Nonlocal Exits</h4>
+
+<p>The <code>unwind-protect</code> construct is essential whenever you
+temporarily put a data structure in an inconsistent state; it permits
+you to make the data consistent again in the event of an error or
+throw.  (Another more specific cleanup construct that is used only for
+changes in buffer contents is the atomic change group; <a href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>.)
+
+<div class="defun">
+&mdash; Special Form: <b>unwind-protect</b><var> body-form cleanup-forms<small class="dots">...</small><a name="index-unwind_002dprotect-562"></a></var><br>
+<blockquote><p><a name="index-cleanup-forms-563"></a><a name="index-protected-forms-564"></a><a name="index-error-cleanup-565"></a><a name="index-unwinding-566"></a><code>unwind-protect</code> executes <var>body-form</var> with a guarantee that
+the <var>cleanup-forms</var> will be evaluated if control leaves
+<var>body-form</var>, no matter how that happens.  <var>body-form</var> may
+complete normally, or execute a <code>throw</code> out of the
+<code>unwind-protect</code>, or cause an error; in all cases, the
+<var>cleanup-forms</var> will be evaluated.
+
+        <p>If <var>body-form</var> finishes normally, <code>unwind-protect</code> returns the
+value of <var>body-form</var>, after it evaluates the <var>cleanup-forms</var>. 
+If <var>body-form</var> does not finish, <code>unwind-protect</code> does not
+return any value in the normal sense.
+
+        <p>Only <var>body-form</var> is protected by the <code>unwind-protect</code>.  If any
+of the <var>cleanup-forms</var> themselves exits nonlocally (via a
+<code>throw</code> or an error), <code>unwind-protect</code> is <em>not</em>
+guaranteed to evaluate the rest of them.  If the failure of one of the
+<var>cleanup-forms</var> has the potential to cause trouble, then protect
+it with another <code>unwind-protect</code> around that form.
+
+        <p>The number of currently active <code>unwind-protect</code> forms counts,
+together with the number of local variable bindings, against the limit
+<code>max-specpdl-size</code> (see <a href="Definition-of-max_002dspecpdl_002dsize.html#Definition-of-max_002dspecpdl_002dsize">Local Variables</a>). 
+</p></blockquote></div>
+
+   <p>For example, here we make an invisible buffer for temporary use, and
+make sure to kill it before finishing:
+
+<pre class="smallexample">     (save-excursion
+       (let ((buffer (get-buffer-create " *temp*")))
+         (set-buffer buffer)
+         (unwind-protect
+             <var>body-form</var>
+           (kill-buffer buffer))))
+</pre>
+   <p class="noindent">You might think that we could just as well write <code>(kill-buffer
+(current-buffer))</code> and dispense with the variable <code>buffer</code>. 
+However, the way shown above is safer, if <var>body-form</var> happens to
+get an error after switching to a different buffer!  (Alternatively,
+you could write another <code>save-excursion</code> around <var>body-form</var>,
+to ensure that the temporary buffer becomes current again in time to
+kill it.)
+
+   <p>Emacs includes a standard macro called <code>with-temp-buffer</code> which
+expands into more or less the code shown above (see <a href="Definition-of-with_002dtemp_002dbuffer.html#Definition-of-with_002dtemp_002dbuffer">Current Buffer</a>).  Several of the macros defined in
+this manual use <code>unwind-protect</code> in this way.
+
+   <p><a name="index-ftp_002dlogin-567"></a>  Here is an actual example derived from an FTP package.  It creates a
+process (see <a href="Processes.html#Processes">Processes</a>) to try to establish a connection to a remote
+machine.  As the function <code>ftp-login</code> is highly susceptible to
+numerous problems that the writer of the function cannot anticipate, it
+is protected with a form that guarantees deletion of the process in the
+event of failure.  Otherwise, Emacs might fill up with useless
+subprocesses.
+
+<pre class="smallexample">     (let ((win nil))
+       (unwind-protect
+           (progn
+             (setq process (ftp-setup-buffer host file))
+             (if (setq win (ftp-login process host user password))
+                 (message "Logged in")
+               (error "Ftp login failed")))
+         (or win (and process (delete-process process)))))
+</pre>
+   <p>This example has a small bug: if the user types <kbd>C-g</kbd> to
+quit, and the quit happens immediately after the function
+<code>ftp-setup-buffer</code> returns but before the variable <code>process</code> is
+set, the process will not be killed.  There is no easy way to fix this bug,
+but at least it is very unlikely.
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2000, -->
+<!-- 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

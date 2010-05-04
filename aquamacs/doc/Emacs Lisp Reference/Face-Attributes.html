@@ -1,0 +1,229 @@
+<html lang="en">
+<head>
+<title>Face Attributes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Faces.html#Faces" title="Faces">
+<link rel="prev" href="Defining-Faces.html#Defining-Faces" title="Defining Faces">
+<link rel="next" href="Attribute-Functions.html#Attribute-Functions" title="Attribute Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Face-Attributes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Attribute-Functions.html#Attribute-Functions">Attribute Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Faces.html#Defining-Faces">Defining Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.12.2 Face Attributes</h4>
+
+<p><a name="index-face-attributes-3230"></a>
+  The effect of using a face is determined by a fixed set of <dfn>face
+attributes</dfn>.  This table lists all the face attributes, and what they
+mean.  You can specify more than one face for a given piece of text;
+Emacs merges the attributes of all the faces to determine how to
+display the text.  See <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>.
+
+   <p>Any attribute in a face can have the value <code>unspecified</code>.  This
+means the face doesn't specify that attribute.  In face merging, when
+the first face fails to specify a particular attribute, that means the
+next face gets a chance.  However, the <code>default</code> face must
+specify all attributes.
+
+   <p>Some of these font attributes are meaningful only on certain kinds of
+displays&mdash;if your display cannot handle a certain attribute, the
+attribute is ignored.  (The attributes <code>:family</code>, <code>:width</code>,
+<code>:height</code>, <code>:weight</code>, and <code>:slant</code> correspond to parts of
+an X Logical Font Descriptor.)
+
+     <dl>
+<dt><code>:family</code><dd>Font family name, or fontset name (see <a href="Fontsets.html#Fontsets">Fontsets</a>).  If you specify a
+font family name, the wild-card characters `<samp><span class="samp">*</span></samp>' and `<samp><span class="samp">?</span></samp>' are
+allowed.
+
+     <br><dt><code>:width</code><dd>Relative proportionate width, also known as the character set width or
+set width.  This should be one of the symbols <code>ultra-condensed</code>,
+<code>extra-condensed</code>, <code>condensed</code>, <code>semi-condensed</code>,
+<code>normal</code>, <code>semi-expanded</code>, <code>expanded</code>,
+<code>extra-expanded</code>, or <code>ultra-expanded</code>.
+
+     <br><dt><code>:height</code><dd>Either the font height, an integer in units of 1/10 point, a floating
+point number specifying the amount by which to scale the height of any
+underlying face, or a function, which is called with the old height
+(from the underlying face), and should return the new height.
+
+     <br><dt><code>:weight</code><dd>Font weight&mdash;a symbol from this series (from most dense to most faint):
+<code>ultra-bold</code>, <code>extra-bold</code>, <code>bold</code>, <code>semi-bold</code>,
+<code>normal</code>, <code>semi-light</code>, <code>light</code>, <code>extra-light</code>,
+or <code>ultra-light</code>.
+
+     <p>On a text-only terminal, any weight greater than normal is displayed as
+extra bright, and any weight less than normal is displayed as
+half-bright (provided the terminal supports the feature).
+
+     <br><dt><code>:slant</code><dd>Font slant&mdash;one of the symbols <code>italic</code>, <code>oblique</code>, <code>normal</code>,
+<code>reverse-italic</code>, or <code>reverse-oblique</code>.
+
+     <p>On a text-only terminal, slanted text is displayed as half-bright, if
+the terminal supports the feature.
+
+     <br><dt><code>:foreground</code><dd>Foreground color, a string.  The value can be a system-defined color
+name, or a hexadecimal color specification of the form
+`<samp><span class="samp">#</span><var>rr</var><var>gg</var><var>bb</var></samp>'.  (`<samp><span class="samp">#000000</span></samp>' is black,
+`<samp><span class="samp">#ff0000</span></samp>' is red, `<samp><span class="samp">#00ff00</span></samp>' is green, `<samp><span class="samp">#0000ff</span></samp>' is
+blue, and `<samp><span class="samp">#ffffff</span></samp>' is white.)
+
+     <br><dt><code>:background</code><dd>Background color, a string, like the foreground color.
+
+     <br><dt><code>:inverse-video</code><dd>Whether or not characters should be displayed in inverse video.  The
+value should be <code>t</code> (yes) or <code>nil</code> (no).
+
+     <br><dt><code>:stipple</code><dd>The background stipple, a bitmap.
+
+     <p>The value can be a string; that should be the name of a file containing
+external-format X bitmap data.  The file is found in the directories
+listed in the variable <code>x-bitmap-file-path</code>.
+
+     <p>Alternatively, the value can specify the bitmap directly, with a list
+of the form <code>(</code><var>width</var> <var>height</var> <var>data</var><code>)</code>.  Here,
+<var>width</var> and <var>height</var> specify the size in pixels, and
+<var>data</var> is a string containing the raw bits of the bitmap, row by
+row.  Each row occupies (<var>width</var> + 7) / 8 consecutive bytes
+in the string (which should be a unibyte string for best results). 
+This means that each row always occupies at least one whole byte.
+
+     <p>If the value is <code>nil</code>, that means use no stipple pattern.
+
+     <p>Normally you do not need to set the stipple attribute, because it is
+used automatically to handle certain shades of gray.
+
+     <br><dt><code>:underline</code><dd>Whether or not characters should be underlined, and in what color.  If
+the value is <code>t</code>, underlining uses the foreground color of the
+face.  If the value is a string, underlining uses that color.  The
+value <code>nil</code> means do not underline.
+
+     <br><dt><code>:overline</code><dd>Whether or not characters should be overlined, and in what color. 
+The value is used like that of <code>:underline</code>.
+
+     <br><dt><code>:strike-through</code><dd>Whether or not characters should be strike-through, and in what
+color.  The value is used like that of <code>:underline</code>.
+
+     <br><dt><code>:inherit</code><dd>The name of a face from which to inherit attributes, or a list of face
+names.  Attributes from inherited faces are merged into the face like an
+underlying face would be, with higher priority than underlying faces. 
+If a list of faces is used, attributes from faces earlier in the list
+override those from later faces.
+
+     <br><dt><code>:box</code><dd>Whether or not a box should be drawn around characters, its color, the
+width of the box lines, and 3D appearance. 
+</dl>
+
+   <p>Here are the possible values of the <code>:box</code> attribute, and what
+they mean:
+
+     <dl>
+<dt><code>nil</code><dd>Don't draw a box.
+
+     <br><dt><code>t</code><dd>Draw a box with lines of width 1, in the foreground color.
+
+     <br><dt><var>color</var><dd>Draw a box with lines of width 1, in color <var>color</var>.
+
+     <br><dt><code>(:line-width </code><var>width</var><code> :color </code><var>color</var><code> :style </code><var>style</var><code>)</code><dd>This way you can explicitly specify all aspects of the box.  The value
+<var>width</var> specifies the width of the lines to draw; it defaults to 1.
+
+     <p>The value <var>color</var> specifies the color to draw with.  The default is
+the foreground color of the face for simple boxes, and the background
+color of the face for 3D boxes.
+
+     <p>The value <var>style</var> specifies whether to draw a 3D box.  If it is
+<code>released-button</code>, the box looks like a 3D button that is not being
+pressed.  If it is <code>pressed-button</code>, the box looks like a 3D button
+that is being pressed.  If it is <code>nil</code> or omitted, a plain 2D box
+is used. 
+</dl>
+
+   <p>In older versions of Emacs, before <code>:family</code>, <code>:height</code>,
+<code>:width</code>, <code>:weight</code>, and <code>:slant</code> existed, these
+attributes were used to specify the type face.  They are now
+semi-obsolete, but they still work:
+
+     <dl>
+<dt><code>:font</code><dd>This attribute specifies the font name.
+
+     <br><dt><code>:bold</code><dd>A non-<code>nil</code> value specifies a bold font.
+
+     <br><dt><code>:italic</code><dd>A non-<code>nil</code> value specifies an italic font. 
+</dl>
+
+   <p>For compatibility, you can still set these &ldquo;attributes,&rdquo; even
+though they are not real face attributes.  Here is what that does:
+
+     <dl>
+<dt><code>:font</code><dd>You can specify an X font name as the &ldquo;value&rdquo; of this &ldquo;attribute&rdquo;;
+that sets the <code>:family</code>, <code>:width</code>, <code>:height</code>,
+<code>:weight</code>, and <code>:slant</code> attributes according to the font name.
+
+     <p>If the value is a pattern with wildcards, the first font that matches
+the pattern is used to set these attributes.
+
+     <br><dt><code>:bold</code><dd>A non-<code>nil</code> makes the face bold; <code>nil</code> makes it normal. 
+This actually works by setting the <code>:weight</code> attribute.
+
+     <br><dt><code>:italic</code><dd>A non-<code>nil</code> makes the face italic; <code>nil</code> makes it normal. 
+This actually works by setting the <code>:slant</code> attribute. 
+</dl>
+
+<div class="defun">
+&mdash; Variable: <b>x-bitmap-file-path</b><var><a name="index-x_002dbitmap_002dfile_002dpath-3231"></a></var><br>
+<blockquote><p>This variable specifies a list of directories for searching
+for bitmap files, for the <code>:stipple</code> attribute. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bitmap-spec-p</b><var> object<a name="index-bitmap_002dspec_002dp-3232"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>object</var> is a valid bitmap specification,
+suitable for use with <code>:stipple</code> (see above).  It returns
+<code>nil</code> otherwise. 
+</p></blockquote></div>
+
+   </body></html>
+

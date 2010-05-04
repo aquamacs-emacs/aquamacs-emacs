@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>List Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Building-Lists.html#Building-Lists" title="Building Lists">
+<link rel="next" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="List-Variables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Building-Lists.html#Building-Lists">Building Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Modifying List Variables</h3>
+
+<p>These functions, and one macro, provide convenient ways
+to modify a list which is stored in a variable.
+
+<div class="defun">
+&mdash; Macro: <b>push</b><var> newelt listname<a name="index-push-321"></a></var><br>
+<blockquote><p>This macro provides an alternative way to write
+<code>(setq </code><var>listname</var><code> (cons </code><var>newelt</var> <var>listname</var><code>))</code>.
+
+     <pre class="example">          (setq l '(a b))
+               =&gt; (a b)
+          (push 'c l)
+               =&gt; (c a b)
+          l
+               =&gt; (c a b)
+     </pre>
+        </blockquote></div>
+
+   <p>Two functions modify lists that are the values of variables.
+
+<div class="defun">
+&mdash; Function: <b>add-to-list</b><var> symbol element &amp;optional append compare-fn<a name="index-add_002dto_002dlist-322"></a></var><br>
+<blockquote><p>This function sets the variable <var>symbol</var> by consing <var>element</var>
+onto the old value, if <var>element</var> is not already a member of that
+value.  It returns the resulting list, whether updated or not.  The
+value of <var>symbol</var> had better be a list already before the call. 
+<code>add-to-list</code> uses <var>compare-fn</var> to compare <var>element</var>
+against existing list members; if <var>compare-fn</var> is <code>nil</code>, it
+uses <code>equal</code>.
+
+        <p>Normally, if <var>element</var> is added, it is added to the front of
+<var>symbol</var>, but if the optional argument <var>append</var> is
+non-<code>nil</code>, it is added at the end.
+
+        <p>The argument <var>symbol</var> is not implicitly quoted; <code>add-to-list</code>
+is an ordinary function, like <code>set</code> and unlike <code>setq</code>.  Quote
+the argument yourself if that is what you want. 
+</p></blockquote></div>
+
+   <p>Here's a scenario showing how to use <code>add-to-list</code>:
+
+<pre class="example">     (setq foo '(a b))
+          =&gt; (a b)
+     
+     (add-to-list 'foo 'c)     ;; <span class="roman">Add </span><code>c</code><span class="roman">.</span>
+          =&gt; (c a b)
+     
+     (add-to-list 'foo 'b)     ;; <span class="roman">No effect.</span>
+          =&gt; (c a b)
+     
+     foo                       ;; <code>foo</code><span class="roman"> was changed.</span>
+          =&gt; (c a b)
+</pre>
+   <p>An equivalent expression for <code>(add-to-list '</code><var>var</var>
+<var>value</var><code>)</code> is this:
+
+<pre class="example">     (or (member <var>value</var> <var>var</var>)
+         (setq <var>var</var> (cons <var>value</var> <var>var</var>)))
+</pre>
+   <div class="defun">
+&mdash; Function: <b>add-to-ordered-list</b><var> symbol element &amp;optional order<a name="index-add_002dto_002dordered_002dlist-323"></a></var><br>
+<blockquote><p>This function sets the variable <var>symbol</var> by inserting
+<var>element</var> into the old value, which must be a list, at the
+position specified by <var>order</var>.  If <var>element</var> is already a
+member of the list, its position in the list is adjusted according
+to <var>order</var>.  Membership is tested using <code>eq</code>. 
+This function returns the resulting list, whether updated or not.
+
+        <p>The <var>order</var> is typically a number (integer or float), and the
+elements of the list are sorted in non-decreasing numerical order.
+
+        <p><var>order</var> may also be omitted or <code>nil</code>.  Then the numeric order
+of <var>element</var> stays unchanged if it already has one; otherwise,
+<var>element</var> has no numeric order.  Elements without a numeric list
+order are placed at the end of the list, in no particular order.
+
+        <p>Any other value for <var>order</var> removes the numeric order of <var>element</var>
+if it already has one; otherwise, it is equivalent to <code>nil</code>.
+
+        <p>The argument <var>symbol</var> is not implicitly quoted;
+<code>add-to-ordered-list</code> is an ordinary function, like <code>set</code>
+and unlike <code>setq</code>.  Quote the argument yourself if that is what
+you want.
+
+        <p>The ordering information is stored in a hash table on <var>symbol</var>'s
+<code>list-order</code> property. 
+</p></blockquote></div>
+
+   <p>Here's a scenario showing how to use <code>add-to-ordered-list</code>:
+
+<pre class="example">     (setq foo '())
+          =&gt; nil
+     
+     (add-to-ordered-list 'foo 'a 1)     ;; <span class="roman">Add </span><code>a</code><span class="roman">.</span>
+          =&gt; (a)
+     
+     (add-to-ordered-list 'foo 'c 3)     ;; <span class="roman">Add </span><code>c</code><span class="roman">.</span>
+          =&gt; (a c)
+     
+     (add-to-ordered-list 'foo 'b 2)     ;; <span class="roman">Add </span><code>b</code><span class="roman">.</span>
+          =&gt; (a b c)
+     
+     (add-to-ordered-list 'foo 'b 4)     ;; <span class="roman">Move </span><code>b</code><span class="roman">.</span>
+          =&gt; (a c b)
+     
+     (add-to-ordered-list 'foo 'd)       ;; <span class="roman">Append </span><code>d</code><span class="roman">.</span>
+          =&gt; (a c b d)
+     
+     (add-to-ordered-list 'foo 'e)       ;; <span class="roman">Add </span><code>e</code>.
+          =&gt; (a c b e d)
+     
+     foo                       ;; <code>foo</code><span class="roman"> was changed.</span>
+          =&gt; (a c b e d)
+</pre>
+   </body></html>
+

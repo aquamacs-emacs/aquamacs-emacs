@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>Narrowing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Positions.html#Positions" title="Positions">
+<link rel="prev" href="Excursions.html#Excursions" title="Excursions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Narrowing"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Excursions.html#Excursions">Excursions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
+<hr>
+</div>
+
+<h3 class="section">30.4 Narrowing</h3>
+
+<p><a name="index-narrowing-2346"></a><a name="index-restriction-_0028in-a-buffer_0029-2347"></a><a name="index-accessible-portion-_0028of-a-buffer_0029-2348"></a>
+  <dfn>Narrowing</dfn> means limiting the text addressable by Emacs editing
+commands to a limited range of characters in a buffer.  The text that
+remains addressable is called the <dfn>accessible portion</dfn> of the
+buffer.
+
+   <p>Narrowing is specified with two buffer positions which become the
+beginning and end of the accessible portion.  For most editing commands
+and most Emacs primitives, these positions replace the values of the
+beginning and end of the buffer.  While narrowing is in effect, no text
+outside the accessible portion is displayed, and point cannot move
+outside the accessible portion.
+
+   <p>Values such as positions or line numbers, which usually count from the
+beginning of the buffer, do so despite narrowing, but the functions
+which use them refuse to operate on text that is inaccessible.
+
+   <p>The commands for saving buffers are unaffected by narrowing; they save
+the entire buffer regardless of any narrowing.
+
+<div class="defun">
+&mdash; Command: <b>narrow-to-region</b><var> start end<a name="index-narrow_002dto_002dregion-2349"></a></var><br>
+<blockquote><p>This function sets the accessible portion of the current buffer to start
+at <var>start</var> and end at <var>end</var>.  Both arguments should be character
+positions.
+
+        <p>In an interactive call, <var>start</var> and <var>end</var> are set to the bounds
+of the current region (point and the mark, with the smallest first). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>narrow-to-page</b><var> &amp;optional move-count<a name="index-narrow_002dto_002dpage-2350"></a></var><br>
+<blockquote><p>This function sets the accessible portion of the current buffer to
+include just the current page.  An optional first argument
+<var>move-count</var> non-<code>nil</code> means to move forward or backward by
+<var>move-count</var> pages and then narrow to one page.  The variable
+<code>page-delimiter</code> specifies where pages start and end
+(see <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>).
+
+        <p>In an interactive call, <var>move-count</var> is set to the numeric prefix
+argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>widen</b><var><a name="index-widen-2351"></a></var><br>
+<blockquote><p><a name="index-widening-2352"></a>This function cancels any narrowing in the current buffer, so that the
+entire contents are accessible.  This is called <dfn>widening</dfn>. 
+It is equivalent to the following expression:
+
+     <pre class="example">          (narrow-to-region 1 (1+ (buffer-size)))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>save-restriction</b><var> body<small class="dots">...</small><a name="index-save_002drestriction-2353"></a></var><br>
+<blockquote><p>This special form saves the current bounds of the accessible portion,
+evaluates the <var>body</var> forms, and finally restores the saved bounds,
+thus restoring the same state of narrowing (or absence thereof) formerly
+in effect.  The state of narrowing is restored even in the event of an
+abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>). 
+Therefore, this construct is a clean way to narrow a buffer temporarily.
+
+        <p>The value returned by <code>save-restriction</code> is that returned by the
+last form in <var>body</var>, or <code>nil</code> if no body forms were given.
+
+     <!-- Wordy to avoid overfull hbox.  -rjc 16mar92 -->
+<p><strong>Caution:</strong> it is easy to make a mistake when using the
+<code>save-restriction</code> construct.  Read the entire description here
+before you try it.
+
+        <p>If <var>body</var> changes the current buffer, <code>save-restriction</code> still
+restores the restrictions on the original buffer (the buffer whose
+restrictions it saved from), but it does not restore the identity of the
+current buffer.
+
+        <p><code>save-restriction</code> does <em>not</em> restore point and the mark; use
+<code>save-excursion</code> for that.  If you use both <code>save-restriction</code>
+and <code>save-excursion</code> together, <code>save-excursion</code> should come
+first (on the outside).  Otherwise, the old point value would be
+restored with temporary narrowing still in effect.  If the old point
+value were outside the limits of the temporary narrowing, this would
+fail to restore it accurately.
+
+        <p>Here is a simple example of correct use of <code>save-restriction</code>:
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          This is the contents of foo
+          This is the contents of foo
+          This is the contents of foo-!-
+          ---------- Buffer: foo ----------
+          
+          (save-excursion
+            (save-restriction
+              (goto-char 1)
+              (forward-line 2)
+              (narrow-to-region 1 (point))
+              (goto-char (point-min))
+              (replace-string "foo" "bar")))
+          
+          ---------- Buffer: foo ----------
+          This is the contents of bar
+          This is the contents of bar
+          This is the contents of foo-!-
+          ---------- Buffer: foo ----------
+     </pre>
+        </blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

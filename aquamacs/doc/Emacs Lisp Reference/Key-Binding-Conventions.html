@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Key Binding Conventions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tips.html#Tips" title="Tips">
+<link rel="prev" href="Coding-Conventions.html#Coding-Conventions" title="Coding Conventions">
+<link rel="next" href="Programming-Tips.html#Programming-Tips" title="Programming Tips">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Key-Binding-Conventions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programming-Tips.html#Programming-Tips">Programming Tips</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Coding-Conventions.html#Coding-Conventions">Coding Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
+<hr>
+</div>
+
+<h3 class="section">D.2 Key Binding Conventions</h3>
+
+<p><a name="index-key-binding_002c-conventions-for-3585"></a>
+     <ul>
+<li><a name="index-mouse_002d2-3586"></a><a name="index-references_002c-following-3587"></a>Special major modes used for read-only text should usually redefine
+<kbd>mouse-2</kbd> and &lt;RET&gt; to trace some sort of reference in the text. 
+Modes such as Dired, Info, Compilation, and Occur redefine it in this
+way.
+
+     <p>In addition, they should mark the text as a kind of &ldquo;link&rdquo; so that
+<kbd>mouse-1</kbd> will follow it also.  See <a href="Links-and-Mouse_002d1.html#Links-and-Mouse_002d1">Links and Mouse-1</a>.
+
+     <li><a name="index-reserved-keys-3588"></a><a name="index-keys_002c-reserved-3589"></a>Please do not define <kbd>C-c </kbd><var>letter</var> as a key in Lisp programs. 
+Sequences consisting of <kbd>C-c</kbd> and a letter (either upper or lower
+case) are reserved for users; they are the <strong>only</strong> sequences
+reserved for users, so do not block them.
+
+     <p>Changing all the Emacs major modes to respect this convention was a
+lot of work; abandoning this convention would make that work go to
+waste, and inconvenience users.  Please comply with it.
+
+     <li>Function keys &lt;F5&gt; through &lt;F9&gt; without modifier keys are
+also reserved for users to define.
+
+     <li>Applications should not bind mouse events based on button 1 with the
+shift key held down.  These events include <kbd>S-mouse-1</kbd>,
+<kbd>M-S-mouse-1</kbd>, <kbd>C-S-mouse-1</kbd>, and so on.  They are reserved for
+users.
+
+     <li>Sequences consisting of <kbd>C-c</kbd> followed by a control character or a
+digit are reserved for major modes.
+
+     <li>Sequences consisting of <kbd>C-c</kbd> followed by <kbd>{</kbd>, <kbd>}</kbd>,
+<kbd>&lt;</kbd>, <kbd>&gt;</kbd>, <kbd>:</kbd> or <kbd>;</kbd> are also reserved for major modes.
+
+     <li>Sequences consisting of <kbd>C-c</kbd> followed by any other punctuation
+character are allocated for minor modes.  Using them in a major mode is
+not absolutely prohibited, but if you do that, the major mode binding
+may be shadowed from time to time by minor modes.
+
+     <li>Do not bind <kbd>C-h</kbd> following any prefix character (including
+<kbd>C-c</kbd>).  If you don't bind <kbd>C-h</kbd>, it is automatically available
+as a help character for listing the subcommands of the prefix character.
+
+     <li>Do not bind a key sequence ending in &lt;ESC&gt; except following
+another &lt;ESC&gt;.  (That is, it is OK to bind a sequence ending in
+<kbd>&lt;ESC&gt; &lt;ESC&gt;</kbd>.)
+
+     <p>The reason for this rule is that a non-prefix binding for &lt;ESC&gt; in
+any context prevents recognition of escape sequences as function keys in
+that context.
+
+     <li>Anything which acts like a temporary mode or state which the user can
+enter and leave should define <kbd>&lt;ESC&gt; &lt;ESC&gt;</kbd> or
+<kbd>&lt;ESC&gt; &lt;ESC&gt; &lt;ESC&gt;</kbd> as a way to escape.
+
+     <p>For a state which accepts ordinary Emacs commands, or more generally any
+kind of state in which &lt;ESC&gt; followed by a function key or arrow key
+is potentially meaningful, then you must not define <kbd>&lt;ESC&gt;
+&lt;ESC&gt;</kbd>, since that would preclude recognizing an escape sequence
+after &lt;ESC&gt;.  In these states, you should define <kbd>&lt;ESC&gt;
+&lt;ESC&gt; &lt;ESC&gt;</kbd> as the way to escape.  Otherwise, define
+<kbd>&lt;ESC&gt; &lt;ESC&gt;</kbd> instead. 
+</ul>
+
+   </body></html>
+

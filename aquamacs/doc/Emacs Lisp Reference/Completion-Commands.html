@@ -1,0 +1,216 @@
+<html lang="en">
+<head>
+<title>Completion Commands - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Minibuffer-Completion.html#Minibuffer-Completion" title="Minibuffer Completion">
+<link rel="next" href="High_002dLevel-Completion.html#High_002dLevel-Completion" title="High-Level Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Completion-Commands"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="High_002dLevel-Completion.html#High_002dLevel-Completion">High-Level Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">20.6.3 Minibuffer Commands that Do Completion</h4>
+
+<p>This section describes the keymaps, commands and user options used
+in the minibuffer to do completion.  The description refers to the
+situation when Partial Completion mode is disabled (as it is by
+default).  When enabled, this minor mode uses its own alternatives to
+some of the commands described below.  See <a href="../emacs/Completion-Options.html#Completion-Options">Completion Options</a>, for a short description of Partial
+Completion mode.
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-completion-table</b><var><a name="index-minibuffer_002dcompletion_002dtable-1091"></a></var><br>
+<blockquote><p>The value of this variable is the collection used for completion in
+the minibuffer.  This is the global variable that contains what
+<code>completing-read</code> passes to <code>try-completion</code>.  It is used by
+minibuffer completion commands such as <code>minibuffer-complete-word</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-completion-predicate</b><var><a name="index-minibuffer_002dcompletion_002dpredicate-1092"></a></var><br>
+<blockquote><p>This variable's value is the predicate that <code>completing-read</code>
+passes to <code>try-completion</code>.  The variable is also used by the other
+minibuffer completion functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-completion-confirm</b><var><a name="index-minibuffer_002dcompletion_002dconfirm-1093"></a></var><br>
+<blockquote><p>When the value of this variable is non-<code>nil</code>, Emacs asks for
+confirmation of a completion before exiting the minibuffer. 
+<code>completing-read</code> binds this variable, and the function
+<code>minibuffer-complete-and-exit</code> checks the value before exiting. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>minibuffer-complete-word</b><var><a name="index-minibuffer_002dcomplete_002dword-1094"></a></var><br>
+<blockquote><p>This function completes the minibuffer contents by at most a single
+word.  Even if the minibuffer contents have only one completion,
+<code>minibuffer-complete-word</code> does not add any characters beyond the
+first character that is not a word constituent.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>minibuffer-complete</b><var><a name="index-minibuffer_002dcomplete-1095"></a></var><br>
+<blockquote><p>This function completes the minibuffer contents as far as possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>minibuffer-complete-and-exit</b><var><a name="index-minibuffer_002dcomplete_002dand_002dexit-1096"></a></var><br>
+<blockquote><p>This function completes the minibuffer contents, and exits if
+confirmation is not required, i.e., if
+<code>minibuffer-completion-confirm</code> is <code>nil</code>.  If confirmation
+<em>is</em> required, it is given by repeating this command
+immediately&mdash;the command is programmed to work without confirmation
+when run twice in succession. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>minibuffer-completion-help</b><var><a name="index-minibuffer_002dcompletion_002dhelp-1097"></a></var><br>
+<blockquote><p>This function creates a list of the possible completions of the
+current minibuffer contents.  It works by calling <code>all-completions</code>
+using the value of the variable <code>minibuffer-completion-table</code> as
+the <var>collection</var> argument, and the value of
+<code>minibuffer-completion-predicate</code> as the <var>predicate</var> argument. 
+The list of completions is displayed as text in a buffer named
+`<samp><span class="samp">*Completions*</span></samp>'. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>display-completion-list</b><var> completions &amp;optional common-substring<a name="index-display_002dcompletion_002dlist-1098"></a></var><br>
+<blockquote><p>This function displays <var>completions</var> to the stream in
+<code>standard-output</code>, usually a buffer.  (See <a href="Read-and-Print.html#Read-and-Print">Read and Print</a>, for more
+information about streams.)  The argument <var>completions</var> is normally
+a list of completions just returned by <code>all-completions</code>, but it
+does not have to be.  Each element may be a symbol or a string, either
+of which is simply printed.  It can also be a list of two strings,
+which is printed as if the strings were concatenated.  The first of
+the two strings is the actual completion, the second string serves as
+annotation.
+
+        <p>The argument <var>common-substring</var> is the prefix that is common to
+all the completions.  With normal Emacs completion, it is usually the
+same as the string that was completed.  <code>display-completion-list</code>
+uses this to highlight text in the completion list for better visual
+feedback.  This is not needed in the minibuffer; for minibuffer
+completion, you can pass <code>nil</code>.
+
+        <p>This function is called by <code>minibuffer-completion-help</code>.  The
+most common way to use it is together with
+<code>with-output-to-temp-buffer</code>, like this:
+
+     <pre class="example">          (with-output-to-temp-buffer "*Completions*"
+            (display-completion-list
+              (all-completions (buffer-string) my-alist)
+              (buffer-string)))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>completion-auto-help</b><var><a name="index-completion_002dauto_002dhelp-1099"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, the completion commands
+automatically display a list of possible completions whenever nothing
+can be completed because the next character is not uniquely determined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-completion-map</b><var><a name="index-minibuffer_002dlocal_002dcompletion_002dmap-1100"></a></var><br>
+<blockquote><p><code>completing-read</code> uses this value as the local keymap when an
+exact match of one of the completions is not required.  By default, this
+keymap makes the following bindings:
+
+          <dl>
+<dt><kbd>?</kbd><dd><code>minibuffer-completion-help</code>
+
+          <br><dt>&lt;SPC&gt;<dd><code>minibuffer-complete-word</code>
+
+          <br><dt>&lt;TAB&gt;<dd><code>minibuffer-complete</code>
+</dl>
+
+     <p class="noindent">with other characters bound as in <code>minibuffer-local-map</code>
+(see <a href="Definition-of-minibuffer_002dlocal_002dmap.html#Definition-of-minibuffer_002dlocal_002dmap">Definition of minibuffer-local-map</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-must-match-map</b><var><a name="index-minibuffer_002dlocal_002dmust_002dmatch_002dmap-1101"></a></var><br>
+<blockquote><p><code>completing-read</code> uses this value as the local keymap when an
+exact match of one of the completions is required.  Therefore, no keys
+are bound to <code>exit-minibuffer</code>, the command that exits the
+minibuffer unconditionally.  By default, this keymap makes the following
+bindings:
+
+          <dl>
+<dt><kbd>?</kbd><dd><code>minibuffer-completion-help</code>
+
+          <br><dt>&lt;SPC&gt;<dd><code>minibuffer-complete-word</code>
+
+          <br><dt>&lt;TAB&gt;<dd><code>minibuffer-complete</code>
+
+          <br><dt><kbd>C-j</kbd><dd><code>minibuffer-complete-and-exit</code>
+
+          <br><dt>&lt;RET&gt;<dd><code>minibuffer-complete-and-exit</code>
+</dl>
+
+     <p class="noindent">with other characters bound as in <code>minibuffer-local-map</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-filename-completion-map</b><var><a name="index-minibuffer_002dlocal_002dfilename_002dcompletion_002dmap-1102"></a></var><br>
+<blockquote><p>This is like <code>minibuffer-local-completion-map</code>
+except that it does not bind &lt;SPC&gt;.  This keymap is used by the
+function <code>read-file-name</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-must-match-filename-map</b><var><a name="index-minibuffer_002dlocal_002dmust_002dmatch_002dfilename_002dmap-1103"></a></var><br>
+<blockquote><p>This is like <code>minibuffer-local-must-match-map</code>
+except that it does not bind &lt;SPC&gt;.  This keymap is used by the
+function <code>read-file-name</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

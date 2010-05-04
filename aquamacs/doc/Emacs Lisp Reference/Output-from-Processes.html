@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Output from Processes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Signals-to-Processes.html#Signals-to-Processes" title="Signals to Processes">
+<link rel="next" href="Sentinels.html#Sentinels" title="Sentinels">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Output-from-Processes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sentinels.html#Sentinels">Sentinels</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.9 Receiving Output from Processes</h3>
+
+<p><a name="index-process-output-3057"></a><a name="index-output-from-processes-3058"></a>
+  There are two ways to receive the output that a subprocess writes to
+its standard output stream.  The output can be inserted in a buffer,
+which is called the associated buffer of the process, or a function
+called the <dfn>filter function</dfn> can be called to act on the output.  If
+the process has no buffer and no filter function, its output is
+discarded.
+
+   <p>When a subprocess terminates, Emacs reads any pending output,
+then stops reading output from that subprocess.  Therefore, if the
+subprocess has children that are still live and still producing
+output, Emacs won't receive that output.
+
+   <p>Output from a subprocess can arrive only while Emacs is waiting: when
+reading terminal input, in <code>sit-for</code> and <code>sleep-for</code>
+(see <a href="Waiting.html#Waiting">Waiting</a>), and in <code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).  This minimizes the problem of timing errors that usually
+plague parallel programming.  For example, you can safely create a
+process and only then specify its buffer or filter function; no output
+can arrive before you finish, if the code in between does not call any
+primitive that waits.
+
+<div class="defun">
+&mdash; Variable: <b>process-adaptive-read-buffering</b><var><a name="index-process_002dadaptive_002dread_002dbuffering-3059"></a></var><br>
+<blockquote><p>On some systems, when Emacs reads the output from a subprocess, the
+output data is read in very small blocks, potentially resulting in
+very poor performance.  This behavior can be remedied to some extent
+by setting the variable <var>process-adaptive-read-buffering</var> to a
+non-<code>nil</code> value (the default), as it will automatically delay reading
+from such processes, thus allowing them to produce more output before
+Emacs tries to read it. 
+</p></blockquote></div>
+
+   <p>It is impossible to separate the standard output and standard error
+streams of the subprocess, because Emacs normally spawns the subprocess
+inside a pseudo-TTY, and a pseudo-TTY has only one output channel.  If
+you want to keep the output to those streams separate, you should
+redirect one of them to a file&mdash;for example, by using an appropriate
+shell command.
+
+<ul class="menu">
+<li><a accesskey="1" href="Process-Buffers.html#Process-Buffers">Process Buffers</a>:          If no filter, output is put in a buffer. 
+<li><a accesskey="2" href="Filter-Functions.html#Filter-Functions">Filter Functions</a>:         Filter functions accept output from the process. 
+<li><a accesskey="3" href="Decoding-Output.html#Decoding-Output">Decoding Output</a>:          Filters can get unibyte or multibyte strings. 
+<li><a accesskey="4" href="Accepting-Output.html#Accepting-Output">Accepting Output</a>:         How to wait until process output arrives. 
+</ul>
+
+   </body></html>
+

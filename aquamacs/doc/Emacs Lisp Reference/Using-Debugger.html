@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Using Debugger - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugger.html#Debugger" title="Debugger">
+<link rel="prev" href="Explicit-Debug.html#Explicit-Debug" title="Explicit Debug">
+<link rel="next" href="Debugger-Commands.html#Debugger-Commands" title="Debugger Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Using-Debugger"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugger-Commands.html#Debugger-Commands">Debugger Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Explicit-Debug.html#Explicit-Debug">Explicit Debug</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.1.5 Using the Debugger</h4>
+
+<p>When the debugger is entered, it displays the previously selected
+buffer in one window and a buffer named `<samp><span class="samp">*Backtrace*</span></samp>' in another
+window.  The backtrace buffer contains one line for each level of Lisp
+function execution currently going on.  At the beginning of this buffer
+is a message describing the reason that the debugger was invoked (such
+as the error message and associated data, if it was invoked due to an
+error).
+
+   <p>The backtrace buffer is read-only and uses a special major mode,
+Debugger mode, in which letters are defined as debugger commands.  The
+usual Emacs editing commands are available; thus, you can switch windows
+to examine the buffer that was being edited at the time of the error,
+switch buffers, visit files, or do any other sort of editing.  However,
+the debugger is a recursive editing level (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>)
+and it is wise to go back to the backtrace buffer and exit the debugger
+(with the <kbd>q</kbd> command) when you are finished with it.  Exiting
+the debugger gets out of the recursive edit and kills the backtrace
+buffer.
+
+   <p><a name="index-current-stack-frame-906"></a>  The backtrace buffer shows you the functions that are executing and
+their argument values.  It also allows you to specify a stack frame by
+moving point to the line describing that frame.  (A stack frame is the
+place where the Lisp interpreter records information about a particular
+invocation of a function.)  The frame whose line point is on is
+considered the <dfn>current frame</dfn>.  Some of the debugger commands
+operate on the current frame.  If a line starts with a star, that means
+that exiting that frame will call the debugger again.  This is useful
+for examining the return value of a function.
+
+   <p>If a function name is underlined, that means the debugger knows
+where its source code is located.  You can click <kbd>Mouse-2</kbd> on that
+name, or move to it and type &lt;RET&gt;, to visit the source code.
+
+   <p>The debugger itself must be run byte-compiled, since it makes
+assumptions about how many stack frames are used for the debugger
+itself.  These assumptions are false if the debugger is running
+interpreted.
+
+   </body></html>
+

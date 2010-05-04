@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Clickable Text - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
+<link rel="prev" href="Lazy-Properties.html#Lazy-Properties" title="Lazy Properties">
+<link rel="next" href="Links-and-Mouse_002d1.html#Links-and-Mouse_002d1" title="Links and Mouse-1">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Clickable-Text"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Links-and-Mouse_002d1.html#Links-and-Mouse_002d1">Links and Mouse-1</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lazy-Properties.html#Lazy-Properties">Lazy Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.19.9 Defining Clickable Text</h4>
+
+<p><a name="index-clickable-text-2625"></a>
+  <dfn>Clickable text</dfn> is text that can be clicked, with either the
+the mouse or via keyboard commands, to produce some result.  Many
+major modes use clickable text to implement features such as
+hyper-links.  The <code>button</code> package provides an easy way to insert
+and manipulate clickable text.  See <a href="Buttons.html#Buttons">Buttons</a>.
+
+   <p>In this section, we will explain how to manually set up clickable
+text in a buffer using text properties.  This involves two things: (1)
+indicating clickability when the mouse moves over the text, and (2)
+making <kbd>RET</kbd> or a mouse click on that text do something.
+
+   <p>Indicating clickability usually involves highlighting the text, and
+often involves displaying helpful information about the action, such
+as which mouse button to press, or a short summary of the action. 
+This can be done with the <code>mouse-face</code> and <code>help-echo</code>
+text properties.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
+Here is an example of how Dired does it:
+
+<pre class="smallexample">     (condition-case nil
+         (if (dired-move-to-filename)
+             (add-text-properties
+              (point)
+              (save-excursion
+                (dired-move-to-end-of-filename)
+                (point))
+              '(mouse-face highlight
+                help-echo "mouse-2: visit this file in other window")))
+       (error nil))
+</pre>
+   <p class="noindent">The first two arguments to <code>add-text-properties</code> specify the
+beginning and end of the text.
+
+   <p>The usual way to make the mouse do something when you click it
+on this text is to define <code>mouse-2</code> in the major mode's
+keymap.  The job of checking whether the click was on clickable text
+is done by the command definition.  Here is how Dired does it:
+
+<pre class="smallexample">     (defun dired-mouse-find-file-other-window (event)
+       "In Dired, visit the file or directory name you click on."
+       (interactive "e")
+       (let (window pos file)
+         (save-excursion
+           (setq window (posn-window (event-end event))
+                 pos (posn-point (event-end event)))
+           (if (not (windowp window))
+               (error "No file chosen"))
+           (set-buffer (window-buffer window))
+           (goto-char pos)
+           (setq file (dired-get-file-for-visit)))
+         (if (file-directory-p file)
+             (or (and (cdr dired-subdir-alist)
+                      (dired-goto-subdir file))
+                 (progn
+                   (select-window window)
+                   (dired-other-window file)))
+           (select-window window)
+           (find-file-other-window (file-name-sans-versions file t)))))
+</pre>
+   <p class="noindent">The reason for the <code>save-excursion</code> construct is to avoid
+changing the current buffer.  In this case,
+Dired uses the functions <code>posn-window</code> and <code>posn-point</code>
+to determine which buffer the click happened in and where, and
+in that buffer, <code>dired-get-file-for-visit</code> to determine which
+file to visit.
+
+   <p>Instead of defining a mouse command for the major mode, you can define
+a key binding for the clickable text itself, using the <code>keymap</code>
+text property:
+
+<pre class="example">     (let ((map (make-sparse-keymap)))
+       (define-key map [mouse-2] 'operate-this-button)
+       (put-text-property (point)
+                          (save-excursion
+                            (dired-move-to-end-of-filename)
+                            (point))
+                          'keymap map))
+</pre>
+   <p class="noindent">This method makes it possible to define different commands for various
+clickable pieces of text.  Also, the major mode definition (or the
+global definition) remains available for the rest of the text in the
+buffer.
+
+   </body></html>
+

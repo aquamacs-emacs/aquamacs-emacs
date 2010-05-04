@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Abbrev Tables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
+<link rel="prev" href="Abbrev-Mode.html#Abbrev-Mode" title="Abbrev Mode">
+<link rel="next" href="Defining-Abbrevs.html#Defining-Abbrevs" title="Defining Abbrevs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Abbrev-Tables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Mode.html#Abbrev-Mode">Abbrev Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr>
+</div>
+
+<h3 class="section">36.2 Abbrev Tables</h3>
+
+<p>This section describes how to create and manipulate abbrev tables.
+
+<div class="defun">
+&mdash; Function: <b>make-abbrev-table</b><var><a name="index-make_002dabbrev_002dtable-2965"></a></var><br>
+<blockquote><p>This function creates and returns a new, empty abbrev table&mdash;an obarray
+containing no symbols.  It is a vector filled with zeros. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>clear-abbrev-table</b><var> table<a name="index-clear_002dabbrev_002dtable-2966"></a></var><br>
+<blockquote><p>This function undefines all the abbrevs in abbrev table <var>table</var>,
+leaving it empty.  It always returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-abbrev-table</b><var> table<a name="index-copy_002dabbrev_002dtable-2967"></a></var><br>
+<blockquote><p>This function returns a copy of abbrev table <var>table</var>&mdash;a new
+abbrev table that contains the same abbrev definitions.  The only
+difference between <var>table</var> and the returned copy is that this
+function sets the property lists of all copied abbrevs to 0. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>define-abbrev-table</b><var> tabname definitions<a name="index-define_002dabbrev_002dtable-2968"></a></var><br>
+<blockquote><p>This function defines <var>tabname</var> (a symbol) as an abbrev table
+name, i.e., as a variable whose value is an abbrev table.  It defines
+abbrevs in the table according to <var>definitions</var>, a list of
+elements of the form <code>(</code><var>abbrevname</var> <var>expansion</var>
+<var>hook</var> <var>usecount</var> <var>system-flag</var><code>)</code>.  If an element of
+<var>definitions</var> has length less than five, omitted elements default
+to <code>nil</code>.  A value of <code>nil</code> for <var>usecount</var> is equivalent
+to zero.  The return value is always <code>nil</code>.
+
+        <p>If this function is called more than once for the same <var>tabname</var>,
+subsequent calls add the definitions in <var>definitions</var> to
+<var>tabname</var>, rather than overriding the entire original contents. 
+(A subsequent call only overrides abbrevs explicitly redefined or
+undefined in <var>definitions</var>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>abbrev-table-name-list</b><var><a name="index-abbrev_002dtable_002dname_002dlist-2969"></a></var><br>
+<blockquote><p>This is a list of symbols whose values are abbrev tables. 
+<code>define-abbrev-table</code> adds the new abbrev table name to this list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>insert-abbrev-table-description</b><var> name &amp;optional human<a name="index-insert_002dabbrev_002dtable_002ddescription-2970"></a></var><br>
+<blockquote><p>This function inserts before point a description of the abbrev table
+named <var>name</var>.  The argument <var>name</var> is a symbol whose value is an
+abbrev table.  The return value is always <code>nil</code>.
+
+        <p>If <var>human</var> is non-<code>nil</code>, the description is human-oriented. 
+System abbrevs are listed and identified as such.  Otherwise the
+description is a Lisp expression&mdash;a call to <code>define-abbrev-table</code>
+that would define <var>name</var> as it is currently defined, but without
+the system abbrevs.  (The mode or package using <var>name</var> is supposed
+to add these to <var>name</var> separately.) 
+</p></blockquote></div>
+
+   </body></html>
+

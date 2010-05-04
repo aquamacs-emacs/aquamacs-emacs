@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Fringe Indicators - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fringes.html#Fringes" title="Fringes">
+<link rel="prev" href="Fringe-Size_002fPos.html#Fringe-Size_002fPos" title="Fringe Size/Pos">
+<link rel="next" href="Fringe-Cursors.html#Fringe-Cursors" title="Fringe Cursors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Fringe-Indicators"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fringe-Cursors.html#Fringe-Cursors">Fringe Cursors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fringe-Size_002fPos.html#Fringe-Size_002fPos">Fringe Size/Pos</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fringes.html#Fringes">Fringes</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.13.2 Fringe Indicators</h4>
+
+<p><a name="index-fringe-indicators-3283"></a><a name="index-indicators_002c-fringe-3284"></a>
+  The <dfn>fringe indicators</dfn> are tiny icons Emacs displays in the
+window fringe (on a graphic display) to indicate truncated or
+continued lines, buffer boundaries, overlay arrow, etc.
+
+<div class="defun">
+&mdash; User Option: <b>indicate-empty-lines</b><var><a name="index-indicate_002dempty_002dlines-3285"></a></var><br>
+<blockquote><p><a name="index-fringes_002c-and-empty-line-indication-3286"></a>When this is non-<code>nil</code>, Emacs displays a special glyph in the
+fringe of each empty line at the end of the buffer, on graphical
+displays.  See <a href="Fringes.html#Fringes">Fringes</a>.  This variable is automatically
+buffer-local in every buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>indicate-buffer-boundaries</b><var><a name="index-indicate_002dbuffer_002dboundaries-3287"></a></var><br>
+<blockquote><p>This buffer-local variable controls how the buffer boundaries and
+window scrolling are indicated in the window fringes.
+
+        <p>Emacs can indicate the buffer boundaries&mdash;that is, the first and last
+line in the buffer&mdash;with angle icons when they appear on the screen. 
+In addition, Emacs can display an up-arrow in the fringe to show
+that there is text above the screen, and a down-arrow to show
+there is text below the screen.
+
+        <p>There are three kinds of basic values:
+
+          <dl>
+<dt><code>nil</code><dd>Don't display any of these fringe icons. 
+<br><dt><code>left</code><dd>Display the angle icons and arrows in the left fringe. 
+<br><dt><code>right</code><dd>Display the angle icons and arrows in the right fringe. 
+<br><dt>any non-alist<dd>Display the angle icons in the left fringe
+and don't display the arrows. 
+</dl>
+
+        <p>Otherwise the value should be an alist that specifies which fringe
+indicators to display and where.  Each element of the alist should
+have the form <code>(</code><var>indicator</var><code> . </code><var>position</var><code>)</code>.  Here,
+<var>indicator</var> is one of <code>top</code>, <code>bottom</code>, <code>up</code>,
+<code>down</code>, and <code>t</code> (which covers all the icons not yet
+specified), while <var>position</var> is one of <code>left</code>, <code>right</code>
+and <code>nil</code>.
+
+        <p>For example, <code>((top . left) (t . right))</code> places the top angle
+bitmap in left fringe, and the bottom angle bitmap as well as both
+arrow bitmaps in right fringe.  To show the angle bitmaps in the left
+fringe, and no arrow bitmaps, use <code>((top .  left) (bottom . left))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>default-indicate-buffer-boundaries</b><var><a name="index-default_002dindicate_002dbuffer_002dboundaries-3288"></a></var><br>
+<blockquote><p>The value of this variable is the default value for
+<code>indicate-buffer-boundaries</code> in buffers that do not override it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>fringe-indicator-alist</b><var><a name="index-fringe_002dindicator_002dalist-3289"></a></var><br>
+<blockquote><p>This buffer-local variable specifies the mapping from logical fringe
+indicators to the actual bitmaps displayed in the window fringes.
+
+        <p>These symbols identify the logical fringe indicators:
+
+          <dl>
+<dt>Truncation and continuation line indicators:<dd><code>truncation</code>, <code>continuation</code>.
+
+          <br><dt>Buffer position indicators:<dd><code>up</code>, <code>down</code>,
+<code>top</code>, <code>bottom</code>,
+<code>top-bottom</code>.
+
+          <br><dt>Empty line indicator:<dd><code>empty-line</code>.
+
+          <br><dt>Overlay arrow indicator:<dd><code>overlay-arrow</code>.
+
+          <br><dt>Unknown bitmap indicator:<dd><code>unknown</code>. 
+</dl>
+
+        <p>The value is an alist where each element <code>(</code><var>indicator</var><code> . </code><var>bitmaps</var><code>)</code>
+specifies the fringe bitmaps used to display a specific logical
+fringe indicator.
+
+        <p>Here, <var>indicator</var> specifies the logical indicator type, and
+<var>bitmaps</var> is list of symbols <code>(</code><var>left</var> <var>right</var><code>
+[</code><var>left1</var> <var>right1</var><code>])</code> which specifies the actual bitmap shown
+in the left or right fringe for the logical indicator.
+
+        <p>The <var>left</var> and <var>right</var> symbols specify the bitmaps shown in
+the left and/or right fringe for the specific indicator.  The
+<var>left1</var> or <var>right1</var> bitmaps are used only for the `bottom' and
+`top-bottom indicators when the last (only) line in has no final
+newline.  Alternatively, <var>bitmaps</var> may be a single symbol which is
+used in both left and right fringes.
+
+        <p>When <code>fringe-indicator-alist</code> has a buffer-local value, and there
+is no bitmap defined for a logical indicator, or the bitmap is
+<code>t</code>, the corresponding value from the (non-local)
+<code>default-fringe-indicator-alist</code> is used.
+
+        <p>To completely hide a specific indicator, set the bitmap to <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>default-fringe-indicator-alist</b><var><a name="index-default_002dfringe_002dindicator_002dalist-3290"></a></var><br>
+<blockquote><p>The value of this variable is the default value for
+<code>fringe-indicator-alist</code> in buffers that do not override it. 
+</p></blockquote></div>
+
+   <p>Standard fringe bitmaps for indicators:
+<pre class="example">     left-arrow right-arrow up-arrow down-arrow
+     left-curly-arrow right-curly-arrow
+     left-triangle right-triangle
+     top-left-angle top-right-angle
+     bottom-left-angle bottom-right-angle
+     left-bracket right-bracket
+     filled-rectangle hollow-rectangle
+     filled-square hollow-square
+     vertical-bar horizontal-bar
+     empty-line question-mark
+</pre>
+   </body></html>
+

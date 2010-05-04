@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Showing Images - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Images.html#Images" title="Images">
+<link rel="prev" href="Defining-Images.html#Defining-Images" title="Defining Images">
+<link rel="next" href="Image-Cache.html#Image-Cache" title="Image Cache">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Showing-Images"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Image-Cache.html#Image-Cache">Image Cache</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Images.html#Defining-Images">Defining Images</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.16.8 Showing Images</h4>
+
+<p>You can use an image descriptor by setting up the <code>display</code>
+property yourself, but it is easier to use the functions in this
+section.
+
+<div class="defun">
+&mdash; Function: <b>insert-image</b><var> image &amp;optional string area slice<a name="index-insert_002dimage-3341"></a></var><br>
+<blockquote><p>This function inserts <var>image</var> in the current buffer at point.  The
+value <var>image</var> should be an image descriptor; it could be a value
+returned by <code>create-image</code>, or the value of a symbol defined with
+<code>defimage</code>.  The argument <var>string</var> specifies the text to put
+in the buffer to hold the image.  If it is omitted or <code>nil</code>,
+<code>insert-image</code> uses <code>" "</code> by default.
+
+        <p>The argument <var>area</var> specifies whether to put the image in a margin. 
+If it is <code>left-margin</code>, the image appears in the left margin;
+<code>right-margin</code> specifies the right margin.  If <var>area</var> is
+<code>nil</code> or omitted, the image is displayed at point within the
+buffer's text.
+
+        <p>The argument <var>slice</var> specifies a slice of the image to insert.  If
+<var>slice</var> is <code>nil</code> or omitted the whole image is inserted. 
+Otherwise, <var>slice</var> is a list <code>(</code><var>x</var> <var>y</var> <var>width</var>
+<var>height</var><code>)</code> which specifies the <var>x</var> and <var>y</var> positions and
+<var>width</var> and <var>height</var> of the image area to insert.  Integer
+values are in units of pixels.  A floating point number in the range
+0.0&ndash;1.0 stands for that fraction of the width or height of the entire
+image.
+
+        <p>Internally, this function inserts <var>string</var> in the buffer, and gives
+it a <code>display</code> property which specifies <var>image</var>.  See <a href="Display-Property.html#Display-Property">Display Property</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>insert-sliced-image</b><var> image &amp;optional string area rows cols<a name="index-insert_002dsliced_002dimage-3342"></a></var><br>
+<blockquote><p>This function inserts <var>image</var> in the current buffer at point, like
+<code>insert-image</code>, but splits the image into <var>rows</var>x<var>cols</var>
+equally sized slices. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>put-image</b><var> image pos &amp;optional string area<a name="index-put_002dimage-3343"></a></var><br>
+<blockquote><p>This function puts image <var>image</var> in front of <var>pos</var> in the
+current buffer.  The argument <var>pos</var> should be an integer or a
+marker.  It specifies the buffer position where the image should appear. 
+The argument <var>string</var> specifies the text that should hold the image
+as an alternative to the default.
+
+        <p>The argument <var>image</var> must be an image descriptor, perhaps returned
+by <code>create-image</code> or stored by <code>defimage</code>.
+
+        <p>The argument <var>area</var> specifies whether to put the image in a margin. 
+If it is <code>left-margin</code>, the image appears in the left margin;
+<code>right-margin</code> specifies the right margin.  If <var>area</var> is
+<code>nil</code> or omitted, the image is displayed at point within the
+buffer's text.
+
+        <p>Internally, this function creates an overlay, and gives it a
+<code>before-string</code> property containing text that has a <code>display</code>
+property whose value is the image.  (Whew!) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>remove-images</b><var> start end &amp;optional buffer<a name="index-remove_002dimages-3344"></a></var><br>
+<blockquote><p>This function removes images in <var>buffer</var> between positions
+<var>start</var> and <var>end</var>.  If <var>buffer</var> is omitted or <code>nil</code>,
+images are removed from the current buffer.
+
+        <p>This removes only images that were put into <var>buffer</var> the way
+<code>put-image</code> does it, not images that were inserted with
+<code>insert-image</code> or in other ways. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>image-size</b><var> spec &amp;optional pixels frame<a name="index-image_002dsize-3345"></a></var><br>
+<blockquote><p>This function returns the size of an image as a pair
+<code>(</code><var>width</var><code>&nbsp;.&nbsp;</code><var>height</var><code>)</code><!-- /@w -->.  <var>spec</var> is an image
+specification.  <var>pixels</var> non-<code>nil</code> means return sizes
+measured in pixels, otherwise return sizes measured in canonical
+character units (fractions of the width/height of the frame's default
+font).  <var>frame</var> is the frame on which the image will be displayed. 
+<var>frame</var> null or omitted means use the selected frame (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>max-image-size</b><var><a name="index-max_002dimage_002dsize-3346"></a></var><br>
+<blockquote><p>This variable is used to define the maximum size of image that Emacs
+will load.  Emacs will refuse to load (and display) any image that is
+larger than this limit.
+
+        <p>If the value is an integer, it directly specifies the maximum
+image height and width, measured in pixels.  If it is a floating
+point number, it specifies the maximum image height and width
+as a ratio to the frame height and width.  If the value is
+non-numeric, there is no explicit limit on the size of images.
+
+        <p>The purpose of this variable is to prevent unreasonably large images
+from accidentally being loaded into Emacs.  It only takes effect the
+first time an image is loaded.  Once an image is placed in the image
+cache, it can always be displayed, even if the value of
+<var>max-image-size</var> is subsequently changed (see <a href="Image-Cache.html#Image-Cache">Image Cache</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

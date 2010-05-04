@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>Text from Minibuffer - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="prev" href="Intro-to-Minibuffers.html#Intro-to-Minibuffers" title="Intro to Minibuffers">
+<link rel="next" href="Object-from-Minibuffer.html#Object-from-Minibuffer" title="Object from Minibuffer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Text-from-Minibuffer"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Object-from-Minibuffer.html#Object-from-Minibuffer">Object from Minibuffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Intro-to-Minibuffers.html#Intro-to-Minibuffers">Intro to Minibuffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.2 Reading Text Strings with the Minibuffer</h3>
+
+<p>Most often, the minibuffer is used to read text as a string.  It can
+also be used to read a Lisp object in textual form.  The most basic
+primitive for minibuffer input is <code>read-from-minibuffer</code>; it can do
+either one.  There are also specialized commands for reading
+commands, variables, file names, etc. (see <a href="Completion.html#Completion">Completion</a>).
+
+   <p>In most cases, you should not call minibuffer input functions in the
+middle of a Lisp function.  Instead, do all minibuffer input as part of
+reading the arguments for a command, in the <code>interactive</code>
+specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
+
+<div class="defun">
+&mdash; Function: <b>read-from-minibuffer</b><var> prompt-string &amp;optional initial-contents keymap read hist default inherit-input-method<a name="index-read_002dfrom_002dminibuffer-1054"></a></var><br>
+<blockquote><p>This function is the most general way to get input through the
+minibuffer.  By default, it accepts arbitrary text and returns it as a
+string; however, if <var>read</var> is non-<code>nil</code>, then it uses
+<code>read</code> to convert the text into a Lisp object (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>).
+
+        <p>The first thing this function does is to activate a minibuffer and
+display it with <var>prompt-string</var> as the prompt.  This value must be a
+string.  Then the user can edit text in the minibuffer.
+
+        <p>When the user types a command to exit the minibuffer,
+<code>read-from-minibuffer</code> constructs the return value from the text in
+the minibuffer.  Normally it returns a string containing that text. 
+However, if <var>read</var> is non-<code>nil</code>, <code>read-from-minibuffer</code>
+reads the text and returns the resulting Lisp object, unevaluated. 
+(See <a href="Input-Functions.html#Input-Functions">Input Functions</a>, for information about reading.)
+
+        <p>The argument <var>default</var> specifies a default value to make available
+through the history commands.  It should be a string, or <code>nil</code>. 
+If non-<code>nil</code>, the user can access it using
+<code>next-history-element</code>, usually bound in the minibuffer to
+<kbd>M-n</kbd>.  If <var>read</var> is non-<code>nil</code>, then <var>default</var> is
+also used as the input to <code>read</code>, if the user enters empty input. 
+(If <var>read</var> is non-<code>nil</code> and <var>default</var> is <code>nil</code>, empty
+input results in an <code>end-of-file</code> error.)  However, in the usual
+case (where <var>read</var> is <code>nil</code>), <code>read-from-minibuffer</code>
+ignores <var>default</var> when the user enters empty input and returns an
+empty string, <code>""</code>.  In this respect, it is different from all
+the other minibuffer input functions in this chapter.
+
+        <p>If <var>keymap</var> is non-<code>nil</code>, that keymap is the local keymap to
+use in the minibuffer.  If <var>keymap</var> is omitted or <code>nil</code>, the
+value of <code>minibuffer-local-map</code> is used as the keymap.  Specifying
+a keymap is the most important way to customize the minibuffer for
+various applications such as completion.
+
+        <p>The argument <var>hist</var> specifies which history list variable to use
+for saving the input and for history commands used in the minibuffer. 
+It defaults to <code>minibuffer-history</code>.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
+
+        <p>If the variable <code>minibuffer-allow-text-properties</code> is
+non-<code>nil</code>, then the string which is returned includes whatever text
+properties were present in the minibuffer.  Otherwise all the text
+properties are stripped when the value is returned.
+
+        <p>If the argument <var>inherit-input-method</var> is non-<code>nil</code>, then the
+minibuffer inherits the current input method (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>) and
+the setting of <code>enable-multibyte-characters</code> (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>) from whichever buffer was current before entering the
+minibuffer.
+
+        <p>Use of <var>initial-contents</var> is mostly deprecated; we recommend using
+a non-<code>nil</code> value only in conjunction with specifying a cons cell
+for <var>hist</var>.  See <a href="Initial-Input.html#Initial-Input">Initial Input</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-string</b><var> prompt &amp;optional initial history default inherit-input-method<a name="index-read_002dstring-1055"></a></var><br>
+<blockquote><p>This function reads a string from the minibuffer and returns it.  The
+arguments <var>prompt</var>, <var>initial</var>, <var>history</var> and
+<var>inherit-input-method</var> are used as in <code>read-from-minibuffer</code>. 
+The keymap used is <code>minibuffer-local-map</code>.
+
+        <p>The optional argument <var>default</var> is used as in
+<code>read-from-minibuffer</code>, except that, if non-<code>nil</code>, it also
+specifies a default value to return if the user enters null input.  As
+in <code>read-from-minibuffer</code> it should be a string, or <code>nil</code>,
+which is equivalent to an empty string.
+
+        <p>This function is a simplified interface to the
+<code>read-from-minibuffer</code> function:
+
+     <pre class="smallexample">          (read-string <var>prompt</var> <var>initial</var> <var>history</var> <var>default</var> <var>inherit</var>)
+          ==
+          (let ((value
+                 (read-from-minibuffer <var>prompt</var> <var>initial</var> nil nil
+                                       <var>history</var> <var>default</var> <var>inherit</var>)))
+            (if (and (equal value "") <var>default</var>)
+                <var>default</var>
+              value))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-allow-text-properties</b><var><a name="index-minibuffer_002dallow_002dtext_002dproperties-1056"></a></var><br>
+<blockquote><p>If this variable is <code>nil</code>, then <code>read-from-minibuffer</code> strips
+all text properties from the minibuffer input before returning it. 
+This variable also affects <code>read-string</code>.  However,
+<code>read-no-blanks-input</code> (see below), as well as
+<code>read-minibuffer</code> and related functions (see <a href="Object-from-Minibuffer.html#Object-from-Minibuffer">Reading Lisp Objects With the Minibuffer</a>), and all
+functions that do minibuffer input with completion, discard text
+properties unconditionally, regardless of the value of this variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-map</b><var><a name="index-minibuffer_002dlocal_002dmap-1057"></a></var><br>
+<blockquote><p>This
+<a name="Definition-of-minibuffer_002dlocal_002dmap"></a>
+<!-- avoid page break at anchor; work around Texinfo deficiency -->
+is the default local keymap for reading from the minibuffer.  By
+default, it makes the following bindings:
+
+          <dl>
+<dt><kbd>C-j</kbd><dd><code>exit-minibuffer</code>
+
+          <br><dt>&lt;RET&gt;<dd><code>exit-minibuffer</code>
+
+          <br><dt><kbd>C-g</kbd><dd><code>abort-recursive-edit</code>
+
+          <br><dt><kbd>M-n</kbd><dt>&lt;DOWN&gt;<dd><code>next-history-element</code>
+
+          <br><dt><kbd>M-p</kbd><dt>&lt;UP&gt;<dd><code>previous-history-element</code>
+
+          <br><dt><kbd>M-s</kbd><dd><code>next-matching-history-element</code>
+
+          <br><dt><kbd>M-r</kbd><dd><code>previous-matching-history-element</code>
+</dl>
+        </p></blockquote></div>
+
+<!-- In version 18, initial is required -->
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>read-no-blanks-input</b><var> prompt &amp;optional initial inherit-input-method<a name="index-read_002dno_002dblanks_002dinput-1058"></a></var><br>
+<blockquote><p>This function reads a string from the minibuffer, but does not allow
+whitespace characters as part of the input: instead, those characters
+terminate the input.  The arguments <var>prompt</var>, <var>initial</var>, and
+<var>inherit-input-method</var> are used as in <code>read-from-minibuffer</code>.
+
+        <p>This is a simplified interface to the <code>read-from-minibuffer</code>
+function, and passes the value of the <code>minibuffer-local-ns-map</code>
+keymap as the <var>keymap</var> argument for that function.  Since the keymap
+<code>minibuffer-local-ns-map</code> does not rebind <kbd>C-q</kbd>, it <em>is</em>
+possible to put a space into the string, by quoting it.
+
+        <p>This function discards text properties, regardless of the value of
+<code>minibuffer-allow-text-properties</code>.
+
+     <pre class="smallexample">          (read-no-blanks-input <var>prompt</var> <var>initial</var>)
+          ==
+          (let (minibuffer-allow-text-properties)
+            (read-from-minibuffer <var>prompt</var> <var>initial</var> minibuffer-local-ns-map))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-local-ns-map</b><var><a name="index-minibuffer_002dlocal_002dns_002dmap-1059"></a></var><br>
+<blockquote><p>This built-in variable is the keymap used as the minibuffer local keymap
+in the function <code>read-no-blanks-input</code>.  By default, it makes the
+following bindings, in addition to those of <code>minibuffer-local-map</code>:
+
+          <dl>
+<dt>&lt;SPC&gt;<dd><a name="index-g_t_0040key_007bSPC_007d-in-minibuffer-1060"></a><code>exit-minibuffer</code>
+
+          <br><dt>&lt;TAB&gt;<dd><a name="index-g_t_0040key_007bTAB_007d-in-minibuffer-1061"></a><code>exit-minibuffer</code>
+
+          <br><dt><kbd>?</kbd><dd><a name="index-g_t_0040kbd_007b_003f_007d-in-minibuffer-1062"></a><code>self-insert-and-exit</code>
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

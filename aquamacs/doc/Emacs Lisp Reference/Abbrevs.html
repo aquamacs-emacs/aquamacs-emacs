@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Abbrevs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
+<link rel="next" href="Processes.html#Processes" title="Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Abbrevs"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Processes.html#Processes">Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">36 Abbrevs and Abbrev Expansion</h2>
+
+<p><a name="index-abbrev-2962"></a><!-- @cindex abbrev table  Redundant with "abbrev". -->
+
+   <p>An abbreviation or <dfn>abbrev</dfn> is a string of characters that may be
+expanded to a longer string.  The user can insert the abbrev string and
+find it replaced automatically with the expansion of the abbrev.  This
+saves typing.
+
+   <p>The set of abbrevs currently in effect is recorded in an <dfn>abbrev
+table</dfn>.  Each buffer has a local abbrev table, but normally all buffers
+in the same major mode share one abbrev table.  There is also a global
+abbrev table.  Normally both are used.
+
+   <p>An abbrev table is represented as an obarray containing a symbol for
+each abbreviation.  The symbol's name is the abbreviation; its value
+is the expansion; its function definition is the hook function to do
+the expansion (see <a href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>); its property list cell
+typically contains the use count, the number of times the abbreviation
+has been expanded.  Alternatively, the use count is on the
+<code>count</code> property and the system-abbrev flag is on the
+<code>system-type</code> property.  Abbrevs with a non-<code>nil</code>
+<code>system-type</code> property are called &ldquo;system&rdquo; abbrevs.  They are
+usually defined by modes or packages, instead of by the user, and are
+treated specially in certain respects.
+
+   <p>Because the symbols used for abbrevs are not interned in the usual
+obarray, they will never appear as the result of reading a Lisp
+expression; in fact, normally they are never used except by the code
+that handles abbrevs.  Therefore, it is safe to use them in an
+extremely nonstandard way.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.
+
+   <p>For the user-level commands for abbrevs, see <a href="../emacs/Abbrevs.html#Abbrevs">Abbrev Mode</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Abbrev-Mode.html#Abbrev-Mode">Abbrev Mode</a>:                  Setting up Emacs for abbreviation. 
+<li><a accesskey="2" href="Abbrev-Tables.html#Abbrev-Tables">Tables</a>:         Creating and working with abbrev tables. 
+<li><a accesskey="3" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>:             Specifying abbreviations and their expansions. 
+<li><a accesskey="4" href="Abbrev-Files.html#Abbrev-Files">Files</a>:           Saving abbrevs in files. 
+<li><a accesskey="5" href="Abbrev-Expansion.html#Abbrev-Expansion">Expansion</a>:   Controlling expansion; expansion subroutines. 
+<li><a accesskey="6" href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>:       Abbrev tables used by various major modes. 
+</ul>
+
+   </body></html>
+

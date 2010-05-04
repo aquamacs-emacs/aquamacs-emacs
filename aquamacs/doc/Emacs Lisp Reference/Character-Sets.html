@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Character Sets - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Character-Codes.html#Character-Codes" title="Character Codes">
+<link rel="next" href="Chars-and-Bytes.html#Chars-and-Bytes" title="Chars and Bytes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Character-Sets"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Chars-and-Bytes.html#Chars-and-Bytes">Chars and Bytes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Codes.html#Character-Codes">Character Codes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.5 Character Sets</h3>
+
+<p><a name="index-character-sets-2695"></a>
+  Emacs classifies characters into various <dfn>character sets</dfn>, each of
+which has a name which is a symbol.  Each character belongs to one and
+only one character set.
+
+   <p>In general, there is one character set for each distinct script.  For
+example, <code>latin-iso8859-1</code> is one character set,
+<code>greek-iso8859-7</code> is another, and <code>ascii</code> is another.  An
+Emacs character set can hold at most 9025 characters; therefore, in some
+cases, characters that would logically be grouped together are split
+into several character sets.  For example, one set of Chinese
+characters, generally known as Big 5, is divided into two Emacs
+character sets, <code>chinese-big5-1</code> and <code>chinese-big5-2</code>.
+
+   <p><acronym>ASCII</acronym> characters are in character set <code>ascii</code>.  The
+non-<acronym>ASCII</acronym> characters 128 through 159 are in character set
+<code>eight-bit-control</code>, and codes 160 through 255 are in character set
+<code>eight-bit-graphic</code>.
+
+<div class="defun">
+&mdash; Function: <b>charsetp</b><var> object<a name="index-charsetp-2696"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <var>object</var> is a symbol that names a character set,
+<code>nil</code> otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>charset-list</b><var><a name="index-charset_002dlist-2697"></a></var><br>
+<blockquote><p>The value is a list of all defined character set names. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>charset-list</b><var><a name="index-charset_002dlist-2698"></a></var><br>
+<blockquote><p>This function returns the value of <code>charset-list</code>.  It is only
+provided for backward compatibility. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-charset</b><var> character<a name="index-char_002dcharset-2699"></a></var><br>
+<blockquote><p>This function returns the name of the character set that <var>character</var>
+belongs to, or the symbol <code>unknown</code> if <var>character</var> is not a
+valid character. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>charset-plist</b><var> charset<a name="index-charset_002dplist-2700"></a></var><br>
+<blockquote><p>This function returns the charset property list of the character set
+<var>charset</var>.  Although <var>charset</var> is a symbol, this is not the same
+as the property list of that symbol.  Charset properties are used for
+special purposes within Emacs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>list-charset-chars</b><var> charset<a name="index-list_002dcharset_002dchars-2701"></a></var><br>
+<blockquote><p>This command displays a list of characters in the character set
+<var>charset</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+<title>Size of Window - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Horizontal-Scrolling.html#Horizontal-Scrolling" title="Horizontal Scrolling">
+<link rel="next" href="Resizing-Windows.html#Resizing-Windows" title="Resizing Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Size-of-Window"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.14 The Size of a Window</h3>
+
+<p><a name="index-window-size-2081"></a><a name="index-size-of-window-2082"></a>
+  An Emacs window is rectangular, and its size information consists of
+the height (the number of lines) and the width (the number of character
+positions in each line).  The mode line is included in the height.  But
+the width does not count the scroll bar or the column of `<samp><span class="samp">|</span></samp>'
+characters that separates side-by-side windows.
+
+   <p>The following three functions return size information about a window:
+
+<div class="defun">
+&mdash; Function: <b>window-height</b><var> &amp;optional window<a name="index-window_002dheight-2083"></a></var><br>
+<blockquote><p>This function returns the number of lines in <var>window</var>, including
+its mode line and header line, if any.  If <var>window</var> fills its
+entire frame except for the echo area, this is typically one less than
+the value of <code>frame-height</code> on that frame.
+
+        <p>If <var>window</var> is <code>nil</code>, the function uses the selected window.
+
+     <pre class="example">          (window-height)
+               =&gt; 23
+          (split-window-vertically)
+               =&gt; #&lt;window 4 on windows.texi&gt;
+          (window-height)
+               =&gt; 11
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-body-height</b><var> &amp;optional window<a name="index-window_002dbody_002dheight-2084"></a></var><br>
+<blockquote><p>Like <code>window-height</code> but the value does not include the
+mode line (if any) or the header line (if any). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-width</b><var> &amp;optional window<a name="index-window_002dwidth-2085"></a></var><br>
+<blockquote><p>This function returns the number of columns in <var>window</var>.  If
+<var>window</var> fills its entire frame, this is the same as the value of
+<code>frame-width</code> on that frame.  The width does not include the
+window's scroll bar or the column of `<samp><span class="samp">|</span></samp>' characters that separates
+side-by-side windows.
+
+        <p>If <var>window</var> is <code>nil</code>, the function uses the selected window.
+
+     <pre class="example">          (window-width)
+               =&gt; 80
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-edges</b><var> &amp;optional window<a name="index-window_002dedges-2086"></a></var><br>
+<blockquote><p>This function returns a list of the edge coordinates of <var>window</var>. 
+If <var>window</var> is <code>nil</code>, the selected window is used.
+
+        <p>The order of the list is <code>(</code><var>left</var> <var>top</var> <var>right</var>
+<var>bottom</var><code>)</code>, all elements relative to 0, 0 at the top left corner of
+the frame.  The element <var>right</var> of the value is one more than the
+rightmost column used by <var>window</var>, and <var>bottom</var> is one more than
+the bottommost row used by <var>window</var> and its mode-line.
+
+        <p>The edges include the space used by the window's scroll bar, display
+margins, fringes, header line, and mode line, if it has them.  Also,
+if the window has a neighbor on the right, its right edge value
+includes the width of the separator line between the window and that
+neighbor.  Since the width of the window does not include this
+separator, the width does not usually equal the difference between the
+right and left edges. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-inside-edges</b><var> &amp;optional window<a name="index-window_002dinside_002dedges-2087"></a></var><br>
+<blockquote><p>This is similar to <code>window-edges</code>, but the edge values
+it returns include only the text area of the window.  They
+do not include the header line, mode line, scroll bar or
+vertical separator, fringes, or display margins. 
+</p></blockquote></div>
+
+   <p>Here are the results obtained on a typical 24-line terminal with just
+one window, with menu bar enabled:
+
+<pre class="example">     (window-edges (selected-window))
+          =&gt; (0 1 80 23)
+     (window-inside-edges (selected-window))
+          =&gt; (0 1 80 22)
+</pre>
+   <p class="noindent">The bottom edge is at line 23 because the last line is the echo area. 
+The bottom inside edge is at line 22, which is the window's mode line.
+
+   <p>If <var>window</var> is at the upper left corner of its frame, and there is
+no menu bar, then <var>bottom</var> returned by <code>window-edges</code> is the
+same as the value of <code>(window-height)</code>, <var>right</var> is almost the
+same as the value of <code>(window-width)</code>, and <var>top</var> and
+<var>left</var> are zero.  For example, the edges of the following window
+are `<samp><span class="samp">0&nbsp;0&nbsp;8&nbsp;5</span></samp>'<!-- /@w -->.  Assuming that the frame has more than 8
+columns, the last column of the window (column 7) holds a border
+rather than text.  The last row (row 4) holds the mode line, shown
+here with `<samp><span class="samp">xxxxxxxxx</span></samp>'.
+
+<pre class="example">                0
+                _______
+             0 |       |
+               |       |
+               |       |
+               |       |
+               xxxxxxxxx  4
+     
+                       7
+</pre>
+   <p>In the following example, let's suppose that the frame is 7
+columns wide.  Then the edges of the left window are `<samp><span class="samp">0&nbsp;0&nbsp;4&nbsp;3</span></samp>'<!-- /@w -->
+and the edges of the right window are `<samp><span class="samp">4&nbsp;0&nbsp;7&nbsp;3</span></samp>'<!-- /@w -->. 
+The inside edges of the left window are `<samp><span class="samp">0&nbsp;0&nbsp;3&nbsp;2</span></samp>'<!-- /@w -->,
+and the inside edges of the right window are `<samp><span class="samp">4&nbsp;0&nbsp;7&nbsp;2</span></samp>'<!-- /@w -->,
+
+<pre class="example">                ___ ___
+               |   |   |
+               |   |   |
+               xxxxxxxxx
+     
+                0  34  7
+</pre>
+   <div class="defun">
+&mdash; Function: <b>window-pixel-edges</b><var> &amp;optional window<a name="index-window_002dpixel_002dedges-2088"></a></var><br>
+<blockquote><p>This function is like <code>window-edges</code> except that, on a graphical
+display, the edge values are measured in pixels instead of in
+character lines and columns. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-inside-pixel-edges</b><var> &amp;optional window<a name="index-window_002dinside_002dpixel_002dedges-2089"></a></var><br>
+<blockquote><p>This function is like <code>window-inside-edges</code> except that, on a
+graphical display, the edge values are measured in pixels instead of
+in character lines and columns. 
+</p></blockquote></div>
+
+   </body></html>
+

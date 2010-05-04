@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Active Display Table - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Tables.html#Display-Tables" title="Display Tables">
+<link rel="prev" href="Display-Table-Format.html#Display-Table-Format" title="Display Table Format">
+<link rel="next" href="Glyphs.html#Glyphs" title="Glyphs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Active-Display-Table"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Glyphs.html#Glyphs">Glyphs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-Table-Format.html#Display-Table-Format">Display Table Format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Tables.html#Display-Tables">Display Tables</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.21.2 Active Display Table</h4>
+
+<p><a name="index-active-display-table-3436"></a>
+  Each window can specify a display table, and so can each buffer.  When
+a buffer <var>b</var> is displayed in window <var>w</var>, display uses the
+display table for window <var>w</var> if it has one; otherwise, the display
+table for buffer <var>b</var> if it has one; otherwise, the standard display
+table if any.  The display table chosen is called the <dfn>active</dfn>
+display table.
+
+<div class="defun">
+&mdash; Function: <b>window-display-table</b><var> &amp;optional window<a name="index-window_002ddisplay_002dtable-3437"></a></var><br>
+<blockquote><p>This function returns <var>window</var>'s display table, or <code>nil</code>
+if <var>window</var> does not have an assigned display table.  The default
+for <var>window</var> is the selected window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-window-display-table</b><var> window table<a name="index-set_002dwindow_002ddisplay_002dtable-3438"></a></var><br>
+<blockquote><p>This function sets the display table of <var>window</var> to <var>table</var>. 
+The argument <var>table</var> should be either a display table or
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-display-table</b><var><a name="index-buffer_002ddisplay_002dtable-3439"></a></var><br>
+<blockquote><p>This variable is automatically buffer-local in all buffers; its value in
+a particular buffer specifies the display table for that buffer.  If it
+is <code>nil</code>, that means the buffer does not have an assigned display
+table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>standard-display-table</b><var><a name="index-standard_002ddisplay_002dtable-3440"></a></var><br>
+<blockquote><p>This variable's value is the default display table, used whenever a
+window has no display table and neither does the buffer displayed in
+that window.  This variable is <code>nil</code> by default. 
+</p></blockquote></div>
+
+   <p>If there is no display table to use for a particular window&mdash;that is,
+if the window specifies none, its buffer specifies none, and
+<code>standard-display-table</code> is <code>nil</code>&mdash;then Emacs uses the usual
+display conventions for all character codes in that window.  See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+   <p>A number of functions for changing the standard display table
+are defined in the library <samp><span class="file">disp-table</span></samp>.
+
+   </body></html>
+

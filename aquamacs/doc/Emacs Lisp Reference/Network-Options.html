@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Network Options - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Low_002dLevel-Network.html#Low_002dLevel-Network" title="Low-Level Network">
+<link rel="prev" href="Network-Processes.html#Network-Processes" title="Network Processes">
+<link rel="next" href="Network-Feature-Testing.html#Network-Feature-Testing" title="Network Feature Testing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Network-Options"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Network-Feature-Testing.html#Network-Feature-Testing">Network Feature Testing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Network-Processes.html#Network-Processes">Network Processes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.16.2 Network Options</h4>
+
+<p>The following network options can be specified when you create a
+network process.  Except for <code>:reuseaddr</code>, you can also set or
+modify these options later, using <code>set-network-process-option</code>.
+
+   <p>For a server process, the options specified with
+<code>make-network-process</code> are not inherited by the client
+connections, so you will need to set the necessary options for each
+child connection as it is created.
+
+     <dl>
+<dt>:bindtodevice <var>device-name</var><dd>If <var>device-name</var> is a non-empty string identifying a network
+interface name (see <code>network-interface-list</code>), only handle
+packets received on that interface.  If <var>device-name</var> is <code>nil</code>
+(the default), handle packets received on any interface.
+
+     <p>Using this option may require special privileges on some systems.
+
+     <br><dt>:broadcast <var>broadcast-flag</var><dd>If <var>broadcast-flag</var> is non-<code>nil</code> for a datagram process, the
+process will receive datagram packet sent to a broadcast address, and
+be able to send packets to a broadcast address.  Ignored for a stream
+connection.
+
+     <br><dt>:dontroute <var>dontroute-flag</var><dd>If <var>dontroute-flag</var> is non-<code>nil</code>, the process can only send
+to hosts on the same network as the local host.
+
+     <br><dt>:keepalive <var>keepalive-flag</var><dd>If <var>keepalive-flag</var> is non-<code>nil</code> for a stream connection,
+enable exchange of low-level keep-alive messages.
+
+     <br><dt>:linger <var>linger-arg</var><dd>If <var>linger-arg</var> is non-<code>nil</code>, wait for successful
+transmission of all queued packets on the connection before it is
+deleted (see <code>delete-process</code>).  If <var>linger-arg</var> is an
+integer, it specifies the maximum time in seconds to wait for queued
+packets to be sent before closing the connection.  Default is
+<code>nil</code> which means to discard unsent queued packets when the
+process is deleted.
+
+     <br><dt>:oobinline <var>oobinline-flag</var><dd>If <var>oobinline-flag</var> is non-<code>nil</code> for a stream connection,
+receive out-of-band data in the normal data stream.  Otherwise, ignore
+out-of-band data.
+
+     <br><dt>:priority <var>priority</var><dd>Set the priority for packets sent on this connection to the integer
+<var>priority</var>.  The interpretation of this number is protocol
+specific, such as setting the TOS (type of service) field on IP
+packets sent on this connection.  It may also have system dependent
+effects, such as selecting a specific output queue on the network
+interface.
+
+     <br><dt>:reuseaddr <var>reuseaddr-flag</var><dd>If <var>reuseaddr-flag</var> is non-<code>nil</code> (the default) for a stream
+server process, allow this server to reuse a specific port number (see
+<code>:service</code>) unless another process on this host is already
+listening on that port.  If <var>reuseaddr-flag</var> is <code>nil</code>, there
+may be a period of time after the last use of that port (by any
+process on the host), where it is not possible to make a new server on
+that port. 
+</dl>
+
+<div class="defun">
+&mdash; Function: <b>set-network-process-option</b><var> process option value<a name="index-set_002dnetwork_002dprocess_002doption-3097"></a></var><br>
+<blockquote><p>This function sets or modifies a network option for network process
+<var>process</var>.  See <code>make-network-process</code> for details of options
+<var>option</var> and their corresponding values <var>value</var>.
+
+        <p>The current setting of an option is available via the
+<code>process-contact</code> function. 
+</p></blockquote></div>
+
+   </body></html>
+

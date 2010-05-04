@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Input Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Terminal-Input.html#Terminal-Input" title="Terminal Input">
+<link rel="next" href="Recording-Input.html#Recording-Input" title="Recording Input">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Input-Modes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Recording-Input.html#Recording-Input">Recording Input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Terminal-Input.html#Terminal-Input">Terminal Input</a>
+<hr>
+</div>
+
+<h4 class="subsection">39.12.1 Input Modes</h4>
+
+<p><a name="index-input-modes-3552"></a><a name="index-terminal-input-modes-3553"></a>
+
+<div class="defun">
+&mdash; Function: <b>set-input-mode</b><var> interrupt flow meta &amp;optional quit-char<a name="index-set_002dinput_002dmode-3554"></a></var><br>
+<blockquote><p>This function sets the mode for reading keyboard input.  If
+<var>interrupt</var> is non-null, then Emacs uses input interrupts.  If it is
+<code>nil</code>, then it uses <span class="sc">cbreak</span> mode.  The default setting is
+system-dependent.  Some systems always use <span class="sc">cbreak</span> mode regardless
+of what is specified.
+
+        <p>When Emacs communicates directly with X, it ignores this argument and
+uses interrupts if that is the way it knows how to communicate.
+
+        <p>If <var>flow</var> is non-<code>nil</code>, then Emacs uses <span class="sc">xon/xoff</span>
+(<kbd>C-q</kbd>, <kbd>C-s</kbd>) flow control for output to the terminal.  This
+has no effect except in <span class="sc">cbreak</span> mode.
+
+     <!-- Emacs 19 feature -->
+<p>The argument <var>meta</var> controls support for input character codes
+above 127.  If <var>meta</var> is <code>t</code>, Emacs converts characters with
+the 8th bit set into Meta characters.  If <var>meta</var> is <code>nil</code>,
+Emacs disregards the 8th bit; this is necessary when the terminal uses
+it as a parity bit.  If <var>meta</var> is neither <code>t</code> nor <code>nil</code>,
+Emacs uses all 8 bits of input unchanged.  This is good for terminals
+that use 8-bit character sets.
+
+     <!-- Emacs 19 feature -->
+<p>If <var>quit-char</var> is non-<code>nil</code>, it specifies the character to
+use for quitting.  Normally this character is <kbd>C-g</kbd>. 
+See <a href="Quitting.html#Quitting">Quitting</a>. 
+</p></blockquote></div>
+
+   <p>The <code>current-input-mode</code> function returns the input mode settings
+Emacs is currently using.
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>current-input-mode</b><var><a name="index-current_002dinput_002dmode-3555"></a></var><br>
+<blockquote><p>This function returns the current mode for reading keyboard input.  It
+returns a list, corresponding to the arguments of <code>set-input-mode</code>,
+of the form <code>(</code><var>interrupt</var> <var>flow</var> <var>meta</var> <var>quit</var><code>)</code> in
+which:
+          <dl>
+<dt><var>interrupt</var><dd>is non-<code>nil</code> when Emacs is using interrupt-driven input.  If
+<code>nil</code>, Emacs is using <span class="sc">cbreak</span> mode. 
+<br><dt><var>flow</var><dd>is non-<code>nil</code> if Emacs uses <span class="sc">xon/xoff</span> (<kbd>C-q</kbd>, <kbd>C-s</kbd>)
+flow control for output to the terminal.  This value is meaningful only
+when <var>interrupt</var> is <code>nil</code>. 
+<br><dt><var>meta</var><dd>is <code>t</code> if Emacs treats the eighth bit of input characters as
+the meta bit; <code>nil</code> means Emacs clears the eighth bit of every
+input character; any other value means Emacs uses all eight bits as the
+basic character code. 
+<br><dt><var>quit</var><dd>is the character Emacs currently uses for quitting, usually <kbd>C-g</kbd>. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

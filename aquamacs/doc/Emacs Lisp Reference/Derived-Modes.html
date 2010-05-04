@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>Derived Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Mode-Help.html#Mode-Help" title="Mode Help">
+<link rel="next" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Derived-Modes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Help.html#Mode-Help">Mode Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.5 Defining Derived Modes</h4>
+
+<p><a name="index-derived-mode-1559"></a>
+  It's often useful to define a new major mode in terms of an existing
+one.  An easy way to do this is to use <code>define-derived-mode</code>.
+
+<div class="defun">
+&mdash; Macro: <b>define-derived-mode</b><var> variant parent name docstring keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dderived_002dmode-1560"></a></var><br>
+<blockquote><p>This construct defines <var>variant</var> as a major mode command, using
+<var>name</var> as the string form of the mode name.  <var>variant</var> and
+<var>parent</var> should be unquoted symbols.
+
+        <p>The new command <var>variant</var> is defined to call the function
+<var>parent</var>, then override certain aspects of that parent mode:
+
+          <ul>
+<li>The new mode has its own sparse keymap, named
+<var>variant</var><code>-map</code>.  <code>define-derived-mode</code>
+makes the parent mode's keymap the parent of the new map, unless
+<var>variant</var><code>-map</code> is already set and already has a parent.
+
+          <li>The new mode has its own syntax table, kept in the variable
+<var>variant</var><code>-syntax-table</code>, unless you override this using the
+<code>:syntax-table</code> keyword (see below).  <code>define-derived-mode</code>
+makes the parent mode's syntax-table the parent of
+<var>variant</var><code>-syntax-table</code>, unless the latter is already set
+and already has a parent different from the standard syntax table.
+
+          <li>The new mode has its own abbrev table, kept in the variable
+<var>variant</var><code>-abbrev-table</code>, unless you override this using the
+<code>:abbrev-table</code> keyword (see below).
+
+          <li>The new mode has its own mode hook, <var>variant</var><code>-hook</code>.  It
+runs this hook, after running the hooks of its ancestor modes, with
+<code>run-mode-hooks</code>, as the last thing it does. See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>. 
+</ul>
+
+        <p>In addition, you can specify how to override other aspects of
+<var>parent</var> with <var>body</var>.  The command <var>variant</var>
+evaluates the forms in <var>body</var> after setting up all its usual
+overrides, just before running the mode hooks.
+
+        <p>You can also specify <code>nil</code> for <var>parent</var>.  This gives the new
+mode no parent.  Then <code>define-derived-mode</code> behaves as described
+above, but, of course, omits all actions connected with <var>parent</var>.
+
+        <p>The argument <var>docstring</var> specifies the documentation string for
+the new mode.  <code>define-derived-mode</code> adds some general
+information about the mode's hook, followed by the mode's keymap, at
+the end of this docstring.  If you omit <var>docstring</var>,
+<code>define-derived-mode</code> generates a documentation string.
+
+        <p>The <var>keyword-args</var> are pairs of keywords and values.  The values
+are evaluated.  The following keywords are currently supported:
+
+          <dl>
+<dt><code>:syntax-table</code><dd>You can use this to explicitly specify a syntax table for the new
+mode.  If you specify a <code>nil</code> value, the new mode uses the same
+syntax table as <var>parent</var>, or the standard syntax table if
+<var>parent</var> is <code>nil</code>.  (Note that this does <em>not</em> follow
+the convention used for non-keyword arguments that a <code>nil</code> value
+is equivalent with not specifying the argument.)
+
+          <br><dt><code>:abbrev-table</code><dd>You can use this to explicitly specify an abbrev table for the new
+mode.  If you specify a <code>nil</code> value, the new mode uses the same
+abbrev table as <var>parent</var>, or <code>fundamental-mode-abbrev-table</code>
+if <var>parent</var> is <code>nil</code>.  (Again, a <code>nil</code> value is
+<em>not</em> equivalent to not specifying this keyword.)
+
+          <br><dt><code>:group</code><dd>If this is specified, the value should be the customization group for
+this mode.  (Not all major modes have one.)  Only the (still
+experimental and unadvertised) command <code>customize-mode</code> currently
+uses this.  <code>define-derived-mode</code> does <em>not</em> automatically
+define the specified customization group. 
+</dl>
+
+        <p>Here is a hypothetical example:
+
+     <pre class="example">          (define-derived-mode hypertext-mode
+            text-mode "Hypertext"
+            "Major mode for hypertext.
+          \\{hypertext-mode-map}"
+            (setq case-fold-search nil))
+          
+          (define-key hypertext-mode-map
+            [down-mouse-3] 'do-hyper-link)
+     </pre>
+        <p>Do not write an <code>interactive</code> spec in the definition;
+<code>define-derived-mode</code> does that automatically. 
+</p></blockquote></div>
+
+   </body></html>
+

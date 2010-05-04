@@ -6,6 +6,7 @@ pdfdir=$(shell pwd)
 srcdir=$(shell pwd)
 newdir=$(srcdir)/aquamacs
 destdir=$(srcdir)/../AquamacsHelp
+destdir2="$(srcdir)/../Aquamacs Help"
 AQUAMACS_DIR=$(srcdir)/../..
 AQUAMACS_VERSION=$(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
 
@@ -35,10 +36,9 @@ html: aquamacs.tex *.pdf
 	latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.1 $(fname) ; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \
-	echo "Applying Apple Help tags..."					     ; \
-	echo "Apple Help tags applied. HTML conversion completed."		     ; \
-	echo $(phrase) ; \
 	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
+	echo "HTML conversion completed."		     ; \
+	echo $(phrase) ; \
 	mv $(newdir)/index2.html $(newdir)/index.html 
 	sed 's|<BODY >|<BODY ><a name="index"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
@@ -49,13 +49,12 @@ html: aquamacs.tex *.pdf
 	(cat $${chgfile}.bak | perl -e 'my $$x=join("",<STDIN>); $$x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($$x);' >$${chgfile} )); \
 	rm $${chgfile}.bak ; \
 	rm -rf $(destdir) ; \
-	echo	mv $(newdir) ../AquamacsHelp				     ; \
 	mv $(newdir) $(destdir) ; \
-	cp "AquamacsHelp idx" $(destdir)/			     ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	rm $(destdir)/WARNINGS
+	mv $(destdir) $(destdir2)
 	echo "Help files copied." ; \
 # Before 10.6, use the Help Indexer application instead of hiutil:
-	(hiutil -Cf $(destdir)/AquamacsHelp.helpindex $(destdir) -g -s en || \
-	$(indexer) $(destdir) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)
+	(hiutil -Cf $(destdir2)"/Aquamacs Help.helpindex" $(destdir2) -g -s en || \
+	$(indexer) $(destdir2) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)

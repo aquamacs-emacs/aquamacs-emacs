@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Subprocess Creation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="next" href="Shell-Arguments.html#Shell-Arguments" title="Shell Arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Subprocess-Creation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.1 Functions that Create Subprocesses</h3>
+
+<p>There are three functions that create a new subprocess in which to run
+a program.  One of them, <code>start-process</code>, creates an asynchronous
+process and returns a process object (see <a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>). 
+The other two, <code>call-process</code> and <code>call-process-region</code>,
+create a synchronous process and do not return a process object
+(see <a href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>).
+
+   <p>Synchronous and asynchronous processes are explained in the following
+sections.  Since the three functions are all called in a similar
+fashion, their common arguments are described here.
+
+   <p><a name="index-execute-program-3000"></a><a name="index-g_t_0040code_007bPATH_007d-environment-variable-3001"></a><a name="index-g_t_0040code_007bHOME_007d-environment-variable-3002"></a>  In all cases, the function's <var>program</var> argument specifies the
+program to be run.  An error is signaled if the file is not found or
+cannot be executed.  If the file name is relative, the variable
+<code>exec-path</code> contains a list of directories to search.  Emacs
+initializes <code>exec-path</code> when it starts up, based on the value of
+the environment variable <code>PATH</code>.  The standard file name
+constructs, `<samp><span class="samp">~</span></samp>', `<samp><span class="samp">.</span></samp>', and `<samp><span class="samp">..</span></samp>', are interpreted as
+usual in <code>exec-path</code>, but environment variable substitutions
+(`<samp><span class="samp">$HOME</span></samp>', etc.) are not recognized; use
+<code>substitute-in-file-name</code> to perform them (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).  <code>nil</code> in this list refers to
+<code>default-directory</code>.
+
+   <p>Executing a program can also try adding suffixes to the specified
+name:
+
+<div class="defun">
+&mdash; Variable: <b>exec-suffixes</b><var><a name="index-exec_002dsuffixes-3003"></a></var><br>
+<blockquote><p>This variable is a list of suffixes (strings) to try adding to the
+specified program file name.  The list should include <code>""</code> if you
+want the name to be tried exactly as specified.  The default value is
+system-dependent. 
+</p></blockquote></div>
+
+   <p><strong>Please note:</strong> The argument <var>program</var> contains only the
+name of the program; it may not contain any command-line arguments.  You
+must use <var>args</var> to provide those.
+
+   <p>Each of the subprocess-creating functions has a <var>buffer-or-name</var>
+argument which specifies where the standard output from the program will
+go.  It should be a buffer or a buffer name; if it is a buffer name,
+that will create the buffer if it does not already exist.  It can also
+be <code>nil</code>, which says to discard the output unless a filter function
+handles it.  (See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>, and <a href="Read-and-Print.html#Read-and-Print">Read and Print</a>.) 
+Normally, you should avoid having multiple processes send output to the
+same buffer because their output would be intermixed randomly.
+
+   <p><a name="index-program-arguments-3004"></a>  All three of the subprocess-creating functions have a <code>&amp;rest</code>
+argument, <var>args</var>.  The <var>args</var> must all be strings, and they are
+supplied to <var>program</var> as separate command line arguments.  Wildcard
+characters and other shell constructs have no special meanings in these
+strings, since the strings are passed directly to the specified program.
+
+   <p>The subprocess gets its current directory from the value of
+<code>default-directory</code> (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).
+
+   <p><a name="index-environment-variables_002c-subprocesses-3005"></a>  The subprocess inherits its environment from Emacs, but you can
+specify overrides for it with <code>process-environment</code>.  See <a href="System-Environment.html#System-Environment">System Environment</a>.
+
+<div class="defun">
+&mdash; Variable: <b>exec-directory</b><var><a name="index-exec_002ddirectory-3006"></a></var><br>
+<blockquote><p><a name="index-movemail-3007"></a>The value of this variable is a string, the name of a directory that
+contains programs that come with GNU Emacs, programs intended for Emacs
+to invoke.  The program <code>movemail</code> is an example of such a program;
+Rmail uses it to fetch new mail from an inbox. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>exec-path</b><var><a name="index-exec_002dpath-3008"></a></var><br>
+<blockquote><p>The value of this variable is a list of directories to search for
+programs to run in subprocesses.  Each element is either the name of a
+directory (i.e., a string), or <code>nil</code>, which stands for the default
+directory (which is the value of <code>default-directory</code>). 
+<a name="index-program-directories-3009"></a>
+The value of <code>exec-path</code> is used by <code>call-process</code> and
+<code>start-process</code> when the <var>program</var> argument is not an absolute
+file name. 
+</p></blockquote></div>
+
+   </body></html>
+

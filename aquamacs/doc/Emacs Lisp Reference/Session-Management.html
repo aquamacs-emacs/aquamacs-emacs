@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Session Management - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Batch-Mode.html#Batch-Mode" title="Batch Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Session-Management"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Batch-Mode.html#Batch-Mode">Batch Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.17 Session Management</h3>
+
+<p><a name="index-session-manager-3578"></a>
+Emacs supports the X Session Management Protocol for suspension and
+restart of applications.  In the X Window System, a program called the
+<dfn>session manager</dfn> has the responsibility to keep track of the
+applications that are running.  During shutdown, the session manager
+asks applications to save their state, and delays the actual shutdown
+until they respond.  An application can also cancel the shutdown.
+
+   <p>When the session manager restarts a suspended session, it directs
+these applications to individually reload their saved state.  It does
+this by specifying a special command-line argument that says what
+saved session to restore.  For Emacs, this argument is `<samp><span class="samp">--smid
+</span><var>session</var></samp>'.
+
+<div class="defun">
+&mdash; Variable: <b>emacs-save-session-functions</b><var><a name="index-emacs_002dsave_002dsession_002dfunctions-3579"></a></var><br>
+<blockquote><p>Emacs supports saving state by using a hook called
+<code>emacs-save-session-functions</code>.  Each function in this hook is
+called when the session manager tells Emacs that the window system is
+shutting down.  The functions are called with no arguments and with the
+current buffer set to a temporary buffer.  Each function can use
+<code>insert</code> to add Lisp code to this buffer.  At the end, Emacs
+saves the buffer in a file that a subsequent Emacs invocation will
+load in order to restart the saved session.
+
+        <p>If a function in <code>emacs-save-session-functions</code> returns
+non-<code>nil</code>, Emacs tells the session manager to cancel the
+shutdown. 
+</p></blockquote></div>
+
+   <p>Here is an example that just inserts some text into `<samp><span class="samp">*scratch*</span></samp>' when
+Emacs is restarted by the session manager.
+
+<pre class="example">     (add-hook 'emacs-save-session-functions 'save-yourself-test)
+     
+     (defun save-yourself-test ()
+       (insert "(save-excursion
+       (switch-to-buffer \"*scratch*\")
+       (insert \"I am restored\"))")
+       nil)
+</pre>
+   <!-- MOVE to Emacs Manual:  include misc-modes.texi -->
+<!-- appendices -->
+<!-- REMOVE this:  include non-hacker.texi -->
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1999, 2002, 2003, 2004, 2005, -->
+<!-- 2006, 2007 Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+<!-- This node must have no pointers. -->
+</body></html>
+

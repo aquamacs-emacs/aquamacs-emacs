@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Truncation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Forcing-Redisplay.html#Forcing-Redisplay" title="Forcing Redisplay">
+<link rel="next" href="The-Echo-Area.html#The-Echo-Area" title="The Echo Area">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Truncation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.3 Truncation</h3>
+
+<p><a name="index-line-wrapping-3125"></a><a name="index-line-truncation-3126"></a><a name="index-continuation-lines-3127"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-3128"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-3129"></a>
+  When a line of text extends beyond the right edge of a window, Emacs
+can <dfn>continue</dfn> the line (make it &ldquo;wrap&rdquo; to the next screen
+line), or <dfn>truncate</dfn> the line (limit it to one screen line).  The
+additional screen lines used to display a long text line are called
+<dfn>continuation</dfn> lines.  Continuation is not the same as filling;
+continuation happens on the screen only, not in the buffer contents,
+and it breaks a line precisely at the right margin, not at a word
+boundary.  See <a href="Filling.html#Filling">Filling</a>.
+
+   <p>On a graphical display, tiny arrow images in the window fringes
+indicate truncated and continued lines (see <a href="Fringes.html#Fringes">Fringes</a>).  On a text
+terminal, a `<samp><span class="samp">$</span></samp>' in the rightmost column of the window indicates
+truncation; a `<samp><span class="samp">\</span></samp>' on the rightmost column indicates a line that
+&ldquo;wraps.&rdquo;  (The display table can specify alternate characters to use
+for this; see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
+
+<div class="defun">
+&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-3130"></a></var><br>
+<blockquote><p>This buffer-local variable controls how Emacs displays lines that extend
+beyond the right edge of the window.  The default is <code>nil</code>, which
+specifies continuation.  If the value is non-<code>nil</code>, then these
+lines are truncated.
+
+        <p>If the variable <code>truncate-partial-width-windows</code> is non-<code>nil</code>,
+then truncation is always used for side-by-side windows (within one
+frame) regardless of the value of <code>truncate-lines</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>default-truncate-lines</b><var><a name="index-default_002dtruncate_002dlines-3131"></a></var><br>
+<blockquote><p>This variable is the default value for <code>truncate-lines</code>, for
+buffers that do not have buffer-local values for it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-3132"></a></var><br>
+<blockquote><p>This variable controls display of lines that extend beyond the right
+edge of the window, in side-by-side windows (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>). 
+If it is non-<code>nil</code>, these lines are truncated; otherwise,
+<code>truncate-lines</code> says what to do with them. 
+</p></blockquote></div>
+
+   <p>When horizontal scrolling (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>) is in use in
+a window, that forces truncation.
+
+   <p>If your buffer contains <em>very</em> long lines, and you use
+continuation to display them, just thinking about them can make Emacs
+redisplay slow.  The column computation and indentation functions also
+become slow.  Then you might find it advisable to set
+<code>cache-long-line-scans</code> to <code>t</code>.
+
+<div class="defun">
+&mdash; Variable: <b>cache-long-line-scans</b><var><a name="index-cache_002dlong_002dline_002dscans-3133"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, various indentation and motion
+functions, and Emacs redisplay, cache the results of scanning the
+buffer, and consult the cache to avoid rescanning regions of the buffer
+unless they are modified.
+
+        <p>Turning on the cache slows down processing of short lines somewhat.
+
+        <p>This variable is automatically buffer-local in every buffer. 
+</p></blockquote></div>
+
+   </body></html>
+

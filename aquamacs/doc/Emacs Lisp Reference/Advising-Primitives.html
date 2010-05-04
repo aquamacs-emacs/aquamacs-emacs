@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Advising Primitives - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Argument-Access-in-Advice.html#Argument-Access-in-Advice" title="Argument Access in Advice">
+<link rel="next" href="Combined-Definition.html#Combined-Definition" title="Combined Definition">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Advising-Primitives"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Combined-Definition.html#Combined-Definition">Combined Definition</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Argument-Access-in-Advice.html#Argument-Access-in-Advice">Argument Access in Advice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h3 class="section">17.9 Advising Primitives</h3>
+
+<p><a name="index-advising-primitives-886"></a>
+  Advising a primitive function (also called a &ldquo;subr&rdquo;) is risky. 
+Some primitive functions are used by the advice mechanism; advising
+them could cause an infinite recursion.  Also, many primitive
+functions are called directly from C code.  Calls to the primitive
+from Lisp code will take note of the advice, but calls from C code
+will ignore the advice.
+
+   <p>When the advice facility constructs the combined definition, it needs
+to know the argument list of the original function.  This is not
+always possible for primitive functions.  When advice cannot determine
+the argument list, it uses <code>(&amp;rest ad-subr-args)</code>, which always
+works but is inefficient because it constructs a list of the argument
+values.  You can use <code>ad-define-subr-args</code> to declare the proper
+argument names for a primitive function:
+
+<div class="defun">
+&mdash; Function: <b>ad-define-subr-args</b><var> function arglist<a name="index-ad_002ddefine_002dsubr_002dargs-887"></a></var><br>
+<blockquote><p>This function specifies that <var>arglist</var> should be used as the
+argument list for function <var>function</var>. 
+</p></blockquote></div>
+
+   <p>For example,
+
+<pre class="example">     (ad-define-subr-args 'fset '(sym newdef))
+</pre>
+   <p class="noindent">specifies the argument list for the function <code>fset</code>.
+
+   </body></html>
+

@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Using Scoping - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
+<link rel="prev" href="Impl-of-Scope.html#Impl-of-Scope" title="Impl of Scope">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Using-Scoping"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Impl-of-Scope.html#Impl-of-Scope">Impl of Scope</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.9.4 Proper Use of Dynamic Scoping</h4>
+
+<p>Binding a variable in one function and using it in another is a
+powerful technique, but if used without restraint, it can make programs
+hard to understand.  There are two clean ways to use this technique:
+
+     <ul>
+<li>Use or bind the variable only in a few related functions, written close
+together in one file.  Such a variable is used for communication within
+one program.
+
+     <p>You should write comments to inform other programmers that they can see
+all uses of the variable before them, and to advise them not to add uses
+elsewhere.
+
+     <li>Give the variable a well-defined, documented meaning, and make all
+appropriate functions refer to it (but not bind it or set it) wherever
+that meaning is relevant.  For example, the variable
+<code>case-fold-search</code> is defined as &ldquo;non-<code>nil</code> means ignore case
+when searching&rdquo;; various search and replace functions refer to it
+directly or through their subroutines, but do not bind or set it.
+
+     <p>Then you can bind the variable in other programs, knowing reliably what
+the effect will be. 
+</ul>
+
+   <p>In either case, you should define the variable with <code>defvar</code>. 
+This helps other people understand your program by telling them to look
+for inter-function usage.  It also avoids a warning from the byte
+compiler.  Choose the variable's name to avoid name conflicts&mdash;don't
+use short names like <code>x</code>.
+
+   </body></html>
+

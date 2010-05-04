@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Translation of Characters - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Scanning-Charsets.html#Scanning-Charsets" title="Scanning Charsets">
+<link rel="next" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Translation-of-Characters"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scanning-Charsets.html#Scanning-Charsets">Scanning Charsets</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.9 Translation of Characters</h3>
+
+<p><a name="index-character-translation-tables-2715"></a><a name="index-translation-tables-2716"></a>
+  A <dfn>translation table</dfn> is a char-table that specifies a mapping
+of characters into characters.  These tables are used in encoding and
+decoding, and for other purposes.  Some coding systems specify their
+own particular translation tables; there are also default translation
+tables which apply to all other coding systems.
+
+   <p>For instance, the coding-system <code>utf-8</code> has a translation table
+that maps characters of various charsets (e.g.,
+<code>latin-iso8859-</code><var>x</var>) into Unicode character sets.  This way,
+it can encode Latin-2 characters into UTF-8.  Meanwhile,
+<code>unify-8859-on-decoding-mode</code> operates by specifying
+<code>standard-translation-table-for-decode</code> to translate
+Latin-<var>x</var> characters into corresponding Unicode characters.
+
+<div class="defun">
+&mdash; Function: <b>make-translation-table</b><var> &amp;rest translations<a name="index-make_002dtranslation_002dtable-2717"></a></var><br>
+<blockquote><p>This function returns a translation table based on the argument
+<var>translations</var>.  Each element of <var>translations</var> should be a
+list of elements of the form <code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>; this says
+to translate the character <var>from</var> into <var>to</var>.
+
+        <p>The arguments and the forms in each argument are processed in order,
+and if a previous form already translates <var>to</var> to some other
+character, say <var>to-alt</var>, <var>from</var> is also translated to
+<var>to-alt</var>.
+
+        <p>You can also map one whole character set into another character set with
+the same dimension.  To do this, you specify a generic character (which
+designates a character set) for <var>from</var> (see <a href="Splitting-Characters.html#Splitting-Characters">Splitting Characters</a>). 
+In this case, if <var>to</var> is also a generic character, its character
+set should have the same dimension as <var>from</var>'s.  Then the
+translation table translates each character of <var>from</var>'s character
+set into the corresponding character of <var>to</var>'s character set.  If
+<var>from</var> is a generic character and <var>to</var> is an ordinary
+character, then the translation table translates every character of
+<var>from</var>'s character set into <var>to</var>. 
+</p></blockquote></div>
+
+   <p>In decoding, the translation table's translations are applied to the
+characters that result from ordinary decoding.  If a coding system has
+property <code>translation-table-for-decode</code>, that specifies the
+translation table to use.  (This is a property of the coding system,
+as returned by <code>coding-system-get</code>, not a property of the symbol
+that is the coding system's name. See <a href="Coding-System-Basics.html#Coding-System-Basics">Basic Concepts of Coding Systems</a>.)  Otherwise, if
+<code>standard-translation-table-for-decode</code> is non-<code>nil</code>,
+decoding uses that table.
+
+   <p>In encoding, the translation table's translations are applied to the
+characters in the buffer, and the result of translation is actually
+encoded.  If a coding system has property
+<code>translation-table-for-encode</code>, that specifies the translation
+table to use.  Otherwise the variable
+<code>standard-translation-table-for-encode</code> specifies the translation
+table.
+
+<div class="defun">
+&mdash; Variable: <b>standard-translation-table-for-decode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002ddecode-2718"></a></var><br>
+<blockquote><p>This is the default translation table for decoding, for
+coding systems that don't specify any other translation table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>standard-translation-table-for-encode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002dencode-2719"></a></var><br>
+<blockquote><p>This is the default translation table for encoding, for
+coding systems that don't specify any other translation table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>translation-table-for-input</b><var><a name="index-translation_002dtable_002dfor_002dinput-2720"></a></var><br>
+<blockquote><p>Self-inserting characters are translated through this translation
+table before they are inserted.  Search commands also translate their
+input through this table, so they can compare more reliably with
+what's in the buffer.
+
+        <p><code>set-buffer-file-coding-system</code> sets this variable so that your
+keyboard input gets translated into the character sets that the buffer
+is likely to contain.  This variable automatically becomes
+buffer-local when set. 
+</p></blockquote></div>
+
+   </body></html>
+

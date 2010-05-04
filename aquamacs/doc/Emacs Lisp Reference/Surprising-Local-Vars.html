@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Surprising Local Vars - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
+<link rel="prev" href="Argument-Evaluation.html#Argument-Evaluation" title="Argument Evaluation">
+<link rel="next" href="Eval-During-Expansion.html#Eval-During-Expansion" title="Eval During Expansion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Surprising-Local-Vars"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eval-During-Expansion.html#Eval-During-Expansion">Eval During Expansion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Argument-Evaluation.html#Argument-Evaluation">Argument Evaluation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.6.3 Local Variables in Macro Expansions</h4>
+
+<p>In the previous section, the definition of <code>for</code> was fixed as
+follows to make the expansion evaluate the macro arguments the proper
+number of times:
+
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple for loop: (for i from 1 to 10 do (print i))."
+       `(let ((,var ,init)
+              (max ,final))
+          (while (&lt;= ,var max)
+            ,@body
+            (inc ,var))))
+</pre>
+   <p>The new definition of <code>for</code> has a new problem: it introduces a
+local variable named <code>max</code> which the user does not expect.  This
+causes trouble in examples such as the following:
+
+<pre class="smallexample">     (let ((max 0))
+       (for x from 0 to 10 do
+         (let ((this (frob x)))
+           (if (&lt; max this)
+               (setq max this)))))
+</pre>
+   <p class="noindent">The references to <code>max</code> inside the body of the <code>for</code>, which
+are supposed to refer to the user's binding of <code>max</code>, really access
+the binding made by <code>for</code>.
+
+   <p>The way to correct this is to use an uninterned symbol instead of
+<code>max</code> (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>).  The uninterned symbol can be
+bound and referred to just like any other symbol, but since it is
+created by <code>for</code>, we know that it cannot already appear in the
+user's program.  Since it is not interned, there is no way the user can
+put it into the program later.  It will never appear anywhere except
+where put by <code>for</code>.  Here is a definition of <code>for</code> that works
+this way:
+
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple for loop: (for i from 1 to 10 do (print i))."
+       (let ((tempvar (make-symbol "max")))
+         `(let ((,var ,init)
+                (,tempvar ,final))
+            (while (&lt;= ,var ,tempvar)
+              ,@body
+              (inc ,var)))))
+</pre>
+   <p class="noindent">This creates an uninterned symbol named <code>max</code> and puts it in the
+expansion instead of the usual interned symbol <code>max</code> that appears
+in expressions ordinarily.
+
+   </body></html>
+

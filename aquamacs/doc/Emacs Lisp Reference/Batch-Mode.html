@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Batch Mode - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="X11-Keysyms.html#X11-Keysyms" title="X11 Keysyms">
+<link rel="next" href="Session-Management.html#Session-Management" title="Session Management">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Batch-Mode"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Session-Management.html#Session-Management">Session Management</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="X11-Keysyms.html#X11-Keysyms">X11 Keysyms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.16 Batch Mode</h3>
+
+<p><a name="index-batch-mode-3576"></a>
+  The command-line option `<samp><span class="samp">-batch</span></samp>' causes Emacs to run
+noninteractively.  In this mode, Emacs does not read commands from the
+terminal, it does not alter the terminal modes, and it does not expect
+to be outputting to an erasable screen.  The idea is that you specify
+Lisp programs to run; when they are finished, Emacs should exit.  The
+way to specify the programs to run is with `<samp><span class="samp">-l </span><var>file</var></samp>', which
+loads the library named <var>file</var>, or `<samp><span class="samp">-f </span><var>function</var></samp>', which
+calls <var>function</var> with no arguments, or `<samp><span class="samp">--eval </span><var>form</var></samp>'.
+
+   <p>Any Lisp program output that would normally go to the echo area,
+either using <code>message</code>, or using <code>prin1</code>, etc., with <code>t</code>
+as the stream, goes instead to Emacs's standard error descriptor when
+in batch mode.  Similarly, input that would normally come from the
+minibuffer is read from the standard input descriptor. 
+Thus, Emacs behaves much like a noninteractive
+application program.  (The echo area output that Emacs itself normally
+generates, such as command echoing, is suppressed entirely.)
+
+<div class="defun">
+&mdash; Variable: <b>noninteractive</b><var><a name="index-noninteractive-3577"></a></var><br>
+<blockquote><p>This variable is non-<code>nil</code> when Emacs is running in batch mode. 
+</p></blockquote></div>
+
+   </body></html>
+

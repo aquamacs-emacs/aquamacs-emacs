@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Deleting Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
+<link rel="next" href="Selecting-Windows.html#Selecting-Windows" title="Selecting Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Deleting-Windows"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.3 Deleting Windows</h3>
+
+<p><a name="index-deleting-windows-1981"></a>
+A window remains visible on its frame unless you <dfn>delete</dfn> it by
+calling certain functions that delete windows.  A deleted window cannot
+appear on the screen, but continues to exist as a Lisp object until
+there are no references to it.  There is no way to cancel the deletion
+of a window aside from restoring a saved window configuration
+(see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).  Restoring a window configuration also
+deletes any windows that aren't part of that configuration.
+
+   <p>When you delete a window, the space it took up is given to one
+adjacent sibling.
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>window-live-p</b><var> window<a name="index-window_002dlive_002dp-1982"></a></var><br>
+<blockquote><p>This function returns <code>nil</code> if <var>window</var> is deleted, and
+<code>t</code> otherwise.
+
+        <p><strong>Warning:</strong> Erroneous information or fatal errors may result from
+using a deleted window as if it were live. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-window</b><var> &amp;optional window<a name="index-delete_002dwindow-1983"></a></var><br>
+<blockquote><p>This function removes <var>window</var> from display, and returns <code>nil</code>. 
+If <var>window</var> is omitted, then the selected window is deleted.  An
+error is signaled if there is only one window when <code>delete-window</code>
+is called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-other-windows</b><var> &amp;optional window<a name="index-delete_002dother_002dwindows-1984"></a></var><br>
+<blockquote><p>This function makes <var>window</var> the only window on its frame, by
+deleting the other windows in that frame.  If <var>window</var> is omitted or
+<code>nil</code>, then the selected window is used by default.
+
+        <p>The return value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-windows-on</b><var> buffer-or-name &amp;optional frame<a name="index-delete_002dwindows_002don-1985"></a></var><br>
+<blockquote><p>This function deletes all windows showing <var>buffer-or-name</var>.  If
+there are no windows showing <var>buffer-or-name</var>, it does nothing. 
+<var>buffer-or-name</var> must be a buffer or the name of an existing
+buffer.
+
+        <p><code>delete-windows-on</code> operates frame by frame.  If a frame has
+several windows showing different buffers, then those showing
+<var>buffer-or-name</var> are removed, and the others expand to fill the
+space.  If all windows in some frame are showing <var>buffer-or-name</var>
+(including the case where there is only one window), then the frame
+winds up with a single window showing another buffer chosen with
+<code>other-buffer</code>.  See <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>.
+
+        <p>The argument <var>frame</var> controls which frames to operate on.  This
+function does not use it in quite the same way as the other functions
+which scan all windows; specifically, the values <code>t</code> and <code>nil</code>
+have the opposite of their meanings in other functions.  Here are the
+full details:
+
+          <ul>
+<li>If it is <code>nil</code>, operate on all frames. 
+<li>If it is <code>t</code>, operate on the selected frame. 
+<li>If it is <code>visible</code>, operate on all visible frames. 
+<li>If it is 0, operate on all visible or iconified frames. 
+<li>If it is a frame, operate on that frame. 
+</ul>
+
+        <p>This function always returns <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

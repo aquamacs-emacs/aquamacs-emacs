@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Variables with Restricted Values - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Variable-Aliases.html#Variable-Aliases" title="Variable Aliases">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Variables-with-Restricted-Values"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Variable-Aliases.html#Variable-Aliases">Variable Aliases</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.15 Variables with Restricted Values</h3>
+
+<p>Ordinary Lisp variables can be assigned any value that is a valid
+Lisp object.  However, certain Lisp variables are not defined in Lisp,
+but in C.  Most of these variables are defined in the C code using
+<code>DEFVAR_LISP</code>.  Like variables defined in Lisp, these can take on
+any value.  However, some variables are defined using
+<code>DEFVAR_INT</code> or <code>DEFVAR_BOOL</code>.  See <a href="Defining-Lisp-variables-in-C.html#Defining-Lisp-variables-in-C">Writing Emacs Primitives</a>, in particular the
+description of functions of the type <code>syms_of_</code><var>filename</var>,
+for a brief discussion of the C implementation.
+
+   <p>Variables of type <code>DEFVAR_BOOL</code> can only take on the values
+<code>nil</code> or <code>t</code>.  Attempting to assign them any other value
+will set them to <code>t</code>:
+
+<pre class="example">     (let ((display-hourglass 5))
+       display-hourglass)
+          =&gt; t
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>byte-boolean-vars</b><var><a name="index-byte_002dboolean_002dvars-646"></a></var><br>
+<blockquote><p>This variable holds a list of all variables of type <code>DEFVAR_BOOL</code>. 
+</p></blockquote></div>
+
+   <p>Variables of type <code>DEFVAR_INT</code> can only take on integer values. 
+Attempting to assign them any other value will result in an error:
+
+<pre class="example">     (setq window-min-height 5.0)
+     error--&gt; Wrong type argument: integerp, 5.0
+</pre>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

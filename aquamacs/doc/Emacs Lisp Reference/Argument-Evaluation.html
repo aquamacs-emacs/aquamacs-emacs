@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Argument Evaluation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
+<link rel="prev" href="Wrong-Time.html#Wrong-Time" title="Wrong Time">
+<link rel="next" href="Surprising-Local-Vars.html#Surprising-Local-Vars" title="Surprising Local Vars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Argument-Evaluation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Surprising-Local-Vars.html#Surprising-Local-Vars">Surprising Local Vars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Wrong-Time.html#Wrong-Time">Wrong Time</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">13.6.2 Evaluating Macro Arguments Repeatedly</h4>
+
+<p>When defining a macro you must pay attention to the number of times
+the arguments will be evaluated when the expansion is executed.  The
+following macro (used to facilitate iteration) illustrates the problem. 
+This macro allows us to write a simple &ldquo;for&rdquo; loop such as one might
+find in Pascal.
+
+   <p><a name="index-for-722"></a>
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple \"for\" loop.
+     For example, (for i from 1 to 10 do (print i))."
+       (list 'let (list (list var init))
+             (cons 'while (cons (list '&lt;= var final)
+                                (append body (list (list 'inc var)))))))
+     =&gt; for
+     
+     (for i from 1 to 3 do
+        (setq square (* i i))
+        (princ (format "\n%d %d" i square)))
+     ==&gt;
+     (let ((i 1))
+       (while (&lt;= i 3)
+         (setq square (* i i))
+         (princ (format "\n%d %d" i square))
+         (inc i)))
+     
+          -|1       1
+          -|2       4
+          -|3       9
+     =&gt; nil
+</pre>
+   <p class="noindent">The arguments <code>from</code>, <code>to</code>, and <code>do</code> in this macro are
+&ldquo;syntactic sugar&rdquo;; they are entirely ignored.  The idea is that you
+will write noise words (such as <code>from</code>, <code>to</code>, and <code>do</code>)
+in those positions in the macro call.
+
+   <p>Here's an equivalent definition simplified through use of backquote:
+
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple \"for\" loop.
+     For example, (for i from 1 to 10 do (print i))."
+       `(let ((,var ,init))
+          (while (&lt;= ,var ,final)
+            ,@body
+            (inc ,var))))
+</pre>
+   <p>Both forms of this definition (with backquote and without) suffer from
+the defect that <var>final</var> is evaluated on every iteration.  If
+<var>final</var> is a constant, this is not a problem.  If it is a more
+complex form, say <code>(long-complex-calculation x)</code>, this can slow
+down the execution significantly.  If <var>final</var> has side effects,
+executing it more than once is probably incorrect.
+
+   <p><a name="index-macro-argument-evaluation-723"></a>A well-designed macro definition takes steps to avoid this problem by
+producing an expansion that evaluates the argument expressions exactly
+once unless repeated evaluation is part of the intended purpose of the
+macro.  Here is a correct expansion for the <code>for</code> macro:
+
+<pre class="smallexample">     (let ((i 1)
+           (max 3))
+       (while (&lt;= i max)
+         (setq square (* i i))
+         (princ (format "%d      %d" i square))
+         (inc i)))
+</pre>
+   <p>Here is a macro definition that creates this expansion:
+
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple for loop: (for i from 1 to 10 do (print i))."
+       `(let ((,var ,init)
+              (max ,final))
+          (while (&lt;= ,var max)
+            ,@body
+            (inc ,var))))
+</pre>
+   <p>Unfortunately, this fix introduces another problem,
+described in the following section.
+
+   </body></html>
+

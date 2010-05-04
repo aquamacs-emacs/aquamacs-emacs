@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Display Property - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Scroll-Bars.html#Scroll-Bars" title="Scroll Bars">
+<link rel="next" href="Images.html#Images" title="Images">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Display-Property"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Images.html#Images">Images</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.15 The <code>display</code> Property</h3>
+
+<p><a name="index-display-specification-3313"></a><a name="index-display-_0040r_007b_0028text-property_0029_007d-3314"></a>
+  The <code>display</code> text property (or overlay property) is used to
+insert images into text, and also control other aspects of how text
+displays.  The value of the <code>display</code> property should be a
+display specification, or a list or vector containing several display
+specifications.
+
+   <p>Some kinds of <code>display</code> properties specify something to display
+instead of the text that has the property.  In this case, &ldquo;the text&rdquo;
+means all the consecutive characters that have the same Lisp object as
+their <code>display</code> property; these characters are replaced as a
+single unit.  By contrast, characters that have similar but distinct
+Lisp objects as their <code>display</code> properties are handled
+separately.  Here's a function that illustrates this point:
+
+<pre class="smallexample">     (defun foo ()
+       (goto-char (point-min))
+       (dotimes (i 5)
+         (let ((string (concat "A")))
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 1)
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 1))))
+</pre>
+   <p class="noindent">It gives each of the first ten characters in the buffer string
+<code>"A"</code> as the <code>display</code> property, but they don't all get the
+same string.  The first two characters get the same string, so they
+together are replaced with one `<samp><span class="samp">A</span></samp>'.  The next two characters get
+a second string, so they together are replaced with one `<samp><span class="samp">A</span></samp>'. 
+Likewise for each following pair of characters.  Thus, the ten
+characters appear as five A's.  This function would have the same
+results:
+
+<pre class="smallexample">     (defun foo ()
+       (goto-char (point-min))
+       (dotimes (i 5)
+         (let ((string (concat "A")))
+           (put-text-property (point) (2+ (point)) 'display string)
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 2))))
+</pre>
+   <p class="noindent">This illustrates that what matters is the property value for
+each character.  If two consecutive characters have the same
+object as the <code>display</code> property value, it's irrelevant
+whether they got this property from a single call to
+<code>put-text-property</code> or from two different calls.
+
+   <p>The rest of this section describes several kinds of
+display specifications and what they mean.
+
+<ul class="menu">
+<li><a accesskey="1" href="Specified-Space.html#Specified-Space">Specified Space</a>:       Displaying one space with a specified width. 
+<li><a accesskey="2" href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>:   Specifying space width or height in pixels. 
+<li><a accesskey="3" href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>:   Displaying an image; magnifying text; moving it
+                          up or down on the page; adjusting the width
+                          of spaces within text. 
+<li><a accesskey="4" href="Display-Margins.html#Display-Margins">Display Margins</a>:      Displaying text or images to the side of the main text. 
+</ul>
+
+   </body></html>
+

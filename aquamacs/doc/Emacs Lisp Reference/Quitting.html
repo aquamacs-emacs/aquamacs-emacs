@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+<title>Quitting - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="prev" href="Waiting.html#Waiting" title="Waiting">
+<link rel="next" href="Prefix-Command-Arguments.html#Prefix-Command-Arguments" title="Prefix Command Arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Quitting"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Waiting.html#Waiting">Waiting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<h3 class="section">21.10 Quitting</h3>
+
+<p><a name="index-g_t_0040kbd_007bC_002dg_007d-1328"></a><a name="index-quitting-1329"></a><a name="index-interrupt-Lisp-functions-1330"></a>
+  Typing <kbd>C-g</kbd> while a Lisp function is running causes Emacs to
+<dfn>quit</dfn> whatever it is doing.  This means that control returns to the
+innermost active command loop.
+
+   <p>Typing <kbd>C-g</kbd> while the command loop is waiting for keyboard input
+does not cause a quit; it acts as an ordinary input character.  In the
+simplest case, you cannot tell the difference, because <kbd>C-g</kbd>
+normally runs the command <code>keyboard-quit</code>, whose effect is to quit. 
+However, when <kbd>C-g</kbd> follows a prefix key, they combine to form an
+undefined key.  The effect is to cancel the prefix key as well as any
+prefix argument.
+
+   <p>In the minibuffer, <kbd>C-g</kbd> has a different definition: it aborts out
+of the minibuffer.  This means, in effect, that it exits the minibuffer
+and then quits.  (Simply quitting would return to the command loop
+<em>within</em> the minibuffer.)  The reason why <kbd>C-g</kbd> does not quit
+directly when the command reader is reading input is so that its meaning
+can be redefined in the minibuffer in this way.  <kbd>C-g</kbd> following a
+prefix key is not redefined in the minibuffer, and it has its normal
+effect of canceling the prefix key and prefix argument.  This too
+would not be possible if <kbd>C-g</kbd> always quit directly.
+
+   <p>When <kbd>C-g</kbd> does directly quit, it does so by setting the variable
+<code>quit-flag</code> to <code>t</code>.  Emacs checks this variable at appropriate
+times and quits if it is not <code>nil</code>.  Setting <code>quit-flag</code>
+non-<code>nil</code> in any way thus causes a quit.
+
+   <p>At the level of C code, quitting cannot happen just anywhere; only at the
+special places that check <code>quit-flag</code>.  The reason for this is
+that quitting at other places might leave an inconsistency in Emacs's
+internal state.  Because quitting is delayed until a safe place, quitting
+cannot make Emacs crash.
+
+   <p>Certain functions such as <code>read-key-sequence</code> or
+<code>read-quoted-char</code> prevent quitting entirely even though they wait
+for input.  Instead of quitting, <kbd>C-g</kbd> serves as the requested
+input.  In the case of <code>read-key-sequence</code>, this serves to bring
+about the special behavior of <kbd>C-g</kbd> in the command loop.  In the
+case of <code>read-quoted-char</code>, this is so that <kbd>C-q</kbd> can be used
+to quote a <kbd>C-g</kbd>.
+
+   <p><a name="index-preventing-quitting-1331"></a>  You can prevent quitting for a portion of a Lisp function by binding
+the variable <code>inhibit-quit</code> to a non-<code>nil</code> value.  Then,
+although <kbd>C-g</kbd> still sets <code>quit-flag</code> to <code>t</code> as usual, the
+usual result of this&mdash;a quit&mdash;is prevented.  Eventually,
+<code>inhibit-quit</code> will become <code>nil</code> again, such as when its
+binding is unwound at the end of a <code>let</code> form.  At that time, if
+<code>quit-flag</code> is still non-<code>nil</code>, the requested quit happens
+immediately.  This behavior is ideal when you wish to make sure that
+quitting does not happen within a &ldquo;critical section&rdquo; of the program.
+
+   <p><a name="index-g_t_0040code_007bread_002dquoted_002dchar_007d-quitting-1332"></a>  In some functions (such as <code>read-quoted-char</code>), <kbd>C-g</kbd> is
+handled in a special way that does not involve quitting.  This is done
+by reading the input with <code>inhibit-quit</code> bound to <code>t</code>, and
+setting <code>quit-flag</code> to <code>nil</code> before <code>inhibit-quit</code>
+becomes <code>nil</code> again.  This excerpt from the definition of
+<code>read-quoted-char</code> shows how this is done; it also shows that
+normal quitting is permitted after the first character of input.
+
+<pre class="example">     (defun read-quoted-char (&amp;optional prompt)
+       "...<var>documentation</var>..."
+       (let ((message-log-max nil) done (first t) (code 0) char)
+         (while (not done)
+           (let ((inhibit-quit first)
+                 ...)
+     	(and prompt (message "%s-" prompt))
+     	(setq char (read-event))
+     	(if inhibit-quit (setq quit-flag nil)))
+           <span class="roman">...set the variable </span><code>code</code><span class="roman">...</span>)
+         code))
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>quit-flag</b><var><a name="index-quit_002dflag-1333"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, then Emacs quits immediately, unless
+<code>inhibit-quit</code> is non-<code>nil</code>.  Typing <kbd>C-g</kbd> ordinarily sets
+<code>quit-flag</code> non-<code>nil</code>, regardless of <code>inhibit-quit</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>inhibit-quit</b><var><a name="index-inhibit_002dquit-1334"></a></var><br>
+<blockquote><p>This variable determines whether Emacs should quit when <code>quit-flag</code>
+is set to a value other than <code>nil</code>.  If <code>inhibit-quit</code> is
+non-<code>nil</code>, then <code>quit-flag</code> has no special effect. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-local-quit</b><var> body<small class="dots">...</small><a name="index-with_002dlocal_002dquit-1335"></a></var><br>
+<blockquote><p>This macro executes <var>body</var> forms in sequence, but allows quitting, at
+least locally, within <var>body</var> even if <code>inhibit-quit</code> was
+non-<code>nil</code> outside this construct.  It returns the value of the
+last form in <var>body</var>, unless exited by quitting, in which case
+it returns <code>nil</code>.
+
+        <p>If <code>inhibit-quit</code> is <code>nil</code> on entry to <code>with-local-quit</code>,
+it only executes the <var>body</var>, and setting <code>quit-flag</code> causes
+a normal quit.  However, if <code>inhibit-quit</code> is non-<code>nil</code> so
+that ordinary quitting is delayed, a non-<code>nil</code> <code>quit-flag</code>
+triggers a special kind of local quit.  This ends the execution of
+<var>body</var> and exits the <code>with-local-quit</code> body with
+<code>quit-flag</code> still non-<code>nil</code>, so that another (ordinary) quit
+will happen as soon as that is allowed.  If <code>quit-flag</code> is
+already non-<code>nil</code> at the beginning of <var>body</var>, the local quit
+happens immediately and the body doesn't execute at all.
+
+        <p>This macro is mainly useful in functions that can be called from
+timers, process filters, process sentinels, <code>pre-command-hook</code>,
+<code>post-command-hook</code>, and other places where <code>inhibit-quit</code> is
+normally bound to <code>t</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>keyboard-quit</b><var><a name="index-keyboard_002dquit-1336"></a></var><br>
+<blockquote><p>This function signals the <code>quit</code> condition with <code>(signal 'quit
+nil)</code>.  This is the same thing that quitting does.  (See <code>signal</code>
+in <a href="Errors.html#Errors">Errors</a>.) 
+</p></blockquote></div>
+
+   <p>You can specify a character other than <kbd>C-g</kbd> to use for quitting. 
+See the function <code>set-input-mode</code> in <a href="Terminal-Input.html#Terminal-Input">Terminal Input</a>.
+
+   </body></html>
+

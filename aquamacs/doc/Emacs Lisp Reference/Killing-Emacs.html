@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Killing Emacs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Out.html#Getting-Out" title="Getting Out">
+<link rel="next" href="Suspending-Emacs.html#Suspending-Emacs" title="Suspending Emacs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Killing-Emacs"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Out.html#Getting-Out">Getting Out</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">39.2.1 Killing Emacs</h4>
+
+<p><a name="index-killing-Emacs-3487"></a>
+  Killing Emacs means ending the execution of the Emacs process.  The
+parent process normally resumes control.  The low-level primitive for
+killing Emacs is <code>kill-emacs</code>.
+
+<div class="defun">
+&mdash; Function: <b>kill-emacs</b><var> &amp;optional exit-data<a name="index-kill_002demacs-3488"></a></var><br>
+<blockquote><p>This function exits the Emacs process and kills it.
+
+        <p>If <var>exit-data</var> is an integer, then it is used as the exit status
+of the Emacs process.  (This is useful primarily in batch operation; see
+<a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>.)
+
+        <p>If <var>exit-data</var> is a string, its contents are stuffed into the
+terminal input buffer so that the shell (or whatever program next reads
+input) can read them. 
+</p></blockquote></div>
+
+   <p>All the information in the Emacs process, aside from files that have
+been saved, is lost when the Emacs process is killed.  Because killing
+Emacs inadvertently can lose a lot of work, Emacs queries for
+confirmation before actually terminating if you have buffers that need
+saving or subprocesses that are running.  This is done in the function
+<code>save-buffers-kill-emacs</code>, the higher level function from which
+<code>kill-emacs</code> is usually called.
+
+<div class="defun">
+&mdash; Variable: <b>kill-emacs-query-functions</b><var><a name="index-kill_002demacs_002dquery_002dfunctions-3489"></a></var><br>
+<blockquote><p>After asking the standard questions, <code>save-buffers-kill-emacs</code>
+calls the functions in the list <code>kill-emacs-query-functions</code>, in
+order of appearance, with no arguments.  These functions can ask for
+additional confirmation from the user.  If any of them returns
+<code>nil</code>, <code>save-buffers-kill-emacs</code> does not kill Emacs, and
+does not run the remaining functions in this hook.  Calling
+<code>kill-emacs</code> directly does not run this hook. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>kill-emacs-hook</b><var><a name="index-kill_002demacs_002dhook-3490"></a></var><br>
+<blockquote><p>This variable is a normal hook; once <code>save-buffers-kill-emacs</code> is
+finished with all file saving and confirmation, it calls
+<code>kill-emacs</code> which runs the functions in this hook. 
+<code>kill-emacs</code> does not run this hook in batch mode.
+
+        <p><code>kill-emacs</code> may be invoked directly (that is not via
+<code>save-buffers-kill-emacs</code>) if the terminal is disconnected, or in
+similar situations where interaction with the user is not possible. 
+Thus, if your hook needs to interact with the user, put it on
+<code>kill-emacs-query-functions</code>; if it needs to run regardless of
+how Emacs is killed, put it on <code>kill-emacs-hook</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

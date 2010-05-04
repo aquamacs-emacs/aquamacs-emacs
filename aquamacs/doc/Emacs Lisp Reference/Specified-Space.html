@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Specified Space - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Property.html#Display-Property" title="Display Property">
+<link rel="next" href="Pixel-Specification.html#Pixel-Specification" title="Pixel Specification">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Specified-Space"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property">Display Property</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.1 Specified Spaces</h4>
+
+<p><a name="index-spaces_002c-specified-height-or-width-3315"></a><a name="index-variable_002dwidth-spaces-3316"></a>
+  To display a space of specified width and/or height, use a display
+specification of the form <code>(space . </code><var>props</var><code>)</code>, where
+<var>props</var> is a property list (a list of alternating properties and
+values).  You can put this property on one or more consecutive
+characters; a space of the specified height and width is displayed in
+place of <em>all</em> of those characters.  These are the properties you
+can use in <var>props</var> to specify the weight of the space:
+
+     <dl>
+<dt><code>:width </code><var>width</var><dd>If <var>width</var> is an integer or floating point number, it specifies
+that the space width should be <var>width</var> times the normal character
+width.  <var>width</var> can also be a <dfn>pixel width</dfn> specification
+(see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>).
+
+     <br><dt><code>:relative-width </code><var>factor</var><dd>Specifies that the width of the stretch should be computed from the
+first character in the group of consecutive characters that have the
+same <code>display</code> property.  The space width is the width of that
+character, multiplied by <var>factor</var>.
+
+     <br><dt><code>:align-to </code><var>hpos</var><dd>Specifies that the space should be wide enough to reach <var>hpos</var>. 
+If <var>hpos</var> is a number, it is measured in units of the normal
+character width.  <var>hpos</var> can also be a <dfn>pixel width</dfn>
+specification (see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>). 
+</dl>
+
+   <p>You should use one and only one of the above properties.  You can
+also specify the height of the space, with these properties:
+
+     <dl>
+<dt><code>:height </code><var>height</var><dd>Specifies the height of the space. 
+If <var>height</var> is an integer or floating point number, it specifies
+that the space height should be <var>height</var> times the normal character
+height.  The <var>height</var> may also be a <dfn>pixel height</dfn> specification
+(see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>).
+
+     <br><dt><code>:relative-height </code><var>factor</var><dd>Specifies the height of the space, multiplying the ordinary height
+of the text having this display specification by <var>factor</var>.
+
+     <br><dt><code>:ascent </code><var>ascent</var><dd>If the value of <var>ascent</var> is a non-negative number no greater than
+100, it specifies that <var>ascent</var> percent of the height of the space
+should be considered as the ascent of the space&mdash;that is, the part
+above the baseline.  The ascent may also be specified in pixel units
+with a <dfn>pixel ascent</dfn> specification (see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>).
+
+   </dl>
+
+   <p>Don't use both <code>:height</code> and <code>:relative-height</code> together.
+
+   <p>The <code>:width</code> and <code>:align-to</code> properties are supported on
+non-graphic terminals, but the other space properties in this section
+are not.
+
+   </body></html>
+

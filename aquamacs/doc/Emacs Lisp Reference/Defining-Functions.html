@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+<title>Defining Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Function-Names.html#Function-Names" title="Function Names">
+<link rel="next" href="Calling-Functions.html#Calling-Functions" title="Calling Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Defining-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Calling-Functions.html#Calling-Functions">Calling Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Function-Names.html#Function-Names">Function Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.4 Defining Functions</h3>
+
+<p><a name="index-defining-a-function-674"></a>
+  We usually give a name to a function when it is first created.  This
+is called <dfn>defining a function</dfn>, and it is done with the
+<code>defun</code> special form.
+
+<div class="defun">
+&mdash; Special Form: <b>defun</b><var> name argument-list body-forms<a name="index-defun-675"></a></var><br>
+<blockquote><p><code>defun</code> is the usual way to define new Lisp functions.  It
+defines the symbol <var>name</var> as a function that looks like this:
+
+     <pre class="example">          (lambda <var>argument-list</var> . <var>body-forms</var>)
+     </pre>
+        <p><code>defun</code> stores this lambda expression in the function cell of
+<var>name</var>.  It returns the value <var>name</var>, but usually we ignore this
+value.
+
+        <p>As described previously, <var>argument-list</var> is a list of argument
+names and may include the keywords <code>&amp;optional</code> and <code>&amp;rest</code>
+(see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).  Also, the first two of the
+<var>body-forms</var> may be a documentation string and an interactive
+declaration.
+
+        <p>There is no conflict if the same symbol <var>name</var> is also used as a
+variable, since the symbol's value cell is independent of the function
+cell.  See <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>.
+
+        <p>Here are some examples:
+
+     <pre class="example">          (defun foo () 5)
+               =&gt; foo
+          (foo)
+               =&gt; 5
+          
+          (defun bar (a &amp;optional b &amp;rest c)
+              (list a b c))
+               =&gt; bar
+          (bar 1 2 3 4 5)
+               =&gt; (1 2 (3 4 5))
+          (bar 1)
+               =&gt; (1 nil nil)
+          (bar)
+          error--&gt; Wrong number of arguments.
+          
+          (defun capitalize-backwards ()
+            "Upcase the last letter of a word."
+            (interactive)
+            (backward-word 1)
+            (forward-word 1)
+            (backward-char 1)
+            (capitalize-word 1))
+               =&gt; capitalize-backwards
+     </pre>
+        <p>Be careful not to redefine existing functions unintentionally. 
+<code>defun</code> redefines even primitive functions such as <code>car</code>
+without any hesitation or notification.  Redefining a function already
+defined is often done deliberately, and there is no way to distinguish
+deliberate redefinition from unintentional redefinition. 
+</p></blockquote></div>
+
+   <p><a name="index-function-aliases-676"></a>
+
+<div class="defun">
+&mdash; Function: <b>defalias</b><var> name definition &amp;optional docstring<a name="index-defalias-677"></a></var><br>
+<blockquote><p><a name="Definition-of-defalias"></a>
+This special form defines the symbol <var>name</var> as a function, with
+definition <var>definition</var> (which can be any valid Lisp function). 
+It returns <var>definition</var>.
+
+        <p>If <var>docstring</var> is non-<code>nil</code>, it becomes the function
+documentation of <var>name</var>.  Otherwise, any documentation provided by
+<var>definition</var> is used.
+
+        <p>The proper place to use <code>defalias</code> is where a specific function
+name is being defined&mdash;especially where that name appears explicitly in
+the source file being loaded.  This is because <code>defalias</code> records
+which file defined the function, just like <code>defun</code>
+(see <a href="Unloading.html#Unloading">Unloading</a>).
+
+        <p>By contrast, in programs that manipulate function definitions for other
+purposes, it is better to use <code>fset</code>, which does not keep such
+records.  See <a href="Function-Cells.html#Function-Cells">Function Cells</a>. 
+</p></blockquote></div>
+
+   <p>You cannot create a new primitive function with <code>defun</code> or
+<code>defalias</code>, but you can use them to change the function definition of
+any symbol, even one such as <code>car</code> or <code>x-popup-menu</code> whose
+normal definition is a primitive.  However, this is risky: for
+instance, it is next to impossible to redefine <code>car</code> without
+breaking Lisp completely.  Redefining an obscure function such as
+<code>x-popup-menu</code> is less dangerous, but it still may not work as
+you expect.  If there are calls to the primitive from C code, they
+call the primitive's C definition directly, so changing the symbol's
+definition will have no effect on them.
+
+   <p>See also <code>defsubst</code>, which defines a function like <code>defun</code>
+and tells the Lisp compiler to open-code it.  See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
+
+   </body></html>
+

@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Images - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Display-Property.html#Display-Property" title="Display Property">
+<link rel="next" href="Buttons.html#Buttons" title="Buttons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Images"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buttons.html#Buttons">Buttons</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-Property.html#Display-Property">Display Property</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.16 Images</h3>
+
+<p><a name="index-images-in-buffers-3324"></a>
+  To display an image in an Emacs buffer, you must first create an image
+descriptor, then use it as a display specifier in the <code>display</code>
+property of text that is displayed (see <a href="Display-Property.html#Display-Property">Display Property</a>).
+
+   <p>Emacs is usually able to display images when it is run on a
+graphical terminal.  Images cannot be displayed in a text terminal, on
+certain graphical terminals that lack the support for this, or if
+Emacs is compiled without image support.  You can use the function
+<code>display-images-p</code> to determine if images can in principle be
+displayed (see <a href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>).
+
+   <p>Emacs can display a number of different image formats; some of them
+are supported only if particular support libraries are installed on
+your machine.  In some environments, Emacs can load image
+libraries on demand; if so, the variable <code>image-library-alist</code>
+can be used to modify the set of known names for these dynamic
+libraries (though it is not possible to add new image formats).
+
+   <p>The supported image formats include XBM, XPM (this requires the
+libraries <code>libXpm</code> version 3.4k and <code>libz</code>), GIF (requiring
+<code>libungif</code> 4.1.0), PostScript, PBM, JPEG (requiring the
+<code>libjpeg</code> library version v6a), TIFF (requiring <code>libtiff</code>
+v3.4), and PNG (requiring <code>libpng</code> 1.0.2).
+
+   <p>You specify one of these formats with an image type symbol.  The image
+type symbols are <code>xbm</code>, <code>xpm</code>, <code>gif</code>, <code>postscript</code>,
+<code>pbm</code>, <code>jpeg</code>, <code>tiff</code>, and <code>png</code>.
+
+<div class="defun">
+&mdash; Variable: <b>image-types</b><var><a name="index-image_002dtypes-3325"></a></var><br>
+<blockquote><p>This variable contains a list of those image type symbols that are
+potentially supported in the current configuration. 
+<em>Potentially</em> here means that Emacs knows about the image types,
+not necessarily that they can be loaded (they could depend on
+unavailable dynamic libraries, for example).
+
+        <p>To know which image types are really available, use
+<code>image-type-available-p</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>image-library-alist</b><var><a name="index-image_002dlibrary_002dalist-3326"></a></var><br>
+<blockquote><p>This in an alist of image types vs external libraries needed to
+display them.
+
+        <p>Each element is a list <code>(</code><var>image-type</var> <var>library</var><code>...)</code>,
+where the car is a supported image format from <code>image-types</code>, and
+the rest are strings giving alternate filenames for the corresponding
+external libraries to load.
+
+        <p>Emacs tries to load the libraries in the order they appear on the
+list; if none is loaded, the running session of Emacs won't support
+the image type.  <code>pbm</code> and <code>xbm</code> don't need to be listed;
+they're always supported.
+
+        <p>This variable is ignored if the image libraries are statically linked
+into Emacs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>image-type-available-p</b><var> type<a name="index-image_002dtype_002davailable_002dp-3327"></a></var><br>
+<blockquote><p><a name="index-image_002dtype_002davailable_002dp-3328"></a>
+This function returns non-<code>nil</code> if image type <var>type</var> is
+available, i.e., if images of this type can be loaded and displayed in
+Emacs.  <var>type</var> should be one of the types contained in
+<code>image-types</code>.
+
+        <p>For image types whose support libraries are statically linked, this
+function always returns <code>t</code>; for other image types, it returns
+<code>t</code> if the dynamic library could be loaded, <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Image-Descriptors.html#Image-Descriptors">Image Descriptors</a>:    How to specify an image for use in <code>:display</code>. 
+<li><a accesskey="2" href="XBM-Images.html#XBM-Images">XBM Images</a>:           Special features for XBM format. 
+<li><a accesskey="3" href="XPM-Images.html#XPM-Images">XPM Images</a>:           Special features for XPM format. 
+<li><a accesskey="4" href="GIF-Images.html#GIF-Images">GIF Images</a>:           Special features for GIF format. 
+<li><a accesskey="5" href="PostScript-Images.html#PostScript-Images">PostScript Images</a>:    Special features for PostScript format. 
+<li><a accesskey="6" href="Other-Image-Types.html#Other-Image-Types">Other Image Types</a>:    Various other formats are supported. 
+<li><a accesskey="7" href="Defining-Images.html#Defining-Images">Defining Images</a>:      Convenient ways to define an image for later use. 
+<li><a accesskey="8" href="Showing-Images.html#Showing-Images">Showing Images</a>:       Convenient ways to display an image once it is defined. 
+<li><a accesskey="9" href="Image-Cache.html#Image-Cache">Image Cache</a>:          Internal mechanisms of image display. 
+</ul>
+
+   </body></html>
+

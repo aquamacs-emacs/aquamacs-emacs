@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Abbrev Files - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
+<link rel="prev" href="Defining-Abbrevs.html#Defining-Abbrevs" title="Defining Abbrevs">
+<link rel="next" href="Abbrev-Expansion.html#Abbrev-Expansion" title="Abbrev Expansion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Abbrev-Files"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Abbrev-Expansion.html#Abbrev-Expansion">Abbrev Expansion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr>
+</div>
+
+<h3 class="section">36.4 Saving Abbrevs in Files</h3>
+
+<p>A file of saved abbrev definitions is actually a file of Lisp code. 
+The abbrevs are saved in the form of a Lisp program to define the same
+abbrev tables with the same contents.  Therefore, you can load the file
+with <code>load</code> (see <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>).  However, the
+function <code>quietly-read-abbrev-file</code> is provided as a more
+convenient interface.
+
+   <p>User-level facilities such as <code>save-some-buffers</code> can save
+abbrevs in a file automatically, under the control of variables
+described here.
+
+<div class="defun">
+&mdash; User Option: <b>abbrev-file-name</b><var><a name="index-abbrev_002dfile_002dname-2974"></a></var><br>
+<blockquote><p>This is the default file name for reading and saving abbrevs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>quietly-read-abbrev-file</b><var> &amp;optional filename<a name="index-quietly_002dread_002dabbrev_002dfile-2975"></a></var><br>
+<blockquote><p>This function reads abbrev definitions from a file named <var>filename</var>,
+previously written with <code>write-abbrev-file</code>.  If <var>filename</var> is
+omitted or <code>nil</code>, the file specified in <code>abbrev-file-name</code> is
+used.  <code>save-abbrevs</code> is set to <code>t</code> so that changes will be
+saved.
+
+        <p>This function does not display any messages.  It returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>save-abbrevs</b><var><a name="index-save_002dabbrevs-2976"></a></var><br>
+<blockquote><p>A non-<code>nil</code> value for <code>save-abbrevs</code> means that Emacs should
+offer the user to save abbrevs when files are saved.  If the value is
+<code>silently</code>, Emacs saves the abbrevs without asking the user. 
+<code>abbrev-file-name</code> specifies the file to save the abbrevs in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>abbrevs-changed</b><var><a name="index-abbrevs_002dchanged-2977"></a></var><br>
+<blockquote><p>This variable is set non-<code>nil</code> by defining or altering any
+abbrevs (except &ldquo;system&rdquo; abbrevs).  This serves as a flag for
+various Emacs commands to offer to save your abbrevs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>write-abbrev-file</b><var> &amp;optional filename<a name="index-write_002dabbrev_002dfile-2978"></a></var><br>
+<blockquote><p>Save all abbrev definitions (except &ldquo;system&rdquo; abbrevs), for all abbrev
+tables listed in <code>abbrev-table-name-list</code>, in the file
+<var>filename</var>, in the form of a Lisp program that when loaded will
+define the same abbrevs.  If <var>filename</var> is <code>nil</code> or omitted,
+<code>abbrev-file-name</code> is used.  This function returns <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

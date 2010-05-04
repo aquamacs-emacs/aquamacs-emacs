@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Near Point - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="next" href="Buffer-Contents.html#Buffer-Contents" title="Buffer Contents">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Near-Point"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.1 Examining Text Near Point</h3>
+
+<p><a name="index-text-near-point-2396"></a>
+  Many functions are provided to look at the characters around point. 
+Several simple functions are described here.  See also <code>looking-at</code>
+in <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
+
+   <p>In the following four functions, &ldquo;beginning&rdquo; or &ldquo;end&rdquo; of buffer
+refers to the beginning or end of the accessible portion.
+
+<div class="defun">
+&mdash; Function: <b>char-after</b><var> &amp;optional position<a name="index-char_002dafter-2397"></a></var><br>
+<blockquote><p>This function returns the character in the current buffer at (i.e.,
+immediately after) position <var>position</var>.  If <var>position</var> is out of
+range for this purpose, either before the beginning of the buffer, or at
+or beyond the end, then the value is <code>nil</code>.  The default for
+<var>position</var> is point.
+
+        <p>In the following example, assume that the first character in the
+buffer is `<samp><span class="samp">@</span></samp>':
+
+     <pre class="example">          (char-to-string (char-after 1))
+               =&gt; "@"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-before</b><var> &amp;optional position<a name="index-char_002dbefore-2398"></a></var><br>
+<blockquote><p>This function returns the character in the current buffer immediately
+before position <var>position</var>.  If <var>position</var> is out of range for
+this purpose, either at or before the beginning of the buffer, or beyond
+the end, then the value is <code>nil</code>.  The default for
+<var>position</var> is point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>following-char</b><var><a name="index-following_002dchar-2399"></a></var><br>
+<blockquote><p>This function returns the character following point in the current
+buffer.  This is similar to <code>(char-after (point))</code>.  However, if
+point is at the end of the buffer, then <code>following-char</code> returns 0.
+
+        <p>Remember that point is always between characters, and the cursor
+normally appears over the character following point.  Therefore, the
+character returned by <code>following-char</code> is the character the
+cursor is over.
+
+        <p>In this example, point is between the `<samp><span class="samp">a</span></samp>' and the `<samp><span class="samp">c</span></samp>'.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          Gentlemen may cry ``Pea-!-ce! Peace!,''
+          but there is no peace.
+          ---------- Buffer: foo ----------
+          
+          (char-to-string (preceding-char))
+               =&gt; "a"
+          (char-to-string (following-char))
+               =&gt; "c"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>preceding-char</b><var><a name="index-preceding_002dchar-2400"></a></var><br>
+<blockquote><p>This function returns the character preceding point in the current
+buffer.  See above, under <code>following-char</code>, for an example.  If
+point is at the beginning of the buffer, <code>preceding-char</code> returns
+0. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bobp</b><var><a name="index-bobp-2401"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if point is at the beginning of the
+buffer.  If narrowing is in effect, this means the beginning of the
+accessible portion of the text.  See also <code>point-min</code> in
+<a href="Point.html#Point">Point</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eobp</b><var><a name="index-eobp-2402"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if point is at the end of the buffer. 
+If narrowing is in effect, this means the end of accessible portion of
+the text.  See also <code>point-max</code> in See <a href="Point.html#Point">Point</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bolp</b><var><a name="index-bolp-2403"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if point is at the beginning of a line. 
+See <a href="Text-Lines.html#Text-Lines">Text Lines</a>.  The beginning of the buffer (or of its accessible
+portion) always counts as the beginning of a line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eolp</b><var><a name="index-eolp-2404"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if point is at the end of a line.  The
+end of the buffer (or of its accessible portion) is always considered
+the end of a line. 
+</p></blockquote></div>
+
+   </body></html>
+

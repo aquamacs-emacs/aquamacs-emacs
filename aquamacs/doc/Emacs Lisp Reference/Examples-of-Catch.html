@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Examples of Catch - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
+<link rel="prev" href="Catch-and-Throw.html#Catch-and-Throw" title="Catch and Throw">
+<link rel="next" href="Errors.html#Errors" title="Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Examples-of-Catch"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Errors.html#Errors">Errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.5.2 Examples of <code>catch</code> and <code>throw</code></h4>
+
+<p>One way to use <code>catch</code> and <code>throw</code> is to exit from a doubly
+nested loop.  (In most languages, this would be done with a &ldquo;go to.&rdquo;)
+Here we compute <code>(foo </code><var>i</var> <var>j</var><code>)</code> for <var>i</var> and <var>j</var>
+varying from 0 to 9:
+
+<pre class="example">     (defun search-foo ()
+       (catch 'loop
+         (let ((i 0))
+           (while (&lt; i 10)
+             (let ((j 0))
+               (while (&lt; j 10)
+                 (if (foo i j)
+                     (throw 'loop (list i j)))
+                 (setq j (1+ j))))
+             (setq i (1+ i))))))
+</pre>
+   <p class="noindent">If <code>foo</code> ever returns non-<code>nil</code>, we stop immediately and return a
+list of <var>i</var> and <var>j</var>.  If <code>foo</code> always returns <code>nil</code>, the
+<code>catch</code> returns normally, and the value is <code>nil</code>, since that
+is the result of the <code>while</code>.
+
+   <p>Here are two tricky examples, slightly different, showing two
+return points at once.  First, two return points with the same tag,
+<code>hack</code>:
+
+<pre class="example">     (defun catch2 (tag)
+       (catch tag
+         (throw 'hack 'yes)))
+     =&gt; catch2
+     
+     (catch 'hack
+       (print (catch2 'hack))
+       'no)
+     -| yes
+     =&gt; no
+</pre>
+   <p class="noindent">Since both return points have tags that match the <code>throw</code>, it goes to
+the inner one, the one established in <code>catch2</code>.  Therefore,
+<code>catch2</code> returns normally with value <code>yes</code>, and this value is
+printed.  Finally the second body form in the outer <code>catch</code>, which is
+<code>'no</code>, is evaluated and returned from the outer <code>catch</code>.
+
+   <p>Now let's change the argument given to <code>catch2</code>:
+
+<pre class="example">     (catch 'hack
+       (print (catch2 'quux))
+       'no)
+     =&gt; yes
+</pre>
+   <p class="noindent">We still have two return points, but this time only the outer one has
+the tag <code>hack</code>; the inner one has the tag <code>quux</code> instead. 
+Therefore, <code>throw</code> makes the outer <code>catch</code> return the value
+<code>yes</code>.  The function <code>print</code> is never called, and the
+body-form <code>'no</code> is never evaluated.
+
+   </body></html>
+

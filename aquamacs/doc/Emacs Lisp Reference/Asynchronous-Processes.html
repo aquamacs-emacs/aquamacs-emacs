@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Asynchronous Processes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Synchronous-Processes.html#Synchronous-Processes" title="Synchronous Processes">
+<link rel="next" href="Deleting-Processes.html#Deleting-Processes" title="Deleting Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Asynchronous-Processes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-Processes.html#Deleting-Processes">Deleting Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.4 Creating an Asynchronous Process</h3>
+
+<p><a name="index-asynchronous-subprocess-3019"></a>
+  After an <dfn>asynchronous process</dfn> is created, Emacs and the subprocess
+both continue running immediately.  The process thereafter runs
+in parallel with Emacs, and the two can communicate with each other
+using the functions described in the following sections.  However,
+communication is only partially asynchronous: Emacs sends data to the
+process only when certain functions are called, and Emacs accepts data
+from the process only when Emacs is waiting for input or for a time
+delay.
+
+   <p>Here we describe how to create an asynchronous process.
+
+<div class="defun">
+&mdash; Function: <b>start-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dprocess-3020"></a></var><br>
+<blockquote><p>This function creates a new asynchronous subprocess and starts the
+program <var>program</var> running in it.  It returns a process object that
+stands for the new subprocess in Lisp.  The argument <var>name</var>
+specifies the name for the process object; if a process with this name
+already exists, then <var>name</var> is modified (by appending `<samp><span class="samp">&lt;1&gt;</span></samp>',
+etc.) to be unique.  The buffer <var>buffer-or-name</var> is the buffer to
+associate with the process.
+
+        <p>The remaining arguments, <var>args</var>, are strings that specify command
+line arguments for the program.
+
+        <p>In the example below, the first process is started and runs (rather,
+sleeps) for 100 seconds.  Meanwhile, the second process is started, and
+given the name `<samp><span class="samp">my-process&lt;1&gt;</span></samp>' for the sake of uniqueness.  It
+inserts the directory listing at the end of the buffer `<samp><span class="samp">foo</span></samp>',
+before the first process finishes.  Then it finishes, and a message to
+that effect is inserted in the buffer.  Much later, the first process
+finishes, and another message is inserted in the buffer for it.
+
+     <pre class="smallexample">          (start-process "my-process" "foo" "sleep" "100")
+               =&gt; #&lt;process my-process&gt;
+          
+          (start-process "my-process" "foo" "ls" "-l" "/user/lewis/bin")
+               =&gt; #&lt;process my-process&lt;1&gt;&gt;
+          
+          ---------- Buffer: foo ----------
+          total 2
+          lrwxrwxrwx  1 lewis     14 Jul 22 10:12 gnuemacs --&gt; /emacs
+          -rwxrwxrwx  1 lewis     19 Jul 30 21:02 lemon
+          
+          Process my-process&lt;1&gt; finished
+          
+          Process my-process finished
+          ---------- Buffer: foo ----------
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>start-process-shell-command</b><var> name buffer-or-name command &amp;rest command-args<a name="index-start_002dprocess_002dshell_002dcommand-3021"></a></var><br>
+<blockquote><p>This function is like <code>start-process</code> except that it uses a shell
+to execute the specified command.  The argument <var>command</var> is a shell
+command name, and <var>command-args</var> are the arguments for the shell
+command.  The variable <code>shell-file-name</code> specifies which shell to
+use.
+
+        <p>The point of running a program through the shell, rather than directly
+with <code>start-process</code>, is so that you can employ shell features such
+as wildcards in the arguments.  It follows that if you include an
+arbitrary user-specified arguments in the command, you should quote it
+with <code>shell-quote-argument</code> first, so that any special shell
+characters do <em>not</em> have their special shell meanings.  See <a href="Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>process-connection-type</b><var><a name="index-process_002dconnection_002dtype-3022"></a></var><br>
+<blockquote><p><a name="index-pipes-3023"></a><a name="index-g_t_0040acronym_007bPTY_007ds-3024"></a>This variable controls the type of device used to communicate with
+asynchronous subprocesses.  If it is non-<code>nil</code>, then <acronym>PTY</acronym>s are
+used, when available.  Otherwise, pipes are used.
+
+        <p><acronym>PTY</acronym>s are usually preferable for processes visible to the user, as
+in Shell mode, because they allow job control (<kbd>C-c</kbd>, <kbd>C-z</kbd>,
+etc.) to work between the process and its children, whereas pipes do
+not.  For subprocesses used for internal purposes by programs, it is
+often better to use a pipe, because they are more efficient.  In
+addition, the total number of <acronym>PTY</acronym>s is limited on many systems and
+it is good not to waste them.
+
+        <p>The value of <code>process-connection-type</code> takes effect when
+<code>start-process</code> is called.  So you can specify how to communicate
+with one subprocess by binding the variable around the call to
+<code>start-process</code>.
+
+     <pre class="smallexample">          (let ((process-connection-type nil))  ; <span class="roman">Use a pipe.</span>
+            (start-process ...))
+     </pre>
+        <p>To determine whether a given subprocess actually got a pipe or a
+<acronym>PTY</acronym>, use the function <code>process-tty-name</code> (see <a href="Process-Information.html#Process-Information">Process Information</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

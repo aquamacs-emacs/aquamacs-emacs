@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Abstract Display - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Buttons.html#Buttons" title="Buttons">
+<link rel="next" href="Blinking.html#Blinking" title="Blinking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Abstract-Display"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Blinking.html#Blinking">Blinking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buttons.html#Buttons">Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.18 Abstract Display</h3>
+
+<p><a name="index-ewoc-3388"></a><a name="index-display_002c-abstract-3389"></a><a name="index-display_002c-arbitrary-objects-3390"></a><a name="index-model_002fview_002fcontroller-3391"></a><a name="index-view-part_002c-model_002fview_002fcontroller-3392"></a>
+  The Ewoc package constructs buffer text that represents a structure
+of Lisp objects, and updates the text to follow changes in that
+structure.  This is like the &ldquo;view&rdquo; component in the
+&ldquo;model/view/controller&rdquo; design paradigm.
+
+   <p>An <dfn>ewoc</dfn> is a structure that organizes information required to
+construct buffer text that represents certain Lisp data.  The buffer
+text of the ewoc has three parts, in order: first, fixed <dfn>header</dfn>
+text; next, textual descriptions of a series of data elements (Lisp
+objects that you specify); and last, fixed <dfn>footer</dfn> text. 
+Specifically, an ewoc contains information on:
+
+     <ul>
+<li>The buffer which its text is generated in.
+
+     <li>The text's start position in the buffer.
+
+     <li>The header and footer strings.
+
+     <li>A doubly-linked chain of <dfn>nodes</dfn>, each of which contains:
+
+          <ul>
+<li>A <dfn>data element</dfn>, a single Lisp object.
+
+          <li>Links to the preceding and following nodes in the chain. 
+</ul>
+
+     <li>A <dfn>pretty-printer</dfn> function which is responsible for
+inserting the textual representation of a data
+element value into the current buffer. 
+</ul>
+
+   <p>Typically, you define an ewoc with <code>ewoc-create</code>, and then pass
+the resulting ewoc structure to other functions in the Ewoc package to
+build nodes within it, and display it in the buffer.  Once it is
+displayed in the buffer, other functions determine the correspondance
+between buffer positions and nodes, move point from one node's textual
+representation to another, and so forth.  See <a href="Abstract-Display-Functions.html#Abstract-Display-Functions">Abstract Display Functions</a>.
+
+   <p>A node <dfn>encapsulates</dfn> a data element much the way a variable
+holds a value.  Normally, encapsulation occurs as a part of adding a
+node to the ewoc.  You can retrieve the data element value and place a
+new value in its place, like so:
+
+<pre class="lisp">     (ewoc-data <var>node</var>)
+     =&gt; value
+     
+     (ewoc-set-data <var>node</var> <var>new-value</var>)
+     =&gt; <var>new-value</var>
+</pre>
+   <p class="noindent">You can also use, as the data element value, a Lisp object (list or
+vector) that is a container for the &ldquo;real&rdquo; value, or an index into
+some other structure.  The example (see <a href="Abstract-Display-Example.html#Abstract-Display-Example">Abstract Display Example</a>)
+uses the latter approach.
+
+   <p>When the data changes, you will want to update the text in the
+buffer.  You can update all nodes by calling <code>ewoc-refresh</code>, or
+just specific nodes using <code>ewoc-invalidate</code>, or all nodes
+satisfying a predicate using <code>ewoc-map</code>.  Alternatively, you can
+delete invalid nodes using <code>ewoc-delete</code> or <code>ewoc-filter</code>,
+and add new nodes in their place.  Deleting a node from an ewoc deletes
+its associated textual description from buffer, as well.
+
+<ul class="menu">
+<li><a accesskey="1" href="Abstract-Display-Functions.html#Abstract-Display-Functions">Abstract Display Functions</a>
+<li><a accesskey="2" href="Abstract-Display-Example.html#Abstract-Display-Example">Abstract Display Example</a>
+</ul>
+
+   </body></html>
+

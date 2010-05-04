@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Character Codes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Selecting-a-Representation.html#Selecting-a-Representation" title="Selecting a Representation">
+<link rel="next" href="Character-Sets.html#Character-Sets" title="Character Sets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Character-Codes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Character-Sets.html#Character-Sets">Character Sets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-a-Representation.html#Selecting-a-Representation">Selecting a Representation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.4 Character Codes</h3>
+
+<p><a name="index-character-codes-2693"></a>
+  The unibyte and multibyte text representations use different character
+codes.  The valid character codes for unibyte representation range from
+0 to 255&mdash;the values that can fit in one byte.  The valid character
+codes for multibyte representation range from 0 to 524287, but not all
+values in that range are valid.  The values 128 through 255 are not
+entirely proper in multibyte text, but they can occur if you do explicit
+encoding and decoding (see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>).  Some other character
+codes cannot occur at all in multibyte text.  Only the <acronym>ASCII</acronym> codes
+0 through 127 are completely legitimate in both representations.
+
+<div class="defun">
+&mdash; Function: <b>char-valid-p</b><var> charcode &amp;optional genericp<a name="index-char_002dvalid_002dp-2694"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>charcode</var> is valid (either for unibyte
+text or for multibyte text).
+
+     <pre class="example">          (char-valid-p 65)
+               =&gt; t
+          (char-valid-p 256)
+               =&gt; nil
+          (char-valid-p 2248)
+               =&gt; t
+     </pre>
+        <p>If the optional argument <var>genericp</var> is non-<code>nil</code>, this
+function also returns <code>t</code> if <var>charcode</var> is a generic
+character (see <a href="Splitting-Characters.html#Splitting-Characters">Splitting Characters</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

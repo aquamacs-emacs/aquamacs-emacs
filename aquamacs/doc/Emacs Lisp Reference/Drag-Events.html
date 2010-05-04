@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Drag Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="prev" href="Click-Events.html#Click-Events" title="Click Events">
+<link rel="next" href="Button_002dDown-Events.html#Button_002dDown-Events" title="Button-Down Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Drag-Events"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Button_002dDown-Events.html#Button_002dDown-Events">Button-Down Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Click-Events.html#Click-Events">Click Events</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.6.5 Drag Events</h4>
+
+<p><a name="index-drag-event-1228"></a><a name="index-mouse-drag-event-1229"></a>
+With Emacs, you can have a drag event without even changing your
+clothes.  A <dfn>drag event</dfn> happens every time the user presses a mouse
+button and then moves the mouse to a different character position before
+releasing the button.  Like all mouse events, drag events are
+represented in Lisp as lists.  The lists record both the starting mouse
+position and the final position, like this:
+
+<pre class="example">     (<var>event-type</var>
+      (<var>window1</var> <var>buffer-pos1</var> (<var>x1</var> . <var>y1</var>) <var>timestamp1</var>)
+      (<var>window2</var> <var>buffer-pos2</var> (<var>x2</var> . <var>y2</var>) <var>timestamp2</var>)
+      <var>click-count</var>)
+</pre>
+   <p>For a drag event, the name of the symbol <var>event-type</var> contains the
+prefix `<samp><span class="samp">drag-</span></samp>'.  For example, dragging the mouse with button 2 held
+down generates a <code>drag-mouse-2</code> event.  The second and third
+elements of the event give the starting and ending position of the drag. 
+Aside from that, the data have the same meanings as in a click event
+(see <a href="Click-Events.html#Click-Events">Click Events</a>).  You can access the second element of any mouse
+event in the same way, with no need to distinguish drag events from
+others.
+
+   <p>The `<samp><span class="samp">drag-</span></samp>' prefix follows the modifier key prefixes such as
+`<samp><span class="samp">C-</span></samp>' and `<samp><span class="samp">M-</span></samp>'.
+
+   <p>If <code>read-key-sequence</code> receives a drag event that has no key
+binding, and the corresponding click event does have a binding, it
+changes the drag event into a click event at the drag's starting
+position.  This means that you don't have to distinguish between click
+and drag events unless you want to.
+
+   </body></html>
+

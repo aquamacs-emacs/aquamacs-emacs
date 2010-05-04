@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Variable Scoping - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Setting-Variables.html#Setting-Variables" title="Setting Variables">
+<link rel="next" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" title="Buffer-Local Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Variable-Scoping"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setting-Variables.html#Setting-Variables">Setting Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.9 Scoping Rules for Variable Bindings</h3>
+
+<p>A given symbol <code>foo</code> can have several local variable bindings,
+established at different places in the Lisp program, as well as a global
+binding.  The most recently established binding takes precedence over
+the others.
+
+   <p><a name="index-scope-603"></a><a name="index-extent-604"></a><a name="index-dynamic-scoping-605"></a><a name="index-lexical-scoping-606"></a>  Local bindings in Emacs Lisp have <dfn>indefinite scope</dfn> and
+<dfn>dynamic extent</dfn>.  <dfn>Scope</dfn> refers to <em>where</em> textually in
+the source code the binding can be accessed.  &ldquo;Indefinite scope&rdquo; means
+that any part of the program can potentially access the variable
+binding.  <dfn>Extent</dfn> refers to <em>when</em>, as the program is
+executing, the binding exists.  &ldquo;Dynamic extent&rdquo; means that the binding
+lasts as long as the activation of the construct that established it.
+
+   <p>The combination of dynamic extent and indefinite scope is called
+<dfn>dynamic scoping</dfn>.  By contrast, most programming languages use
+<dfn>lexical scoping</dfn>, in which references to a local variable must be
+located textually within the function or block that binds the variable.
+
+   <p><a name="index-CL-note_002d_002d_002dspecial-variables-607"></a><blockquote>
+<b>Common Lisp note:</b> Variables declared &ldquo;special&rdquo; in Common Lisp are
+dynamically scoped, like all variables in Emacs Lisp. 
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Scope.html#Scope">Scope</a>:           Scope means where in the program a value is visible. 
+                     Comparison with other languages. 
+<li><a accesskey="2" href="Extent.html#Extent">Extent</a>:          Extent means how long in time a value exists. 
+<li><a accesskey="3" href="Impl-of-Scope.html#Impl-of-Scope">Impl of Scope</a>:   Two ways to implement dynamic scoping. 
+<li><a accesskey="4" href="Using-Scoping.html#Using-Scoping">Using Scoping</a>:   How to use dynamic scoping carefully and avoid problems. 
+</ul>
+
+   </body></html>
+

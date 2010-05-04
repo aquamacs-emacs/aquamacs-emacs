@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>Error Symbols - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Errors.html#Errors" title="Errors">
+<link rel="prev" href="Handling-Errors.html#Handling-Errors" title="Handling Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Error-Symbols"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Handling-Errors.html#Handling-Errors">Handling Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.5.3.4 Error Symbols and Condition Names</h5>
+
+<p><a name="index-error-symbol-556"></a><a name="index-error-name-557"></a><a name="index-condition-name-558"></a><a name="index-user_002ddefined-error-559"></a><a name="index-error_002dconditions-560"></a>
+  When you signal an error, you specify an <dfn>error symbol</dfn> to specify
+the kind of error you have in mind.  Each error has one and only one
+error symbol to categorize it.  This is the finest classification of
+errors defined by the Emacs Lisp language.
+
+   <p>These narrow classifications are grouped into a hierarchy of wider
+classes called <dfn>error conditions</dfn>, identified by <dfn>condition
+names</dfn>.  The narrowest such classes belong to the error symbols
+themselves: each error symbol is also a condition name.  There are also
+condition names for more extensive classes, up to the condition name
+<code>error</code> which takes in all kinds of errors (but not <code>quit</code>). 
+Thus, each error has one or more condition names: <code>error</code>, the
+error symbol if that is distinct from <code>error</code>, and perhaps some
+intermediate classifications.
+
+   <p>In order for a symbol to be an error symbol, it must have an
+<code>error-conditions</code> property which gives a list of condition names. 
+This list defines the conditions that this kind of error belongs to. 
+(The error symbol itself, and the symbol <code>error</code>, should always be
+members of this list.)  Thus, the hierarchy of condition names is
+defined by the <code>error-conditions</code> properties of the error symbols. 
+Because quitting is not considered an error, the value of the
+<code>error-conditions</code> property of <code>quit</code> is just <code>(quit)</code>.
+
+   <p><a name="index-peculiar-error-561"></a>  In addition to the <code>error-conditions</code> list, the error symbol
+should have an <code>error-message</code> property whose value is a string to
+be printed when that error is signaled but not handled.  If the
+error symbol has no <code>error-message</code> property or if the
+<code>error-message</code> property exists, but is not a string, the error
+message `<samp><span class="samp">peculiar error</span></samp>' is used.  See <a href="Definition-of-signal.html#Definition-of-signal">Definition of signal</a>.
+
+   <p>Here is how we define a new error symbol, <code>new-error</code>:
+
+<pre class="example">     (put 'new-error
+          'error-conditions
+          '(error my-own-errors new-error))
+     =&gt; (error my-own-errors new-error)
+     (put 'new-error 'error-message "A new error")
+     =&gt; "A new error"
+</pre>
+   <p class="noindent">This error has three condition names: <code>new-error</code>, the narrowest
+classification; <code>my-own-errors</code>, which we imagine is a wider
+classification; and <code>error</code>, which is the widest of all.
+
+   <p>The error string should start with a capital letter but it should
+not end with a period.  This is for consistency with the rest of Emacs.
+
+   <p>Naturally, Emacs will never signal <code>new-error</code> on its own; only
+an explicit call to <code>signal</code> (see <a href="Definition-of-signal.html#Definition-of-signal">Definition of signal</a>) in
+your code can do this:
+
+<pre class="example">     (signal 'new-error '(x y))
+          error--&gt; A new error: x, y
+</pre>
+   <p>This error can be handled through any of the three condition names. 
+This example handles <code>new-error</code> and any other errors in the class
+<code>my-own-errors</code>:
+
+<pre class="example">     (condition-case foo
+         (bar nil t)
+       (my-own-errors nil))
+</pre>
+   <p>The significant way that errors are classified is by their condition
+names&mdash;the names used to match errors with handlers.  An error symbol
+serves only as a convenient way to specify the intended error message
+and list of condition names.  It would be cumbersome to give
+<code>signal</code> a list of condition names rather than one error symbol.
+
+   <p>By contrast, using only error symbols without condition names would
+seriously decrease the power of <code>condition-case</code>.  Condition names
+make it possible to categorize errors at various levels of generality
+when you write an error handler.  Using error symbols alone would
+eliminate all but the narrowest level of classification.
+
+   <p>See <a href="Standard-Errors.html#Standard-Errors">Standard Errors</a>, for a list of all the standard error symbols
+and their conditions.
+
+   </body></html>
+

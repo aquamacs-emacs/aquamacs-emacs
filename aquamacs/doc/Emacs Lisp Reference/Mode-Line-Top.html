@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Mode Line Top - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
+<link rel="prev" href="Mode-Line-Data.html#Mode-Line-Data" title="Mode Line Data">
+<link rel="next" href="Mode-Line-Variables.html#Mode-Line-Variables" title="Mode Line Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Mode-Line-Top"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.4.3 The Top Level of Mode Line Control</h4>
+
+<p>The variable in overall control of the mode line is
+<code>mode-line-format</code>.
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-format</b><var><a name="index-mode_002dline_002dformat-1581"></a></var><br>
+<blockquote><p>The value of this variable is a mode-line construct that controls the
+contents of the mode-line.  It is always buffer-local in all buffers.
+
+        <p>If you set this variable to <code>nil</code> in a buffer, that buffer does
+not have a mode line.  (A window that is just one line tall never
+displays a mode line.) 
+</p></blockquote></div>
+
+   <p>The default value of <code>mode-line-format</code> is designed to use the
+values of other variables such as <code>mode-line-position</code> and
+<code>mode-line-modes</code> (which in turn incorporates the values of the
+variables <code>mode-name</code> and <code>minor-mode-alist</code>).  Very few
+modes need to alter <code>mode-line-format</code> itself.  For most
+purposes, it is sufficient to alter some of the variables that
+<code>mode-line-format</code> either directly or indirectly refers to.
+
+   <p>If you do alter <code>mode-line-format</code> itself, the new value should
+use the same variables that appear in the default value (see <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>), rather than duplicating their contents or displaying
+the information in another fashion.  This way, customizations made by
+the user or by Lisp programs (such as <code>display-time</code> and major
+modes) via changes to those variables remain effective.
+
+   <p>Here is an example of a <code>mode-line-format</code> that might be
+useful for <code>shell-mode</code>, since it contains the host name and default
+directory.
+
+<pre class="example">     (setq mode-line-format
+       (list "-"
+        'mode-line-mule-info
+        'mode-line-modified
+        'mode-line-frame-identification
+        "%b--"
+        ;; <span class="roman">Note that this is evaluated while making the list.</span>
+        ;; <span class="roman">It makes a mode-line construct which is just a string.</span>
+        (getenv "HOST")
+        ":"
+        'default-directory
+        "   "
+        'global-mode-string
+        "   %[("
+        '(:eval (mode-line-mode-name))
+        'mode-line-process
+        'minor-mode-alist
+        "%n"
+        ")%]--"
+        '(which-func-mode ("" which-func-format "--"))
+        '(line-number-mode "L%l--")
+        '(column-number-mode "C%c--")
+        '(-3 "%p")
+        "-%-"))
+</pre>
+   <p class="noindent">(The variables <code>line-number-mode</code>, <code>column-number-mode</code>
+and <code>which-func-mode</code> enable particular minor modes; as usual,
+these variable names are also the minor mode command names.)
+
+   </body></html>
+

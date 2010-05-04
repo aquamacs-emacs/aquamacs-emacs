@@ -1,0 +1,190 @@
+<html lang="en">
+<head>
+<title>Common Keywords - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Group-Definitions.html#Group-Definitions" title="Group Definitions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Common-Keywords"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Group-Definitions.html#Group-Definitions">Group Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">14.1 Common Item Keywords</h3>
+
+<p><a name="index-customization-keywords-725"></a>  All kinds of customization declarations (for variables and groups, and
+for faces) accept keyword arguments for specifying various information. 
+This section describes some keywords that apply to all kinds.
+
+   <p>All of these keywords, except <code>:tag</code>, can be used more than once
+in a given item.  Each use of the keyword has an independent effect. 
+The keyword <code>:tag</code> is an exception because any given item can only
+display one name.
+
+     <dl>
+<dt><code>:tag </code><var>label</var><dd><a name="index-tag_0040r_007b_002c-customization-keyword_007d-726"></a>Use <var>label</var>, a string, instead of the item's name, to label the
+item in customization menus and buffers.  <strong>Don't use a tag
+which is substantially different from the item's real name; that would
+cause confusion.</strong>  One legitimate case for use of <code>:tag</code> is to
+specify a dash where normally a hyphen would be converted to a space:
+
+     <pre class="example">          (defcustom cursor-in-non-selected-windows ...
+            :tag "Cursor In Non-selected Windows"
+     </pre>
+     <p><a name="index-group_0040r_007b_002c-customization-keyword_007d-727"></a><br><dt><code>:group </code><var>group</var><dd>Put this customization item in group <var>group</var>.  When you use
+<code>:group</code> in a <code>defgroup</code>, it makes the new group a subgroup of
+<var>group</var>.
+
+     <p>If you use this keyword more than once, you can put a single item into
+more than one group.  Displaying any of those groups will show this
+item.  Please don't overdo this, since the result would be annoying.
+
+     <br><dt><code>:link </code><var>link-data</var><dd><a name="index-link_0040r_007b_002c-customization-keyword_007d-728"></a>Include an external link after the documentation string for this item. 
+This is a sentence containing an active field which references some
+other documentation.
+
+     <p>There are several alternatives you can use for <var>link-data</var>:
+
+          <dl>
+<dt><code>(custom-manual </code><var>info-node</var><code>)</code><dd>Link to an Info node; <var>info-node</var> is a string which specifies the
+node name, as in <code>"(emacs)Top"</code>.  The link appears as
+`<samp><span class="samp">[Manual]</span></samp>' in the customization buffer and enters the built-in
+Info reader on <var>info-node</var>.
+
+          <br><dt><code>(info-link </code><var>info-node</var><code>)</code><dd>Like <code>custom-manual</code> except that the link appears
+in the customization buffer with the Info node name.
+
+          <br><dt><code>(url-link </code><var>url</var><code>)</code><dd>Link to a web page; <var>url</var> is a string which specifies the
+<acronym>URL</acronym>.  The link appears in the customization buffer as
+<var>url</var> and invokes the WWW browser specified by
+<code>browse-url-browser-function</code>.
+
+          <br><dt><code>(emacs-commentary-link </code><var>library</var><code>)</code><dd>Link to the commentary section of a library; <var>library</var> is a string
+which specifies the library name.
+
+          <br><dt><code>(emacs-library-link </code><var>library</var><code>)</code><dd>Link to an Emacs Lisp library file; <var>library</var> is a string which
+specifies the library name.
+
+          <br><dt><code>(file-link </code><var>file</var><code>)</code><dd>Link to a file; <var>file</var> is a string which specifies the name of the
+file to visit with <code>find-file</code> when the user invokes this link.
+
+          <br><dt><code>(function-link </code><var>function</var><code>)</code><dd>Link to the documentation of a function; <var>function</var> is a string
+which specifies the name of the function to describe with
+<code>describe-function</code> when the user invokes this link.
+
+          <br><dt><code>(variable-link </code><var>variable</var><code>)</code><dd>Link to the documentation of a variable; <var>variable</var> is a string
+which specifies the name of the variable to describe with
+<code>describe-variable</code> when the user invokes this link.
+
+          <br><dt><code>(custom-group-link </code><var>group</var><code>)</code><dd>Link to another customization group.  Invoking it creates a new
+customization buffer for <var>group</var>. 
+</dl>
+
+     <p>You can specify the text to use in the customization buffer by adding
+<code>:tag </code><var>name</var> after the first element of the <var>link-data</var>;
+for example, <code>(info-link :tag "foo" "(emacs)Top")</code> makes a link to
+the Emacs manual which appears in the buffer as `<samp><span class="samp">foo</span></samp>'.
+
+     <p>An item can have more than one external link; however, most items have
+none at all.
+
+     <br><dt><code>:load </code><var>file</var><dd><a name="index-load_0040r_007b_002c-customization-keyword_007d-729"></a>Load file <var>file</var> (a string) before displaying this customization
+item.  Loading is done with <code>load-library</code>, and only if the file is
+not already loaded.
+
+     <br><dt><code>:require </code><var>feature</var><dd><a name="index-require_0040r_007b_002c-customization-keyword_007d-730"></a>Execute <code>(require '</code><var>feature</var><code>)</code> when your saved customizations
+set the value of this item.  <var>feature</var> should be a symbol.
+
+     <p>The most common reason to use <code>:require</code> is when a variable enables
+a feature such as a minor mode, and just setting the variable won't have
+any effect unless the code which implements the mode is loaded.
+
+     <br><dt><code>:version </code><var>version</var><dd><a name="index-version_0040r_007b_002c-customization-keyword_007d-731"></a>This keyword specifies that the item was first introduced in Emacs
+version <var>version</var>, or that its default value was changed in that
+version.  The value <var>version</var> must be a string.
+
+     <br><dt><code>:package-version '(</code><var>package</var><code> . </code><var>version</var><code>)</code><dd><a name="index-package_002dversion_0040r_007b_002c-customization-keyword_007d-732"></a>This keyword specifies that the item was first introduced in
+<var>package</var> version <var>version</var>, or that its meaning or default
+value was changed in that version.  The value of <var>package</var> is a
+symbol and <var>version</var> is a string.
+
+     <p>This keyword takes priority over <code>:version</code>.
+
+     <p><var>package</var> should be the official name of the package, such as MH-E
+or Gnus.  If the package <var>package</var> is released as part of Emacs,
+<var>package</var> and <var>version</var> should appear in the value of
+<code>customize-package-emacs-version-alist</code>. 
+</dl>
+
+   <p>Packages distributed as part of Emacs that use the
+<code>:package-version</code> keyword must also update the
+<code>customize-package-emacs-version-alist</code> variable.
+
+<div class="defun">
+&mdash; Variable: <b>customize-package-emacs-version-alist</b><var><a name="index-customize_002dpackage_002demacs_002dversion_002dalist-733"></a></var><br>
+<blockquote><p>This alist provides a mapping for the versions of Emacs that are
+associated with versions of a package listed in the
+<code>:package-version</code> keyword.  Its elements look like this:
+
+     <pre class="example">          (<var>package</var> (<var>pversion</var> . <var>eversion</var>)...)
+     </pre>
+        <p>For each <var>package</var>, which is a symbol, there are one or more
+elements that contain a package version <var>pversion</var> with an
+associated Emacs version <var>eversion</var>.  These versions are strings. 
+For example, the MH-E package updates this alist with the following:
+
+     <pre class="smallexample">          (add-to-list 'customize-package-emacs-version-alist
+                       '(MH-E ("6.0" . "22.1") ("6.1" . "22.1") ("7.0" . "22.1")
+                              ("7.1" . "22.1") ("7.2" . "22.1") ("7.3" . "22.1")
+                              ("7.4" . "22.1") ("8.0" . "22.1")))
+     </pre>
+        <p>The value of <var>package</var> needs to be unique and it needs to match
+the <var>package</var> value appearing in the <code>:package-version</code>
+keyword.  Since the user might see the value in a error message, a good
+choice is the official name of the package, such as MH-E or Gnus. 
+</p></blockquote></div>
+
+   </body></html>
+

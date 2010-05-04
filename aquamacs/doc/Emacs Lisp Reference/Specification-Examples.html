@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Specification Examples - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug-and-Macros.html#Edebug-and-Macros" title="Edebug and Macros">
+<link rel="prev" href="Backtracking.html#Backtracking" title="Backtracking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Specification-Examples"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Backtracking.html#Backtracking">Backtracking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.15.4 Specification Examples</h5>
+
+<p>It may be easier to understand Edebug specifications by studying
+the examples provided here.
+
+   <p>A <code>let</code> special form has a sequence of bindings and a body.  Each
+of the bindings is either a symbol or a sublist with a symbol and
+optional expression.  In the specification below, notice the <code>gate</code>
+inside of the sublist to prevent backtracking once a sublist is found.
+
+<pre class="example">     (def-edebug-spec let
+       ((&amp;rest
+         &amp;or symbolp (gate symbolp &amp;optional form))
+        body))
+</pre>
+   <p>Edebug uses the following specifications for <code>defun</code> and
+<code>defmacro</code> and the associated argument list and <code>interactive</code>
+specifications.  It is necessary to handle interactive forms specially
+since an expression argument is actually evaluated outside of the
+function body.
+
+<pre class="smallexample">     (def-edebug-spec defmacro defun) ; <span class="roman">Indirect ref to </span><code>defun</code><span class="roman"> spec.</span>
+     (def-edebug-spec defun
+       (&amp;define name lambda-list
+                [&amp;optional stringp]   ; <span class="roman">Match the doc string, if present.</span>
+                [&amp;optional ("interactive" interactive)]
+                def-body))
+     
+     (def-edebug-spec lambda-list
+       (([&amp;rest arg]
+         [&amp;optional ["&amp;optional" arg &amp;rest arg]]
+         &amp;optional ["&amp;rest" arg]
+         )))
+     
+     (def-edebug-spec interactive
+       (&amp;optional &amp;or stringp def-form))    ; <span class="roman">Notice: </span><code>def-form</code>
+</pre>
+   <p>The specification for backquote below illustrates how to match
+dotted lists and use <code>nil</code> to terminate recursion.  It also
+illustrates how components of a vector may be matched.  (The actual
+specification defined by Edebug does not support dotted lists because
+doing so causes very deep recursion that could fail.)
+
+<pre class="smallexample">     (def-edebug-spec ` (backquote-form))   ; <span class="roman">Alias just for clarity.</span>
+     
+     (def-edebug-spec backquote-form
+       (&amp;or ([&amp;or "," ",@"] &amp;or ("quote" backquote-form) form)
+            (backquote-form . [&amp;or nil backquote-form])
+            (vector &amp;rest backquote-form)
+            sexp))
+</pre>
+   </body></html>
+

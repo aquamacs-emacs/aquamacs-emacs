@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Button Buffer Commands - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buttons.html#Buttons" title="Buttons">
+<link rel="prev" href="Manipulating-Buttons.html#Manipulating-Buttons" title="Manipulating Buttons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Button-Buffer-Commands"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Manipulating-Buttons.html#Manipulating-Buttons">Manipulating Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buttons.html#Buttons">Buttons</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.17.5 Button Buffer Commands</h4>
+
+<p><a name="index-button-buffer-commands-3382"></a>
+These are commands and functions for locating and operating on
+buttons in an Emacs buffer.
+
+   <p><code>push-button</code> is the command that a user uses to actually `push'
+a button, and is bound by default in the button itself to &lt;RET&gt;
+and to &lt;mouse-2&gt; using a region-specific keymap.  Commands
+that are useful outside the buttons itself, such as
+<code>forward-button</code> and <code>backward-button</code> are additionally
+available in the keymap stored in <code>button-buffer-map</code>; a mode
+which uses buttons may want to use <code>button-buffer-map</code> as a
+parent keymap for its keymap.
+
+   <p>If the button has a non-<code>nil</code> <code>follow-link</code> property, and
+<var>mouse-1-click-follows-link</var> is set, a quick &lt;Mouse-1&gt; click
+will also activate the <code>push-button</code> command. 
+See <a href="Links-and-Mouse_002d1.html#Links-and-Mouse_002d1">Links and Mouse-1</a>.
+
+<div class="defun">
+&mdash; Command: <b>push-button</b><var> &amp;optional pos use-mouse-action<a name="index-push_002dbutton-3383"></a></var><br>
+<blockquote><p>Perform the action specified by a button at location <var>pos</var>. 
+<var>pos</var> may be either a buffer position or a mouse-event.  If
+<var>use-mouse-action</var> is non-<code>nil</code>, or <var>pos</var> is a
+mouse-event (see <a href="Mouse-Events.html#Mouse-Events">Mouse Events</a>), try to invoke the button's
+<code>mouse-action</code> property instead of <code>action</code>; if the button
+has no <code>mouse-action</code> property, use <code>action</code> as normal. 
+<var>pos</var> defaults to point, except when <code>push-button</code> is invoked
+interactively as the result of a mouse-event, in which case, the mouse
+event's position is used.  If there's no button at <var>pos</var>, do
+nothing and return <code>nil</code>, otherwise return <code>t</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>forward-button</b><var> n &amp;optional wrap display-message<a name="index-forward_002dbutton-3384"></a></var><br>
+<blockquote><p>Move to the <var>n</var>th next button, or <var>n</var>th previous button if
+<var>n</var> is negative.  If <var>n</var> is zero, move to the start of any
+button at point.  If <var>wrap</var> is non-<code>nil</code>, moving past either
+end of the buffer continues from the other end.  If
+<var>display-message</var> is non-<code>nil</code>, the button's help-echo string
+is displayed.  Any button with a non-<code>nil</code> <code>skip</code> property
+is skipped over.  Returns the button found. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>backward-button</b><var> n &amp;optional wrap display-message<a name="index-backward_002dbutton-3385"></a></var><br>
+<blockquote><p>Move to the <var>n</var>th previous button, or <var>n</var>th next button if
+<var>n</var> is negative.  If <var>n</var> is zero, move to the start of any
+button at point.  If <var>wrap</var> is non-<code>nil</code>, moving past either
+end of the buffer continues from the other end.  If
+<var>display-message</var> is non-<code>nil</code>, the button's help-echo string
+is displayed.  Any button with a non-<code>nil</code> <code>skip</code> property
+is skipped over.  Returns the button found. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-button</b><var> pos &amp;optional count-current<a name="index-next_002dbutton-3386"></a></var><br>
+&mdash; Function: <b>previous-button</b><var> pos &amp;optional count-current<a name="index-previous_002dbutton-3387"></a></var><br>
+<blockquote><p>Return the next button after (for <code>next-button</code> or before (for
+<code>previous-button</code>) position <var>pos</var> in the current buffer.  If
+<var>count-current</var> is non-<code>nil</code>, count any button at <var>pos</var>
+in the search, instead of starting at the next button. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>Lisp and Coding Systems - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" title="Encoding and I/O">
+<link rel="next" href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" title="User-Chosen Coding Systems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Lisp-and-Coding-Systems"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">User-Chosen Coding Systems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.10.3 Coding Systems in Lisp</h4>
+
+<p>Here are the Lisp facilities for working with coding systems:
+
+<div class="defun">
+&mdash; Function: <b>coding-system-list</b><var> &amp;optional base-only<a name="index-coding_002dsystem_002dlist-2733"></a></var><br>
+<blockquote><p>This function returns a list of all coding system names (symbols).  If
+<var>base-only</var> is non-<code>nil</code>, the value includes only the
+base coding systems.  Otherwise, it includes alias and variant coding
+systems as well. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coding-system-p</b><var> object<a name="index-coding_002dsystem_002dp-2734"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a coding system
+name or <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>check-coding-system</b><var> coding-system<a name="index-check_002dcoding_002dsystem-2735"></a></var><br>
+<blockquote><p>This function checks the validity of <var>coding-system</var>. 
+If that is valid, it returns <var>coding-system</var>. 
+Otherwise it signals an error with condition <code>coding-system-error</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coding-system-eol-type</b><var> coding-system<a name="index-coding_002dsystem_002deol_002dtype-2736"></a></var><br>
+<blockquote><p>This function returns the type of end-of-line (a.k.a. <dfn>eol</dfn>)
+conversion used by <var>coding-system</var>.  If <var>coding-system</var>
+specifies a certain eol conversion, the return value is an integer 0,
+1, or 2, standing for <code>unix</code>, <code>dos</code>, and <code>mac</code>,
+respectively.  If <var>coding-system</var> doesn't specify eol conversion
+explicitly, the return value is a vector of coding systems, each one
+with one of the possible eol conversion types, like this:
+
+     <pre class="lisp">          (coding-system-eol-type 'latin-1)
+               =&gt; [latin-1-unix latin-1-dos latin-1-mac]
+     </pre>
+        <p class="noindent">If this function returns a vector, Emacs will decide, as part of the
+text encoding or decoding process, what eol conversion to use.  For
+decoding, the end-of-line format of the text is auto-detected, and the
+eol conversion is set to match it (e.g., DOS-style CRLF format will
+imply <code>dos</code> eol conversion).  For encoding, the eol conversion is
+taken from the appropriate default coding system (e.g.,
+<code>default-buffer-file-coding-system</code> for
+<code>buffer-file-coding-system</code>), or from the default eol conversion
+appropriate for the underlying platform. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coding-system-change-eol-conversion</b><var> coding-system eol-type<a name="index-coding_002dsystem_002dchange_002deol_002dconversion-2737"></a></var><br>
+<blockquote><p>This function returns a coding system which is like <var>coding-system</var>
+except for its eol conversion, which is specified by <code>eol-type</code>. 
+<var>eol-type</var> should be <code>unix</code>, <code>dos</code>, <code>mac</code>, or
+<code>nil</code>.  If it is <code>nil</code>, the returned coding system determines
+the end-of-line conversion from the data.
+
+        <p><var>eol-type</var> may also be 0, 1 or 2, standing for <code>unix</code>,
+<code>dos</code> and <code>mac</code>, respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coding-system-change-text-conversion</b><var> eol-coding text-coding<a name="index-coding_002dsystem_002dchange_002dtext_002dconversion-2738"></a></var><br>
+<blockquote><p>This function returns a coding system which uses the end-of-line
+conversion of <var>eol-coding</var>, and the text conversion of
+<var>text-coding</var>.  If <var>text-coding</var> is <code>nil</code>, it returns
+<code>undecided</code>, or one of its variants according to <var>eol-coding</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>find-coding-systems-region</b><var> from to<a name="index-find_002dcoding_002dsystems_002dregion-2739"></a></var><br>
+<blockquote><p>This function returns a list of coding systems that could be used to
+encode a text between <var>from</var> and <var>to</var>.  All coding systems in
+the list can safely encode any multibyte characters in that portion of
+the text.
+
+        <p>If the text contains no multibyte characters, the function returns the
+list <code>(undecided)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>find-coding-systems-string</b><var> string<a name="index-find_002dcoding_002dsystems_002dstring-2740"></a></var><br>
+<blockquote><p>This function returns a list of coding systems that could be used to
+encode the text of <var>string</var>.  All coding systems in the list can
+safely encode any multibyte characters in <var>string</var>.  If the text
+contains no multibyte characters, this returns the list
+<code>(undecided)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>find-coding-systems-for-charsets</b><var> charsets<a name="index-find_002dcoding_002dsystems_002dfor_002dcharsets-2741"></a></var><br>
+<blockquote><p>This function returns a list of coding systems that could be used to
+encode all the character sets in the list <var>charsets</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>detect-coding-region</b><var> start end &amp;optional highest<a name="index-detect_002dcoding_002dregion-2742"></a></var><br>
+<blockquote><p>This function chooses a plausible coding system for decoding the text
+from <var>start</var> to <var>end</var>.  This text should be a byte sequence
+(see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>).
+
+        <p>Normally this function returns a list of coding systems that could
+handle decoding the text that was scanned.  They are listed in order of
+decreasing priority.  But if <var>highest</var> is non-<code>nil</code>, then the
+return value is just one coding system, the one that is highest in
+priority.
+
+        <p>If the region contains only <acronym>ASCII</acronym> characters except for such
+ISO-2022 control characters ISO-2022 as <code>ESC</code>, the value is
+<code>undecided</code> or <code>(undecided)</code>, or a variant specifying
+end-of-line conversion, if that can be deduced from the text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>detect-coding-string</b><var> string &amp;optional highest<a name="index-detect_002dcoding_002dstring-2743"></a></var><br>
+<blockquote><p>This function is like <code>detect-coding-region</code> except that it
+operates on the contents of <var>string</var> instead of bytes in the buffer. 
+</p></blockquote></div>
+
+   <p>See <a href="Coding-systems-for-a-subprocess.html#Coding-systems-for-a-subprocess">Process Information</a>, in
+particular the description of the functions
+<code>process-coding-system</code> and <code>set-process-coding-system</code>, for
+how to examine or set the coding systems used for I/O to a subprocess.
+
+   </body></html>
+

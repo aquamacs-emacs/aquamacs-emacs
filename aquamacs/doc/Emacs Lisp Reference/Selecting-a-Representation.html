@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Selecting a Representation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Converting-Representations.html#Converting-Representations" title="Converting Representations">
+<link rel="next" href="Character-Codes.html#Character-Codes" title="Character Codes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Selecting-a-Representation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Character-Codes.html#Character-Codes">Character Codes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Converting-Representations.html#Converting-Representations">Converting Representations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.3 Selecting a Representation</h3>
+
+<p>Sometimes it is useful to examine an existing buffer or string as
+multibyte when it was unibyte, or vice versa.
+
+<div class="defun">
+&mdash; Function: <b>set-buffer-multibyte</b><var> multibyte<a name="index-set_002dbuffer_002dmultibyte-2690"></a></var><br>
+<blockquote><p>Set the representation type of the current buffer.  If <var>multibyte</var>
+is non-<code>nil</code>, the buffer becomes multibyte.  If <var>multibyte</var>
+is <code>nil</code>, the buffer becomes unibyte.
+
+        <p>This function leaves the buffer contents unchanged when viewed as a
+sequence of bytes.  As a consequence, it can change the contents viewed
+as characters; a sequence of two bytes which is treated as one character
+in multibyte representation will count as two characters in unibyte
+representation.  Character codes 128 through 159 are an exception.  They
+are represented by one byte in a unibyte buffer, but when the buffer is
+set to multibyte, they are converted to two-byte sequences, and vice
+versa.
+
+        <p>This function sets <code>enable-multibyte-characters</code> to record which
+representation is in use.  It also adjusts various data in the buffer
+(including overlays, text properties and markers) so that they cover the
+same text as they did before.
+
+        <p>You cannot use <code>set-buffer-multibyte</code> on an indirect buffer,
+because indirect buffers always inherit the representation of the
+base buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-as-unibyte</b><var> string<a name="index-string_002das_002dunibyte-2691"></a></var><br>
+<blockquote><p>This function returns a string with the same bytes as <var>string</var> but
+treating each byte as a character.  This means that the value may have
+more characters than <var>string</var> has.
+
+        <p>If <var>string</var> is already a unibyte string, then the value is
+<var>string</var> itself.  Otherwise it is a newly created string, with no
+text properties.  If <var>string</var> is multibyte, any characters it
+contains of charset <code>eight-bit-control</code> or <code>eight-bit-graphic</code>
+are converted to the corresponding single byte. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-as-multibyte</b><var> string<a name="index-string_002das_002dmultibyte-2692"></a></var><br>
+<blockquote><p>This function returns a string with the same bytes as <var>string</var> but
+treating each multibyte sequence as one character.  This means that the
+value may have fewer characters than <var>string</var> has.
+
+        <p>If <var>string</var> is already a multibyte string, then the value is
+<var>string</var> itself.  Otherwise it is a newly created string, with no
+text properties.  If <var>string</var> is unibyte and contains any individual
+8-bit bytes (i.e. not part of a multibyte form), they are converted to
+the corresponding multibyte character of charset <code>eight-bit-control</code>
+or <code>eight-bit-graphic</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Intro to Minibuffers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="next" href="Text-from-Minibuffer.html#Text-from-Minibuffer" title="Text from Minibuffer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Intro-to-Minibuffers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.1 Introduction to Minibuffers</h3>
+
+<p>In most ways, a minibuffer is a normal Emacs buffer.  Most operations
+<em>within</em> a buffer, such as editing commands, work normally in a
+minibuffer.  However, many operations for managing buffers do not apply
+to minibuffers.  The name of a minibuffer always has the form `<samp><span class="samp">&nbsp;*Minibuf-</span><var>number</var><span class="samp">*</span></samp>'<!-- /@w -->, and it cannot be changed.  Minibuffers are
+displayed only in special windows used only for minibuffers; these
+windows always appear at the bottom of a frame.  (Sometimes frames have
+no minibuffer window, and sometimes a special kind of frame contains
+nothing but a minibuffer window; see <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>.)
+
+   <p>The text in the minibuffer always starts with the <dfn>prompt string</dfn>,
+the text that was specified by the program that is using the minibuffer
+to tell the user what sort of input to type.  This text is marked
+read-only so you won't accidentally delete or change it.  It is also
+marked as a field (see <a href="Fields.html#Fields">Fields</a>), so that certain motion functions,
+including <code>beginning-of-line</code>, <code>forward-word</code>,
+<code>forward-sentence</code>, and <code>forward-paragraph</code>, stop at the
+boundary between the prompt and the actual text.  (In older Emacs
+versions, the prompt was displayed using a special mechanism and was not
+part of the buffer contents.)
+
+   <p>The minibuffer's window is normally a single line; it grows
+automatically if necessary if the contents require more space.  You can
+explicitly resize it temporarily with the window sizing commands; it
+reverts to its normal size when the minibuffer is exited.  You can
+resize it permanently by using the window sizing commands in the frame's
+other window, when the minibuffer is not active.  If the frame contains
+just a minibuffer, you can change the minibuffer's size by changing the
+frame's size.
+
+   <p>Use of the minibuffer reads input events, and that alters the values
+of variables such as <code>this-command</code> and <code>last-command</code>
+(see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>).  Your program should bind them around the
+code that uses the minibuffer, if you do not want that to change them.
+
+   <p>If a command uses a minibuffer while there is an active minibuffer,
+this is called a <dfn>recursive minibuffer</dfn>.  The first minibuffer is
+named `<samp><span class="samp">&nbsp;*Minibuf-0*</span></samp>'<!-- /@w -->.  Recursive minibuffers are named by
+incrementing the number at the end of the name.  (The names begin with a
+space so that they won't show up in normal buffer lists.)  Of several
+recursive minibuffers, the innermost (or most recently entered) is the
+active minibuffer.  We usually call this &ldquo;the&rdquo; minibuffer.  You can
+permit or forbid recursive minibuffers by setting the variable
+<code>enable-recursive-minibuffers</code> or by putting properties of that
+name on command symbols (see <a href="Recursive-Mini.html#Recursive-Mini">Recursive Mini</a>).
+
+   <p>Like other buffers, a minibuffer uses a local keymap
+(see <a href="Keymaps.html#Keymaps">Keymaps</a>) to specify special key bindings.  The function that
+invokes the minibuffer also sets up its local map according to the job
+to be done.  See <a href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>, for the non-completion
+minibuffer local maps.  See <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>, for the minibuffer
+local maps for completion.
+
+   <p>When Emacs is running in batch mode, any request to read from the
+minibuffer actually reads a line from the standard input descriptor that
+was supplied when Emacs was started.
+
+   </body></html>
+

@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Keymap Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Key-Sequences.html#Key-Sequences" title="Key Sequences">
+<link rel="next" href="Format-of-Keymaps.html#Format-of-Keymaps" title="Format of Keymaps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Keymap-Basics"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Sequences.html#Key-Sequences">Key Sequences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.2 Keymap Basics</h3>
+
+<p><a name="index-key-binding-1381"></a><a name="index-binding-of-a-key-1382"></a><a name="index-complete-key-1383"></a><a name="index-undefined-key-1384"></a>
+  A keymap is a Lisp data structure that specifies <dfn>key bindings</dfn>
+for various key sequences.
+
+   <p>A single keymap directly specifies definitions for individual
+events.  When a key sequence consists of a single event, its binding
+in a keymap is the keymap's definition for that event.  The binding of
+a longer key sequence is found by an iterative process: first find the
+definition of the first event (which must itself be a keymap); then
+find the second event's definition in that keymap, and so on until all
+the events in the key sequence have been processed.
+
+   <p>If the binding of a key sequence is a keymap, we call the key sequence
+a <dfn>prefix key</dfn>.  Otherwise, we call it a <dfn>complete key</dfn> (because
+no more events can be added to it).  If the binding is <code>nil</code>,
+we call the key <dfn>undefined</dfn>.  Examples of prefix keys are <kbd>C-c</kbd>,
+<kbd>C-x</kbd>, and <kbd>C-x 4</kbd>.  Examples of defined complete keys are
+<kbd>X</kbd>, &lt;RET&gt;, and <kbd>C-x 4 C-f</kbd>.  Examples of undefined complete
+keys are <kbd>C-x C-g</kbd>, and <kbd>C-c 3</kbd>.  See <a href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>, for more
+details.
+
+   <p>The rule for finding the binding of a key sequence assumes that the
+intermediate bindings (found for the events before the last) are all
+keymaps; if this is not so, the sequence of events does not form a
+unit&mdash;it is not really one key sequence.  In other words, removing one
+or more events from the end of any valid key sequence must always yield
+a prefix key.  For example, <kbd>C-f C-n</kbd> is not a key sequence;
+<kbd>C-f</kbd> is not a prefix key, so a longer sequence starting with
+<kbd>C-f</kbd> cannot be a key sequence.
+
+   <p>The set of possible multi-event key sequences depends on the bindings
+for prefix keys; therefore, it can be different for different keymaps,
+and can change when bindings are changed.  However, a one-event sequence
+is always a key sequence, because it does not depend on any prefix keys
+for its well-formedness.
+
+   <p>At any time, several primary keymaps are <dfn>active</dfn>&mdash;that is, in
+use for finding key bindings.  These are the <dfn>global map</dfn>, which is
+shared by all buffers; the <dfn>local keymap</dfn>, which is usually
+associated with a specific major mode; and zero or more <dfn>minor mode
+keymaps</dfn>, which belong to currently enabled minor modes.  (Not all minor
+modes have keymaps.)  The local keymap bindings shadow (i.e., take
+precedence over) the corresponding global bindings.  The minor mode
+keymaps shadow both local and global keymaps.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
+for details.
+
+   </body></html>
+

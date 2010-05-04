@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Type Keywords - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization-Types.html#Customization-Types" title="Customization Types">
+<link rel="prev" href="Splicing-into-Lists.html#Splicing-into-Lists" title="Splicing into Lists">
+<link rel="next" href="Defining-New-Types.html#Defining-New-Types" title="Defining New Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Type-Keywords"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-New-Types.html#Defining-New-Types">Defining New Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Splicing-into-Lists.html#Splicing-into-Lists">Splicing into Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-Types">Customization Types</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.4.4 Type Keywords</h4>
+
+<p>You can specify keyword-argument pairs in a customization type after the
+type name symbol.  Here are the keywords you can use, and their
+meanings:
+
+     <dl>
+<dt><code>:value </code><var>default</var><dd>This is used for a type that appears as an alternative inside of
+<code>choice</code>; it specifies the default value to use, at first, if and
+when the user selects this alternative with the menu in the
+customization buffer.
+
+     <p>Of course, if the actual value of the option fits this alternative, it
+will appear showing the actual value, not <var>default</var>.
+
+     <p>If <code>nil</code> is not a valid value for the alternative, then it is
+essential to specify a valid default with <code>:value</code>.
+
+     <br><dt><code>:format </code><var>format-string</var><dd><a name="index-format_0040r_007b_002c-customization-keyword_007d-752"></a>This string will be inserted in the buffer to represent the value
+corresponding to the type.  The following `<samp><span class="samp">%</span></samp>' escapes are available
+for use in <var>format-string</var>:
+
+          <dl>
+<dt>`<samp><span class="samp">%[</span><var>button</var><span class="samp">%]</span></samp>'<dd>Display the text <var>button</var> marked as a button.  The <code>:action</code>
+attribute specifies what the button will do if the user invokes it;
+its value is a function which takes two arguments&mdash;the widget which
+the button appears in, and the event.
+
+          <p>There is no way to specify two different buttons with different
+actions.
+
+          <br><dt>`<samp><span class="samp">%{</span><var>sample</var><span class="samp">%}</span></samp>'<dd>Show <var>sample</var> in a special face specified by <code>:sample-face</code>.
+
+          <br><dt>`<samp><span class="samp">%v</span></samp>'<dd>Substitute the item's value.  How the value is represented depends on
+the kind of item, and (for variables) on the customization type.
+
+          <br><dt>`<samp><span class="samp">%d</span></samp>'<dd>Substitute the item's documentation string.
+
+          <br><dt>`<samp><span class="samp">%h</span></samp>'<dd>Like `<samp><span class="samp">%d</span></samp>', but if the documentation string is more than one line,
+add an active field to control whether to show all of it or just the
+first line.
+
+          <br><dt>`<samp><span class="samp">%t</span></samp>'<dd>Substitute the tag here.  You specify the tag with the <code>:tag</code>
+keyword.
+
+          <br><dt>`<samp><span class="samp">%%</span></samp>'<dd>Display a literal `<samp><span class="samp">%</span></samp>'. 
+</dl>
+
+     <br><dt><code>:action </code><var>action</var><dd><a name="index-action_0040r_007b_002c-customization-keyword_007d-753"></a>Perform <var>action</var> if the user clicks on a button.
+
+     <br><dt><code>:button-face </code><var>face</var><dd><a name="index-button_002dface_0040r_007b_002c-customization-keyword_007d-754"></a>Use the face <var>face</var> (a face name or a list of face names) for button
+text displayed with `<samp><span class="samp">%[...%]</span></samp>'.
+
+     <br><dt><code>:button-prefix </code><var>prefix</var><dt><code>:button-suffix </code><var>suffix</var><dd><a name="index-button_002dprefix_0040r_007b_002c-customization-keyword_007d-755"></a><a name="index-button_002dsuffix_0040r_007b_002c-customization-keyword_007d-756"></a>These specify the text to display before and after a button. 
+Each can be:
+
+          <dl>
+<dt><code>nil</code><dd>No text is inserted.
+
+          <br><dt>a string<dd>The string is inserted literally.
+
+          <br><dt>a symbol<dd>The symbol's value is used. 
+</dl>
+
+     <br><dt><code>:tag </code><var>tag</var><dd>Use <var>tag</var> (a string) as the tag for the value (or part of the value)
+that corresponds to this type.
+
+     <br><dt><code>:doc </code><var>doc</var><dd><a name="index-doc_0040r_007b_002c-customization-keyword_007d-757"></a>Use <var>doc</var> as the documentation string for this value (or part of the
+value) that corresponds to this type.  In order for this to work, you
+must specify a value for <code>:format</code>, and use `<samp><span class="samp">%d</span></samp>' or `<samp><span class="samp">%h</span></samp>'
+in that value.
+
+     <p>The usual reason to specify a documentation string for a type is to
+provide more information about the meanings of alternatives inside a
+<code>:choice</code> type or the parts of some other composite type.
+
+     <br><dt><code>:help-echo </code><var>motion-doc</var><dd><a name="index-help_002decho_0040r_007b_002c-customization-keyword_007d-758"></a>When you move to this item with <code>widget-forward</code> or
+<code>widget-backward</code>, it will display the string <var>motion-doc</var> in
+the echo area.  In addition, <var>motion-doc</var> is used as the mouse
+<code>help-echo</code> string and may actually be a function or form evaluated
+to yield a help string.  If it is a function, it is called with one
+argument, the widget.
+
+     <br><dt><code>:match </code><var>function</var><dd><a name="index-match_0040r_007b_002c-customization-keyword_007d-759"></a>Specify how to decide whether a value matches the type.  The
+corresponding value, <var>function</var>, should be a function that accepts
+two arguments, a widget and a value; it should return non-<code>nil</code> if
+the value is acceptable.
+
+   </dl>
+
+   </body></html>
+

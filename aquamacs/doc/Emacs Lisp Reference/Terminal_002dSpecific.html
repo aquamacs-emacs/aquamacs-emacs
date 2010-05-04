@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Terminal-Specific - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
+<link rel="prev" href="Init-File.html#Init-File" title="Init File">
+<link rel="next" href="Command_002dLine-Arguments.html#Command_002dLine-Arguments" title="Command-Line Arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Terminal-Specific"></a>
+<a name="Terminal_002dSpecific"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Command_002dLine-Arguments.html#Command_002dLine-Arguments">Command-Line Arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-File.html#Init-File">Init File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
+<hr>
+</div>
+
+<h4 class="subsection">39.1.3 Terminal-Specific Initialization</h4>
+
+<p><a name="index-terminal_002dspecific-initialization-3472"></a>
+  Each terminal type can have its own Lisp library that Emacs loads when
+run on that type of terminal.  The library's name is constructed by
+concatenating the value of the variable <code>term-file-prefix</code> and the
+terminal type (specified by the environment variable <code>TERM</code>). 
+Normally, <code>term-file-prefix</code> has the value
+<code>"term/"</code>; changing this is not recommended.  Emacs finds the file
+in the normal manner, by searching the <code>load-path</code> directories, and
+trying the `<samp><span class="samp">.elc</span></samp>' and `<samp><span class="samp">.el</span></samp>' suffixes.
+
+   <p><a name="index-Termcap-3473"></a>  The usual function of a terminal-specific library is to enable
+special keys to send sequences that Emacs can recognize.  It may also
+need to set or add to <code>function-key-map</code> if the Termcap or
+Terminfo entry does not specify all the terminal's function keys. 
+See <a href="Terminal-Input.html#Terminal-Input">Terminal Input</a>.
+
+   <p>When the name of the terminal type contains a hyphen, and no library
+is found whose name is identical to the terminal's name, Emacs strips
+from the terminal's name the last hyphen and everything that follows
+it, and tries again.  This process is repeated until Emacs finds a
+matching library or until there are no more hyphens in the name (the
+latter means the terminal doesn't have any library specific to it). 
+Thus, for example, if there are no `<samp><span class="samp">aaa-48</span></samp>' and `<samp><span class="samp">aaa-30</span></samp>'
+libraries, Emacs will try the same library <samp><span class="file">term/aaa.el</span></samp> for
+terminal types `<samp><span class="samp">aaa-48</span></samp>' and `<samp><span class="samp">aaa-30-rv</span></samp>'.  If necessary, the
+library can evaluate <code>(getenv "TERM")</code> to find the full name of
+the terminal type.
+
+   <p>Your init file can prevent the loading of the
+terminal-specific library by setting the variable
+<code>term-file-prefix</code> to <code>nil</code>.  This feature is useful when
+experimenting with your own peculiar customizations.
+
+   <p>You can also arrange to override some of the actions of the
+terminal-specific library by setting the variable
+<code>term-setup-hook</code>.  This is a normal hook which Emacs runs using
+<code>run-hooks</code> at the end of Emacs initialization, after loading both
+your init file and any terminal-specific libraries.  You can
+use this variable to define initializations for terminals that do not
+have their own libraries.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+<div class="defun">
+&mdash; Variable: <b>term-file-prefix</b><var><a name="index-term_002dfile_002dprefix-3474"></a></var><br>
+<blockquote><p><a name="index-g_t_0040code_007bTERM_007d-environment-variable-3475"></a>If the <code>term-file-prefix</code> variable is non-<code>nil</code>, Emacs loads
+a terminal-specific initialization file as follows:
+
+     <pre class="example">          (load (concat term-file-prefix (getenv "TERM")))
+     </pre>
+        <p class="noindent">You may set the <code>term-file-prefix</code> variable to <code>nil</code> in your
+init file if you do not wish to load the
+terminal-initialization file.  To do this, put the following in
+your init file: <code>(setq term-file-prefix nil)</code>.
+
+        <p>On MS-DOS, if the environment variable <code>TERM</code> is not set, Emacs
+uses `<samp><span class="samp">internal</span></samp>' as the terminal type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>term-setup-hook</b><var><a name="index-term_002dsetup_002dhook-3476"></a></var><br>
+<blockquote><p>This variable is a normal hook that Emacs runs after loading your
+init file, the default initialization file (if any) and the
+terminal-specific Lisp file.
+
+        <p>You can use <code>term-setup-hook</code> to override the definitions made by a
+terminal-specific file. 
+</p></blockquote></div>
+
+   <p>See <code>window-setup-hook</code> in <a href="Window-Systems.html#Window-Systems">Window Systems</a>, for a related
+feature.
+
+   </body></html>
+

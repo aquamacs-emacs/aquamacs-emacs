@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+<title>Char-Tables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
+<link rel="prev" href="Vector-Functions.html#Vector-Functions" title="Vector Functions">
+<link rel="next" href="Bool_002dVectors.html#Bool_002dVectors" title="Bool-Vectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Char-Tables"></a>
+<a name="Char_002dTables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bool_002dVectors.html#Bool_002dVectors">Bool-Vectors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vector-Functions.html#Vector-Functions">Vector Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">6.6 Char-Tables</h3>
+
+<p><a name="index-char_002dtables-402"></a><a name="index-extra-slots-of-char_002dtable-403"></a>
+  A char-table is much like a vector, except that it is indexed by
+character codes.  Any valid character code, without modifiers, can be
+used as an index in a char-table.  You can access a char-table's
+elements with <code>aref</code> and <code>aset</code>, as with any array.  In
+addition, a char-table can have <dfn>extra slots</dfn> to hold additional
+data not associated with particular character codes.  Char-tables are
+constants when evaluated.
+
+   <p><a name="index-subtype-of-char_002dtable-404"></a>  Each char-table has a <dfn>subtype</dfn> which is a symbol.  The subtype
+has two purposes: to distinguish char-tables meant for different uses,
+and to control the number of extra slots.  For example, display tables
+are char-tables with <code>display-table</code> as the subtype, and syntax
+tables are char-tables with <code>syntax-table</code> as the subtype.  A valid
+subtype must have a <code>char-table-extra-slots</code> property which is an
+integer between 0 and 10.  This integer specifies the number of
+<dfn>extra slots</dfn> in the char-table.
+
+   <p><a name="index-parent-of-char_002dtable-405"></a>  A char-table can have a <dfn>parent</dfn>, which is another char-table.  If
+it does, then whenever the char-table specifies <code>nil</code> for a
+particular character <var>c</var>, it inherits the value specified in the
+parent.  In other words, <code>(aref </code><var>char-table</var> <var>c</var><code>)</code> returns
+the value from the parent of <var>char-table</var> if <var>char-table</var> itself
+specifies <code>nil</code>.
+
+   <p><a name="index-default-value-of-char_002dtable-406"></a>  A char-table can also have a <dfn>default value</dfn>.  If so, then
+<code>(aref </code><var>char-table</var> <var>c</var><code>)</code> returns the default value
+whenever the char-table does not specify any other non-<code>nil</code> value.
+
+<div class="defun">
+&mdash; Function: <b>make-char-table</b><var> subtype &amp;optional init<a name="index-make_002dchar_002dtable-407"></a></var><br>
+<blockquote><p>Return a newly created char-table, with subtype <var>subtype</var>.  Each
+element is initialized to <var>init</var>, which defaults to <code>nil</code>.  You
+cannot alter the subtype of a char-table after the char-table is
+created.
+
+        <p>There is no argument to specify the length of the char-table, because
+all char-tables have room for any valid character code as an index. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-table-p</b><var> object<a name="index-char_002dtable_002dp-408"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a char-table,
+otherwise <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-table-subtype</b><var> char-table<a name="index-char_002dtable_002dsubtype-409"></a></var><br>
+<blockquote><p>This function returns the subtype symbol of <var>char-table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-char-table-default</b><var> char-table char new-default<a name="index-set_002dchar_002dtable_002ddefault-410"></a></var><br>
+<blockquote><p>This function sets the default value of generic character <var>char</var>
+in <var>char-table</var> to <var>new-default</var>.
+
+        <p>There is no special function to access default values in a char-table. 
+To do that, use <code>char-table-range</code> (see below). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-table-parent</b><var> char-table<a name="index-char_002dtable_002dparent-411"></a></var><br>
+<blockquote><p>This function returns the parent of <var>char-table</var>.  The parent is
+always either <code>nil</code> or another char-table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-char-table-parent</b><var> char-table new-parent<a name="index-set_002dchar_002dtable_002dparent-412"></a></var><br>
+<blockquote><p>This function sets the parent of <var>char-table</var> to <var>new-parent</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-table-extra-slot</b><var> char-table n<a name="index-char_002dtable_002dextra_002dslot-413"></a></var><br>
+<blockquote><p>This function returns the contents of extra slot <var>n</var> of
+<var>char-table</var>.  The number of extra slots in a char-table is
+determined by its subtype. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-char-table-extra-slot</b><var> char-table n value<a name="index-set_002dchar_002dtable_002dextra_002dslot-414"></a></var><br>
+<blockquote><p>This function stores <var>value</var> in extra slot <var>n</var> of
+<var>char-table</var>. 
+</p></blockquote></div>
+
+   <p>A char-table can specify an element value for a single character code;
+it can also specify a value for an entire character set.
+
+<div class="defun">
+&mdash; Function: <b>char-table-range</b><var> char-table range<a name="index-char_002dtable_002drange-415"></a></var><br>
+<blockquote><p>This returns the value specified in <var>char-table</var> for a range of
+characters <var>range</var>.  Here are the possibilities for <var>range</var>:
+
+          <dl>
+<dt><code>nil</code><dd>Refers to the default value.
+
+          <br><dt><var>char</var><dd>Refers to the element for character <var>char</var>
+(supposing <var>char</var> is a valid character code).
+
+          <br><dt><var>charset</var><dd>Refers to the value specified for the whole character set
+<var>charset</var> (see <a href="Character-Sets.html#Character-Sets">Character Sets</a>).
+
+          <br><dt><var>generic-char</var><dd>A generic character stands for a character set, or a row of a
+character set; specifying the generic character as argument is
+equivalent to specifying the character set name.  See <a href="Splitting-Characters.html#Splitting-Characters">Splitting Characters</a>, for a description of generic characters. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-char-table-range</b><var> char-table range value<a name="index-set_002dchar_002dtable_002drange-416"></a></var><br>
+<blockquote><p>This function sets the value in <var>char-table</var> for a range of
+characters <var>range</var>.  Here are the possibilities for <var>range</var>:
+
+          <dl>
+<dt><code>nil</code><dd>Refers to the default value.
+
+          <br><dt><code>t</code><dd>Refers to the whole range of character codes.
+
+          <br><dt><var>char</var><dd>Refers to the element for character <var>char</var>
+(supposing <var>char</var> is a valid character code).
+
+          <br><dt><var>charset</var><dd>Refers to the value specified for the whole character set
+<var>charset</var> (see <a href="Character-Sets.html#Character-Sets">Character Sets</a>).
+
+          <br><dt><var>generic-char</var><dd>A generic character stands for a character set; specifying the generic
+character as argument is equivalent to specifying the character set
+name.  See <a href="Splitting-Characters.html#Splitting-Characters">Splitting Characters</a>, for a description of generic characters. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>map-char-table</b><var> function char-table<a name="index-map_002dchar_002dtable-417"></a></var><br>
+<blockquote><p>This function calls <var>function</var> for each element of <var>char-table</var>. 
+<var>function</var> is called with two arguments, a key and a value.  The key
+is a possible <var>range</var> argument for <code>char-table-range</code>&mdash;either
+a valid character or a generic character&mdash;and the value is
+<code>(char-table-range </code><var>char-table</var> <var>key</var><code>)</code>.
+
+        <p>Overall, the key-value pairs passed to <var>function</var> describe all the
+values stored in <var>char-table</var>.
+
+        <p>The return value is always <code>nil</code>; to make this function useful,
+<var>function</var> should have side effects.  For example,
+here is how to examine each element of the syntax table:
+
+     <pre class="example">          (let (accumulator)
+            (map-char-table
+             #'(lambda (key value)
+                 (setq accumulator
+                       (cons (list key value) accumulator)))
+             (syntax-table))
+            accumulator)
+          =&gt;
+          ((475008 nil) (474880 nil) (474752 nil) (474624 nil)
+           ... (5 (3)) (4 (3)) (3 (3)) (2 (3)) (1 (3)) (0 (3)))
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>Internals of Debugger - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugger.html#Debugger" title="Debugger">
+<link rel="prev" href="Invoking-the-Debugger.html#Invoking-the-Debugger" title="Invoking the Debugger">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Internals-of-Debugger"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Invoking-the-Debugger.html#Invoking-the-Debugger">Invoking the Debugger</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.1.8 Internals of the Debugger</h4>
+
+<p>This section describes functions and variables used internally by the
+debugger.
+
+<div class="defun">
+&mdash; Variable: <b>debugger</b><var><a name="index-debugger-911"></a></var><br>
+<blockquote><p>The value of this variable is the function to call to invoke the
+debugger.  Its value must be a function of any number of arguments, or,
+more typically, the name of a function.  This function should invoke
+some kind of debugger.  The default value of the variable is
+<code>debug</code>.
+
+        <p>The first argument that Lisp hands to the function indicates why it
+was called.  The convention for arguments is detailed in the description
+of <code>debug</code> (see <a href="Invoking-the-Debugger.html#Invoking-the-Debugger">Invoking the Debugger</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>backtrace</b><var><a name="index-backtrace-912"></a></var><br>
+<blockquote><p><a name="index-run-time-stack-913"></a><a name="index-call-stack-914"></a>This function prints a trace of Lisp function calls currently active. 
+This is the function used by <code>debug</code> to fill up the
+`<samp><span class="samp">*Backtrace*</span></samp>' buffer.  It is written in C, since it must have access
+to the stack to determine which function calls are active.  The return
+value is always <code>nil</code>.
+
+        <p>In the following example, a Lisp expression calls <code>backtrace</code>
+explicitly.  This prints the backtrace to the stream
+<code>standard-output</code>, which, in this case, is the buffer
+`<samp><span class="samp">backtrace-output</span></samp>'.
+
+        <p>Each line of the backtrace represents one function call.  The line shows
+the values of the function's arguments if they are all known; if they
+are still being computed, the line says so.  The arguments of special
+forms are elided.
+
+     <pre class="smallexample">          (with-output-to-temp-buffer "backtrace-output"
+            (let ((var 1))
+              (save-excursion
+                (setq var (eval '(progn
+                                   (1+ var)
+                                   (list 'testing (backtrace))))))))
+          
+               =&gt; (testing nil)
+          
+          ----------- Buffer: backtrace-output ------------
+            backtrace()
+            (list ...computing arguments...)
+            (progn ...)
+            eval((progn (1+ var) (list (quote testing) (backtrace))))
+            (setq ...)
+            (save-excursion ...)
+            (let ...)
+            (with-output-to-temp-buffer ...)
+            eval((with-output-to-temp-buffer ...))
+            eval-last-sexp-1(nil)
+            eval-last-sexp(nil)
+            call-interactively(eval-last-sexp)
+          ----------- Buffer: backtrace-output ------------
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>debug-on-next-call</b><var><a name="index-debug_002don_002dnext_002dcall-915"></a></var><br>
+<blockquote><p><a name="index-g_t_0040code_007beval_007d_002c-and-debugging-916"></a><a name="index-g_t_0040code_007bapply_007d_002c-and-debugging-917"></a><a name="index-g_t_0040code_007bfuncall_007d_002c-and-debugging-918"></a>If this variable is non-<code>nil</code>, it says to call the debugger before
+the next <code>eval</code>, <code>apply</code> or <code>funcall</code>.  Entering the
+debugger sets <code>debug-on-next-call</code> to <code>nil</code>.
+
+        <p>The <kbd>d</kbd> command in the debugger works by setting this variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>backtrace-debug</b><var> level flag<a name="index-backtrace_002ddebug-919"></a></var><br>
+<blockquote><p>This function sets the debug-on-exit flag of the stack frame <var>level</var>
+levels down the stack, giving it the value <var>flag</var>.  If <var>flag</var> is
+non-<code>nil</code>, this will cause the debugger to be entered when that
+frame later exits.  Even a nonlocal exit through that frame will enter
+the debugger.
+
+        <p>This function is used only by the debugger. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-debug-status</b><var><a name="index-command_002ddebug_002dstatus-920"></a></var><br>
+<blockquote><p>This variable records the debugging status of the current interactive
+command.  Each time a command is called interactively, this variable is
+bound to <code>nil</code>.  The debugger can set this variable to leave
+information for future debugger invocations during the same command
+invocation.
+
+        <p>The advantage of using this variable rather than an ordinary global
+variable is that the data will never carry over to a subsequent command
+invocation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>backtrace-frame</b><var> frame-number<a name="index-backtrace_002dframe-921"></a></var><br>
+<blockquote><p>The function <code>backtrace-frame</code> is intended for use in Lisp
+debuggers.  It returns information about what computation is happening
+in the stack frame <var>frame-number</var> levels down.
+
+        <p>If that frame has not evaluated the arguments yet, or is a special
+form, the value is <code>(nil </code><var>function</var> <var>arg-forms</var><code>...)</code>.
+
+        <p>If that frame has evaluated its arguments and called its function
+already, the return value is <code>(t </code><var>function</var>
+<var>arg-values</var><code>...)</code>.
+
+        <p>In the return value, <var>function</var> is whatever was supplied as the
+<span class="sc">car</span> of the evaluated list, or a <code>lambda</code> expression in the
+case of a macro call.  If the function has a <code>&amp;rest</code> argument, that
+is represented as the tail of the list <var>arg-values</var>.
+
+        <p>If <var>frame-number</var> is out of range, <code>backtrace-frame</code> returns
+<code>nil</code>. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1992, 1993, 1994, 1998, 1999, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+<!-- This file can also be used by an independent Edebug User -->
+<!-- Manual in which case the Edebug node below should be used -->
+<!-- with the following links to the Bugs section and to the top level: -->
+<!-- , Bugs and Todo List, Top, Top -->
+</body></html>
+

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Programmed Completion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Reading-File-Names.html#Reading-File-Names" title="Reading File Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Programmed-Completion"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">20.6.6 Programmed Completion</h4>
+
+<p><a name="index-programmed-completion-1117"></a>
+  Sometimes it is not possible to create an alist or an obarray
+containing all the intended possible completions.  In such a case, you
+can supply your own function to compute the completion of a given string. 
+This is called <dfn>programmed completion</dfn>.
+
+   <p>To use this feature, pass a symbol with a function definition as the
+<var>collection</var> argument to <code>completing-read</code>.  The function
+<code>completing-read</code> arranges to pass your completion function along
+to <code>try-completion</code> and <code>all-completions</code>, which will then let
+your function do all the work.
+
+   <p>The completion function should accept three arguments:
+
+     <ul>
+<li>The string to be completed.
+
+     <li>The predicate function to filter possible matches, or <code>nil</code> if
+none.  Your function should call the predicate for each possible match,
+and ignore the possible match if the predicate returns <code>nil</code>.
+
+     <li>A flag specifying the type of operation. 
+</ul>
+
+   <p>There are three flag values for three operations:
+
+     <ul>
+<li><code>nil</code> specifies <code>try-completion</code>.  The completion function
+should return the completion of the specified string, or <code>t</code> if the
+string is a unique and exact match already, or <code>nil</code> if the string
+matches no possibility.
+
+     <p>If the string is an exact match for one possibility, but also matches
+other longer possibilities, the function should return the string, not
+<code>t</code>.
+
+     <li><code>t</code> specifies <code>all-completions</code>.  The completion function
+should return a list of all possible completions of the specified
+string.
+
+     <li><code>lambda</code> specifies <code>test-completion</code>.  The completion
+function should return <code>t</code> if the specified string is an exact
+match for some possibility; <code>nil</code> otherwise. 
+</ul>
+
+   <p>It would be consistent and clean for completion functions to allow
+lambda expressions (lists that are functions) as well as function
+symbols as <var>collection</var>, but this is impossible.  Lists as
+completion tables already have other meanings, and it would be
+unreliable to treat one differently just because it is also a possible
+function.  So you must arrange for any function you wish to use for
+completion to be encapsulated in a symbol.
+
+   <p>Emacs uses programmed completion when completing file names. 
+See <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>.
+
+<div class="defun">
+&mdash; Macro: <b>dynamic-completion-table</b><var> function<a name="index-dynamic_002dcompletion_002dtable-1118"></a></var><br>
+<blockquote><p>This macro is a convenient way to write a function that can act as
+programmed completion function.  The argument <var>function</var> should be
+a function that takes one argument, a string, and returns an alist of
+possible completions of it.  You can think of
+<code>dynamic-completion-table</code> as a transducer between that interface
+and the interface for programmed completion functions. 
+</p></blockquote></div>
+
+   </body></html>
+

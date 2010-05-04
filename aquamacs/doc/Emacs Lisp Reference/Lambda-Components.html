@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Lambda Components - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
+<link rel="next" href="Simple-Lambda.html#Simple-Lambda" title="Simple Lambda">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Lambda-Components"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Simple-Lambda.html#Simple-Lambda">Simple Lambda</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.2.1 Components of a Lambda Expression</h4>
+
+<p>A function written in Lisp (a &ldquo;lambda expression&rdquo;) is a list that
+looks like this:
+
+<pre class="example">     (lambda (<var>arg-variables</var>...)
+       [<var>documentation-string</var>]
+       [<var>interactive-declaration</var>]
+       <var>body-forms</var>...)
+</pre>
+   <p><a name="index-lambda-list-659"></a>  The first element of a lambda expression is always the symbol
+<code>lambda</code>.  This indicates that the list represents a function.  The
+reason functions are defined to start with <code>lambda</code> is so that
+other lists, intended for other uses, will not accidentally be valid as
+functions.
+
+   <p>The second element is a list of symbols&mdash;the argument variable names. 
+This is called the <dfn>lambda list</dfn>.  When a Lisp function is called,
+the argument values are matched up against the variables in the lambda
+list, which are given local bindings with the values provided. 
+See <a href="Local-Variables.html#Local-Variables">Local Variables</a>.
+
+   <p>The documentation string is a Lisp string object placed within the
+function definition to describe the function for the Emacs help
+facilities.  See <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>.
+
+   <p>The interactive declaration is a list of the form <code>(interactive
+</code><var>code-string</var><code>)</code>.  This declares how to provide arguments if the
+function is used interactively.  Functions with this declaration are called
+<dfn>commands</dfn>; they can be called using <kbd>M-x</kbd> or bound to a key. 
+Functions not intended to be called in this way should not have interactive
+declarations.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>, for how to write an interactive
+declaration.
+
+   <p><a name="index-body-of-function-660"></a>  The rest of the elements are the <dfn>body</dfn> of the function: the Lisp
+code to do the work of the function (or, as a Lisp programmer would say,
+&ldquo;a list of Lisp forms to evaluate&rdquo;).  The value returned by the
+function is the value returned by the last element of the body.
+
+   </body></html>
+

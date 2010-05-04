@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Quoted Character Input - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Input.html#Reading-Input" title="Reading Input">
+<link rel="prev" href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" title="Invoking the Input Method">
+<link rel="next" href="Event-Input-Misc.html#Event-Input-Misc" title="Event Input Misc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Quoted-Character-Input"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Event-Input-Misc.html#Event-Input-Misc">Event Input Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Invoking-the-Input-Method.html#Invoking-the-Input-Method">Invoking the Input Method</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Reading Input</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.7.5 Quoted Character Input</h4>
+
+<p><a name="index-quoted-character-input-1304"></a>
+  You can use the function <code>read-quoted-char</code> to ask the user to
+specify a character, and allow the user to specify a control or meta
+character conveniently, either literally or as an octal character code. 
+The command <code>quoted-insert</code> uses this function.
+
+<div class="defun">
+&mdash; Function: <b>read-quoted-char</b><var> &amp;optional prompt<a name="index-read_002dquoted_002dchar-1305"></a></var><br>
+<blockquote><p><a name="index-octal-character-input-1306"></a><a name="index-control-characters_002c-reading-1307"></a><a name="index-nonprinting-characters_002c-reading-1308"></a>This function is like <code>read-char</code>, except that if the first
+character read is an octal digit (0-7), it reads any number of octal
+digits (but stopping if a non-octal digit is found), and returns the
+character represented by that numeric character code.  If the
+character that terminates the sequence of octal digits is &lt;RET&gt;,
+it is discarded.  Any other terminating character is used as input
+after this function returns.
+
+        <p>Quitting is suppressed when the first character is read, so that the
+user can enter a <kbd>C-g</kbd>.  See <a href="Quitting.html#Quitting">Quitting</a>.
+
+        <p>If <var>prompt</var> is supplied, it specifies a string for prompting the
+user.  The prompt string is always displayed in the echo area, followed
+by a single `<samp><span class="samp">-</span></samp>'.
+
+        <p>In the following example, the user types in the octal number 177 (which
+is 127 in decimal).
+
+     <pre class="example">          (read-quoted-char "What character")
+          
+          ---------- Echo Area ----------
+          What character <kbd>1 7 7</kbd>-
+          ---------- Echo Area ----------
+          
+               =&gt; 127
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

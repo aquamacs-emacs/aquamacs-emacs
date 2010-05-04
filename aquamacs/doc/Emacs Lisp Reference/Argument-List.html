@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Argument List - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
+<link rel="prev" href="Simple-Lambda.html#Simple-Lambda" title="Simple Lambda">
+<link rel="next" href="Function-Documentation.html#Function-Documentation" title="Function Documentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Argument-List"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Documentation.html#Function-Documentation">Function Documentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Lambda.html#Simple-Lambda">Simple Lambda</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.2.3 Other Features of Argument Lists</h4>
+
+<p><a name="index-wrong_002dnumber_002dof_002darguments-661"></a><a name="index-argument-binding-662"></a><a name="index-binding-arguments-663"></a><a name="index-argument-lists_002c-features-664"></a>
+  Our simple sample function, <code>(lambda (a b c) (+ a b c))</code>,
+specifies three argument variables, so it must be called with three
+arguments: if you try to call it with only two arguments or four
+arguments, you get a <code>wrong-number-of-arguments</code> error.
+
+   <p>It is often convenient to write a function that allows certain
+arguments to be omitted.  For example, the function <code>substring</code>
+accepts three arguments&mdash;a string, the start index and the end
+index&mdash;but the third argument defaults to the <var>length</var> of the
+string if you omit it.  It is also convenient for certain functions to
+accept an indefinite number of arguments, as the functions <code>list</code>
+and <code>+</code> do.
+
+   <p><a name="index-optional-arguments-665"></a><a name="index-rest-arguments-666"></a><a name="index-g_t_0026optional-667"></a><a name="index-g_t_0026rest-668"></a>  To specify optional arguments that may be omitted when a function
+is called, simply include the keyword <code>&amp;optional</code> before the optional
+arguments.  To specify a list of zero or more extra arguments, include the
+keyword <code>&amp;rest</code> before one final argument.
+
+   <p>Thus, the complete syntax for an argument list is as follows:
+
+<pre class="example">     (<var>required-vars</var>...
+      <span class="roman">[</span>&amp;optional <var>optional-vars</var>...<span class="roman">]</span>
+      <span class="roman">[</span>&amp;rest <var>rest-var</var><span class="roman">]</span>)
+</pre>
+   <p class="noindent">The square brackets indicate that the <code>&amp;optional</code> and <code>&amp;rest</code>
+clauses, and the variables that follow them, are optional.
+
+   <p>A call to the function requires one actual argument for each of the
+<var>required-vars</var>.  There may be actual arguments for zero or more of
+the <var>optional-vars</var>, and there cannot be any actual arguments beyond
+that unless the lambda list uses <code>&amp;rest</code>.  In that case, there may
+be any number of extra actual arguments.
+
+   <p>If actual arguments for the optional and rest variables are omitted,
+then they always default to <code>nil</code>.  There is no way for the
+function to distinguish between an explicit argument of <code>nil</code> and
+an omitted argument.  However, the body of the function is free to
+consider <code>nil</code> an abbreviation for some other meaningful value. 
+This is what <code>substring</code> does; <code>nil</code> as the third argument to
+<code>substring</code> means to use the length of the string supplied.
+
+   <p><a name="index-CL-note_002d_002d_002ddefault-optional-arg-669"></a><blockquote>
+<b>Common Lisp note:</b> Common Lisp allows the function to specify what
+default value to use when an optional argument is omitted; Emacs Lisp
+always uses <code>nil</code>.  Emacs Lisp does not support &ldquo;supplied-p&rdquo;
+variables that tell you whether an argument was explicitly passed. 
+</blockquote>
+
+   <p>For example, an argument list that looks like this:
+
+<pre class="example">     (a b &amp;optional c d &amp;rest e)
+</pre>
+   <p class="noindent">binds <code>a</code> and <code>b</code> to the first two actual arguments, which are
+required.  If one or two more arguments are provided, <code>c</code> and
+<code>d</code> are bound to them respectively; any arguments after the first
+four are collected into a list and <code>e</code> is bound to that list.  If
+there are only two arguments, <code>c</code> is <code>nil</code>; if two or three
+arguments, <code>d</code> is <code>nil</code>; if four arguments or fewer, <code>e</code>
+is <code>nil</code>.
+
+   <p>There is no way to have required arguments following optional
+ones&mdash;it would not make sense.  To see why this must be so, suppose
+that <code>c</code> in the example were optional and <code>d</code> were required. 
+Suppose three actual arguments are given; which variable would the
+third argument be for?  Would it be used for the <var>c</var>, or for
+<var>d</var>?  One can argue for both possibilities.  Similarly, it makes
+no sense to have any more arguments (either required or optional)
+after a <code>&amp;rest</code> argument.
+
+   <p>Here are some examples of argument lists and proper calls:
+
+<pre class="smallexample">     ((lambda (n) (1+ n))                ; <span class="roman">One required:</span>
+      1)                                 ; <span class="roman">requires exactly one argument.</span>
+          =&gt; 2
+     ((lambda (n &amp;optional n1)           ; <span class="roman">One required and one optional:</span>
+              (if n1 (+ n n1) (1+ n)))   ; <span class="roman">1 or 2 arguments.</span>
+      1 2)
+          =&gt; 3
+     ((lambda (n &amp;rest ns)               ; <span class="roman">One required and one rest:</span>
+              (+ n (apply '+ ns)))       ; <span class="roman">1 or more arguments.</span>
+      1 2 3 4 5)
+          =&gt; 15
+</pre>
+   </body></html>
+

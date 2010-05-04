@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Load Suffixes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Loading.html#Loading" title="Loading">
+<link rel="prev" href="How-Programs-Do-Loading.html#How-Programs-Do-Loading" title="How Programs Do Loading">
+<link rel="next" href="Library-Search.html#Library-Search" title="Library Search">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Load-Suffixes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Library-Search.html#Library-Search">Library Search</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
+<hr>
+</div>
+
+<h3 class="section">15.2 Load Suffixes</h3>
+
+<p>We now describe some technical details about the exact suffixes that
+<code>load</code> tries.
+
+<div class="defun">
+&mdash; Variable: <b>load-suffixes</b><var><a name="index-load_002dsuffixes-771"></a></var><br>
+<blockquote><p>This is a list of suffixes indicating (compiled or source) Emacs Lisp
+files.  It should not include the empty string.  <code>load</code> uses
+these suffixes in order when it appends Lisp suffixes to the specified
+file name.  The standard value is <code>(".elc" ".el")</code> which produces
+the behavior described in the previous section. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>load-file-rep-suffixes</b><var><a name="index-load_002dfile_002drep_002dsuffixes-772"></a></var><br>
+<blockquote><p>This is a list of suffixes that indicate representations of the same
+file.  This list should normally start with the empty string. 
+When <code>load</code> searches for a file it appends the suffixes in this
+list, in order, to the file name, before searching for another file.
+
+        <p>Enabling Auto Compression mode appends the suffixes in
+<code>jka-compr-load-suffixes</code> to this list and disabling Auto
+Compression mode removes them again.  The standard value of
+<code>load-file-rep-suffixes</code> if Auto Compression mode is disabled is
+<code>("")</code>.  Given that the standard value of
+<code>jka-compr-load-suffixes</code> is <code>(".gz")</code>, the standard value
+of <code>load-file-rep-suffixes</code> if Auto Compression mode is enabled
+is <code>("" ".gz")</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-load-suffixes</b><var><a name="index-get_002dload_002dsuffixes-773"></a></var><br>
+<blockquote><p>This function returns the list of all suffixes that <code>load</code> should
+try, in order, when its <var>must-suffix</var> argument is non-<code>nil</code>. 
+This takes both <code>load-suffixes</code> and <code>load-file-rep-suffixes</code>
+into account.  If <code>load-suffixes</code>, <code>jka-compr-load-suffixes</code>
+and <code>load-file-rep-suffixes</code> all have their standard values, this
+function returns <code>(".elc" ".elc.gz" ".el" ".el.gz")</code> if Auto
+Compression mode is enabled and <code>(".elc" ".el")</code> if Auto
+Compression mode is disabled. 
+</p></blockquote></div>
+
+   <p>To summarize, <code>load</code> normally first tries the suffixes in the
+value of <code>(get-load-suffixes)</code> and then those in
+<code>load-file-rep-suffixes</code>.  If <var>nosuffix</var> is non-<code>nil</code>,
+it skips the former group, and if <var>must-suffix</var> is non-<code>nil</code>,
+it skips the latter group.
+
+   </body></html>
+

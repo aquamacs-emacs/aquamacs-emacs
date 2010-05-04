@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Function Names - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
+<link rel="next" href="Defining-Functions.html#Defining-Functions" title="Defining Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Function-Names"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Functions.html#Defining-Functions">Defining Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.3 Naming a Function</h3>
+
+<p><a name="index-function-definition-671"></a><a name="index-named-function-672"></a><a name="index-function-name-673"></a>
+  In most computer languages, every function has a name; the idea of a
+function without a name is nonsensical.  In Lisp, a function in the
+strictest sense has no name.  It is simply a list whose first element is
+<code>lambda</code>, a byte-code function object, or a primitive subr-object.
+
+   <p>However, a symbol can serve as the name of a function.  This happens
+when you put the function in the symbol's <dfn>function cell</dfn>
+(see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>).  Then the symbol itself becomes a valid,
+callable function, equivalent to the list or subr-object that its
+function cell refers to.  The contents of the function cell are also
+called the symbol's <dfn>function definition</dfn>.  The procedure of using a
+symbol's function definition in place of the symbol is called
+<dfn>symbol function indirection</dfn>; see <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
+
+   <p>In practice, nearly all functions are given names in this way and
+referred to through their names.  For example, the symbol <code>car</code> works
+as a function and does what it does because the primitive subr-object
+<code>#&lt;subr car&gt;</code> is stored in its function cell.
+
+   <p>We give functions names because it is convenient to refer to them by
+their names in Lisp expressions.  For primitive subr-objects such as
+<code>#&lt;subr car&gt;</code>, names are the only way you can refer to them: there
+is no read syntax for such objects.  For functions written in Lisp, the
+name is more convenient to use in a call than an explicit lambda
+expression.  Also, a function with a name can refer to itself&mdash;it can
+be recursive.  Writing the function's name in its own definition is much
+more convenient than making the function definition point to itself
+(something that is not impossible but that has various disadvantages in
+practice).
+
+   <p>We often identify functions with the symbols used to name them.  For
+example, we often speak of &ldquo;the function <code>car</code>,&rdquo; not
+distinguishing between the symbol <code>car</code> and the primitive
+subr-object that is its function definition.  For most purposes, the
+distinction is not important.
+
+   <p>Even so, keep in mind that a function need not have a unique name.  While
+a given function object <em>usually</em> appears in the function cell of only
+one symbol, this is just a matter of convenience.  It is easy to store
+it in several symbols using <code>fset</code>; then each of the symbols is
+equally well a name for the same function.
+
+   <p>A symbol used as a function name may also be used as a variable; these
+two uses of a symbol are independent and do not conflict.  (Some Lisp
+dialects, such as Scheme, do not distinguish between a symbol's value
+and its function definition; a symbol's value as a variable is also its
+function definition.)  If you have not given a symbol a function
+definition, you cannot use it as a function; whether the symbol has a
+value as a variable makes no difference to this.
+
+   </body></html>
+

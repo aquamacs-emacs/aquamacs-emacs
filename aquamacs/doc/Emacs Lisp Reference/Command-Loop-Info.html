@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+<title>Command Loop Info - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="prev" href="Interactive-Call.html#Interactive-Call" title="Interactive Call">
+<link rel="next" href="Adjusting-Point.html#Adjusting-Point" title="Adjusting Point">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Command-Loop-Info"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interactive-Call.html#Interactive-Call">Interactive Call</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">21.4 Information from the Command Loop</h3>
+
+<p>The editor command loop sets several Lisp variables to keep status
+records for itself and for commands that are run.
+
+<div class="defun">
+&mdash; Variable: <b>last-command</b><var><a name="index-last_002dcommand-1200"></a></var><br>
+<blockquote><p>This variable records the name of the previous command executed by the
+command loop (the one before the current command).  Normally the value
+is a symbol with a function definition, but this is not guaranteed.
+
+        <p>The value is copied from <code>this-command</code> when a command returns to
+the command loop, except when the command has specified a prefix
+argument for the following command.
+
+        <p>This variable is always local to the current terminal and cannot be
+buffer-local.  See <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>real-last-command</b><var><a name="index-real_002dlast_002dcommand-1201"></a></var><br>
+<blockquote><p>This variable is set up by Emacs just like <code>last-command</code>,
+but never altered by Lisp programs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>this-command</b><var><a name="index-this_002dcommand-1202"></a></var><br>
+<blockquote><p><a name="index-current-command-1203"></a>This variable records the name of the command now being executed by
+the editor command loop.  Like <code>last-command</code>, it is normally a symbol
+with a function definition.
+
+        <p>The command loop sets this variable just before running a command, and
+copies its value into <code>last-command</code> when the command finishes
+(unless the command specified a prefix argument for the following
+command).
+
+        <p><a name="index-kill-command-repetition-1204"></a>Some commands set this variable during their execution, as a flag for
+whatever command runs next.  In particular, the functions for killing text
+set <code>this-command</code> to <code>kill-region</code> so that any kill commands
+immediately following will know to append the killed text to the
+previous kill. 
+</p></blockquote></div>
+
+   <p>If you do not want a particular command to be recognized as the previous
+command in the case where it got an error, you must code that command to
+prevent this.  One way is to set <code>this-command</code> to <code>t</code> at the
+beginning of the command, and set <code>this-command</code> back to its proper
+value at the end, like this:
+
+<pre class="example">     (defun foo (args...)
+       (interactive ...)
+       (let ((old-this-command this-command))
+         (setq this-command t)
+         <span class="roman">...do the work...</span>
+         (setq this-command old-this-command)))
+</pre>
+   <p class="noindent">We do not bind <code>this-command</code> with <code>let</code> because that would
+restore the old value in case of error&mdash;a feature of <code>let</code> which
+in this case does precisely what we want to avoid.
+
+<div class="defun">
+&mdash; Variable: <b>this-original-command</b><var><a name="index-this_002doriginal_002dcommand-1205"></a></var><br>
+<blockquote><p>This has the same value as <code>this-command</code> except when command
+remapping occurs (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  In that case,
+<code>this-command</code> gives the command actually run (the result of
+remapping), and <code>this-original-command</code> gives the command that
+was specified to run but remapped into another command. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>this-command-keys</b><var><a name="index-this_002dcommand_002dkeys-1206"></a></var><br>
+<blockquote><p>This function returns a string or vector containing the key sequence
+that invoked the present command, plus any previous commands that
+generated the prefix argument for this command.  Any events read by the
+command using <code>read-event</code> without a timeout get tacked on to the end.
+
+        <p>However, if the command has called <code>read-key-sequence</code>, it
+returns the last read key sequence.  See <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>.  The
+value is a string if all events in the sequence were characters that
+fit in a string.  See <a href="Input-Events.html#Input-Events">Input Events</a>.
+
+     <pre class="example">          (this-command-keys)
+          ;; <span class="roman">Now use </span><kbd>C-u C-x C-e</kbd><span class="roman"> to evaluate that.</span>
+               =&gt; "^U^X^E"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>this-command-keys-vector</b><var><a name="index-this_002dcommand_002dkeys_002dvector-1207"></a></var><br>
+<blockquote><p><a name="Definition-of-this_002dcommand_002dkeys_002dvector"></a>
+Like <code>this-command-keys</code>, except that it always returns the events
+in a vector, so you don't need to deal with the complexities of storing
+input events in a string (see <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>clear-this-command-keys</b><var> &amp;optional keep-record<a name="index-clear_002dthis_002dcommand_002dkeys-1208"></a></var><br>
+<blockquote><p>This function empties out the table of events for
+<code>this-command-keys</code> to return.  Unless <var>keep-record</var> is
+non-<code>nil</code>, it also empties the records that the function
+<code>recent-keys</code> (see <a href="Recording-Input.html#Recording-Input">Recording Input</a>) will subsequently return. 
+This is useful after reading a password, to prevent the password from
+echoing inadvertently as part of the next command in certain cases. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>last-nonmenu-event</b><var><a name="index-last_002dnonmenu_002devent-1209"></a></var><br>
+<blockquote><p>This variable holds the last input event read as part of a key sequence,
+not counting events resulting from mouse menus.
+
+        <p>One use of this variable is for telling <code>x-popup-menu</code> where to pop
+up a menu.  It is also used internally by <code>y-or-n-p</code>
+(see <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>last-command-event</b><var><a name="index-last_002dcommand_002devent-1210"></a></var><br>
+&mdash; Variable: <b>last-command-char</b><var><a name="index-last_002dcommand_002dchar-1211"></a></var><br>
+<blockquote><p>This variable is set to the last input event that was read by the
+command loop as part of a command.  The principal use of this variable
+is in <code>self-insert-command</code>, which uses it to decide which
+character to insert.
+
+     <pre class="example">          last-command-event
+          ;; <span class="roman">Now use </span><kbd>C-u C-x C-e</kbd><span class="roman"> to evaluate that.</span>
+               =&gt; 5
+     </pre>
+        <p class="noindent">The value is 5 because that is the <acronym>ASCII</acronym> code for <kbd>C-e</kbd>.
+
+        <p>The alias <code>last-command-char</code> exists for compatibility with
+Emacs version 18. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Variable: <b>last-event-frame</b><var><a name="index-last_002devent_002dframe-1212"></a></var><br>
+<blockquote><p>This variable records which frame the last input event was directed to. 
+Usually this is the frame that was selected when the event was
+generated, but if that frame has redirected input focus to another
+frame, the value is the frame to which the event was redirected. 
+See <a href="Input-Focus.html#Input-Focus">Input Focus</a>.
+
+        <p>If the last event came from a keyboard macro, the value is <code>macro</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

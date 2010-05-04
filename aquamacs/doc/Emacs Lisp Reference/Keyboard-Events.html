@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Keyboard Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="next" href="Function-Keys.html#Function-Keys" title="Function Keys">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Keyboard-Events"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Keys.html#Function-Keys">Function Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.6.1 Keyboard Events</h4>
+
+<p><a name="index-keyboard-events-1222"></a>
+There are two kinds of input you can get from the keyboard: ordinary
+keys, and function keys.  Ordinary keys correspond to characters; the
+events they generate are represented in Lisp as characters.  The event
+type of a character event is the character itself (an integer); see
+<a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>.
+
+   <p><a name="index-modifier-bits-_0028of-input-character_0029-1223"></a><a name="index-basic-code-_0028of-input-character_0029-1224"></a>An input character event consists of a <dfn>basic code</dfn> between 0 and
+524287, plus any or all of these <dfn>modifier bits</dfn>:
+
+     <dl>
+<dt>meta<dd>The
+2**27
+bit in the character code indicates a character
+typed with the meta key held down.
+
+     <br><dt>control<dd>The
+2**26
+bit in the character code indicates a non-<acronym>ASCII</acronym>
+control character.
+
+     <p><span class="sc">ascii</span> control characters such as <kbd>C-a</kbd> have special basic
+codes of their own, so Emacs needs no special bit to indicate them. 
+Thus, the code for <kbd>C-a</kbd> is just 1.
+
+     <p>But if you type a control combination not in <acronym>ASCII</acronym>, such as
+<kbd>%</kbd> with the control key, the numeric value you get is the code
+for <kbd>%</kbd> plus
+2**26
+(assuming the terminal supports non-<acronym>ASCII</acronym>
+control characters).
+
+     <br><dt>shift<dd>The
+2**25
+bit in the character code indicates an <acronym>ASCII</acronym> control
+character typed with the shift key held down.
+
+     <p>For letters, the basic code itself indicates upper versus lower case;
+for digits and punctuation, the shift key selects an entirely different
+character with a different basic code.  In order to keep within the
+<acronym>ASCII</acronym> character set whenever possible, Emacs avoids using the
+2**25
+bit for those characters.
+
+     <p>However, <acronym>ASCII</acronym> provides no way to distinguish <kbd>C-A</kbd> from
+<kbd>C-a</kbd>, so Emacs uses the
+2**25
+bit in <kbd>C-A</kbd> and not in
+<kbd>C-a</kbd>.
+
+     <br><dt>hyper<dd>The
+2**24
+bit in the character code indicates a character
+typed with the hyper key held down.
+
+     <br><dt>super<dd>The
+2**23
+bit in the character code indicates a character
+typed with the super key held down.
+
+     <br><dt>alt<dd>The
+2**22
+bit in the character code indicates a character typed with
+the alt key held down.  (On some terminals, the key labeled &lt;ALT&gt;
+is actually the meta key.) 
+</dl>
+
+   <p>It is best to avoid mentioning specific bit numbers in your program. 
+To test the modifier bits of a character, use the function
+<code>event-modifiers</code> (see <a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>).  When making key
+bindings, you can use the read syntax for characters with modifier bits
+(`<samp><span class="samp">\C-</span></samp>', `<samp><span class="samp">\M-</span></samp>', and so on).  For making key bindings with
+<code>define-key</code>, you can use lists such as <code>(control hyper ?x)</code> to
+specify the characters (see <a href="Changing-Key-Bindings.html#Changing-Key-Bindings">Changing Key Bindings</a>).  The function
+<code>event-convert-list</code> converts such a list into an event type
+(see <a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>).
+
+   </body></html>
+

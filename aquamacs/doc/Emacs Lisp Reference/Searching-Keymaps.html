@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Searching Keymaps - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Active-Keymaps.html#Active-Keymaps" title="Active Keymaps">
+<link rel="next" href="Controlling-Active-Maps.html#Controlling-Active-Maps" title="Controlling Active Maps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Searching-Keymaps"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling Active Maps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.8 Searching the Active Keymaps</h3>
+
+<p><a name="index-searching-active-keymaps-for-keys-1432"></a>
+  After translation of event subsequences (see <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>) Emacs looks for them in the active keymaps.  Here is a
+pseudo-Lisp description of the order and conditions for searching
+them:
+
+<pre class="lisp">     (or (if overriding-terminal-local-map
+             (<var>find-in</var> overriding-terminal-local-map)
+           (if overriding-local-map
+               (<var>find-in</var> overriding-local-map)
+             (or (<var>find-in</var> (get-char-property (point) 'keymap))
+                 (<var>find-in-any</var> emulation-mode-map-alists)
+                 (<var>find-in-any</var> minor-mode-overriding-map-alist)
+                 (<var>find-in-any</var> minor-mode-map-alist)
+                 (if (get-text-property (point) 'local-map)
+                     (<var>find-in</var> (get-char-property (point) 'local-map))
+                   (<var>find-in</var> (current-local-map))))))
+         (<var>find-in</var> (current-global-map)))
+</pre>
+   <p class="noindent">The <var>find-in</var> and <var>find-in-any</var> are pseudo functions that
+search in one keymap and in an alist of keymaps, respectively. 
+(Searching a single keymap for a binding is called <dfn>key lookup</dfn>;
+see <a href="Key-Lookup.html#Key-Lookup">Key Lookup</a>.)  If the key sequence starts with a mouse event,
+or a symbolic prefix event followed by a mouse event, that event's
+position is used instead of point and the current buffer.  Mouse
+events on an embedded string use non-<code>nil</code> text properties from
+that string instead of the buffer.
+
+     <ol type=1 start=1>
+<li>The function finally found may be remapped
+(see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).
+
+     <li>Characters that are bound to <code>self-insert-command</code> are translated
+according to <code>translation-table-for-input</code> before insertion.
+
+     <li><code>current-active-maps</code> returns a list of the
+currently active keymaps at point.
+
+     <li>When a match is found (see <a href="Key-Lookup.html#Key-Lookup">Key Lookup</a>), if the binding in the
+keymap is a function, the search is over.  However if the keymap entry
+is a symbol with a value or a string, Emacs replaces the input key
+sequences with the variable's value or the string, and restarts the
+search of the active keymaps.
+        </ol>
+
+   </body></html>
+

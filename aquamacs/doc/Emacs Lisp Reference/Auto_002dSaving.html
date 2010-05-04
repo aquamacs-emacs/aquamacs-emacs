@@ -1,0 +1,294 @@
+<html lang="en">
+<head>
+<title>Auto-Saving - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" title="Backups and Auto-Saving">
+<link rel="prev" href="Backup-Files.html#Backup-Files" title="Backup Files">
+<link rel="next" href="Reverting.html#Reverting" title="Reverting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Auto-Saving"></a>
+<a name="Auto_002dSaving"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reverting.html#Reverting">Reverting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Backup-Files.html#Backup-Files">Backup Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>
+<hr>
+</div>
+
+<h3 class="section">26.2 Auto-Saving</h3>
+
+<!-- @cindex auto-saving   Lots of symbols starting with auto-save here. -->
+<p>Emacs periodically saves all files that you are visiting; this is
+called <dfn>auto-saving</dfn>.  Auto-saving prevents you from losing more
+than a limited amount of work if the system crashes.  By default,
+auto-saves happen every 300 keystrokes, or after around 30 seconds of
+idle time.  See <a href="../emacs/Auto-Save.html#Auto-Save">Auto Save</a>, for information on auto-save
+for users.  Here we describe the functions used to implement auto-saving
+and the variables that control them.
+
+<div class="defun">
+&mdash; Variable: <b>buffer-auto-save-file-name</b><var><a name="index-buffer_002dauto_002dsave_002dfile_002dname-1869"></a></var><br>
+<blockquote><p>This buffer-local variable is the name of the file used for
+auto-saving the current buffer.  It is <code>nil</code> if the buffer
+should not be auto-saved.
+
+     <pre class="example">          buffer-auto-save-file-name
+               =&gt; "/xcssun/users/rms/lewis/#backups.texi#"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>auto-save-mode</b><var> arg<a name="index-auto_002dsave_002dmode-1870"></a></var><br>
+<blockquote><p>When used interactively without an argument, this command is a toggle
+switch: it turns on auto-saving of the current buffer if it is off, and
+vice versa.  With an argument <var>arg</var>, the command turns auto-saving
+on if the value of <var>arg</var> is <code>t</code>, a nonempty list, or a positive
+integer.  Otherwise, it turns auto-saving off. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>auto-save-file-name-p</b><var> filename<a name="index-auto_002dsave_002dfile_002dname_002dp-1871"></a></var><br>
+<blockquote><p>This function returns a non-<code>nil</code> value if <var>filename</var> is a
+string that could be the name of an auto-save file.  It assumes
+the usual naming convention for auto-save files: a name that
+begins and ends with hash marks (`<samp><span class="samp">#</span></samp>') is a possible auto-save file
+name.  The argument <var>filename</var> should not contain a directory part.
+
+     <pre class="example">          (make-auto-save-file-name)
+               =&gt; "/xcssun/users/rms/lewis/#backups.texi#"
+          (auto-save-file-name-p "#backups.texi#")
+               =&gt; 0
+          (auto-save-file-name-p "backups.texi")
+               =&gt; nil
+     </pre>
+        <p>The standard definition of this function is as follows:
+
+     <pre class="example">          (defun auto-save-file-name-p (filename)
+            "Return non-nil if FILENAME can be yielded by..."
+            (string-match "^#.*#$" filename))
+     </pre>
+        <p>This function exists so that you can customize it if you wish to
+change the naming convention for auto-save files.  If you redefine it,
+be sure to redefine the function <code>make-auto-save-file-name</code>
+correspondingly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-auto-save-file-name</b><var><a name="index-make_002dauto_002dsave_002dfile_002dname-1872"></a></var><br>
+<blockquote><p>This function returns the file name to use for auto-saving the current
+buffer.  This is just the file name with hash marks (`<samp><span class="samp">#</span></samp>') prepended
+and appended to it.  This function does not look at the variable
+<code>auto-save-visited-file-name</code> (described below); callers of this
+function should check that variable first.
+
+     <pre class="example">          (make-auto-save-file-name)
+               =&gt; "/xcssun/users/rms/lewis/#backups.texi#"
+     </pre>
+        <p>Here is a simplified version of the standard definition of this
+function:
+
+     <pre class="example">          (defun make-auto-save-file-name ()
+            "Return file name to use for auto-saves \
+          of current buffer.."
+            (if buffer-file-name
+                (concat
+                 (file-name-directory buffer-file-name)
+                 "#"
+                 (file-name-nondirectory buffer-file-name)
+                 "#")
+              (expand-file-name
+               (concat "#%" (buffer-name) "#"))))
+     </pre>
+        <p>This exists as a separate function so that you can redefine it to
+customize the naming convention for auto-save files.  Be sure to
+change <code>auto-save-file-name-p</code> in a corresponding way. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>auto-save-visited-file-name</b><var><a name="index-auto_002dsave_002dvisited_002dfile_002dname-1873"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, Emacs auto-saves buffers in
+the files they are visiting.  That is, the auto-save is done in the same
+file that you are editing.  Normally, this variable is <code>nil</code>, so
+auto-save files have distinct names that are created by
+<code>make-auto-save-file-name</code>.
+
+        <p>When you change the value of this variable, the new value does not take
+effect in an existing buffer until the next time auto-save mode is
+reenabled in it.  If auto-save mode is already enabled, auto-saves
+continue to go in the same file name until <code>auto-save-mode</code> is
+called again. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>recent-auto-save-p</b><var><a name="index-recent_002dauto_002dsave_002dp-1874"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the current buffer has been
+auto-saved since the last time it was read in or saved. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-buffer-auto-saved</b><var><a name="index-set_002dbuffer_002dauto_002dsaved-1875"></a></var><br>
+<blockquote><p>This function marks the current buffer as auto-saved.  The buffer will
+not be auto-saved again until the buffer text is changed again.  The
+function returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>auto-save-interval</b><var><a name="index-auto_002dsave_002dinterval-1876"></a></var><br>
+<blockquote><p>The value of this variable specifies how often to do auto-saving, in
+terms of number of input events.  Each time this many additional input
+events are read, Emacs does auto-saving for all buffers in which that is
+enabled.  Setting this to zero disables autosaving based on the
+number of characters typed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>auto-save-timeout</b><var><a name="index-auto_002dsave_002dtimeout-1877"></a></var><br>
+<blockquote><p>The value of this variable is the number of seconds of idle time that
+should cause auto-saving.  Each time the user pauses for this long,
+Emacs does auto-saving for all buffers in which that is enabled.  (If
+the current buffer is large, the specified timeout is multiplied by a
+factor that increases as the size increases; for a million-byte
+buffer, the factor is almost 4.)
+
+        <p>If the value is zero or <code>nil</code>, then auto-saving is not done as a
+result of idleness, only after a certain number of input events as
+specified by <code>auto-save-interval</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-save-hook</b><var><a name="index-auto_002dsave_002dhook-1878"></a></var><br>
+<blockquote><p>This normal hook is run whenever an auto-save is about to happen. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>auto-save-default</b><var><a name="index-auto_002dsave_002ddefault-1879"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, buffers that are visiting files
+have auto-saving enabled by default.  Otherwise, they do not. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>do-auto-save</b><var> &amp;optional no-message current-only<a name="index-do_002dauto_002dsave-1880"></a></var><br>
+<blockquote><p>This function auto-saves all buffers that need to be auto-saved.  It
+saves all buffers for which auto-saving is enabled and that have been
+changed since the previous auto-save.
+
+        <p>If any buffers are auto-saved, <code>do-auto-save</code> normally displays a
+message saying `<samp><span class="samp">Auto-saving...</span></samp>' in the echo area while
+auto-saving is going on.  However, if <var>no-message</var> is
+non-<code>nil</code>, the message is inhibited.
+
+        <p>If <var>current-only</var> is non-<code>nil</code>, only the current buffer
+is auto-saved. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-auto-save-file-if-necessary</b><var> &amp;optional force<a name="index-delete_002dauto_002dsave_002dfile_002dif_002dnecessary-1881"></a></var><br>
+<blockquote><p>This function deletes the current buffer's auto-save file if
+<code>delete-auto-save-files</code> is non-<code>nil</code>.  It is called every
+time a buffer is saved.
+
+        <p>Unless <var>force</var> is non-<code>nil</code>, this function only deletes the
+file if it was written by the current Emacs session since the last
+true save. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>delete-auto-save-files</b><var><a name="index-delete_002dauto_002dsave_002dfiles-1882"></a></var><br>
+<blockquote><p>This variable is used by the function
+<code>delete-auto-save-file-if-necessary</code>.  If it is non-<code>nil</code>,
+Emacs deletes auto-save files when a true save is done (in the visited
+file).  This saves disk space and unclutters your directory. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>rename-auto-save-file</b><var><a name="index-rename_002dauto_002dsave_002dfile-1883"></a></var><br>
+<blockquote><p>This function adjusts the current buffer's auto-save file name if the
+visited file name has changed.  It also renames an existing auto-save
+file, if it was made in the current Emacs session.  If the visited
+file name has not changed, this function does nothing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-saved-size</b><var><a name="index-buffer_002dsaved_002dsize-1884"></a></var><br>
+<blockquote><p>The value of this buffer-local variable is the length of the current
+buffer, when it was last read in, saved, or auto-saved.  This is
+used to detect a substantial decrease in size, and turn off auto-saving
+in response.
+
+        <p>If it is &minus;1, that means auto-saving is temporarily shut off in
+this buffer due to a substantial decrease in size.  Explicitly saving
+the buffer stores a positive value in this variable, thus reenabling
+auto-saving.  Turning auto-save mode off or on also updates this
+variable, so that the substantial decrease in size is forgotten. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-save-list-file-name</b><var><a name="index-auto_002dsave_002dlist_002dfile_002dname-1885"></a></var><br>
+<blockquote><p>This variable (if non-<code>nil</code>) specifies a file for recording the
+names of all the auto-save files.  Each time Emacs does auto-saving, it
+writes two lines into this file for each buffer that has auto-saving
+enabled.  The first line gives the name of the visited file (it's empty
+if the buffer has none), and the second gives the name of the auto-save
+file.
+
+        <p>When Emacs exits normally, it deletes this file; if Emacs crashes, you
+can look in the file to find all the auto-save files that might contain
+work that was otherwise lost.  The <code>recover-session</code> command uses
+this file to find them.
+
+        <p>The default name for this file specifies your home directory and starts
+with `<samp><span class="samp">.saves-</span></samp>'.  It also contains the Emacs process <acronym>ID</acronym> and the
+host name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-save-list-file-prefix</b><var><a name="index-auto_002dsave_002dlist_002dfile_002dprefix-1886"></a></var><br>
+<blockquote><p>After Emacs reads your init file, it initializes
+<code>auto-save-list-file-name</code> (if you have not already set it
+non-<code>nil</code>) based on this prefix, adding the host name and process
+ID.  If you set this to <code>nil</code> in your init file, then Emacs does
+not initialize <code>auto-save-list-file-name</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

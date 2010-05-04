@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Meta-Char Syntax - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Character-Type.html#Character-Type" title="Character Type">
+<link rel="prev" href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" title="Ctl-Char Syntax">
+<link rel="next" href="Other-Char-Bits.html#Other-Char-Bits" title="Other Char Bits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Meta-Char-Syntax"></a>
+<a name="Meta_002dChar-Syntax"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Char-Bits.html#Other-Char-Bits">Other Char Bits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax">Ctl-Char Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Character-Type.html#Character-Type">Character Type</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.3.3.4 Meta-Character Syntax</h5>
+
+<p><a name="index-meta-characters-80"></a>  A <dfn>meta character</dfn> is a character typed with the &lt;META&gt;
+modifier key.  The integer that represents such a character has the
+2**27
+bit set.  We use high bits for this and other modifiers to make
+possible a wide range of basic character codes.
+
+   <p>In a string, the
+2**7
+bit attached to an <acronym>ASCII</acronym> character indicates a meta
+character; thus, the meta characters that can fit in a string have
+codes in the range from 128 to 255, and are the meta versions of the
+ordinary <acronym>ASCII</acronym> characters.  (In Emacs versions 18 and older,
+this convention was used for characters outside of strings as well.)
+
+   <p>The read syntax for meta characters uses `<samp><span class="samp">\M-</span></samp>'.  For example,
+`<samp><span class="samp">?\M-A</span></samp>' stands for <kbd>M-A</kbd>.  You can use `<samp><span class="samp">\M-</span></samp>' together with
+octal character codes (see below), with `<samp><span class="samp">\C-</span></samp>', or with any other
+syntax for a character.  Thus, you can write <kbd>M-A</kbd> as `<samp><span class="samp">?\M-A</span></samp>',
+or as `<samp><span class="samp">?\M-\101</span></samp>'.  Likewise, you can write <kbd>C-M-b</kbd> as
+`<samp><span class="samp">?\M-\C-b</span></samp>', `<samp><span class="samp">?\C-\M-b</span></samp>', or `<samp><span class="samp">?\M-\002</span></samp>'.
+
+   </body></html>
+

@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Sequencing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structures.html#Control-Structures" title="Control Structures">
+<link rel="next" href="Conditionals.html#Conditionals" title="Conditionals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Sequencing"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conditionals.html#Conditionals">Conditionals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structures">Control Structures</a>
+<hr>
+</div>
+
+<h3 class="section">10.1 Sequencing</h3>
+
+<p>Evaluating forms in the order they appear is the most common way
+control passes from one form to another.  In some contexts, such as in a
+function body, this happens automatically.  Elsewhere you must use a
+control structure construct to do this: <code>progn</code>, the simplest
+control construct of Lisp.
+
+   <p>A <code>progn</code> special form looks like this:
+
+<pre class="example">     (progn <var>a</var> <var>b</var> <var>c</var> ...)
+</pre>
+   <p class="noindent">and it says to execute the forms <var>a</var>, <var>b</var>, <var>c</var>, and so on, in
+that order.  These forms are called the <dfn>body</dfn> of the <code>progn</code> form. 
+The value of the last form in the body becomes the value of the entire
+<code>progn</code>.  <code>(progn)</code> returns <code>nil</code>.
+
+   <p><a name="index-implicit-_0040code_007bprogn_007d-520"></a>  In the early days of Lisp, <code>progn</code> was the only way to execute
+two or more forms in succession and use the value of the last of them. 
+But programmers found they often needed to use a <code>progn</code> in the
+body of a function, where (at that time) only one form was allowed.  So
+the body of a function was made into an &ldquo;implicit <code>progn</code>&rdquo;:
+several forms are allowed just as in the body of an actual <code>progn</code>. 
+Many other control structures likewise contain an implicit <code>progn</code>. 
+As a result, <code>progn</code> is not used as much as it was many years ago. 
+It is needed now most often inside an <code>unwind-protect</code>, <code>and</code>,
+<code>or</code>, or in the <var>then</var>-part of an <code>if</code>.
+
+<div class="defun">
+&mdash; Special Form: <b>progn</b><var> forms<small class="dots">...</small><a name="index-progn-521"></a></var><br>
+<blockquote><p>This special form evaluates all of the <var>forms</var>, in textual
+order, returning the result of the final form.
+
+     <pre class="example">          (progn (print "The first form")
+                 (print "The second form")
+                 (print "The third form"))
+               -| "The first form"
+               -| "The second form"
+               -| "The third form"
+          =&gt; "The third form"
+     </pre>
+        </blockquote></div>
+
+   <p>Two other control constructs likewise evaluate a series of forms but return
+a different value:
+
+<div class="defun">
+&mdash; Special Form: <b>prog1</b><var> form1 forms<small class="dots">...</small><a name="index-prog1-522"></a></var><br>
+<blockquote><p>This special form evaluates <var>form1</var> and all of the <var>forms</var>, in
+textual order, returning the result of <var>form1</var>.
+
+     <pre class="example">          (prog1 (print "The first form")
+                 (print "The second form")
+                 (print "The third form"))
+               -| "The first form"
+               -| "The second form"
+               -| "The third form"
+          =&gt; "The first form"
+     </pre>
+        <p>Here is a way to remove the first element from a list in the variable
+<code>x</code>, then return the value of that former element:
+
+     <pre class="example">          (prog1 (car x) (setq x (cdr x)))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>prog2</b><var> form1 form2 forms<small class="dots">...</small><a name="index-prog2-523"></a></var><br>
+<blockquote><p>This special form evaluates <var>form1</var>, <var>form2</var>, and all of the
+following <var>forms</var>, in textual order, returning the result of
+<var>form2</var>.
+
+     <pre class="example">          (prog2 (print "The first form")
+                 (print "The second form")
+                 (print "The third form"))
+               -| "The first form"
+               -| "The second form"
+               -| "The third form"
+          =&gt; "The second form"
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

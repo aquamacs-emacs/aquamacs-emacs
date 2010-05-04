@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+<title>Text Lines - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Motion.html#Motion" title="Motion">
+<link rel="prev" href="Buffer-End-Motion.html#Buffer-End-Motion" title="Buffer End Motion">
+<link rel="next" href="Screen-Lines.html#Screen-Lines" title="Screen Lines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Text-Lines"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Screen-Lines.html#Screen-Lines">Screen Lines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-End-Motion.html#Buffer-End-Motion">Buffer End Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.2.4 Motion by Text Lines</h4>
+
+<p><a name="index-lines-2306"></a>
+  Text lines are portions of the buffer delimited by newline characters,
+which are regarded as part of the previous line.  The first text line
+begins at the beginning of the buffer, and the last text line ends at
+the end of the buffer whether or not the last character is a newline. 
+The division of the buffer into text lines is not affected by the width
+of the window, by line continuation in display, or by how tabs and
+control characters are displayed.
+
+<div class="defun">
+&mdash; Command: <b>goto-line</b><var> line<a name="index-goto_002dline-2307"></a></var><br>
+<blockquote><p>This function moves point to the front of the <var>line</var>th line,
+counting from line 1 at beginning of the buffer.  If <var>line</var> is less
+than 1, it moves point to the beginning of the buffer.  If <var>line</var> is
+greater than the number of lines in the buffer, it moves point to the
+end of the buffer&mdash;that is, the <em>end of the last line</em> of the
+buffer.  This is the only case in which <code>goto-line</code> does not
+necessarily move to the beginning of a line.
+
+        <p>If narrowing is in effect, then <var>line</var> still counts from the
+beginning of the buffer, but point cannot go outside the accessible
+portion.  So <code>goto-line</code> moves point to the beginning or end of the
+accessible portion, if the line number specifies an inaccessible
+position.
+
+        <p>The return value of <code>goto-line</code> is the difference between
+<var>line</var> and the line number of the line to which point actually was
+able to move (in the full buffer, before taking account of narrowing). 
+Thus, the value is positive if the scan encounters the real end of the
+buffer before finding the specified line.  The value is zero if scan
+encounters the end of the accessible portion but not the real end of the
+buffer.
+
+        <p>In an interactive call, <var>line</var> is the numeric prefix argument if
+one has been provided.  Otherwise <var>line</var> is read in the minibuffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>beginning-of-line</b><var> &amp;optional count<a name="index-beginning_002dof_002dline-2308"></a></var><br>
+<blockquote><p>This function moves point to the beginning of the current line.  With an
+argument <var>count</var> not <code>nil</code> or 1, it moves forward
+<var>count</var>&minus;1 lines and then to the beginning of the line.
+
+        <p>This function does not move point across a field boundary
+(see <a href="Fields.html#Fields">Fields</a>) unless doing so would move beyond there to a
+different line; therefore, if <var>count</var> is <code>nil</code> or 1, and
+point starts at a field boundary, point does not move.  To ignore
+field boundaries, either bind <code>inhibit-field-text-motion</code> to
+<code>t</code>, or use the <code>forward-line</code> function instead.  For
+instance, <code>(forward-line 0)</code> does the same thing as
+<code>(beginning-of-line)</code>, except that it ignores field boundaries.
+
+        <p>If this function reaches the end of the buffer (or of the accessible
+portion, if narrowing is in effect), it positions point there.  No error
+is signaled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>line-beginning-position</b><var> &amp;optional count<a name="index-line_002dbeginning_002dposition-2309"></a></var><br>
+<blockquote><p>Return the position that <code>(beginning-of-line </code><var>count</var><code>)</code>
+would move to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>end-of-line</b><var> &amp;optional count<a name="index-end_002dof_002dline-2310"></a></var><br>
+<blockquote><p>This function moves point to the end of the current line.  With an
+argument <var>count</var> not <code>nil</code> or 1, it moves forward
+<var>count</var>&minus;1 lines and then to the end of the line.
+
+        <p>This function does not move point across a field boundary
+(see <a href="Fields.html#Fields">Fields</a>) unless doing so would move beyond there to a
+different line; therefore, if <var>count</var> is <code>nil</code> or 1, and
+point starts at a field boundary, point does not move.  To ignore
+field boundaries, bind <code>inhibit-field-text-motion</code> to <code>t</code>.
+
+        <p>If this function reaches the end of the buffer (or of the accessible
+portion, if narrowing is in effect), it positions point there.  No error
+is signaled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>line-end-position</b><var> &amp;optional count<a name="index-line_002dend_002dposition-2311"></a></var><br>
+<blockquote><p>Return the position that <code>(end-of-line </code><var>count</var><code>)</code>
+would move to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>forward-line</b><var> &amp;optional count<a name="index-forward_002dline-2312"></a></var><br>
+<blockquote><p><a name="index-beginning-of-line-2313"></a>This function moves point forward <var>count</var> lines, to the beginning of
+the line.  If <var>count</var> is negative, it moves point
+&minus;<var>count</var> lines backward, to the beginning of a line.  If
+<var>count</var> is zero, it moves point to the beginning of the current
+line.  If <var>count</var> is <code>nil</code>, that means 1.
+
+        <p>If <code>forward-line</code> encounters the beginning or end of the buffer (or
+of the accessible portion) before finding that many lines, it sets point
+there.  No error is signaled.
+
+        <p><code>forward-line</code> returns the difference between <var>count</var> and the
+number of lines actually moved.  If you attempt to move down five lines
+from the beginning of a buffer that has only three lines, point stops at
+the end of the last line, and the value will be 2.
+
+        <p>In an interactive call, <var>count</var> is the numeric prefix argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>count-lines</b><var> start end<a name="index-count_002dlines-2314"></a></var><br>
+<blockquote><p><a name="index-lines-in-region-2315"></a><a name="Definition-of-count_002dlines"></a>
+This function returns the number of lines between the positions
+<var>start</var> and <var>end</var> in the current buffer.  If <var>start</var> and
+<var>end</var> are equal, then it returns 0.  Otherwise it returns at least
+1, even if <var>start</var> and <var>end</var> are on the same line.  This is
+because the text between them, considered in isolation, must contain at
+least one line unless it is empty.
+
+        <p>Here is an example of using <code>count-lines</code>:
+
+     <pre class="example">          (defun current-line ()
+            "Return the vertical position of point..."
+            (+ (count-lines (window-start) (point))
+               (if (= (current-column) 0) 1 0)))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>line-number-at-pos</b><var> &amp;optional pos<a name="index-line_002dnumber_002dat_002dpos-2316"></a></var><br>
+<blockquote><p><a name="index-line-number-2317"></a>This function returns the line number in the current buffer
+corresponding to the buffer position <var>pos</var>.  If <var>pos</var> is <code>nil</code>
+or omitted, the current buffer position is used. 
+</p></blockquote></div>
+
+   <p>Also see the functions <code>bolp</code> and <code>eolp</code> in <a href="Near-Point.html#Near-Point">Near Point</a>. 
+These functions do not move point, but test whether it is already at the
+beginning or end of a line.
+
+   </body></html>
+

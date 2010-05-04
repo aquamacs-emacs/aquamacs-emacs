@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Faces for Font Lock - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="prev" href="Precalculated-Fontification.html#Precalculated-Fontification" title="Precalculated Fontification">
+<link rel="next" href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" title="Syntactic Font Lock">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Faces-for-Font-Lock"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Precalculated-Fontification.html#Precalculated-Fontification">Precalculated Fontification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.6.7 Faces for Font Lock</h4>
+
+<p><a name="index-faces-for-font-lock-1620"></a><a name="index-font-lock-faces-1621"></a>
+  You can make Font Lock mode use any face, but several faces are
+defined specifically for Font Lock mode.  Each of these symbols is both
+a face name, and a variable whose default value is the symbol itself. 
+Thus, the default value of <code>font-lock-comment-face</code> is
+<code>font-lock-comment-face</code>.  This means you can write
+<code>font-lock-comment-face</code> in a context such as
+<code>font-lock-keywords</code> where a face-name-valued expression is used.
+
+     <dl>
+<dt><code>font-lock-comment-face</code><dd><a name="index-font_002dlock_002dcomment_002dface-1622"></a>Used (typically) for comments.
+
+     <br><dt><code>font-lock-comment-delimiter-face</code><dd><a name="index-font_002dlock_002dcomment_002ddelimiter_002dface-1623"></a>Used (typically) for comments delimiters.
+
+     <br><dt><code>font-lock-doc-face</code><dd><a name="index-font_002dlock_002ddoc_002dface-1624"></a>Used (typically) for documentation strings in the code.
+
+     <br><dt><code>font-lock-string-face</code><dd><a name="index-font_002dlock_002dstring_002dface-1625"></a>Used (typically) for string constants.
+
+     <br><dt><code>font-lock-keyword-face</code><dd><a name="index-font_002dlock_002dkeyword_002dface-1626"></a>Used (typically) for keywords&mdash;names that have special syntactic
+significance, like <code>for</code> and <code>if</code> in C.
+
+     <br><dt><code>font-lock-builtin-face</code><dd><a name="index-font_002dlock_002dbuiltin_002dface-1627"></a>Used (typically) for built-in function names.
+
+     <br><dt><code>font-lock-function-name-face</code><dd><a name="index-font_002dlock_002dfunction_002dname_002dface-1628"></a>Used (typically) for the name of a function being defined or declared,
+in a function definition or declaration.
+
+     <br><dt><code>font-lock-variable-name-face</code><dd><a name="index-font_002dlock_002dvariable_002dname_002dface-1629"></a>Used (typically) for the name of a variable being defined or declared,
+in a variable definition or declaration.
+
+     <br><dt><code>font-lock-type-face</code><dd><a name="index-font_002dlock_002dtype_002dface-1630"></a>Used (typically) for names of user-defined data types,
+where they are defined and where they are used.
+
+     <br><dt><code>font-lock-constant-face</code><dd><a name="index-font_002dlock_002dconstant_002dface-1631"></a>Used (typically) for constant names.
+
+     <br><dt><code>font-lock-preprocessor-face</code><dd><a name="index-font_002dlock_002dpreprocessor_002dface-1632"></a>Used (typically) for preprocessor commands.
+
+     <br><dt><code>font-lock-negation-char-face</code><dd><a name="index-font_002dlock_002dnegation_002dchar_002dface-1633"></a>Used (typically) for easily-overlooked negation characters.
+
+     <br><dt><code>font-lock-warning-face</code><dd><a name="index-font_002dlock_002dwarning_002dface-1634"></a>Used (typically) for constructs that are peculiar, or that greatly
+change the meaning of other text.  For example, this is used for
+`<samp><span class="samp">;;;###autoload</span></samp>' cookies in Emacs Lisp, and for <code>#error</code>
+directives in C. 
+</dl>
+
+   </body></html>
+

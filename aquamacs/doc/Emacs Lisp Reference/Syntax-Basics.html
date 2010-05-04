@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Syntax Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
+<link rel="next" href="Syntax-Descriptors.html#Syntax-Descriptors" title="Syntax Descriptors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Syntax-Basics"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
+<hr>
+</div>
+
+<h3 class="section">35.1 Syntax Table Concepts</h3>
+
+<p>A <dfn>syntax table</dfn> provides Emacs with the information that
+determines the syntactic use of each character in a buffer.  This
+information is used by the parsing commands, the complex movement
+commands, and others to determine where words, symbols, and other
+syntactic constructs begin and end.  The current syntax table controls
+the meaning of the word motion functions (see <a href="Word-Motion.html#Word-Motion">Word Motion</a>) and the
+list motion functions (see <a href="List-Motion.html#List-Motion">List Motion</a>) as well as the functions in
+this chapter.
+
+<p>A syntax table is a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>).  The element at
+index <var>c</var> describes the character with code <var>c</var>.  The element's
+value should be a list that encodes the syntax of the character in
+question.
+
+   <p>Syntax tables are used only for moving across text, not for the Emacs
+Lisp reader.  Emacs Lisp uses built-in syntactic rules when reading Lisp
+expressions, and these rules cannot be changed.  (Some Lisp systems
+provide ways to redefine the read syntax, but we decided to leave this
+feature out of Emacs Lisp for simplicity.)
+
+   <p>Each buffer has its own major mode, and each major mode has its own
+idea of the syntactic class of various characters.  For example, in Lisp
+mode, the character `<samp><span class="samp">;</span></samp>' begins a comment, but in C mode, it
+terminates a statement.  To support these variations, Emacs makes the
+choice of syntax table local to each buffer.  Typically, each major
+mode has its own syntax table and installs that table in each buffer
+that uses that mode.  Changing this table alters the syntax in all
+those buffers as well as in any buffers subsequently put in that mode. 
+Occasionally several similar modes share one syntax table. 
+See <a href="Example-Major-Modes.html#Example-Major-Modes">Example Major Modes</a>, for an example of how to set up a syntax
+table.
+
+   <p>A syntax table can inherit the data for some characters from the
+standard syntax table, while specifying other characters itself.  The
+&ldquo;inherit&rdquo; syntax class means &ldquo;inherit this character's syntax from
+the standard syntax table.&rdquo;  Just changing the standard syntax for a
+character affects all syntax tables that inherit from it.
+
+<div class="defun">
+&mdash; Function: <b>syntax-table-p</b><var> object<a name="index-syntax_002dtable_002dp-2884"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a syntax table. 
+</p></blockquote></div>
+
+   </body></html>
+

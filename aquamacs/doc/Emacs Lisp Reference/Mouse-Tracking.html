@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Mouse Tracking - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Frame-Configurations.html#Frame-Configurations" title="Frame Configurations">
+<link rel="next" href="Mouse-Position.html#Mouse-Position" title="Mouse Position">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Mouse-Tracking"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Position.html#Mouse-Position">Mouse Position</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.13 Mouse Tracking</h3>
+
+<p><a name="index-mouse-tracking-2210"></a><!-- @cindex tracking the mouse   Duplicates track-mouse -->
+
+   <p>Sometimes it is useful to <dfn>track</dfn> the mouse, which means to display
+something to indicate where the mouse is and move the indicator as the
+mouse moves.  For efficient mouse tracking, you need a way to wait until
+the mouse actually moves.
+
+   <p>The convenient way to track the mouse is to ask for events to represent
+mouse motion.  Then you can wait for motion by waiting for an event.  In
+addition, you can easily handle any other sorts of events that may
+occur.  That is useful, because normally you don't want to track the
+mouse forever&mdash;only until some other event, such as the release of a
+button.
+
+<div class="defun">
+&mdash; Special Form: <b>track-mouse</b><var> body<small class="dots">...</small><a name="index-track_002dmouse-2211"></a></var><br>
+<blockquote><p>This special form executes <var>body</var>, with generation of mouse motion
+events enabled.  Typically <var>body</var> would use <code>read-event</code> to
+read the motion events and modify the display accordingly.  See <a href="Motion-Events.html#Motion-Events">Motion Events</a>, for the format of mouse motion events.
+
+        <p>The value of <code>track-mouse</code> is that of the last form in <var>body</var>. 
+You should design <var>body</var> to return when it sees the up-event that
+indicates the release of the button, or whatever kind of event means
+it is time to stop tracking. 
+</p></blockquote></div>
+
+   <p>The usual purpose of tracking mouse motion is to indicate on the screen
+the consequences of pushing or releasing a button at the current
+position.
+
+   <p>In many cases, you can avoid the need to track the mouse by using
+the <code>mouse-face</code> text property (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>). 
+That works at a much lower level and runs more smoothly than
+Lisp-level mouse tracking.
+
+   </body></html>
+

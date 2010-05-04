@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Input to Processes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Process-Information.html#Process-Information" title="Process Information">
+<link rel="next" href="Signals-to-Processes.html#Signals-to-Processes" title="Signals to Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Input-to-Processes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Process-Information.html#Process-Information">Process Information</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.7 Sending Input to Processes</h3>
+
+<p><a name="index-process-input-3043"></a>
+  Asynchronous subprocesses receive input when it is sent to them by
+Emacs, which is done with the functions in this section.  You must
+specify the process to send input to, and the input data to send.  The
+data appears on the &ldquo;standard input&rdquo; of the subprocess.
+
+   <p>Some operating systems have limited space for buffered input in a
+<acronym>PTY</acronym>.  On these systems, Emacs sends an <acronym>EOF</acronym>
+periodically amidst the other characters, to force them through.  For
+most programs, these <acronym>EOF</acronym>s do no harm.
+
+   <p>Subprocess input is normally encoded using a coding system before the
+subprocess receives it, much like text written into a file.  You can use
+<code>set-process-coding-system</code> to specify which coding system to use
+(see <a href="Process-Information.html#Process-Information">Process Information</a>).  Otherwise, the coding system comes from
+<code>coding-system-for-write</code>, if that is non-<code>nil</code>; or else from
+the defaulting mechanism (see <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>).
+
+   <p>Sometimes the system is unable to accept input for that process,
+because the input buffer is full.  When this happens, the send functions
+wait a short while, accepting output from subprocesses, and then try
+again.  This gives the subprocess a chance to read more of its pending
+input and make space in the buffer.  It also allows filters, sentinels
+and timers to run&mdash;so take account of that in writing your code.
+
+   <p>In these functions, the <var>process</var> argument can be a process or
+the name of a process, or a buffer or buffer name (which stands
+for a process via <code>get-buffer-process</code>).  <code>nil</code> means
+the current buffer's process.
+
+<div class="defun">
+&mdash; Function: <b>process-send-string</b><var> process string<a name="index-process_002dsend_002dstring-3044"></a></var><br>
+<blockquote><p>This function sends <var>process</var> the contents of <var>string</var> as
+standard input.  If it is <code>nil</code>, the current buffer's process is used.
+
+        <p>The function returns <code>nil</code>.
+
+     <pre class="smallexample">          (process-send-string "shell&lt;1&gt;" "ls\n")
+               =&gt; nil
+          
+          
+          ---------- Buffer: *shell* ----------
+          ...
+          introduction.texi               syntax-tables.texi~
+          introduction.texi~              text.texi
+          introduction.txt                text.texi~
+          ...
+          ---------- Buffer: *shell* ----------
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-send-region</b><var> process start end<a name="index-process_002dsend_002dregion-3045"></a></var><br>
+<blockquote><p>This function sends the text in the region defined by <var>start</var> and
+<var>end</var> as standard input to <var>process</var>.
+
+        <p>An error is signaled unless both <var>start</var> and <var>end</var> are
+integers or markers that indicate positions in the current buffer.  (It
+is unimportant which number is larger.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-send-eof</b><var> &amp;optional process<a name="index-process_002dsend_002deof-3046"></a></var><br>
+<blockquote><p>This function makes <var>process</var> see an end-of-file in its
+input.  The <acronym>EOF</acronym> comes after any text already sent to it.
+
+        <p>The function returns <var>process</var>.
+
+     <pre class="smallexample">          (process-send-eof "shell")
+               =&gt; "shell"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-running-child-p</b><var> process<a name="index-process_002drunning_002dchild_002dp-3047"></a></var><br>
+<blockquote><p>This function will tell you whether a subprocess has given control of
+its terminal to its own child process.  The value is <code>t</code> if this is
+true, or if Emacs cannot tell; it is <code>nil</code> if Emacs can be certain
+that this is not so. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Hash Tables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
+<link rel="next" href="Symbols.html#Symbols" title="Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Hash-Tables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Symbols.html#Symbols">Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">7 Hash Tables</h2>
+
+<p><a name="index-hash-tables-421"></a><a name="index-lookup-tables-422"></a>
+  A hash table is a very fast kind of lookup table, somewhat like an
+alist (see <a href="Association-Lists.html#Association-Lists">Association Lists</a>) in that it maps keys to
+corresponding values.  It differs from an alist in these ways:
+
+     <ul>
+<li>Lookup in a hash table is extremely fast for large tables&mdash;in fact, the
+time required is essentially <em>independent</em> of how many elements are
+stored in the table.  For smaller tables (a few tens of elements)
+alists may still be faster because hash tables have a more-or-less
+constant overhead.
+
+     <li>The correspondences in a hash table are in no particular order.
+
+     <li>There is no way to share structure between two hash tables,
+the way two alists can share a common tail. 
+</ul>
+
+   <p>Emacs Lisp provides a general-purpose hash table data type, along
+with a series of functions for operating on them.  Hash tables have no
+read syntax, and print in hash notation, like this:
+
+<pre class="example">     (make-hash-table)
+          =&gt; #&lt;hash-table 'eql nil 0/65 0x83af980&gt;
+</pre>
+   <p class="noindent">(The term &ldquo;hash notation&rdquo; refers to the initial `<samp><span class="samp">#</span></samp>'
+character&mdash;see <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>&mdash;and has nothing to do with
+the term &ldquo;hash table.&rdquo;)
+
+   <p>Obarrays are also a kind of hash table, but they are a different type
+of object and are used only for recording interned symbols
+(see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Creating-Hash.html#Creating-Hash">Creating Hash</a>:        Functions to create hash tables. 
+<li><a accesskey="2" href="Hash-Access.html#Hash-Access">Hash Access</a>:          Reading and writing the hash table contents. 
+<li><a accesskey="3" href="Defining-Hash.html#Defining-Hash">Defining Hash</a>:        Defining new comparison methods
+<li><a accesskey="4" href="Other-Hash.html#Other-Hash">Other Hash</a>:           Miscellaneous. 
+</ul>
+
+   </body></html>
+

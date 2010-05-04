@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Repeated Loading - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Loading.html#Loading" title="Loading">
+<link rel="prev" href="Autoload.html#Autoload" title="Autoload">
+<link rel="next" href="Named-Features.html#Named-Features" title="Named Features">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Repeated-Loading"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Named-Features.html#Named-Features">Named Features</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Autoload.html#Autoload">Autoload</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
+<hr>
+</div>
+
+<h3 class="section">15.6 Repeated Loading</h3>
+
+<p><a name="index-repeated-loading-788"></a>
+  You can load a given file more than once in an Emacs session.  For
+example, after you have rewritten and reinstalled a function definition
+by editing it in a buffer, you may wish to return to the original
+version; you can do this by reloading the file it came from.
+
+   <p>When you load or reload files, bear in mind that the <code>load</code> and
+<code>load-library</code> functions automatically load a byte-compiled file
+rather than a non-compiled file of similar name.  If you rewrite a file
+that you intend to save and reinstall, you need to byte-compile the new
+version; otherwise Emacs will load the older, byte-compiled file instead
+of your newer, non-compiled file!  If that happens, the message
+displayed when loading the file includes, `<samp><span class="samp">(compiled; note, source is
+newer)</span></samp>', to remind you to recompile it.
+
+   <p>When writing the forms in a Lisp library file, keep in mind that the
+file might be loaded more than once.  For example, think about whether
+each variable should be reinitialized when you reload the library;
+<code>defvar</code> does not change the value if the variable is already
+initialized.  (See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.)
+
+   <p>The simplest way to add an element to an alist is like this:
+
+<pre class="example">     (push '(leif-mode " Leif") minor-mode-alist)
+</pre>
+   <p class="noindent">But this would add multiple elements if the library is reloaded. 
+To avoid the problem, write this:
+
+<pre class="example">     (or (assq 'leif-mode minor-mode-alist)
+         (push '(leif-mode " Leif") minor-mode-alist))
+</pre>
+   <p class="noindent">or this:
+
+<pre class="example">     (add-to-list '(leif-mode " Leif") minor-mode-alist)
+</pre>
+   <p>Occasionally you will want to test explicitly whether a library has
+already been loaded.  Here's one way to test, in a library, whether it
+has been loaded before:
+
+<pre class="example">     (defvar foo-was-loaded nil)
+     
+     (unless foo-was-loaded
+       <var>execute-first-time-only</var>
+       (setq foo-was-loaded t))
+</pre>
+   <p class="noindent">If the library uses <code>provide</code> to provide a named feature, you can
+use <code>featurep</code> earlier in the file to test whether the
+<code>provide</code> call has been executed before. 
+See <a href="Named-Features.html#Named-Features">Named Features</a>.
+
+   </body></html>
+

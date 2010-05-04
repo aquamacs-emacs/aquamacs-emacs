@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>Timers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Time-Calculations.html#Time-Calculations" title="Time Calculations">
+<link rel="next" href="Idle-Timers.html#Idle-Timers" title="Idle Timers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Timers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Idle-Timers.html#Idle-Timers">Idle Timers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Time-Calculations.html#Time-Calculations">Time Calculations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.10 Timers for Delayed Execution</h3>
+
+<p><a name="index-timer-3543"></a>
+  You can set up a <dfn>timer</dfn> to call a function at a specified
+future time or after a certain length of idleness.
+
+   <p>Emacs cannot run timers at any arbitrary point in a Lisp program; it
+can run them only when Emacs could accept output from a subprocess:
+namely, while waiting or inside certain primitive functions such as
+<code>sit-for</code> or <code>read-event</code> which <em>can</em> wait.  Therefore, a
+timer's execution may be delayed if Emacs is busy.  However, the time of
+execution is very precise if Emacs is idle.
+
+   <p>Emacs binds <code>inhibit-quit</code> to <code>t</code> before calling the timer
+function, because quitting out of many timer functions can leave
+things in an inconsistent state.  This is normally unproblematical
+because most timer functions don't do a lot of work.  Indeed, for a
+timer to call a function that takes substantial time to run is likely
+to be annoying.  If a timer function needs to allow quitting, it
+should use <code>with-local-quit</code> (see <a href="Quitting.html#Quitting">Quitting</a>).  For example, if
+a timer function calls <code>accept-process-output</code> to receive output
+from an external process, that call should be wrapped inside
+<code>with-local-quit</code>, to ensure that <kbd>C-g</kbd> works if the external
+process hangs.
+
+   <p>It is usually a bad idea for timer functions to alter buffer
+contents.  When they do, they usually should call <code>undo-boundary</code>
+both before and after changing the buffer, to separate the timer's
+changes from user commands' changes and prevent a single undo entry
+from growing to be quite large.
+
+   <p>Timer functions should also avoid calling functions that cause Emacs
+to wait, such as <code>sit-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>).  This can lead to
+unpredictable effects, since other timers (or even the same timer) can
+run while waiting.  If a timer function needs to perform an action
+after a certain time has elapsed, it can do this by scheduling a new
+timer.
+
+   <p>If a timer function calls functions that can change the match data,
+it should save and restore the match data.  See <a href="Saving-Match-Data.html#Saving-Match-Data">Saving Match Data</a>.
+
+<div class="defun">
+&mdash; Command: <b>run-at-time</b><var> time repeat function &amp;rest args<a name="index-run_002dat_002dtime-3544"></a></var><br>
+<blockquote><p>This sets up a timer that calls the function <var>function</var> with
+arguments <var>args</var> at time <var>time</var>.  If <var>repeat</var> is a number
+(integer or floating point), the timer is scheduled to run again every
+<var>repeat</var> seconds after <var>time</var>.  If <var>repeat</var> is <code>nil</code>,
+the timer runs only once.
+
+        <p><var>time</var> may specify an absolute or a relative time.
+
+        <p>Absolute times may be specified using a string with a limited variety
+of formats, and are taken to be times <em>today</em>, even if already in
+the past.  The recognized forms are `<samp><var>xxxx</var></samp>',
+`<samp><var>x</var><span class="samp">:</span><var>xx</var></samp>', or `<samp><var>xx</var><span class="samp">:</span><var>xx</var></samp>' (military time),
+and `<samp><var>xx</var><span class="samp">am</span></samp>', `<samp><var>xx</var><span class="samp">AM</span></samp>', `<samp><var>xx</var><span class="samp">pm</span></samp>',
+`<samp><var>xx</var><span class="samp">PM</span></samp>', `<samp><var>xx</var><span class="samp">:</span><var>xx</var><span class="samp">am</span></samp>',
+`<samp><var>xx</var><span class="samp">:</span><var>xx</var><span class="samp">AM</span></samp>', `<samp><var>xx</var><span class="samp">:</span><var>xx</var><span class="samp">pm</span></samp>', or
+`<samp><var>xx</var><span class="samp">:</span><var>xx</var><span class="samp">PM</span></samp>'.  A period can be used instead of a colon
+to separate the hour and minute parts.
+
+        <p>To specify a relative time as a string, use numbers followed by units. 
+For example:
+
+          <dl>
+<dt>`<samp><span class="samp">1 min</span></samp>'<dd>denotes 1 minute from now. 
+<br><dt>`<samp><span class="samp">1 min 5 sec</span></samp>'<dd>denotes 65 seconds from now. 
+<br><dt>`<samp><span class="samp">1 min 2 sec 3 hour 4 day 5 week 6 fortnight 7 month 8 year</span></samp>'<dd>denotes exactly 103 months, 123 days, and 10862 seconds from now. 
+</dl>
+
+        <p>For relative time values, Emacs considers a month to be exactly thirty
+days, and a year to be exactly 365.25 days.
+
+        <p>Not all convenient formats are strings.  If <var>time</var> is a number
+(integer or floating point), that specifies a relative time measured in
+seconds.  The result of <code>encode-time</code> can also be used to specify
+an absolute value for <var>time</var>.
+
+        <p>In most cases, <var>repeat</var> has no effect on when <em>first</em> call
+takes place&mdash;<var>time</var> alone specifies that.  There is one exception:
+if <var>time</var> is <code>t</code>, then the timer runs whenever the time is a
+multiple of <var>repeat</var> seconds after the epoch.  This is useful for
+functions like <code>display-time</code>.
+
+        <p>The function <code>run-at-time</code> returns a timer value that identifies
+the particular scheduled future action.  You can use this value to call
+<code>cancel-timer</code> (see below). 
+</p></blockquote></div>
+
+   <p>A repeating timer nominally ought to run every <var>repeat</var> seconds,
+but remember that any invocation of a timer can be late.  Lateness of
+one repetition has no effect on the scheduled time of the next
+repetition.  For instance, if Emacs is busy computing for long enough
+to cover three scheduled repetitions of the timer, and then starts to
+wait, it will immediately call the timer function three times in
+immediate succession (presuming no other timers trigger before or
+between them).  If you want a timer to run again no less than <var>n</var>
+seconds after the last invocation, don't use the <var>repeat</var> argument. 
+Instead, the timer function should explicitly reschedule the timer.
+
+<div class="defun">
+&mdash; Variable: <b>timer-max-repeats</b><var><a name="index-timer_002dmax_002drepeats-3545"></a></var><br>
+<blockquote><p>This variable's value specifies the maximum number of times to repeat
+calling a timer function in a row, when many previously scheduled
+calls were unavoidably delayed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-timeout</b> (<var>seconds timeout-forms<small class="dots">...</small></var>)<var> body<small class="dots">...</small><a name="index-with_002dtimeout-3546"></a></var><br>
+<blockquote><p>Execute <var>body</var>, but give up after <var>seconds</var> seconds.  If
+<var>body</var> finishes before the time is up, <code>with-timeout</code> returns
+the value of the last form in <var>body</var>.  If, however, the execution of
+<var>body</var> is cut short by the timeout, then <code>with-timeout</code>
+executes all the <var>timeout-forms</var> and returns the value of the last
+of them.
+
+        <p>This macro works by setting a timer to run after <var>seconds</var> seconds.  If
+<var>body</var> finishes before that time, it cancels the timer.  If the
+timer actually runs, it terminates execution of <var>body</var>, then
+executes <var>timeout-forms</var>.
+
+        <p>Since timers can run within a Lisp program only when the program calls a
+primitive that can wait, <code>with-timeout</code> cannot stop executing
+<var>body</var> while it is in the midst of a computation&mdash;only when it
+calls one of those primitives.  So use <code>with-timeout</code> only with a
+<var>body</var> that waits for input, not one that does a long computation. 
+</p></blockquote></div>
+
+   <p>The function <code>y-or-n-p-with-timeout</code> provides a simple way to use
+a timer to avoid waiting too long for an answer.  See <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>.
+
+<div class="defun">
+&mdash; Function: <b>cancel-timer</b><var> timer<a name="index-cancel_002dtimer-3547"></a></var><br>
+<blockquote><p>This cancels the requested action for <var>timer</var>, which should be a
+timer&mdash;usually, one previously returned by <code>run-at-time</code> or
+<code>run-with-idle-timer</code>.  This cancels the effect of that call to
+one of these functions; the arrival of the specified time will not
+cause anything special to happen. 
+</p></blockquote></div>
+
+   </body></html>
+

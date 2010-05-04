@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Key Sequences - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="next" href="Keymap-Basics.html#Keymap-Basics" title="Keymap Basics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Key-Sequences"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keymap-Basics.html#Keymap-Basics">Keymap Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.1 Key Sequences</h3>
+
+<p><a name="index-key-1377"></a><a name="index-keystroke-1378"></a><a name="index-key-sequence-1379"></a>
+  A <dfn>key sequence</dfn>, or <dfn>key</dfn> for short, is a sequence of one
+or more input events that form a unit.  Input events include
+characters, function keys, and mouse actions (see <a href="Input-Events.html#Input-Events">Input Events</a>). 
+The Emacs Lisp representation for a key sequence is a string or
+vector.  Unless otherwise stated, any Emacs Lisp function that accepts
+a key sequence as an argument can handle both representations.
+
+   <p>In the string representation, alphanumeric characters ordinarily
+stand for themselves; for example, <code>"a"</code> represents <kbd>a</kbd>
+and <code>"2"</code> represents <kbd>2</kbd>.  Control character events are
+prefixed by the substring <code>"\C-"</code>, and meta characters by
+<code>"\M-"</code>; for example, <code>"\C-x"</code> represents the key <kbd>C-x</kbd>. 
+In addition, the &lt;TAB&gt;, &lt;RET&gt;, &lt;ESC&gt;, and &lt;DEL&gt; events
+are represented by <code>"\t"</code>, <code>"\r"</code>, <code>"\e"</code>, and
+<code>"\d"</code> respectively.  The string representation of a complete key
+sequence is the concatenation of the string representations of the
+constituent events; thus, <code>"\C-xl"</code> represents the key sequence
+<kbd>C-x l</kbd>.
+
+   <p>Key sequences containing function keys, mouse button events, or
+non-ASCII characters such as <kbd>C-=</kbd> or <kbd>H-a</kbd> cannot be
+represented as strings; they have to be represented as vectors.
+
+   <p>In the vector representation, each element of the vector represents
+an input event, in its Lisp form.  See <a href="Input-Events.html#Input-Events">Input Events</a>.  For example,
+the vector <code>[?\C-x ?l]</code> represents the key sequence <kbd>C-x l</kbd>.
+
+   <p>For examples of key sequences written in string and vector
+representations, <a href="../emacs/Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>.
+
+<div class="defun">
+&mdash; Macro: <b>kbd</b><var> keyseq-text<a name="index-kbd-1380"></a></var><br>
+<blockquote><p>This macro converts the text <var>keyseq-text</var> (a string constant)
+into a key sequence (a string or vector constant).  The contents of
+<var>keyseq-text</var> should describe the key sequence using almost the same
+syntax used in this manual.  More precisely, it uses the same syntax
+that Edit Macro mode uses for editing keyboard macros (see <a href="../emacs/Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>); you must surround
+function key names with `<samp><span class="samp">&lt;...&gt;</span></samp>'.
+
+     <pre class="example">          (kbd "C-x") =&gt; "\C-x"
+          (kbd "C-x C-f") =&gt; "\C-x\C-f"
+          (kbd "C-x 4 C-f") =&gt; "\C-x4\C-f"
+          (kbd "X") =&gt; "X"
+          (kbd "RET") =&gt; "\^M"
+          (kbd "C-c SPC") =&gt; "\C-c "
+          (kbd "&lt;f1&gt; SPC") =&gt; [f1 32]
+          (kbd "C-M-&lt;down&gt;") =&gt; [C-M-down]
+     </pre>
+        <p>This macro is not meant for use with arguments that vary&mdash;only
+with string constants. 
+</p></blockquote></div>
+
+   </body></html>
+

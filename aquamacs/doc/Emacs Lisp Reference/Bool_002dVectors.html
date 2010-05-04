@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Bool-Vectors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
+<link rel="prev" href="Char_002dTables.html#Char_002dTables" title="Char-Tables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Bool-Vectors"></a>
+<a name="Bool_002dVectors"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Char_002dTables.html#Char_002dTables">Char-Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">6.7 Bool-vectors</h3>
+
+<p><a name="index-Bool_002dvectors-418"></a>
+  A bool-vector is much like a vector, except that it stores only the
+values <code>t</code> and <code>nil</code>.  If you try to store any non-<code>nil</code>
+value into an element of the bool-vector, the effect is to store
+<code>t</code> there.  As with all arrays, bool-vector indices start from 0,
+and the length cannot be changed once the bool-vector is created. 
+Bool-vectors are constants when evaluated.
+
+   <p>There are two special functions for working with bool-vectors; aside
+from that, you manipulate them with same functions used for other kinds
+of arrays.
+
+<div class="defun">
+&mdash; Function: <b>make-bool-vector</b><var> length initial<a name="index-make_002dbool_002dvector-419"></a></var><br>
+<blockquote><p>Return a new bool-vector of <var>length</var> elements,
+each one initialized to <var>initial</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-p</b><var> object<a name="index-bool_002dvector_002dp-420"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>object</var> is a bool-vector,
+and <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+   <p>Here is an example of creating, examining, and updating a
+bool-vector.  Note that the printed form represents up to 8 boolean
+values as a single character.
+
+<pre class="example">     (setq bv (make-bool-vector 5 t))
+          =&gt; #&amp;5"^_"
+     (aref bv 1)
+          =&gt; t
+     (aset bv 3 nil)
+          =&gt; nil
+     bv
+          =&gt; #&amp;5"^W"
+</pre>
+   <p class="noindent">These results make sense because the binary codes for control-_ and
+control-W are 11111 and 10111, respectively.
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1999, 2001, 2002, 2003, 2004, 2005, -->
+<!-- 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

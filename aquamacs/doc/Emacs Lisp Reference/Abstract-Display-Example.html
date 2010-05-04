@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Abstract Display Example - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Abstract-Display.html#Abstract-Display" title="Abstract Display">
+<link rel="prev" href="Abstract-Display-Functions.html#Abstract-Display-Functions" title="Abstract Display Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Abstract-Display-Example"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abstract-Display-Functions.html#Abstract-Display-Functions">Abstract Display Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abstract-Display.html#Abstract-Display">Abstract Display</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.18.2 Abstract Display Example</h4>
+
+<p>Here is a simple example using functions of the ewoc package to
+implement a &ldquo;color components display,&rdquo; an area in a buffer that
+represents a vector of three integers (itself representing a 24-bit RGB
+value) in various ways.
+
+<pre class="example">     (setq colorcomp-ewoc nil
+           colorcomp-data nil
+           colorcomp-mode-map nil
+           colorcomp-labels ["Red" "Green" "Blue"])
+     
+     (defun colorcomp-pp (data)
+       (if data
+           (let ((comp (aref colorcomp-data data)))
+             (insert (aref colorcomp-labels data) "\t: #x"
+                     (format "%02X" comp) " "
+                     (make-string (ash comp -2) ?#) "\n"))
+         (let ((cstr (format "#%02X%02X%02X"
+                             (aref colorcomp-data 0)
+                             (aref colorcomp-data 1)
+                             (aref colorcomp-data 2)))
+               (samp " (sample text) "))
+           (insert "Color\t: "
+                   (propertize samp 'face `(foreground-color . ,cstr))
+                   (propertize samp 'face `(background-color . ,cstr))
+                   "\n"))))
+     
+     (defun colorcomp (color)
+       "Allow fiddling with COLOR in a new buffer.
+     The buffer is in Color Components mode."
+       (interactive "sColor (name or #RGB or #RRGGBB): ")
+       (when (string= "" color)
+         (setq color "green"))
+       (unless (color-values color)
+         (error "No such color: %S" color))
+       (switch-to-buffer
+        (generate-new-buffer (format "originally: %s" color)))
+       (kill-all-local-variables)
+       (setq major-mode 'colorcomp-mode
+             mode-name "Color Components")
+       (use-local-map colorcomp-mode-map)
+       (erase-buffer)
+       (buffer-disable-undo)
+       (let ((data (apply 'vector (mapcar (lambda (n) (ash n -8))
+                                          (color-values color))))
+             (ewoc (ewoc-create 'colorcomp-pp
+                                "\nColor Components\n\n"
+                                (substitute-command-keys
+                                 "\n\\{colorcomp-mode-map}"))))
+         (set (make-local-variable 'colorcomp-data) data)
+         (set (make-local-variable 'colorcomp-ewoc) ewoc)
+         (ewoc-enter-last ewoc 0)
+         (ewoc-enter-last ewoc 1)
+         (ewoc-enter-last ewoc 2)
+         (ewoc-enter-last ewoc nil)))
+</pre>
+   <p><a name="index-controller-part_002c-model_002fview_002fcontroller-3417"></a>  This example can be extended to be a &ldquo;color selection widget&rdquo; (in
+other words, the controller part of the &ldquo;model/view/controller&rdquo;
+design paradigm) by defining commands to modify <code>colorcomp-data</code>
+and to &ldquo;finish&rdquo; the selection process, and a keymap to tie it all
+together conveniently.
+
+<pre class="smallexample">     (defun colorcomp-mod (index limit delta)
+       (let ((cur (aref colorcomp-data index)))
+         (unless (= limit cur)
+           (aset colorcomp-data index (+ cur delta)))
+         (ewoc-invalidate
+          colorcomp-ewoc
+          (ewoc-nth colorcomp-ewoc index)
+          (ewoc-nth colorcomp-ewoc -1))))
+     
+     (defun colorcomp-R-more () (interactive) (colorcomp-mod 0 255 1))
+     (defun colorcomp-G-more () (interactive) (colorcomp-mod 1 255 1))
+     (defun colorcomp-B-more () (interactive) (colorcomp-mod 2 255 1))
+     (defun colorcomp-R-less () (interactive) (colorcomp-mod 0 0 -1))
+     (defun colorcomp-G-less () (interactive) (colorcomp-mod 1 0 -1))
+     (defun colorcomp-B-less () (interactive) (colorcomp-mod 2 0 -1))
+     
+     (defun colorcomp-copy-as-kill-and-exit ()
+       "Copy the color components into the kill ring and kill the buffer.
+     The string is formatted #RRGGBB (hash followed by six hex digits)."
+       (interactive)
+       (kill-new (format "#%02X%02X%02X"
+                         (aref colorcomp-data 0)
+                         (aref colorcomp-data 1)
+                         (aref colorcomp-data 2)))
+       (kill-buffer nil))
+     
+     (setq colorcomp-mode-map
+           (let ((m (make-sparse-keymap)))
+             (suppress-keymap m)
+             (define-key m "i" 'colorcomp-R-less)
+             (define-key m "o" 'colorcomp-R-more)
+             (define-key m "k" 'colorcomp-G-less)
+             (define-key m "l" 'colorcomp-G-more)
+             (define-key m "," 'colorcomp-B-less)
+             (define-key m "." 'colorcomp-B-more)
+             (define-key m " " 'colorcomp-copy-as-kill-and-exit)
+             m))
+</pre>
+   <p>Note that we never modify the data in each node, which is fixed when the
+ewoc is created to be either <code>nil</code> or an index into the vector
+<code>colorcomp-data</code>, the actual color components.
+
+   </body></html>
+

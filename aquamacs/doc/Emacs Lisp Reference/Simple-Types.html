@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+<title>Simple Types - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization-Types.html#Customization-Types" title="Customization Types">
+<link rel="next" href="Composite-Types.html#Composite-Types" title="Composite Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Simple-Types"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Composite-Types.html#Composite-Types">Composite Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-Types">Customization Types</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.4.1 Simple Types</h4>
+
+<p>This section describes all the simple customization types.
+
+     <dl>
+<dt><code>sexp</code><dd>The value may be any Lisp object that can be printed and read back.  You
+can use <code>sexp</code> as a fall-back for any option, if you don't want to
+take the time to work out a more specific type to use.
+
+     <br><dt><code>integer</code><dd>The value must be an integer, and is represented textually
+in the customization buffer.
+
+     <br><dt><code>number</code><dd>The value must be a number (floating point or integer), and is
+represented textually in the customization buffer.
+
+     <br><dt><code>float</code><dd>The value must be a floating point number, and is represented
+textually in the customization buffer.
+
+     <br><dt><code>string</code><dd>The value must be a string, and the customization buffer shows just the
+contents, with no delimiting `<samp><span class="samp">"</span></samp>' characters and no quoting with
+`<samp><span class="samp">\</span></samp>'.
+
+     <br><dt><code>regexp</code><dd>Like <code>string</code> except that the string must be a valid regular
+expression.
+
+     <br><dt><code>character</code><dd>The value must be a character code.  A character code is actually an
+integer, but this type shows the value by inserting the character in the
+buffer, rather than by showing the number.
+
+     <br><dt><code>file</code><dd>The value must be a file name, and you can do completion with
+<kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>(file :must-match t)</code><dd>The value must be a file name for an existing file, and you can do
+completion with <kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>directory</code><dd>The value must be a directory name, and you can do completion with
+<kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>hook</code><dd>The value must be a list of functions (or a single function, but that is
+obsolete usage).  This customization type is used for hook variables. 
+You can use the <code>:options</code> keyword in a hook variable's
+<code>defcustom</code> to specify a list of functions recommended for use in
+the hook; see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>.
+
+     <br><dt><code>alist</code><dd>The value must be a list of cons-cells, the <span class="sc">car</span> of each cell
+representing a key, and the <span class="sc">cdr</span> of the same cell representing an
+associated value.  The user can add and delete key/value pairs, and
+edit both the key and the value of each pair.
+
+     <p>You can specify the key and value types like this:
+
+     <pre class="smallexample">          (alist :key-type <var>key-type</var> :value-type <var>value-type</var>)
+     </pre>
+     <p class="noindent">where <var>key-type</var> and <var>value-type</var> are customization type
+specifications.  The default key type is <code>sexp</code>, and the default
+value type is <code>sexp</code>.
+
+     <p>The user can add any key matching the specified key type, but you can
+give some keys a preferential treatment by specifying them with the
+<code>:options</code> (see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>).  The specified keys
+will always be shown in the customize buffer (together with a suitable
+value), with a checkbox to include or exclude or disable the key/value
+pair from the alist.  The user will not be able to edit the keys
+specified by the <code>:options</code> keyword argument.
+
+     <p>The argument to the <code>:options</code> keywords should be a list of
+specifications for reasonable keys in the alist.  Ordinarily, they are
+simply atoms, which stand for themselves as.  For example:
+
+     <pre class="smallexample">          :options '("foo" "bar" "baz")
+     </pre>
+     <p class="noindent">specifies that there are three &ldquo;known&rdquo; keys, namely <code>"foo"</code>,
+<code>"bar"</code> and <code>"baz"</code>, which will always be shown first.
+
+     <p>You may want to restrict the value type for specific keys, for
+example, the value associated with the <code>"bar"</code> key can only be an
+integer.  You can specify this by using a list instead of an atom in
+the list.  The first element will specify the key, like before, while
+the second element will specify the value type.  For example:
+
+     <pre class="smallexample">          :options '("foo" ("bar" integer) "baz")
+     </pre>
+     <p>Finally, you may want to change how the key is presented.  By default,
+the key is simply shown as a <code>const</code>, since the user cannot change
+the special keys specified with the <code>:options</code> keyword.  However,
+you may want to use a more specialized type for presenting the key, like
+<code>function-item</code> if you know it is a symbol with a function binding. 
+This is done by using a customization type specification instead of a
+symbol for the key.
+
+     <pre class="smallexample">          :options '("foo" ((function-item some-function) integer)
+                     "baz")
+     </pre>
+     <p>Many alists use lists with two elements, instead of cons cells.  For
+example,
+
+     <pre class="smallexample">          (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
+            "Each element is a list of the form (KEY VALUE).")
+     </pre>
+     <p class="noindent">instead of
+
+     <pre class="smallexample">          (defcustom cons-alist '(("foo" . 1) ("bar" . 2) ("baz" . 3))
+            "Each element is a cons-cell (KEY . VALUE).")
+     </pre>
+     <p>Because of the way lists are implemented on top of cons cells, you can
+treat <code>list-alist</code> in the example above as a cons cell alist, where
+the value type is a list with a single element containing the real
+value.
+
+     <pre class="smallexample">          (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
+            "Each element is a list of the form (KEY VALUE)."
+            :type '(alist :value-type (group integer)))
+     </pre>
+     <p>The <code>group</code> widget is used here instead of <code>list</code> only because
+the formatting is better suited for the purpose.
+
+     <p>Similarly, you can have alists with more values associated with each
+key, using variations of this trick:
+
+     <pre class="smallexample">          (defcustom person-data '(("brian"  50 t)
+                                   ("dorith" 55 nil)
+                                   ("ken"    52 t))
+            "Alist of basic info about people.
+          Each element has the form (NAME AGE MALE-FLAG)."
+            :type '(alist :value-type (group integer boolean)))
+          
+          (defcustom pets '(("brian")
+                            ("dorith" "dog" "guppy")
+                            ("ken" "cat"))
+            "Alist of people's pets.
+          In an element (KEY . VALUE), KEY is the person's name,
+          and the VALUE is a list of that person's pets."
+            :type '(alist :value-type (repeat string)))
+     </pre>
+     <br><dt><code>plist</code><dd>The <code>plist</code> custom type is similar to the <code>alist</code> (see above),
+except that the information is stored as a property list, i.e. a list of
+this form:
+
+     <pre class="smallexample">          (<var>key</var> <var>value</var> <var>key</var> <var>value</var> <var>key</var> <var>value</var> ...)
+     </pre>
+     <p>The default <code>:key-type</code> for <code>plist</code> is <code>symbol</code>,
+rather than <code>sexp</code>.
+
+     <br><dt><code>symbol</code><dd>The value must be a symbol.  It appears in the customization buffer as
+the name of the symbol.
+
+     <br><dt><code>function</code><dd>The value must be either a lambda expression or a function name.  When
+it is a function name, you can do completion with <kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>variable</code><dd>The value must be a variable name, and you can do completion with
+<kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>face</code><dd>The value must be a symbol which is a face name, and you can do
+completion with <kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>boolean</code><dd>The value is boolean&mdash;either <code>nil</code> or <code>t</code>.  Note that by
+using <code>choice</code> and <code>const</code> together (see the next section),
+you can specify that the value must be <code>nil</code> or <code>t</code>, but also
+specify the text to describe each value in a way that fits the specific
+meaning of the alternative.
+
+     <br><dt><code>coding-system</code><dd>The value must be a coding-system name, and you can do completion with
+<kbd>M-&lt;TAB&gt;</kbd>.
+
+     <br><dt><code>color</code><dd>The value must be a valid color name, and you can do completion with
+<kbd>M-&lt;TAB&gt;</kbd>.  A sample is provided. 
+</dl>
+
+   </body></html>
+

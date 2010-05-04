@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Other Display Specs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Property.html#Display-Property" title="Display Property">
+<link rel="prev" href="Pixel-Specification.html#Pixel-Specification" title="Pixel Specification">
+<link rel="next" href="Display-Margins.html#Display-Margins" title="Display Margins">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Other-Display-Specs"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Display-Margins.html#Display-Margins">Display Margins</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property">Display Property</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.3 Other Display Specifications</h4>
+
+<p>Here are the other sorts of display specifications that you can use
+in the <code>display</code> text property.
+
+     <dl>
+<dt><var>string</var><dd>Display <var>string</var> instead of the text that has this property.
+
+     <p>Recursive display specifications are not supported&mdash;<var>string</var>'s
+<code>display</code> properties, if any, are not used.
+
+     <br><dt><code>(image . </code><var>image-props</var><code>)</code><dd>This kind of display specification is an image descriptor (see <a href="Images.html#Images">Images</a>). 
+When used as a display specification, it means to display the image
+instead of the text that has the display specification.
+
+     <br><dt><code>(slice </code><var>x</var> <var>y</var> <var>width</var> <var>height</var><code>)</code><dd>This specification together with <code>image</code> specifies a <dfn>slice</dfn>
+(a partial area) of the image to display.  The elements <var>y</var> and
+<var>x</var> specify the top left corner of the slice, within the image;
+<var>width</var> and <var>height</var> specify the width and height of the
+slice.  Integer values are numbers of pixels.  A floating point number
+in the range 0.0&ndash;1.0 stands for that fraction of the width or height
+of the entire image.
+
+     <br><dt><code>((margin nil) </code><var>string</var><code>)</code><dd>A display specification of this form means to display <var>string</var>
+instead of the text that has the display specification, at the same
+position as that text.  It is equivalent to using just <var>string</var>,
+but it is done as a special case of marginal display (see <a href="Display-Margins.html#Display-Margins">Display Margins</a>).
+
+     <br><dt><code>(space-width </code><var>factor</var><code>)</code><dd>This display specification affects all the space characters within the
+text that has the specification.  It displays all of these spaces
+<var>factor</var> times as wide as normal.  The element <var>factor</var> should
+be an integer or float.  Characters other than spaces are not affected
+at all; in particular, this has no effect on tab characters.
+
+     <br><dt><code>(height </code><var>height</var><code>)</code><dd>This display specification makes the text taller or shorter. 
+Here are the possibilities for <var>height</var>:
+
+          <dl>
+<dt><code>(+ </code><var>n</var><code>)</code><dd>This means to use a font that is <var>n</var> steps larger.  A &ldquo;step&rdquo; is
+defined by the set of available fonts&mdash;specifically, those that match
+what was otherwise specified for this text, in all attributes except
+height.  Each size for which a suitable font is available counts as
+another step.  <var>n</var> should be an integer.
+
+          <br><dt><code>(- </code><var>n</var><code>)</code><dd>This means to use a font that is <var>n</var> steps smaller.
+
+          <br><dt>a number, <var>factor</var><dd>A number, <var>factor</var>, means to use a font that is <var>factor</var> times
+as tall as the default font.
+
+          <br><dt>a symbol, <var>function</var><dd>A symbol is a function to compute the height.  It is called with the
+current height as argument, and should return the new height to use.
+
+          <br><dt>anything else, <var>form</var><dd>If the <var>height</var> value doesn't fit the previous possibilities, it is
+a form.  Emacs evaluates it to get the new height, with the symbol
+<code>height</code> bound to the current specified font height. 
+</dl>
+
+     <br><dt><code>(raise </code><var>factor</var><code>)</code><dd>This kind of display specification raises or lowers the text
+it applies to, relative to the baseline of the line.
+
+     <p><var>factor</var> must be a number, which is interpreted as a multiple of the
+height of the affected text.  If it is positive, that means to display
+the characters raised.  If it is negative, that means to display them
+lower down.
+
+     <p>If the text also has a <code>height</code> display specification, that does
+not affect the amount of raising or lowering, which is based on the
+faces used for the text. 
+</dl>
+
+<!-- We put all the `@code{(when ...)}' on one line to encourage -->
+<!-- makeinfo's end-of-sentence heuristics to DTRT.  Previously, the dot -->
+<!-- was at eol; the info file ended up w/ two spaces rendered after it. -->
+<p>You can make any display specification conditional.  To do that,
+package it in another list of the form
+<code>(when </code><var>condition</var><code> . </code><var>spec</var><code>)</code>. 
+Then the specification <var>spec</var> applies only when
+<var>condition</var> evaluates to a non-<code>nil</code> value.  During the
+evaluation, <code>object</code> is bound to the string or buffer having the
+conditional <code>display</code> property.  <code>position</code> and
+<code>buffer-position</code> are bound to the position within <code>object</code>
+and the buffer position where the <code>display</code> property was found,
+respectively.  Both positions can be different when <code>object</code> is a
+string.
+
+   </body></html>
+

@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Docs and Compilation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
+<link rel="prev" href="Compilation-Functions.html#Compilation-Functions" title="Compilation Functions">
+<link rel="next" href="Dynamic-Loading.html#Dynamic-Loading" title="Dynamic Loading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Docs-and-Compilation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dynamic-Loading.html#Dynamic-Loading">Dynamic Loading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compilation-Functions.html#Compilation-Functions">Compilation Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
+<hr>
+</div>
+
+<h3 class="section">16.3 Documentation Strings and Compilation</h3>
+
+<p><a name="index-dynamic-loading-of-documentation-823"></a>
+  Functions and variables loaded from a byte-compiled file access their
+documentation strings dynamically from the file whenever needed.  This
+saves space within Emacs, and makes loading faster because the
+documentation strings themselves need not be processed while loading the
+file.  Actual access to the documentation strings becomes slower as a
+result, but this normally is not enough to bother users.
+
+   <p>Dynamic access to documentation strings does have drawbacks:
+
+     <ul>
+<li>If you delete or move the compiled file after loading it, Emacs can no
+longer access the documentation strings for the functions and variables
+in the file.
+
+     <li>If you alter the compiled file (such as by compiling a new version),
+then further access to documentation strings in this file will
+probably give nonsense results. 
+</ul>
+
+   <p>If your site installs Emacs following the usual procedures, these
+problems will never normally occur.  Installing a new version uses a new
+directory with a different name; as long as the old version remains
+installed, its files will remain unmodified in the places where they are
+expected to be.
+
+   <p>However, if you have built Emacs yourself and use it from the
+directory where you built it, you will experience this problem
+occasionally if you edit and recompile Lisp files.  When it happens, you
+can cure the problem by reloading the file after recompiling it.
+
+   <p>You can turn off this feature at compile time by setting
+<code>byte-compile-dynamic-docstrings</code> to <code>nil</code>; this is useful
+mainly if you expect to change the file, and you want Emacs processes
+that have already loaded it to keep working when the file changes. 
+You can do this globally, or for one source file by specifying a
+file-local binding for the variable.  One way to do that is by adding
+this string to the file's first line:
+
+<pre class="example">     -*-byte-compile-dynamic-docstrings: nil;-*-
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>byte-compile-dynamic-docstrings</b><var><a name="index-byte_002dcompile_002ddynamic_002ddocstrings-824"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, the byte compiler generates compiled files
+that are set up for dynamic loading of documentation strings. 
+</p></blockquote></div>
+
+   <p><a name="index-g_t_0040samp_007b_0023_0040_0040_0040var_007bcount_007d_007d-825"></a><a name="index-g_t_0040samp_007b_0023_0024_007d-826"></a>  The dynamic documentation string feature writes compiled files that
+use a special Lisp reader construct, `<samp><span class="samp">#@</span><var>count</var></samp>'.  This
+construct skips the next <var>count</var> characters.  It also uses the
+`<samp><span class="samp">#$</span></samp>' construct, which stands for &ldquo;the name of this file, as a
+string.&rdquo;  It is usually best not to use these constructs in Lisp source
+files, since they are not designed to be clear to humans reading the
+file.
+
+   </body></html>
+

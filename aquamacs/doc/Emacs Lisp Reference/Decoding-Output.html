@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Decoding Output - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Output-from-Processes.html#Output-from-Processes" title="Output from Processes">
+<link rel="prev" href="Filter-Functions.html#Filter-Functions" title="Filter Functions">
+<link rel="next" href="Accepting-Output.html#Accepting-Output" title="Accepting Output">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Decoding-Output"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Accepting-Output.html#Accepting-Output">Accepting Output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filter-Functions.html#Filter-Functions">Filter Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.9.3 Decoding Process Output</h4>
+
+<p><a name="index-decode-process-output-3068"></a>
+  When Emacs writes process output directly into a multibyte buffer,
+it decodes the output according to the process output coding system. 
+If the coding system is <code>raw-text</code> or <code>no-conversion</code>, Emacs
+converts the unibyte output to multibyte using
+<code>string-to-multibyte</code>, and inserts the resulting multibyte text.
+
+   <p>You can use <code>set-process-coding-system</code> to specify which coding
+system to use (see <a href="Process-Information.html#Process-Information">Process Information</a>).  Otherwise, the coding
+system comes from <code>coding-system-for-read</code>, if that is
+non-<code>nil</code>; or else from the defaulting mechanism (see <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>).
+
+   <p><strong>Warning:</strong> Coding systems such as <code>undecided</code> which
+determine the coding system from the data do not work entirely
+reliably with asynchronous subprocess output.  This is because Emacs
+has to process asynchronous subprocess output in batches, as it
+arrives.  Emacs must try to detect the proper coding system from one
+batch at a time, and this does not always work.  Therefore, if at all
+possible, specify a coding system that determines both the character
+code conversion and the end of line conversion&mdash;that is, one like
+<code>latin-1-unix</code>, rather than <code>undecided</code> or <code>latin-1</code>.
+
+   <p><a name="index-filter-multibyte-flag_002c-of-process-3069"></a><a name="index-process-filter-multibyte-flag-3070"></a>  When Emacs calls a process filter function, it provides the process
+output as a multibyte string or as a unibyte string according to the
+process's filter multibyte flag.  If the flag is non-<code>nil</code>, Emacs
+decodes the output according to the process output coding system to
+produce a multibyte string, and passes that to the process.  If the
+flag is <code>nil</code>, Emacs puts the output into a unibyte string, with
+no decoding, and passes that.
+
+   <p>When you create a process, the filter multibyte flag takes its
+initial value from <code>default-enable-multibyte-characters</code>.  If you
+want to change the flag later on, use
+<code>set-process-filter-multibyte</code>.
+
+<div class="defun">
+&mdash; Function: <b>set-process-filter-multibyte</b><var> process multibyte<a name="index-set_002dprocess_002dfilter_002dmultibyte-3071"></a></var><br>
+<blockquote><p>This function sets the filter multibyte flag of <var>process</var>
+to <var>multibyte</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-filter-multibyte-p</b><var> process<a name="index-process_002dfilter_002dmultibyte_002dp-3072"></a></var><br>
+<blockquote><p>This function returns the filter multibyte flag of <var>process</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

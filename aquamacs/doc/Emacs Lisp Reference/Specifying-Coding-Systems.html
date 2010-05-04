@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Specifying Coding Systems - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="Default-Coding-Systems.html#Default-Coding-Systems" title="Default Coding Systems">
+<link rel="next" href="Explicit-Encoding.html#Explicit-Encoding" title="Explicit Encoding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Specifying-Coding-Systems"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.10.6 Specifying a Coding System for One Operation</h4>
+
+<p>You can specify the coding system for a specific operation by binding
+the variables <code>coding-system-for-read</code> and/or
+<code>coding-system-for-write</code>.
+
+<div class="defun">
+&mdash; Variable: <b>coding-system-for-read</b><var><a name="index-coding_002dsystem_002dfor_002dread-2756"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it specifies the coding system to
+use for reading a file, or for input from a synchronous subprocess.
+
+        <p>It also applies to any asynchronous subprocess or network stream, but in
+a different way: the value of <code>coding-system-for-read</code> when you
+start the subprocess or open the network stream specifies the input
+decoding method for that subprocess or network stream.  It remains in
+use for that subprocess or network stream unless and until overridden.
+
+        <p>The right way to use this variable is to bind it with <code>let</code> for a
+specific I/O operation.  Its global value is normally <code>nil</code>, and
+you should not globally set it to any other value.  Here is an example
+of the right way to use the variable:
+
+     <pre class="example">          ;; <span class="roman">Read the file with no character code conversion.</span>
+          ;; <span class="roman">Assume <acronym>crlf</acronym> represents end-of-line.</span>
+          (let ((coding-system-for-read 'emacs-mule-dos))
+            (insert-file-contents filename))
+     </pre>
+        <p>When its value is non-<code>nil</code>, this variable takes precedence over
+all other methods of specifying a coding system to use for input,
+including <code>file-coding-system-alist</code>,
+<code>process-coding-system-alist</code> and
+<code>network-coding-system-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>coding-system-for-write</b><var><a name="index-coding_002dsystem_002dfor_002dwrite-2757"></a></var><br>
+<blockquote><p>This works much like <code>coding-system-for-read</code>, except that it
+applies to output rather than input.  It affects writing to files,
+as well as sending output to subprocesses and net connections.
+
+        <p>When a single operation does both input and output, as do
+<code>call-process-region</code> and <code>start-process</code>, both
+<code>coding-system-for-read</code> and <code>coding-system-for-write</code>
+affect it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>inhibit-eol-conversion</b><var><a name="index-inhibit_002deol_002dconversion-2758"></a></var><br>
+<blockquote><p>When this variable is non-<code>nil</code>, no end-of-line conversion is done,
+no matter which coding system is specified.  This applies to all the
+Emacs I/O and subprocess primitives, and to the explicit encoding and
+decoding functions (see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+<title>Window Internals - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Object-Internals.html#Object-Internals" title="Object Internals">
+<link rel="prev" href="Buffer-Internals.html#Buffer-Internals" title="Buffer Internals">
+<link rel="next" href="Process-Internals.html#Process-Internals" title="Process Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Window-Internals"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Process-Internals.html#Process-Internals">Process Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Internals.html#Buffer-Internals">Buffer Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals">Object Internals</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">E.6.2 Window Internals</h4>
+
+<p><a name="index-internals_002c-of-window-3657"></a><a name="index-window-internals-3658"></a>
+  Windows have the following accessible fields:
+
+     <dl>
+<dt><code>frame</code><dd>The frame that this window is on.
+
+     <br><dt><code>mini_p</code><dd>Non-<code>nil</code> if this window is a minibuffer window.
+
+     <br><dt><code>parent</code><dd>Internally, Emacs arranges windows in a tree; each group of siblings has
+a parent window whose area includes all the siblings.  This field points
+to a window's parent.
+
+     <p>Parent windows do not display buffers, and play little role in display
+except to shape their child windows.  Emacs Lisp programs usually have
+no access to the parent windows; they operate on the windows at the
+leaves of the tree, which actually display buffers.
+
+     <p>The following four fields also describe the window tree structure.
+
+     <br><dt><code>hchild</code><dd>In a window subdivided horizontally by child windows, the leftmost child. 
+Otherwise, <code>nil</code>.
+
+     <br><dt><code>vchild</code><dd>In a window subdivided vertically by child windows, the topmost child. 
+Otherwise, <code>nil</code>.
+
+     <br><dt><code>next</code><dd>The next sibling of this window.  It is <code>nil</code> in a window that is
+the rightmost or bottommost of a group of siblings.
+
+     <br><dt><code>prev</code><dd>The previous sibling of this window.  It is <code>nil</code> in a window that
+is the leftmost or topmost of a group of siblings.
+
+     <br><dt><code>left</code><dd>This is the left-hand edge of the window, measured in columns.  (The
+leftmost column on the screen is column&nbsp;0<!-- /@w -->.)
+
+     <br><dt><code>top</code><dd>This is the top edge of the window, measured in lines.  (The top line on
+the screen is line&nbsp;0<!-- /@w -->.)
+
+     <br><dt><code>height</code><dd>The height of the window, measured in lines.
+
+     <br><dt><code>width</code><dd>The width of the window, measured in columns.  This width includes the
+scroll bar and fringes, and/or the separator line on the right of the
+window (if any).
+
+     <br><dt><code>buffer</code><dd>The buffer that the window is displaying.  This may change often during
+the life of the window.
+
+     <br><dt><code>start</code><dd>The position in the buffer that is the first character to be displayed
+in the window.
+
+     <br><dt><code>pointm</code><dd><a name="index-window-point-internals-3659"></a>This is the value of point in the current buffer when this window is
+selected; when it is not selected, it retains its previous value.
+
+     <br><dt><code>force_start</code><dd>If this flag is non-<code>nil</code>, it says that the window has been
+scrolled explicitly by the Lisp program.  This affects what the next
+redisplay does if point is off the screen: instead of scrolling the
+window to show the text around point, it moves point to a location that
+is on the screen.
+
+     <br><dt><code>frozen_window_start_p</code><dd>This field is set temporarily to 1 to indicate to redisplay that
+<code>start</code> of this window should not be changed, even if point
+gets invisible.
+
+     <br><dt><code>start_at_line_beg</code><dd>Non-<code>nil</code> means current value of <code>start</code> was the beginning of a line
+when it was chosen.
+
+     <br><dt><code>too_small_ok</code><dd>Non-<code>nil</code> means don't delete this window for becoming &ldquo;too small.&rdquo;
+
+     <br><dt><code>height_fixed_p</code><dd>This field is temporarily set to 1 to fix the height of the selected
+window when the echo area is resized.
+
+     <br><dt><code>use_time</code><dd>This is the last time that the window was selected.  The function
+<code>get-lru-window</code> uses this field.
+
+     <br><dt><code>sequence_number</code><dd>A unique number assigned to this window when it was created.
+
+     <br><dt><code>last_modified</code><dd>The <code>modiff</code> field of the window's buffer, as of the last time
+a redisplay completed in this window.
+
+     <br><dt><code>last_overlay_modified</code><dd>The <code>overlay_modiff</code> field of the window's buffer, as of the last
+time a redisplay completed in this window.
+
+     <br><dt><code>last_point</code><dd>The buffer's value of point, as of the last time a redisplay completed
+in this window.
+
+     <br><dt><code>last_had_star</code><dd>A non-<code>nil</code> value means the window's buffer was &ldquo;modified&rdquo; when the
+window was last updated.
+
+     <br><dt><code>vertical_scroll_bar</code><dd>This window's vertical scroll bar.
+
+     <br><dt><code>left_margin_width</code><dd>The width of the left margin in this window, or <code>nil</code> not to
+specify it (in which case the buffer's value of <code>left-margin-width</code>
+is used.
+
+     <br><dt><code>right_margin_width</code><dd>Likewise for the right margin.
+
+     <br><dt><code>window_end_pos</code><dd>This is computed as <code>z</code> minus the buffer position of the last glyph
+in the current matrix of the window.  The value is only valid if
+<code>window_end_valid</code> is not <code>nil</code>.
+
+     <br><dt><code>window_end_bytepos</code><dd>The byte position corresponding to <code>window_end_pos</code>.
+
+     <br><dt><code>window_end_vpos</code><dd>The window-relative vertical position of the line containing
+<code>window_end_pos</code>.
+
+     <br><dt><code>window_end_valid</code><dd>This field is set to a non-<code>nil</code> value if <code>window_end_pos</code> is truly
+valid.  This is <code>nil</code> if nontrivial redisplay is preempted since in that
+case the display that <code>window_end_pos</code> was computed for did not get
+onto the screen.
+
+     <br><dt><code>redisplay_end_trigger</code><dd>If redisplay in this window goes beyond this buffer position, it runs
+the <code>redisplay-end-trigger-hook</code>.
+
+     <br><dt><code>cursor</code><dd>A structure describing where the cursor is in this window.
+
+     <br><dt><code>last_cursor</code><dd>The value of <code>cursor</code> as of the last redisplay that finished.
+
+     <br><dt><code>phys_cursor</code><dd>A structure describing where the cursor of this window physically is.
+
+     <br><dt><code>phys_cursor_type</code><dd>The type of cursor that was last displayed on this window.
+
+     <br><dt><code>phys_cursor_on_p</code><dd>This field is non-zero if the cursor is physically on.
+
+     <br><dt><code>cursor_off_p</code><dd>Non-zero means the cursor in this window is logically on.
+
+     <br><dt><code>last_cursor_off_p</code><dd>This field contains the value of <code>cursor_off_p</code> as of the time of
+the last redisplay.
+
+     <br><dt><code>must_be_updated_p</code><dd>This is set to 1 during redisplay when this window must be updated.
+
+     <br><dt><code>hscroll</code><dd>This is the number of columns that the display in the window is scrolled
+horizontally to the left.  Normally, this is 0.
+
+     <br><dt><code>vscroll</code><dd>Vertical scroll amount, in pixels.  Normally, this is 0.
+
+     <br><dt><code>dedicated</code><dd>Non-<code>nil</code> if this window is dedicated to its buffer.
+
+     <br><dt><code>display_table</code><dd>The window's display table, or <code>nil</code> if none is specified for it.
+
+     <br><dt><code>update_mode_line</code><dd>Non-<code>nil</code> means this window's mode line needs to be updated.
+
+     <br><dt><code>base_line_number</code><dd>The line number of a certain position in the buffer, or <code>nil</code>. 
+This is used for displaying the line number of point in the mode line.
+
+     <br><dt><code>base_line_pos</code><dd>The position in the buffer for which the line number is known, or
+<code>nil</code> meaning none is known.
+
+     <br><dt><code>region_showing</code><dd>If the region (or part of it) is highlighted in this window, this field
+holds the mark position that made one end of that region.  Otherwise,
+this field is <code>nil</code>.
+
+     <br><dt><code>column_number_displayed</code><dd>The column number currently displayed in this window's mode line, or <code>nil</code>
+if column numbers are not being displayed.
+
+     <br><dt><code>current_matrix</code><dd>A glyph matrix describing the current display of this window.
+
+     <br><dt><code>desired_matrix</code><dd>A glyph matrix describing the desired display of this window. 
+</dl>
+
+   </body></html>
+

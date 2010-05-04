@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Function Indirection - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Forms.html#Forms" title="Forms">
+<link rel="prev" href="Classifying-Lists.html#Classifying-Lists" title="Classifying Lists">
+<link rel="next" href="Function-Forms.html#Function-Forms" title="Function Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Function-Indirection"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Forms.html#Function-Forms">Function Forms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Classifying-Lists.html#Classifying-Lists">Classifying Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Forms.html#Forms">Forms</a>
+<hr>
+</div>
+
+<h4 class="subsection">9.2.4 Symbol Function Indirection</h4>
+
+<p><a name="index-symbol-function-indirection-496"></a><a name="index-indirection-for-functions-497"></a><a name="index-void-function-498"></a>
+  If the first element of the list is a symbol then evaluation examines
+the symbol's function cell, and uses its contents instead of the
+original symbol.  If the contents are another symbol, this process,
+called <dfn>symbol function indirection</dfn>, is repeated until it obtains a
+non-symbol.  See <a href="Function-Names.html#Function-Names">Function Names</a>, for more information about using a
+symbol as a name for a function stored in the function cell of the
+symbol.
+
+   <p>One possible consequence of this process is an infinite loop, in the
+event that a symbol's function cell refers to the same symbol.  Or a
+symbol may have a void function cell, in which case the subroutine
+<code>symbol-function</code> signals a <code>void-function</code> error.  But if
+neither of these things happens, we eventually obtain a non-symbol,
+which ought to be a function or other suitable object.
+
+   <p><a name="index-invalid_002dfunction-499"></a>  More precisely, we should now have a Lisp function (a lambda
+expression), a byte-code function, a primitive function, a Lisp macro, a
+special form, or an autoload object.  Each of these types is a case
+described in one of the following sections.  If the object is not one of
+these types, the error <code>invalid-function</code> is signaled.
+
+   <p>The following example illustrates the symbol indirection process.  We
+use <code>fset</code> to set the function cell of a symbol and
+<code>symbol-function</code> to get the function cell contents
+(see <a href="Function-Cells.html#Function-Cells">Function Cells</a>).  Specifically, we store the symbol <code>car</code>
+into the function cell of <code>first</code>, and the symbol <code>first</code> into
+the function cell of <code>erste</code>.
+
+<pre class="smallexample">     ;; <span class="roman">Build this function cell linkage:</span>
+     ;;   -------------       -----        -------        -------
+     ;;  | #&lt;subr car&gt; | &lt;-- | car |  &lt;-- | first |  &lt;-- | erste |
+     ;;   -------------       -----        -------        -------
+</pre>
+   <pre class="smallexample">     (symbol-function 'car)
+          =&gt; #&lt;subr car&gt;
+     (fset 'first 'car)
+          =&gt; car
+     (fset 'erste 'first)
+          =&gt; first
+     (erste '(1 2 3))   ; <span class="roman">Call the function referenced by </span><code>erste</code><span class="roman">.</span>
+          =&gt; 1
+</pre>
+   <p>By contrast, the following example calls a function without any symbol
+function indirection, because the first element is an anonymous Lisp
+function, not a symbol.
+
+<pre class="smallexample">     ((lambda (arg) (erste arg))
+      '(1 2 3))
+          =&gt; 1
+</pre>
+   <p class="noindent">Executing the function itself evaluates its body; this does involve
+symbol function indirection when calling <code>erste</code>.
+
+   <p>The built-in function <code>indirect-function</code> provides an easy way to
+perform symbol function indirection explicitly.
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>indirect-function</b><var> function &amp;optional noerror<a name="index-indirect_002dfunction-500"></a></var><br>
+<blockquote><p><a name="Definition-of-indirect_002dfunction"></a>
+This function returns the meaning of <var>function</var> as a function.  If
+<var>function</var> is a symbol, then it finds <var>function</var>'s function
+definition and starts over with that value.  If <var>function</var> is not a
+symbol, then it returns <var>function</var> itself.
+
+        <p>This function signals a <code>void-function</code> error if the final symbol
+is unbound and optional argument <var>noerror</var> is <code>nil</code> or
+omitted.  Otherwise, if <var>noerror</var> is non-<code>nil</code>, it returns
+<code>nil</code> if the final symbol is unbound.
+
+        <p>It signals a <code>cyclic-function-indirection</code> error if there is a
+loop in the chain of symbols.
+
+        <p>Here is how you could define <code>indirect-function</code> in Lisp:
+
+     <pre class="smallexample">          (defun indirect-function (function)
+            (if (symbolp function)
+                (indirect-function (symbol-function function))
+              function))
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

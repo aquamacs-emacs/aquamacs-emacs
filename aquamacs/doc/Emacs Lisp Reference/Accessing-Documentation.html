@@ -1,0 +1,223 @@
+<html lang="en">
+<head>
+<title>Accessing Documentation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Documentation.html#Documentation" title="Documentation">
+<link rel="prev" href="Documentation-Basics.html#Documentation-Basics" title="Documentation Basics">
+<link rel="next" href="Keys-in-Documentation.html#Keys-in-Documentation" title="Keys in Documentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Accessing-Documentation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Documentation</a>
+<hr>
+</div>
+
+<h3 class="section">24.2 Access to Documentation Strings</h3>
+
+<div class="defun">
+&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1655"></a></var><br>
+<blockquote><p>This function returns the documentation string that is recorded in
+<var>symbol</var>'s property list under property <var>property</var>.  It
+retrieves the text from a file if the value calls for that.  If the
+property value isn't <code>nil</code>, isn't a string, and doesn't refer to
+text in a file, then it is evaluated to obtain a string.
+
+        <p>The last thing this function does is pass the string through
+<code>substitute-command-keys</code> to substitute actual key bindings,
+unless <var>verbatim</var> is non-<code>nil</code>.
+
+     <pre class="smallexample">          (documentation-property 'command-line-processed
+             'variable-documentation)
+               =&gt; "Non-nil once command line has been processed"
+          (symbol-plist 'command-line-processed)
+               =&gt; (variable-documentation 188902)
+          (documentation-property 'emacs 'group-documentation)
+               =&gt; "Customization of the One True Editor."
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1656"></a></var><br>
+<blockquote><p>This function returns the documentation string of <var>function</var>. 
+<code>documentation</code> handles macros, named keyboard macros, and
+special forms, as well as ordinary functions.
+
+        <p>If <var>function</var> is a symbol, this function first looks for the
+<code>function-documentation</code> property of that symbol; if that has a
+non-<code>nil</code> value, the documentation comes from that value (if the
+value is not a string, it is evaluated).  If <var>function</var> is not a
+symbol, or if it has no <code>function-documentation</code> property, then
+<code>documentation</code> extracts the documentation string from the actual
+function definition, reading it from a file if called for.
+
+        <p>Finally, unless <var>verbatim</var> is non-<code>nil</code>, it calls
+<code>substitute-command-keys</code> so as to return a value containing the
+actual (current) key bindings.
+
+        <p>The function <code>documentation</code> signals a <code>void-function</code> error
+if <var>function</var> has no function definition.  However, it is OK if
+the function definition has no documentation string.  In that case,
+<code>documentation</code> returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1657"></a></var><br>
+<blockquote><p>This function returns the documentation string of <var>face</var> as a
+face. 
+</p></blockquote></div>
+
+<!-- Wordy to prevent overfull hboxes.  -rjc 15mar92 -->
+<p>Here is an example of using the two functions, <code>documentation</code> and
+<code>documentation-property</code>, to display the documentation strings for
+several symbols in a `<samp><span class="samp">*Help*</span></samp>' buffer.
+
+   <p><a name="describe_002dsymbols-example"></a>
+<pre class="smallexample">     (defun describe-symbols (pattern)
+       "Describe the Emacs Lisp symbols matching PATTERN.
+     All symbols that have PATTERN in their name are described
+     in the `*Help*' buffer."
+       (interactive "sDescribe symbols matching: ")
+       (let ((describe-func
+              (function
+               (lambda (s)
+                 ;; <span class="roman">Print description of symbol.</span>
+                 (if (fboundp s)             ; <span class="roman">It is a function.</span>
+                     (princ
+                      (format "%s\t%s\n%s\n\n" s
+                        (if (commandp s)
+                            (let ((keys (where-is-internal s)))
+                              (if keys
+                                  (concat
+                                   "Keys: "
+                                   (mapconcat 'key-description
+                                              keys " "))
+                                "Keys: none"))
+                          "Function")
+                        (or (documentation s)
+                            "not documented"))))
+     
+                 (if (boundp s)              ; <span class="roman">It is a variable.</span>
+                     (princ
+                      (format "%s\t%s\n%s\n\n" s
+                        (if (user-variable-p s)
+                            "Option " "Variable")
+                        (or (documentation-property
+                              s 'variable-documentation)
+                            "not documented")))))))
+             sym-list)
+     
+         ;; <span class="roman">Build a list of symbols that match pattern.</span>
+         (mapatoms (function
+                    (lambda (sym)
+                      (if (string-match pattern (symbol-name sym))
+                          (setq sym-list (cons sym sym-list))))))
+     
+         ;; <span class="roman">Display the data.</span>
+         (with-output-to-temp-buffer "*Help*"
+           (mapcar describe-func (sort sym-list 'string&lt;))
+           (print-help-return-message))))
+</pre>
+   <p>The <code>describe-symbols</code> function works like <code>apropos</code>,
+but provides more information.
+
+<pre class="smallexample">     (describe-symbols "goal")
+     
+     ---------- Buffer: *Help* ----------
+     goal-column     Option
+     *Semipermanent goal column for vertical motion, as set by ...
+     <!-- Do not blithely break or fill these lines. -->
+     <!-- That makes them incorrect. -->
+     
+     set-goal-column Keys: C-x C-n
+     Set the current horizontal position as a goal for C-n and C-p.
+     <!-- DO NOT put a blank line here!  That is factually inaccurate! -->
+     Those commands will move to this position in the line moved to
+     rather than trying to keep the same horizontal position.
+     With a non-nil argument, clears out the goal column
+     so that C-n and C-p resume vertical motion.
+     The goal column is stored in the variable `goal-column'.
+     
+     temporary-goal-column   Variable
+     Current goal column for vertical motion.
+     It is the column where point was
+     at the start of current run of vertical motion commands.
+     When the `track-eol' feature is doing its job, the value is 9999.
+     ---------- Buffer: *Help* ----------
+</pre>
+   <p>The asterisk `<samp><span class="samp">*</span></samp>' as the first character of a variable's doc string,
+as shown above for the <code>goal-column</code> variable, means that it is a
+user option; see the description of <code>defvar</code> in <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
+
+<div class="defun">
+&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1658"></a></var><br>
+<blockquote><p><a name="Definition-of-Snarf_002ddocumentation"></a>
+This function is used only during Emacs initialization, just before
+the runnable Emacs is dumped.  It finds the file offsets of the
+documentation strings stored in the file <var>filename</var>, and records
+them in the in-core function definitions and variable property lists in
+place of the actual strings.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>.
+
+        <p>Emacs reads the file <var>filename</var> from the <samp><span class="file">emacs/etc</span></samp> directory. 
+When the dumped Emacs is later executed, the same file will be looked
+for in the directory <code>doc-directory</code>.  Usually <var>filename</var> is
+<code>"DOC-</code><var>version</var><code>"</code>. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1659"></a></var><br>
+<blockquote><p>This variable holds the name of the directory which should contain the
+file <code>"DOC-</code><var>version</var><code>"</code> that contains documentation strings for
+built-in and preloaded functions and variables.
+
+        <p>In most cases, this is the same as <code>data-directory</code>.  They may be
+different when you run Emacs from the directory where you built it,
+without actually installing it.  See <a href="Definition-of-data_002ddirectory.html#Definition-of-data_002ddirectory">Definition of data-directory</a>.
+
+        <p>In older Emacs versions, <code>exec-directory</code> was used for this. 
+</p></blockquote></div>
+
+   </body></html>
+

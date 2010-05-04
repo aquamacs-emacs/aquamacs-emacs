@@ -1,0 +1,415 @@
+<html lang="en">
+<head>
+<title>Antinews - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Antinews"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="System-Interface.html#System-Interface">System Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix A Emacs 21 Antinews</h2>
+
+<p>For those users who live backwards in time, here is information about
+downgrading to Emacs version 21.4.  We hope you will enjoy the greater
+simplicity that results from the absence of many Emacs 22.1
+features.
+
+<h3 class="section">A.1 Old Lisp Features in Emacs 21</h3>
+
+     <ul>
+<li>Many unnecessary features of redisplay have been eliminated.  (The
+earlier major release, Emacs 20, will have a completely rewritten
+redisplay engine, which will be even simpler.)
+
+          <ul>
+<li>The function <code>redisplay</code> has been removed.  To update the display
+without delay, call <code>(sit-for 0)</code>.  Since it is generally
+considered wasteful to update the display if there are any pending
+input events, no replacement for <code>(redisplay t)</code> is provided.
+
+          <li>The function <code>force-window-update</code> has been removed.  It
+shouldn't be needed, since changes in window contents are detected
+automatically.  In case they aren't, call <code>redraw-display</code> to
+redraw everything.
+
+          <li>Point no longer moves out from underneath invisible text at the end of
+each command.  This allows the user to detect invisible text by moving
+the cursor around&mdash;if the cursor gets stuck, there is something
+invisible in the way.  If you really want cursor motion to ignore the
+text, try marking it as intangible.
+
+          <li>Support for image maps and image slices has been removed.  Emacs was
+always meant for editing text, anyway.
+
+          <li>The mode line now accepts all text properties, as well as
+<code>:propertize</code> and <code>:eval</code> forms, regardless of the
+<code>risky-local-variable</code> property.
+
+          <li>The <code>line-height</code> and <code>line-spacing</code> properties no longer
+have any meaning for newline characters.  Such properties wouldn't
+make sense, since newlines are not really characters; they just tell
+you where to break a line.
+
+          <li>Considerable simplifications have been made to the display
+specification <code>(space . </code><var>props</var><code>)</code>, which is used for
+displaying a space of specified width and height.  Pixel-based
+specifications and Lisp expressions are no longer accepted.
+
+          <li>Many features associated with the fringe areas have been removed, to
+encourage people to concentrate on the main editing area (the fringe
+will be completely removed in Emacs 20.)  Arbitrary bitmaps can no
+longer be displayed in the fringe; an overlay arrow can still be
+displayed, but there can only be one overlay arrow at a time (any more
+would be confusing.)  The fringe widths cannot be adjusted, and
+individual windows cannot have their own fringe settings.  A mouse
+click on the fringe no longer generates a special event.
+
+          <li>Individual windows cannot have their own scroll-bar settings.
+
+          <li>You can no longer use `<samp><span class="samp">default</span></samp>' in a <code>defface</code> to specify
+defaults for subsequent faces.
+
+          <li>The function <code>display-supports-face-attributes-p</code> has been
+removed.  In <code>defface</code> specifications, the <code>supports</code>
+predicate is no longer supported.
+
+          <li>The functions <code>merge-face-attribute</code> and
+<code>face-attribute-relative-p</code> have been removed.
+
+          <li>The priority of faces in a list supplied by the <code>:inherit</code> face
+attribute has been reversed.  We like to make changes like this once
+in a while, to keep Emacs Lisp programmers on their toes.
+
+          <li>The <code>min-colors</code> face attribute, used for tailoring faces to
+limited-color displays, does not exist.  If in doubt, use colors like
+&ldquo;white&rdquo; and &ldquo;black,&rdquo; which ought to be defined everywhere.
+
+          <li>The <code>tty-color-mode</code> frame parameter does not exist.  You should
+just trust the terminal capabilities database. 
+</ul>
+
+     <li>Several simplifications have been made to mouse support:
+
+          <ul>
+<li>Clicking <kbd>mouse-1</kbd> won't follow links, as that is alien to the
+spirit of Emacs.  Therefore, the <code>follow-link</code> property doesn't
+has any special meaning, and the function <code>mouse-on-link-p</code> has
+been removed.
+
+          <li>The variable <code>void-text-area-pointer</code> has been removed, so the
+mouse pointer shape remains unchanged when moving between valid text
+areas and void text areas.  The <code>pointer</code> image and text
+properties are no longer supported.
+
+          <li>Mouse events will no longer specify the timestamp, the object clicked,
+equivalent buffer positions (for marginal or fringe areas), glyph
+coordinates, or relative pixel coordinates. 
+</ul>
+
+     <li>Simplifications have also been made to the way Emacs handles keymaps
+and key sequences:
+
+          <ul>
+<li>The <code>kbd</code> macro is now obsolete and is no longer documented. 
+It isn't that difficult to write key sequences using the string and
+vector representations, and we want to encourage users to learn.
+
+          <li>Emacs no longer supports key remapping.  You can do pretty much the
+same thing with <code>substitute-key-definition</code>, or by advising the
+relevant command.
+
+          <li>The <code>keymap</code> text and overlay property is now overridden by minor
+mode keymaps, and will not work at the ends of text properties and
+overlays.
+
+          <li>The functions <code>map-keymap</code>, <code>keymap-prompt</code>, and
+<code>current-active-maps</code> have been removed. 
+</ul>
+
+     <li>Process support has been pared down to a functional minimum.  The
+functions <code>call-process-shell-command</code> and <code>process-file</code>
+have been deleted.  Processes no longer maintain property lists, and
+they won't ask any questions when the user tries to exit Emacs (which
+would simply be rude.)  The function <code>signal-process</code> won't
+accept a process object, only the process id; determining the process
+id from a process object is left as an exercise to the programmer.
+
+     <li>Networking has also been simplified: <code>make-network-process</code> and
+its various associated function have all been replaced with a single
+easy-to-use function, <code>open-network-stream</code>, which can't use UDP,
+can't act as a server, and can't set up non-blocking connections. 
+Also, deleting a network process with <code>delete-process</code> won't call
+the sentinel.
+
+     <li>Many programming shortcuts have been deleted, to provide you with the
+enjoyment of &ldquo;rolling your own.&rdquo;  The macros <code>while-no-input</code>,
+<code>with-local-quit</code>, and <code>with-selected-window</code>, along with
+<code>dynamic-completion-table</code> and <code>lazy-completion-table</code> no
+longer exist.  Also, there are no built-in progress reporters;
+with Emacs, you can take progress for granted.
+
+     <li>Variable aliases are no longer supported.  Aliases are for functions,
+not for variables.
+
+     <li>The variables <code>most-positive-fixnum</code> and
+<code>most-negative-fixnum</code> do not exist.  On 32 bit machines, the
+most positive integer is probably 134217727, and the most negative
+integer is probably -134217728.
+
+     <li>The functions <code>eql</code> and <code>macroexpand-all</code> are no longer
+available.  However, you can find similar functions in the <code>cl</code>
+package.
+
+     <li>The list returned by <code>split-string</code> won't include null substrings
+for separators at the beginning or end of a string.  If you want to
+check for such separators, do it separately.
+
+     <li>The function <code>assoc-string</code> has been removed.  Use
+<code>assoc-ignore-case</code> or <code>assoc-ignore-representation</code> (which
+are no longer obsolete.)
+
+     <li>The escape sequence `<samp><span class="samp">\s</span></samp>' is always interpreted as a super
+modifier, never a space.
+
+     <li>The variable <code>buffer-save-without-query</code> has been removed, to
+prevent Emacs from sneakily saving buffers.  Also, the hook
+<code>before-save-hook</code> has been removed, so if you want something to
+be done before saving, advise or redefine <code>basic-save-buffer</code>.
+
+     <li>The variable <code>buffer-auto-save-file-format</code> has been renamed to
+<code>auto-save-file-format</code>, and is no longer a permanent local.
+
+     <li>The function <code>visited-file-modtime</code> now returns a cons, instead
+of a list of two integers.  The primitive <code>set-file-times</code> has
+been eliminated.
+
+     <li>The function <code>file-remote-p</code> is no longer available.
+
+     <li>When determining the filename extension, a leading dot in a filename
+is no longer ignored.  Thus, <samp><span class="file">.emacs</span></samp> is considered to have
+extension <samp><span class="file">emacs</span></samp>, rather than being extensionless.
+
+     <li>Emacs looks for special file handlers in a more efficient manner: it
+will choose the first matching handler in
+<code>file-name-handler-alist</code>, rather than trying to figure out which
+provides the closest match.
+
+     <li>The <code>predicate</code> argument for <code>read-file-name</code> has been
+removed, and so have the variables <code>read-file-name-function</code> and
+<code>read-file-name-completion-ignore-case</code>.  The function
+<code>read-directory-name</code> has also been removed.
+
+     <li>The functions <code>all-completions</code> and <code>try-completion</code> will no
+longer accept lists of strings or hash tables (it will still accept
+alists, obarrays, and functions.)  In addition, the function
+<code>test-completion</code> is no longer available.
+
+     <li>The `<samp><span class="samp">G</span></samp>' interactive code character is no longer supported. 
+Use `<samp><span class="samp">F</span></samp>' instead.
+
+     <li>Arbitrary Lisp functions can no longer be recorded into
+<code>buffer-undo-list</code>.  As a consequence, <code>yank-undo-function</code>
+is obsolete, and has been removed.
+
+     <li>Emacs will never complain about commands that accumulate too much undo
+information, so you no longer have to worry about binding
+<code>buffer-undo-list</code> to <code>t</code> for such commands (though you may
+want to do that anyway, to avoid taking up unnecessary memory space.)
+
+     <li>Atomic change groups are no longer supported.
+
+     <li>The list returned by <code>(match-data t)</code> no longer records the
+buffer as a final element.
+
+     <li>The function <code>looking-back</code> has been removed, so we no longer
+have the benefit of hindsight.
+
+     <li>The variable <code>search-spaces-regexp</code> does not exist.  Spaces
+always stand for themselves in regular expression searches.
+
+     <li>The functions <code>skip-chars-forward</code> and <code>skip-chars-backward</code>
+no longer accepts character classes such as `<samp><span class="samp">[:alpha:]</span></samp>'.  All
+characters are created equal.
+
+     <li>The <code>yank-handler</code> text property no longer has any meaning. 
+Also, <code>yank-excluded-properties</code>, <code>insert-for-yank</code>, and
+<code>insert-buffer-substring-as-yank</code> have all been removed.
+
+     <li>The variable <code>char-property-alias-alist</code> has been deleted. 
+Aliases are for functions, not for properties.
+
+     <li>The function <code>get-char-property-and-overlay</code> has been deleted. 
+If you want the properties at a point, find the text properties at the
+point; then, find the overlays at the point, and find the properties
+on those overlays.
+
+     <li>Font Lock mode only manages <code>face</code> properties; you can't use
+font-lock keywords to specify arbitrary text properties for it to
+manage.  After all, it is called Font Lock mode, not Arbitrary
+Properties Lock mode.
+
+     <li>The arguments to <code>remove-overlays</code> are no longer optional.
+
+     <li>In <code>replace-match</code>, the replacement text now inherits properties
+from the surrounding text.
+
+     <li>The variable <code>mode-line-format</code> no longer supports the <code>:propertize</code>,
+<code>%i</code>, and <code>%I</code> constructs.  The function
+<code>format-mode-line</code> has been removed.
+
+     <li>The functions <code>window-inside-edges</code> and <code>window-body-height</code>
+have been removed.  You should do the relevant calculations yourself,
+starting with <code>window-width</code> and <code>window-height</code>.
+
+     <li>The functions <code>window-pixel-edges</code> and
+<code>window-inside-pixel-edges</code> have been removed.  We prefer to
+think in terms of lines and columns, not pixel coordinates.  (Sometime
+in the distant past, we will do away with graphical terminals
+entirely, in favor of text terminals.)  For similar reasons, the
+functions <code>posn-at-point</code>, <code>posn-at-x-y</code>, and
+<code>window-line-height</code> have been removed, and
+<code>pos-visible-in-window-p</code> no longer worries about partially
+visible rows.
+
+     <li>The macro <code>save-selected-window</code> only saves the selected window
+of the selected frame, so don't try selecting windows in other frames.
+
+     <li>The function <code>minibufferp</code> is no longer available.
+
+     <li>The function <code>modify-all-frames-parameters</code> has been removed (we
+always suspected the name was ungrammatical, anyway.)
+
+     <li>The <code>line-spacing</code> variable no longer accepts float values.
+
+     <li>The function <code>tool-bar-local-item-from-menu</code> has been deleted. 
+If you need to make an entry in the tool bar, you can still use
+<code>tool-bar-add-item-from-menu</code>, but that modifies the binding in
+the source keymap instead of copying it into the local keymap.
+
+     <li>When determining the major mode, the file name takes precedence over
+the interpreter magic line.  The variable <code>magic-mode-alist</code>,
+which associates certain buffer beginnings with major modes, has been
+eliminated.
+
+     <li>The hook <code>after-change-major-mode-hook</code> is not defined, and
+neither are <code>run-mode-hooks</code> and <code>delay-mode-hooks</code>.
+
+     <li>The variable <code>minor-mode-list</code> has been removed.
+
+     <li><code>define-derived-mode</code> will copy abbrevs from the parent mode's
+abbrev table, instead of creating a new, empty abbrev table.
+
+     <li>There are no &ldquo;system&rdquo; abbrevs.  When the user saves into the abbrevs
+file, all abbrevs are saved.
+
+     <li>The Warnings facility has been removed.  Just use <code>error</code>.
+
+     <li>Several hook variables have been renamed to flout the Emacs naming
+conventions.  We feel that consistency is boring, and having
+non-standard hook names encourages users to check the documentation
+before using a hook.  For instance, the normal hook
+<code>find-file-hook</code> has been renamed to <code>find-file-hooks</code>, and
+the abnormal hook <code>delete-frame-functions</code> has been renamed to
+<code>delete-frame-hook</code>.
+
+     <li>The function <code>symbol-file</code> does not exist.  If you want to know
+which file defined a function or variable, try grepping for it.
+
+     <li>The variable <code>load-history</code> records function definitions just
+like variable definitions, instead of indicating which functions were
+previously autoloaded.
+
+     <li>There is a new variable, <code>recursive-load-depth-limit</code>, which
+specifies how many times files can recursively load themselves; it is
+50 by default, and <code>nil</code> means infinity.  Previously, Emacs signaled an
+error after just 3 recursive loads, which was boring.
+
+     <li>Byte-compiler warnings and error messages will leave out the line and
+character positions, in order to exercise your debugging skills. 
+Also, there is no <code>with-no-warnings</code> macro&mdash;instead of
+suppressing compiler warnings, fix your code to avoid them!
+
+     <li>The function <code>unsafep</code> has been removed.
+
+     <li>File local variables can now specify a string with text properties. 
+Since arbitrary Lisp expressions can be embedded in text properties,
+this can provide you with a great deal of flexibility and power.  On
+the other hand, <code>safe-local-eval-forms</code> and the
+<code>safe-local-eval-function</code> function property have no special
+meaning.
+
+     <li>You can no longer use <code>char-displayable-p</code> to test if Emacs can
+display a certain character.
+
+     <li>The function <code>string-to-multibyte</code> is no longer available.
+
+     <li>The <code>translation-table-for-input</code> translation table has been
+removed.  Also, translation hash tables are no longer available, so we
+don't need the functions <code>lookup-character</code> and
+<code>lookup-integer</code>.
+
+     <li>The <code>table</code> argument to <code>translate-region</code> can no longer be
+a char-table; it has to be a string.
+
+     <li>The variable <code>auto-coding-functions</code> and the two functions
+<code>merge-coding-systems</code> and <code>decode-coding-inserted-region</code>
+have been deleted.  The coding system property
+<code>mime-text-unsuitable</code> no longer has any special meaning.
+
+     <li>If pure storage overflows while dumping, Emacs won't tell you how much
+additional pure storage it needs.  Try adding in increments of 20000,
+until you have enough.
+
+     <li>The variables <code>gc-elapsed</code>, <code>gcs-done</code>, and
+<code>post-gc-hook</code> have been garbage-collected. 
+</ul>
+
+<!-- *-texinfo-*- -->
+</body></html>
+

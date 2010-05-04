@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Sound Output - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Terminal-Output.html#Terminal-Output" title="Terminal Output">
+<link rel="next" href="X11-Keysyms.html#X11-Keysyms" title="X11 Keysyms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Sound-Output"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="X11-Keysyms.html#X11-Keysyms">X11 Keysyms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal-Output.html#Terminal-Output">Terminal Output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.14 Sound Output</h3>
+
+<p><a name="index-sound-3566"></a>
+  To play sound using Emacs, use the function <code>play-sound</code>.  Only
+certain systems are supported; if you call <code>play-sound</code> on a system
+which cannot really do the job, it gives an error.  Emacs version 20 and
+earlier did not support sound at all.
+
+   <p>The sound must be stored as a file in RIFF-WAVE format (`<samp><span class="samp">.wav</span></samp>')
+or Sun Audio format (`<samp><span class="samp">.au</span></samp>').
+
+<div class="defun">
+&mdash; Function: <b>play-sound</b><var> sound<a name="index-play_002dsound-3567"></a></var><br>
+<blockquote><p>This function plays a specified sound.  The argument, <var>sound</var>, has
+the form <code>(sound </code><var>properties</var><code>...)</code>, where the <var>properties</var>
+consist of alternating keywords (particular symbols recognized
+specially) and values corresponding to them.
+
+        <p>Here is a table of the keywords that are currently meaningful in
+<var>sound</var>, and their meanings:
+
+          <dl>
+<dt><code>:file </code><var>file</var><dd>This specifies the file containing the sound to play. 
+If the file name is not absolute, it is expanded against
+the directory <code>data-directory</code>.
+
+          <br><dt><code>:data </code><var>data</var><dd>This specifies the sound to play without need to refer to a file.  The
+value, <var>data</var>, should be a string containing the same bytes as a
+sound file.  We recommend using a unibyte string.
+
+          <br><dt><code>:volume </code><var>volume</var><dd>This specifies how loud to play the sound.  It should be a number in the
+range of 0 to 1.  The default is to use whatever volume has been
+specified before.
+
+          <br><dt><code>:device </code><var>device</var><dd>This specifies the system device on which to play the sound, as a
+string.  The default device is system-dependent. 
+</dl>
+
+        <p>Before actually playing the sound, <code>play-sound</code>
+calls the functions in the list <code>play-sound-functions</code>. 
+Each function is called with one argument, <var>sound</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>play-sound-file</b><var> file &amp;optional volume device<a name="index-play_002dsound_002dfile-3568"></a></var><br>
+<blockquote><p>This function is an alternative interface to playing a sound <var>file</var>
+specifying an optional <var>volume</var> and <var>device</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>play-sound-functions</b><var><a name="index-play_002dsound_002dfunctions-3569"></a></var><br>
+<blockquote><p>A list of functions to be called before playing a sound.  Each function
+is called with one argument, a property list that describes the sound. 
+</p></blockquote></div>
+
+   </body></html>
+

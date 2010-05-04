@@ -1,0 +1,175 @@
+<html lang="en">
+<head>
+<title>Syntax Table Internals - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
+<link rel="prev" href="Standard-Syntax-Tables.html#Standard-Syntax-Tables" title="Standard Syntax Tables">
+<link rel="next" href="Categories.html#Categories" title="Categories">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Syntax-Table-Internals"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Categories.html#Categories">Categories</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Syntax-Tables.html#Standard-Syntax-Tables">Standard Syntax Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
+<hr>
+</div>
+
+<h3 class="section">35.8 Syntax Table Internals</h3>
+
+<p><a name="index-syntax-table-internals-2941"></a>
+  Lisp programs don't usually work with the elements directly; the
+Lisp-level syntax table functions usually work with syntax descriptors
+(see <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>).  Nonetheless, here we document the
+internal format.  This format is used mostly when manipulating
+syntax properties.
+
+   <p>Each element of a syntax table is a cons cell of the form
+<code>(</code><var>syntax-code</var><code> . </code><var>matching-char</var><code>)</code>.  The <span class="sc">car</span>,
+<var>syntax-code</var>, is an integer that encodes the syntax class, and any
+flags.  The <span class="sc">cdr</span>, <var>matching-char</var>, is non-<code>nil</code> if
+a character to match was specified.
+
+   <p>This table gives the value of <var>syntax-code</var> which corresponds
+to each syntactic type.
+
+   <p><table summary=""><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+<i>Integer</i> <i>Class</i>
+</td><td valign="top" width="30%">
+<i>Integer</i> <i>Class</i>
+</td><td valign="top" width="31%">
+<i>Integer</i> <i>Class</i>
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+0    whitespace
+</td><td valign="top" width="30%">
+5    close parenthesis
+</td><td valign="top" width="31%">
+10    character quote
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+1    punctuation
+</td><td valign="top" width="30%">
+6    expression prefix
+</td><td valign="top" width="31%">
+11    comment-start
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+2    word
+</td><td valign="top" width="30%">
+7    string quote
+</td><td valign="top" width="31%">
+12    comment-end
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+3    symbol
+</td><td valign="top" width="30%">
+8    paired delimiter
+</td><td valign="top" width="31%">
+13    inherit
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+4    open parenthesis
+</td><td valign="top" width="30%">
+9    escape
+</td><td valign="top" width="31%">
+14    generic comment
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+15   generic string
+   <br></td></tr></table>
+
+   <p>For example, the usual syntax value for `<samp><span class="samp">(</span></samp>' is <code>(4 . 41)</code>. 
+(41 is the character code for `<samp><span class="samp">)</span></samp>'.)
+
+   <p>The flags are encoded in higher order bits, starting 16 bits from the
+least significant bit.  This table gives the power of two which
+corresponds to each syntax flag.
+
+   <p><table summary=""><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+<i>Prefix</i> <i>Flag</i>
+</td><td valign="top" width="30%">
+<i>Prefix</i> <i>Flag</i>
+</td><td valign="top" width="30%">
+<i>Prefix</i> <i>Flag</i>
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+`<samp><span class="samp">1</span></samp>'    <code>(lsh 1 16)</code>
+</td><td valign="top" width="30%">
+`<samp><span class="samp">4</span></samp>'    <code>(lsh 1 19)</code>
+</td><td valign="top" width="30%">
+`<samp><span class="samp">b</span></samp>'    <code>(lsh 1 21)</code>
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+`<samp><span class="samp">2</span></samp>'    <code>(lsh 1 17)</code>
+</td><td valign="top" width="30%">
+`<samp><span class="samp">p</span></samp>'    <code>(lsh 1 20)</code>
+</td><td valign="top" width="30%">
+`<samp><span class="samp">n</span></samp>'    <code>(lsh 1 22)</code>
+<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
+`<samp><span class="samp">3</span></samp>'    <code>(lsh 1 18)</code>
+   <br></td></tr></table>
+
+<div class="defun">
+&mdash; Function: <b>string-to-syntax</b><var> desc<a name="index-string_002dto_002dsyntax-2942"></a></var><br>
+<blockquote><p>This function returns the internal form corresponding to the syntax
+descriptor <var>desc</var>, a cons cell <code>(</code><var>syntax-code</var><code>
+. </code><var>matching-char</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>syntax-after</b><var> pos<a name="index-syntax_002dafter-2943"></a></var><br>
+<blockquote><p>This function returns the syntax code of the character in the buffer
+after position <var>pos</var>, taking account of syntax properties as well
+as the syntax table.  If <var>pos</var> is outside the buffer's accessible
+portion (see <a href="Narrowing.html#Narrowing">accessible portion</a>), this function returns
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>syntax-class</b><var> syntax<a name="index-syntax_002dclass-2944"></a></var><br>
+<blockquote><p>This function returns the syntax class of the syntax code
+<var>syntax</var>.  (It masks off the high 16 bits that hold the flags
+encoded in the syntax descriptor.)  If <var>syntax</var> is <code>nil</code>, it
+returns <code>nil</code>; this is so evaluating the expression
+
+     <pre class="example">          (syntax-class (syntax-after pos))
+     </pre>
+        <p class="noindent">where <code>pos</code> is outside the buffer's accessible portion, will
+yield <code>nil</code> without throwing errors or producing wrong syntax
+class codes. 
+</p></blockquote></div>
+
+   </body></html>
+

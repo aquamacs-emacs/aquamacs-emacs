@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Scope - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
+<link rel="next" href="Extent.html#Extent" title="Extent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Scope"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Extent.html#Extent">Extent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.9.1 Scope</h4>
+
+<p>Emacs Lisp uses <dfn>indefinite scope</dfn> for local variable bindings. 
+This means that any function anywhere in the program text might access a
+given binding of a variable.  Consider the following function
+definitions:
+
+<pre class="example">     (defun binder (x)   ; <code>x</code><span class="roman"> is bound in </span><code>binder</code><span class="roman">.</span>
+        (foo 5))         ; <code>foo</code><span class="roman"> is some other function.</span>
+     
+     (defun user ()      ; <code>x</code><span class="roman"> is used ``free'' in </span><code>user</code><span class="roman">.</span>
+       (list x))
+</pre>
+   <p>In a lexically scoped language, the binding of <code>x</code> in
+<code>binder</code> would never be accessible in <code>user</code>, because
+<code>user</code> is not textually contained within the function
+<code>binder</code>.  However, in dynamically-scoped Emacs Lisp, <code>user</code>
+may or may not refer to the binding of <code>x</code> established in
+<code>binder</code>, depending on the circumstances:
+
+     <ul>
+<li>If we call <code>user</code> directly without calling <code>binder</code> at all,
+then whatever binding of <code>x</code> is found, it cannot come from
+<code>binder</code>.
+
+     <li>If we define <code>foo</code> as follows and then call <code>binder</code>, then the
+binding made in <code>binder</code> will be seen in <code>user</code>:
+
+     <pre class="example">          (defun foo (lose)
+            (user))
+     </pre>
+     <li>However, if we define <code>foo</code> as follows and then call <code>binder</code>,
+then the binding made in <code>binder</code> <em>will not</em> be seen in
+<code>user</code>:
+
+     <pre class="example">          (defun foo (x)
+            (user))
+     </pre>
+     <p class="noindent">Here, when <code>foo</code> is called by <code>binder</code>, it binds <code>x</code>. 
+(The binding in <code>foo</code> is said to <dfn>shadow</dfn> the one made in
+<code>binder</code>.)  Therefore, <code>user</code> will access the <code>x</code> bound
+by <code>foo</code> instead of the one bound by <code>binder</code>. 
+</ul>
+
+   <p>Emacs Lisp uses dynamic scoping because simple implementations of
+lexical scoping are slow.  In addition, every Lisp system needs to offer
+dynamic scoping at least as an option; if lexical scoping is the norm,
+there must be a way to specify dynamic scoping instead for a particular
+variable.  It might not be a bad thing for Emacs to offer both, but
+implementing it with dynamic scoping only was much easier.
+
+   </body></html>
+

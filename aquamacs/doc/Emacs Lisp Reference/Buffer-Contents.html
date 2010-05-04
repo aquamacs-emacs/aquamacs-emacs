@@ -1,0 +1,202 @@
+<html lang="en">
+<head>
+<title>Buffer Contents - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Near-Point.html#Near-Point" title="Near Point">
+<link rel="next" href="Comparing-Text.html#Comparing-Text" title="Comparing Text">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Buffer-Contents"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Comparing-Text.html#Comparing-Text">Comparing Text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Near-Point.html#Near-Point">Near Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.2 Examining Buffer Contents</h3>
+
+<p>This section describes functions that allow a Lisp program to
+convert any portion of the text in the buffer into a string.
+
+<div class="defun">
+&mdash; Function: <b>buffer-substring</b><var> start end<a name="index-buffer_002dsubstring-2405"></a></var><br>
+<blockquote><p>This function returns a string containing a copy of the text of the
+region defined by positions <var>start</var> and <var>end</var> in the current
+buffer.  If the arguments are not positions in the accessible portion of
+the buffer, <code>buffer-substring</code> signals an <code>args-out-of-range</code>
+error.
+
+        <p>It is not necessary for <var>start</var> to be less than <var>end</var>; the
+arguments can be given in either order.  But most often the smaller
+argument is written first.
+
+        <p>Here's an example which assumes Font-Lock mode is not enabled:
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          This is the contents of buffer foo
+          
+          ---------- Buffer: foo ----------
+          
+          (buffer-substring 1 10)
+               =&gt; "This is t"
+          (buffer-substring (point-max) 10)
+               =&gt; "he contents of buffer foo\n"
+     </pre>
+        <p>If the text being copied has any text properties, these are copied into
+the string along with the characters they belong to.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.  However, overlays (see <a href="Overlays.html#Overlays">Overlays</a>) in the buffer and
+their properties are ignored, not copied.
+
+        <p>For example, if Font-Lock mode is enabled, you might get results like
+these:
+
+     <pre class="example">          (buffer-substring 1 10)
+               =&gt; #("This is t" 0 1 (fontified t) 1 9 (fontified t))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-substring-no-properties</b><var> start end<a name="index-buffer_002dsubstring_002dno_002dproperties-2406"></a></var><br>
+<blockquote><p>This is like <code>buffer-substring</code>, except that it does not copy text
+properties, just the characters themselves.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>filter-buffer-substring</b><var> start end &amp;optional delete noprops<a name="index-filter_002dbuffer_002dsubstring-2407"></a></var><br>
+<blockquote><p>This function passes the buffer text between <var>start</var> and <var>end</var>
+through the filter functions specified by the variable
+<code>buffer-substring-filters</code>, and returns the value from the last
+filter function.  If <code>buffer-substring-filters</code> is <code>nil</code>,
+the value is the unaltered text from the buffer, what
+<code>buffer-substring</code> would return.
+
+        <p>If <var>delete</var> is non-<code>nil</code>, this function deletes the text
+between <var>start</var> and <var>end</var> after copying it, like
+<code>delete-and-extract-region</code>.
+
+        <p>If <var>noprops</var> is non-<code>nil</code>, the final string returned does not
+include text properties, while the string passed through the filters
+still includes text properties from the buffer text.
+
+        <p>Lisp code should use this function instead of <code>buffer-substring</code>,
+<code>buffer-substring-no-properties</code>,
+or <code>delete-and-extract-region</code> when copying into user-accessible
+data structures such as the kill-ring, X clipboard, and registers. 
+Major and minor modes can add functions to
+<code>buffer-substring-filters</code> to alter such text as it is copied out
+of the buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-substring-filters</b><var><a name="index-buffer_002dsubstring_002dfilters-2408"></a></var><br>
+<blockquote><p>This variable should be a list of functions that accept a single
+argument, a string, and return a string. 
+<code>filter-buffer-substring</code> passes the buffer substring to the
+first function in this list, and the return value of each function is
+passed to the next function.  The return value of the last function is
+used as the return value of <code>filter-buffer-substring</code>.
+
+        <p>As a special convention, point is set to the start of the buffer text
+being operated on (i.e., the <var>start</var> argument for
+<code>filter-buffer-substring</code>) before these functions are called.
+
+        <p>If this variable is <code>nil</code>, no filtering is performed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-string</b><var><a name="index-buffer_002dstring-2409"></a></var><br>
+<blockquote><p>This function returns the contents of the entire accessible portion of
+the current buffer as a string.  It is equivalent to
+
+     <pre class="example">          (buffer-substring (point-min) (point-max))
+     </pre>
+        <pre class="example">          ---------- Buffer: foo ----------
+          This is the contents of buffer foo
+          
+          ---------- Buffer: foo ----------
+          
+          (buffer-string)
+               =&gt; "This is the contents of buffer foo\n"
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-word</b><var> &amp;optional strict really-word<a name="index-current_002dword-2410"></a></var><br>
+<blockquote><p>This function returns the symbol (or word) at or near point, as a string. 
+The return value includes no text properties.
+
+        <p>If the optional argument <var>really-word</var> is non-<code>nil</code>, it finds a
+word; otherwise, it finds a symbol (which includes both word
+characters and symbol constituent characters).
+
+        <p>If the optional argument <var>strict</var> is non-<code>nil</code>, then point
+must be in or next to the symbol or word&mdash;if no symbol or word is
+there, the function returns <code>nil</code>.  Otherwise, a nearby symbol or
+word on the same line is acceptable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>thing-at-point</b><var> thing<a name="index-thing_002dat_002dpoint-2411"></a></var><br>
+<blockquote><p>Return the <var>thing</var> around or next to point, as a string.
+
+        <p>The argument <var>thing</var> is a symbol which specifies a kind of syntactic
+entity.  Possibilities include <code>symbol</code>, <code>list</code>, <code>sexp</code>,
+<code>defun</code>, <code>filename</code>, <code>url</code>, <code>word</code>, <code>sentence</code>,
+<code>whitespace</code>, <code>line</code>, <code>page</code>, and others.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          Gentlemen may cry ``Pea-!-ce! Peace!,''
+          but there is no peace.
+          ---------- Buffer: foo ----------
+          
+          (thing-at-point 'word)
+               =&gt; "Peace"
+          (thing-at-point 'line)
+               =&gt; "Gentlemen may cry ``Peace! Peace!,''\n"
+          (thing-at-point 'whitespace)
+               =&gt; nil
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

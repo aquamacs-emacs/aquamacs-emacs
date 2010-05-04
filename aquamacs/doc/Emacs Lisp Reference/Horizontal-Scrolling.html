@@ -1,0 +1,185 @@
+<html lang="en">
+<head>
+<title>Horizontal Scrolling - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Vertical-Scrolling.html#Vertical-Scrolling" title="Vertical Scrolling">
+<link rel="next" href="Size-of-Window.html#Size-of-Window" title="Size of Window">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Horizontal-Scrolling"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Size-of-Window.html#Size-of-Window">Size of Window</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vertical-Scrolling.html#Vertical-Scrolling">Vertical Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.13 Horizontal Scrolling</h3>
+
+<p><a name="index-horizontal-scrolling-2075"></a>
+  <dfn>Horizontal scrolling</dfn> means shifting the image in the window left
+or right by a specified multiple of the normal character width.  Each
+window has a <dfn>horizontal scroll position</dfn>, which is a number, never
+less than zero.  It specifies how far to shift the contents left. 
+Shifting the window contents left generally makes all or part of some
+characters disappear off the left, and all or part of some other
+characters appear at the right.  The usual value is zero.
+
+   <p>The horizontal scroll position is measured in units of the normal
+character width, which is the width of space in the default font.  Thus,
+if the value is 5, that means the window contents are scrolled left by 5
+times the normal character width.  How many characters actually
+disappear off to the left depends on their width, and could vary from
+line to line.
+
+   <p>Because we read from side to side in the &ldquo;inner loop,&rdquo; and from top
+to bottom in the &ldquo;outer loop,&rdquo; the effect of horizontal scrolling is
+not like that of textual or vertical scrolling.  Textual scrolling
+involves selection of a portion of text to display, and vertical
+scrolling moves the window contents contiguously; but horizontal
+scrolling causes part of <em>each line</em> to go off screen.
+
+   <p>Usually, no horizontal scrolling is in effect; then the leftmost
+column is at the left edge of the window.  In this state, scrolling to
+the right is meaningless, since there is no data to the left of the edge
+to be revealed by it; so this is not allowed.  Scrolling to the left is
+allowed; it scrolls the first columns of text off the edge of the window
+and can reveal additional columns on the right that were truncated
+before.  Once a window has a nonzero amount of leftward horizontal
+scrolling, you can scroll it back to the right, but only so far as to
+reduce the net horizontal scroll to zero.  There is no limit to how far
+left you can scroll, but eventually all the text will disappear off the
+left edge.
+
+   <p><a name="index-auto_002dhscroll_002dmode-2076"></a>  If <code>auto-hscroll-mode</code> is set, redisplay automatically alters
+the horizontal scrolling of a window as necessary to ensure that point
+is always visible.  However, you can still set the horizontal
+scrolling value explicitly.  The value you specify serves as a lower
+bound for automatic scrolling, i.e. automatic scrolling will not
+scroll a window to a column less than the specified one.
+
+<div class="defun">
+&mdash; Command: <b>scroll-left</b><var> &amp;optional count set-minimum<a name="index-scroll_002dleft-2077"></a></var><br>
+<blockquote><p>This function scrolls the selected window <var>count</var> columns to the
+left (or to the right if <var>count</var> is negative).  The default
+for <var>count</var> is the window width, minus 2.
+
+        <p>The return value is the total amount of leftward horizontal scrolling in
+effect after the change&mdash;just like the value returned by
+<code>window-hscroll</code> (below).
+
+        <p>Once you scroll a window as far right as it can go, back to its normal
+position where the total leftward scrolling is zero, attempts to scroll
+any farther right have no effect.
+
+        <p>If <var>set-minimum</var> is non-<code>nil</code>, the new scroll amount becomes
+the lower bound for automatic scrolling; that is, automatic scrolling
+will not scroll a window to a column less than the value returned by
+this function.  Interactive calls pass non-<code>nil</code> for
+<var>set-minimum</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>scroll-right</b><var> &amp;optional count set-minimum<a name="index-scroll_002dright-2078"></a></var><br>
+<blockquote><p>This function scrolls the selected window <var>count</var> columns to the
+right (or to the left if <var>count</var> is negative).  The default
+for <var>count</var> is the window width, minus 2.  Aside from the direction
+of scrolling, this works just like <code>scroll-left</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-hscroll</b><var> &amp;optional window<a name="index-window_002dhscroll-2079"></a></var><br>
+<blockquote><p>This function returns the total leftward horizontal scrolling of
+<var>window</var>&mdash;the number of columns by which the text in <var>window</var>
+is scrolled left past the left margin.
+
+        <p>The value is never negative.  It is zero when no horizontal scrolling
+has been done in <var>window</var> (which is usually the case).
+
+        <p>If <var>window</var> is <code>nil</code>, the selected window is used.
+
+     <pre class="example">          (window-hscroll)
+               =&gt; 0
+          (scroll-left 5)
+               =&gt; 5
+          (window-hscroll)
+               =&gt; 5
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-window-hscroll</b><var> window columns<a name="index-set_002dwindow_002dhscroll-2080"></a></var><br>
+<blockquote><p>This function sets horizontal scrolling of <var>window</var>.  The value of
+<var>columns</var> specifies the amount of scrolling, in terms of columns
+from the left margin.  The argument <var>columns</var> should be zero or
+positive; if not, it is taken as zero.  Fractional values of
+<var>columns</var> are not supported at present.
+
+        <p>Note that <code>set-window-hscroll</code> may appear not to work if you test
+it by evaluating a call with <kbd>M-:</kbd> in a simple way.  What happens
+is that the function sets the horizontal scroll value and returns, but
+then redisplay adjusts the horizontal scrolling to make point visible,
+and this overrides what the function did.  You can observe the
+function's effect if you call it while point is sufficiently far from
+the left margin that it will remain visible.
+
+        <p>The value returned is <var>columns</var>.
+
+     <pre class="example">          (set-window-hscroll (selected-window) 10)
+               =&gt; 10
+     </pre>
+        </blockquote></div>
+
+   <p>Here is how you can determine whether a given position <var>position</var>
+is off the screen due to horizontal scrolling:
+
+<pre class="example">     (defun hscroll-on-screen (window position)
+       (save-excursion
+         (goto-char position)
+         (and
+          (&gt;= (- (current-column) (window-hscroll window)) 0)
+          (&lt; (- (current-column) (window-hscroll window))
+             (window-width window)))))
+</pre>
+   </body></html>
+

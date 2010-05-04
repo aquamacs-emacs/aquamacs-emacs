@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Customizing Bitmaps - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fringes.html#Fringes" title="Fringes">
+<link rel="prev" href="Fringe-Bitmaps.html#Fringe-Bitmaps" title="Fringe Bitmaps">
+<link rel="next" href="Overlay-Arrow.html#Overlay-Arrow" title="Overlay Arrow">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Customizing-Bitmaps"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overlay-Arrow.html#Overlay-Arrow">Overlay Arrow</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fringe-Bitmaps.html#Fringe-Bitmaps">Fringe Bitmaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fringes.html#Fringes">Fringes</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.13.5 Customizing Fringe Bitmaps</h4>
+
+<div class="defun">
+&mdash; Function: <b>define-fringe-bitmap</b><var> bitmap bits &amp;optional height width align<a name="index-define_002dfringe_002dbitmap-3299"></a></var><br>
+<blockquote><p>This function defines the symbol <var>bitmap</var> as a new fringe bitmap,
+or replaces an existing bitmap with that name.
+
+        <p>The argument <var>bits</var> specifies the image to use.  It should be
+either a string or a vector of integers, where each element (an
+integer) corresponds to one row of the bitmap.  Each bit of an integer
+corresponds to one pixel of the bitmap, where the low bit corresponds
+to the rightmost pixel of the bitmap.
+
+        <p>The height is normally the length of <var>bits</var>.  However, you
+can specify a different height with non-<code>nil</code> <var>height</var>.  The width
+is normally 8, but you can specify a different width with non-<code>nil</code>
+<var>width</var>.  The width must be an integer between 1 and 16.
+
+        <p>The argument <var>align</var> specifies the positioning of the bitmap
+relative to the range of rows where it is used; the default is to
+center the bitmap.  The allowed values are <code>top</code>, <code>center</code>,
+or <code>bottom</code>.
+
+        <p>The <var>align</var> argument may also be a list <code>(</code><var>align</var>
+<var>periodic</var><code>)</code> where <var>align</var> is interpreted as described above. 
+If <var>periodic</var> is non-<code>nil</code>, it specifies that the rows in
+<code>bits</code> should be repeated enough times to reach the specified
+height. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>destroy-fringe-bitmap</b><var> bitmap<a name="index-destroy_002dfringe_002dbitmap-3300"></a></var><br>
+<blockquote><p>This function destroy the fringe bitmap identified by <var>bitmap</var>. 
+If <var>bitmap</var> identifies a standard fringe bitmap, it actually
+restores the standard definition of that bitmap, instead of
+eliminating it entirely. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-fringe-bitmap-face</b><var> bitmap &amp;optional face<a name="index-set_002dfringe_002dbitmap_002dface-3301"></a></var><br>
+<blockquote><p>This sets the face for the fringe bitmap <var>bitmap</var> to <var>face</var>. 
+If <var>face</var> is <code>nil</code>, it selects the <code>fringe</code> face.  The
+bitmap's face controls the color to draw it in.
+
+        <p><var>face</var> is merged with the <code>fringe</code> face, so normally
+<var>face</var> should specify only the foreground color. 
+</p></blockquote></div>
+
+   </body></html>
+

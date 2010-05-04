@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Jumping - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug.html#Edebug" title="Edebug">
+<link rel="prev" href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" title="Edebug Execution Modes">
+<link rel="next" href="Edebug-Misc.html#Edebug-Misc" title="Edebug Misc">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Jumping"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Edebug-Misc.html#Edebug-Misc">Edebug Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.4 Jumping</h4>
+
+<p>The commands described in this section execute until they reach a
+specified location.  All except <kbd>i</kbd> make a temporary breakpoint to
+establish the place to stop, then switch to go mode.  Any other
+breakpoint reached before the intended stop point will also stop
+execution.  See <a href="Breakpoints.html#Breakpoints">Breakpoints</a>, for the details on breakpoints.
+
+   <p>These commands may fail to work as expected in case of nonlocal exit,
+as that can bypass the temporary breakpoint where you expected the
+program to stop.
+
+     <dl>
+<dt><kbd>h</kbd><dd>Proceed to the stop point near where point is (<code>edebug-goto-here</code>).
+
+     <br><dt><kbd>f</kbd><dd>Run the program for one expression
+(<code>edebug-forward-sexp</code>).
+
+     <br><dt><kbd>o</kbd><dd>Run the program until the end of the containing sexp.
+
+     <br><dt><kbd>i</kbd><dd>Step into the function or macro called by the form after point. 
+</dl>
+
+   <p>The <kbd>h</kbd> command proceeds to the stop point at or after the current
+location of point, using a temporary breakpoint.
+
+   <p>The <kbd>f</kbd> command runs the program forward over one expression.  More
+precisely, it sets a temporary breakpoint at the position that
+<kbd>C-M-f</kbd> would reach, then executes in go mode so that the program
+will stop at breakpoints.
+
+   <p>With a prefix argument <var>n</var>, the temporary breakpoint is placed
+<var>n</var> sexps beyond point.  If the containing list ends before <var>n</var>
+more elements, then the place to stop is after the containing
+expression.
+
+   <p>You must check that the position <kbd>C-M-f</kbd> finds is a place that the
+program will really get to.  In <code>cond</code>, for example, this may not
+be true.
+
+   <p>For flexibility, the <kbd>f</kbd> command does <code>forward-sexp</code> starting
+at point, rather than at the stop point.  If you want to execute one
+expression <em>from the current stop point</em>, first type <kbd>w</kbd>, to
+move point there, and then type <kbd>f</kbd>.
+
+   <p>The <kbd>o</kbd> command continues &ldquo;out of&rdquo; an expression.  It places a
+temporary breakpoint at the end of the sexp containing point.  If the
+containing sexp is a function definition itself, <kbd>o</kbd> continues until
+just before the last sexp in the definition.  If that is where you are
+now, it returns from the function and then stops.  In other words, this
+command does not exit the currently executing function unless you are
+positioned after the last sexp.
+
+   <p>The <kbd>i</kbd> command steps into the function or macro called by the list
+form after point, and stops at its first stop point.  Note that the form
+need not be the one about to be evaluated.  But if the form is a
+function call about to be evaluated, remember to use this command before
+any of the arguments are evaluated, since otherwise it will be too late.
+
+   <p>The <kbd>i</kbd> command instruments the function or macro it's supposed to
+step into, if it isn't instrumented already.  This is convenient, but keep
+in mind that the function or macro remains instrumented unless you explicitly
+arrange to deinstrument it.
+
+   </body></html>
+

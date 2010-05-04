@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Variable Aliases - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="File-Local-Variables.html#File-Local-Variables" title="File Local Variables">
+<link rel="next" href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" title="Variables with Restricted Values">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Variable-Aliases"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values">Variables with Restricted Values</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.14 Variable Aliases</h3>
+
+<p><a name="index-variable-aliases-641"></a>
+  It is sometimes useful to make two variables synonyms, so that both
+variables always have the same value, and changing either one also
+changes the other.  Whenever you change the name of a
+variable&mdash;either because you realize its old name was not well
+chosen, or because its meaning has partly changed&mdash;it can be useful
+to keep the old name as an <em>alias</em> of the new one for
+compatibility.  You can do this with <code>defvaralias</code>.
+
+<div class="defun">
+&mdash; Function: <b>defvaralias</b><var> new-alias base-variable &amp;optional docstring<a name="index-defvaralias-642"></a></var><br>
+<blockquote><p>This function defines the symbol <var>new-alias</var> as a variable alias
+for symbol <var>base-variable</var>. This means that retrieving the value
+of <var>new-alias</var> returns the value of <var>base-variable</var>, and
+changing the value of <var>new-alias</var> changes the value of
+<var>base-variable</var>.  The two aliased variable names always share the
+same value and the same bindings.
+
+        <p>If the <var>docstring</var> argument is non-<code>nil</code>, it specifies the
+documentation for <var>new-alias</var>; otherwise, the alias gets the same
+documentation as <var>base-variable</var> has, if any, unless
+<var>base-variable</var> is itself an alias, in which case <var>new-alias</var> gets
+the documentation of the variable at the end of the chain of aliases.
+
+        <p>This function returns <var>base-variable</var>. 
+</p></blockquote></div>
+
+   <p>Variable aliases are convenient for replacing an old name for a
+variable with a new name.  <code>make-obsolete-variable</code> declares that
+the old name is obsolete and therefore that it may be removed at some
+stage in the future.
+
+<div class="defun">
+&mdash; Function: <b>make-obsolete-variable</b><var> obsolete-name current-name &amp;optional when<a name="index-make_002dobsolete_002dvariable-643"></a></var><br>
+<blockquote><p>This function makes the byte-compiler warn that the variable
+<var>obsolete-name</var> is obsolete.  If <var>current-name</var> is a symbol, it is
+the variable's new name; then the warning message says to use
+<var>current-name</var> instead of <var>obsolete-name</var>.  If <var>current-name</var>
+is a string, this is the message and there is no replacement variable.
+
+        <p>If provided, <var>when</var> should be a string indicating when the
+variable was first made obsolete&mdash;for example, a date or a release
+number. 
+</p></blockquote></div>
+
+   <p>You can make two variables synonyms and declare one obsolete at the
+same time using the macro <code>define-obsolete-variable-alias</code>.
+
+<div class="defun">
+&mdash; Macro: <b>define-obsolete-variable-alias</b><var> obsolete-name current-name &amp;optional when docstring<a name="index-define_002dobsolete_002dvariable_002dalias-644"></a></var><br>
+<blockquote><p>This macro marks the variable <var>obsolete-name</var> as obsolete and also
+makes it an alias for the variable <var>current-name</var>.  It is
+equivalent to the following:
+
+     <pre class="example">          (defvaralias <var>obsolete-name</var> <var>current-name</var> <var>docstring</var>)
+          (make-obsolete-variable <var>obsolete-name</var> <var>current-name</var> <var>when</var>)
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>indirect-variable</b><var> variable<a name="index-indirect_002dvariable-645"></a></var><br>
+<blockquote><p>This function returns the variable at the end of the chain of aliases
+of <var>variable</var>.  If <var>variable</var> is not a symbol, or if <var>variable</var> is
+not defined as an alias, the function returns <var>variable</var>.
+
+        <p>This function signals a <code>cyclic-variable-indirection</code> error if
+there is a loop in the chain of symbols. 
+</p></blockquote></div>
+
+<pre class="example">     (defvaralias 'foo 'bar)
+     (indirect-variable 'foo)
+          =&gt; bar
+     (indirect-variable 'bar)
+          =&gt; bar
+     (setq bar 2)
+     bar
+          =&gt; 2
+     foo
+          =&gt; 2
+     (setq foo 0)
+     bar
+          =&gt; 0
+     foo
+          =&gt; 0
+</pre>
+   </body></html>
+

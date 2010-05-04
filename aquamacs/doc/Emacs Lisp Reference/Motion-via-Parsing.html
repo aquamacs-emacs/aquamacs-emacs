@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Motion via Parsing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parsing-Expressions.html#Parsing-Expressions" title="Parsing Expressions">
+<link rel="next" href="Position-Parse.html#Position-Parse" title="Position Parse">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Motion-via-Parsing"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Position-Parse.html#Position-Parse">Position Parse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">35.6.1 Motion Commands Based on Parsing</h4>
+
+<p>This section describes simple point-motion functions that operate
+based on parsing expressions.
+
+<div class="defun">
+&mdash; Function: <b>scan-lists</b><var> from count depth<a name="index-scan_002dlists-2918"></a></var><br>
+<blockquote><p>This function scans forward <var>count</var> balanced parenthetical groupings
+from position <var>from</var>.  It returns the position where the scan stops. 
+If <var>count</var> is negative, the scan moves backwards.
+
+        <p>If <var>depth</var> is nonzero, parenthesis depth counting begins from that
+value.  The only candidates for stopping are places where the depth in
+parentheses becomes zero; <code>scan-lists</code> counts <var>count</var> such
+places and then stops.  Thus, a positive value for <var>depth</var> means go
+out <var>depth</var> levels of parenthesis.
+
+        <p>Scanning ignores comments if <code>parse-sexp-ignore-comments</code> is
+non-<code>nil</code>.
+
+        <p>If the scan reaches the beginning or end of the buffer (or its
+accessible portion), and the depth is not zero, an error is signaled. 
+If the depth is zero but the count is not used up, <code>nil</code> is
+returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>scan-sexps</b><var> from count<a name="index-scan_002dsexps-2919"></a></var><br>
+<blockquote><p>This function scans forward <var>count</var> sexps from position <var>from</var>. 
+It returns the position where the scan stops.  If <var>count</var> is
+negative, the scan moves backwards.
+
+        <p>Scanning ignores comments if <code>parse-sexp-ignore-comments</code> is
+non-<code>nil</code>.
+
+        <p>If the scan reaches the beginning or end of (the accessible part of) the
+buffer while in the middle of a parenthetical grouping, an error is
+signaled.  If it reaches the beginning or end between groupings but
+before count is used up, <code>nil</code> is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>forward-comment</b><var> count<a name="index-forward_002dcomment-2920"></a></var><br>
+<blockquote><p>This function moves point forward across <var>count</var> complete comments
+     (that is, including the starting delimiter and the terminating
+delimiter if any), plus any whitespace encountered on the way.  It
+moves backward if <var>count</var> is negative.  If it encounters anything
+other than a comment or whitespace, it stops, leaving point at the
+place where it stopped.  This includes (for instance) finding the end
+of a comment when moving forward and expecting the beginning of one. 
+The function also stops immediately after moving over the specified
+number of complete comments.  If <var>count</var> comments are found as
+expected, with nothing except whitespace between them, it returns
+<code>t</code>; otherwise it returns <code>nil</code>.
+
+        <p>This function cannot tell whether the &ldquo;comments&rdquo; it traverses are
+embedded within a string.  If they look like comments, it treats them
+as comments. 
+</p></blockquote></div>
+
+   <p>To move forward over all comments and whitespace following point, use
+<code>(forward-comment (buffer-size))</code>.  <code>(buffer-size)</code> is a good
+argument to use, because the number of comments in the buffer cannot
+exceed that many.
+
+   </body></html>
+

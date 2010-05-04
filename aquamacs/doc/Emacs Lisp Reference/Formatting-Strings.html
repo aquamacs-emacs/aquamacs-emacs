@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+<title>Formatting Strings - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
+<link rel="prev" href="String-Conversion.html#String-Conversion" title="String Conversion">
+<link rel="next" href="Case-Conversion.html#Case-Conversion" title="Case Conversion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Formatting-Strings"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Case-Conversion.html#Case-Conversion">Case Conversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="String-Conversion.html#String-Conversion">String Conversion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">4.7 Formatting Strings</h3>
+
+<p><a name="index-formatting-strings-251"></a><a name="index-strings_002c-formatting-them-252"></a>
+  <dfn>Formatting</dfn> means constructing a string by substitution of
+computed values at various places in a constant string.  This constant string
+controls how the other values are printed, as well as where they appear;
+it is called a <dfn>format string</dfn>.
+
+   <p>Formatting is often useful for computing messages to be displayed.  In
+fact, the functions <code>message</code> and <code>error</code> provide the same
+formatting feature described here; they differ from <code>format</code> only
+in how they use the result of formatting.
+
+<div class="defun">
+&mdash; Function: <b>format</b><var> string &amp;rest objects<a name="index-format-253"></a></var><br>
+<blockquote><p>This function returns a new string that is made by copying
+<var>string</var> and then replacing any format specification
+in the copy with encodings of the corresponding <var>objects</var>.  The
+arguments <var>objects</var> are the computed values to be formatted.
+
+        <p>The characters in <var>string</var>, other than the format specifications,
+are copied directly into the output, including their text properties,
+if any. 
+</p></blockquote></div>
+
+   <p><a name="index-g_t_0040samp_007b_0025_007d-in-format-254"></a><a name="index-format-specification-255"></a>  A format specification is a sequence of characters beginning with a
+`<samp><span class="samp">%</span></samp>'.  Thus, if there is a `<samp><span class="samp">%d</span></samp>' in <var>string</var>, the
+<code>format</code> function replaces it with the printed representation of
+one of the values to be formatted (one of the arguments <var>objects</var>). 
+For example:
+
+<pre class="example">     (format "The value of fill-column is %d." fill-column)
+          =&gt; "The value of fill-column is 72."
+</pre>
+   <p>Since <code>format</code> interprets `<samp><span class="samp">%</span></samp>' characters as format
+specifications, you should <em>never</em> pass an arbitrary string as
+the first argument.  This is particularly true when the string is
+generated by some Lisp code.  Unless the string is <em>known</em> to
+never include any `<samp><span class="samp">%</span></samp>' characters, pass <code>"%s"</code>, described
+below, as the first argument, and the string as the second, like this:
+
+<pre class="example">       (format "%s" <var>arbitrary-string</var>)
+</pre>
+   <p>If <var>string</var> contains more than one format specification, the
+format specifications correspond to successive values from
+<var>objects</var>.  Thus, the first format specification in <var>string</var>
+uses the first such value, the second format specification uses the
+second such value, and so on.  Any extra format specifications (those
+for which there are no corresponding values) cause an error.  Any
+extra values to be formatted are ignored.
+
+   <p>Certain format specifications require values of particular types.  If
+you supply a value that doesn't fit the requirements, an error is
+signaled.
+
+   <p>Here is a table of valid format specifications:
+
+     <dl>
+<dt>`<samp><span class="samp">%s</span></samp>'<dd>Replace the specification with the printed representation of the object,
+made without quoting (that is, using <code>princ</code>, not
+<code>prin1</code>&mdash;see <a href="Output-Functions.html#Output-Functions">Output Functions</a>).  Thus, strings are represented
+by their contents alone, with no `<samp><span class="samp">"</span></samp>' characters, and symbols appear
+without `<samp><span class="samp">\</span></samp>' characters.
+
+     <p>If the object is a string, its text properties are
+copied into the output.  The text properties of the `<samp><span class="samp">%s</span></samp>' itself
+are also copied, but those of the object take priority.
+
+     <br><dt>`<samp><span class="samp">%S</span></samp>'<dd>Replace the specification with the printed representation of the object,
+made with quoting (that is, using <code>prin1</code>&mdash;see <a href="Output-Functions.html#Output-Functions">Output Functions</a>).  Thus, strings are enclosed in `<samp><span class="samp">"</span></samp>' characters, and
+`<samp><span class="samp">\</span></samp>' characters appear where necessary before special characters.
+
+     <br><dt>`<samp><span class="samp">%o</span></samp>'<dd><a name="index-integer-to-octal-256"></a>Replace the specification with the base-eight representation of an
+integer.
+
+     <br><dt>`<samp><span class="samp">%d</span></samp>'<dd>Replace the specification with the base-ten representation of an
+integer.
+
+     <br><dt>`<samp><span class="samp">%x</span></samp>'<dt>`<samp><span class="samp">%X</span></samp>'<dd><a name="index-integer-to-hexadecimal-257"></a>Replace the specification with the base-sixteen representation of an
+integer.  `<samp><span class="samp">%x</span></samp>' uses lower case and `<samp><span class="samp">%X</span></samp>' uses upper case.
+
+     <br><dt>`<samp><span class="samp">%c</span></samp>'<dd>Replace the specification with the character which is the value given.
+
+     <br><dt>`<samp><span class="samp">%e</span></samp>'<dd>Replace the specification with the exponential notation for a floating
+point number.
+
+     <br><dt>`<samp><span class="samp">%f</span></samp>'<dd>Replace the specification with the decimal-point notation for a floating
+point number.
+
+     <br><dt>`<samp><span class="samp">%g</span></samp>'<dd>Replace the specification with notation for a floating point number,
+using either exponential notation or decimal-point notation, whichever
+is shorter.
+
+     <br><dt>`<samp><span class="samp">%%</span></samp>'<dd>Replace the specification with a single `<samp><span class="samp">%</span></samp>'.  This format
+specification is unusual in that it does not use a value.  For example,
+<code>(format "%% %d" 30)</code> returns <code>"% 30"</code>. 
+</dl>
+
+   <p>Any other format character results in an `<samp><span class="samp">Invalid format
+operation</span></samp>' error.
+
+   <p>Here are several examples:
+
+<pre class="example">     (format "The name of this buffer is %s." (buffer-name))
+          =&gt; "The name of this buffer is strings.texi."
+     
+     (format "The buffer object prints as %s." (current-buffer))
+          =&gt; "The buffer object prints as strings.texi."
+     
+     (format "The octal value of %d is %o,
+              and the hex value is %x." 18 18 18)
+          =&gt; "The octal value of 18 is 22,
+              and the hex value is 12."
+</pre>
+   <p><a name="index-field-width-258"></a><a name="index-padding-259"></a>  A specification can have a <dfn>width</dfn>, which is a signed decimal
+number between the `<samp><span class="samp">%</span></samp>' and the specification character.  If the
+printed representation of the object contains fewer characters than
+this width, <code>format</code> extends it with padding.  The padding goes
+on the left if the width is positive (or starts with zero) and on the
+right if the width is negative.  The padding character is normally a
+space, but it's `<samp><span class="samp">0</span></samp>' if the width starts with a zero.
+
+   <p>Some of these conventions are ignored for specification characters
+for which they do not make sense.  That is, `<samp><span class="samp">%s</span></samp>', `<samp><span class="samp">%S</span></samp>' and
+`<samp><span class="samp">%c</span></samp>' accept a width starting with 0, but still pad with
+<em>spaces</em> on the left.  Also, `<samp><span class="samp">%%</span></samp>' accepts a width, but
+ignores it.  Here are some examples of padding:
+
+<pre class="example">     (format "%06d is padded on the left with zeros" 123)
+          =&gt; "000123 is padded on the left with zeros"
+     
+     (format "%-6d is padded on the right" 123)
+          =&gt; "123    is padded on the right"
+</pre>
+   <p class="noindent">If the width is too small, <code>format</code> does not truncate the
+object's printed representation.  Thus, you can use a width to specify
+a minimum spacing between columns with no risk of losing information.
+
+   <p>In the following three examples, `<samp><span class="samp">%7s</span></samp>' specifies a minimum
+width of 7.  In the first case, the string inserted in place of
+`<samp><span class="samp">%7s</span></samp>' has only 3 letters, it needs 4 blank spaces as padding.  In
+the second case, the string <code>"specification"</code> is 13 letters wide
+but is not truncated.  In the third case, the padding is on the right.
+
+<pre class="smallexample">     (format "The word `%7s' actually has %d letters in it."
+             "foo" (length "foo"))
+          =&gt; "The word `    foo' actually has 3 letters in it."
+     
+     (format "The word `%7s' actually has %d letters in it."
+             "specification" (length "specification"))
+          =&gt; "The word `specification' actually has 13 letters in it."
+     
+     (format "The word `%-7s' actually has %d letters in it."
+             "foo" (length "foo"))
+          =&gt; "The word `foo    ' actually has 3 letters in it."
+</pre>
+   <p><a name="index-precision-in-format-specifications-260"></a>  All the specification characters allow an optional <dfn>precision</dfn>
+before the character (after the width, if present).  The precision is
+a decimal-point `<samp><span class="samp">.</span></samp>' followed by a digit-string.  For the
+floating-point specifications (`<samp><span class="samp">%e</span></samp>', `<samp><span class="samp">%f</span></samp>', `<samp><span class="samp">%g</span></samp>'), the
+precision specifies how many decimal places to show; if zero, the
+decimal-point itself is also omitted.  For `<samp><span class="samp">%s</span></samp>' and `<samp><span class="samp">%S</span></samp>',
+the precision truncates the string to the given width, so `<samp><span class="samp">%.3s</span></samp>'
+shows only the first three characters of the representation for
+<var>object</var>.  Precision has no effect for other specification
+characters.
+
+   <p><a name="index-flags-in-format-specifications-261"></a>  Immediately after the `<samp><span class="samp">%</span></samp>' and before the optional width and
+precision, you can put certain &ldquo;flag&rdquo; characters.
+
+   <p>`<samp><span class="samp">+</span></samp>' as a flag inserts a plus sign before a positive number, so
+that it always has a sign.  A space character as flag inserts a space
+before a positive number.  (Otherwise, positive numbers start with the
+first digit.)  Either of these two flags ensures that positive numbers
+and negative numbers use the same number of columns.  These flags are
+ignored except for `<samp><span class="samp">%d</span></samp>', `<samp><span class="samp">%e</span></samp>', `<samp><span class="samp">%f</span></samp>', `<samp><span class="samp">%g</span></samp>', and if
+both flags are used, the `<samp><span class="samp">+</span></samp>' takes precedence.
+
+   <p>The flag `<samp><span class="samp">#</span></samp>' specifies an &ldquo;alternate form&rdquo; which depends on
+the format in use.  For `<samp><span class="samp">%o</span></samp>' it ensures that the result begins
+with a `<samp><span class="samp">0</span></samp>'.  For `<samp><span class="samp">%x</span></samp>' and `<samp><span class="samp">%X</span></samp>', it prefixes the result
+with `<samp><span class="samp">0x</span></samp>' or `<samp><span class="samp">0X</span></samp>'.  For `<samp><span class="samp">%e</span></samp>', `<samp><span class="samp">%f</span></samp>', and `<samp><span class="samp">%g</span></samp>',
+the `<samp><span class="samp">#</span></samp>' flag means include a decimal point even if the precision
+is zero.
+
+   </body></html>
+

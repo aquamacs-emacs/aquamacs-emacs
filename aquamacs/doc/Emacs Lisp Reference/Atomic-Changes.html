@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Atomic Changes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="MD5-Checksum.html#MD5-Checksum" title="MD5 Checksum">
+<link rel="next" href="Change-Hooks.html#Change-Hooks" title="Change Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Atomic-Changes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Change-Hooks.html#Change-Hooks">Change Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MD5-Checksum.html#MD5-Checksum">MD5 Checksum</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.25 Atomic Change Groups</h3>
+
+<p><a name="index-atomic-changes-2656"></a>
+  In data base terminology, an <dfn>atomic</dfn> change is an indivisible
+change&mdash;it can succeed entirely or it can fail entirely, but it
+cannot partly succeed.  A Lisp program can make a series of changes to
+one or several buffers as an <dfn>atomic change group</dfn>, meaning that
+either the entire series of changes will be installed in their buffers
+or, in case of an error, none of them will be.
+
+   <p>To do this for one buffer, the one already current, simply write a
+call to <code>atomic-change-group</code> around the code that makes the
+changes, like this:
+
+<pre class="example">     (atomic-change-group
+       (insert foo)
+       (delete-region x y))
+</pre>
+   <p class="noindent">If an error (or other nonlocal exit) occurs inside the body of
+<code>atomic-change-group</code>, it unmakes all the changes in that buffer
+that were during the execution of the body.  This kind of change group
+has no effect on any other buffers&mdash;any such changes remain.
+
+   <p>If you need something more sophisticated, such as to make changes in
+various buffers constitute one atomic group, you must directly call
+lower-level functions that <code>atomic-change-group</code> uses.
+
+<div class="defun">
+&mdash; Function: <b>prepare-change-group</b><var> &amp;optional buffer<a name="index-prepare_002dchange_002dgroup-2657"></a></var><br>
+<blockquote><p>This function sets up a change group for buffer <var>buffer</var>, which
+defaults to the current buffer.  It returns a &ldquo;handle&rdquo; that
+represents the change group.  You must use this handle to activate the
+change group and subsequently to finish it. 
+</p></blockquote></div>
+
+   <p>To use the change group, you must <dfn>activate</dfn> it.  You must do
+this before making any changes in the text of <var>buffer</var>.
+
+<div class="defun">
+&mdash; Function: <b>activate-change-group</b><var> handle<a name="index-activate_002dchange_002dgroup-2658"></a></var><br>
+<blockquote><p>This function activates the change group that <var>handle</var> designates. 
+</p></blockquote></div>
+
+   <p>After you activate the change group, any changes you make in that
+buffer become part of it.  Once you have made all the desired changes
+in the buffer, you must <dfn>finish</dfn> the change group.  There are two
+ways to do this: you can either accept (and finalize) all the changes,
+or cancel them all.
+
+<div class="defun">
+&mdash; Function: <b>accept-change-group</b><var> handle<a name="index-accept_002dchange_002dgroup-2659"></a></var><br>
+<blockquote><p>This function accepts all the changes in the change group specified by
+<var>handle</var>, making them final. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cancel-change-group</b><var> handle<a name="index-cancel_002dchange_002dgroup-2660"></a></var><br>
+<blockquote><p>This function cancels and undoes all the changes in the change group
+specified by <var>handle</var>. 
+</p></blockquote></div>
+
+   <p>Your code should use <code>unwind-protect</code> to make sure the group is
+always finished.  The call to <code>activate-change-group</code> should be
+inside the <code>unwind-protect</code>, in case the user types <kbd>C-g</kbd>
+just after it runs.  (This is one reason why
+<code>prepare-change-group</code> and <code>activate-change-group</code> are
+separate functions, because normally you would call
+<code>prepare-change-group</code> before the start of that
+<code>unwind-protect</code>.)  Once you finish the group, don't use the
+handle again&mdash;in particular, don't try to finish the same group
+twice.
+
+   <p>To make a multibuffer change group, call <code>prepare-change-group</code>
+once for each buffer you want to cover, then use <code>nconc</code> to
+combine the returned values, like this:
+
+<pre class="example">     (nconc (prepare-change-group buffer-1)
+            (prepare-change-group buffer-2))
+</pre>
+   <p>You can then activate the multibuffer change group with a single call
+to <code>activate-change-group</code>, and finish it with a single call to
+<code>accept-change-group</code> or <code>cancel-change-group</code>.
+
+   <p>Nested use of several change groups for the same buffer works as you
+would expect.  Non-nested use of change groups for the same buffer
+will get Emacs confused, so don't let it happen; the first change
+group you start for any given buffer should be the last one finished.
+
+   </body></html>
+

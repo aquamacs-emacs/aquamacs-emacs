@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Properties in Mode - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
+<link rel="prev" href="_0025_002dConstructs.html#g_t_0025_002dConstructs" title="%-Constructs">
+<link rel="next" href="Header-Lines.html#Header-Lines" title="Header Lines">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Properties-in-Mode"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Header-Lines.html#Header-Lines">Header Lines</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.4.6 Properties in the Mode Line</h4>
+
+<p><a name="index-text-properties-in-the-mode-line-1594"></a>
+  Certain text properties are meaningful in the
+mode line.  The <code>face</code> property affects the appearance of text; the
+<code>help-echo</code> property associates help strings with the text, and
+<code>local-map</code> can make the text mouse-sensitive.
+
+   <p>There are four ways to specify text properties for text in the mode
+line:
+
+     <ol type=1 start=1>
+<li>Put a string with a text property directly into the mode-line data
+structure.
+
+     <li>Put a text property on a mode-line %-construct such as `<samp><span class="samp">%12b</span></samp>'; then
+the expansion of the %-construct will have that same text property.
+
+     <li>Use a <code>(:propertize </code><var>elt</var> <var>props</var><code>...)</code> construct to
+give <var>elt</var> a text property specified by <var>props</var>.
+
+     <li>Use a list containing <code>:eval </code><var>form</var> in the mode-line data
+structure, and make <var>form</var> evaluate to a string that has a text
+property.
+        </ol>
+
+   <p>You can use the <code>local-map</code> property to specify a keymap.  This
+keymap only takes real effect for mouse clicks; binding character keys
+and function keys to it has no effect, since it is impossible to move
+point into the mode line.
+
+   <p>When the mode line refers to a variable which does not have a
+non-<code>nil</code> <code>risky-local-variable</code> property, any text
+properties given or specified within that variable's values are
+ignored.  This is because such properties could otherwise specify
+functions to be called, and those functions could come from file
+local variables.
+
+   </body></html>
+

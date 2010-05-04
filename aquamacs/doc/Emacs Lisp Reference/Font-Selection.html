@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>Font Selection - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Faces.html#Faces" title="Faces">
+<link rel="prev" href="Displaying-Faces.html#Displaying-Faces" title="Displaying Faces">
+<link rel="next" href="Face-Functions.html#Face-Functions" title="Face Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Font-Selection"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Face-Functions.html#Face-Functions">Face Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.12.5 Font Selection</h4>
+
+<p><dfn>Selecting a font</dfn> means mapping the specified face attributes for
+a character to a font that is available on a particular display.  The
+face attributes, as determined by face merging, specify most of the
+font choice, but not all.  Part of the choice depends on what character
+it is.
+
+   <p>If the face specifies a fontset name, that fontset determines a
+pattern for fonts of the given charset.  If the face specifies a font
+family, a font pattern is constructed.
+
+   <p>Emacs tries to find an available font for the given face attributes
+and character's registry and encoding.  If there is a font that matches
+exactly, it is used, of course.  The hard case is when no available font
+exactly fits the specification.  Then Emacs looks for one that is
+&ldquo;close&rdquo;&mdash;one attribute at a time.  You can specify the order to
+consider the attributes.  In the case where a specified font family is
+not available, you can specify a set of mappings for alternatives to
+try.
+
+<div class="defun">
+&mdash; Variable: <b>face-font-selection-order</b><var><a name="index-face_002dfont_002dselection_002dorder-3254"></a></var><br>
+<blockquote><p>This variable specifies the order of importance of the face attributes
+<code>:width</code>, <code>:height</code>, <code>:weight</code>, and <code>:slant</code>.  The
+value should be a list containing those four symbols, in order of
+decreasing importance.
+
+        <p>Font selection first finds the best available matches for the first
+attribute listed; then, among the fonts which are best in that way, it
+searches for the best matches in the second attribute, and so on.
+
+        <p>The attributes <code>:weight</code> and <code>:width</code> have symbolic values in
+a range centered around <code>normal</code>.  Matches that are more extreme
+(farther from <code>normal</code>) are somewhat preferred to matches that are
+less extreme (closer to <code>normal</code>); this is designed to ensure that
+non-normal faces contrast with normal ones, whenever possible.
+
+        <p>The default is <code>(:width :height :weight :slant)</code>, which means first
+find the fonts closest to the specified <code>:width</code>, then&mdash;among the
+fonts with that width&mdash;find a best match for the specified font height,
+and so on.
+
+        <p>One example of a case where this variable makes a difference is when the
+default font has no italic equivalent.  With the default ordering, the
+<code>italic</code> face will use a non-italic font that is similar to the
+default one.  But if you put <code>:slant</code> before <code>:height</code>, the
+<code>italic</code> face will use an italic font, even if its height is not
+quite right. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>face-font-family-alternatives</b><var><a name="index-face_002dfont_002dfamily_002dalternatives-3255"></a></var><br>
+<blockquote><p>This variable lets you specify alternative font families to try, if a
+given family is specified and doesn't exist.  Each element should have
+this form:
+
+     <pre class="example">          (<var>family</var> <var>alternate-families</var>...)
+     </pre>
+        <p>If <var>family</var> is specified but not available, Emacs will try the other
+families given in <var>alternate-families</var>, one by one, until it finds a
+family that does exist. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>face-font-registry-alternatives</b><var><a name="index-face_002dfont_002dregistry_002dalternatives-3256"></a></var><br>
+<blockquote><p>This variable lets you specify alternative font registries to try, if a
+given registry is specified and doesn't exist.  Each element should have
+this form:
+
+     <pre class="example">          (<var>registry</var> <var>alternate-registries</var>...)
+     </pre>
+        <p>If <var>registry</var> is specified but not available, Emacs will try the
+other registries given in <var>alternate-registries</var>, one by one,
+until it finds a registry that does exist. 
+</p></blockquote></div>
+
+   <p>Emacs can make use of scalable fonts, but by default it does not use
+them, since the use of too many or too big scalable fonts can crash
+XFree86 servers.
+
+<div class="defun">
+&mdash; Variable: <b>scalable-fonts-allowed</b><var><a name="index-scalable_002dfonts_002dallowed-3257"></a></var><br>
+<blockquote><p>This variable controls which scalable fonts to use.  A value of
+<code>nil</code>, the default, means do not use scalable fonts.  <code>t</code>
+means to use any scalable font that seems appropriate for the text.
+
+        <p>Otherwise, the value must be a list of regular expressions.  Then a
+scalable font is enabled for use if its name matches any regular
+expression in the list.  For example,
+
+     <pre class="example">          (setq scalable-fonts-allowed '("muleindian-2$"))
+     </pre>
+        <p class="noindent">allows the use of scalable fonts with registry <code>muleindian-2</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>face-font-rescale-alist</b><var><a name="index-face_002dfont_002drescale_002dalist-3258"></a></var><br>
+<blockquote><p>This variable specifies scaling for certain faces.  Its value should
+be a list of elements of the form
+
+     <pre class="example">          (<var>fontname-regexp</var> . <var>scale-factor</var>)
+     </pre>
+        <p>If <var>fontname-regexp</var> matches the font name that is about to be
+used, this says to choose a larger similar font according to the
+factor <var>scale-factor</var>.  You would use this feature to normalize
+the font size if certain fonts are bigger or smaller than their
+nominal heights and widths would suggest. 
+</p></blockquote></div>
+
+   </body></html>
+

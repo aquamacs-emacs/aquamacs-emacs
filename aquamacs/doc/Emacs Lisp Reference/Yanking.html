@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Yanking - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
+<link rel="prev" href="Kill-Functions.html#Kill-Functions" title="Kill Functions">
+<link rel="next" href="Yank-Commands.html#Yank-Commands" title="Yank Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Yanking"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Yank-Commands.html#Yank-Commands">Yank Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-Functions.html#Kill-Functions">Kill Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.8.3 Yanking</h4>
+
+<p>Yanking means inserting text from the kill ring, but it does
+not insert the text blindly.  Yank commands and some other commands
+use <code>insert-for-yank</code> to perform special processing on the
+text that they copy into the buffer.
+
+<div class="defun">
+&mdash; Function: <b>insert-for-yank</b><var> string<a name="index-insert_002dfor_002dyank-2451"></a></var><br>
+<blockquote><p>This function normally works like <code>insert</code> except that it doesn't
+insert the text properties in the <code>yank-excluded-properties</code>
+list.  However, if any part of <var>string</var> has a non-<code>nil</code>
+<code>yank-handler</code> text property, that property can do various
+special processing on that part of the text being inserted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>insert-buffer-substring-as-yank</b><var> buf &amp;optional start end<a name="index-insert_002dbuffer_002dsubstring_002das_002dyank-2452"></a></var><br>
+<blockquote><p>This function resembles <code>insert-buffer-substring</code> except that it
+doesn't insert the text properties in the
+<code>yank-excluded-properties</code> list. 
+</p></blockquote></div>
+
+   <p>You can put a <code>yank-handler</code> text property on all or part of
+the text to control how it will be inserted if it is yanked.  The
+<code>insert-for-yank</code> function looks for that property.  The property
+value must be a list of one to four elements, with the following
+format (where elements after the first may be omitted):
+
+<pre class="example">     (<var>function</var> <var>param</var> <var>noexclude</var> <var>undo</var>)
+</pre>
+   <p>Here is what the elements do:
+
+     <dl>
+<dt><var>function</var><dd>When <var>function</var> is present and non-<code>nil</code>, it is called instead of
+<code>insert</code> to insert the string.  <var>function</var> takes one
+argument&mdash;the string to insert.
+
+     <br><dt><var>param</var><dd>If <var>param</var> is present and non-<code>nil</code>, it replaces <var>string</var>
+(or the part of <var>string</var> being processed) as the object passed to
+<var>function</var> (or <code>insert</code>); for example, if <var>function</var> is
+<code>yank-rectangle</code>, <var>param</var> should be a list of strings to
+insert as a rectangle.
+
+     <br><dt><var>noexclude</var><dd>If <var>noexclude</var> is present and non-<code>nil</code>, the normal removal of the
+yank-excluded-properties is not performed; instead <var>function</var> is
+responsible for removing those properties.  This may be necessary
+if <var>function</var> adjusts point before or after inserting the object.
+
+     <br><dt><var>undo</var><dd>If <var>undo</var> is present and non-<code>nil</code>, it is a function that will be
+called by <code>yank-pop</code> to undo the insertion of the current object. 
+It is called with two arguments, the start and end of the current
+region.  <var>function</var> can set <code>yank-undo-function</code> to override
+the <var>undo</var> value. 
+</dl>
+
+   </body></html>
+

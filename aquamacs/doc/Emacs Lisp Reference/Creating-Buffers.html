@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Creating Buffers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="The-Buffer-List.html#The-Buffer-List" title="The Buffer List">
+<link rel="next" href="Killing-Buffers.html#Killing-Buffers" title="Killing Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Creating-Buffers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<h3 class="section">27.9 Creating Buffers</h3>
+
+<p><a name="index-creating-buffers-1947"></a><a name="index-buffers_002c-creating-1948"></a>
+  This section describes the two primitives for creating buffers. 
+<code>get-buffer-create</code> creates a buffer if it finds no existing buffer
+with the specified name; <code>generate-new-buffer</code> always creates a new
+buffer and gives it a unique name.
+
+   <p>Other functions you can use to create buffers include
+<code>with-output-to-temp-buffer</code> (see <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>) and
+<code>create-file-buffer</code> (see <a href="Visiting-Files.html#Visiting-Files">Visiting Files</a>).  Starting a
+subprocess can also create a buffer (see <a href="Processes.html#Processes">Processes</a>).
+
+<div class="defun">
+&mdash; Function: <b>get-buffer-create</b><var> name<a name="index-get_002dbuffer_002dcreate-1949"></a></var><br>
+<blockquote><p>This function returns a buffer named <var>name</var>.  It returns a live
+buffer with that name, if one exists; otherwise, it creates a new
+buffer.  The buffer does not become the current buffer&mdash;this function
+does not change which buffer is current.
+
+        <p>If <var>name</var> is a buffer instead of a string, it is returned, even if
+it is dead.  An error is signaled if <var>name</var> is neither a string
+nor a buffer.
+
+     <pre class="example">          (get-buffer-create "foo")
+               =&gt; #&lt;buffer foo&gt;
+     </pre>
+        <p>The major mode for a newly created buffer is set to Fundamental mode. 
+(The variable <code>default-major-mode</code> is handled at a higher level;
+see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.)  If the name begins with a space, the
+buffer initially disables undo information recording (see <a href="Undo.html#Undo">Undo</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>generate-new-buffer</b><var> name<a name="index-generate_002dnew_002dbuffer-1950"></a></var><br>
+<blockquote><p>This function returns a newly created, empty buffer, but does not make
+it current.  If there is no buffer named <var>name</var>, then that is the
+name of the new buffer.  If that name is in use, this function adds
+suffixes of the form `<samp><span class="samp">&lt;</span><var>n</var><span class="samp">&gt;</span></samp>' to <var>name</var>, where <var>n</var> is an
+integer.  It tries successive integers starting with 2 until it finds an
+available name.
+
+        <p>An error is signaled if <var>name</var> is not a string.
+
+     <pre class="example">          (generate-new-buffer "bar")
+               =&gt; #&lt;buffer bar&gt;
+          (generate-new-buffer "bar")
+               =&gt; #&lt;buffer bar&lt;2&gt;&gt;
+          (generate-new-buffer "bar")
+               =&gt; #&lt;buffer bar&lt;3&gt;&gt;
+     </pre>
+        <p>The major mode for the new buffer is set to Fundamental mode.  The
+variable <code>default-major-mode</code> is handled at a higher level. 
+See <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.
+
+        <p>See the related function <code>generate-new-buffer-name</code> in <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

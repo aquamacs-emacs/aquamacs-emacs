@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Math Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numbers.html#Numbers" title="Numbers">
+<link rel="prev" href="Bitwise-Operations.html#Bitwise-Operations" title="Bitwise Operations">
+<link rel="next" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Math-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Random-Numbers.html#Random-Numbers">Random Numbers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Bitwise-Operations.html#Bitwise-Operations">Bitwise Operations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">3.9 Standard Mathematical Functions</h3>
+
+<p><a name="index-transcendental-functions-196"></a><a name="index-mathematical-functions-197"></a><a name="index-floating_002dpoint-functions-198"></a>
+  These mathematical functions allow integers as well as floating point
+numbers as arguments.
+
+<div class="defun">
+&mdash; Function: <b>sin</b><var> arg<a name="index-sin-199"></a></var><br>
+&mdash; Function: <b>cos</b><var> arg<a name="index-cos-200"></a></var><br>
+&mdash; Function: <b>tan</b><var> arg<a name="index-tan-201"></a></var><br>
+<blockquote><p>These are the ordinary trigonometric functions, with argument measured
+in radians. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>asin</b><var> arg<a name="index-asin-202"></a></var><br>
+<blockquote><p>The value of <code>(asin </code><var>arg</var><code>)</code> is a number between
+&minus;pi/2
+and
+pi/2
+(inclusive) whose sine is <var>arg</var>; if, however, <var>arg</var> is out of
+range (outside [&minus;1, 1]), it signals a <code>domain-error</code> error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>acos</b><var> arg<a name="index-acos-203"></a></var><br>
+<blockquote><p>The value of <code>(acos </code><var>arg</var><code>)</code> is a number between 0 and
+pi
+(inclusive) whose cosine is <var>arg</var>; if, however, <var>arg</var> is out
+of range (outside [&minus;1, 1]), it signals a <code>domain-error</code> error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>atan</b><var> y &amp;optional x<a name="index-atan-204"></a></var><br>
+<blockquote><p>The value of <code>(atan </code><var>y</var><code>)</code> is a number between
+&minus;pi/2
+and
+pi/2
+(exclusive) whose tangent is <var>y</var>.  If the optional second
+argument <var>x</var> is given, the value of <code>(atan y x)</code> is the
+angle in radians between the vector <code>[</code><var>x</var><code>, </code><var>y</var><code>]</code> and the
+<code>X</code> axis. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>exp</b><var> arg<a name="index-exp-205"></a></var><br>
+<blockquote><p>This is the exponential function; it returns
+<i>e</i>
+to the power <var>arg</var>. 
+<i>e</i>
+is a fundamental mathematical constant also called the base of natural
+logarithms. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>log</b><var> arg &amp;optional base<a name="index-log-206"></a></var><br>
+<blockquote><p>This function returns the logarithm of <var>arg</var>, with base <var>base</var>. 
+If you don't specify <var>base</var>, the base
+<i>e</i>
+is used.  If <var>arg</var> is negative, it signals a <code>domain-error</code>
+error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>log10</b><var> arg<a name="index-log10-207"></a></var><br>
+<blockquote><p>This function returns the logarithm of <var>arg</var>, with base 10.  If
+<var>arg</var> is negative, it signals a <code>domain-error</code> error. 
+<code>(log10 </code><var>x</var><code>)</code> == <code>(log </code><var>x</var><code> 10)</code>, at least
+approximately. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>expt</b><var> x y<a name="index-expt-208"></a></var><br>
+<blockquote><p>This function returns <var>x</var> raised to power <var>y</var>.  If both
+arguments are integers and <var>y</var> is positive, the result is an
+integer; in this case, overflow causes truncation, so watch out. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sqrt</b><var> arg<a name="index-sqrt-209"></a></var><br>
+<blockquote><p>This returns the square root of <var>arg</var>.  If <var>arg</var> is negative,
+it signals a <code>domain-error</code> error. 
+</p></blockquote></div>
+
+   </body></html>
+

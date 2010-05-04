@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Dialog Boxes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" title="Pop-Up Menus">
+<link rel="next" href="Pointer-Shape.html#Pointer-Shape" title="Pointer Shape">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Dialog-Boxes"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up Menus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.16 Dialog Boxes</h3>
+
+<p><a name="index-dialog-boxes-2220"></a>
+  A dialog box is a variant of a pop-up menu&mdash;it looks a little
+different, it always appears in the center of a frame, and it has just
+one level and one or more buttons.  The main use of dialog boxes is
+for asking questions that the user can answer with &ldquo;yes,&rdquo; &ldquo;no,&rdquo;
+and a few other alternatives.  With a single button, they can also
+force the user to acknowledge important information.  The functions
+<code>y-or-n-p</code> and <code>yes-or-no-p</code> use dialog boxes instead of the
+keyboard, when called from commands invoked by mouse clicks.
+
+<div class="defun">
+&mdash; Function: <b>x-popup-dialog</b><var> position contents &amp;optional header<a name="index-x_002dpopup_002ddialog-2221"></a></var><br>
+<blockquote><p>This function displays a pop-up dialog box and returns an indication of
+what selection the user makes.  The argument <var>contents</var> specifies
+the alternatives to offer; it has this format:
+
+     <pre class="example">          (<var>title</var> (<var>string</var> . <var>value</var>)...)
+     </pre>
+        <p class="noindent">which looks like the list that specifies a single pane for
+<code>x-popup-menu</code>.
+
+        <p>The return value is <var>value</var> from the chosen alternative.
+
+        <p>As for <code>x-popup-menu</code>, an element of the list may be just a
+string instead of a cons cell <code>(</code><var>string</var><code> . </code><var>value</var><code>)</code>. 
+That makes a box that cannot be selected.
+
+        <p>If <code>nil</code> appears in the list, it separates the left-hand items from
+the right-hand items; items that precede the <code>nil</code> appear on the
+left, and items that follow the <code>nil</code> appear on the right.  If you
+don't include a <code>nil</code> in the list, then approximately half the
+items appear on each side.
+
+        <p>Dialog boxes always appear in the center of a frame; the argument
+<var>position</var> specifies which frame.  The possible values are as in
+<code>x-popup-menu</code>, but the precise coordinates or the individual
+window don't matter; only the frame matters.
+
+        <p>If <var>header</var> is non-<code>nil</code>, the frame title for the box is
+`<samp><span class="samp">Information</span></samp>', otherwise it is `<samp><span class="samp">Question</span></samp>'.  The former is used
+for <code>message-box</code> (see <a href="message_002dbox.html#message_002dbox">message-box</a>).
+
+        <p>In some configurations, Emacs cannot display a real dialog box; so
+instead it displays the same items in a pop-up menu in the center of the
+frame.
+
+        <p>If the user gets rid of the dialog box without making a valid choice,
+for instance using the window manager, then this produces a quit and
+<code>x-popup-dialog</code> does not return. 
+</p></blockquote></div>
+
+   </body></html>
+

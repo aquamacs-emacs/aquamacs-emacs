@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Network Feature Testing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Low_002dLevel-Network.html#Low_002dLevel-Network" title="Low-Level Network">
+<link rel="prev" href="Network-Options.html#Network-Options" title="Network Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Network-Feature-Testing"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Network-Options.html#Network-Options">Network Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.16.3 Testing Availability of Network Features</h4>
+
+<p>To test for the availability of a given network feature, use
+<code>featurep</code> like this:
+
+<pre class="example">     (featurep 'make-network-process '(<var>keyword</var> <var>value</var>))
+</pre>
+   <p class="noindent">The result of the first form is <code>t</code> if it works to specify
+<var>keyword</var> with value <var>value</var> in <code>make-network-process</code>. 
+The result of the second form is <code>t</code> if <var>keyword</var> is
+supported by <code>make-network-process</code>.  Here are some of the
+<var>keyword</var>&mdash;<var>value</var> pairs you can test in
+this way.
+
+     <dl>
+<dt><code>(:nowait t)</code><dd>Non-<code>nil</code> if non-blocking connect is supported. 
+<br><dt><code>(:type datagram)</code><dd>Non-<code>nil</code> if datagrams are supported. 
+<br><dt><code>(:family local)</code><dd>Non-<code>nil</code> if local (a.k.a. &ldquo;UNIX domain&rdquo;) sockets are supported. 
+<br><dt><code>(:family ipv6)</code><dd>Non-<code>nil</code> if IPv6 is supported. 
+<br><dt><code>(:service t)</code><dd>Non-<code>nil</code> if the system can select the port for a server. 
+</dl>
+
+   <p>To test for the availability of a given network option, use
+<code>featurep</code> like this:
+
+<pre class="example">     (featurep 'make-network-process '<var>keyword</var>)
+</pre>
+   <p class="noindent">Here are some of the options you can test in this way.
+
+     <dl>
+<dt><code>:bindtodevice</code><dt><code>:broadcast</code><dt><code>:dontroute</code><dt><code>:keepalive</code><dt><code>:linger</code><dt><code>:oobinline</code><dt><code>:priority</code><dt><code>:reuseaddr</code><dd>That particular network option is supported by
+<code>make-network-process</code> and <code>set-network-process-option</code>. 
+</dl>
+
+   </body></html>
+

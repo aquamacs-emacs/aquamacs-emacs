@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Buffer Modification - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="Buffer-File-Name.html#Buffer-File-Name" title="Buffer File Name">
+<link rel="next" href="Modification-Time.html#Modification-Time" title="Modification Time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Buffer-Modification"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modification-Time.html#Modification-Time">Modification Time</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<h3 class="section">27.5 Buffer Modification</h3>
+
+<p><a name="index-buffer-modification-1921"></a><a name="index-modification-flag-_0028of-buffer_0029-1922"></a>
+  Emacs keeps a flag called the <dfn>modified flag</dfn> for each buffer, to
+record whether you have changed the text of the buffer.  This flag is
+set to <code>t</code> whenever you alter the contents of the buffer, and
+cleared to <code>nil</code> when you save it.  Thus, the flag shows whether
+there are unsaved changes.  The flag value is normally shown in the mode
+line (see <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>), and controls saving (see <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>) and auto-saving (see <a href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>).
+
+   <p>Some Lisp programs set the flag explicitly.  For example, the function
+<code>set-visited-file-name</code> sets the flag to <code>t</code>, because the text
+does not match the newly-visited file, even if it is unchanged from the
+file formerly visited.
+
+   <p>The functions that modify the contents of buffers are described in
+<a href="Text.html#Text">Text</a>.
+
+<div class="defun">
+&mdash; Function: <b>buffer-modified-p</b><var> &amp;optional buffer<a name="index-buffer_002dmodified_002dp-1923"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the buffer <var>buffer</var> has been modified
+since it was last read in from a file or saved, or <code>nil</code>
+otherwise.  If <var>buffer</var> is not supplied, the current buffer
+is tested. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-buffer-modified-p</b><var> flag<a name="index-set_002dbuffer_002dmodified_002dp-1924"></a></var><br>
+<blockquote><p>This function marks the current buffer as modified if <var>flag</var> is
+non-<code>nil</code>, or as unmodified if the flag is <code>nil</code>.
+
+        <p>Another effect of calling this function is to cause unconditional
+redisplay of the mode line for the current buffer.  In fact, the
+function <code>force-mode-line-update</code> works by doing this:
+
+     <pre class="example">          (set-buffer-modified-p (buffer-modified-p))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>restore-buffer-modified-p</b><var> flag<a name="index-restore_002dbuffer_002dmodified_002dp-1925"></a></var><br>
+<blockquote><p>Like <code>set-buffer-modified-p</code>, but does not force redisplay
+of mode lines. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>not-modified</b><var> &amp;optional arg<a name="index-not_002dmodified-1926"></a></var><br>
+<blockquote><p>This command marks the current buffer as unmodified, and not needing
+to be saved.  If <var>arg</var> is non-<code>nil</code>, it marks the buffer as
+modified, so that it will be saved at the next suitable occasion. 
+Interactively, <var>arg</var> is the prefix argument.
+
+        <p>Don't use this function in programs, since it prints a message in the
+echo area; use <code>set-buffer-modified-p</code> (above) instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-modified-tick</b><var> &amp;optional buffer<a name="index-buffer_002dmodified_002dtick-1927"></a></var><br>
+<blockquote><p>This function returns <var>buffer</var>'s modification-count.  This is a
+counter that increments every time the buffer is modified.  If
+<var>buffer</var> is <code>nil</code> (or omitted), the current buffer is used. 
+The counter can wrap around occasionally. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-chars-modified-tick</b><var> &amp;optional buffer<a name="index-buffer_002dchars_002dmodified_002dtick-1928"></a></var><br>
+<blockquote><p>This function returns <var>buffer</var>'s character-change modification-count. 
+Changes to text properties leave this counter unchanged; however, each
+time text is inserted or removed from the buffer, the counter is reset
+to the value that would be returned <code>buffer-modified-tick</code>. 
+By comparing the values returned by two <code>buffer-chars-modified-tick</code>
+calls, you can tell whether a character change occurred in that buffer
+in between the calls.  If <var>buffer</var> is <code>nil</code> (or omitted), the
+current buffer is used. 
+</p></blockquote></div>
+
+   </body></html>
+

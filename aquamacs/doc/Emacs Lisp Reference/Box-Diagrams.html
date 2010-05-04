@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Box Diagrams - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Cons-Cell-Type.html#Cons-Cell-Type" title="Cons Cell Type">
+<link rel="next" href="Dotted-Pair-Notation.html#Dotted-Pair-Notation" title="Dotted Pair Notation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Box-Diagrams"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dotted-Pair-Notation.html#Dotted-Pair-Notation">Dotted Pair Notation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.3.6.1 Drawing Lists as Box Diagrams</h5>
+
+<p><a name="index-box-diagrams_002c-for-lists-94"></a><a name="index-diagrams_002c-boxed_002c-for-lists-95"></a>
+  A list can be illustrated by a diagram in which the cons cells are
+shown as pairs of boxes, like dominoes.  (The Lisp reader cannot read
+such an illustration; unlike the textual notation, which can be
+understood by both humans and computers, the box illustrations can be
+understood only by humans.)  This picture represents the three-element
+list <code>(rose violet buttercup)</code>:
+
+<pre class="example">         --- ---      --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; nil
+         --- ---      --- ---      --- ---
+          |            |            |
+          |            |            |
+           --&gt; rose     --&gt; violet   --&gt; buttercup
+</pre>
+   <p>In this diagram, each box represents a slot that can hold or refer to
+any Lisp object.  Each pair of boxes represents a cons cell.  Each arrow
+represents a reference to a Lisp object, either an atom or another cons
+cell.
+
+   <p>In this example, the first box, which holds the <span class="sc">car</span> of the first
+cons cell, refers to or &ldquo;holds&rdquo; <code>rose</code> (a symbol).  The second
+box, holding the <span class="sc">cdr</span> of the first cons cell, refers to the next
+pair of boxes, the second cons cell.  The <span class="sc">car</span> of the second cons
+cell is <code>violet</code>, and its <span class="sc">cdr</span> is the third cons cell.  The
+<span class="sc">cdr</span> of the third (and last) cons cell is <code>nil</code>.
+
+   <p>Here is another diagram of the same list, <code>(rose violet
+buttercup)</code>, sketched in a different manner:
+
+<pre class="smallexample">      ---------------       ----------------       -------------------
+     | car   | cdr   |     | car    | cdr   |     | car       | cdr   |
+     | rose  |   o--------&gt;| violet |   o--------&gt;| buttercup |  nil  |
+     |       |       |     |        |       |     |           |       |
+      ---------------       ----------------       -------------------
+</pre>
+   <p><a name="index-g_t_0040code_007bnil_007d-as-a-list-96"></a><a name="index-empty-list-97"></a>  A list with no elements in it is the <dfn>empty list</dfn>; it is identical
+to the symbol <code>nil</code>.  In other words, <code>nil</code> is both a symbol
+and a list.
+
+   <p>Here is the list <code>(A ())</code>, or equivalently <code>(A nil)</code>,
+depicted with boxes and arrows:
+
+<pre class="example">         --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; nil
+         --- ---      --- ---
+          |            |
+          |            |
+           --&gt; A        --&gt; nil
+</pre>
+   <p>Here is a more complex illustration, showing the three-element list,
+<code>((pine needles) oak maple)</code>, the first element of which is a
+two-element list:
+
+<pre class="example">         --- ---      --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; nil
+         --- ---      --- ---      --- ---
+          |            |            |
+          |            |            |
+          |             --&gt; oak      --&gt; maple
+          |
+          |     --- ---      --- ---
+           --&gt; |   |   |--&gt; |   |   |--&gt; nil
+                --- ---      --- ---
+                 |            |
+                 |            |
+                  --&gt; pine     --&gt; needles
+</pre>
+   <p>The same list represented in the second box notation looks like this:
+
+<pre class="example">      --------------       --------------       --------------
+     | car   | cdr  |     | car   | cdr  |     | car   | cdr  |
+     |   o   |   o-------&gt;| oak   |   o-------&gt;| maple |  nil |
+     |   |   |      |     |       |      |     |       |      |
+      -- | ---------       --------------       --------------
+         |
+         |
+         |        --------------       ----------------
+         |       | car   | cdr  |     | car     | cdr  |
+          ------&gt;| pine  |   o-------&gt;| needles |  nil |
+                 |       |      |     |         |      |
+                  --------------       ----------------
+</pre>
+   </body></html>
+

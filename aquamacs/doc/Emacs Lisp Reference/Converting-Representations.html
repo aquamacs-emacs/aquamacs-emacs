@@ -1,0 +1,175 @@
+<html lang="en">
+<head>
+<title>Converting Representations - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Text-Representations.html#Text-Representations" title="Text Representations">
+<link rel="next" href="Selecting-a-Representation.html#Selecting-a-Representation" title="Selecting a Representation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Converting-Representations"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-a-Representation.html#Selecting-a-Representation">Selecting a Representation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Representations.html#Text-Representations">Text Representations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.2 Converting Text Representations</h3>
+
+<p>Emacs can convert unibyte text to multibyte; it can also convert
+multibyte text to unibyte, though this conversion loses information.  In
+general these conversions happen when inserting text into a buffer, or
+when putting text from several strings together in one string.  You can
+also explicitly convert a string's contents to either representation.
+
+   <p>Emacs chooses the representation for a string based on the text that
+it is constructed from.  The general rule is to convert unibyte text to
+multibyte text when combining it with other multibyte text, because the
+multibyte representation is more general and can hold whatever
+characters the unibyte text has.
+
+   <p>When inserting text into a buffer, Emacs converts the text to the
+buffer's representation, as specified by
+<code>enable-multibyte-characters</code> in that buffer.  In particular, when
+you insert multibyte text into a unibyte buffer, Emacs converts the text
+to unibyte, even though this conversion cannot in general preserve all
+the characters that might be in the multibyte text.  The other natural
+alternative, to convert the buffer contents to multibyte, is not
+acceptable because the buffer's representation is a choice made by the
+user that cannot be overridden automatically.
+
+   <p>Converting unibyte text to multibyte text leaves <acronym>ASCII</acronym> characters
+unchanged, and likewise character codes 128 through 159.  It converts
+the non-<acronym>ASCII</acronym> codes 160 through 255 by adding the value
+<code>nonascii-insert-offset</code> to each character code.  By setting this
+variable, you specify which character set the unibyte characters
+correspond to (see <a href="Character-Sets.html#Character-Sets">Character Sets</a>).  For example, if
+<code>nonascii-insert-offset</code> is 2048, which is <code>(- (make-char
+'latin-iso8859-1) 128)</code>, then the unibyte non-<acronym>ASCII</acronym> characters
+correspond to Latin 1.  If it is 2688, which is <code>(- (make-char
+'greek-iso8859-7) 128)</code>, then they correspond to Greek letters.
+
+   <p>Converting multibyte text to unibyte is simpler: it discards all but
+the low 8 bits of each character code.  If <code>nonascii-insert-offset</code>
+has a reasonable value, corresponding to the beginning of some character
+set, this conversion is the inverse of the other: converting unibyte
+text to multibyte and back to unibyte reproduces the original unibyte
+text.
+
+<div class="defun">
+&mdash; Variable: <b>nonascii-insert-offset</b><var><a name="index-nonascii_002dinsert_002doffset-2683"></a></var><br>
+<blockquote><p>This variable specifies the amount to add to a non-<acronym>ASCII</acronym> character
+when converting unibyte text to multibyte.  It also applies when
+<code>self-insert-command</code> inserts a character in the unibyte
+non-<acronym>ASCII</acronym> range, 128 through 255.  However, the functions
+<code>insert</code> and <code>insert-char</code> do not perform this conversion.
+
+        <p>The right value to use to select character set <var>cs</var> is <code>(-
+(make-char </code><var>cs</var><code>) 128)</code>.  If the value of
+<code>nonascii-insert-offset</code> is zero, then conversion actually uses the
+value for the Latin 1 character set, rather than zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>nonascii-translation-table</b><var><a name="index-nonascii_002dtranslation_002dtable-2684"></a></var><br>
+<blockquote><p>This variable provides a more general alternative to
+<code>nonascii-insert-offset</code>.  You can use it to specify independently
+how to translate each code in the range of 128 through 255 into a
+multibyte character.  The value should be a char-table, or <code>nil</code>. 
+If this is non-<code>nil</code>, it overrides <code>nonascii-insert-offset</code>. 
+</p></blockquote></div>
+
+   <p>The next three functions either return the argument <var>string</var>, or a
+newly created string with no text properties.
+
+<div class="defun">
+&mdash; Function: <b>string-make-unibyte</b><var> string<a name="index-string_002dmake_002dunibyte-2685"></a></var><br>
+<blockquote><p>This function converts the text of <var>string</var> to unibyte
+representation, if it isn't already, and returns the result.  If
+<var>string</var> is a unibyte string, it is returned unchanged.  Multibyte
+character codes are converted to unibyte according to
+<code>nonascii-translation-table</code> or, if that is <code>nil</code>, using
+<code>nonascii-insert-offset</code>.  If the lookup in the translation table
+fails, this function takes just the low 8 bits of each character. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-make-multibyte</b><var> string<a name="index-string_002dmake_002dmultibyte-2686"></a></var><br>
+<blockquote><p>This function converts the text of <var>string</var> to multibyte
+representation, if it isn't already, and returns the result.  If
+<var>string</var> is a multibyte string or consists entirely of
+<acronym>ASCII</acronym> characters, it is returned unchanged.  In particular,
+if <var>string</var> is unibyte and entirely <acronym>ASCII</acronym>, the returned
+string is unibyte.  (When the characters are all <acronym>ASCII</acronym>,
+Emacs primitives will treat the string the same way whether it is
+unibyte or multibyte.)  If <var>string</var> is unibyte and contains
+non-<acronym>ASCII</acronym> characters, the function
+<code>unibyte-char-to-multibyte</code> is used to convert each unibyte
+character to a multibyte character. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-to-multibyte</b><var> string<a name="index-string_002dto_002dmultibyte-2687"></a></var><br>
+<blockquote><p>This function returns a multibyte string containing the same sequence
+of character codes as <var>string</var>.  Unlike
+<code>string-make-multibyte</code>, this function unconditionally returns a
+multibyte string.  If <var>string</var> is a multibyte string, it is
+returned unchanged. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>multibyte-char-to-unibyte</b><var> char<a name="index-multibyte_002dchar_002dto_002dunibyte-2688"></a></var><br>
+<blockquote><p>This convert the multibyte character <var>char</var> to a unibyte
+character, based on <code>nonascii-translation-table</code> and
+<code>nonascii-insert-offset</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>unibyte-char-to-multibyte</b><var> char<a name="index-unibyte_002dchar_002dto_002dmultibyte-2689"></a></var><br>
+<blockquote><p>This convert the unibyte character <var>char</var> to a multibyte
+character, based on <code>nonascii-translation-table</code> and
+<code>nonascii-insert-offset</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

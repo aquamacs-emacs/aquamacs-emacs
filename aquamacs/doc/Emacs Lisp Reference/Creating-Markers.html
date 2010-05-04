@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Creating Markers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Markers.html#Markers" title="Markers">
+<link rel="prev" href="Predicates-on-Markers.html#Predicates-on-Markers" title="Predicates on Markers">
+<link rel="next" href="Information-from-Markers.html#Information-from-Markers" title="Information from Markers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Creating-Markers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Information-from-Markers.html#Information-from-Markers">Information from Markers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Predicates-on-Markers.html#Predicates-on-Markers">Predicates on Markers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
+<hr>
+</div>
+
+<h3 class="section">31.3 Functions that Create Markers</h3>
+
+<p>When you create a new marker, you can make it point nowhere, or point
+to the present position of point, or to the beginning or end of the
+accessible portion of the buffer, or to the same place as another given
+marker.
+
+   <p>The next four functions all return markers with insertion type
+<code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.
+
+<div class="defun">
+&mdash; Function: <b>make-marker</b><var><a name="index-make_002dmarker-2361"></a></var><br>
+<blockquote><p>This function returns a newly created marker that does not point
+anywhere.
+
+     <pre class="example">          (make-marker)
+               =&gt; #&lt;marker in no buffer&gt;
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>point-marker</b><var><a name="index-point_002dmarker-2362"></a></var><br>
+<blockquote><p>This function returns a new marker that points to the present position
+of point in the current buffer.  See <a href="Point.html#Point">Point</a>.  For an example, see
+<code>copy-marker</code>, below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>point-min-marker</b><var><a name="index-point_002dmin_002dmarker-2363"></a></var><br>
+<blockquote><p>This function returns a new marker that points to the beginning of the
+accessible portion of the buffer.  This will be the beginning of the
+buffer unless narrowing is in effect.  See <a href="Narrowing.html#Narrowing">Narrowing</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>point-max-marker</b><var><a name="index-point_002dmax_002dmarker-2364"></a></var><br>
+<blockquote><p>This function returns a new marker that points to the end of the
+accessible portion of the buffer.  This will be the end of the buffer
+unless narrowing is in effect.  See <a href="Narrowing.html#Narrowing">Narrowing</a>.
+
+        <p>Here are examples of this function and <code>point-min-marker</code>, shown in
+a buffer containing a version of the source file for the text of this
+chapter.
+
+     <pre class="example">          (point-min-marker)
+               =&gt; #&lt;marker at 1 in markers.texi&gt;
+          (point-max-marker)
+               =&gt; #&lt;marker at 15573 in markers.texi&gt;
+          
+          (narrow-to-region 100 200)
+               =&gt; nil
+          (point-min-marker)
+               =&gt; #&lt;marker at 100 in markers.texi&gt;
+          (point-max-marker)
+               =&gt; #&lt;marker at 200 in markers.texi&gt;
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-marker</b><var> marker-or-integer &amp;optional insertion-type<a name="index-copy_002dmarker-2365"></a></var><br>
+<blockquote><p>If passed a marker as its argument, <code>copy-marker</code> returns a
+new marker that points to the same place and the same buffer as does
+<var>marker-or-integer</var>.  If passed an integer as its argument,
+<code>copy-marker</code> returns a new marker that points to position
+<var>marker-or-integer</var> in the current buffer.
+
+        <p>The new marker's insertion type is specified by the argument
+<var>insertion-type</var>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.
+
+        <p>If passed an integer argument less than 1, <code>copy-marker</code> returns a
+new marker that points to the beginning of the current buffer.  If
+passed an integer argument greater than the length of the buffer,
+<code>copy-marker</code> returns a new marker that points to the end of the
+buffer.
+
+     <pre class="example">          (copy-marker 0)
+               =&gt; #&lt;marker at 1 in markers.texi&gt;
+          
+          (copy-marker 20000)
+               =&gt; #&lt;marker at 7572 in markers.texi&gt;
+     </pre>
+        <p>An error is signaled if <var>marker</var> is neither a marker nor an
+integer. 
+</p></blockquote></div>
+
+   <p>Two distinct markers are considered <code>equal</code> (even though not
+<code>eq</code>) to each other if they have the same position and buffer, or
+if they both point nowhere.
+
+<pre class="example">     (setq p (point-marker))
+          =&gt; #&lt;marker at 2139 in markers.texi&gt;
+     
+     (setq q (copy-marker p))
+          =&gt; #&lt;marker at 2139 in markers.texi&gt;
+     
+     (eq p q)
+          =&gt; nil
+     
+     (equal p q)
+          =&gt; t
+</pre>
+   </body></html>
+

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Dotted Pair Notation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Cons-Cell-Type.html#Cons-Cell-Type" title="Cons Cell Type">
+<link rel="prev" href="Box-Diagrams.html#Box-Diagrams" title="Box Diagrams">
+<link rel="next" href="Association-List-Type.html#Association-List-Type" title="Association List Type">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Dotted-Pair-Notation"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Association-List-Type.html#Association-List-Type">Association List Type</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Box-Diagrams.html#Box-Diagrams">Box Diagrams</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.3.6.2 Dotted Pair Notation</h5>
+
+<p><a name="index-dotted-pair-notation-98"></a><a name="index-g_t_0040samp_007b_002e_007d-in-lists-99"></a>
+  <dfn>Dotted pair notation</dfn> is a general syntax for cons cells that
+represents the <span class="sc">car</span> and <span class="sc">cdr</span> explicitly.  In this syntax,
+<code>(</code><var>a</var><code> . </code><var>b</var><code>)</code> stands for a cons cell whose <span class="sc">car</span> is
+the object <var>a</var> and whose <span class="sc">cdr</span> is the object <var>b</var>.  Dotted
+pair notation is more general than list syntax because the <span class="sc">cdr</span>
+does not have to be a list.  However, it is more cumbersome in cases
+where list syntax would work.  In dotted pair notation, the list
+`<samp><span class="samp">(1 2 3)</span></samp>' is written as `<samp><span class="samp">(1 .  (2 . (3 . nil)))</span></samp>'.  For
+<code>nil</code>-terminated lists, you can use either notation, but list
+notation is usually clearer and more convenient.  When printing a
+list, the dotted pair notation is only used if the <span class="sc">cdr</span> of a cons
+cell is not a list.
+
+   <p>Here's an example using boxes to illustrate dotted pair notation. 
+This example shows the pair <code>(rose . violet)</code>:
+
+<pre class="example">         --- ---
+        |   |   |--&gt; violet
+         --- ---
+          |
+          |
+           --&gt; rose
+</pre>
+   <p>You can combine dotted pair notation with list notation to represent
+conveniently a chain of cons cells with a non-<code>nil</code> final <span class="sc">cdr</span>. 
+You write a dot after the last element of the list, followed by the
+<span class="sc">cdr</span> of the final cons cell.  For example, <code>(rose violet
+. buttercup)</code> is equivalent to <code>(rose . (violet . buttercup))</code>. 
+The object looks like this:
+
+<pre class="example">         --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; buttercup
+         --- ---      --- ---
+          |            |
+          |            |
+           --&gt; rose     --&gt; violet
+</pre>
+   <p>The syntax <code>(rose . violet . buttercup)</code> is invalid because
+there is nothing that it could mean.  If anything, it would say to put
+<code>buttercup</code> in the <span class="sc">cdr</span> of a cons cell whose <span class="sc">cdr</span> is already
+used for <code>violet</code>.
+
+   <p>The list <code>(rose violet)</code> is equivalent to <code>(rose . (violet))</code>,
+and looks like this:
+
+<pre class="example">         --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; nil
+         --- ---      --- ---
+          |            |
+          |            |
+           --&gt; rose     --&gt; violet
+</pre>
+   <p>Similarly, the three-element list <code>(rose violet buttercup)</code>
+is equivalent to <code>(rose . (violet . (buttercup)))</code>. 
+It looks like this:
+
+<pre class="example">         --- ---      --- ---      --- ---
+        |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; nil
+         --- ---      --- ---      --- ---
+          |            |            |
+          |            |            |
+           --&gt; rose     --&gt; violet   --&gt; buttercup
+</pre>
+   </body></html>
+

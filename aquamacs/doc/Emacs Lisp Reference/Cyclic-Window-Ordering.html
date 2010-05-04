@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Cyclic Window Ordering - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Selecting-Windows.html#Selecting-Windows" title="Selecting Windows">
+<link rel="next" href="Buffers-and-Windows.html#Buffers-and-Windows" title="Buffers and Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Cyclic-Window-Ordering"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">28.5 Cyclic Ordering of Windows</h3>
+
+<p><a name="index-cyclic-ordering-of-windows-1997"></a><a name="index-ordering-of-windows_002c-cyclic-1998"></a><a name="index-window-ordering_002c-cyclic-1999"></a>
+  When you use the command <kbd>C-x o</kbd> (<code>other-window</code>) to select
+the next window, it moves through all the windows on the screen in a
+specific cyclic order.  For any given configuration of windows, this
+order never varies.  It is called the <dfn>cyclic ordering of windows</dfn>.
+
+   <p>This ordering generally goes from top to bottom, and from left to
+right.  But it may go down first or go right first, depending on the
+order in which the windows were split.
+
+   <p>If the first split was vertical (into windows one above each other),
+and then the subwindows were split horizontally, then the ordering is
+left to right in the top of the frame, and then left to right in the
+next lower part of the frame, and so on.  If the first split was
+horizontal, the ordering is top to bottom in the left part, and so on. 
+In general, within each set of siblings at any level in the window tree,
+the order is left to right, or top to bottom.
+
+<div class="defun">
+&mdash; Function: <b>next-window</b><var> &amp;optional window minibuf all-frames<a name="index-next_002dwindow-2000"></a></var><br>
+<blockquote><p><a name="index-minibuffer-window_002c-and-_0040code_007bnext_002dwindow_007d-2001"></a>This function returns the window following <var>window</var> in the cyclic
+ordering of windows.  This is the window that <kbd>C-x o</kbd> would select
+if typed when <var>window</var> is selected.  If <var>window</var> is the only
+window visible, then this function returns <var>window</var>.  If omitted,
+<var>window</var> defaults to the selected window.
+
+        <p>The value of the argument <var>minibuf</var> determines whether the
+minibuffer is included in the window order.  Normally, when
+<var>minibuf</var> is <code>nil</code>, the minibuffer is included if it is
+currently active; this is the behavior of <kbd>C-x o</kbd>.  (The minibuffer
+window is active while the minibuffer is in use.  See <a href="Minibuffers.html#Minibuffers">Minibuffers</a>.)
+
+        <p>If <var>minibuf</var> is <code>t</code>, then the cyclic ordering includes the
+minibuffer window even if it is not active.
+
+        <p>If <var>minibuf</var> is neither <code>t</code> nor <code>nil</code>, then the minibuffer
+window is not included even if it is active.
+
+        <p>The argument <var>all-frames</var> specifies which frames to consider.  Here
+are the possible values and their meanings:
+
+          <dl>
+<dt><code>nil</code><dd>Consider all the windows in <var>window</var>'s frame, plus the minibuffer
+used by that frame even if it lies in some other frame.  If the
+minibuffer counts (as determined by <var>minibuf</var>), then all windows on
+all frames that share that minibuffer count too.
+
+          <br><dt><code>t</code><dd>Consider all windows in all existing frames.
+
+          <br><dt><code>visible</code><dd>Consider all windows in all visible frames.  (To get useful results, you
+must ensure <var>window</var> is in a visible frame.)
+
+          <br><dt>0<dd>Consider all windows in all visible or iconified frames.
+
+          <br><dt>a frame<dd>Consider all windows on that frame.
+
+          <br><dt>anything else<dd>Consider precisely the windows in <var>window</var>'s frame, and no others. 
+</dl>
+
+        <p>This example assumes there are two windows, both displaying the
+buffer `<samp><span class="samp">windows.texi</span></samp>':
+
+     <pre class="example">          (selected-window)
+               =&gt; #&lt;window 56 on windows.texi&gt;
+          (next-window (selected-window))
+               =&gt; #&lt;window 52 on windows.texi&gt;
+          (next-window (next-window (selected-window)))
+               =&gt; #&lt;window 56 on windows.texi&gt;
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>previous-window</b><var> &amp;optional window minibuf all-frames<a name="index-previous_002dwindow-2002"></a></var><br>
+<blockquote><p>This function returns the window preceding <var>window</var> in the cyclic
+ordering of windows.  The other arguments specify which windows to
+include in the cycle, as in <code>next-window</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>other-window</b><var> count &amp;optional all-frames<a name="index-other_002dwindow-2003"></a></var><br>
+<blockquote><p>This function selects the <var>count</var>th following window in the cyclic
+order.  If count is negative, then it moves back &minus;<var>count</var>
+windows in the cycle, rather than forward.  It returns <code>nil</code>.
+
+        <p>The argument <var>all-frames</var> has the same meaning as in
+<code>next-window</code>, but the <var>minibuf</var> argument of <code>next-window</code>
+is always effectively <code>nil</code>.
+
+        <p>In an interactive call, <var>count</var> is the numeric prefix argument. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>walk-windows</b><var> proc &amp;optional minibuf all-frames<a name="index-walk_002dwindows-2004"></a></var><br>
+<blockquote><p>This function cycles through all windows.  It calls the function
+<code>proc</code> once for each window, with the window as its sole
+argument.
+
+        <p>The optional arguments <var>minibuf</var> and <var>all-frames</var> specify the
+set of windows to include in the scan.  See <code>next-window</code>, above,
+for details. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-list</b><var> &amp;optional frame minibuf window<a name="index-window_002dlist-2005"></a></var><br>
+<blockquote><p>This function returns a list of the windows on <var>frame</var>, starting
+with <var>window</var>.  If <var>frame</var> is <code>nil</code> or omitted,
+<code>window-list</code> uses the selected frame instead; if <var>window</var> is
+<code>nil</code> or omitted, it uses the selected window.
+
+        <p>The value of <var>minibuf</var> determines if the minibuffer window is
+included in the result list.  If <var>minibuf</var> is <code>t</code>, the result
+always includes the minibuffer window.  If <var>minibuf</var> is <code>nil</code>
+or omitted, that includes the minibuffer window if it is active.  If
+<var>minibuf</var> is neither <code>nil</code> nor <code>t</code>, the result never
+includes the minibuffer window. 
+</p></blockquote></div>
+
+   </body></html>
+

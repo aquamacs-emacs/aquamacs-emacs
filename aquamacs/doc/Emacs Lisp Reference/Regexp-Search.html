@@ -1,0 +1,230 @@
+<html lang="en">
+<head>
+<title>Regexp Search - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Searching-and-Matching.html#Searching-and-Matching" title="Searching and Matching">
+<link rel="prev" href="Regular-Expressions.html#Regular-Expressions" title="Regular Expressions">
+<link rel="next" href="POSIX-Regexps.html#POSIX-Regexps" title="POSIX Regexps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Regexp-Search"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="POSIX-Regexps.html#POSIX-Regexps">POSIX Regexps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>
+<hr>
+</div>
+
+<h3 class="section">34.4 Regular Expression Searching</h3>
+
+<p><a name="index-regular-expression-searching-2841"></a><a name="index-regexp-searching-2842"></a><a name="index-searching-for-regexp-2843"></a>
+  In GNU Emacs, you can search for the next match for a regular
+expression either incrementally or not.  For incremental search
+commands, see <a href="../emacs/Regexp-Search.html#Regexp-Search">Regular Expression Search</a>.  Here we describe only the search functions
+useful in programs.  The principal one is <code>re-search-forward</code>.
+
+   <p>These search functions convert the regular expression to multibyte if
+the buffer is multibyte; they convert the regular expression to unibyte
+if the buffer is unibyte.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
+
+<div class="defun">
+&mdash; Command: <b>re-search-forward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dforward-2844"></a></var><br>
+<blockquote><p>This function searches forward in the current buffer for a string of
+text that is matched by the regular expression <var>regexp</var>.  The
+function skips over any amount of text that is not matched by
+<var>regexp</var>, and leaves point at the end of the first match found. 
+It returns the new value of point.
+
+        <p>If <var>limit</var> is non-<code>nil</code>, it must be a position in the current
+buffer.  It specifies the upper bound to the search.  No match
+extending after that position is accepted.
+
+        <p>If <var>repeat</var> is supplied, it must be a positive number; the search
+is repeated that many times; each repetition starts at the end of the
+previous match.  If all these successive searches succeed, the search
+succeeds, moving point and returning its new value.  Otherwise the
+search fails.  What <code>re-search-forward</code> does when the search
+fails depends on the value of <var>noerror</var>:
+
+          <dl>
+<dt><code>nil</code><dd>Signal a <code>search-failed</code> error. 
+<br><dt><code>t</code><dd>Do nothing and return <code>nil</code>. 
+<br><dt>anything else<dd>Move point to <var>limit</var> (or the end of the accessible portion of the
+buffer) and return <code>nil</code>. 
+</dl>
+
+        <p>In the following example, point is initially before the `<samp><span class="samp">T</span></samp>'. 
+Evaluating the search call moves point to the end of that line (between
+the `<samp><span class="samp">t</span></samp>' of `<samp><span class="samp">hat</span></samp>' and the newline).
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          I read "-!-The cat in the hat
+          comes back" twice.
+          ---------- Buffer: foo ----------
+          
+          (re-search-forward "[a-z]+" nil t 5)
+               =&gt; 27
+          
+          ---------- Buffer: foo ----------
+          I read "The cat in the hat-!-
+          comes back" twice.
+          ---------- Buffer: foo ----------
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>re-search-backward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dbackward-2845"></a></var><br>
+<blockquote><p>This function searches backward in the current buffer for a string of
+text that is matched by the regular expression <var>regexp</var>, leaving
+point at the beginning of the first text found.
+
+        <p>This function is analogous to <code>re-search-forward</code>, but they are not
+simple mirror images.  <code>re-search-forward</code> finds the match whose
+beginning is as close as possible to the starting point.  If
+<code>re-search-backward</code> were a perfect mirror image, it would find the
+match whose end is as close as possible.  However, in fact it finds the
+match whose beginning is as close as possible (and yet ends before the
+starting point).  The reason for this is that matching a regular
+expression at a given spot always works from beginning to end, and
+starts at a specified beginning position.
+
+        <p>A true mirror-image of <code>re-search-forward</code> would require a special
+feature for matching regular expressions from end to beginning.  It's
+not worth the trouble of implementing that. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-match</b><var> regexp string &amp;optional start<a name="index-string_002dmatch-2846"></a></var><br>
+<blockquote><p>This function returns the index of the start of the first match for
+the regular expression <var>regexp</var> in <var>string</var>, or <code>nil</code> if
+there is no match.  If <var>start</var> is non-<code>nil</code>, the search starts
+at that index in <var>string</var>.
+
+        <p>For example,
+
+     <pre class="example">          (string-match
+           "quick" "The quick brown fox jumped quickly.")
+               =&gt; 4
+          (string-match
+           "quick" "The quick brown fox jumped quickly." 8)
+               =&gt; 27
+     </pre>
+        <p class="noindent">The index of the first character of the
+string is 0, the index of the second character is 1, and so on.
+
+        <p>After this function returns, the index of the first character beyond
+the match is available as <code>(match-end 0)</code>.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
+
+     <pre class="example">          (string-match
+           "quick" "The quick brown fox jumped quickly." 8)
+               =&gt; 27
+          
+          (match-end 0)
+               =&gt; 32
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>looking-at</b><var> regexp<a name="index-looking_002dat-2847"></a></var><br>
+<blockquote><p>This function determines whether the text in the current buffer directly
+following point matches the regular expression <var>regexp</var>.  &ldquo;Directly
+following&rdquo; means precisely that: the search is &ldquo;anchored&rdquo; and it can
+succeed only starting with the first character following point.  The
+result is <code>t</code> if so, <code>nil</code> otherwise.
+
+        <p>This function does not move point, but it updates the match data, which
+you can access using <code>match-beginning</code> and <code>match-end</code>. 
+See <a href="Match-Data.html#Match-Data">Match Data</a>.
+
+        <p>In this example, point is located directly before the `<samp><span class="samp">T</span></samp>'.  If it
+were anywhere else, the result would be <code>nil</code>.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          I read "-!-The cat in the hat
+          comes back" twice.
+          ---------- Buffer: foo ----------
+          
+          (looking-at "The cat in the hat$")
+               =&gt; t
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>looking-back</b><var> regexp &amp;optional limit<a name="index-looking_002dback-2848"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>regexp</var> matches text before
+point, ending at point, and <code>nil</code> otherwise.
+
+        <p>Because regular expression matching works only going forward, this is
+implemented by searching backwards from point for a match that ends at
+point.  That can be quite slow if it has to search a long distance. 
+You can bound the time required by specifying <var>limit</var>, which says
+not to search before <var>limit</var>.  In this case, the match that is
+found must begin at or after <var>limit</var>.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          I read "-!-The cat in the hat
+          comes back" twice.
+          ---------- Buffer: foo ----------
+          
+          (looking-back "read \"" 3)
+               =&gt; t
+          (looking-back "read \"" 4)
+               =&gt; nil
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>search-spaces-regexp</b><var><a name="index-search_002dspaces_002dregexp-2849"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it should be a regular expression
+that says how to search for whitespace.  In that case, any group of
+spaces in a regular expression being searched for stands for use of
+this regular expression.  However, spaces inside of constructs such as
+`<samp><span class="samp">[...]</span></samp>' and `<samp><span class="samp">*</span></samp>', `<samp><span class="samp">+</span></samp>', `<samp><span class="samp">?</span></samp>' are not affected by
+<code>search-spaces-regexp</code>.
+
+        <p>Since this variable affects all regular expression search and match
+constructs, you should bind it temporarily for as small as possible
+a part of the code. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Standard File Names - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="File-Names.html#File-Names" title="File Names">
+<link rel="prev" href="File-Name-Completion.html#File-Name-Completion" title="File Name Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Standard-File-Names"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names</a>
+<hr>
+</div>
+
+<h4 class="subsection">25.8.7 Standard File Names</h4>
+
+<p>Most of the file names used in Lisp programs are entered by the user. 
+But occasionally a Lisp program needs to specify a standard file name
+for a particular use&mdash;typically, to hold customization information
+about each user.  For example, abbrev definitions are stored (by
+default) in the file <samp><span class="file">~/.abbrev_defs</span></samp>; the <code>completion</code>
+package stores completions in the file <samp><span class="file">~/.completions</span></samp>.  These are
+two of the many standard file names used by parts of Emacs for certain
+purposes.
+
+   <p>Various operating systems have their own conventions for valid file
+names and for which file names to use for user profile data.  A Lisp
+program which reads a file using a standard file name ought to use, on
+each type of system, a file name suitable for that system.  The function
+<code>convert-standard-filename</code> makes this easy to do.
+
+<div class="defun">
+&mdash; Function: <b>convert-standard-filename</b><var> filename<a name="index-convert_002dstandard_002dfilename-1814"></a></var><br>
+<blockquote><p>This function alters the file name <var>filename</var> to fit the conventions
+of the operating system in use, and returns the result as a new string. 
+</p></blockquote></div>
+
+   <p>The recommended way to specify a standard file name in a Lisp program
+is to choose a name which fits the conventions of GNU and Unix systems,
+usually with a nondirectory part that starts with a period, and pass it
+to <code>convert-standard-filename</code> instead of using it directly.  Here
+is an example from the <code>completion</code> package:
+
+<pre class="example">     (defvar save-completions-file-name
+             (convert-standard-filename "~/.completions")
+       "*The file name to save completions to.")
+</pre>
+   <p>On GNU and Unix systems, and on some other systems as well,
+<code>convert-standard-filename</code> returns its argument unchanged.  On
+some other systems, it alters the name to fit the system's conventions.
+
+   <p>For example, on MS-DOS the alterations made by this function include
+converting a leading `<samp><span class="samp">.</span></samp>'  to `<samp><span class="samp">_</span></samp>', converting a `<samp><span class="samp">_</span></samp>' in the
+middle of the name to `<samp><span class="samp">.</span></samp>' if there is no other `<samp><span class="samp">.</span></samp>', inserting
+a `<samp><span class="samp">.</span></samp>' after eight characters if there is none, and truncating to
+three characters after the `<samp><span class="samp">.</span></samp>'.  (It makes other changes as well.) 
+Thus, <samp><span class="file">.abbrev_defs</span></samp> becomes <samp><span class="file">_abbrev.def</span></samp>, and
+<samp><span class="file">.completions</span></samp> becomes <samp><span class="file">_complet.ion</span></samp>.
+
+   </body></html>
+

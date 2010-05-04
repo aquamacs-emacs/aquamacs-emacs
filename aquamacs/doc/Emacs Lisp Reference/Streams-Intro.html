@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Streams Intro - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Read-and-Print.html#Read-and-Print" title="Read and Print">
+<link rel="next" href="Input-Streams.html#Input-Streams" title="Input Streams">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Streams-Intro"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Input-Streams.html#Input-Streams">Input Streams</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
+<hr>
+</div>
+
+<h3 class="section">19.1 Introduction to Reading and Printing</h3>
+
+<p><a name="index-Lisp-reader-994"></a><a name="index-printing-995"></a><a name="index-reading-996"></a>
+  <dfn>Reading</dfn> a Lisp object means parsing a Lisp expression in textual
+form and producing a corresponding Lisp object.  This is how Lisp
+programs get into Lisp from files of Lisp code.  We call the text the
+<dfn>read syntax</dfn> of the object.  For example, the text `<samp><span class="samp">(a . 5)</span></samp>'
+is the read syntax for a cons cell whose <span class="sc">car</span> is <code>a</code> and whose
+<span class="sc">cdr</span> is the number 5.
+
+   <p><dfn>Printing</dfn> a Lisp object means producing text that represents that
+object&mdash;converting the object to its <dfn>printed representation</dfn>
+(see <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>).  Printing the cons cell described
+above produces the text `<samp><span class="samp">(a . 5)</span></samp>'.
+
+   <p>Reading and printing are more or less inverse operations: printing the
+object that results from reading a given piece of text often produces
+the same text, and reading the text that results from printing an object
+usually produces a similar-looking object.  For example, printing the
+symbol <code>foo</code> produces the text `<samp><span class="samp">foo</span></samp>', and reading that text
+returns the symbol <code>foo</code>.  Printing a list whose elements are
+<code>a</code> and <code>b</code> produces the text `<samp><span class="samp">(a b)</span></samp>', and reading that
+text produces a list (but not the same list) with elements <code>a</code>
+and <code>b</code>.
+
+   <p>However, these two operations are not precisely inverse to each other. 
+There are three kinds of exceptions:
+
+     <ul>
+<li>Printing can produce text that cannot be read.  For example, buffers,
+windows, frames, subprocesses and markers print as text that starts
+with `<samp><span class="samp">#</span></samp>'; if you try to read this text, you get an error.  There is
+no way to read those data types.
+
+     <li>One object can have multiple textual representations.  For example,
+`<samp><span class="samp">1</span></samp>' and `<samp><span class="samp">01</span></samp>' represent the same integer, and `<samp><span class="samp">(a b)</span></samp>' and
+`<samp><span class="samp">(a . (b))</span></samp>' represent the same list.  Reading will accept any of
+the alternatives, but printing must choose one of them.
+
+     <li>Comments can appear at certain points in the middle of an object's
+read sequence without affecting the result of reading it. 
+</ul>
+
+   </body></html>
+

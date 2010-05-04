@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Simple Advice - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="next" href="Defining-Advice.html#Defining-Advice" title="Defining Advice">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Simple-Advice"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Advice.html#Defining-Advice">Defining Advice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h3 class="section">17.1 A Simple Advice Example</h3>
+
+<p>The command <code>next-line</code> moves point down vertically one or more
+lines; it is the standard binding of <kbd>C-n</kbd>.  When used on the last
+line of the buffer, this command inserts a newline to create a line to
+move to if <code>next-line-add-newlines</code> is non-<code>nil</code> (its default
+is <code>nil</code>.)
+
+   <p>Suppose you wanted to add a similar feature to <code>previous-line</code>,
+which would insert a new line at the beginning of the buffer for the
+command to move to (when <code>next-line-add-newlines</code> is
+non-<code>nil</code>).  How could you do this?
+
+   <p>You could do it by redefining the whole function, but that is not
+modular.  The advice feature provides a cleaner alternative: you can
+effectively add your code to the existing function definition, without
+actually changing or even seeing that definition.  Here is how to do
+this:
+
+<pre class="example">     (defadvice previous-line (before next-line-at-end
+                                      (&amp;optional arg try-vscroll))
+       "Insert an empty line when moving up from the top line."
+       (if (and next-line-add-newlines (= arg 1)
+                (save-excursion (beginning-of-line) (bobp)))
+           (progn
+             (beginning-of-line)
+             (newline))))
+</pre>
+   <p>This expression defines a <dfn>piece of advice</dfn> for the function
+<code>previous-line</code>.  This piece of advice is named
+<code>next-line-at-end</code>, and the symbol <code>before</code> says that it is
+<dfn>before-advice</dfn> which should run before the regular definition of
+<code>previous-line</code>.  <code>(&amp;optional arg try-vscroll)</code> specifies
+how the advice code can refer to the function's arguments.
+
+   <p>When this piece of advice runs, it creates an additional line, in the
+situation where that is appropriate, but does not move point to that
+line.  This is the correct way to write the advice, because the normal
+definition will run afterward and will move back to the newly inserted
+line.
+
+   <p>Defining the advice doesn't immediately change the function
+<code>previous-line</code>.  That happens when you <dfn>activate</dfn> the advice,
+like this:
+
+<pre class="example">     (ad-activate 'previous-line)
+</pre>
+   <p class="noindent">This is what actually begins to use the advice that has been defined so
+far for the function <code>previous-line</code>.  Henceforth, whenever that
+function is run, whether invoked by the user with <kbd>C-p</kbd> or
+<kbd>M-x</kbd>, or called from Lisp, it runs the advice first, and its
+regular definition second.
+
+   <p>This example illustrates before-advice, which is one <dfn>class</dfn> of
+advice: it runs before the function's base definition.  There are two
+other advice classes: <dfn>after-advice</dfn>, which runs after the base
+definition, and <dfn>around-advice</dfn>, which lets you specify an
+expression to wrap around the invocation of the base definition.
+
+   </body></html>
+

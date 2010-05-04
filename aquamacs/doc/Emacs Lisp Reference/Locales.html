@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Locales - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Input-Methods.html#Input-Methods" title="Input Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Locales"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Methods.html#Input-Methods">Input Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.12 Locales</h3>
+
+<p><a name="index-locale-2785"></a>
+  POSIX defines a concept of &ldquo;locales&rdquo; which control which language
+to use in language-related features.  These Emacs variables control
+how Emacs interacts with these features.
+
+<div class="defun">
+&mdash; Variable: <b>locale-coding-system</b><var><a name="index-locale_002dcoding_002dsystem-2786"></a></var><br>
+<blockquote><p><a name="index-keyboard-input-decoding-on-X-2787"></a>This variable specifies the coding system to use for decoding system
+error messages and&mdash;on X Window system only&mdash;keyboard input, for
+encoding the format argument to <code>format-time-string</code>, and for
+decoding the return value of <code>format-time-string</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>system-messages-locale</b><var><a name="index-system_002dmessages_002dlocale-2788"></a></var><br>
+<blockquote><p>This variable specifies the locale to use for generating system error
+messages.  Changing the locale can cause messages to come out in a
+different language or in a different orthography.  If the variable is
+<code>nil</code>, the locale is specified by environment variables in the
+usual POSIX fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>system-time-locale</b><var><a name="index-system_002dtime_002dlocale-2789"></a></var><br>
+<blockquote><p>This variable specifies the locale to use for formatting time values. 
+Changing the locale can cause messages to appear according to the
+conventions of a different language.  If the variable is <code>nil</code>, the
+locale is specified by environment variables in the usual POSIX fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>locale-info</b><var> item<a name="index-locale_002dinfo-2790"></a></var><br>
+<blockquote><p>This function returns locale data <var>item</var> for the current POSIX
+locale, if available.  <var>item</var> should be one of these symbols:
+
+          <dl>
+<dt><code>codeset</code><dd>Return the character set as a string (locale item <code>CODESET</code>).
+
+          <br><dt><code>days</code><dd>Return a 7-element vector of day names (locale items
+<code>DAY_1</code> through <code>DAY_7</code>);
+
+          <br><dt><code>months</code><dd>Return a 12-element vector of month names (locale items <code>MON_1</code>
+through <code>MON_12</code>).
+
+          <br><dt><code>paper</code><dd>Return a list <code>(</code><var>width</var> <var>height</var><code>)</code> for the default paper
+size measured in millimeters (locale items <code>PAPER_WIDTH</code> and
+<code>PAPER_HEIGHT</code>). 
+</dl>
+
+        <p>If the system can't provide the requested information, or if
+<var>item</var> is not one of those symbols, the value is <code>nil</code>.  All
+strings in the return value are decoded using
+<code>locale-coding-system</code>.  See <a href="../libc/Locales.html#Locales">Locales</a>,
+for more information about locales and locale items. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

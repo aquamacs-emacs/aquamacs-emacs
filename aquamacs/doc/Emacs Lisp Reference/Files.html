@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Files - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Documentation.html#Documentation" title="Documentation">
+<link rel="next" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" title="Backups and Auto-Saving">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Files"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Documentation.html#Documentation">Documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">25 Files</h2>
+
+<p>In Emacs, you can find, create, view, save, and otherwise work with
+files and file directories.  This chapter describes most of the
+file-related functions of Emacs Lisp, but a few others are described in
+<a href="Buffers.html#Buffers">Buffers</a>, and those related to backups and auto-saving are
+described in <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>.
+
+   <p>Many of the file functions take one or more arguments that are file
+names.  A file name is actually a string.  Most of these functions
+expand file name arguments by calling <code>expand-file-name</code>, so that
+<samp><span class="file">~</span></samp> is handled correctly, as are relative file names (including
+`<samp><span class="samp">../</span></samp>').  These functions don't recognize environment variable
+substitutions such as `<samp><span class="samp">$HOME</span></samp>'.  See <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>.
+
+   <p>When file I/O functions signal Lisp errors, they usually use the
+condition <code>file-error</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).  The error
+message is in most cases obtained from the operating system, according
+to locale <code>system-message-locale</code>, and decoded using coding system
+<code>locale-coding-system</code> (see <a href="Locales.html#Locales">Locales</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Visiting-Files.html#Visiting-Files">Visiting Files</a>:            Reading files into Emacs buffers for editing. 
+<li><a accesskey="2" href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>:            Writing changed buffers back into files. 
+<li><a accesskey="3" href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>:        Reading files into buffers without visiting. 
+<li><a accesskey="4" href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>:          Writing new files from parts of buffers. 
+<li><a accesskey="5" href="File-Locks.html#File-Locks">File Locks</a>:                Locking and unlocking files, to prevent
+                               simultaneous editing by two people. 
+<li><a accesskey="6" href="Information-about-Files.html#Information-about-Files">Information about Files</a>:   Testing existence, accessibility, size of files. 
+<li><a accesskey="7" href="Changing-Files.html#Changing-Files">Changing Files</a>:            Renaming files, changing protection, etc. 
+<li><a accesskey="8" href="File-Names.html#File-Names">File Names</a>:                Decomposing and expanding file names. 
+<li><a accesskey="9" href="Contents-of-Directories.html#Contents-of-Directories">Contents of Directories</a>:   Getting a list of the files in a directory. 
+<li><a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>: 	     Creating and Deleting Directories. 
+<li><a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>: 	     Defining "magic" special handling
+			       for certain file names. 
+<li><a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>:         Conversion to and from various file formats. 
+</ul>
+
+   </body></html>
+

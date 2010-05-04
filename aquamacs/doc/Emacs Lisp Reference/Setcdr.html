@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Setcdr - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
+<link rel="prev" href="Setcar.html#Setcar" title="Setcar">
+<link rel="next" href="Rearrangement.html#Rearrangement" title="Rearrangement">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Setcdr"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rearrangement.html#Rearrangement">Rearrangement</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setcar.html#Setcar">Setcar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.6.2 Altering the CDR of a List</h4>
+
+<p>The lowest-level primitive for modifying a <span class="sc">cdr</span> is <code>setcdr</code>:
+
+<div class="defun">
+&mdash; Function: <b>setcdr</b><var> cons object<a name="index-setcdr-329"></a></var><br>
+<blockquote><p>This function stores <var>object</var> as the new <span class="sc">cdr</span> of <var>cons</var>,
+replacing its previous <span class="sc">cdr</span>.  In other words, it changes the
+<span class="sc">cdr</span> slot of <var>cons</var> to refer to <var>object</var>.  It returns the
+value <var>object</var>. 
+</p></blockquote></div>
+
+   <p>Here is an example of replacing the <span class="sc">cdr</span> of a list with a
+different list.  All but the first element of the list are removed in
+favor of a different sequence of elements.  The first element is
+unchanged, because it resides in the <span class="sc">car</span> of the list, and is not
+reached via the <span class="sc">cdr</span>.
+
+<pre class="example">     (setq x '(1 2 3))
+          =&gt; (1 2 3)
+     (setcdr x '(4))
+          =&gt; (4)
+     x
+          =&gt; (1 4)
+</pre>
+   <p>You can delete elements from the middle of a list by altering the
+<span class="sc">cdr</span>s of the cons cells in the list.  For example, here we delete
+the second element, <code>b</code>, from the list <code>(a b c)</code>, by changing
+the <span class="sc">cdr</span> of the first cons cell:
+
+<pre class="example">     (setq x1 '(a b c))
+          =&gt; (a b c)
+     (setcdr x1 (cdr (cdr x1)))
+          =&gt; (c)
+     x1
+          =&gt; (a c)
+</pre>
+   <p>Here is the result in box notation:
+
+<pre class="smallexample">                        --------------------
+                       |                    |
+      --------------   |   --------------   |    --------------
+     | car   | cdr  |  |  | car   | cdr  |   --&gt;| car   | cdr  |
+     |   a   |   o-----   |   b   |   o--------&gt;|   c   |  nil |
+     |       |      |     |       |      |      |       |      |
+      --------------       --------------        --------------
+</pre>
+   <p class="noindent">The second cons cell, which previously held the element <code>b</code>, still
+exists and its <span class="sc">car</span> is still <code>b</code>, but it no longer forms part
+of this list.
+
+   <p>It is equally easy to insert a new element by changing <span class="sc">cdr</span>s:
+
+<pre class="example">     (setq x1 '(a b c))
+          =&gt; (a b c)
+     (setcdr x1 (cons 'd (cdr x1)))
+          =&gt; (d b c)
+     x1
+          =&gt; (a d b c)
+</pre>
+   <p>Here is this result in box notation:
+
+<pre class="smallexample">      --------------        -------------       -------------
+     | car  | cdr   |      | car  | cdr  |     | car  | cdr  |
+     |   a  |   o   |   --&gt;|   b  |   o-------&gt;|   c  |  nil |
+     |      |   |   |  |   |      |      |     |      |      |
+      --------- | --   |    -------------       -------------
+                |      |
+          -----         --------
+         |                      |
+         |    ---------------   |
+         |   | car   | cdr   |  |
+          --&gt;|   d   |   o------
+             |       |       |
+              ---------------
+</pre>
+   </body></html>
+

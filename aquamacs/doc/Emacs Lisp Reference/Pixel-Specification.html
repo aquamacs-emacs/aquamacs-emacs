@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Pixel Specification - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Property.html#Display-Property" title="Display Property">
+<link rel="prev" href="Specified-Space.html#Specified-Space" title="Specified Space">
+<link rel="next" href="Other-Display-Specs.html#Other-Display-Specs" title="Other Display Specs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Pixel-Specification"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Specified-Space.html#Specified-Space">Specified Space</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property">Display Property</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.2 Pixel Specification for Spaces</h4>
+
+<p><a name="index-spaces_002c-pixel-specification-3317"></a>
+  The value of the <code>:width</code>, <code>:align-to</code>, <code>:height</code>,
+and <code>:ascent</code> properties can be a special kind of expression that
+is evaluated during redisplay.  The result of the evaluation is used
+as an absolute number of pixels.
+
+   <p>The following expressions are supported:
+
+<pre class="smallexample">       <var>expr</var> ::= <var>num</var> | (<var>num</var>) | <var>unit</var> | <var>elem</var> | <var>pos</var> | <var>image</var> | <var>form</var>
+       <var>num</var>  ::= <var>integer</var> | <var>float</var> | <var>symbol</var>
+       <var>unit</var> ::= in | mm | cm | width | height
+       <var>elem</var> ::= left-fringe | right-fringe | left-margin | right-margin
+             |  scroll-bar | text
+       <var>pos</var>  ::= left | center | right
+       <var>form</var> ::= (<var>num</var> . <var>expr</var>) | (<var>op</var> <var>expr</var> ...)
+       <var>op</var>   ::= + | -
+</pre>
+   <p>The form <var>num</var> specifies a fraction of the default frame font
+height or width.  The form <code>(</code><var>num</var><code>)</code> specifies an absolute
+number of pixels.  If <var>num</var> is a symbol, <var>symbol</var>, its
+buffer-local variable binding is used.
+
+   <p>The <code>in</code>, <code>mm</code>, and <code>cm</code> units specify the number of
+pixels per inch, millimeter, and centimeter, respectively.  The
+<code>width</code> and <code>height</code> units correspond to the default width
+and height of the current face.  An image specification <code>image</code>
+corresponds to the width or height of the image.
+
+   <p>The <code>left-fringe</code>, <code>right-fringe</code>, <code>left-margin</code>,
+<code>right-margin</code>, <code>scroll-bar</code>, and <code>text</code> elements
+specify to the width of the corresponding area of the window.
+
+   <p>The <code>left</code>, <code>center</code>, and <code>right</code> positions can be
+used with <code>:align-to</code> to specify a position relative to the left
+edge, center, or right edge of the text area.
+
+   <p>Any of the above window elements (except <code>text</code>) can also be
+used with <code>:align-to</code> to specify that the position is relative to
+the left edge of the given area.  Once the base offset for a relative
+position has been set (by the first occurrence of one of these
+symbols), further occurrences of these symbols are interpreted as the
+width of the specified area.  For example, to align to the center of
+the left-margin, use
+
+<pre class="example">     :align-to (+ left-margin (0.5 . left-margin))
+</pre>
+   <p>If no specific base offset is set for alignment, it is always relative
+to the left edge of the text area.  For example, `<samp><span class="samp">:align-to 0</span></samp>' in a
+header-line aligns with the first text column in the text area.
+
+   <p>A value of the form <code>(</code><var>num</var><code> . </code><var>expr</var><code>)</code> stands for the
+product of the values of <var>num</var> and <var>expr</var>.  For example,
+<code>(2 . in)</code> specifies a width of 2 inches, while <code>(0.5 . 
+</code><var>image</var><code>)</code> specifies half the width (or height) of the specified
+image.
+
+   <p>The form <code>(+ </code><var>expr</var><code> ...)</code> adds up the value of the
+expressions.  The form <code>(- </code><var>expr</var><code> ...)</code> negates or subtracts
+the value of the expressions.
+
+   </body></html>
+

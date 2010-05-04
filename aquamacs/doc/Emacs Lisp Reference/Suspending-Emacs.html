@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Suspending Emacs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Out.html#Getting-Out" title="Getting Out">
+<link rel="prev" href="Killing-Emacs.html#Killing-Emacs" title="Killing Emacs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Suspending-Emacs"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Killing-Emacs.html#Killing-Emacs">Killing Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Out.html#Getting-Out">Getting Out</a>
+<hr>
+</div>
+
+<h4 class="subsection">39.2.2 Suspending Emacs</h4>
+
+<p><a name="index-suspending-Emacs-3491"></a>
+  <dfn>Suspending Emacs</dfn> means stopping Emacs temporarily and returning
+control to its superior process, which is usually the shell.  This
+allows you to resume editing later in the same Emacs process, with the
+same buffers, the same kill ring, the same undo history, and so on.  To
+resume Emacs, use the appropriate command in the parent shell&mdash;most
+likely <code>fg</code>.
+
+   <p>Some operating systems do not support suspension of jobs; on these
+systems, &ldquo;suspension&rdquo; actually creates a new shell temporarily as a
+subprocess of Emacs.  Then you would exit the shell to return to Emacs.
+
+   <p>Suspension is not useful with window systems, because the Emacs job
+may not have a parent that can resume it again, and in any case you can
+give input to some other job such as a shell merely by moving to a
+different window.  Therefore, suspending is not allowed when Emacs is using
+a window system (X, MS Windows, or Mac).
+
+<div class="defun">
+&mdash; Function: <b>suspend-emacs</b><var> &amp;optional string<a name="index-suspend_002demacs-3492"></a></var><br>
+<blockquote><p>This function stops Emacs and returns control to the superior process. 
+If and when the superior process resumes Emacs, <code>suspend-emacs</code>
+returns <code>nil</code> to its caller in Lisp.
+
+        <p>If <var>string</var> is non-<code>nil</code>, its characters are sent to be read
+as terminal input by Emacs's superior shell.  The characters in
+<var>string</var> are not echoed by the superior shell; only the results
+appear.
+
+        <p>Before suspending, <code>suspend-emacs</code> runs the normal hook
+<code>suspend-hook</code>.
+
+        <p>After the user resumes Emacs, <code>suspend-emacs</code> runs the normal hook
+<code>suspend-resume-hook</code>.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+        <p>The next redisplay after resumption will redraw the entire screen,
+unless the variable <code>no-redraw-on-reenter</code> is non-<code>nil</code>
+(see <a href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>).
+
+        <p>In the following example, note that `<samp><span class="samp">pwd</span></samp>' is not echoed after
+Emacs is suspended.  But it is read and executed by the shell.
+
+     <pre class="smallexample">          (suspend-emacs)
+               =&gt; nil
+          
+          (add-hook 'suspend-hook
+                    (function (lambda ()
+                                (or (y-or-n-p
+                                      "Really suspend? ")
+                                    (error "Suspend canceled")))))
+               =&gt; (lambda nil
+                    (or (y-or-n-p "Really suspend? ")
+                        (error "Suspend canceled")))
+          (add-hook 'suspend-resume-hook
+                    (function (lambda () (message "Resumed!"))))
+               =&gt; (lambda nil (message "Resumed!"))
+          (suspend-emacs "pwd")
+               =&gt; nil
+          ---------- Buffer: Minibuffer ----------
+          Really suspend? <kbd>y</kbd>
+          ---------- Buffer: Minibuffer ----------
+          
+          ---------- Parent Shell ----------
+          lewis@slug[23] % /user/lewis/manual
+          lewis@slug[24] % fg
+          
+          ---------- Echo Area ----------
+          Resumed!
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>suspend-hook</b><var><a name="index-suspend_002dhook-3493"></a></var><br>
+<blockquote><p>This variable is a normal hook that Emacs runs before suspending. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>suspend-resume-hook</b><var><a name="index-suspend_002dresume_002dhook-3494"></a></var><br>
+<blockquote><p>This variable is a normal hook that Emacs runs on resuming
+after a suspension. 
+</p></blockquote></div>
+
+   </body></html>
+

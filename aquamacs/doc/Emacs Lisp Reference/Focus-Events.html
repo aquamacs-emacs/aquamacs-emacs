@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Focus Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="prev" href="Motion-Events.html#Motion-Events" title="Motion Events">
+<link rel="next" href="Misc-Events.html#Misc-Events" title="Misc Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Focus-Events"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Misc-Events.html#Misc-Events">Misc Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion-Events.html#Motion-Events">Motion Events</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.6.9 Focus Events</h4>
+
+<p><a name="index-focus-event-1240"></a>
+Window systems provide general ways for the user to control which window
+gets keyboard input.  This choice of window is called the <dfn>focus</dfn>. 
+When the user does something to switch between Emacs frames, that
+generates a <dfn>focus event</dfn>.  The normal definition of a focus event,
+in the global keymap, is to select a new frame within Emacs, as the user
+would expect.  See <a href="Input-Focus.html#Input-Focus">Input Focus</a>.
+
+   <p>Focus events are represented in Lisp as lists that look like this:
+
+<pre class="example">     (switch-frame <var>new-frame</var>)
+</pre>
+   <p class="noindent">where <var>new-frame</var> is the frame switched to.
+
+   <p>Most X window managers are set up so that just moving the mouse into a
+window is enough to set the focus there.  Emacs appears to do this,
+because it changes the cursor to solid in the new frame.  However, there
+is no need for the Lisp program to know about the focus change until
+some other kind of input arrives.  So Emacs generates a focus event only
+when the user actually types a keyboard key or presses a mouse button in
+the new frame; just moving the mouse between frames does not generate a
+focus event.
+
+   <p>A focus event in the middle of a key sequence would garble the
+sequence.  So Emacs never generates a focus event in the middle of a key
+sequence.  If the user changes focus in the middle of a key
+sequence&mdash;that is, after a prefix key&mdash;then Emacs reorders the events
+so that the focus event comes either before or after the multi-event key
+sequence, and not within it.
+
+   </body></html>
+

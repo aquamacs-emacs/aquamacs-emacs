@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Symbol Plists - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Property-Lists.html#Property-Lists" title="Property Lists">
+<link rel="prev" href="Plists-and-Alists.html#Plists-and-Alists" title="Plists and Alists">
+<link rel="next" href="Other-Plists.html#Other-Plists" title="Other Plists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Symbol-Plists"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Plists.html#Other-Plists">Other Plists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Plists-and-Alists.html#Plists-and-Alists">Plists and Alists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Property-Lists.html#Property-Lists">Property Lists</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.4.2 Property List Functions for Symbols</h4>
+
+<div class="defun">
+&mdash; Function: <b>symbol-plist</b><var> symbol<a name="index-symbol_002dplist-473"></a></var><br>
+<blockquote><p>This function returns the property list of <var>symbol</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>setplist</b><var> symbol plist<a name="index-setplist-474"></a></var><br>
+<blockquote><p>This function sets <var>symbol</var>'s property list to <var>plist</var>. 
+Normally, <var>plist</var> should be a well-formed property list, but this is
+not enforced.  The return value is <var>plist</var>.
+
+     <pre class="smallexample">          (setplist 'foo '(a 1 b (2 3) c nil))
+               =&gt; (a 1 b (2 3) c nil)
+          (symbol-plist 'foo)
+               =&gt; (a 1 b (2 3) c nil)
+     </pre>
+        <p>For symbols in special obarrays, which are not used for ordinary
+purposes, it may make sense to use the property list cell in a
+nonstandard fashion; in fact, the abbrev mechanism does so
+(see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get</b><var> symbol property<a name="index-get-475"></a></var><br>
+<blockquote><p>This function finds the value of the property named <var>property</var> in
+<var>symbol</var>'s property list.  If there is no such property, <code>nil</code>
+is returned.  Thus, there is no distinction between a value of
+<code>nil</code> and the absence of the property.
+
+        <p>The name <var>property</var> is compared with the existing property names
+using <code>eq</code>, so any object is a legitimate property.
+
+        <p>See <code>put</code> for an example. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>put</b><var> symbol property value<a name="index-put-476"></a></var><br>
+<blockquote><p>This function puts <var>value</var> onto <var>symbol</var>'s property list under
+the property name <var>property</var>, replacing any previous property value. 
+The <code>put</code> function returns <var>value</var>.
+
+     <pre class="smallexample">          (put 'fly 'verb 'transitive)
+               =&gt;'transitive
+          (put 'fly 'noun '(a buzzing little bug))
+               =&gt; (a buzzing little bug)
+          (get 'fly 'verb)
+               =&gt; transitive
+          (symbol-plist 'fly)
+               =&gt; (verb transitive noun (a buzzing little bug))
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

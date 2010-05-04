@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Combining Conditions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structures.html#Control-Structures" title="Control Structures">
+<link rel="prev" href="Conditionals.html#Conditionals" title="Conditionals">
+<link rel="next" href="Iteration.html#Iteration" title="Iteration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Combining-Conditions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Iteration.html#Iteration">Iteration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Conditionals.html#Conditionals">Conditionals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structures">Control Structures</a>
+<hr>
+</div>
+
+<h3 class="section">10.3 Constructs for Combining Conditions</h3>
+
+<p>This section describes three constructs that are often used together
+with <code>if</code> and <code>cond</code> to express complicated conditions.  The
+constructs <code>and</code> and <code>or</code> can also be used individually as
+kinds of multiple conditional constructs.
+
+<div class="defun">
+&mdash; Function: <b>not</b><var> condition<a name="index-not-529"></a></var><br>
+<blockquote><p>This function tests for the falsehood of <var>condition</var>.  It returns
+<code>t</code> if <var>condition</var> is <code>nil</code>, and <code>nil</code> otherwise. 
+The function <code>not</code> is identical to <code>null</code>, and we recommend
+using the name <code>null</code> if you are testing for an empty list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>and</b><var> conditions<small class="dots">...</small><a name="index-and-530"></a></var><br>
+<blockquote><p>The <code>and</code> special form tests whether all the <var>conditions</var> are
+true.  It works by evaluating the <var>conditions</var> one by one in the
+order written.
+
+        <p>If any of the <var>conditions</var> evaluates to <code>nil</code>, then the result
+of the <code>and</code> must be <code>nil</code> regardless of the remaining
+<var>conditions</var>; so <code>and</code> returns <code>nil</code> right away, ignoring
+the remaining <var>conditions</var>.
+
+        <p>If all the <var>conditions</var> turn out non-<code>nil</code>, then the value of
+the last of them becomes the value of the <code>and</code> form.  Just
+<code>(and)</code>, with no <var>conditions</var>, returns <code>t</code>, appropriate
+because all the <var>conditions</var> turned out non-<code>nil</code>.  (Think
+about it; which one did not?)
+
+        <p>Here is an example.  The first condition returns the integer 1, which is
+not <code>nil</code>.  Similarly, the second condition returns the integer 2,
+which is not <code>nil</code>.  The third condition is <code>nil</code>, so the
+remaining condition is never evaluated.
+
+     <pre class="example">          (and (print 1) (print 2) nil (print 3))
+               -| 1
+               -| 2
+          =&gt; nil
+     </pre>
+        <p>Here is a more realistic example of using <code>and</code>:
+
+     <pre class="example">          (if (and (consp foo) (eq (car foo) 'x))
+              (message "foo is a list starting with x"))
+     </pre>
+        <p class="noindent">Note that <code>(car foo)</code> is not executed if <code>(consp foo)</code> returns
+<code>nil</code>, thus avoiding an error.
+
+        <p><code>and</code> expressions can also be written using either <code>if</code> or
+<code>cond</code>.  Here's how:
+
+     <pre class="example">          (and <var>arg1</var> <var>arg2</var> <var>arg3</var>)
+          ==
+          (if <var>arg1</var> (if <var>arg2</var> <var>arg3</var>))
+          ==
+          (cond (<var>arg1</var> (cond (<var>arg2</var> <var>arg3</var>))))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>or</b><var> conditions<small class="dots">...</small><a name="index-or-531"></a></var><br>
+<blockquote><p>The <code>or</code> special form tests whether at least one of the
+<var>conditions</var> is true.  It works by evaluating all the
+<var>conditions</var> one by one in the order written.
+
+        <p>If any of the <var>conditions</var> evaluates to a non-<code>nil</code> value, then
+the result of the <code>or</code> must be non-<code>nil</code>; so <code>or</code> returns
+right away, ignoring the remaining <var>conditions</var>.  The value it
+returns is the non-<code>nil</code> value of the condition just evaluated.
+
+        <p>If all the <var>conditions</var> turn out <code>nil</code>, then the <code>or</code>
+expression returns <code>nil</code>.  Just <code>(or)</code>, with no
+<var>conditions</var>, returns <code>nil</code>, appropriate because all the
+<var>conditions</var> turned out <code>nil</code>.  (Think about it; which one
+did not?)
+
+        <p>For example, this expression tests whether <code>x</code> is either
+<code>nil</code> or the integer zero:
+
+     <pre class="example">          (or (eq x nil) (eq x 0))
+     </pre>
+        <p>Like the <code>and</code> construct, <code>or</code> can be written in terms of
+<code>cond</code>.  For example:
+
+     <pre class="example">          (or <var>arg1</var> <var>arg2</var> <var>arg3</var>)
+          ==
+          (cond (<var>arg1</var>)
+                (<var>arg2</var>)
+                (<var>arg3</var>))
+     </pre>
+        <p>You could almost write <code>or</code> in terms of <code>if</code>, but not quite:
+
+     <pre class="example">          (if <var>arg1</var> <var>arg1</var>
+            (if <var>arg2</var> <var>arg2</var>
+              <var>arg3</var>))
+     </pre>
+        <p class="noindent">This is not completely equivalent because it can evaluate <var>arg1</var> or
+<var>arg2</var> twice.  By contrast, <code>(or </code><var>arg1</var> <var>arg2</var>
+<var>arg3</var><code>)</code> never evaluates any argument more than once. 
+</p></blockquote></div>
+
+   </body></html>
+

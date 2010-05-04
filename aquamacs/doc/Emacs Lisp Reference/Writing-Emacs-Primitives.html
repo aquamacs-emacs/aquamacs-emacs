@@ -1,0 +1,327 @@
+<html lang="en">
+<head>
+<title>Writing Emacs Primitives - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
+<link rel="prev" href="Memory-Usage.html#Memory-Usage" title="Memory Usage">
+<link rel="next" href="Object-Internals.html#Object-Internals" title="Object Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Writing-Emacs-Primitives"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Object-Internals.html#Object-Internals">Object Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">E.5 Writing Emacs Primitives</h3>
+
+<p><a name="index-primitive-function-internals-3642"></a><a name="index-writing-Emacs-primitives-3643"></a>
+  Lisp primitives are Lisp functions implemented in C.  The details of
+interfacing the C function so that Lisp can call it are handled by a few
+C macros.  The only way to really understand how to write new C code is
+to read the source, but we can explain some things here.
+
+   <p>An example of a special form is the definition of <code>or</code>, from
+<samp><span class="file">eval.c</span></samp>.  (An ordinary function would have the same general
+appearance.)
+
+   <p><a name="index-garbage-collection-protection-3644"></a>
+<pre class="smallexample">     DEFUN ("or", For, Sor, 0, UNEVALLED, 0,
+       doc: /* Eval args until one of them yields non-nil, then return that
+     value. The remaining args are not evalled at all.
+     If all args return nil, return nil.
+     usage: (or CONDITIONS ...)  */)
+       (args)
+          Lisp_Object args;
+     {
+       register Lisp_Object val = Qnil;
+       struct gcpro gcpro1;
+     
+       GCPRO1 (args);
+     
+       while (CONSP (args))
+         {
+           val = Feval (XCAR (args));
+           if (!NILP (val))
+             break;
+           args = XCDR (args);
+         }
+     
+       UNGCPRO;
+       return val;
+     }
+</pre>
+   <p><a name="index-g_t_0040code_007bDEFUN_007d_002c-C-macro-to-define-Lisp-primitives-3645"></a>  Let's start with a precise explanation of the arguments to the
+<code>DEFUN</code> macro.  Here is a template for them:
+
+<pre class="example">     DEFUN (<var>lname</var>, <var>fname</var>, <var>sname</var>, <var>min</var>, <var>max</var>, <var>interactive</var>, <var>doc</var>)
+</pre>
+     <dl>
+<dt><var>lname</var><dd>This is the name of the Lisp symbol to define as the function name; in
+the example above, it is <code>or</code>.
+
+     <br><dt><var>fname</var><dd>This is the C function name for this function.  This is
+the name that is used in C code for calling the function.  The name is,
+by convention, `<samp><span class="samp">F</span></samp>' prepended to the Lisp name, with all dashes
+(`<samp><span class="samp">-</span></samp>') in the Lisp name changed to underscores.  Thus, to call this
+function from C code, call <code>For</code>.  Remember that the arguments must
+be of type <code>Lisp_Object</code>; various macros and functions for creating
+values of type <code>Lisp_Object</code> are declared in the file
+<samp><span class="file">lisp.h</span></samp>.
+
+     <br><dt><var>sname</var><dd>This is a C variable name to use for a structure that holds the data for
+the subr object that represents the function in Lisp.  This structure
+conveys the Lisp symbol name to the initialization routine that will
+create the symbol and store the subr object as its definition.  By
+convention, this name is always <var>fname</var> with `<samp><span class="samp">F</span></samp>' replaced with
+`<samp><span class="samp">S</span></samp>'.
+
+     <br><dt><var>min</var><dd>This is the minimum number of arguments that the function requires.  The
+function <code>or</code> allows a minimum of zero arguments.
+
+     <br><dt><var>max</var><dd>This is the maximum number of arguments that the function accepts, if
+there is a fixed maximum.  Alternatively, it can be <code>UNEVALLED</code>,
+indicating a special form that receives unevaluated arguments, or
+<code>MANY</code>, indicating an unlimited number of evaluated arguments (the
+equivalent of <code>&amp;rest</code>).  Both <code>UNEVALLED</code> and <code>MANY</code> are
+macros.  If <var>max</var> is a number, it may not be less than <var>min</var> and
+it may not be greater than eight.
+
+     <br><dt><var>interactive</var><dd>This is an interactive specification, a string such as might be used as
+the argument of <code>interactive</code> in a Lisp function.  In the case of
+<code>or</code>, it is 0 (a null pointer), indicating that <code>or</code> cannot be
+called interactively.  A value of <code>""</code> indicates a function that
+should receive no arguments when called interactively.
+
+     <br><dt><var>doc</var><dd>This is the documentation string.  It uses C comment syntax rather
+than C string syntax because comment syntax requires nothing special
+to include multiple lines.  The `<samp><span class="samp">doc:</span></samp>' identifies the comment
+that follows as the documentation string.  The `<samp><span class="samp">/*</span></samp>' and `<samp><span class="samp">*/</span></samp>'
+delimiters that begin and end the comment are not part of the
+documentation string.
+
+     <p>If the last line of the documentation string begins with the keyword
+`<samp><span class="samp">usage:</span></samp>', the rest of the line is treated as the argument list
+for documentation purposes.  This way, you can use different argument
+names in the documentation string from the ones used in the C code. 
+`<samp><span class="samp">usage:</span></samp>' is required if the function has an unlimited number of
+arguments.
+
+     <p>All the usual rules for documentation strings in Lisp code
+(see <a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>) apply to C code documentation strings
+too. 
+</dl>
+
+   <p>After the call to the <code>DEFUN</code> macro, you must write the argument
+name list that every C function must have, followed by ordinary C
+declarations for the arguments.  For a function with a fixed maximum
+number of arguments, declare a C argument for each Lisp argument, and
+give them all type <code>Lisp_Object</code>.  When a Lisp function has no
+upper limit on the number of arguments, its implementation in C actually
+receives exactly two arguments: the first is the number of Lisp
+arguments, and the second is the address of a block containing their
+values.  They have types <code>int</code> and <code>Lisp_Object&nbsp;*</code><!-- /@w -->.
+
+   <p><a name="index-g_t_0040code_007bGCPRO_007d-and-_0040code_007bUNGCPRO_007d-3646"></a><a name="index-protect-C-variables-from-garbage-collection-3647"></a>  Within the function <code>For</code> itself, note the use of the macros
+<code>GCPRO1</code> and <code>UNGCPRO</code>.  <code>GCPRO1</code> is used to
+&ldquo;protect&rdquo; a variable from garbage collection&mdash;to inform the garbage
+collector that it must look in that variable and regard its contents
+as an accessible object.  GC protection is necessary whenever you call
+<code>Feval</code> or anything that can directly or indirectly call
+<code>Feval</code>.  At such a time, any Lisp object that this function may
+refer to again must be protected somehow.
+
+   <p>It suffices to ensure that at least one pointer to each object is
+GC-protected; that way, the object cannot be recycled, so all pointers
+to it remain valid.  Thus, a particular local variable can do without
+protection if it is certain that the object it points to will be
+preserved by some other pointer (such as another local variable which
+has a <code>GCPRO</code>)<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Otherwise, the local
+variable needs a <code>GCPRO</code>.
+
+   <p>The macro <code>GCPRO1</code> protects just one local variable.  If you
+want to protect two variables, use <code>GCPRO2</code> instead; repeating
+<code>GCPRO1</code> will not work.  Macros <code>GCPRO3</code>, <code>GCPRO4</code>,
+<code>GCPRO5</code>, and <code>GCPRO6</code> also exist.  All these macros
+implicitly use local variables such as <code>gcpro1</code>; you must declare
+these explicitly, with type <code>struct gcpro</code>.  Thus, if you use
+<code>GCPRO2</code>, you must declare <code>gcpro1</code> and <code>gcpro2</code>. 
+Alas, we can't explain all the tricky details here.
+
+   <p><code>UNGCPRO</code> cancels the protection of the variables that are
+protected in the current function.  It is necessary to do this
+explicitly.
+
+   <p>Built-in functions that take a variable number of arguments actually
+accept two arguments at the C level: the number of Lisp arguments, and
+a <code>Lisp_Object *</code> pointer to a C vector containing those Lisp
+arguments.  This C vector may be part of a Lisp vector, but it need
+not be.  The responsibility for using <code>GCPRO</code> to protect the Lisp
+arguments from GC if necessary rests with the caller in this case,
+since the caller allocated or found the storage for them.
+
+   <p>You must not use C initializers for static or global variables unless
+the variables are never written once Emacs is dumped.  These variables
+with initializers are allocated in an area of memory that becomes
+read-only (on certain operating systems) as a result of dumping Emacs. 
+See <a href="Pure-Storage.html#Pure-Storage">Pure Storage</a>.
+
+   <p>Do not use static variables within functions&mdash;place all static
+variables at top level in the file.  This is necessary because Emacs on
+some operating systems defines the keyword <code>static</code> as a null
+macro.  (This definition is used because those systems put all variables
+declared static in a place that becomes read-only after dumping, whether
+they have initializers or not.)
+
+   <p><a name="index-g_t_0040code_007bdefsubr_007d_002c-Lisp-symbol-for-a-primitive-3648"></a>  Defining the C function is not enough to make a Lisp primitive
+available; you must also create the Lisp symbol for the primitive and
+store a suitable subr object in its function cell.  The code looks like
+this:
+
+<pre class="example">     defsubr (&amp;<var>subr-structure-name</var>);
+</pre>
+   <p class="noindent">Here <var>subr-structure-name</var> is the name you used as the third
+argument to <code>DEFUN</code>.
+
+   <p>If you add a new primitive to a file that already has Lisp primitives
+defined in it, find the function (near the end of the file) named
+<code>syms_of_</code><var>something</var>, and add the call to <code>defsubr</code>
+there.  If the file doesn't have this function, or if you create a new
+file, add to it a <code>syms_of_</code><var>filename</var> (e.g.,
+<code>syms_of_myfile</code>).  Then find the spot in <samp><span class="file">emacs.c</span></samp> where all
+of these functions are called, and add a call to
+<code>syms_of_</code><var>filename</var> there.
+
+   <p><a name="Defining-Lisp-variables-in-C"></a>
+<a name="index-byte_002dboolean_002dvars-3649"></a><a name="index-defining-Lisp-variables-in-C-3650"></a><a name="index-g_t_0040code_007bDEFVAR_005fINT_007d_002c-_0040code_007bDEFVAR_005fLISP_007d_002c-_0040code_007bDEFVAR_005fBOOL_007d-3651"></a>  The function <code>syms_of_</code><var>filename</var> is also the place to define
+any C variables that are to be visible as Lisp variables. 
+<code>DEFVAR_LISP</code> makes a C variable of type <code>Lisp_Object</code> visible
+in Lisp.  <code>DEFVAR_INT</code> makes a C variable of type <code>int</code>
+visible in Lisp with a value that is always an integer. 
+<code>DEFVAR_BOOL</code> makes a C variable of type <code>int</code> visible in Lisp
+with a value that is either <code>t</code> or <code>nil</code>.  Note that variables
+defined with <code>DEFVAR_BOOL</code> are automatically added to the list
+<code>byte-boolean-vars</code> used by the byte compiler.
+
+   <p><a name="index-g_t_0040code_007bstaticpro_007d_002c-protection-from-GC-3652"></a>  If you define a file-scope C variable of type <code>Lisp_Object</code>,
+you must protect it from garbage-collection by calling <code>staticpro</code>
+in <code>syms_of_</code><var>filename</var>, like this:
+
+<pre class="example">     staticpro (&amp;<var>variable</var>);
+</pre>
+   <p>Here is another example function, with more complicated arguments. 
+This comes from the code in <samp><span class="file">window.c</span></samp>, and it demonstrates the use
+of macros and functions to manipulate Lisp objects.
+
+<pre class="smallexample">     DEFUN ("coordinates-in-window-p", Fcoordinates_in_window_p,
+       Scoordinates_in_window_p, 2, 2,
+       "xSpecify coordinate pair: \nXExpression which evals to window: ",
+       "Return non-nil if COORDINATES is in WINDOW.\n\
+     COORDINATES is a cons of the form (X . Y), X and Y being distances\n\
+     ...
+     If they are on the border between WINDOW and its right sibling,\n\
+        `vertical-line' is returned.")
+       (coordinates, window)
+          register Lisp_Object coordinates, window;
+     {
+       int x, y;
+     
+       CHECK_LIVE_WINDOW (window, 0);
+       CHECK_CONS (coordinates, 1);
+       x = XINT (Fcar (coordinates));
+       y = XINT (Fcdr (coordinates));
+     
+       switch (coordinates_in_window (XWINDOW (window), &amp;x, &amp;y))
+         {
+         case 0:			/* NOT in window at all. */
+           return Qnil;
+     
+         case 1:			/* In text part of window. */
+           return Fcons (make_number (x), make_number (y));
+     
+         case 2:			/* In mode line of window. */
+           return Qmode_line;
+     
+         case 3:			/* On right border of window.  */
+           return Qvertical_line;
+     
+         default:
+           abort ();
+         }
+     }
+</pre>
+   <p>Note that C code cannot call functions by name unless they are defined
+in C.  The way to call a function written in Lisp is to use
+<code>Ffuncall</code>, which embodies the Lisp function <code>funcall</code>.  Since
+the Lisp function <code>funcall</code> accepts an unlimited number of
+arguments, in C it takes two: the number of Lisp-level arguments, and a
+one-dimensional array containing their values.  The first Lisp-level
+argument is the Lisp function to call, and the rest are the arguments to
+pass to it.  Since <code>Ffuncall</code> can call the evaluator, you must
+protect pointers from garbage collection around the call to
+<code>Ffuncall</code>.
+
+   <p>The C functions <code>call0</code>, <code>call1</code>, <code>call2</code>, and so on,
+provide handy ways to call a Lisp function conveniently with a fixed
+number of arguments.  They work by calling <code>Ffuncall</code>.
+
+   <p><samp><span class="file">eval.c</span></samp> is a very good file to look through for examples;
+<samp><span class="file">lisp.h</span></samp> contains the definitions for some important macros and
+functions.
+
+   <p>If you define a function which is side-effect free, update the code
+in <samp><span class="file">byte-opt.el</span></samp> which binds <code>side-effect-free-fns</code> and
+<code>side-effect-and-error-free-fns</code> so that the compiler optimizer
+knows about it.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Formerly, strings were a special
+exception; in older Emacs versions, every local variable that might
+point to a string needed a <code>GCPRO</code>.</p>
+
+   <p><hr></div>
+
+   </body></html>
+

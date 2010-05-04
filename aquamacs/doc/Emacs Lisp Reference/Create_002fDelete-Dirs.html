@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Create/Delete Dirs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Files.html#Files" title="Files">
+<link rel="prev" href="Contents-of-Directories.html#Contents-of-Directories" title="Contents of Directories">
+<link rel="next" href="Magic-File-Names.html#Magic-File-Names" title="Magic File Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Create%2fDelete-Dirs"></a>
+<a name="Create_002fDelete-Dirs"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Contents-of-Directories.html#Contents-of-Directories">Contents of Directories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr>
+</div>
+
+<h3 class="section">25.10 Creating and Deleting Directories</h3>
+
+<p><a name="index-creating-and-deleting-directories-1823"></a><!-- Emacs 19 features -->
+
+   <p>Most Emacs Lisp file-manipulation functions get errors when used on
+files that are directories.  For example, you cannot delete a directory
+with <code>delete-file</code>.  These special functions exist to create and
+delete directories.
+
+<div class="defun">
+&mdash; Function: <b>make-directory</b><var> dirname &amp;optional parents<a name="index-make_002ddirectory-1824"></a></var><br>
+<blockquote><p>This function creates a directory named <var>dirname</var>. 
+If <var>parents</var> is non-<code>nil</code>, as is always the case in an
+interactive call, that means to create the parent directories first,
+if they don't already exist. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-directory</b><var> dirname<a name="index-delete_002ddirectory-1825"></a></var><br>
+<blockquote><p>This function deletes the directory named <var>dirname</var>.  The function
+<code>delete-file</code> does not work for files that are directories; you
+must use <code>delete-directory</code> for them.  If the directory contains
+any files, <code>delete-directory</code> signals an error.
+
+        <p>This function only follows symbolic links at the level of parent
+directories. 
+</p></blockquote></div>
+
+   </body></html>
+

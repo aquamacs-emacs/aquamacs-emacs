@@ -1,0 +1,193 @@
+<html lang="en">
+<head>
+<title>Temporary Displays - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Selective-Display.html#Selective-Display" title="Selective Display">
+<link rel="next" href="Overlays.html#Overlays" title="Overlays">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Temporary-Displays"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overlays.html#Overlays">Overlays</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-Display.html#Selective-Display">Selective Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.8 Temporary Displays</h3>
+
+<p>Temporary displays are used by Lisp programs to put output into a
+buffer and then present it to the user for perusal rather than for
+editing.  Many help commands use this feature.
+
+<div class="defun">
+&mdash; Special Form: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3177"></a></var><br>
+<blockquote><p>This function executes <var>forms</var> while arranging to insert any output
+they print into the buffer named <var>buffer-name</var>, which is first
+created if necessary, and put into Help mode.  Finally, the buffer is
+displayed in some window, but not selected.
+
+        <p>If the <var>forms</var> do not change the major mode in the output buffer,
+so that it is still Help mode at the end of their execution, then
+<code>with-output-to-temp-buffer</code> makes this buffer read-only at the
+end, and also scans it for function and variable names to make them
+into clickable cross-references.  See <a href="Docstring-hyperlinks.html#Docstring-hyperlinks">Tips for Documentation Strings</a>, in particular the item on hyperlinks in
+documentation strings, for more details.
+
+        <p>The string <var>buffer-name</var> specifies the temporary buffer, which
+need not already exist.  The argument must be a string, not a buffer. 
+The buffer is erased initially (with no questions asked), and it is
+marked as unmodified after <code>with-output-to-temp-buffer</code> exits.
+
+        <p><code>with-output-to-temp-buffer</code> binds <code>standard-output</code> to the
+temporary buffer, then it evaluates the forms in <var>forms</var>.  Output
+using the Lisp output functions within <var>forms</var> goes by default to
+that buffer (but screen display and messages in the echo area, although
+they are &ldquo;output&rdquo; in the general sense of the word, are not affected). 
+See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
+
+        <p>Several hooks are available for customizing the behavior
+of this construct; they are listed below.
+
+        <p>The value of the last form in <var>forms</var> is returned.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+           This is the contents of foo.
+          ---------- Buffer: foo ----------
+          
+          (with-output-to-temp-buffer "foo"
+              (print 20)
+              (print standard-output))
+          =&gt; #&lt;buffer foo&gt;
+          
+          ---------- Buffer: foo ----------
+          20
+          
+          #&lt;buffer foo&gt;
+          
+          ---------- Buffer: foo ----------
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3178"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, <code>with-output-to-temp-buffer</code>
+calls it as a function to do the job of displaying a help buffer.  The
+function gets one argument, which is the buffer it should display.
+
+        <p>It is a good idea for this function to run <code>temp-buffer-show-hook</code>
+just as <code>with-output-to-temp-buffer</code> normally would, inside of
+<code>save-selected-window</code> and with the chosen window and buffer
+selected. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3179"></a></var><br>
+<blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> before
+evaluating <var>body</var>.  When the hook runs, the temporary buffer is
+current.  This hook is normally set up with a function to put the
+buffer in Help mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3180"></a></var><br>
+<blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> after
+displaying the temporary buffer.  When the hook runs, the temporary buffer
+is current, and the window it was displayed in is selected.  This hook
+is normally set up with a function to make the buffer read only, and
+find function names and variable names in it, provided the major mode
+is Help mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3181"></a></var><br>
+<blockquote><p>This function momentarily displays <var>string</var> in the current buffer at
+<var>position</var>.  It has no effect on the undo list or on the buffer's
+modification status.
+
+        <p>The momentary display remains until the next input event.  If the next
+input event is <var>char</var>, <code>momentary-string-display</code> ignores it
+and returns.  Otherwise, that event remains buffered for subsequent use
+as input.  Thus, typing <var>char</var> will simply remove the string from
+the display, while typing (say) <kbd>C-f</kbd> will remove the string from
+the display and later (presumably) move point forward.  The argument
+<var>char</var> is a space by default.
+
+        <p>The return value of <code>momentary-string-display</code> is not meaningful.
+
+        <p>If the string <var>string</var> does not contain control characters, you can
+do the same job in a more general way by creating (and then subsequently
+deleting) an overlay with a <code>before-string</code> property. 
+See <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>.
+
+        <p>If <var>message</var> is non-<code>nil</code>, it is displayed in the echo area
+while <var>string</var> is displayed in the buffer.  If it is <code>nil</code>, a
+default message says to type <var>char</var> to continue.
+
+        <p>In this example, point is initially located at the beginning of the
+second line:
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          This is the contents of foo.
+          -!-Second line.
+          ---------- Buffer: foo ----------
+          
+          (momentary-string-display
+            "**** Important Message! ****"
+            (point) ?\r
+            "Type RET when done reading")
+          =&gt; t
+          
+          ---------- Buffer: foo ----------
+          This is the contents of foo.
+          **** Important Message! ****Second line.
+          ---------- Buffer: foo ----------
+          
+          ---------- Echo Area ----------
+          Type RET when done reading
+          ---------- Echo Area ----------
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

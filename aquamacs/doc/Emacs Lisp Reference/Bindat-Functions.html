@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Bindat Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Byte-Packing.html#Byte-Packing" title="Byte Packing">
+<link rel="prev" href="Bindat-Spec.html#Bindat-Spec" title="Bindat Spec">
+<link rel="next" href="Bindat-Examples.html#Bindat-Examples" title="Bindat Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Bindat-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bindat-Examples.html#Bindat-Examples">Bindat Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Bindat-Spec.html#Bindat-Spec">Bindat Spec</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Packing</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.18.2 Functions to Unpack and Pack Bytes</h4>
+
+<p>In the following documentation, <var>spec</var> refers to a data layout
+specification, <code>bindat-raw</code> to a byte array, and <var>struct</var> to an
+alist representing unpacked field data.
+
+<div class="defun">
+&mdash; Function: <b>bindat-unpack</b><var> spec bindat-raw &amp;optional bindat-idx<a name="index-bindat_002dunpack-3110"></a></var><br>
+<blockquote><p>This function unpacks data from the unibyte string or byte
+array <code>bindat-raw</code>
+according to <var>spec</var>.  Normally this starts unpacking at the
+beginning of the byte array, but if <var>bindat-idx</var> is non-<code>nil</code>, it
+specifies a zero-based starting position to use instead.
+
+        <p>The value is an alist or nested alist in which each element describes
+one unpacked field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bindat-get-field</b><var> struct &amp;rest name<a name="index-bindat_002dget_002dfield-3111"></a></var><br>
+<blockquote><p>This function selects a field's data from the nested alist
+<var>struct</var>.  Usually <var>struct</var> was returned by
+<code>bindat-unpack</code>.  If <var>name</var> corresponds to just one argument,
+that means to extract a top-level field value.  Multiple <var>name</var>
+arguments specify repeated lookup of sub-structures.  An integer name
+acts as an array index.
+
+        <p>For example, if <var>name</var> is <code>(a b 2 c)</code>, that means to find
+field <code>c</code> in the third element of subfield <code>b</code> of field
+<code>a</code>.  (This corresponds to <code>struct.a.b[2].c</code> in C.) 
+</p></blockquote></div>
+
+   <p>Although packing and unpacking operations change the organization of
+data (in memory), they preserve the data's <dfn>total length</dfn>, which is
+the sum of all the fields' lengths, in bytes.  This value is not
+generally inherent in either the specification or alist alone; instead,
+both pieces of information contribute to its calculation.  Likewise, the
+length of a string or array being unpacked may be longer than the data's
+total length as described by the specification.
+
+<div class="defun">
+&mdash; Function: <b>bindat-length</b><var> spec struct<a name="index-bindat_002dlength-3112"></a></var><br>
+<blockquote><p>This function returns the total length of the data in <var>struct</var>,
+according to <var>spec</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bindat-pack</b><var> spec struct &amp;optional bindat-raw bindat-idx<a name="index-bindat_002dpack-3113"></a></var><br>
+<blockquote><p>This function returns a byte array packed according to <var>spec</var> from
+the data in the alist <var>struct</var>.  Normally it creates and fills a
+new byte array starting at the beginning.  However, if <var>bindat-raw</var>
+is non-<code>nil</code>, it specifies a pre-allocated unibyte string or vector to
+pack into.  If <var>bindat-idx</var> is non-<code>nil</code>, it specifies the starting
+offset for packing into <code>bindat-raw</code>.
+
+        <p>When pre-allocating, you should make sure <code>(length </code><var>bindat-raw</var><code>)</code>
+meets or exceeds the total length to avoid an out-of-range error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bindat-ip-to-string</b><var> ip<a name="index-bindat_002dip_002dto_002dstring-3114"></a></var><br>
+<blockquote><p>Convert the Internet address vector <var>ip</var> to a string in the usual
+dotted notation.
+
+     <pre class="example">          (bindat-ip-to-string [127 0 0 1])
+               =&gt; "127.0.0.1"
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

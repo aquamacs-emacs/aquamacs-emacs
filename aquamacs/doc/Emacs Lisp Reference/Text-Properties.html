@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Text Properties - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Case-Changes.html#Case-Changes" title="Case Changes">
+<link rel="next" href="Substitution.html#Substitution" title="Substitution">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Text-Properties"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Substitution.html#Substitution">Substitution</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Case-Changes.html#Case-Changes">Case Changes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.19 Text Properties</h3>
+
+<p><a name="index-text-properties-2557"></a><a name="index-attributes-of-text-2558"></a><a name="index-properties-of-text-2559"></a>
+  Each character position in a buffer or a string can have a <dfn>text
+property list</dfn>, much like the property list of a symbol (see <a href="Property-Lists.html#Property-Lists">Property Lists</a>).  The properties belong to a particular character at a
+particular place, such as, the letter `<samp><span class="samp">T</span></samp>' at the beginning of this
+sentence or the first `<samp><span class="samp">o</span></samp>' in `<samp><span class="samp">foo</span></samp>'&mdash;if the same character
+occurs in two different places, the two occurrences in general have
+different properties.
+
+   <p>Each property has a name and a value.  Both of these can be any Lisp
+object, but the name is normally a symbol.  Typically each property
+name symbol is used for a particular purpose; for instance, the text
+property <code>face</code> specifies the faces for displaying the character
+(see <a href="Special-Properties.html#Special-Properties">Special Properties</a>).  The usual way to access the property
+list is to specify a name and ask what value corresponds to it.
+
+   <p>If a character has a <code>category</code> property, we call it the
+<dfn>property category</dfn> of the character.  It should be a symbol.  The
+properties of the symbol serve as defaults for the properties of the
+character.
+
+   <p>Copying text between strings and buffers preserves the properties
+along with the characters; this includes such diverse functions as
+<code>substring</code>, <code>insert</code>, and <code>buffer-substring</code>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Examining-Properties.html#Examining-Properties">Examining Properties</a>:    Looking at the properties of one character. 
+<li><a accesskey="2" href="Changing-Properties.html#Changing-Properties">Changing Properties</a>: 	   Setting the properties of a range of text. 
+<li><a accesskey="3" href="Property-Search.html#Property-Search">Property Search</a>: 	   Searching for where a property changes value. 
+<li><a accesskey="4" href="Special-Properties.html#Special-Properties">Special Properties</a>: 	   Particular properties with special meanings. 
+<li><a accesskey="5" href="Format-Properties.html#Format-Properties">Format Properties</a>:       Properties for representing formatting of text. 
+<li><a accesskey="6" href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>:       How inserted text gets properties from
+                             neighboring text. 
+<li><a accesskey="7" href="Saving-Properties.html#Saving-Properties">Saving Properties</a>:       Saving text properties in files, and reading
+                             them back. 
+<li><a accesskey="8" href="Lazy-Properties.html#Lazy-Properties">Lazy Properties</a>:         Computing text properties in a lazy fashion
+                             only when text is examined. 
+<li><a accesskey="9" href="Clickable-Text.html#Clickable-Text">Clickable Text</a>:          Using text properties to make regions of text
+                             do something when you click on them. 
+<li><a href="Links-and-Mouse_002d1.html#Links-and-Mouse_002d1">Links and Mouse-1</a>:       How to make &lt;Mouse-1&gt; follow a link. 
+<li><a href="Fields.html#Fields">Fields</a>:                  The <code>field</code> property defines
+                             fields within the buffer. 
+<li><a href="Not-Intervals.html#Not-Intervals">Not Intervals</a>: 	   Why text properties do not use
+			     Lisp-visible text intervals. 
+</ul>
+
+   </body></html>
+

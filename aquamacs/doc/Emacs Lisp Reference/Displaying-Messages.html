@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+<title>Displaying Messages - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Echo-Area.html#The-Echo-Area" title="The Echo Area">
+<link rel="next" href="Progress.html#Progress" title="Progress">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Displaying-Messages"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Progress.html#Progress">Progress</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.4.1 Displaying Messages in the Echo Area</h4>
+
+<p><a name="index-display-message-in-echo-area-3136"></a>
+  This section describes the functions for explicitly producing echo
+area messages.  Many other Emacs features display messages there, too.
+
+<div class="defun">
+&mdash; Function: <b>message</b><var> format-string &amp;rest arguments<a name="index-message-3137"></a></var><br>
+<blockquote><p>This function displays a message in the echo area.  The argument
+<var>format-string</var> is similar to a C language <code>printf</code> format
+string.  See <code>format</code> in <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>, for the details
+on the conversion specifications.  <code>message</code> returns the
+constructed string.
+
+        <p>In batch mode, <code>message</code> prints the message text on the standard
+error stream, followed by a newline.
+
+        <p>If <var>format-string</var>, or strings among the <var>arguments</var>, have
+<code>face</code> text properties, these affect the way the message is displayed.
+
+     <!-- Emacs 19 feature -->
+<p>If <var>format-string</var> is <code>nil</code> or the empty string,
+<code>message</code> clears the echo area; if the echo area has been
+expanded automatically, this brings it back to its normal size. 
+If the minibuffer is active, this brings the minibuffer contents back
+onto the screen immediately.
+
+     <pre class="example">          (message "Minibuffer depth is %d."
+                   (minibuffer-depth))
+           -| Minibuffer depth is 0.
+          =&gt; "Minibuffer depth is 0."
+          
+          ---------- Echo Area ----------
+          Minibuffer depth is 0.
+          ---------- Echo Area ----------
+     </pre>
+        <p>To automatically display a message in the echo area or in a pop-buffer,
+depending on its size, use <code>display-message-or-buffer</code> (see below). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-temp-message</b><var> message &amp;rest body<a name="index-with_002dtemp_002dmessage-3138"></a></var><br>
+<blockquote><p>This construct displays a message in the echo area temporarily, during
+the execution of <var>body</var>.  It displays <var>message</var>, executes
+<var>body</var>, then returns the value of the last body form while restoring
+the previous echo area contents. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>message-or-box</b><var> format-string &amp;rest arguments<a name="index-message_002dor_002dbox-3139"></a></var><br>
+<blockquote><p>This function displays a message like <code>message</code>, but may display it
+in a dialog box instead of the echo area.  If this function is called in
+a command that was invoked using the mouse&mdash;more precisely, if
+<code>last-nonmenu-event</code> (see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>) is either
+<code>nil</code> or a list&mdash;then it uses a dialog box or pop-up menu to
+display the message.  Otherwise, it uses the echo area.  (This is the
+same criterion that <code>y-or-n-p</code> uses to make a similar decision; see
+<a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>.)
+
+        <p>You can force use of the mouse or of the echo area by binding
+<code>last-nonmenu-event</code> to a suitable value around the call. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>message-box</b><var> format-string &amp;rest arguments<a name="index-message_002dbox-3140"></a></var><br>
+<blockquote><p><a name="message_002dbox"></a>
+This function displays a message like <code>message</code>, but uses a dialog
+box (or a pop-up menu) whenever that is possible.  If it is impossible
+to use a dialog box or pop-up menu, because the terminal does not
+support them, then <code>message-box</code> uses the echo area, like
+<code>message</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>display-message-or-buffer</b><var> message &amp;optional buffer-name not-this-window frame<a name="index-display_002dmessage_002dor_002dbuffer-3141"></a></var><br>
+<blockquote><p>This function displays the message <var>message</var>, which may be either a
+string or a buffer.  If it is shorter than the maximum height of the
+echo area, as defined by <code>max-mini-window-height</code>, it is displayed
+in the echo area, using <code>message</code>.  Otherwise,
+<code>display-buffer</code> is used to show it in a pop-up buffer.
+
+        <p>Returns either the string shown in the echo area, or when a pop-up
+buffer is used, the window used to display it.
+
+        <p>If <var>message</var> is a string, then the optional argument
+<var>buffer-name</var> is the name of the buffer used to display it when a
+pop-up buffer is used, defaulting to `<samp><span class="samp">*Message*</span></samp>'.  In the case
+where <var>message</var> is a string and displayed in the echo area, it is
+not specified whether the contents are inserted into the buffer anyway.
+
+        <p>The optional arguments <var>not-this-window</var> and <var>frame</var> are as for
+<code>display-buffer</code>, and only used if a buffer is displayed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-message</b><var><a name="index-current_002dmessage-3142"></a></var><br>
+<blockquote><p>This function returns the message currently being displayed in the
+echo area, or <code>nil</code> if there is none. 
+</p></blockquote></div>
+
+   </body></html>
+

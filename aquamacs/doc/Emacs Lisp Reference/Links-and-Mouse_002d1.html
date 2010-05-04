@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Links and Mouse-1 - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
+<link rel="prev" href="Clickable-Text.html#Clickable-Text" title="Clickable Text">
+<link rel="next" href="Fields.html#Fields" title="Fields">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Links-and-Mouse-1"></a>
+<a name="Links-and-Mouse_002d1"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fields.html#Fields">Fields</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clickable-Text.html#Clickable-Text">Clickable Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.19.10 Links and Mouse-1</h4>
+
+<p><a name="index-follow-links-2626"></a><a name="index-mouse_002d1-2627"></a>
+  The normal Emacs command for activating text in read-only buffers is
+&lt;Mouse-2&gt;, which includes following textual links.  However, most
+graphical applications use &lt;Mouse-1&gt; for following links.  For
+compatibility, &lt;Mouse-1&gt; follows links in Emacs too, when you
+click on a link quickly without moving the mouse.  The user can
+customize this behavior through the variable
+<code>mouse-1-click-follows-link</code>.
+
+   <p>To define text as a link at the Lisp level, you should bind the
+<code>mouse-2</code> event to a command to follow the link.  Then, to indicate that
+&lt;Mouse-1&gt; should also follow the link, you should specify a
+<code>follow-link</code> condition either as a text property or as a key
+binding:
+
+     <dl>
+<dt><code>follow-link</code> property<dd>If the clickable text has a non-<code>nil</code> <code>follow-link</code> text or overlay
+property, that specifies the condition.
+
+     <br><dt><code>follow-link</code> event<dd>If there is a binding for the <code>follow-link</code> event, either on the
+clickable text or in the local keymap, the binding is the condition. 
+</dl>
+
+   <p>Regardless of how you set the <code>follow-link</code> condition, its
+value is used as follows to determine whether the given position is
+inside a link, and (if so) to compute an <dfn>action code</dfn> saying how
+&lt;Mouse-1&gt; should handle the link.
+
+     <dl>
+<dt><code>mouse-face</code><dd>If the condition is <code>mouse-face</code>, a position is inside a link if
+there is a non-<code>nil</code> <code>mouse-face</code> property at that position. 
+The action code is always <code>t</code>.
+
+     <p>For example, here is how Info mode handles &lt;Mouse-1&gt;:
+
+     <pre class="smallexample">          (define-key Info-mode-map [follow-link] 'mouse-face)
+     </pre>
+     <br><dt>a function<dd>If the condition is a valid function, <var>func</var>, then a position
+<var>pos</var> is inside a link if <code>(</code><var>func</var> <var>pos</var><code>)</code> evaluates
+to non-<code>nil</code>.  The value returned by <var>func</var> serves as the
+action code.
+
+     <p>For example, here is how pcvs enables &lt;Mouse-1&gt; to follow links on
+file names only:
+
+     <pre class="smallexample">          (define-key map [follow-link]
+            (lambda (pos)
+              (eq (get-char-property pos 'face) 'cvs-filename-face)))
+     </pre>
+     <br><dt>anything else<dd>If the condition value is anything else, then the position is inside a
+link and the condition itself is the action code.  Clearly you should
+only specify this kind of condition on the text that constitutes a
+link. 
+</dl>
+
+<p class="noindent">The action code tells &lt;Mouse-1&gt; how to follow the link:
+
+     <dl>
+<dt>a string or vector<dd>If the action code is a string or vector, the &lt;Mouse-1&gt; event is
+translated into the first element of the string or vector; i.e., the
+action of the &lt;Mouse-1&gt; click is the local or global binding of
+that character or symbol.  Thus, if the action code is <code>"foo"</code>,
+&lt;Mouse-1&gt; translates into <kbd>f</kbd>.  If it is <code>[foo]</code>,
+&lt;Mouse-1&gt; translates into &lt;foo&gt;.
+
+     <br><dt>anything else<dd>For any other non-<code>nil</code> action code, the <code>mouse-1</code> event is
+translated into a <code>mouse-2</code> event at the same position. 
+</dl>
+
+   <p>To define &lt;Mouse-1&gt; to activate a button defined with
+<code>define-button-type</code>, give the button a <code>follow-link</code>
+property with a value as specified above to determine how to follow
+the link.  For example, here is how Help mode handles &lt;Mouse-1&gt;:
+
+<pre class="smallexample">     (define-button-type 'help-xref
+       'follow-link t
+       'action #'help-button-action)
+</pre>
+   <p>To define &lt;Mouse-1&gt; on a widget defined with
+<code>define-widget</code>, give the widget a <code>:follow-link</code> property
+with a value as specified above to determine how to follow the link.
+
+   <p>For example, here is how the <code>link</code> widget specifies that
+a &lt;Mouse-1&gt; click shall be translated to &lt;RET&gt;:
+
+<pre class="smallexample">     (define-widget 'link 'item
+       "An embedded link."
+       :button-prefix 'widget-link-prefix
+       :button-suffix 'widget-link-suffix
+       :follow-link "\C-m"
+       :help-echo "Follow the link."
+       :format "%[%t%]")
+</pre>
+   <div class="defun">
+&mdash; Function: <b>mouse-on-link-p</b><var> pos<a name="index-mouse_002don_002dlink_002dp-2628"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if position <var>pos</var> in the
+current buffer is on a link.  <var>pos</var> can also be a mouse event
+location, as returned by <code>event-start</code> (see <a href="Accessing-Events.html#Accessing-Events">Accessing Events</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

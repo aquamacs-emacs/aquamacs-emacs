@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+<title>Key Lookup - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Controlling-Active-Maps.html#Controlling-Active-Maps" title="Controlling Active Maps">
+<link rel="next" href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup" title="Functions for Key Lookup">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Key-Lookup"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup">Functions for Key Lookup</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling Active Maps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.10 Key Lookup</h3>
+
+<p><a name="index-key-lookup-1446"></a><a name="index-keymap-entry-1447"></a>
+  <dfn>Key lookup</dfn> is the process of finding the binding of a key
+sequence from a given keymap.  The execution or use of the binding is
+not part of key lookup.
+
+   <p>Key lookup uses just the event type of each event in the key sequence;
+the rest of the event is ignored.  In fact, a key sequence used for key
+lookup may designate a mouse event with just its types (a symbol)
+instead of the entire event (a list).  See <a href="Input-Events.html#Input-Events">Input Events</a>.  Such
+a &ldquo;key sequence&rdquo; is insufficient for <code>command-execute</code> to run,
+but it is sufficient for looking up or rebinding a key.
+
+   <p>When the key sequence consists of multiple events, key lookup
+processes the events sequentially: the binding of the first event is
+found, and must be a keymap; then the second event's binding is found in
+that keymap, and so on until all the events in the key sequence are used
+up.  (The binding thus found for the last event may or may not be a
+keymap.)  Thus, the process of key lookup is defined in terms of a
+simpler process for looking up a single event in a keymap.  How that is
+done depends on the type of object associated with the event in that
+keymap.
+
+   <p>Let's use the term <dfn>keymap entry</dfn> to describe the value found by
+looking up an event type in a keymap.  (This doesn't include the item
+string and other extra elements in a keymap element for a menu item, because
+<code>lookup-key</code> and other key lookup functions don't include them in
+the returned value.)  While any Lisp object may be stored in a keymap
+as a keymap entry, not all make sense for key lookup.  Here is a table
+of the meaningful types of keymap entries:
+
+     <dl>
+<dt><code>nil</code><dd><a name="index-g_t_0040code_007bnil_007d-in-keymap-1448"></a><code>nil</code> means that the events used so far in the lookup form an
+undefined key.  When a keymap fails to mention an event type at all, and
+has no default binding, that is equivalent to a binding of <code>nil</code>
+for that event type.
+
+     <br><dt><var>command</var><dd><a name="index-command-in-keymap-1449"></a>The events used so far in the lookup form a complete key,
+and <var>command</var> is its binding.  See <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>.
+
+     <br><dt><var>array</var><dd><a name="index-string-in-keymap-1450"></a>The array (either a string or a vector) is a keyboard macro.  The events
+used so far in the lookup form a complete key, and the array is its
+binding.  See <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>, for more information.
+
+     <br><dt><var>keymap</var><dd><a name="index-keymap-in-keymap-1451"></a>The events used so far in the lookup form a prefix key.  The next
+event of the key sequence is looked up in <var>keymap</var>.
+
+     <br><dt><var>list</var><dd><a name="index-list-in-keymap-1452"></a>The meaning of a list depends on what it contains:
+
+          <ul>
+<li>If the <span class="sc">car</span> of <var>list</var> is the symbol <code>keymap</code>, then the list
+is a keymap, and is treated as a keymap (see above).
+
+          <li><a name="index-g_t_0040code_007blambda_007d-in-keymap-1453"></a>If the <span class="sc">car</span> of <var>list</var> is <code>lambda</code>, then the list is a
+lambda expression.  This is presumed to be a function, and is treated
+as such (see above).  In order to execute properly as a key binding,
+this function must be a command&mdash;it must have an <code>interactive</code>
+specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
+
+          <li>If the <span class="sc">car</span> of <var>list</var> is a keymap and the <span class="sc">cdr</span> is an event
+type, then this is an <dfn>indirect entry</dfn>:
+
+          <pre class="example">               (<var>othermap</var> . <var>othertype</var>)
+          </pre>
+          <p>When key lookup encounters an indirect entry, it looks up instead the
+binding of <var>othertype</var> in <var>othermap</var> and uses that.
+
+          <p>This feature permits you to define one key as an alias for another key. 
+For example, an entry whose <span class="sc">car</span> is the keymap called <code>esc-map</code>
+and whose <span class="sc">cdr</span> is 32 (the code for &lt;SPC&gt;) means, &ldquo;Use the global
+binding of <kbd>Meta-&lt;SPC&gt;</kbd>, whatever that may be.&rdquo;
+</ul>
+
+     <br><dt><var>symbol</var><dd><a name="index-symbol-in-keymap-1454"></a>The function definition of <var>symbol</var> is used in place of
+<var>symbol</var>.  If that too is a symbol, then this process is repeated,
+any number of times.  Ultimately this should lead to an object that is
+a keymap, a command, or a keyboard macro.  A list is allowed if it is a
+keymap or a command, but indirect entries are not understood when found
+via symbols.
+
+     <p>Note that keymaps and keyboard macros (strings and vectors) are not
+valid functions, so a symbol with a keymap, string, or vector as its
+function definition is invalid as a function.  It is, however, valid as
+a key binding.  If the definition is a keyboard macro, then the symbol
+is also valid as an argument to <code>command-execute</code>
+(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
+
+     <p><a name="index-g_t_0040code_007bundefined_007d-in-keymap-1455"></a>The symbol <code>undefined</code> is worth special mention: it means to treat
+the key as undefined.  Strictly speaking, the key is defined, and its
+binding is the command <code>undefined</code>; but that command does the same
+thing that is done automatically for an undefined key: it rings the bell
+(by calling <code>ding</code>) but does not signal an error.
+
+     <p><a name="index-preventing-prefix-key-1456"></a><code>undefined</code> is used in local keymaps to override a global key
+binding and make the key &ldquo;undefined&rdquo; locally.  A local binding of
+<code>nil</code> would fail to do this because it would not override the
+global binding.
+
+     <br><dt><var>anything else</var><dd>If any other type of object is found, the events used so far in the
+lookup form a complete key, and the object is its binding, but the
+binding is not executable as a command. 
+</dl>
+
+   <p>In short, a keymap entry may be a keymap, a command, a keyboard macro,
+a symbol that leads to one of them, or an indirection or <code>nil</code>. 
+Here is an example of a sparse keymap with two characters bound to
+commands and one bound to another keymap.  This map is the normal value
+of <code>emacs-lisp-mode-map</code>.  Note that 9 is the code for &lt;TAB&gt;,
+127 for &lt;DEL&gt;, 27 for &lt;ESC&gt;, 17 for <kbd>C-q</kbd> and 24 for
+<kbd>C-x</kbd>.
+
+<pre class="example">     (keymap (9 . lisp-indent-line)
+             (127 . backward-delete-char-untabify)
+             (27 keymap (17 . indent-sexp) (24 . eval-defun)))
+</pre>
+   </body></html>
+

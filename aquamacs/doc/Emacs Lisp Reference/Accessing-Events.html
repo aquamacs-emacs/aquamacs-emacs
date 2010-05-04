@@ -1,0 +1,246 @@
+<html lang="en">
+<head>
+<title>Accessing Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="prev" href="Classifying-Events.html#Classifying-Events" title="Classifying Events">
+<link rel="next" href="Strings-of-Events.html#Strings-of-Events" title="Strings of Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Accessing-Events"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Classifying-Events.html#Classifying-Events">Classifying Events</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.6.13 Accessing Events</h4>
+
+<p><a name="index-mouse-events_002c-data-in-1256"></a>
+  This section describes convenient functions for accessing the data in
+a mouse button or motion event.
+
+   <p>These two functions return the starting or ending position of a
+mouse-button event, as a list of this form:
+
+<pre class="example">     (<var>window</var> <var>pos-or-area</var> (<var>x</var> . <var>y</var>) <var>timestamp</var>
+      <var>object</var> <var>text-pos</var> (<var>col</var> . <var>row</var>)
+      <var>image</var> (<var>dx</var> . <var>dy</var>) (<var>width</var> . <var>height</var>))
+</pre>
+   <div class="defun">
+&mdash; Function: <b>event-start</b><var> event<a name="index-event_002dstart-1257"></a></var><br>
+<blockquote><p>This returns the starting position of <var>event</var>.
+
+        <p>If <var>event</var> is a click or button-down event, this returns the
+location of the event.  If <var>event</var> is a drag event, this returns the
+drag's starting position. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>event-end</b><var> event<a name="index-event_002dend-1258"></a></var><br>
+<blockquote><p>This returns the ending position of <var>event</var>.
+
+        <p>If <var>event</var> is a drag event, this returns the position where the user
+released the mouse button.  If <var>event</var> is a click or button-down
+event, the value is actually the starting position, which is the only
+position such events have. 
+</p></blockquote></div>
+
+   <p><a name="index-mouse-position-list_002c-accessing-1259"></a>  These functions take a position list as described above, and
+return various parts of it.
+
+<div class="defun">
+&mdash; Function: <b>posn-window</b><var> position<a name="index-posn_002dwindow-1260"></a></var><br>
+<blockquote><p>Return the window that <var>position</var> is in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-area</b><var> position<a name="index-posn_002darea-1261"></a></var><br>
+<blockquote><p>Return the window area recorded in <var>position</var>.  It returns <code>nil</code>
+when the event occurred in the text area of the window; otherwise, it
+is a symbol identifying the area in which the event occurred. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-point</b><var> position<a name="index-posn_002dpoint-1262"></a></var><br>
+<blockquote><p>Return the buffer position in <var>position</var>.  When the event occurred
+in the text area of the window, in a marginal area, or on a fringe,
+this is an integer specifying a buffer position.  Otherwise, the value
+is undefined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-x-y</b><var> position<a name="index-posn_002dx_002dy-1263"></a></var><br>
+<blockquote><p>Return the pixel-based x and y coordinates in <var>position</var>, as a
+cons cell <code>(</code><var>x</var><code> . </code><var>y</var><code>)</code>.  These coordinates are relative
+to the window given by <code>posn-window</code>.
+
+        <p>This example shows how to convert these window-relative coordinates
+into frame-relative coordinates:
+
+     <pre class="example">          (defun frame-relative-coordinates (position)
+            "Return frame-relative coordinates from POSITION."
+            (let* ((x-y (posn-x-y position))
+                   (window (posn-window position))
+                   (edges (window-inside-pixel-edges window)))
+              (cons (+ (car x-y) (car edges))
+                    (+ (cdr x-y) (cadr edges)))))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-col-row</b><var> position<a name="index-posn_002dcol_002drow-1264"></a></var><br>
+<blockquote><p>Return the row and column (in units of the frame's default character
+height and width) of <var>position</var>, as a cons cell <code>(</code><var>col</var><code> . 
+</code><var>row</var><code>)</code>.  These are computed from the <var>x</var> and <var>y</var> values
+actually found in <var>position</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-actual-col-row</b><var> position<a name="index-posn_002dactual_002dcol_002drow-1265"></a></var><br>
+<blockquote><p>Return the actual row and column in <var>position</var>, as a cons cell
+<code>(</code><var>col</var><code> . </code><var>row</var><code>)</code>.  The values are the actual row number
+in the window, and the actual character number in that row.  It returns
+<code>nil</code> if <var>position</var> does not include actual positions values. 
+You can use <code>posn-col-row</code> to get approximate values. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-string</b><var> position<a name="index-posn_002dstring-1266"></a></var><br>
+<blockquote><p>Return the string object in <var>position</var>, either <code>nil</code>, or a
+cons cell <code>(</code><var>string</var><code> . </code><var>string-pos</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-image</b><var> position<a name="index-posn_002dimage-1267"></a></var><br>
+<blockquote><p>Return the image object in <var>position</var>, either <code>nil</code>, or an
+image <code>(image ...)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-object</b><var> position<a name="index-posn_002dobject-1268"></a></var><br>
+<blockquote><p>Return the image or string object in <var>position</var>, either
+<code>nil</code>, an image <code>(image ...)</code>, or a cons cell
+<code>(</code><var>string</var><code> . </code><var>string-pos</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-object-x-y</b><var> position<a name="index-posn_002dobject_002dx_002dy-1269"></a></var><br>
+<blockquote><p>Return the pixel-based x and y coordinates relative to the upper left
+corner of the object in <var>position</var> as a cons cell <code>(</code><var>dx</var><code>
+. </code><var>dy</var><code>)</code>.  If the <var>position</var> is a buffer position, return the
+relative position in the character at that position. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-object-width-height</b><var> position<a name="index-posn_002dobject_002dwidth_002dheight-1270"></a></var><br>
+<blockquote><p>Return the pixel width and height of the object in <var>position</var> as a
+cons cell <code>(</code><var>width</var><code> . </code><var>height</var><code>)</code>.  If the <var>position</var>
+is a buffer position, return the size of the character at that position. 
+</p></blockquote></div>
+
+   <p><a name="index-timestamp-of-a-mouse-event-1271"></a>
+
+<div class="defun">
+&mdash; Function: <b>posn-timestamp</b><var> position<a name="index-posn_002dtimestamp-1272"></a></var><br>
+<blockquote><p>Return the timestamp in <var>position</var>.  This is the time at which the
+event occurred, in milliseconds. 
+</p></blockquote></div>
+
+   <p>These functions compute a position list given particular buffer
+position or screen position.  You can access the data in this position
+list with the functions described above.
+
+<div class="defun">
+&mdash; Function: <b>posn-at-point</b><var> &amp;optional pos window<a name="index-posn_002dat_002dpoint-1273"></a></var><br>
+<blockquote><p>This function returns a position list for position <var>pos</var> in
+<var>window</var>.  <var>pos</var> defaults to point in <var>window</var>;
+<var>window</var> defaults to the selected window.
+
+        <p><code>posn-at-point</code> returns <code>nil</code> if <var>pos</var> is not visible in
+<var>window</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posn-at-x-y</b><var> x y &amp;optional frame-or-window whole<a name="index-posn_002dat_002dx_002dy-1274"></a></var><br>
+<blockquote><p>This function returns position information corresponding to pixel
+coordinates <var>x</var> and <var>y</var> in a specified frame or window,
+<var>frame-or-window</var>, which defaults to the selected window. 
+The coordinates <var>x</var> and <var>y</var> are relative to the
+frame or window used. 
+If <var>whole</var> is <code>nil</code>, the coordinates are relative
+to the window text area, otherwise they are relative to
+the entire window area including scroll bars, margins and fringes. 
+</p></blockquote></div>
+
+   <p>These functions are useful for decoding scroll bar events.
+
+<div class="defun">
+&mdash; Function: <b>scroll-bar-event-ratio</b><var> event<a name="index-scroll_002dbar_002devent_002dratio-1275"></a></var><br>
+<blockquote><p>This function returns the fractional vertical position of a scroll bar
+event within the scroll bar.  The value is a cons cell
+<code>(</code><var>portion</var><code> . </code><var>whole</var><code>)</code> containing two integers whose ratio
+is the fractional position. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>scroll-bar-scale</b><var> ratio total<a name="index-scroll_002dbar_002dscale-1276"></a></var><br>
+<blockquote><p>This function multiplies (in effect) <var>ratio</var> by <var>total</var>,
+rounding the result to an integer.  The argument <var>ratio</var> is not a
+number, but rather a pair <code>(</code><var>num</var><code> . </code><var>denom</var><code>)</code>&mdash;typically a
+value returned by <code>scroll-bar-event-ratio</code>.
+
+        <p>This function is handy for scaling a position on a scroll bar into a
+buffer position.  Here's how to do that:
+
+     <pre class="example">          (+ (point-min)
+             (scroll-bar-scale
+                (posn-x-y (event-start event))
+                (- (point-max) (point-min))))
+     </pre>
+        <p>Recall that scroll bar events have two integers forming a ratio, in place
+of a pair of x and y coordinates. 
+</p></blockquote></div>
+
+   </body></html>
+

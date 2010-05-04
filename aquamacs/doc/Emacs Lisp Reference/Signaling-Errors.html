@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Signaling Errors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Errors.html#Errors" title="Errors">
+<link rel="next" href="Processing-of-Errors.html#Processing-of-Errors" title="Processing of Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Signaling-Errors"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Processing-of-Errors.html#Processing-of-Errors">Processing of Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.5.3.1 How to Signal an Error</h5>
+
+<p><a name="index-signaling-errors-544"></a>
+   <dfn>Signaling</dfn> an error means beginning error processing.  Error
+processing normally aborts all or part of the running program and
+returns to a point that is set up to handle the error
+(see <a href="Processing-of-Errors.html#Processing-of-Errors">Processing of Errors</a>).  Here we describe how to signal an
+error.
+
+   <p>Most errors are signaled &ldquo;automatically&rdquo; within Lisp primitives
+which you call for other purposes, such as if you try to take the
+<span class="sc">car</span> of an integer or move forward a character at the end of the
+buffer.  You can also signal errors explicitly with the functions
+<code>error</code> and <code>signal</code>.
+
+   <p>Quitting, which happens when the user types <kbd>C-g</kbd>, is not
+considered an error, but it is handled almost like an error. 
+See <a href="Quitting.html#Quitting">Quitting</a>.
+
+   <p>Every error specifies an error message, one way or another.  The
+message should state what is wrong (&ldquo;File does not exist&rdquo;), not how
+things ought to be (&ldquo;File must exist&rdquo;).  The convention in Emacs
+Lisp is that error messages should start with a capital letter, but
+should not end with any sort of punctuation.
+
+<div class="defun">
+&mdash; Function: <b>error</b><var> format-string &amp;rest args<a name="index-error-545"></a></var><br>
+<blockquote><p>This function signals an error with an error message constructed by
+applying <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) to
+<var>format-string</var> and <var>args</var>.
+
+        <p>These examples show typical uses of <code>error</code>:
+
+     <pre class="example">          (error "That is an error -- try something else")
+               error--&gt; That is an error -- try something else
+          
+          (error "You have committed %d errors" 10)
+               error--&gt; You have committed 10 errors
+     </pre>
+        <p><code>error</code> works by calling <code>signal</code> with two arguments: the
+error symbol <code>error</code>, and a list containing the string returned by
+<code>format</code>.
+
+        <p><strong>Warning:</strong> If you want to use your own string as an error message
+verbatim, don't just write <code>(error </code><var>string</var><code>)</code>.  If <var>string</var>
+contains `<samp><span class="samp">%</span></samp>', it will be interpreted as a format specifier, with
+undesirable results.  Instead, use <code>(error "%s" </code><var>string</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>signal</b><var> error-symbol data<a name="index-signal-546"></a></var><br>
+<blockquote><p><a name="Definition-of-signal"></a>
+This function signals an error named by <var>error-symbol</var>.  The
+argument <var>data</var> is a list of additional Lisp objects relevant to
+the circumstances of the error.
+
+        <p>The argument <var>error-symbol</var> must be an <dfn>error symbol</dfn>&mdash;a symbol
+bearing a property <code>error-conditions</code> whose value is a list of
+condition names.  This is how Emacs Lisp classifies different sorts of
+errors. See <a href="Error-Symbols.html#Error-Symbols">Error Symbols</a>, for a description of error symbols,
+error conditions and condition names.
+
+        <p>If the error is not handled, the two arguments are used in printing
+the error message.  Normally, this error message is provided by the
+<code>error-message</code> property of <var>error-symbol</var>.  If <var>data</var> is
+non-<code>nil</code>, this is followed by a colon and a comma separated list
+of the unevaluated elements of <var>data</var>.  For <code>error</code>, the
+error message is the <span class="sc">car</span> of <var>data</var> (that must be a string). 
+Subcategories of <code>file-error</code> are handled specially.
+
+        <p>The number and significance of the objects in <var>data</var> depends on
+<var>error-symbol</var>.  For example, with a <code>wrong-type-arg</code> error,
+there should be two objects in the list: a predicate that describes the type
+that was expected, and the object that failed to fit that type.
+
+        <p>Both <var>error-symbol</var> and <var>data</var> are available to any error
+handlers that handle the error: <code>condition-case</code> binds a local
+variable to a list of the form <code>(</code><var>error-symbol</var><code> . 
+</code><var>data</var><code>)</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).
+
+        <p>The function <code>signal</code> never returns (though in older Emacs versions
+it could sometimes return).
+
+     <pre class="smallexample">          (signal 'wrong-number-of-arguments '(x y))
+               error--&gt; Wrong number of arguments: x, y
+          
+          (signal 'no-such-error '("My unknown error condition"))
+               error--&gt; peculiar error: "My unknown error condition"
+     </pre>
+        </blockquote></div>
+
+   <p><a name="index-CL-note_002d_002d_002dno-continuable-errors-547"></a><blockquote>
+<b>Common Lisp note:</b> Emacs Lisp has nothing like the Common Lisp
+concept of continuable errors. 
+</blockquote>
+
+   </body></html>
+

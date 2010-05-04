@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+<title>Edebug Options - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug.html#Edebug" title="Edebug">
+<link rel="prev" href="Edebug-and-Macros.html#Edebug-and-Macros" title="Edebug and Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Edebug-Options"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.16 Edebug Options</h4>
+
+<p>These options affect the behavior of Edebug:
+
+<div class="defun">
+&mdash; User Option: <b>edebug-setup-hook</b><var><a name="index-edebug_002dsetup_002dhook-972"></a></var><br>
+<blockquote><p>Functions to call before Edebug is used.  Each time it is set to a new
+value, Edebug will call those functions once and then
+<code>edebug-setup-hook</code> is reset to <code>nil</code>.  You could use this to
+load up Edebug specifications associated with a package you are using
+but only when you also use Edebug. 
+See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-all-defs</b><var><a name="index-edebug_002dall_002ddefs-973"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, normal evaluation of defining forms such as
+<code>defun</code> and <code>defmacro</code> instruments them for Edebug.  This
+applies to <code>eval-defun</code>, <code>eval-region</code>, <code>eval-buffer</code>,
+and <code>eval-current-buffer</code>.
+
+        <p>Use the command <kbd>M-x edebug-all-defs</kbd> to toggle the value of this
+option.  See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-all-forms</b><var><a name="index-edebug_002dall_002dforms-974"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, the commands <code>eval-defun</code>,
+<code>eval-region</code>, <code>eval-buffer</code>, and <code>eval-current-buffer</code>
+instrument all forms, even those that don't define anything. 
+This doesn't apply to loading or evaluations in the minibuffer.
+
+        <p>Use the command <kbd>M-x edebug-all-forms</kbd> to toggle the value of this
+option.  See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-save-windows</b><var><a name="index-edebug_002dsave_002dwindows-975"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, Edebug saves and restores the window
+configuration.  That takes some time, so if your program does not care
+what happens to the window configurations, it is better to set this
+variable to <code>nil</code>.
+
+        <p>If the value is a list, only the listed windows are saved and
+restored.
+
+        <p>You can use the <kbd>W</kbd> command in Edebug to change this variable
+interactively.  See <a href="Edebug-Display-Update.html#Edebug-Display-Update">Edebug Display Update</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-save-displayed-buffer-points</b><var><a name="index-edebug_002dsave_002ddisplayed_002dbuffer_002dpoints-976"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, Edebug saves and restores point in all
+displayed buffers.
+
+        <p>Saving and restoring point in other buffers is necessary if you are
+debugging code that changes the point of a buffer which is displayed in
+a non-selected window.  If Edebug or the user then selects the window,
+point in that buffer will move to the window's value of point.
+
+        <p>Saving and restoring point in all buffers is expensive, since it
+requires selecting each window twice, so enable this only if you need
+it.  See <a href="Edebug-Display-Update.html#Edebug-Display-Update">Edebug Display Update</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-initial-mode</b><var><a name="index-edebug_002dinitial_002dmode-977"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it specifies the initial execution
+mode for Edebug when it is first activated.  Possible values are
+<code>step</code>, <code>next</code>, <code>go</code>, <code>Go-nonstop</code>, <code>trace</code>,
+<code>Trace-fast</code>, <code>continue</code>, and <code>Continue-fast</code>.
+
+        <p>The default value is <code>step</code>. 
+See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-trace</b><var><a name="index-edebug_002dtrace-978"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, trace each function entry and exit. 
+Tracing output is displayed in a buffer named `<samp><span class="samp">*edebug-trace*</span></samp>', one
+function entry or exit per line, indented by the recursion level.
+
+        <p>Also see <code>edebug-tracing</code>, in <a href="Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-test-coverage</b><var><a name="index-edebug_002dtest_002dcoverage-979"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, Edebug tests coverage of all expressions debugged. 
+See <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-continue-kbd-macro</b><var><a name="index-edebug_002dcontinue_002dkbd_002dmacro-980"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, continue defining or executing any keyboard macro
+that is executing outside of Edebug.   Use this with caution since it is not
+debugged. 
+See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-on-error</b><var><a name="index-edebug_002don_002derror-981"></a></var><br>
+<blockquote><p>Edebug binds <code>debug-on-error</code> to this value, if
+<code>debug-on-error</code> was previously <code>nil</code>.  See <a href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>edebug-on-quit</b><var><a name="index-edebug_002don_002dquit-982"></a></var><br>
+<blockquote><p>Edebug binds <code>debug-on-quit</code> to this value, if
+<code>debug-on-quit</code> was previously <code>nil</code>.  See <a href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>. 
+</p></blockquote></div>
+
+   <p>If you change the values of <code>edebug-on-error</code> or
+<code>edebug-on-quit</code> while Edebug is active, their values won't be used
+until the <em>next</em> time Edebug is invoked via a new command. 
+<!-- Not necessarily a deeper command level. -->
+<!-- A new command is not precisely true, but that is close enough - dan -->
+
+<div class="defun">
+&mdash; User Option: <b>edebug-global-break-condition</b><var><a name="index-edebug_002dglobal_002dbreak_002dcondition-983"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, an expression to test for at every stop point.  If
+the result is non-<code>nil</code>, then break.  Errors are ignored. 
+See <a href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

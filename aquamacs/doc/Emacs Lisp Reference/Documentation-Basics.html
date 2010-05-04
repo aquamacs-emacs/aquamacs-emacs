@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Documentation Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Documentation.html#Documentation" title="Documentation">
+<link rel="next" href="Accessing-Documentation.html#Accessing-Documentation" title="Accessing Documentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Documentation-Basics"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Documentation</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">24.1 Documentation Basics</h3>
+
+<p><a name="index-documentation-conventions-1648"></a><a name="index-writing-a-documentation-string-1649"></a><a name="index-string_002c-writing-a-doc-string-1650"></a>
+  A documentation string is written using the Lisp syntax for strings,
+with double-quote characters surrounding the text of the string.  This
+is because it really is a Lisp string object.  The string serves as
+documentation when it is written in the proper place in the definition
+of a function or variable.  In a function definition, the documentation
+string follows the argument list.  In a variable definition, the
+documentation string follows the initial value of the variable.
+
+   <p>When you write a documentation string, make the first line a
+complete sentence (or two complete sentences) since some commands,
+such as <code>apropos</code>, show only the first line of a multi-line
+documentation string.  Also, you should not indent the second line of
+a documentation string, if it has one, because that looks odd when you
+use <kbd>C-h f</kbd> (<code>describe-function</code>) or <kbd>C-h v</kbd>
+(<code>describe-variable</code>) to view the documentation string.  There
+are many other conventions for doc strings; see <a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>.
+
+   <p>Documentation strings can contain several special substrings, which
+stand for key bindings to be looked up in the current keymaps when the
+documentation is displayed.  This allows documentation strings to refer
+to the keys for related commands and be accurate even when a user
+rearranges the key bindings.  (See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.)
+
+   <p><a name="index-emacs_002dlisp_002ddocstring_002dfill_002dcolumn-1651"></a>  Emacs Lisp mode fills documentation strings to the width
+specified by <code>emacs-lisp-docstring-fill-column</code>.
+
+   <p>In Emacs Lisp, a documentation string is accessible through the
+function or variable that it describes:
+
+     <ul>
+<li><a name="index-function_002ddocumentation-1652"></a>The documentation for a function is usually stored in the function
+definition itself (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).  The function
+<code>documentation</code> knows how to extract it.  You can also put
+function documentation in the <code>function-documentation</code> property
+of the function name.  That is useful with definitions such as
+keyboard macros that can't hold a documentation string.
+
+     <li><a name="index-variable_002ddocumentation-1653"></a>The documentation for a variable is stored in the variable's property
+list under the property name <code>variable-documentation</code>.  The
+function <code>documentation-property</code> knows how to retrieve it. 
+</ul>
+
+   <p><a name="index-g_t_0040file_007bDOC_002d_0040var_007bversion_007d_007d-_0028documentation_0029-file-1654"></a>To save space, the documentation for preloaded functions and variables
+(including primitive functions and autoloaded functions) is stored in
+the file <samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp>&mdash;not inside Emacs.  The
+documentation strings for functions and variables loaded during the
+Emacs session from byte-compiled files are stored in those files
+(see <a href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>).
+
+   <p>The data structure inside Emacs has an integer offset into the file, or
+a list containing a file name and an integer, in place of the
+documentation string.  The functions <code>documentation</code> and
+<code>documentation-property</code> use that information to fetch the
+documentation string from the appropriate file; this is transparent to
+the user.
+
+<!-- Wordy to prevent overfull hbox.  -rjc 15mar92 -->
+<p>The <samp><span class="file">emacs/lib-src</span></samp> directory contains two utilities that you can
+use to print nice-looking hardcopy for the file
+<samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp>.  These are <samp><span class="file">sorted-doc</span></samp> and
+<samp><span class="file">digest-doc</span></samp>.
+
+   </body></html>
+

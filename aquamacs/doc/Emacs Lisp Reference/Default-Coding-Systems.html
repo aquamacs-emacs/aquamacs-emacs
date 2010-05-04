@@ -1,0 +1,213 @@
+<html lang="en">
+<head>
+<title>Default Coding Systems - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" title="User-Chosen Coding Systems">
+<link rel="next" href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" title="Specifying Coding Systems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Default-Coding-Systems"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">User-Chosen Coding Systems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.10.5 Default Coding Systems</h4>
+
+<p>This section describes variables that specify the default coding
+system for certain files or when running certain subprograms, and the
+function that I/O operations use to access them.
+
+   <p>The idea of these variables is that you set them once and for all to the
+defaults you want, and then do not change them again.  To specify a
+particular coding system for a particular operation in a Lisp program,
+don't change these variables; instead, override them using
+<code>coding-system-for-read</code> and <code>coding-system-for-write</code>
+(see <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>).
+
+<div class="defun">
+&mdash; Variable: <b>auto-coding-regexp-alist</b><var><a name="index-auto_002dcoding_002dregexp_002dalist-2749"></a></var><br>
+<blockquote><p>This variable is an alist of text patterns and corresponding coding
+systems. Each element has the form <code>(</code><var>regexp</var><code>
+. </code><var>coding-system</var><code>)</code>; a file whose first few kilobytes match
+<var>regexp</var> is decoded with <var>coding-system</var> when its contents are
+read into a buffer.  The settings in this alist take priority over
+<code>coding:</code> tags in the files and the contents of
+<code>file-coding-system-alist</code> (see below).  The default value is set
+so that Emacs automatically recognizes mail files in Babyl format and
+reads them with no code conversions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>file-coding-system-alist</b><var><a name="index-file_002dcoding_002dsystem_002dalist-2750"></a></var><br>
+<blockquote><p>This variable is an alist that specifies the coding systems to use for
+reading and writing particular files.  Each element has the form
+<code>(</code><var>pattern</var><code> . </code><var>coding</var><code>)</code>, where <var>pattern</var> is a regular
+expression that matches certain file names.  The element applies to file
+names that match <var>pattern</var>.
+
+        <p>The <span class="sc">cdr</span> of the element, <var>coding</var>, should be either a coding
+system, a cons cell containing two coding systems, or a function name (a
+symbol with a function definition).  If <var>coding</var> is a coding system,
+that coding system is used for both reading the file and writing it.  If
+<var>coding</var> is a cons cell containing two coding systems, its <span class="sc">car</span>
+specifies the coding system for decoding, and its <span class="sc">cdr</span> specifies the
+coding system for encoding.
+
+        <p>If <var>coding</var> is a function name, the function should take one
+argument, a list of all arguments passed to
+<code>find-operation-coding-system</code>.  It must return a coding system
+or a cons cell containing two coding systems.  This value has the same
+meaning as described above. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>process-coding-system-alist</b><var><a name="index-process_002dcoding_002dsystem_002dalist-2751"></a></var><br>
+<blockquote><p>This variable is an alist specifying which coding systems to use for a
+subprocess, depending on which program is running in the subprocess.  It
+works like <code>file-coding-system-alist</code>, except that <var>pattern</var> is
+matched against the program name used to start the subprocess.  The coding
+system or systems specified in this alist are used to initialize the
+coding systems used for I/O to the subprocess, but you can specify
+other coding systems later using <code>set-process-coding-system</code>. 
+</p></blockquote></div>
+
+   <p><strong>Warning:</strong> Coding systems such as <code>undecided</code>, which
+determine the coding system from the data, do not work entirely reliably
+with asynchronous subprocess output.  This is because Emacs handles
+asynchronous subprocess output in batches, as it arrives.  If the coding
+system leaves the character code conversion unspecified, or leaves the
+end-of-line conversion unspecified, Emacs must try to detect the proper
+conversion from one batch at a time, and this does not always work.
+
+   <p>Therefore, with an asynchronous subprocess, if at all possible, use a
+coding system which determines both the character code conversion and
+the end of line conversion&mdash;that is, one like <code>latin-1-unix</code>,
+rather than <code>undecided</code> or <code>latin-1</code>.
+
+<div class="defun">
+&mdash; Variable: <b>network-coding-system-alist</b><var><a name="index-network_002dcoding_002dsystem_002dalist-2752"></a></var><br>
+<blockquote><p>This variable is an alist that specifies the coding system to use for
+network streams.  It works much like <code>file-coding-system-alist</code>,
+with the difference that the <var>pattern</var> in an element may be either a
+port number or a regular expression.  If it is a regular expression, it
+is matched against the network service name used to open the network
+stream. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>default-process-coding-system</b><var><a name="index-default_002dprocess_002dcoding_002dsystem-2753"></a></var><br>
+<blockquote><p>This variable specifies the coding systems to use for subprocess (and
+network stream) input and output, when nothing else specifies what to
+do.
+
+        <p>The value should be a cons cell of the form <code>(</code><var>input-coding</var><code>
+. </code><var>output-coding</var><code>)</code>.  Here <var>input-coding</var> applies to input from
+the subprocess, and <var>output-coding</var> applies to output to it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-coding-functions</b><var><a name="index-auto_002dcoding_002dfunctions-2754"></a></var><br>
+<blockquote><p>This variable holds a list of functions that try to determine a
+coding system for a file based on its undecoded contents.
+
+        <p>Each function in this list should be written to look at text in the
+current buffer, but should not modify it in any way.  The buffer will
+contain undecoded text of parts of the file.  Each function should
+take one argument, <var>size</var>, which tells it how many characters to
+look at, starting from point.  If the function succeeds in determining
+a coding system for the file, it should return that coding system. 
+Otherwise, it should return <code>nil</code>.
+
+        <p>If a file has a `<samp><span class="samp">coding:</span></samp>' tag, that takes precedence, so these
+functions won't be called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>find-operation-coding-system</b><var> operation &amp;rest arguments<a name="index-find_002doperation_002dcoding_002dsystem-2755"></a></var><br>
+<blockquote><p>This function returns the coding system to use (by default) for
+performing <var>operation</var> with <var>arguments</var>.  The value has this
+form:
+
+     <pre class="example">          (<var>decoding-system</var> . <var>encoding-system</var>)
+     </pre>
+        <p>The first element, <var>decoding-system</var>, is the coding system to use
+for decoding (in case <var>operation</var> does decoding), and
+<var>encoding-system</var> is the coding system for encoding (in case
+<var>operation</var> does encoding).
+
+        <p>The argument <var>operation</var> is a symbol, one of <code>write-region</code>,
+<code>start-process</code>, <code>call-process</code>, <code>call-process-region</code>,
+<code>insert-file-contents</code>, or <code>open-network-stream</code>.  These are
+the names of the Emacs I/O primitives that can do character code and
+eol conversion.
+
+        <p>The remaining arguments should be the same arguments that might be given
+to the corresponding I/O primitive.  Depending on the primitive, one
+of those arguments is selected as the <dfn>target</dfn>.  For example, if
+<var>operation</var> does file I/O, whichever argument specifies the file
+name is the target.  For subprocess primitives, the process name is the
+target.  For <code>open-network-stream</code>, the target is the service name
+or port number.
+
+        <p>Depending on <var>operation</var>, this function looks up the target in
+<code>file-coding-system-alist</code>, <code>process-coding-system-alist</code>,
+or <code>network-coding-system-alist</code>.  If the target is found in the
+alist, <code>find-operation-coding-system</code> returns its association in
+the alist; otherwise it returns <code>nil</code>.
+
+        <p>If <var>operation</var> is <code>insert-file-contents</code>, the argument
+corresponding to the target may be a cons cell of the form
+<code>(</code><var>filename</var><code> . </code><var>buffer</var><code>)</code>).  In that case, <var>filename</var>
+is a file name to look up in <code>file-coding-system-alist</code>, and
+<var>buffer</var> is a buffer that contains the file's contents (not yet
+decoded).  If <code>file-coding-system-alist</code> specifies a function to
+call for this file, and that function needs to examine the file's
+contents (as it usually does), it should examine the contents of
+<var>buffer</var> instead of reading the file. 
+</p></blockquote></div>
+
+   </body></html>
+

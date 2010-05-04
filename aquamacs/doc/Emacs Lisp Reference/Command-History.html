@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Command History - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="prev" href="Disabling-Commands.html#Disabling-Commands" title="Disabling Commands">
+<link rel="next" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Command-History"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Disabling-Commands.html#Disabling-Commands">Disabling Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<h3 class="section">21.14 Command History</h3>
+
+<p><a name="index-command-history-1366"></a><a name="index-complex-command-1367"></a><a name="index-history-of-commands-1368"></a>
+  The command loop keeps a history of the complex commands that have
+been executed, to make it convenient to repeat these commands.  A
+<dfn>complex command</dfn> is one for which the interactive argument reading
+uses the minibuffer.  This includes any <kbd>M-x</kbd> command, any
+<kbd>M-:</kbd> command, and any command whose <code>interactive</code>
+specification reads an argument from the minibuffer.  Explicit use of
+the minibuffer during the execution of the command itself does not cause
+the command to be considered complex.
+
+<div class="defun">
+&mdash; Variable: <b>command-history</b><var><a name="index-command_002dhistory-1369"></a></var><br>
+<blockquote><p>This variable's value is a list of recent complex commands, each
+represented as a form to evaluate.  It continues to accumulate all
+complex commands for the duration of the editing session, but when it
+reaches the maximum size (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), the oldest
+elements are deleted as new ones are added.
+
+     <pre class="example">          command-history
+          =&gt; ((switch-to-buffer "chistory.texi")
+              (describe-key "^X^[")
+              (visit-tags-table "~/emacs/src/")
+              (find-tag "repeat-complex-command"))
+     </pre>
+        </blockquote></div>
+
+   <p>This history list is actually a special case of minibuffer history
+(see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), with one special twist: the elements are
+expressions rather than strings.
+
+   <p>There are a number of commands devoted to the editing and recall of
+previous commands.  The commands <code>repeat-complex-command</code>, and
+<code>list-command-history</code> are described in the user manual
+(see <a href="../emacs/Repetition.html#Repetition">Repetition</a>).  Within the
+minibuffer, the usual minibuffer history commands are available.
+
+   </body></html>
+

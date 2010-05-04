@@ -1,0 +1,222 @@
+<html lang="en">
+<head>
+<title>Defining Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Void-Variables.html#Void-Variables" title="Void Variables">
+<link rel="next" href="Tips-for-Defining.html#Tips-for-Defining" title="Tips for Defining">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Defining-Variables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Tips-for-Defining.html#Tips-for-Defining">Tips for Defining</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Void-Variables.html#Void-Variables">Void Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.5 Defining Global Variables</h3>
+
+<p><a name="index-variable-definition-593"></a>
+  You may announce your intention to use a symbol as a global variable
+with a <dfn>variable definition</dfn>: a special form, either <code>defconst</code>
+or <code>defvar</code>.
+
+   <p>In Emacs Lisp, definitions serve three purposes.  First, they inform
+people who read the code that certain symbols are <em>intended</em> to be
+used a certain way (as variables).  Second, they inform the Lisp system
+of these things, supplying a value and documentation.  Third, they
+provide information to utilities such as <code>etags</code> and
+<code>make-docfile</code>, which create data bases of the functions and
+variables in a program.
+
+   <p>The difference between <code>defconst</code> and <code>defvar</code> is primarily
+a matter of intent, serving to inform human readers of whether the value
+should ever change.  Emacs Lisp does not restrict the ways in which a
+variable can be used based on <code>defconst</code> or <code>defvar</code>
+declarations.  However, it does make a difference for initialization:
+<code>defconst</code> unconditionally initializes the variable, while
+<code>defvar</code> initializes it only if it is void.
+
+<div class="defun">
+&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-594"></a></var><br>
+<blockquote><p>This special form defines <var>symbol</var> as a variable and can also
+initialize and document it.  The definition informs a person reading
+your code that <var>symbol</var> is used as a variable that might be set or
+changed.  Note that <var>symbol</var> is not evaluated; the symbol to be
+defined must appear explicitly in the <code>defvar</code>.
+
+        <p>If <var>symbol</var> is void and <var>value</var> is specified, <code>defvar</code>
+evaluates it and sets <var>symbol</var> to the result.  But if <var>symbol</var>
+already has a value (i.e., it is not void), <var>value</var> is not even
+evaluated, and <var>symbol</var>'s value remains unchanged.  If <var>value</var>
+is omitted, the value of <var>symbol</var> is not changed in any case.
+
+        <p>If <var>symbol</var> has a buffer-local binding in the current buffer,
+<code>defvar</code> operates on the default value, which is buffer-independent,
+not the current (buffer-local) binding.  It sets the default value if
+the default value is void.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
+
+        <p>When you evaluate a top-level <code>defvar</code> form with <kbd>C-M-x</kbd> in
+Emacs Lisp mode (<code>eval-defun</code>), a special feature of
+<code>eval-defun</code> arranges to set the variable unconditionally, without
+testing whether its value is void.
+
+        <p>If the <var>doc-string</var> argument appears, it specifies the documentation
+for the variable.  (This opportunity to specify documentation is one of
+the main benefits of defining the variable.)  The documentation is
+stored in the symbol's <code>variable-documentation</code> property.  The
+Emacs help functions (see <a href="Documentation.html#Documentation">Documentation</a>) look for this property.
+
+        <p>If the variable is a user option that users would want to set
+interactively, you should use `<samp><span class="samp">*</span></samp>' as the first character of
+<var>doc-string</var>.  This lets users set the variable conveniently using
+the <code>set-variable</code> command.  Note that you should nearly always
+use <code>defcustom</code> instead of <code>defvar</code> to define these
+variables, so that users can use <kbd>M-x customize</kbd> and related
+commands to set them.  See <a href="Customization.html#Customization">Customization</a>.
+
+        <p>Here are some examples.  This form defines <code>foo</code> but does not
+initialize it:
+
+     <pre class="example">          (defvar foo)
+               =&gt; foo
+     </pre>
+        <p>This example initializes the value of <code>bar</code> to <code>23</code>, and gives
+it a documentation string:
+
+     <pre class="example">          (defvar bar 23
+            "The normal weight of a bar.")
+               =&gt; bar
+     </pre>
+        <p>The following form changes the documentation string for <code>bar</code>,
+making it a user option, but does not change the value, since <code>bar</code>
+already has a value.  (The addition <code>(1+ nil)</code> would get an error
+if it were evaluated, but since it is not evaluated, there is no error.)
+
+     <pre class="example">          (defvar bar (1+ nil)
+            "*The normal weight of a bar.")
+               =&gt; bar
+          bar
+               =&gt; 23
+     </pre>
+        <p>Here is an equivalent expression for the <code>defvar</code> special form:
+
+     <pre class="example">          (defvar <var>symbol</var> <var>value</var> <var>doc-string</var>)
+          ==
+          (progn
+            (if (not (boundp '<var>symbol</var>))
+                (setq <var>symbol</var> <var>value</var>))
+            (if '<var>doc-string</var>
+              (put '<var>symbol</var> 'variable-documentation '<var>doc-string</var>))
+            '<var>symbol</var>)
+     </pre>
+        <p>The <code>defvar</code> form returns <var>symbol</var>, but it is normally used
+at top level in a file where its value does not matter. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-595"></a></var><br>
+<blockquote><p>This special form defines <var>symbol</var> as a value and initializes it. 
+It informs a person reading your code that <var>symbol</var> has a standard
+global value, established here, that should not be changed by the user
+or by other programs.  Note that <var>symbol</var> is not evaluated; the
+symbol to be defined must appear explicitly in the <code>defconst</code>.
+
+        <p><code>defconst</code> always evaluates <var>value</var>, and sets the value of
+<var>symbol</var> to the result.  If <var>symbol</var> does have a buffer-local
+binding in the current buffer, <code>defconst</code> sets the default value,
+not the buffer-local value.  (But you should not be making
+buffer-local bindings for a symbol that is defined with
+<code>defconst</code>.)
+
+        <p>Here, <code>pi</code> is a constant that presumably ought not to be changed
+by anyone (attempts by the Indiana State Legislature notwithstanding). 
+As the second form illustrates, however, this is only advisory.
+
+     <pre class="example">          (defconst pi 3.1415 "Pi to five places.")
+               =&gt; pi
+          (setq pi 3)
+               =&gt; pi
+          pi
+               =&gt; 3
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>user-variable-p</b><var> variable<a name="index-user_002dvariable_002dp-596"></a></var><br>
+<blockquote><p><a name="index-user-option-597"></a>This function returns <code>t</code> if <var>variable</var> is a user option&mdash;a
+variable intended to be set by the user for customization&mdash;and
+<code>nil</code> otherwise.  (Variables other than user options exist for the
+internal purposes of Lisp programs, and users need not know about them.)
+
+        <p>User option variables are distinguished from other variables either
+though being declared using <code>defcustom</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> or by the first character
+of their <code>variable-documentation</code> property.  If the property exists
+and is a string, and its first character is `<samp><span class="samp">*</span></samp>', then the variable
+is a user option.  Aliases of user options are also user options. 
+</p></blockquote></div>
+
+   <p><a name="index-variable_002dinteractive-598"></a>  If a user option variable has a <code>variable-interactive</code> property,
+the <code>set-variable</code> command uses that value to control reading the
+new value for the variable.  The property's value is used as if it were
+specified in <code>interactive</code> (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>).  However,
+this feature is largely obsoleted by <code>defcustom</code>
+(see <a href="Customization.html#Customization">Customization</a>).
+
+   <p><strong>Warning:</strong> If the <code>defconst</code> and <code>defvar</code> special
+forms are used while the variable has a local binding (made with
+<code>let</code>, or a function argument), they set the local-binding's
+value; the top-level binding is not changed.  This is not what you
+usually want.  To prevent it, use these special forms at top level in
+a file, where normally no local binding is in effect, and make sure to
+load the file before making a local binding for the variable.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> They may also be
+declared equivalently in <samp><span class="file">cus-start.el</span></samp>.</p>
+
+   <p><hr></div>
+
+   </body></html>
+

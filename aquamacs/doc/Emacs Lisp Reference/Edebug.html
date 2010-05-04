@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Edebug - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging.html#Debugging" title="Debugging">
+<link rel="prev" href="Debugger.html#Debugger" title="Debugger">
+<link rel="next" href="Syntax-Errors.html#Syntax-Errors" title="Syntax Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Edebug"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugger.html#Debugger">Debugger</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging.html#Debugging">Debugging</a>
+<hr>
+</div>
+
+<h3 class="section">18.2 Edebug</h3>
+
+<p><a name="index-Edebug-debugging-facility-922"></a>
+  Edebug is a source-level debugger for Emacs Lisp programs with which
+you can:
+
+     <ul>
+<li>Step through evaluation, stopping before and after each expression.
+
+     <li>Set conditional or unconditional breakpoints.
+
+     <li>Stop when a specified condition is true (the global break event).
+
+     <li>Trace slow or fast, stopping briefly at each stop point, or
+at each breakpoint.
+
+     <li>Display expression results and evaluate expressions as if outside of
+Edebug.
+
+     <li>Automatically re-evaluate a list of expressions and
+display their results each time Edebug updates the display.
+
+     <li>Output trace info on function enter and exit.
+
+     <li>Stop when an error occurs.
+
+     <li>Display a backtrace, omitting Edebug's own frames.
+
+     <li>Specify argument evaluation for macros and defining forms.
+
+     <li>Obtain rudimentary coverage testing and frequency counts. 
+</ul>
+
+   <p>The first three sections below should tell you enough about Edebug to
+enable you to use it.
+
+<ul class="menu">
+<li><a accesskey="1" href="Using-Edebug.html#Using-Edebug">Using Edebug</a>: 		Introduction to use of Edebug. 
+<li><a accesskey="2" href="Instrumenting.html#Instrumenting">Instrumenting</a>: 		You must instrument your code
+				  in order to debug it with Edebug. 
+<li><a accesskey="3" href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Modes</a>:  Execution modes, stopping more or less often. 
+<li><a accesskey="4" href="Jumping.html#Jumping">Jumping</a>: 			Commands to jump to a specified place. 
+<li><a accesskey="5" href="Edebug-Misc.html#Edebug-Misc">Misc</a>: 		Miscellaneous commands. 
+<li><a accesskey="6" href="Breaks.html#Breaks">Breaks</a>:                       Setting breakpoints to make the program stop. 
+<li><a accesskey="7" href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>: 		Trapping errors with Edebug. 
+<li><a accesskey="8" href="Edebug-Views.html#Edebug-Views">Views</a>: 		Views inside and outside of Edebug. 
+<li><a accesskey="9" href="Edebug-Eval.html#Edebug-Eval">Eval</a>: 		Evaluating expressions within Edebug. 
+<li><a href="Eval-List.html#Eval-List">Eval List</a>: 			Expressions whose values are displayed
+				  each time you enter Edebug. 
+<li><a href="Printing-in-Edebug.html#Printing-in-Edebug">Printing in Edebug</a>: 		Customization of printing. 
+<li><a href="Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>: 		How to produce trace output in a buffer. 
+<li><a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>: 		How to test evaluation coverage. 
+<li><a href="The-Outside-Context.html#The-Outside-Context">The Outside Context</a>: 		Data that Edebug saves and restores. 
+<li><a href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>: 	        Specifying how to handle macro calls. 
+<li><a href="Edebug-Options.html#Edebug-Options">Options</a>: 	Option variables for customizing Edebug. 
+</ul>
+
+   </body></html>
+

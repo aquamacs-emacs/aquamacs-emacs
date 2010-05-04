@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Object from Minibuffer - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="prev" href="Text-from-Minibuffer.html#Text-from-Minibuffer" title="Text from Minibuffer">
+<link rel="next" href="Minibuffer-History.html#Minibuffer-History" title="Minibuffer History">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Object-from-Minibuffer"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.3 Reading Lisp Objects with the Minibuffer</h3>
+
+<p>This section describes functions for reading Lisp objects with the
+minibuffer.
+
+<div class="defun">
+&mdash; Function: <b>read-minibuffer</b><var> prompt &amp;optional initial<a name="index-read_002dminibuffer-1063"></a></var><br>
+<blockquote><p>This function reads a Lisp object using the minibuffer, and returns it
+without evaluating it.  The arguments <var>prompt</var> and <var>initial</var> are
+used as in <code>read-from-minibuffer</code>.
+
+        <p>This is a simplified interface to the
+<code>read-from-minibuffer</code> function:
+
+     <pre class="smallexample">          (read-minibuffer <var>prompt</var> <var>initial</var>)
+          ==
+          (let (minibuffer-allow-text-properties)
+            (read-from-minibuffer <var>prompt</var> <var>initial</var> nil t))
+     </pre>
+        <p>Here is an example in which we supply the string <code>"(testing)"</code> as
+initial input:
+
+     <pre class="smallexample">          (read-minibuffer
+           "Enter an expression: " (format "%s" '(testing)))
+          
+          ;; <span class="roman">Here is how the minibuffer is displayed:</span>
+          
+          ---------- Buffer: Minibuffer ----------
+          Enter an expression: (testing)-!-
+          ---------- Buffer: Minibuffer ----------
+     </pre>
+        <p class="noindent">The user can type &lt;RET&gt; immediately to use the initial input as a
+default, or can edit the input. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eval-minibuffer</b><var> prompt &amp;optional initial<a name="index-eval_002dminibuffer-1064"></a></var><br>
+<blockquote><p>This function reads a Lisp expression using the minibuffer, evaluates
+it, then returns the result.  The arguments <var>prompt</var> and
+<var>initial</var> are used as in <code>read-from-minibuffer</code>.
+
+        <p>This function simply evaluates the result of a call to
+<code>read-minibuffer</code>:
+
+     <pre class="smallexample">          (eval-minibuffer <var>prompt</var> <var>initial</var>)
+          ==
+          (eval (read-minibuffer <var>prompt</var> <var>initial</var>))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>edit-and-eval-command</b><var> prompt form<a name="index-edit_002dand_002deval_002dcommand-1065"></a></var><br>
+<blockquote><p>This function reads a Lisp expression in the minibuffer, and then
+evaluates it.  The difference between this command and
+<code>eval-minibuffer</code> is that here the initial <var>form</var> is not
+optional and it is treated as a Lisp object to be converted to printed
+representation rather than as a string of text.  It is printed with
+<code>prin1</code>, so if it is a string, double-quote characters (`<samp><span class="samp">"</span></samp>')
+appear in the initial text.  See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
+
+        <p>The first thing <code>edit-and-eval-command</code> does is to activate the
+minibuffer with <var>prompt</var> as the prompt.  Then it inserts the printed
+representation of <var>form</var> in the minibuffer, and lets the user edit it. 
+When the user exits the minibuffer, the edited text is read with
+<code>read</code> and then evaluated.  The resulting value becomes the value
+of <code>edit-and-eval-command</code>.
+
+        <p>In the following example, we offer the user an expression with initial
+text which is a valid form already:
+
+     <pre class="smallexample">          (edit-and-eval-command "Please edit: " '(forward-word 1))
+          
+          ;; <span class="roman">After evaluation of the preceding expression,</span>
+          ;;   <span class="roman">the following appears in the minibuffer:</span>
+          
+          ---------- Buffer: Minibuffer ----------
+          Please edit: (forward-word 1)-!-
+          ---------- Buffer: Minibuffer ----------
+     </pre>
+        <p class="noindent">Typing &lt;RET&gt; right away would exit the minibuffer and evaluate the
+expression, thus moving point forward one word. 
+<code>edit-and-eval-command</code> returns <code>nil</code> in this example. 
+</p></blockquote></div>
+
+   </body></html>
+

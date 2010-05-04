@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>Time of Day - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="User-Identification.html#User-Identification" title="User Identification">
+<link rel="next" href="Time-Conversion.html#Time-Conversion" title="Time Conversion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Time-of-Day"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-Conversion.html#Time-Conversion">Time Conversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="User-Identification.html#User-Identification">User Identification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.5 Time of Day</h3>
+
+<p>This section explains how to determine the current time and the time
+zone.
+
+<div class="defun">
+&mdash; Function: <b>current-time-string</b><var> &amp;optional time-value<a name="index-current_002dtime_002dstring-3525"></a></var><br>
+<blockquote><p>This function returns the current time and date as a human-readable
+string.  The format of the string is unvarying; the number of characters
+used for each part is always the same, so you can reliably use
+<code>substring</code> to extract pieces of it.  It is wise to count the
+characters from the beginning of the string rather than from the end, as
+additional information may some day be added at the end.
+
+     <!-- Emacs 19 feature -->
+<p>The argument <var>time-value</var>, if given, specifies a time to format
+instead of the current time.  The argument should be a list whose first
+two elements are integers.  Thus, you can use times obtained from
+<code>current-time</code> (see below) and from <code>file-attributes</code>
+(see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  <var>time-value</var> can also be
+a cons of two integers, but this is considered obsolete.
+
+     <pre class="example">          (current-time-string)
+               =&gt; "Wed Oct 14 22:21:05 1987"
+     </pre>
+        </blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>current-time</b><var><a name="index-current_002dtime-3526"></a></var><br>
+<blockquote><p>This function returns the system's time value as a list of three
+integers: <code>(</code><var>high</var> <var>low</var> <var>microsec</var><code>)</code>.  The integers
+<var>high</var> and <var>low</var> combine to give the number of seconds since
+0:00 January 1, 1970 UTC (Coordinated Universal Time), which is
+<var>high</var> * 2**16 + <var>low</var>.
+
+        <p>The third element, <var>microsec</var>, gives the microseconds since the
+start of the current second (or 0 for systems that return time with
+the resolution of only one second).
+
+        <p>The first two elements can be compared with file time values such as you
+get with the function <code>file-attributes</code>. 
+See <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>current-time-zone</b><var> &amp;optional time-value<a name="index-current_002dtime_002dzone-3527"></a></var><br>
+<blockquote><p>This function returns a list describing the time zone that the user is
+in.
+
+        <p>The value has the form <code>(</code><var>offset</var> <var>name</var><code>)</code>.  Here
+<var>offset</var> is an integer giving the number of seconds ahead of UTC
+(east of Greenwich).  A negative value means west of Greenwich.  The
+second element, <var>name</var>, is a string giving the name of the time
+zone.  Both elements change when daylight saving time begins or ends;
+if the user has specified a time zone that does not use a seasonal time
+adjustment, then the value is constant through time.
+
+        <p>If the operating system doesn't supply all the information necessary to
+compute the value, the unknown elements of the list are <code>nil</code>.
+
+        <p>The argument <var>time-value</var>, if given, specifies a time to analyze
+instead of the current time.  The argument should have the same form
+as for <code>current-time-string</code> (see above).  Thus, you can use
+times obtained from <code>current-time</code> (see above) and from
+<code>file-attributes</code>.  See <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-time-zone-rule</b><var> tz<a name="index-set_002dtime_002dzone_002drule-3528"></a></var><br>
+<blockquote><p>This function specifies the local time zone according to <var>tz</var>.  If
+<var>tz</var> is <code>nil</code>, that means to use an implementation-defined
+default time zone.  If <var>tz</var> is <code>t</code>, that means to use
+Universal Time.  Otherwise, <var>tz</var> should be a string specifying a
+time zone rule. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>float-time</b><var> &amp;optional time-value<a name="index-float_002dtime-3529"></a></var><br>
+<blockquote><p>This function returns the current time as a floating-point number of
+seconds since the epoch.  The argument <var>time-value</var>, if given,
+specifies a time to convert instead of the current time.  The argument
+should have the same form as for <code>current-time-string</code> (see
+above).  Thus, it accepts the output of <code>current-time</code> and
+<code>file-attributes</code>.
+
+        <p><em>Warning</em>: Since the result is floating point, it may not be
+exact.  Do not use this function if precise time stamps are required. 
+</p></blockquote></div>
+
+   </body></html>
+

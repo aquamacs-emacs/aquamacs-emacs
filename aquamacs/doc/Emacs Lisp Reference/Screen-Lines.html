@@ -1,0 +1,205 @@
+<html lang="en">
+<head>
+<title>Screen Lines - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Motion.html#Motion" title="Motion">
+<link rel="prev" href="Text-Lines.html#Text-Lines" title="Text Lines">
+<link rel="next" href="List-Motion.html#List-Motion" title="List Motion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Screen-Lines"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="List-Motion.html#List-Motion">List Motion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Lines.html#Text-Lines">Text Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.2.5 Motion by Screen Lines</h4>
+
+<p>The line functions in the previous section count text lines, delimited
+only by newline characters.  By contrast, these functions count screen
+lines, which are defined by the way the text appears on the screen.  A
+text line is a single screen line if it is short enough to fit the width
+of the selected window, but otherwise it may occupy several screen
+lines.
+
+   <p>In some cases, text lines are truncated on the screen rather than
+continued onto additional screen lines.  In these cases,
+<code>vertical-motion</code> moves point much like <code>forward-line</code>. 
+See <a href="Truncation.html#Truncation">Truncation</a>.
+
+   <p>Because the width of a given string depends on the flags that control
+the appearance of certain characters, <code>vertical-motion</code> behaves
+differently, for a given piece of text, depending on the buffer it is
+in, and even on the selected window (because the width, the truncation
+flag, and display table may vary between windows).  See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+   <p>These functions scan text to determine where screen lines break, and
+thus take time proportional to the distance scanned.  If you intend to
+use them heavily, Emacs provides caches which may improve the
+performance of your code.  See <a href="Truncation.html#Truncation">cache-long-line-scans</a>.
+
+<div class="defun">
+&mdash; Function: <b>vertical-motion</b><var> count &amp;optional window<a name="index-vertical_002dmotion-2318"></a></var><br>
+<blockquote><p>This function moves point to the start of the screen line <var>count</var>
+screen lines down from the screen line containing point.  If <var>count</var>
+is negative, it moves up instead.
+
+        <p><code>vertical-motion</code> returns the number of screen lines over which it
+moved point.  The value may be less in absolute value than <var>count</var>
+if the beginning or end of the buffer was reached.
+
+        <p>The window <var>window</var> is used for obtaining parameters such as the
+width, the horizontal scrolling, and the display table.  But
+<code>vertical-motion</code> always operates on the current buffer, even if
+<var>window</var> currently displays some other buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>count-screen-lines</b><var> &amp;optional beg end count-final-newline window<a name="index-count_002dscreen_002dlines-2319"></a></var><br>
+<blockquote><p>This function returns the number of screen lines in the text from
+<var>beg</var> to <var>end</var>.  The number of screen lines may be different
+from the number of actual lines, due to line continuation, the display
+table, etc.  If <var>beg</var> and <var>end</var> are <code>nil</code> or omitted,
+they default to the beginning and end of the accessible portion of the
+buffer.
+
+        <p>If the region ends with a newline, that is ignored unless the optional
+third argument <var>count-final-newline</var> is non-<code>nil</code>.
+
+        <p>The optional fourth argument <var>window</var> specifies the window for
+obtaining parameters such as width, horizontal scrolling, and so on. 
+The default is to use the selected window's parameters.
+
+        <p>Like <code>vertical-motion</code>, <code>count-screen-lines</code> always uses the
+current buffer, regardless of which buffer is displayed in
+<var>window</var>.  This makes possible to use <code>count-screen-lines</code> in
+any buffer, whether or not it is currently displayed in some window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>move-to-window-line</b><var> count<a name="index-move_002dto_002dwindow_002dline-2320"></a></var><br>
+<blockquote><p>This function moves point with respect to the text currently displayed
+in the selected window.  It moves point to the beginning of the screen
+line <var>count</var> screen lines from the top of the window.  If
+<var>count</var> is negative, that specifies a position
+&minus;<var>count</var><!-- /@w --> lines from the bottom (or the last line of the
+buffer, if the buffer ends above the specified screen position).
+
+        <p>If <var>count</var> is <code>nil</code>, then point moves to the beginning of the
+line in the middle of the window.  If the absolute value of <var>count</var>
+is greater than the size of the window, then point moves to the place
+that would appear on that screen line if the window were tall enough. 
+This will probably cause the next redisplay to scroll to bring that
+location onto the screen.
+
+        <p>In an interactive call, <var>count</var> is the numeric prefix argument.
+
+        <p>The value returned is the window line number point has moved to, with
+the top line in the window numbered 0. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compute-motion</b><var> from frompos to topos width offsets window<a name="index-compute_002dmotion-2321"></a></var><br>
+<blockquote><p>This function scans the current buffer, calculating screen positions. 
+It scans the buffer forward from position <var>from</var>, assuming that is
+at screen coordinates <var>frompos</var>, to position <var>to</var> or coordinates
+<var>topos</var>, whichever comes first.  It returns the ending buffer
+position and screen coordinates.
+
+        <p>The coordinate arguments <var>frompos</var> and <var>topos</var> are cons cells of
+the form <code>(</code><var>hpos</var><code> . </code><var>vpos</var><code>)</code>.
+
+        <p>The argument <var>width</var> is the number of columns available to display
+text; this affects handling of continuation lines.  <code>nil</code> means
+the actual number of usable text columns in the window, which is
+equivalent to the value returned by <code>(window-width window)</code>.
+
+        <p>The argument <var>offsets</var> is either <code>nil</code> or a cons cell of the
+form <code>(</code><var>hscroll</var><code> . </code><var>tab-offset</var><code>)</code>.  Here <var>hscroll</var> is
+the number of columns not being displayed at the left margin; most
+callers get this by calling <code>window-hscroll</code>.  Meanwhile,
+<var>tab-offset</var> is the offset between column numbers on the screen and
+column numbers in the buffer.  This can be nonzero in a continuation
+line, when the previous screen lines' widths do not add up to a multiple
+of <code>tab-width</code>.  It is always zero in a non-continuation line.
+
+        <p>The window <var>window</var> serves only to specify which display table to
+use.  <code>compute-motion</code> always operates on the current buffer,
+regardless of what buffer is displayed in <var>window</var>.
+
+        <p>The return value is a list of five elements:
+
+     <pre class="example">          (<var>pos</var> <var>hpos</var> <var>vpos</var> <var>prevhpos</var> <var>contin</var>)
+     </pre>
+        <p class="noindent">Here <var>pos</var> is the buffer position where the scan stopped, <var>vpos</var>
+is the vertical screen position, and <var>hpos</var> is the horizontal screen
+position.
+
+        <p>The result <var>prevhpos</var> is the horizontal position one character back
+from <var>pos</var>.  The result <var>contin</var> is <code>t</code> if the last line
+was continued after (or within) the previous character.
+
+        <p>For example, to find the buffer position of column <var>col</var> of screen line
+<var>line</var> of a certain window, pass the window's display start location
+as <var>from</var> and the window's upper-left coordinates as <var>frompos</var>. 
+Pass the buffer's <code>(point-max)</code> as <var>to</var>, to limit the scan to
+the end of the accessible portion of the buffer, and pass <var>line</var> and
+<var>col</var> as <var>topos</var>.  Here's a function that does this:
+
+     <pre class="example">          (defun coordinates-of-position (col line)
+            (car (compute-motion (window-start)
+                                 '(0 . 0)
+                                 (point-max)
+                                 (cons col line)
+                                 (window-width)
+                                 (cons (window-hscroll) 0)
+                                 (selected-window))))
+     </pre>
+        <p>When you use <code>compute-motion</code> for the minibuffer, you need to use
+<code>minibuffer-prompt-width</code> to get the horizontal position of the
+beginning of the first screen line.  See <a href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

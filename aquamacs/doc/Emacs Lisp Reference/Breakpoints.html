@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Breakpoints - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Breaks.html#Breaks" title="Breaks">
+<link rel="next" href="Global-Break-Condition.html#Global-Break-Condition" title="Global Break Condition">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Breakpoints"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Breaks.html#Breaks">Breaks</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.6.1 Edebug Breakpoints</h5>
+
+<p><a name="index-breakpoints-_0028Edebug_0029-934"></a>While using Edebug, you can specify <dfn>breakpoints</dfn> in the program you
+are testing: these are places where execution should stop.  You can set a
+breakpoint at any stop point, as defined in <a href="Using-Edebug.html#Using-Edebug">Using Edebug</a>.  For
+setting and unsetting breakpoints, the stop point that is affected is
+the first one at or after point in the source code buffer.  Here are the
+Edebug commands for breakpoints:
+
+     <dl>
+<dt><kbd>b</kbd><dd>Set a breakpoint at the stop point at or after point
+(<code>edebug-set-breakpoint</code>).  If you use a prefix argument, the
+breakpoint is temporary&mdash;it turns off the first time it stops the
+program.
+
+     <br><dt><kbd>u</kbd><dd>Unset the breakpoint (if any) at the stop point at or after
+point (<code>edebug-unset-breakpoint</code>).
+
+     <br><dt><kbd>x </kbd><var>condition</var><kbd> &lt;RET&gt;</kbd><dd>Set a conditional breakpoint which stops the program only if
+evaluating <var>condition</var> produces a non-<code>nil</code> value
+(<code>edebug-set-conditional-breakpoint</code>).  With a prefix argument,
+the breakpoint is temporary.
+
+     <br><dt><kbd>B</kbd><dd>Move point to the next breakpoint in the current definition
+(<code>edebug-next-breakpoint</code>). 
+</dl>
+
+   <p>While in Edebug, you can set a breakpoint with <kbd>b</kbd> and unset one
+with <kbd>u</kbd>.  First move point to the Edebug stop point of your choice,
+then type <kbd>b</kbd> or <kbd>u</kbd> to set or unset a breakpoint there. 
+Unsetting a breakpoint where none has been set has no effect.
+
+   <p>Re-evaluating or reinstrumenting a definition removes all of its
+previous breakpoints.
+
+   <p>A <dfn>conditional breakpoint</dfn> tests a condition each time the program
+gets there.  Any errors that occur as a result of evaluating the
+condition are ignored, as if the result were <code>nil</code>.  To set a
+conditional breakpoint, use <kbd>x</kbd>, and specify the condition
+expression in the minibuffer.  Setting a conditional breakpoint at a
+stop point that has a previously established conditional breakpoint puts
+the previous condition expression in the minibuffer so you can edit it.
+
+   <p>You can make a conditional or unconditional breakpoint
+<dfn>temporary</dfn> by using a prefix argument with the command to set the
+breakpoint.  When a temporary breakpoint stops the program, it is
+automatically unset.
+
+   <p>Edebug always stops or pauses at a breakpoint, except when the Edebug
+mode is Go-nonstop.  In that mode, it ignores breakpoints entirely.
+
+   <p>To find out where your breakpoints are, use the <kbd>B</kbd> command, which
+moves point to the next breakpoint following point, within the same
+function, or to the first breakpoint if there are no following
+breakpoints.  This command does not continue execution&mdash;it just moves
+point in the buffer.
+
+   </body></html>
+

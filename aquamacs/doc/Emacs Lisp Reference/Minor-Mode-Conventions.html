@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Minor Mode Conventions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minor-Modes.html#Minor-Modes" title="Minor Modes">
+<link rel="next" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" title="Keymaps and Minor Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Minor-Mode-Conventions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes">Keymaps and Minor Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minor-Modes.html#Minor-Modes">Minor Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.3.1 Conventions for Writing Minor Modes</h4>
+
+<p><a name="index-minor-mode-conventions-1570"></a><a name="index-conventions-for-writing-minor-modes-1571"></a>
+  There are conventions for writing minor modes just as there are for
+major modes.  Several of the major mode conventions apply to minor
+modes as well: those regarding the name of the mode initialization
+function, the names of global symbols, the use of a hook at the end of
+the initialization function, and the use of keymaps and other tables.
+
+   <p>In addition, there are several conventions that are specific to
+minor modes.  (The easiest way to follow all the conventions is to use
+the macro <code>define-minor-mode</code>; <a href="Defining-Minor-Modes.html#Defining-Minor-Modes">Defining Minor Modes</a>.)
+
+     <ul>
+<li><a name="index-mode-variable-1572"></a>Make a variable whose name ends in `<samp><span class="samp">-mode</span></samp>' to control the minor
+mode.  We call this the <dfn>mode variable</dfn>.  The minor mode command
+should set this variable (<code>nil</code> to disable; anything else to
+enable).
+
+     <p>If possible, implement the mode so that setting the variable
+automatically enables or disables the mode.  Then the minor mode command
+does not need to do anything except set the variable.
+
+     <p>This variable is used in conjunction with the <code>minor-mode-alist</code> to
+display the minor mode name in the mode line.  It can also enable
+or disable a minor mode keymap.  Individual commands or hooks can also
+check the variable's value.
+
+     <p>If you want the minor mode to be enabled separately in each buffer,
+make the variable buffer-local.
+
+     <li>Define a command whose name is the same as the mode variable. 
+Its job is to enable and disable the mode by setting the variable.
+
+     <p>The command should accept one optional argument.  If the argument is
+<code>nil</code>, it should toggle the mode (turn it on if it is off, and
+off if it is on).  It should turn the mode on if the argument is a
+positive integer, the symbol <code>t</code>, or a list whose <span class="sc">car</span> is one
+of those.  It should turn the mode off if the argument is a negative
+integer or zero, the symbol <code>-</code>, or a list whose <span class="sc">car</span> is a
+negative integer or zero.  The meaning of other arguments is not
+specified.
+
+     <p>Here is an example taken from the definition of <code>transient-mark-mode</code>. 
+It shows the use of <code>transient-mark-mode</code> as a variable that enables or
+disables the mode's behavior, and also shows the proper way to toggle,
+enable or disable the minor mode based on the raw prefix argument value.
+
+     <pre class="smallexample">          (setq transient-mark-mode
+                (if (null arg) (not transient-mark-mode)
+                  (&gt; (prefix-numeric-value arg) 0)))
+     </pre>
+     <li>Add an element to <code>minor-mode-alist</code> for each minor mode
+(see <a href="Definition-of-minor_002dmode_002dalist.html#Definition-of-minor_002dmode_002dalist">Definition of minor-mode-alist</a>), if you want to indicate the
+minor mode in the mode line.  This element should be a list of the
+following form:
+
+     <pre class="smallexample">          (<var>mode-variable</var> <var>string</var>)
+     </pre>
+     <p>Here <var>mode-variable</var> is the variable that controls enabling of the
+minor mode, and <var>string</var> is a short string, starting with a space,
+to represent the mode in the mode line.  These strings must be short so
+that there is room for several of them at once.
+
+     <p>When you add an element to <code>minor-mode-alist</code>, use <code>assq</code> to
+check for an existing element, to avoid duplication.  For example:
+
+     <pre class="smallexample">          (unless (assq 'leif-mode minor-mode-alist)
+            (setq minor-mode-alist
+                  (cons '(leif-mode " Leif") minor-mode-alist)))
+     </pre>
+     <p class="noindent">or like this, using <code>add-to-list</code> (see <a href="List-Variables.html#List-Variables">List Variables</a>):
+
+     <pre class="smallexample">          (add-to-list 'minor-mode-alist '(leif-mode " Leif"))
+     </pre>
+     </ul>
+
+   <p>Global minor modes distributed with Emacs should if possible support
+enabling and disabling via Custom (see <a href="Customization.html#Customization">Customization</a>).  To do this,
+the first step is to define the mode variable with <code>defcustom</code>, and
+specify <code>:type boolean</code>.
+
+   <p>If just setting the variable is not sufficient to enable the mode, you
+should also specify a <code>:set</code> method which enables the mode by
+invoking the mode command.  Note in the variable's documentation string that
+setting the variable other than via Custom may not take effect.
+
+   <p>Also mark the definition with an autoload cookie (see <a href="autoload-cookie.html#autoload-cookie">autoload cookie</a>),
+and specify a <code>:require</code> so that customizing the variable will load
+the library that defines the mode.  This will copy suitable definitions
+into <samp><span class="file">loaddefs.el</span></samp> so that users can use <code>customize-option</code> to
+enable the mode.  For example:
+
+<pre class="smallexample">     
+     ;;;###autoload
+     (defcustom msb-mode nil
+       "Toggle msb-mode.
+     Setting this variable directly does not take effect;
+     use either \\[customize] or the function `msb-mode'."
+       :set 'custom-set-minor-mode
+       :initialize 'custom-initialize-default
+       :version "20.4"
+       :type    'boolean
+       :group   'msb
+       :require 'msb)
+</pre>
+   </body></html>
+

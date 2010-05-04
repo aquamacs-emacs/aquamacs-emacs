@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Backquote - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Defining-Macros.html#Defining-Macros" title="Defining Macros">
+<link rel="next" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Backquote"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Macros.html#Defining-Macros">Defining Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h3 class="section">13.5 Backquote</h3>
+
+<p><a name="index-backquote-_0028list-substitution_0029-716"></a><a name="index-g_t_0060-_0028list-substitution_0029-717"></a><a name="index-g_t_0060-718"></a>
+  Macros often need to construct large list structures from a mixture of
+constants and nonconstant parts.  To make this easier, use the `<samp><span class="samp">`</span></samp>'
+syntax (usually called <dfn>backquote</dfn>).
+
+   <p>Backquote allows you to quote a list, but selectively evaluate
+elements of that list.  In the simplest case, it is identical to the
+special form <code>quote</code> (see <a href="Quoting.html#Quoting">Quoting</a>).  For example, these
+two forms yield identical results:
+
+<pre class="example">     `(a list of (+ 2 3) elements)
+          =&gt; (a list of (+ 2 3) elements)
+     '(a list of (+ 2 3) elements)
+          =&gt; (a list of (+ 2 3) elements)
+</pre>
+   <p><a name="index-g_t_002c-_0040r_007b_0028with-backquote_0029_007d-719"></a>The special marker `<samp><span class="samp">,</span></samp>' inside of the argument to backquote
+indicates a value that isn't constant.  Backquote evaluates the
+argument of `<samp><span class="samp">,</span></samp>' and puts the value in the list structure:
+
+<pre class="example">     (list 'a 'list 'of (+ 2 3) 'elements)
+          =&gt; (a list of 5 elements)
+     `(a list of ,(+ 2 3) elements)
+          =&gt; (a list of 5 elements)
+</pre>
+   <p>Substitution with `<samp><span class="samp">,</span></samp>' is allowed at deeper levels of the list
+structure also.  For example:
+
+<pre class="example">     (defmacro t-becomes-nil (variable)
+       `(if (eq ,variable t)
+            (setq ,variable nil)))
+     
+     (t-becomes-nil foo)
+          == (if (eq foo t) (setq foo nil))
+</pre>
+   <p><a name="index-g_t_002c_0040_0040-_0040r_007b_0028with-backquote_0029_007d-720"></a><a name="index-splicing-_0028with-backquote_0029-721"></a>  You can also <dfn>splice</dfn> an evaluated value into the resulting list,
+using the special marker `<samp><span class="samp">,@</span></samp>'.  The elements of the spliced list
+become elements at the same level as the other elements of the resulting
+list.  The equivalent code without using `<samp><span class="samp">`</span></samp>' is often unreadable. 
+Here are some examples:
+
+<pre class="example">     (setq some-list '(2 3))
+          =&gt; (2 3)
+     (cons 1 (append some-list '(4) some-list))
+          =&gt; (1 2 3 4 2 3)
+     `(1 ,@some-list 4 ,@some-list)
+          =&gt; (1 2 3 4 2 3)
+     
+     (setq list '(hack foo bar))
+          =&gt; (hack foo bar)
+     (cons 'use
+       (cons 'the
+         (cons 'words (append (cdr list) '(as elements)))))
+          =&gt; (use the words foo bar as elements)
+     `(use the words ,@(cdr list) as elements)
+          =&gt; (use the words foo bar as elements)
+</pre>
+   <p>In old Emacs versions, before version 19.29, `<samp><span class="samp">`</span></samp>' used a different
+syntax which required an extra level of parentheses around the entire
+backquote construct.  Likewise, each `<samp><span class="samp">,</span></samp>' or `<samp><span class="samp">,@</span></samp>' substitution
+required an extra level of parentheses surrounding both the `<samp><span class="samp">,</span></samp>' or
+`<samp><span class="samp">,@</span></samp>' and the following expression.  The old syntax required
+whitespace between the `<samp><span class="samp">`</span></samp>', `<samp><span class="samp">,</span></samp>' or `<samp><span class="samp">,@</span></samp>' and the
+following expression.
+
+   <p>This syntax is still accepted, for compatibility with old Emacs
+versions, but we recommend not using it in new programs.
+
+   </body></html>
+

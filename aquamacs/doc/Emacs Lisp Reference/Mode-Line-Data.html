@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Mode Line Data - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
+<link rel="prev" href="Mode-Line-Basics.html#Mode-Line-Basics" title="Mode Line Basics">
+<link rel="next" href="Mode-Line-Top.html#Mode-Line-Top" title="Mode Line Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Mode-Line-Data"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Line-Top.html#Mode-Line-Top">Mode Line Top</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Basics.html#Mode-Line-Basics">Mode Line Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.4.2 The Data Structure of the Mode Line</h4>
+
+<p><a name="index-mode_002dline-construct-1579"></a>
+  The mode-line contents are controlled by a data structure called a
+<dfn>mode-line construct</dfn>, made up of lists, strings, symbols, and
+numbers kept in buffer-local variables.  Each data type has a specific
+meaning for the mode-line appearance, as described below.  The same
+data structure is used for constructing frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>) and header lines (see <a href="Header-Lines.html#Header-Lines">Header Lines</a>).
+
+   <p>A mode-line construct may be as simple as a fixed string of text,
+but it usually specifies how to combine fixed strings with variables'
+values to construct the text.  Many of these variables are themselves
+defined to have mode-line constructs as their values.
+
+   <p>Here are the meanings of various data types as mode-line constructs:
+
+     
+<a name="index-percent-symbol-in-mode-line-1580"></a>
+<dl><dt><var>string</var><dd>A string as a mode-line construct appears verbatim except for
+<code>%</code><dfn>-constructs</dfn> in it.  These stand for substitution of
+other data; see <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>.
+
+     <p>If parts of the string have <code>face</code> properties, they control
+display of the text just as they would text in the buffer.  Any
+characters which have no <code>face</code> properties are displayed, by
+default, in the face <code>mode-line</code> or <code>mode-line-inactive</code>
+(see <a href="../emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a>).  The
+<code>help-echo</code> and <code>local-map</code> properties in <var>string</var> have
+special meanings.  See <a href="Properties-in-Mode.html#Properties-in-Mode">Properties in Mode</a>.
+
+     <br><dt><var>symbol</var><dd>A symbol as a mode-line construct stands for its value.  The value of
+<var>symbol</var> is used as a mode-line construct, in place of <var>symbol</var>. 
+However, the symbols <code>t</code> and <code>nil</code> are ignored, as is any
+symbol whose value is void.
+
+     <p>There is one exception: if the value of <var>symbol</var> is a string, it is
+displayed verbatim: the <code>%</code>-constructs are not recognized.
+
+     <p>Unless <var>symbol</var> is marked as &ldquo;risky&rdquo; (i.e., it has a
+non-<code>nil</code> <code>risky-local-variable</code> property), all text
+properties specified in <var>symbol</var>'s value are ignored.  This
+includes the text properties of strings in <var>symbol</var>'s value, as
+well as all <code>:eval</code> and <code>:propertize</code> forms in it.  (The
+reason for this is security: non-risky variables could be set
+automatically from file variables without prompting the user.)
+
+     <br><dt><code>(</code><var>string</var> <var>rest</var><code>...)</code><dt><code>(</code><var>list</var> <var>rest</var><code>...)</code><dd>A list whose first element is a string or list means to process all the
+elements recursively and concatenate the results.  This is the most
+common form of mode-line construct.
+
+     <br><dt><code>(:eval </code><var>form</var><code>)</code><dd>A list whose first element is the symbol <code>:eval</code> says to evaluate
+<var>form</var>, and use the result as a string to display.  Make sure this
+evaluation cannot load any files, as doing so could cause infinite
+recursion.
+
+     <br><dt><code>(:propertize </code><var>elt</var> <var>props</var><code>...)</code><dd>A list whose first element is the symbol <code>:propertize</code> says to
+process the mode-line construct <var>elt</var> recursively, then add the text
+properties specified by <var>props</var> to the result.  The argument
+<var>props</var> should consist of zero or more pairs <var>text-property</var>
+<var>value</var>.  (This feature is new as of Emacs 22.1.)
+
+     <br><dt><code>(</code><var>symbol</var> <var>then</var> <var>else</var><code>)</code><dd>A list whose first element is a symbol that is not a keyword specifies
+a conditional.  Its meaning depends on the value of <var>symbol</var>.  If
+<var>symbol</var> has a non-<code>nil</code> value, the second element,
+<var>then</var>, is processed recursively as a mode-line element. 
+Otherwise, the third element, <var>else</var>, is processed recursively. 
+You may omit <var>else</var>; then the mode-line element displays nothing
+if the value of <var>symbol</var> is <code>nil</code> or void.
+
+     <br><dt><code>(</code><var>width</var> <var>rest</var><code>...)</code><dd>A list whose first element is an integer specifies truncation or
+padding of the results of <var>rest</var>.  The remaining elements
+<var>rest</var> are processed recursively as mode-line constructs and
+concatenated together.  When <var>width</var> is positive, the result is
+space filled on the right if its width is less than <var>width</var>.  When
+<var>width</var> is negative, the result is truncated on the right to
+&minus;<var>width</var> columns if its width exceeds &minus;<var>width</var>.
+
+     <p>For example, the usual way to show what percentage of a buffer is above
+the top of the window is to use a list like this: <code>(-3 "%p")</code>. 
+</dl>
+
+   </body></html>
+

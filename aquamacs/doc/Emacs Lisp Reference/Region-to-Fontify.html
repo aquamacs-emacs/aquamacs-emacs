@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Region to Fontify - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Multiline-Font-Lock.html#Multiline-Font-Lock" title="Multiline Font Lock">
+<link rel="prev" href="Font-Lock-Multiline.html#Font-Lock-Multiline" title="Font Lock Multiline">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Region-to-Fontify"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Lock-Multiline.html#Font-Lock-Multiline">Font Lock Multiline</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font Lock</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">23.6.10.2 Region to Fontify after a Buffer Change</h5>
+
+<p>When a buffer is changed, the region that Font Lock refontifies is
+by default the smallest sequence of whole lines that spans the change. 
+While this works well most of the time, sometimes it doesn't&mdash;for
+example, when a change alters the syntactic meaning of text on an
+earlier line.
+
+   <p>You can enlarge (or even reduce) the region to fontify by setting
+one the following variables:
+
+<div class="defun">
+&mdash; Variable: <b>font-lock-extend-after-change-region-function</b><var><a name="index-font_002dlock_002dextend_002dafter_002dchange_002dregion_002dfunction-1643"></a></var><br>
+<blockquote><p>This buffer-local variable is either <code>nil</code> or a function for
+Font-Lock to call to determine the region to scan and fontify.
+
+        <p>The function is given three parameters, the standard <var>beg</var>,
+<var>end</var>, and <var>old-len</var> from after-change-functions
+(see <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>).  It should return either a cons of the
+beginning and end buffer positions (in that order) of the region to
+fontify, or <code>nil</code> (which means choose the region in the standard
+way).  This function needs to preserve point, the match-data, and the
+current restriction.  The region it returns may start or end in the
+middle of a line.
+
+        <p>Since this function is called after every buffer change, it should be
+reasonably fast. 
+</p></blockquote></div>
+
+   </body></html>
+

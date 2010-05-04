@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Enabling Advice - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Activation-of-Advice.html#Activation-of-Advice" title="Activation of Advice">
+<link rel="next" href="Preactivation.html#Preactivation" title="Preactivation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Enabling-Advice"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Preactivation.html#Preactivation">Preactivation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Activation-of-Advice.html#Activation-of-Advice">Activation of Advice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h3 class="section">17.6 Enabling and Disabling Advice</h3>
+
+<p><a name="index-enabling-advice-873"></a><a name="index-advice_002c-enabling-and-disabling-874"></a><a name="index-disabling-advice-875"></a>
+  Each piece of advice has a flag that says whether it is enabled or
+not.  By enabling or disabling a piece of advice, you can turn it on
+and off without having to undefine and redefine it.  For example, here is
+how to disable a particular piece of advice named <code>my-advice</code> for
+the function <code>foo</code>:
+
+<pre class="example">     (ad-disable-advice 'foo 'before 'my-advice)
+</pre>
+   <p>This function by itself only changes the enable flag for a piece of
+advice.  To make the change take effect in the advised definition, you
+must activate the advice for <code>foo</code> again:
+
+<pre class="example">     (ad-activate 'foo)
+</pre>
+   <div class="defun">
+&mdash; Command: <b>ad-disable-advice</b><var> function class name<a name="index-ad_002ddisable_002dadvice-876"></a></var><br>
+<blockquote><p>This command disables the piece of advice named <var>name</var> in class
+<var>class</var> on <var>function</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>ad-enable-advice</b><var> function class name<a name="index-ad_002denable_002dadvice-877"></a></var><br>
+<blockquote><p>This command enables the piece of advice named <var>name</var> in class
+<var>class</var> on <var>function</var>. 
+</p></blockquote></div>
+
+   <p>You can also disable many pieces of advice at once, for various
+functions, using a regular expression.  As always, the changes take real
+effect only when you next reactivate advice for the functions in
+question.
+
+<div class="defun">
+&mdash; Command: <b>ad-disable-regexp</b><var> regexp<a name="index-ad_002ddisable_002dregexp-878"></a></var><br>
+<blockquote><p>This command disables all pieces of advice whose names match
+<var>regexp</var>, in all classes, on all functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>ad-enable-regexp</b><var> regexp<a name="index-ad_002denable_002dregexp-879"></a></var><br>
+<blockquote><p>This command enables all pieces of advice whose names match
+<var>regexp</var>, in all classes, on all functions. 
+</p></blockquote></div>
+
+   </body></html>
+

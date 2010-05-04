@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Time Parsing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Time-Conversion.html#Time-Conversion" title="Time Conversion">
+<link rel="next" href="Processor-Run-Time.html#Processor-Run-Time" title="Processor Run Time">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Time-Parsing"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Processor-Run-Time.html#Processor-Run-Time">Processor Run Time</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Time-Conversion.html#Time-Conversion">Time Conversion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.7 Parsing and Formatting Times</h3>
+
+<p>These functions convert time values (lists of two or three integers)
+to text in a string, and vice versa.
+
+<div class="defun">
+&mdash; Function: <b>date-to-time</b><var> string<a name="index-date_002dto_002dtime-3532"></a></var><br>
+<blockquote><p>This function parses the time-string <var>string</var> and returns the
+corresponding time value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-time-string</b><var> format-string &amp;optional time universal<a name="index-format_002dtime_002dstring-3533"></a></var><br>
+<blockquote><p>This function converts <var>time</var> (or the current time, if <var>time</var> is
+omitted) to a string according to <var>format-string</var>.  The argument
+<var>format-string</var> may contain `<samp><span class="samp">%</span></samp>'-sequences which say to
+substitute parts of the time.  Here is a table of what the
+`<samp><span class="samp">%</span></samp>'-sequences mean:
+
+          <dl>
+<dt>`<samp><span class="samp">%a</span></samp>'<dd>This stands for the abbreviated name of the day of week. 
+<br><dt>`<samp><span class="samp">%A</span></samp>'<dd>This stands for the full name of the day of week. 
+<br><dt>`<samp><span class="samp">%b</span></samp>'<dd>This stands for the abbreviated name of the month. 
+<br><dt>`<samp><span class="samp">%B</span></samp>'<dd>This stands for the full name of the month. 
+<br><dt>`<samp><span class="samp">%c</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%x %X</span></samp>'. 
+<br><dt>`<samp><span class="samp">%C</span></samp>'<dd>This has a locale-specific meaning.  In the default locale (named C), it
+is equivalent to `<samp><span class="samp">%A, %B %e, %Y</span></samp>'. 
+<br><dt>`<samp><span class="samp">%d</span></samp>'<dd>This stands for the day of month, zero-padded. 
+<br><dt>`<samp><span class="samp">%D</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%m/%d/%y</span></samp>'. 
+<br><dt>`<samp><span class="samp">%e</span></samp>'<dd>This stands for the day of month, blank-padded. 
+<br><dt>`<samp><span class="samp">%h</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%b</span></samp>'. 
+<br><dt>`<samp><span class="samp">%H</span></samp>'<dd>This stands for the hour (00-23). 
+<br><dt>`<samp><span class="samp">%I</span></samp>'<dd>This stands for the hour (01-12). 
+<br><dt>`<samp><span class="samp">%j</span></samp>'<dd>This stands for the day of the year (001-366). 
+<br><dt>`<samp><span class="samp">%k</span></samp>'<dd>This stands for the hour (0-23), blank padded. 
+<br><dt>`<samp><span class="samp">%l</span></samp>'<dd>This stands for the hour (1-12), blank padded. 
+<br><dt>`<samp><span class="samp">%m</span></samp>'<dd>This stands for the month (01-12). 
+<br><dt>`<samp><span class="samp">%M</span></samp>'<dd>This stands for the minute (00-59). 
+<br><dt>`<samp><span class="samp">%n</span></samp>'<dd>This stands for a newline. 
+<br><dt>`<samp><span class="samp">%p</span></samp>'<dd>This stands for `<samp><span class="samp">AM</span></samp>' or `<samp><span class="samp">PM</span></samp>', as appropriate. 
+<br><dt>`<samp><span class="samp">%r</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%I:%M:%S %p</span></samp>'. 
+<br><dt>`<samp><span class="samp">%R</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%H:%M</span></samp>'. 
+<br><dt>`<samp><span class="samp">%S</span></samp>'<dd>This stands for the seconds (00-59). 
+<br><dt>`<samp><span class="samp">%t</span></samp>'<dd>This stands for a tab character. 
+<br><dt>`<samp><span class="samp">%T</span></samp>'<dd>This is a synonym for `<samp><span class="samp">%H:%M:%S</span></samp>'. 
+<br><dt>`<samp><span class="samp">%U</span></samp>'<dd>This stands for the week of the year (01-52), assuming that weeks
+start on Sunday. 
+<br><dt>`<samp><span class="samp">%w</span></samp>'<dd>This stands for the numeric day of week (0-6).  Sunday is day 0. 
+<br><dt>`<samp><span class="samp">%W</span></samp>'<dd>This stands for the week of the year (01-52), assuming that weeks
+start on Monday. 
+<br><dt>`<samp><span class="samp">%x</span></samp>'<dd>This has a locale-specific meaning.  In the default locale (named
+`<samp><span class="samp">C</span></samp>'), it is equivalent to `<samp><span class="samp">%D</span></samp>'. 
+<br><dt>`<samp><span class="samp">%X</span></samp>'<dd>This has a locale-specific meaning.  In the default locale (named
+`<samp><span class="samp">C</span></samp>'), it is equivalent to `<samp><span class="samp">%T</span></samp>'. 
+<br><dt>`<samp><span class="samp">%y</span></samp>'<dd>This stands for the year without century (00-99). 
+<br><dt>`<samp><span class="samp">%Y</span></samp>'<dd>This stands for the year with century. 
+<br><dt>`<samp><span class="samp">%Z</span></samp>'<dd>This stands for the time zone abbreviation (e.g., `<samp><span class="samp">EST</span></samp>'). 
+<br><dt>`<samp><span class="samp">%z</span></samp>'<dd>This stands for the time zone numerical offset (e.g., `<samp><span class="samp">-0500</span></samp>'). 
+</dl>
+
+        <p>You can also specify the field width and type of padding for any of
+these `<samp><span class="samp">%</span></samp>'-sequences.  This works as in <code>printf</code>: you write
+the field width as digits in the middle of a `<samp><span class="samp">%</span></samp>'-sequences.  If you
+start the field width with `<samp><span class="samp">0</span></samp>', it means to pad with zeros.  If you
+start the field width with `<samp><span class="samp">_</span></samp>', it means to pad with spaces.
+
+        <p>For example, `<samp><span class="samp">%S</span></samp>' specifies the number of seconds since the minute;
+`<samp><span class="samp">%03S</span></samp>' means to pad this with zeros to 3 positions, `<samp><span class="samp">%_3S</span></samp>' to
+pad with spaces to 3 positions.  Plain `<samp><span class="samp">%3S</span></samp>' pads with zeros,
+because that is how `<samp><span class="samp">%S</span></samp>' normally pads to two positions.
+
+        <p>The characters `<samp><span class="samp">E</span></samp>' and `<samp><span class="samp">O</span></samp>' act as modifiers when used between
+`<samp><span class="samp">%</span></samp>' and one of the letters in the table above.  `<samp><span class="samp">E</span></samp>' specifies
+using the current locale's &ldquo;alternative&rdquo; version of the date and time. 
+In a Japanese locale, for example, <code>%Ex</code> might yield a date format
+based on the Japanese Emperors' reigns.  `<samp><span class="samp">E</span></samp>' is allowed in
+`<samp><span class="samp">%Ec</span></samp>', `<samp><span class="samp">%EC</span></samp>', `<samp><span class="samp">%Ex</span></samp>', `<samp><span class="samp">%EX</span></samp>', `<samp><span class="samp">%Ey</span></samp>', and
+`<samp><span class="samp">%EY</span></samp>'.
+
+        <p>`<samp><span class="samp">O</span></samp>' means to use the current locale's &ldquo;alternative&rdquo;
+representation of numbers, instead of the ordinary decimal digits.  This
+is allowed with most letters, all the ones that output numbers.
+
+        <p>If <var>universal</var> is non-<code>nil</code>, that means to describe the time as
+Universal Time; <code>nil</code> means describe it using what Emacs believes
+is the local time zone (see <code>current-time-zone</code>).
+
+        <p>This function uses the C library function <code>strftime</code>
+(see <a href="../libc/Formatting-Calendar-Time.html#Formatting-Calendar-Time">Formatting Calendar Time</a>) to do most of the work.  In order to communicate with that
+function, it first encodes its argument using the coding system
+specified by <code>locale-coding-system</code> (see <a href="Locales.html#Locales">Locales</a>); after
+<code>strftime</code> returns the resulting string,
+<code>format-time-string</code> decodes the string using that same coding
+system. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>seconds-to-time</b><var> seconds<a name="index-seconds_002dto_002dtime-3534"></a></var><br>
+<blockquote><p>This function converts <var>seconds</var>, a floating point number of
+seconds since the epoch, to a time value and returns that.  To perform
+the inverse conversion, use <code>float-time</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

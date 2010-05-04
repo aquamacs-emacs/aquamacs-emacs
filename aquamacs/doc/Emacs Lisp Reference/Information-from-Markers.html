@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Information from Markers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Markers.html#Markers" title="Markers">
+<link rel="prev" href="Creating-Markers.html#Creating-Markers" title="Creating Markers">
+<link rel="next" href="Marker-Insertion-Types.html#Marker-Insertion-Types" title="Marker Insertion Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Information-from-Markers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Markers.html#Creating-Markers">Creating Markers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
+<hr>
+</div>
+
+<h3 class="section">31.4 Information from Markers</h3>
+
+<p>This section describes the functions for accessing the components of a
+marker object.
+
+<div class="defun">
+&mdash; Function: <b>marker-position</b><var> marker<a name="index-marker_002dposition-2366"></a></var><br>
+<blockquote><p>This function returns the position that <var>marker</var> points to, or
+<code>nil</code> if it points nowhere. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>marker-buffer</b><var> marker<a name="index-marker_002dbuffer-2367"></a></var><br>
+<blockquote><p>This function returns the buffer that <var>marker</var> points into, or
+<code>nil</code> if it points nowhere.
+
+     <pre class="example">          (setq m (make-marker))
+               =&gt; #&lt;marker in no buffer&gt;
+          (marker-position m)
+               =&gt; nil
+          (marker-buffer m)
+               =&gt; nil
+          
+          (set-marker m 3770 (current-buffer))
+               =&gt; #&lt;marker at 3770 in markers.texi&gt;
+          (marker-buffer m)
+               =&gt; #&lt;buffer markers.texi&gt;
+          (marker-position m)
+               =&gt; 3770
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-has-markers-at</b><var> position<a name="index-buffer_002dhas_002dmarkers_002dat-2368"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if one or more markers
+point at position <var>position</var> in the current buffer. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Explicit Encoding - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" title="Specifying Coding Systems">
+<link rel="next" href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" title="Terminal I/O Encoding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Explicit-Encoding"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.10.7 Explicit Encoding and Decoding</h4>
+
+<p><a name="index-encoding-in-coding-systems-2759"></a><a name="index-decoding-in-coding-systems-2760"></a>
+  All the operations that transfer text in and out of Emacs have the
+ability to use a coding system to encode or decode the text. 
+You can also explicitly encode and decode text using the functions
+in this section.
+
+   <p>The result of encoding, and the input to decoding, are not ordinary
+text.  They logically consist of a series of byte values; that is, a
+series of characters whose codes are in the range 0 through 255.  In a
+multibyte buffer or string, character codes 128 through 159 are
+represented by multibyte sequences, but this is invisible to Lisp
+programs.
+
+   <p>The usual way to read a file into a buffer as a sequence of bytes, so
+you can decode the contents explicitly, is with
+<code>insert-file-contents-literally</code> (see <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>);
+alternatively, specify a non-<code>nil</code> <var>rawfile</var> argument when
+visiting a file with <code>find-file-noselect</code>.  These methods result in
+a unibyte buffer.
+
+   <p>The usual way to use the byte sequence that results from explicitly
+encoding text is to copy it to a file or process&mdash;for example, to write
+it with <code>write-region</code> (see <a href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>), and suppress
+encoding by binding <code>coding-system-for-write</code> to
+<code>no-conversion</code>.
+
+   <p>Here are the functions to perform explicit encoding or decoding.  The
+encoding functions produce sequences of bytes; the decoding functions
+are meant to operate on sequences of bytes.  All of these functions
+discard text properties.
+
+<div class="defun">
+&mdash; Command: <b>encode-coding-region</b><var> start end coding-system<a name="index-encode_002dcoding_002dregion-2761"></a></var><br>
+<blockquote><p>This command encodes the text from <var>start</var> to <var>end</var> according
+to coding system <var>coding-system</var>.  The encoded text replaces the
+original text in the buffer.  The result of encoding is logically a
+sequence of bytes, but the buffer remains multibyte if it was multibyte
+before.
+
+        <p>This command returns the length of the encoded text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>encode-coding-string</b><var> string coding-system &amp;optional nocopy<a name="index-encode_002dcoding_002dstring-2762"></a></var><br>
+<blockquote><p>This function encodes the text in <var>string</var> according to coding
+system <var>coding-system</var>.  It returns a new string containing the
+encoded text, except when <var>nocopy</var> is non-<code>nil</code>, in which
+case the function may return <var>string</var> itself if the encoding
+operation is trivial.  The result of encoding is a unibyte string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>decode-coding-region</b><var> start end coding-system<a name="index-decode_002dcoding_002dregion-2763"></a></var><br>
+<blockquote><p>This command decodes the text from <var>start</var> to <var>end</var> according
+to coding system <var>coding-system</var>.  The decoded text replaces the
+original text in the buffer.  To make explicit decoding useful, the text
+before decoding ought to be a sequence of byte values, but both
+multibyte and unibyte buffers are acceptable.
+
+        <p>This command returns the length of the decoded text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>decode-coding-string</b><var> string coding-system &amp;optional nocopy<a name="index-decode_002dcoding_002dstring-2764"></a></var><br>
+<blockquote><p>This function decodes the text in <var>string</var> according to coding
+system <var>coding-system</var>.  It returns a new string containing the
+decoded text, except when <var>nocopy</var> is non-<code>nil</code>, in which
+case the function may return <var>string</var> itself if the decoding
+operation is trivial.  To make explicit decoding useful, the contents
+of <var>string</var> ought to be a sequence of byte values, but a multibyte
+string is acceptable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>decode-coding-inserted-region</b><var> from to filename &amp;optional visit beg end replace<a name="index-decode_002dcoding_002dinserted_002dregion-2765"></a></var><br>
+<blockquote><p>This function decodes the text from <var>from</var> to <var>to</var> as if
+it were being read from file <var>filename</var> using <code>insert-file-contents</code>
+using the rest of the arguments provided.
+
+        <p>The normal way to use this function is after reading text from a file
+without decoding, if you decide you would rather have decoded it. 
+Instead of deleting the text and reading it again, this time with
+decoding, you can call this function. 
+</p></blockquote></div>
+
+   </body></html>
+

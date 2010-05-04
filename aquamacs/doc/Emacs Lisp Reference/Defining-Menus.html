@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Defining Menus - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Menu-Keymaps.html#Menu-Keymaps" title="Menu Keymaps">
+<link rel="next" href="Mouse-Menus.html#Mouse-Menus" title="Mouse Menus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Defining-Menus"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Menus.html#Mouse-Menus">Mouse Menus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>
+<hr>
+</div>
+
+<h4 class="subsection">22.17.1 Defining Menus</h4>
+
+<p><a name="index-defining-menus-1494"></a><a name="index-menu-prompt-string-1495"></a><a name="index-prompt-string-_0028of-menu_0029-1496"></a>
+A keymap acts as a menu if it has an <dfn>overall prompt string</dfn>,
+which is a string that appears as an element of the keymap. 
+(See <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>.)  The string should describe the purpose of
+the menu's commands.  Emacs displays the overall prompt string as the
+menu title in some cases, depending on the toolkit (if any) used for
+displaying menus.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  Keyboard menus also display the
+overall prompt string.
+
+   <p>The easiest way to construct a keymap with a prompt string is to
+specify the string as an argument when you call <code>make-keymap</code>,
+<code>make-sparse-keymap</code> (see <a href="Creating-Keymaps.html#Creating-Keymaps">Creating Keymaps</a>), or
+<code>define-prefix-command</code> (see <a href="Definition-of-define_002dprefix_002dcommand.html#Definition-of-define_002dprefix_002dcommand">Definition of define-prefix-command</a>).  If you do not want the keymap to operate as
+a menu, don't specify a prompt string for it.
+
+<div class="defun">
+&mdash; Function: <b>keymap-prompt</b><var> keymap<a name="index-keymap_002dprompt-1497"></a></var><br>
+<blockquote><p>This function returns the overall prompt string of <var>keymap</var>,
+or <code>nil</code> if it has none. 
+</p></blockquote></div>
+
+   <p>The menu's items are the bindings in the keymap.  Each binding
+associates an event type to a definition, but the event types have no
+significance for the menu appearance.  (Usually we use pseudo-events,
+symbols that the keyboard cannot generate, as the event types for menu
+item bindings.)  The menu is generated entirely from the bindings that
+correspond in the keymap to these events.
+
+   <p>The order of items in the menu is the same as the order of bindings in
+the keymap.  Since <code>define-key</code> puts new bindings at the front, you
+should define the menu items starting at the bottom of the menu and
+moving to the top, if you care about the order.  When you add an item to
+an existing menu, you can specify its position in the menu using
+<code>define-key-after</code> (see <a href="Modifying-Menus.html#Modifying-Menus">Modifying Menus</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>:        A simple kind of menu key binding,
+                              limited in capabilities. 
+<li><a accesskey="2" href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>:      More powerful menu item definitions
+                              let you specify keywords to enable
+                              various features. 
+<li><a accesskey="3" href="Menu-Separators.html#Menu-Separators">Menu Separators</a>:          Drawing a horizontal line through a menu. 
+<li><a accesskey="4" href="Alias-Menu-Items.html#Alias-Menu-Items">Alias Menu Items</a>:         Using command aliases in menu items. 
+</ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> It is required for menus which do not use a
+toolkit, e.g. under MS-DOS.</p>
+
+   <p><hr></div>
+
+   </body></html>
+

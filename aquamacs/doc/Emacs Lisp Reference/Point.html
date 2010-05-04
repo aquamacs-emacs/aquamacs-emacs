@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>Point - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Positions.html#Positions" title="Positions">
+<link rel="next" href="Motion.html#Motion" title="Motion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Point"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Motion.html#Motion">Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
+<hr>
+</div>
+
+<h3 class="section">30.1 Point</h3>
+
+<p><a name="index-point-2287"></a>
+  <dfn>Point</dfn> is a special buffer position used by many editing
+commands, including the self-inserting typed characters and text
+insertion functions.  Other commands move point through the text
+to allow editing and insertion at different places.
+
+   <p>Like other positions, point designates a place between two characters
+(or before the first character, or after the last character), rather
+than a particular character.  Usually terminals display the cursor over
+the character that immediately follows point; point is actually before
+the character on which the cursor sits.
+
+   <p><a name="index-point-with-narrowing-2288"></a>  The value of point is a number no less than 1, and no greater than the
+buffer size plus 1.  If narrowing is in effect (see <a href="Narrowing.html#Narrowing">Narrowing</a>), then
+point is constrained to fall within the accessible portion of the buffer
+(possibly at one end of it).
+
+   <p>Each buffer has its own value of point, which is independent of the
+value of point in other buffers.  Each window also has a value of point,
+which is independent of the value of point in other windows on the same
+buffer.  This is why point can have different values in various windows
+that display the same buffer.  When a buffer appears in only one window,
+the buffer's point and the window's point normally have the same value,
+so the distinction is rarely important.  See <a href="Window-Point.html#Window-Point">Window Point</a>, for more
+details.
+
+<div class="defun">
+&mdash; Function: <b>point</b><var><a name="index-point-2289"></a></var><br>
+<blockquote><p><a name="index-current-buffer-position-2290"></a>This function returns the value of point in the current buffer,
+as an integer.
+
+     <pre class="example">          (point)
+               =&gt; 175
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>point-min</b><var><a name="index-point_002dmin-2291"></a></var><br>
+<blockquote><p>This function returns the minimum accessible value of point in the
+current buffer.  This is normally 1, but if narrowing is in effect, it
+is the position of the start of the region that you narrowed to. 
+(See <a href="Narrowing.html#Narrowing">Narrowing</a>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>point-max</b><var><a name="index-point_002dmax-2292"></a></var><br>
+<blockquote><p>This function returns the maximum accessible value of point in the
+current buffer.  This is <code>(1+ (buffer-size))</code>, unless narrowing is
+in effect, in which case it is the position of the end of the region
+that you narrowed to.  (See <a href="Narrowing.html#Narrowing">Narrowing</a>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-end</b><var> flag<a name="index-buffer_002dend-2293"></a></var><br>
+<blockquote><p>This function returns <code>(point-max)</code> if <var>flag</var> is greater than
+0, <code>(point-min)</code> otherwise.  The argument <var>flag</var> must be a
+number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>buffer-size</b><var> &amp;optional buffer<a name="index-buffer_002dsize-2294"></a></var><br>
+<blockquote><p>This function returns the total number of characters in the current
+buffer.  In the absence of any narrowing (see <a href="Narrowing.html#Narrowing">Narrowing</a>),
+<code>point-max</code> returns a value one larger than this.
+
+        <p>If you specify a buffer, <var>buffer</var>, then the value is the
+size of <var>buffer</var>.
+
+     <pre class="example">          (buffer-size)
+               =&gt; 35
+          (point-max)
+               =&gt; 36
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

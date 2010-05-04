@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Kinds of Files - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
+<link rel="prev" href="Testing-Accessibility.html#Testing-Accessibility" title="Testing Accessibility">
+<link rel="next" href="Truenames.html#Truenames" title="Truenames">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Kinds-of-Files"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Truenames.html#Truenames">Truenames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Testing-Accessibility.html#Testing-Accessibility">Testing Accessibility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">25.6.2 Distinguishing Kinds of Files</h4>
+
+<p>This section describes how to distinguish various kinds of files, such
+as directories, symbolic links, and ordinary files.
+
+<div class="defun">
+&mdash; Function: <b>file-symlink-p</b><var> filename<a name="index-file_002dsymlink_002dp-1739"></a></var><br>
+<blockquote><p><a name="index-file-symbolic-links-1740"></a>If the file <var>filename</var> is a symbolic link, the
+<code>file-symlink-p</code> function returns the (non-recursive) link target
+as a string.  (Determining the file name that the link points to from
+the target is nontrivial.)  First, this function recursively follows
+symbolic links at all levels of parent directories.
+
+        <p>If the file <var>filename</var> is not a symbolic link (or there is no such file),
+<code>file-symlink-p</code> returns <code>nil</code>.
+
+     <pre class="example">          (file-symlink-p "foo")
+               =&gt; nil
+          (file-symlink-p "sym-link")
+               =&gt; "foo"
+          (file-symlink-p "sym-link2")
+               =&gt; "sym-link"
+          (file-symlink-p "/bin")
+               =&gt; "/pub/bin"
+     </pre>
+        <!-- !!! file-symlink-p: should show output of ls -l for comparison -->
+</blockquote></div>
+
+   <p>The next two functions recursively follow symbolic links at
+all levels for <var>filename</var>.
+
+<div class="defun">
+&mdash; Function: <b>file-directory-p</b><var> filename<a name="index-file_002ddirectory_002dp-1741"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>filename</var> is the name of an
+existing directory, <code>nil</code> otherwise.
+
+     <pre class="example">          (file-directory-p "~rms")
+               =&gt; t
+          (file-directory-p "~rms/lewis/files.texi")
+               =&gt; nil
+          (file-directory-p "~rms/lewis/no-such-file")
+               =&gt; nil
+          (file-directory-p "$HOME")
+               =&gt; nil
+          (file-directory-p
+           (substitute-in-file-name "$HOME"))
+               =&gt; t
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-regular-p</b><var> filename<a name="index-file_002dregular_002dp-1742"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the file <var>filename</var> exists and is
+a regular file (not a directory, named pipe, terminal, or
+other I/O device). 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Initial Parameters - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
+<link rel="prev" href="Parameter-Access.html#Parameter-Access" title="Parameter Access">
+<link rel="next" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Initial-Parameters"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Parameter-Access.html#Parameter-Access">Parameter Access</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.3.2 Initial Frame Parameters</h4>
+
+<p>You can specify the parameters for the initial startup frame
+by setting <code>initial-frame-alist</code> in your init file (see <a href="Init-File.html#Init-File">Init File</a>).
+
+<div class="defun">
+&mdash; Variable: <b>initial-frame-alist</b><var><a name="index-initial_002dframe_002dalist-2142"></a></var><br>
+<blockquote><p>This variable's value is an alist of parameter values used when creating
+the initial window frame.  You can set this variable to specify the
+appearance of the initial frame without altering subsequent frames. 
+Each element has the form:
+
+     <pre class="example">          (<var>parameter</var> . <var>value</var>)
+     </pre>
+        <p>Emacs creates the initial frame before it reads your init
+file.  After reading that file, Emacs checks <code>initial-frame-alist</code>,
+and applies the parameter settings in the altered value to the already
+created initial frame.
+
+        <p>If these settings affect the frame geometry and appearance, you'll see
+the frame appear with the wrong ones and then change to the specified
+ones.  If that bothers you, you can specify the same geometry and
+appearance with X resources; those do take effect before the frame is
+created.  See <a href="../emacs/X-Resources.html#X-Resources">X Resources</a>.
+
+        <p>X resource settings typically apply to all frames.  If you want to
+specify some X resources solely for the sake of the initial frame, and
+you don't want them to apply to subsequent frames, here's how to achieve
+this.  Specify parameters in <code>default-frame-alist</code> to override the
+X resources for subsequent frames; then, to prevent these from affecting
+the initial frame, specify the same parameters in
+<code>initial-frame-alist</code> with values that match the X resources. 
+</p></blockquote></div>
+
+   <p>If these parameters specify a separate minibuffer-only frame with
+<code>(minibuffer . nil)</code>, and you have not created one, Emacs creates
+one for you.
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-frame-alist</b><var><a name="index-minibuffer_002dframe_002dalist-2143"></a></var><br>
+<blockquote><p>This variable's value is an alist of parameter values used when creating
+an initial minibuffer-only frame&mdash;if such a frame is needed, according
+to the parameters for the main initial frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>default-frame-alist</b><var><a name="index-default_002dframe_002dalist-2144"></a></var><br>
+<blockquote><p>This is an alist specifying default values of frame parameters for all
+Emacs frames&mdash;the first frame, and subsequent frames.  When using the X
+Window System, you can get the same results by means of X resources
+in many cases.
+
+        <p>Setting this variable does not affect existing frames. 
+</p></blockquote></div>
+
+   <p>See also <code>special-display-frame-alist</code>.  See <a href="Definition-of-special_002ddisplay_002dframe_002dalist.html#Definition-of-special_002ddisplay_002dframe_002dalist">Definition of special-display-frame-alist</a>.
+
+   <p>If you use options that specify window appearance when you invoke Emacs,
+they take effect by adding elements to <code>default-frame-alist</code>.  One
+exception is `<samp><span class="samp">-geometry</span></samp>', which adds the specified position to
+<code>initial-frame-alist</code> instead.  See <a href="../emacs/Emacs-Invocation.html#Emacs-Invocation">Command Line Arguments for Emacs Invocation</a>.
+
+   </body></html>
+

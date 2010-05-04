@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Vertical Scrolling - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Textual-Scrolling.html#Textual-Scrolling" title="Textual Scrolling">
+<link rel="next" href="Horizontal-Scrolling.html#Horizontal-Scrolling" title="Horizontal Scrolling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Vertical-Scrolling"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Textual-Scrolling.html#Textual-Scrolling">Textual Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.12 Vertical Fractional Scrolling</h3>
+
+<p><a name="index-vertical-fractional-scrolling-2071"></a>
+  <dfn>Vertical fractional scrolling</dfn> means shifting the image in the
+window up or down by a specified multiple or fraction of a line. 
+Each window has a <dfn>vertical scroll position</dfn>,
+which is a number, never less than zero.  It specifies how far to raise
+the contents of the window.  Raising the window contents generally makes
+all or part of some lines disappear off the top, and all or part of some
+other lines appear at the bottom.  The usual value is zero.
+
+   <p>The vertical scroll position is measured in units of the normal line
+height, which is the height of the default font.  Thus, if the value is
+.5, that means the window contents are scrolled up half the normal line
+height.  If it is 3.3, that means the window contents are scrolled up
+somewhat over three times the normal line height.
+
+   <p>What fraction of a line the vertical scrolling covers, or how many
+lines, depends on what the lines contain.  A value of .5 could scroll a
+line whose height is very short off the screen, while a value of 3.3
+could scroll just part of the way through a tall line or an image.
+
+<div class="defun">
+&mdash; Function: <b>window-vscroll</b><var> &amp;optional window pixels-p<a name="index-window_002dvscroll-2072"></a></var><br>
+<blockquote><p>This function returns the current vertical scroll position of
+<var>window</var>.  If <var>window</var> is <code>nil</code>, the selected window is
+used.  If <var>pixels-p</var> is non-<code>nil</code>, the return value is
+measured in pixels, rather than in units of the normal line height.
+
+     <pre class="example">          (window-vscroll)
+               =&gt; 0
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-window-vscroll</b><var> window lines &amp;optional pixels-p<a name="index-set_002dwindow_002dvscroll-2073"></a></var><br>
+<blockquote><p>This function sets <var>window</var>'s vertical scroll position to
+<var>lines</var>.  The argument <var>lines</var> should be zero or positive; if
+not, it is taken as zero.
+
+        <p>If <var>window</var> is <code>nil</code>, the selected window is used.
+
+        <p>The actual vertical scroll position must always correspond
+to an integral number of pixels, so the value you specify
+is rounded accordingly.
+
+        <p>The return value is the result of this rounding.
+
+     <pre class="example">          (set-window-vscroll (selected-window) 1.2)
+               =&gt; 1.13
+     </pre>
+        <p>If <var>pixels-p</var> is non-<code>nil</code>, <var>lines</var> specifies a number of
+pixels.  In this case, the return value is <var>lines</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-window-vscroll</b><var><a name="index-auto_002dwindow_002dvscroll-2074"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, the line-move, scroll-up, and
+scroll-down functions will automatically modify the window vscroll to
+scroll through display rows that are taller that the height of the
+window, for example in the presence of large images. 
+</p></blockquote></div>
+
+   </body></html>
+

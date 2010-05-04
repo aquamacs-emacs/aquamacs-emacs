@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Obsolete Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Function-Cells.html#Function-Cells" title="Function Cells">
+<link rel="next" href="Inline-Functions.html#Inline-Functions" title="Inline Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Obsolete-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inline-Functions.html#Inline-Functions">Inline Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Function-Cells.html#Function-Cells">Function Cells</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.9 Declaring Functions Obsolete</h3>
+
+<p>You can use <code>make-obsolete</code> to declare a function obsolete.  This
+indicates that the function may be removed at some stage in the future.
+
+<div class="defun">
+&mdash; Function: <b>make-obsolete</b><var> obsolete-name current-name &amp;optional when<a name="index-make_002dobsolete-699"></a></var><br>
+<blockquote><p>This function makes the byte compiler warn that the function
+<var>obsolete-name</var> is obsolete.  If <var>current-name</var> is a symbol, the
+warning message says to use <var>current-name</var> instead of
+<var>obsolete-name</var>.  <var>current-name</var> does not need to be an alias for
+<var>obsolete-name</var>; it can be a different function with similar
+functionality.  If <var>current-name</var> is a string, it is the warning
+message.
+
+        <p>If provided, <var>when</var> should be a string indicating when the function
+was first made obsolete&mdash;for example, a date or a release number. 
+</p></blockquote></div>
+
+   <p>You can define a function as an alias and declare it obsolete at the
+same time using the macro <code>define-obsolete-function-alias</code>.
+
+<div class="defun">
+&mdash; Macro: <b>define-obsolete-function-alias</b><var> obsolete-name current-name &amp;optional when docstring<a name="index-define_002dobsolete_002dfunction_002dalias-700"></a></var><br>
+<blockquote><p>This macro marks the function <var>obsolete-name</var> obsolete and also
+defines it as an alias for the function <var>current-name</var>.  It is
+equivalent to the following:
+
+     <pre class="example">          (defalias <var>obsolete-name</var> <var>current-name</var> <var>docstring</var>)
+          (make-obsolete <var>obsolete-name</var> <var>current-name</var> <var>when</var>)
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

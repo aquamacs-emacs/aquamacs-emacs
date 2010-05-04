@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Vectors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
+<link rel="prev" href="Array-Functions.html#Array-Functions" title="Array Functions">
+<link rel="next" href="Vector-Functions.html#Vector-Functions" title="Vector Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Vectors"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vector-Functions.html#Vector-Functions">Vector Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Array-Functions.html#Array-Functions">Array Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">6.4 Vectors</h3>
+
+<p><a name="index-vector-_0028type_0029-396"></a>
+  Arrays in Lisp, like arrays in most languages, are blocks of memory
+whose elements can be accessed in constant time.  A <dfn>vector</dfn> is a
+general-purpose array of specified length; its elements can be any Lisp
+objects.  (By contrast, a string can hold only characters as elements.) 
+Vectors in Emacs are used for obarrays (vectors of symbols), and as part
+of keymaps (vectors of commands).  They are also used internally as part
+of the representation of a byte-compiled function; if you print such a
+function, you will see a vector in it.
+
+   <p>In Emacs Lisp, the indices of the elements of a vector start from zero
+and count up from there.
+
+   <p>Vectors are printed with square brackets surrounding the elements. 
+Thus, a vector whose elements are the symbols <code>a</code>, <code>b</code> and
+<code>a</code> is printed as <code>[a b a]</code>.  You can write vectors in the
+same way in Lisp input.
+
+   <p>A vector, like a string or a number, is considered a constant for
+evaluation: the result of evaluating it is the same vector.  This does
+not evaluate or even examine the elements of the vector. 
+See <a href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms">Self-Evaluating Forms</a>.
+
+   <p>Here are examples illustrating these principles:
+
+<pre class="example">     (setq avector [1 two '(three) "four" [five]])
+          =&gt; [1 two (quote (three)) "four" [five]]
+     (eval avector)
+          =&gt; [1 two (quote (three)) "four" [five]]
+     (eq avector (eval avector))
+          =&gt; t
+</pre>
+   </body></html>
+

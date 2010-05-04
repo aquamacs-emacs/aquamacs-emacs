@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Edebug Views - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug.html#Edebug" title="Edebug">
+<link rel="prev" href="Trapping-Errors.html#Trapping-Errors" title="Trapping Errors">
+<link rel="next" href="Edebug-Eval.html#Edebug-Eval" title="Edebug Eval">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Edebug-Views"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Edebug-Eval.html#Edebug-Eval">Edebug Eval</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.8 Edebug Views</h4>
+
+<p>These Edebug commands let you view aspects of the buffer and window
+status as they were before entry to Edebug.  The outside window
+configuration is the collection of windows and contents that were in
+effect outside of Edebug.
+
+     <dl>
+<dt><kbd>v</kbd><dd>Switch to viewing the outside window configuration
+(<code>edebug-view-outside</code>).  Type <kbd>C-x X w</kbd> to return to Edebug.
+
+     <br><dt><kbd>p</kbd><dd>Temporarily display the outside current buffer with point at its
+outside position (<code>edebug-bounce-point</code>), pausing for one second
+before returning to Edebug.  With a prefix argument <var>n</var>, pause for
+<var>n</var> seconds instead.
+
+     <br><dt><kbd>w</kbd><dd>Move point back to the current stop point in the source code buffer
+(<code>edebug-where</code>).
+
+     <p>If you use this command in a different window displaying the same
+buffer, that window will be used instead to display the current
+definition in the future.
+
+     <br><dt><kbd>W</kbd><dd><!-- Its function is not simply to forget the saved configuration - dan -->
+Toggle whether Edebug saves and restores the outside window
+configuration (<code>edebug-toggle-save-windows</code>).
+
+     <p>With a prefix argument, <code>W</code> only toggles saving and restoring of
+the selected window.  To specify a window that is not displaying the
+source code buffer, you must use <kbd>C-x X W</kbd> from the global keymap. 
+</dl>
+
+   <p>You can view the outside window configuration with <kbd>v</kbd> or just
+bounce to the point in the current buffer with <kbd>p</kbd>, even if
+it is not normally displayed.
+
+   <p>After moving point, you may wish to jump back to the stop point. 
+You can do that with <kbd>w</kbd> from a source code buffer.  You can jump
+back to the stop point in the source code buffer from any buffer using
+<kbd>C-x X w</kbd>.
+
+   <p>Each time you use <kbd>W</kbd> to turn saving <em>off</em>, Edebug forgets the
+saved outside window configuration&mdash;so that even if you turn saving
+back <em>on</em>, the current window configuration remains unchanged when
+you next exit Edebug (by continuing the program).  However, the
+automatic redisplay of `<samp><span class="samp">*edebug*</span></samp>' and `<samp><span class="samp">*edebug-trace*</span></samp>' may
+conflict with the buffers you wish to see unless you have enough windows
+open.
+
+   </body></html>
+

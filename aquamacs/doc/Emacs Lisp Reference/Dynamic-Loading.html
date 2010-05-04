@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Dynamic Loading - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
+<link rel="prev" href="Docs-and-Compilation.html#Docs-and-Compilation" title="Docs and Compilation">
+<link rel="next" href="Eval-During-Compile.html#Eval-During-Compile" title="Eval During Compile">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Dynamic-Loading"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
+<hr>
+</div>
+
+<h3 class="section">16.4 Dynamic Loading of Individual Functions</h3>
+
+<p><a name="index-dynamic-loading-of-functions-827"></a><a name="index-lazy-loading-828"></a>  When you compile a file, you can optionally enable the <dfn>dynamic
+function loading</dfn> feature (also known as <dfn>lazy loading</dfn>).  With
+dynamic function loading, loading the file doesn't fully read the
+function definitions in the file.  Instead, each function definition
+contains a place-holder which refers to the file.  The first time each
+function is called, it reads the full definition from the file, to
+replace the place-holder.
+
+   <p>The advantage of dynamic function loading is that loading the file
+becomes much faster.  This is a good thing for a file which contains
+many separate user-callable functions, if using one of them does not
+imply you will probably also use the rest.  A specialized mode which
+provides many keyboard commands often has that usage pattern: a user may
+invoke the mode, but use only a few of the commands it provides.
+
+   <p>The dynamic loading feature has certain disadvantages:
+
+     <ul>
+<li>If you delete or move the compiled file after loading it, Emacs can no
+longer load the remaining function definitions not already loaded.
+
+     <li>If you alter the compiled file (such as by compiling a new version),
+then trying to load any function not already loaded will usually yield
+nonsense results. 
+</ul>
+
+   <p>These problems will never happen in normal circumstances with
+installed Emacs files.  But they are quite likely to happen with Lisp
+files that you are changing.  The easiest way to prevent these problems
+is to reload the new compiled file immediately after each recompilation.
+
+   <p>The byte compiler uses the dynamic function loading feature if the
+variable <code>byte-compile-dynamic</code> is non-<code>nil</code> at compilation
+time.  Do not set this variable globally, since dynamic loading is
+desirable only for certain files.  Instead, enable the feature for
+specific source files with file-local variable bindings.  For example,
+you could do it by writing this text in the source file's first line:
+
+<pre class="example">     -*-byte-compile-dynamic: t;-*-
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>byte-compile-dynamic</b><var><a name="index-byte_002dcompile_002ddynamic-829"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, the byte compiler generates compiled files
+that are set up for dynamic function loading. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>fetch-bytecode</b><var> function<a name="index-fetch_002dbytecode-830"></a></var><br>
+<blockquote><p>If <var>function</var> is a byte-code function object, this immediately
+finishes loading the byte code of <var>function</var> from its
+byte-compiled file, if it is not fully loaded already.  Otherwise,
+it does nothing.  It always returns <var>function</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

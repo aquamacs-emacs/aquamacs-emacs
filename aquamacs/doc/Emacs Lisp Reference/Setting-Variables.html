@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Setting Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Accessing-Variables.html#Accessing-Variables" title="Accessing Variables">
+<link rel="next" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Setting-Variables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.8 How to Alter a Variable Value</h3>
+
+<p>The usual way to change the value of a variable is with the special
+form <code>setq</code>.  When you need to compute the choice of variable at
+run time, use the function <code>set</code>.
+
+<div class="defun">
+&mdash; Special Form: <b>setq</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq-600"></a></var><br>
+<blockquote><p>This special form is the most common method of changing a variable's
+value.  Each <var>symbol</var> is given a new value, which is the result of
+evaluating the corresponding <var>form</var>.  The most-local existing
+binding of the symbol is changed.
+
+        <p><code>setq</code> does not evaluate <var>symbol</var>; it sets the symbol that you
+write.  We say that this argument is <dfn>automatically quoted</dfn>.  The
+`<samp><span class="samp">q</span></samp>' in <code>setq</code> stands for &ldquo;quoted.&rdquo;
+
+        <p>The value of the <code>setq</code> form is the value of the last <var>form</var>.
+
+     <pre class="example">          (setq x (1+ 2))
+               =&gt; 3
+          x                   ; <code>x</code><span class="roman"> now has a global value.</span>
+               =&gt; 3
+          (let ((x 5))
+            (setq x 6)        ; <span class="roman">The local binding of </span><code>x</code><span class="roman"> is set.</span>
+            x)
+               =&gt; 6
+          x                   ; <span class="roman">The global value is unchanged.</span>
+               =&gt; 3
+     </pre>
+        <p>Note that the first <var>form</var> is evaluated, then the first
+<var>symbol</var> is set, then the second <var>form</var> is evaluated, then the
+second <var>symbol</var> is set, and so on:
+
+     <pre class="example">          (setq x 10          ; <span class="roman">Notice that </span><code>x</code><span class="roman"> is set before</span>
+                y (1+ x))     ;   <span class="roman">the value of </span><code>y</code><span class="roman"> is computed.</span>
+               =&gt; 11
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set</b><var> symbol value<a name="index-set-601"></a></var><br>
+<blockquote><p>This function sets <var>symbol</var>'s value to <var>value</var>, then returns
+<var>value</var>.  Since <code>set</code> is a function, the expression written for
+<var>symbol</var> is evaluated to obtain the symbol to set.
+
+        <p>The most-local existing binding of the variable is the binding that is
+set; shadowed bindings are not affected.
+
+     <pre class="example">          (set one 1)
+          error--&gt; Symbol's value as variable is void: one
+          (set 'one 1)
+               =&gt; 1
+          (set 'two 'one)
+               =&gt; one
+          (set two 2)         ; <code>two</code><span class="roman"> evaluates to symbol </span><code>one</code><span class="roman">.</span>
+               =&gt; 2
+          one                 ; <span class="roman">So it is </span><code>one</code><span class="roman"> that was set.</span>
+               =&gt; 2
+          (let ((one 1))      ; <span class="roman">This binding of </span><code>one</code><span class="roman"> is set,</span>
+            (set 'one 3)      ;   <span class="roman">not the global value.</span>
+            one)
+               =&gt; 3
+          one
+               =&gt; 2
+     </pre>
+        <p>If <var>symbol</var> is not actually a symbol, a <code>wrong-type-argument</code>
+error is signaled.
+
+     <pre class="example">          (set '(x y) 'z)
+          error--&gt; Wrong type argument: symbolp, (x y)
+     </pre>
+        <p>Logically speaking, <code>set</code> is a more fundamental primitive than
+<code>setq</code>.  Any use of <code>setq</code> can be trivially rewritten to use
+<code>set</code>; <code>setq</code> could even be defined as a macro, given the
+availability of <code>set</code>.  However, <code>set</code> itself is rarely used;
+beginners hardly need to know about it.  It is useful only for choosing
+at run time which variable to set.  For example, the command
+<code>set-variable</code>, which reads a variable name from the user and then
+sets the variable, needs to use <code>set</code>.
+
+        <p><a name="index-CL-note_002d_002d_002d_0040code_007bset_007d-local-602"></a><blockquote>
+<b>Common Lisp note:</b> In Common Lisp, <code>set</code> always changes the
+symbol's &ldquo;special&rdquo; or dynamic value, ignoring any lexical bindings. 
+In Emacs Lisp, all variables and all bindings are dynamic, so <code>set</code>
+always affects the most local existing binding. 
+</blockquote>
+        </p></blockquote></div>
+
+   </body></html>
+

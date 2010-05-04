@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+<title>Functions for Key Lookup - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Key-Lookup.html#Key-Lookup" title="Key Lookup">
+<link rel="next" href="Changing-Key-Bindings.html#Changing-Key-Bindings" title="Changing Key Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Functions-for-Key-Lookup"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Changing-Key-Bindings.html#Changing-Key-Bindings">Changing Key Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Lookup.html#Key-Lookup">Key Lookup</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.11 Functions for Key Lookup</h3>
+
+<p>Here are the functions and variables pertaining to key lookup.
+
+<div class="defun">
+&mdash; Function: <b>lookup-key</b><var> keymap key &amp;optional accept-defaults<a name="index-lookup_002dkey-1457"></a></var><br>
+<blockquote><p>This function returns the definition of <var>key</var> in <var>keymap</var>.  All
+the other functions described in this chapter that look up keys use
+<code>lookup-key</code>.  Here are examples:
+
+     <pre class="example">          (lookup-key (current-global-map) "\C-x\C-f")
+              =&gt; find-file
+          (lookup-key (current-global-map) (kbd "C-x C-f"))
+              =&gt; find-file
+          (lookup-key (current-global-map) "\C-x\C-f12345")
+              =&gt; 2
+     </pre>
+        <p>If the string or vector <var>key</var> is not a valid key sequence according
+to the prefix keys specified in <var>keymap</var>, it must be &ldquo;too long&rdquo;
+and have extra events at the end that do not fit into a single key
+sequence.  Then the value is a number, the number of events at the front
+of <var>key</var> that compose a complete key.
+
+     <!-- Emacs 19 feature -->
+<p>If <var>accept-defaults</var> is non-<code>nil</code>, then <code>lookup-key</code>
+considers default bindings as well as bindings for the specific events
+in <var>key</var>.  Otherwise, <code>lookup-key</code> reports only bindings for
+the specific sequence <var>key</var>, ignoring default bindings except when
+you explicitly ask about them.  (To do this, supply <code>t</code> as an
+element of <var>key</var>; see <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>.)
+
+        <p>If <var>key</var> contains a meta character (not a function key), that
+character is implicitly replaced by a two-character sequence: the value
+of <code>meta-prefix-char</code>, followed by the corresponding non-meta
+character.  Thus, the first example below is handled by conversion into
+the second example.
+
+     <pre class="example">          (lookup-key (current-global-map) "\M-f")
+              =&gt; forward-word
+          (lookup-key (current-global-map) "\ef")
+              =&gt; forward-word
+     </pre>
+        <p>Unlike <code>read-key-sequence</code>, this function does not modify the
+specified events in ways that discard information (see <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>).  In particular, it does not convert letters to lower case and
+it does not change drag events to clicks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>undefined</b><var><a name="index-undefined-1458"></a></var><br>
+<blockquote><p>Used in keymaps to undefine keys.  It calls <code>ding</code>, but does
+not cause an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>local-key-binding</b><var> key &amp;optional accept-defaults<a name="index-local_002dkey_002dbinding-1459"></a></var><br>
+<blockquote><p>This function returns the binding for <var>key</var> in the current
+local keymap, or <code>nil</code> if it is undefined there.
+
+     <!-- Emacs 19 feature -->
+<p>The argument <var>accept-defaults</var> controls checking for default bindings,
+as in <code>lookup-key</code> (above). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>global-key-binding</b><var> key &amp;optional accept-defaults<a name="index-global_002dkey_002dbinding-1460"></a></var><br>
+<blockquote><p>This function returns the binding for command <var>key</var> in the
+current global keymap, or <code>nil</code> if it is undefined there.
+
+     <!-- Emacs 19 feature -->
+<p>The argument <var>accept-defaults</var> controls checking for default bindings,
+as in <code>lookup-key</code> (above). 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>minor-mode-key-binding</b><var> key &amp;optional accept-defaults<a name="index-minor_002dmode_002dkey_002dbinding-1461"></a></var><br>
+<blockquote><p>This function returns a list of all the active minor mode bindings of
+<var>key</var>.  More precisely, it returns an alist of pairs
+<code>(</code><var>modename</var><code> . </code><var>binding</var><code>)</code>, where <var>modename</var> is the
+variable that enables the minor mode, and <var>binding</var> is <var>key</var>'s
+binding in that mode.  If <var>key</var> has no minor-mode bindings, the
+value is <code>nil</code>.
+
+        <p>If the first binding found is not a prefix definition (a keymap or a
+symbol defined as a keymap), all subsequent bindings from other minor
+modes are omitted, since they would be completely shadowed.  Similarly,
+the list omits non-prefix bindings that follow prefix bindings.
+
+        <p>The argument <var>accept-defaults</var> controls checking for default
+bindings, as in <code>lookup-key</code> (above). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>meta-prefix-char</b><var><a name="index-meta_002dprefix_002dchar-1462"></a></var><br>
+<blockquote><p><a name="index-g_t_0040key_007bESC_007d-1463"></a>This variable is the meta-prefix character code.  It is used for
+translating a meta character to a two-character sequence so it can be
+looked up in a keymap.  For useful results, the value should be a
+prefix event (see <a href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>).  The default value is 27, which is
+the <acronym>ASCII</acronym> code for &lt;ESC&gt;.
+
+        <p>As long as the value of <code>meta-prefix-char</code> remains 27, key lookup
+translates <kbd>M-b</kbd> into <kbd>&lt;ESC&gt; b</kbd>, which is normally defined
+as the <code>backward-word</code> command.  However, if you were to set
+<code>meta-prefix-char</code> to 24, the code for <kbd>C-x</kbd>, then Emacs will
+translate <kbd>M-b</kbd> into <kbd>C-x b</kbd>, whose standard binding is the
+<code>switch-to-buffer</code> command.  (Don't actually do this!)  Here is an
+illustration of what would happen:
+
+     <pre class="smallexample">          meta-prefix-char                    ; <span class="roman">The default value.</span>
+               =&gt; 27
+          (key-binding "\M-b")
+               =&gt; backward-word
+          ?\C-x                               ; <span class="roman">The print representation</span>
+               =&gt; 24                          ;   <span class="roman">of a character.</span>
+          (setq meta-prefix-char 24)
+               =&gt; 24
+          (key-binding "\M-b")
+               =&gt; switch-to-buffer            ; <span class="roman">Now, typing </span><kbd>M-b</kbd><span class="roman"> is</span>
+                                              ;   <span class="roman">like typing </span><kbd>C-x b</kbd><span class="roman">.</span>
+          
+          (setq meta-prefix-char 27)          ; <span class="roman">Avoid confusion!</span>
+               =&gt; 27                          ; <span class="roman">Restore the default value!</span>
+     </pre>
+        <p>This translation of one event into two happens only for characters, not
+for other kinds of input events.  Thus, <kbd>M-&lt;F1&gt;</kbd>, a function
+key, is not converted into <kbd>&lt;ESC&gt; &lt;F1&gt;</kbd>. 
+</p></blockquote></div>
+
+   </body></html>
+

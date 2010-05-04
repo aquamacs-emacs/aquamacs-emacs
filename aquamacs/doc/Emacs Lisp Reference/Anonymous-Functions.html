@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Anonymous Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Mapping-Functions.html#Mapping-Functions" title="Mapping Functions">
+<link rel="next" href="Function-Cells.html#Function-Cells" title="Function Cells">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Anonymous-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Cells.html#Function-Cells">Function Cells</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.7 Anonymous Functions</h3>
+
+<p><a name="index-anonymous-function-689"></a>
+  In Lisp, a function is a list that starts with <code>lambda</code>, a
+byte-code function compiled from such a list, or alternatively a
+primitive subr-object; names are &ldquo;extra.&rdquo;  Although usually functions
+are defined with <code>defun</code> and given names at the same time, it is
+occasionally more concise to use an explicit lambda expression&mdash;an
+anonymous function.  Such a list is valid wherever a function name is.
+
+   <p>Any method of creating such a list makes a valid function.  Even this:
+
+<pre class="smallexample">     (setq silly (append '(lambda (x)) (list (list '+ (* 3 4) 'x))))
+     =&gt; (lambda (x) (+ 12 x))
+</pre>
+   <p class="noindent">This computes a list that looks like <code>(lambda (x) (+ 12 x))</code> and
+makes it the value (<em>not</em> the function definition!) of
+<code>silly</code>.
+
+   <p>Here is how we might call this function:
+
+<pre class="example">     (funcall silly 1)
+     =&gt; 13
+</pre>
+   <p class="noindent">(It does <em>not</em> work to write <code>(silly 1)</code>, because this function
+is not the <em>function definition</em> of <code>silly</code>.  We have not given
+<code>silly</code> any function definition, just a value as a variable.)
+
+   <p>Most of the time, anonymous functions are constants that appear in
+your program.  For example, you might want to pass one as an argument to
+the function <code>mapcar</code>, which applies any given function to each
+element of a list.
+
+   <p>Here we define a function <code>change-property</code> which
+uses a function as its third argument:
+
+<pre class="example">     (defun change-property (symbol prop function)
+       (let ((value (get symbol prop)))
+         (put symbol prop (funcall function value))))
+</pre>
+   <p class="noindent">Here we define a function that uses <code>change-property</code>,
+passing it a function to double a number:
+
+<pre class="example">     (defun double-property (symbol prop)
+       (change-property symbol prop '(lambda (x) (* 2 x))))
+</pre>
+   <p class="noindent">In such cases, we usually use the special form <code>function</code> instead
+of simple quotation to quote the anonymous function, like this:
+
+<pre class="example">     (defun double-property (symbol prop)
+       (change-property symbol prop
+                        (function (lambda (x) (* 2 x)))))
+</pre>
+   <p>Using <code>function</code> instead of <code>quote</code> makes a difference if you
+compile the function <code>double-property</code>.  For example, if you
+compile the second definition of <code>double-property</code>, the anonymous
+function is compiled as well.  By contrast, if you compile the first
+definition which uses ordinary <code>quote</code>, the argument passed to
+<code>change-property</code> is the precise list shown:
+
+<pre class="example">     (lambda (x) (* x 2))
+</pre>
+   <p class="noindent">The Lisp compiler cannot assume this list is a function, even though it
+looks like one, since it does not know what <code>change-property</code> will
+do with the list.  Perhaps it will check whether the <span class="sc">car</span> of the third
+element is the symbol <code>*</code>!  Using <code>function</code> tells the
+compiler it is safe to go ahead and compile the constant function.
+
+   <p>Nowadays it is possible to omit <code>function</code> entirely, like this:
+
+<pre class="example">     (defun double-property (symbol prop)
+       (change-property symbol prop (lambda (x) (* 2 x))))
+</pre>
+   <p class="noindent">This is because <code>lambda</code> itself implies <code>function</code>.
+
+   <p>We sometimes write <code>function</code> instead of <code>quote</code> when
+quoting the name of a function, but this usage is just a sort of
+comment:
+
+<pre class="example">     (function <var>symbol</var>) == (quote <var>symbol</var>) == '<var>symbol</var>
+</pre>
+   <p><a name="index-g_t_0040samp_007b_0023_0027_007d-syntax-690"></a>  The read syntax <code>#'</code> is a short-hand for using <code>function</code>. 
+For example,
+
+<pre class="example">     #'(lambda (x) (* x x))
+</pre>
+   <p class="noindent">is equivalent to
+
+<pre class="example">     (function (lambda (x) (* x x)))
+</pre>
+   <div class="defun">
+&mdash; Special Form: <b>function</b><var> function-object<a name="index-function-691"></a></var><br>
+<blockquote><p><a name="index-function-quoting-692"></a>This special form returns <var>function-object</var> without evaluating it. 
+In this, it is equivalent to <code>quote</code>.  However, it serves as a
+note to the Emacs Lisp compiler that <var>function-object</var> is intended
+to be used only as a function, and therefore can safely be compiled. 
+Contrast this with <code>quote</code>, in <a href="Quoting.html#Quoting">Quoting</a>. 
+</p></blockquote></div>
+
+   <p>See <a href="describe_002dsymbols-example.html#describe_002dsymbols-example">describe-symbols example</a>, for a realistic example using
+<code>function</code> and an anonymous function.
+
+   </body></html>
+

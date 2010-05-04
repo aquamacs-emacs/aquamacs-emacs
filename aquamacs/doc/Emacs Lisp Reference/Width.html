@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Width - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Overlays.html#Overlays" title="Overlays">
+<link rel="next" href="Line-Height.html#Line-Height" title="Line Height">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Width"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Line-Height.html#Line-Height">Line Height</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overlays.html#Overlays">Overlays</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.10 Width</h3>
+
+<p>Since not all characters have the same width, these functions let you
+check the width of a character.  See <a href="Primitive-Indent.html#Primitive-Indent">Primitive Indent</a>, and
+<a href="Screen-Lines.html#Screen-Lines">Screen Lines</a>, for related functions.
+
+<div class="defun">
+&mdash; Function: <b>char-width</b><var> char<a name="index-char_002dwidth-3217"></a></var><br>
+<blockquote><p>This function returns the width in columns of the character <var>char</var>,
+if it were displayed in the current buffer and the selected window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-width</b><var> string<a name="index-string_002dwidth-3218"></a></var><br>
+<blockquote><p>This function returns the width in columns of the string <var>string</var>,
+if it were displayed in the current buffer and the selected window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>truncate-string-to-width</b><var> string width &amp;optional start-column padding ellipsis<a name="index-truncate_002dstring_002dto_002dwidth-3219"></a></var><br>
+<blockquote><p>This function returns the part of <var>string</var> that fits within
+<var>width</var> columns, as a new string.
+
+        <p>If <var>string</var> does not reach <var>width</var>, then the result ends where
+<var>string</var> ends.  If one multi-column character in <var>string</var>
+extends across the column <var>width</var>, that character is not included in
+the result.  Thus, the result can fall short of <var>width</var> but cannot
+go beyond it.
+
+        <p>The optional argument <var>start-column</var> specifies the starting column. 
+If this is non-<code>nil</code>, then the first <var>start-column</var> columns of
+the string are omitted from the value.  If one multi-column character in
+<var>string</var> extends across the column <var>start-column</var>, that
+character is not included.
+
+        <p>The optional argument <var>padding</var>, if non-<code>nil</code>, is a padding
+character added at the beginning and end of the result string, to extend
+it to exactly <var>width</var> columns.  The padding character is used at the
+end of the result if it falls short of <var>width</var>.  It is also used at
+the beginning of the result if one multi-column character in
+<var>string</var> extends across the column <var>start-column</var>.
+
+        <p>If <var>ellipsis</var> is non-<code>nil</code>, it should be a string which will
+replace the end of <var>str</var> (including any padding) if it extends
+beyond <var>end-column</var>, unless the display width of <var>str</var> is
+equal to or less than the display width of <var>ellipsis</var>.  If
+<var>ellipsis</var> is non-<code>nil</code> and not a string, it stands for
+<code>"..."</code>.
+
+     <pre class="example">          (truncate-string-to-width "\tab\t" 12 4)
+               =&gt; "ab"
+          (truncate-string-to-width "\tab\t" 12 4 ?\s)
+               =&gt; "    ab  "
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Base 64 - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Registers.html#Registers" title="Registers">
+<link rel="next" href="MD5-Checksum.html#MD5-Checksum" title="MD5 Checksum">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Base-64"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="MD5-Checksum.html#MD5-Checksum">MD5 Checksum</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Registers.html#Registers">Registers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.23 Base 64 Encoding</h3>
+
+<p><a name="index-base-64-encoding-2648"></a>
+  Base 64 code is used in email to encode a sequence of 8-bit bytes as
+a longer sequence of <acronym>ASCII</acronym> graphic characters.  It is defined in
+Internet RFC<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>2045.  This section describes the functions for
+converting to and from this code.
+
+<div class="defun">
+&mdash; Function: <b>base64-encode-region</b><var> beg end &amp;optional no-line-break<a name="index-base64_002dencode_002dregion-2649"></a></var><br>
+<blockquote><p>This function converts the region from <var>beg</var> to <var>end</var> into base
+64 code.  It returns the length of the encoded text.  An error is
+signaled if a character in the region is multibyte, i.e. in a
+multibyte buffer the region must contain only characters from the
+charsets <code>ascii</code>, <code>eight-bit-control</code> and
+<code>eight-bit-graphic</code>.
+
+        <p>Normally, this function inserts newline characters into the encoded
+text, to avoid overlong lines.  However, if the optional argument
+<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
+the output is just one long line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>base64-encode-string</b><var> string &amp;optional no-line-break<a name="index-base64_002dencode_002dstring-2650"></a></var><br>
+<blockquote><p>This function converts the string <var>string</var> into base 64 code.  It
+returns a string containing the encoded text.  As for
+<code>base64-encode-region</code>, an error is signaled if a character in the
+string is multibyte.
+
+        <p>Normally, this function inserts newline characters into the encoded
+text, to avoid overlong lines.  However, if the optional argument
+<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
+the result string is just one long line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>base64-decode-region</b><var> beg end<a name="index-base64_002ddecode_002dregion-2651"></a></var><br>
+<blockquote><p>This function converts the region from <var>beg</var> to <var>end</var> from base
+64 code into the corresponding decoded text.  It returns the length of
+the decoded text.
+
+        <p>The decoding functions ignore newline characters in the encoded text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>base64-decode-string</b><var> string<a name="index-base64_002ddecode_002dstring-2652"></a></var><br>
+<blockquote><p>This function converts the string <var>string</var> from base 64 code into
+the corresponding decoded text.  It returns a unibyte string containing the
+decoded text.
+
+        <p>The decoding functions ignore newline characters in the encoded text. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+An RFC, an acronym for <dfn>Request for Comments</dfn>, is a numbered
+Internet informational document describing a standard.  RFCs are
+usually written by technical experts acting on their own initiative,
+and are traditionally written in a pragmatic, experience-driven
+manner. 
+</p>
+
+   <p><hr></div>
+
+   </body></html>
+

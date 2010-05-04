@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>General Escape Syntax - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Character-Type.html#Character-Type" title="Character Type">
+<link rel="prev" href="Basic-Char-Syntax.html#Basic-Char-Syntax" title="Basic Char Syntax">
+<link rel="next" href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" title="Ctl-Char Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="General-Escape-Syntax"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax">Ctl-Char Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Char-Syntax.html#Basic-Char-Syntax">Basic Char Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Character-Type.html#Character-Type">Character Type</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">2.3.3.2 General Escape Syntax</h5>
+
+<p>In addition to the specific excape sequences for special important
+control characters, Emacs provides general categories of escape syntax
+that you can use to specify non-ASCII text characters.
+
+   <p><a name="index-unicode-character-escape-75"></a>  For instance, you can specify characters by their Unicode values. 
+<code>?\u</code><var>nnnn</var> represents a character that maps to the Unicode
+code point `<samp><span class="samp">U+</span><var>nnnn</var></samp>'.  There is a slightly different syntax
+for specifying characters with code points above <code>#xFFFF</code>;
+<code>\U00</code><var>nnnnnn</var> represents the character whose Unicode code
+point is `<samp><span class="samp">U+</span><var>nnnnnn</var></samp>', if such a character is supported by
+Emacs.  If the corresponding character is not supported, Emacs signals
+an error.
+
+   <p>This peculiar and inconvenient syntax was adopted for compatibility
+with other programming languages.  Unlike some other languages, Emacs
+Lisp supports this syntax in only character literals and strings.
+
+   <p><a name="index-g_t_0040samp_007b_005c_007d-in-character-constant-76"></a><a name="index-backslash-in-character-constant-77"></a><a name="index-octal-character-code-78"></a>  The most general read syntax for a character represents the
+character code in either octal or hex.  To use octal, write a question
+mark followed by a backslash and the octal character code (up to three
+octal digits); thus, `<samp><span class="samp">?\101</span></samp>' for the character <kbd>A</kbd>,
+`<samp><span class="samp">?\001</span></samp>' for the character <kbd>C-a</kbd>, and <code>?\002</code> for the
+character <kbd>C-b</kbd>.  Although this syntax can represent any
+<acronym>ASCII</acronym> character, it is preferred only when the precise octal
+value is more important than the <acronym>ASCII</acronym> representation.
+
+<pre class="example">     ?\012 =&gt; 10         ?\n =&gt; 10         ?\C-j =&gt; 10
+     ?\101 =&gt; 65         ?A =&gt; 65
+</pre>
+   <p>To use hex, write a question mark followed by a backslash, `<samp><span class="samp">x</span></samp>',
+and the hexadecimal character code.  You can use any number of hex
+digits, so you can represent any character code in this way. 
+Thus, `<samp><span class="samp">?\x41</span></samp>' for the character <kbd>A</kbd>, `<samp><span class="samp">?\x1</span></samp>' for the
+character <kbd>C-a</kbd>, and <code>?\x8e0</code> for the Latin-1 character
+`<samp><span class="samp">a</span></samp>' with grave accent.
+
+   </body></html>
+

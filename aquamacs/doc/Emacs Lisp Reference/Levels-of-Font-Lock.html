@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Levels of Font Lock - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="prev" href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" title="Other Font Lock Variables">
+<link rel="next" href="Precalculated-Fontification.html#Precalculated-Fontification" title="Precalculated Fontification">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Levels-of-Font-Lock"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Precalculated-Fontification.html#Precalculated-Fontification">Precalculated Fontification</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.6.5 Levels of Font Lock</h4>
+
+<p>Many major modes offer three different levels of fontification.  You
+can define multiple levels by using a list of symbols for <var>keywords</var>
+in <code>font-lock-defaults</code>.  Each symbol specifies one level of
+fontification; it is up to the user to choose one of these levels.  The
+chosen level's symbol value is used to initialize
+<code>font-lock-keywords</code>.
+
+   <p>Here are the conventions for how to define the levels of
+fontification:
+
+     <ul>
+<li>Level 1: highlight function declarations, file directives (such as include or
+import directives), strings and comments.  The idea is speed, so only
+the most important and top-level components are fontified.
+
+     <li>Level 2: in addition to level 1, highlight all language keywords,
+including type names that act like keywords, as well as named constant
+values.  The idea is that all keywords (either syntactic or semantic)
+should be fontified appropriately.
+
+     <li>Level 3: in addition to level 2, highlight the symbols being defined in
+function and variable declarations, and all builtin function names,
+wherever they appear. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Parameter Access - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
+<link rel="next" href="Initial-Parameters.html#Initial-Parameters" title="Initial Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Parameter-Access"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Initial-Parameters.html#Initial-Parameters">Initial Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.3.1 Access to Frame Parameters</h4>
+
+<p>These functions let you read and change the parameter values of a
+frame.
+
+<div class="defun">
+&mdash; Function: <b>frame-parameter</b><var> frame parameter<a name="index-frame_002dparameter-2138"></a></var><br>
+<blockquote><p>This function returns the value of the parameter <var>parameter</var> (a
+symbol) of <var>frame</var>.  If <var>frame</var> is <code>nil</code>, it returns the
+selected frame's parameter.  If <var>frame</var> has no setting for
+<var>parameter</var>, this function returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>frame-parameters</b><var> &amp;optional frame<a name="index-frame_002dparameters-2139"></a></var><br>
+<blockquote><p>The function <code>frame-parameters</code> returns an alist listing all the
+parameters of <var>frame</var> and their values.  If <var>frame</var> is
+<code>nil</code> or omitted, this returns the selected frame's parameters
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>modify-frame-parameters</b><var> frame alist<a name="index-modify_002dframe_002dparameters-2140"></a></var><br>
+<blockquote><p>This function alters the parameters of frame <var>frame</var> based on the
+elements of <var>alist</var>.  Each element of <var>alist</var> has the form
+<code>(</code><var>parm</var><code> . </code><var>value</var><code>)</code>, where <var>parm</var> is a symbol naming a
+parameter.  If you don't mention a parameter in <var>alist</var>, its value
+doesn't change.  If <var>frame</var> is <code>nil</code>, it defaults to the selected
+frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>modify-all-frames-parameters</b><var> alist<a name="index-modify_002dall_002dframes_002dparameters-2141"></a></var><br>
+<blockquote><p>This function alters the frame parameters of all existing frames
+according to <var>alist</var>, then modifies <code>default-frame-alist</code>
+(and, if necessary, <code>initial-frame-alist</code>) to apply the same
+parameter values to frames that will be created henceforth. 
+</p></blockquote></div>
+
+   </body></html>
+

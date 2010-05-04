@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Moving Markers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Markers.html#Markers" title="Markers">
+<link rel="prev" href="Marker-Insertion-Types.html#Marker-Insertion-Types" title="Marker Insertion Types">
+<link rel="next" href="The-Mark.html#The-Mark" title="The Mark">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Moving-Markers"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Mark.html#The-Mark">The Mark</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
+<hr>
+</div>
+
+<h3 class="section">31.6 Moving Marker Positions</h3>
+
+<p>This section describes how to change the position of an existing
+marker.  When you do this, be sure you know whether the marker is used
+outside of your program, and, if so, what effects will result from
+moving it&mdash;otherwise, confusing things may happen in other parts of
+Emacs.
+
+<div class="defun">
+&mdash; Function: <b>set-marker</b><var> marker position &amp;optional buffer<a name="index-set_002dmarker-2372"></a></var><br>
+<blockquote><p>This function moves <var>marker</var> to <var>position</var>
+in <var>buffer</var>.  If <var>buffer</var> is not provided, it defaults to
+the current buffer.
+
+        <p>If <var>position</var> is less than 1, <code>set-marker</code> moves <var>marker</var>
+to the beginning of the buffer.  If <var>position</var> is greater than the
+size of the buffer, <code>set-marker</code> moves marker to the end of the
+buffer.  If <var>position</var> is <code>nil</code> or a marker that points
+nowhere, then <var>marker</var> is set to point nowhere.
+
+        <p>The value returned is <var>marker</var>.
+
+     <pre class="example">          (setq m (point-marker))
+               =&gt; #&lt;marker at 4714 in markers.texi&gt;
+          (set-marker m 55)
+               =&gt; #&lt;marker at 55 in markers.texi&gt;
+          (setq b (get-buffer "foo"))
+               =&gt; #&lt;buffer foo&gt;
+          (set-marker m 0 b)
+               =&gt; #&lt;marker at 1 in foo&gt;
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>move-marker</b><var> marker position &amp;optional buffer<a name="index-move_002dmarker-2373"></a></var><br>
+<blockquote><p>This is another name for <code>set-marker</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

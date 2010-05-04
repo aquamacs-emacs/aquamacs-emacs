@@ -1,0 +1,211 @@
+<html lang="en">
+<head>
+<title>Output Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Read-and-Print.html#Read-and-Print" title="Read and Print">
+<link rel="prev" href="Output-Functions.html#Output-Functions" title="Output Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Output-Variables"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Output-Functions.html#Output-Functions">Output Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
+<hr>
+</div>
+
+<h3 class="section">19.6 Variables Affecting Output</h3>
+
+<p><a name="index-output_002dcontrolling-variables-1033"></a>
+
+<div class="defun">
+&mdash; Variable: <b>standard-output</b><var><a name="index-standard_002doutput-1034"></a></var><br>
+<blockquote><p>The value of this variable is the default output stream&mdash;the stream
+that print functions use when the <var>stream</var> argument is <code>nil</code>. 
+The default is <code>t</code>, meaning display in the echo area. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-quoted</b><var><a name="index-print_002dquoted-1035"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, that means to print quoted forms using
+abbreviated reader syntax.  <code>(quote foo)</code> prints as <code>'foo</code>,
+<code>(function foo)</code> as <code>#'foo</code>, and backquoted forms print
+using modern backquote syntax. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-escape-newlines</b><var><a name="index-print_002descape_002dnewlines-1036"></a></var><br>
+<blockquote><p><a name="index-g_t_0040samp_007b_005cn_007d-in-print-1037"></a><a name="index-escape-characters-1038"></a>If this variable is non-<code>nil</code>, then newline characters in strings
+are printed as `<samp><span class="samp">\n</span></samp>' and formfeeds are printed as `<samp><span class="samp">\f</span></samp>'. 
+Normally these characters are printed as actual newlines and formfeeds.
+
+        <p>This variable affects the print functions <code>prin1</code> and <code>print</code>
+that print with quoting.  It does not affect <code>princ</code>.  Here is an
+example using <code>prin1</code>:
+
+     <pre class="example">          (prin1 "a\nb")
+               -| "a
+               -| b"
+               =&gt; "a
+          b"
+          
+          (let ((print-escape-newlines t))
+            (prin1 "a\nb"))
+               -| "a\nb"
+               =&gt; "a
+          b"
+     </pre>
+        <p class="noindent">In the second expression, the local binding of
+<code>print-escape-newlines</code> is in effect during the call to
+<code>prin1</code>, but not during the printing of the result. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-escape-nonascii</b><var><a name="index-print_002descape_002dnonascii-1039"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, then unibyte non-<acronym>ASCII</acronym>
+characters in strings are unconditionally printed as backslash sequences
+by the print functions <code>prin1</code> and <code>print</code> that print with
+quoting.
+
+        <p>Those functions also use backslash sequences for unibyte non-<acronym>ASCII</acronym>
+characters, regardless of the value of this variable, when the output
+stream is a multibyte buffer or a marker pointing into one. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-escape-multibyte</b><var><a name="index-print_002descape_002dmultibyte-1040"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, then multibyte non-<acronym>ASCII</acronym>
+characters in strings are unconditionally printed as backslash sequences
+by the print functions <code>prin1</code> and <code>print</code> that print with
+quoting.
+
+        <p>Those functions also use backslash sequences for multibyte
+non-<acronym>ASCII</acronym> characters, regardless of the value of this variable,
+when the output stream is a unibyte buffer or a marker pointing into
+one. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-length</b><var><a name="index-print_002dlength-1041"></a></var><br>
+<blockquote><p><a name="index-printing-limits-1042"></a>The value of this variable is the maximum number of elements to print in
+any list, vector or bool-vector.  If an object being printed has more
+than this many elements, it is abbreviated with an ellipsis.
+
+        <p>If the value is <code>nil</code> (the default), then there is no limit.
+
+     <pre class="example">          (setq print-length 2)
+               =&gt; 2
+          (print '(1 2 3 4 5))
+               -| (1 2 ...)
+               =&gt; (1 2 ...)
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-level</b><var><a name="index-print_002dlevel-1043"></a></var><br>
+<blockquote><p>The value of this variable is the maximum depth of nesting of
+parentheses and brackets when printed.  Any list or vector at a depth
+exceeding this limit is abbreviated with an ellipsis.  A value of
+<code>nil</code> (which is the default) means no limit. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>eval-expression-print-length</b><var><a name="index-eval_002dexpression_002dprint_002dlength-1044"></a></var><br>
+&mdash; User Option: <b>eval-expression-print-level</b><var><a name="index-eval_002dexpression_002dprint_002dlevel-1045"></a></var><br>
+<blockquote><p>These are the values for <code>print-length</code> and <code>print-level</code>
+used by <code>eval-expression</code>, and thus, indirectly, by many
+interactive evaluation commands (see <a href="../emacs/Lisp-Eval.html#Lisp-Eval">Evaluating Emacs-Lisp Expressions</a>). 
+</p></blockquote></div>
+
+   <p>These variables are used for detecting and reporting circular
+and shared structure:
+
+<div class="defun">
+&mdash; Variable: <b>print-circle</b><var><a name="index-print_002dcircle-1046"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable enables detection of circular
+and shared structure in printing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-gensym</b><var><a name="index-print_002dgensym-1047"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable enables detection of uninterned symbols
+(see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>) in printing.  When this is enabled,
+uninterned symbols print with the prefix `<samp><span class="samp">#:</span></samp>', which tells the Lisp
+reader to produce an uninterned symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-continuous-numbering</b><var><a name="index-print_002dcontinuous_002dnumbering-1048"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, that means number continuously across print calls. 
+This affects the numbers printed for `<samp><span class="samp">#</span><var>n</var><span class="samp">=</span></samp>' labels and
+`<samp><span class="samp">#</span><var>m</var><span class="samp">#</span></samp>' references.
+
+        <p>Don't set this variable with <code>setq</code>; you should only bind it
+temporarily to <code>t</code> with <code>let</code>.  When you do that, you should
+also bind <code>print-number-table</code> to <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>print-number-table</b><var><a name="index-print_002dnumber_002dtable-1049"></a></var><br>
+<blockquote><p>This variable holds a vector used internally by printing to implement
+the <code>print-circle</code> feature.  You should not use it except
+to bind it to <code>nil</code> when you bind <code>print-continuous-numbering</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>float-output-format</b><var><a name="index-float_002doutput_002dformat-1050"></a></var><br>
+<blockquote><p>This variable specifies how to print floating point numbers.  Its
+default value is <code>nil</code>, meaning use the shortest output
+that represents the number without losing information.
+
+        <p>To control output format more precisely, you can put a string in this
+variable.  The string should hold a `<samp><span class="samp">%</span></samp>'-specification to be used
+in the C function <code>sprintf</code>.  For further restrictions on what
+you can use, see the variable's documentation string. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, 2002, -->
+<!-- 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

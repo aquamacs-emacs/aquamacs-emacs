@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Raising and Lowering - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Visibility-of-Frames.html#Visibility-of-Frames" title="Visibility of Frames">
+<link rel="next" href="Frame-Configurations.html#Frame-Configurations" title="Frame Configurations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Raising-and-Lowering"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.11 Raising and Lowering Frames</h3>
+
+<p>Most window systems use a desktop metaphor.  Part of this metaphor is
+the idea that windows are stacked in a notional third dimension
+perpendicular to the screen surface, and thus ordered from &ldquo;highest&rdquo;
+to &ldquo;lowest.&rdquo;  Where two windows overlap, the one higher up covers
+the one underneath.  Even a window at the bottom of the stack can be
+seen if no other window overlaps it.
+
+<!-- @cindex raising a frame  redundant with raise-frame -->
+<p><a name="index-lowering-a-frame-2203"></a>  A window's place in this ordering is not fixed; in fact, users tend
+to change the order frequently.  <dfn>Raising</dfn> a window means moving
+it &ldquo;up,&rdquo; to the top of the stack.  <dfn>Lowering</dfn> a window means
+moving it to the bottom of the stack.  This motion is in the notional
+third dimension only, and does not change the position of the window
+on the screen.
+
+   <p>You can raise and lower Emacs frame Windows with these functions:
+
+<div class="defun">
+&mdash; Command: <b>raise-frame</b><var> &amp;optional frame<a name="index-raise_002dframe-2204"></a></var><br>
+<blockquote><p>This function raises frame <var>frame</var> (default, the selected frame). 
+If <var>frame</var> is invisible or iconified, this makes it visible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>lower-frame</b><var> &amp;optional frame<a name="index-lower_002dframe-2205"></a></var><br>
+<blockquote><p>This function lowers frame <var>frame</var> (default, the selected frame). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>minibuffer-auto-raise</b><var><a name="index-minibuffer_002dauto_002draise-2206"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, activation of the minibuffer raises the frame
+that the minibuffer window is in. 
+</p></blockquote></div>
+
+   <p>You can also enable auto-raise (raising automatically when a frame is
+selected) or auto-lower (lowering automatically when it is deselected)
+for any frame using frame parameters.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.
+
+   </body></html>
+

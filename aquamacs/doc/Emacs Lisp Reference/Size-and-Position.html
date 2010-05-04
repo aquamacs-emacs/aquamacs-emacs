@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Size and Position - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
+<link rel="prev" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
+<link rel="next" href="Geometry.html#Geometry" title="Geometry">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Size-and-Position"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Geometry.html#Geometry">Geometry</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.3.4 Frame Size And Position</h4>
+
+<p><a name="index-size-of-frame-2150"></a><a name="index-screen-size-2151"></a><a name="index-frame-size-2152"></a><a name="index-resize-frame-2153"></a>
+  You can read or change the size and position of a frame using the
+frame parameters <code>left</code>, <code>top</code>, <code>height</code>, and
+<code>width</code>.  Whatever geometry parameters you don't specify are chosen
+by the window manager in its usual fashion.
+
+   <p>Here are some special features for working with sizes and positions. 
+(For the precise meaning of &ldquo;selected frame&rdquo; used by these functions,
+see <a href="Input-Focus.html#Input-Focus">Input Focus</a>.)
+
+<div class="defun">
+&mdash; Function: <b>set-frame-position</b><var> frame left top<a name="index-set_002dframe_002dposition-2154"></a></var><br>
+<blockquote><p>This function sets the position of the top left corner of <var>frame</var> to
+<var>left</var> and <var>top</var>.  These arguments are measured in pixels, and
+normally count from the top left corner of the screen.
+
+        <p>Negative parameter values position the bottom edge of the window up from
+the bottom edge of the screen, or the right window edge to the left of
+the right edge of the screen.  It would probably be better if the values
+were always counted from the left and top, so that negative arguments
+would position the frame partly off the top or left edge of the screen,
+but it seems inadvisable to change that now. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>frame-height</b><var> &amp;optional frame<a name="index-frame_002dheight-2155"></a></var><br>
+&mdash; Function: <b>frame-width</b><var> &amp;optional frame<a name="index-frame_002dwidth-2156"></a></var><br>
+<blockquote><p>These functions return the height and width of <var>frame</var>, measured in
+lines and columns.  If you don't supply <var>frame</var>, they use the
+selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>screen-height</b><var><a name="index-screen_002dheight-2157"></a></var><br>
+&mdash; Function: <b>screen-width</b><var><a name="index-screen_002dwidth-2158"></a></var><br>
+<blockquote><p>These functions are old aliases for <code>frame-height</code> and
+<code>frame-width</code>.  When you are using a non-window terminal, the size
+of the frame is normally the same as the size of the terminal screen. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>frame-pixel-height</b><var> &amp;optional frame<a name="index-frame_002dpixel_002dheight-2159"></a></var><br>
+&mdash; Function: <b>frame-pixel-width</b><var> &amp;optional frame<a name="index-frame_002dpixel_002dwidth-2160"></a></var><br>
+<blockquote><p>These functions return the height and width of <var>frame</var>, measured in
+pixels.  If you don't supply <var>frame</var>, they use the selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>frame-char-height</b><var> &amp;optional frame<a name="index-frame_002dchar_002dheight-2161"></a></var><br>
+&mdash; Function: <b>frame-char-width</b><var> &amp;optional frame<a name="index-frame_002dchar_002dwidth-2162"></a></var><br>
+<blockquote><p>These functions return the height and width of a character in
+<var>frame</var>, measured in pixels.  The values depend on the choice of
+font.  If you don't supply <var>frame</var>, these functions use the selected
+frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-frame-size</b><var> frame cols rows<a name="index-set_002dframe_002dsize-2163"></a></var><br>
+<blockquote><p>This function sets the size of <var>frame</var>, measured in characters;
+<var>cols</var> and <var>rows</var> specify the new width and height.
+
+        <p>To set the size based on values measured in pixels, use
+<code>frame-char-height</code> and <code>frame-char-width</code> to convert
+them to units of characters. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-frame-height</b><var> frame lines &amp;optional pretend<a name="index-set_002dframe_002dheight-2164"></a></var><br>
+<blockquote><p>This function resizes <var>frame</var> to a height of <var>lines</var> lines.  The
+sizes of existing windows in <var>frame</var> are altered proportionally to
+fit.
+
+        <p>If <var>pretend</var> is non-<code>nil</code>, then Emacs displays <var>lines</var>
+lines of output in <var>frame</var>, but does not change its value for the
+actual height of the frame.  This is only useful for a terminal frame. 
+Using a smaller height than the terminal actually implements may be
+useful to reproduce behavior observed on a smaller screen, or if the
+terminal malfunctions when using its whole screen.  Setting the frame
+height &ldquo;for real&rdquo; does not always work, because knowing the correct
+actual size may be necessary for correct cursor positioning on a
+terminal frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-frame-width</b><var> frame width &amp;optional pretend<a name="index-set_002dframe_002dwidth-2165"></a></var><br>
+<blockquote><p>This function sets the width of <var>frame</var>, measured in characters. 
+The argument <var>pretend</var> has the same meaning as in
+<code>set-frame-height</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-set_002dscreen_002dheight-2166"></a><a name="index-set_002dscreen_002dwidth-2167"></a>  The older functions <code>set-screen-height</code> and
+<code>set-screen-width</code> were used to specify the height and width of the
+screen, in Emacs versions that did not support multiple frames.  They
+are semi-obsolete, but still work; they apply to the selected frame.
+
+   </body></html>
+

@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Reading One Event - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Input.html#Reading-Input" title="Reading Input">
+<link rel="prev" href="Key-Sequence-Input.html#Key-Sequence-Input" title="Key Sequence Input">
+<link rel="next" href="Event-Mod.html#Event-Mod" title="Event Mod">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Reading-One-Event"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Event-Mod.html#Event-Mod">Event Mod</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Reading Input</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.7.2 Reading One Event</h4>
+
+<p><a name="index-reading-a-single-event-1294"></a><a name="index-event_002c-reading-only-one-1295"></a>
+  The lowest level functions for command input are those that read a
+single event.
+
+   <p>None of the three functions below suppresses quitting.
+
+<div class="defun">
+&mdash; Function: <b>read-event</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002devent-1296"></a></var><br>
+<blockquote><p>This function reads and returns the next event of command input, waiting
+if necessary until an event is available.  Events can come directly from
+the user or from a keyboard macro.
+
+        <p>If the optional argument <var>prompt</var> is non-<code>nil</code>, it should be a
+string to display in the echo area as a prompt.  Otherwise,
+<code>read-event</code> does not display any message to indicate it is waiting
+for input; instead, it prompts by echoing: it displays descriptions of
+the events that led to or were read by the current command.  See <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>.
+
+        <p>If <var>inherit-input-method</var> is non-<code>nil</code>, then the current input
+method (if any) is employed to make it possible to enter a
+non-<acronym>ASCII</acronym> character.  Otherwise, input method handling is disabled
+for reading this event.
+
+        <p>If <code>cursor-in-echo-area</code> is non-<code>nil</code>, then <code>read-event</code>
+moves the cursor temporarily to the echo area, to the end of any message
+displayed there.  Otherwise <code>read-event</code> does not move the cursor.
+
+        <p>If <var>seconds</var> is non-<code>nil</code>, it should be a number specifying
+the maximum time to wait for input, in seconds.  If no input arrives
+within that time, <code>read-event</code> stops waiting and returns
+<code>nil</code>.  A floating-point value for <var>seconds</var> means to wait
+for a fractional number of seconds.  Some systems support only a whole
+number of seconds; on these systems, <var>seconds</var> is rounded down. 
+If <var>seconds</var> is <code>nil</code>, <code>read-event</code> waits as long as
+necessary for input to arrive.
+
+        <p>If <var>seconds</var> is <code>nil</code>, Emacs is considered idle while waiting
+for user input to arrive.  Idle timers&mdash;those created with
+<code>run-with-idle-timer</code> (see <a href="Idle-Timers.html#Idle-Timers">Idle Timers</a>)&mdash;can run during this
+period.  However, if <var>seconds</var> is non-<code>nil</code>, the state of
+idleness remains unchanged.  If Emacs is non-idle when
+<code>read-event</code> is called, it remains non-idle throughout the
+operation of <code>read-event</code>; if Emacs is idle (which can happen if
+the call happens inside an idle timer), it remains idle.
+
+        <p>If <code>read-event</code> gets an event that is defined as a help character,
+then in some cases <code>read-event</code> processes the event directly without
+returning.  See <a href="Help-Functions.html#Help-Functions">Help Functions</a>.  Certain other events, called
+<dfn>special events</dfn>, are also processed directly within
+<code>read-event</code> (see <a href="Special-Events.html#Special-Events">Special Events</a>).
+
+        <p>Here is what happens if you call <code>read-event</code> and then press the
+right-arrow function key:
+
+     <pre class="example">          (read-event)
+               =&gt; right
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-char</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar-1297"></a></var><br>
+<blockquote><p>This function reads and returns a character of command input.  If the
+user generates an event which is not a character (i.e. a mouse click or
+function key event), <code>read-char</code> signals an error.  The arguments
+work as in <code>read-event</code>.
+
+        <p>In the first example, the user types the character <kbd>1</kbd> (<acronym>ASCII</acronym>
+code 49).  The second example shows a keyboard macro definition that
+calls <code>read-char</code> from the minibuffer using <code>eval-expression</code>. 
+<code>read-char</code> reads the keyboard macro's very next character, which
+is <kbd>1</kbd>.  Then <code>eval-expression</code> displays its return value in
+the echo area.
+
+     <pre class="example">          (read-char)
+               =&gt; 49
+          
+          ;; <span class="roman">We assume here you use </span><kbd>M-:</kbd><span class="roman"> to evaluate this.</span>
+          (symbol-function 'foo)
+               =&gt; "^[:(read-char)^M1"
+          (execute-kbd-macro 'foo)
+               -| 49
+               =&gt; nil
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-char-exclusive</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar_002dexclusive-1298"></a></var><br>
+<blockquote><p>This function reads and returns a character of command input.  If the
+user generates an event which is not a character,
+<code>read-char-exclusive</code> ignores it and reads another event, until it
+gets a character.  The arguments work as in <code>read-event</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>num-nonmacro-input-events</b><var><a name="index-num_002dnonmacro_002dinput_002devents-1299"></a></var><br>
+<blockquote><p>This variable holds the total number of input events received so far
+from the terminal&mdash;not counting those generated by keyboard macros. 
+</p></blockquote></div>
+
+   </body></html>
+

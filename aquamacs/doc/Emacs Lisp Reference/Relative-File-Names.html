@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Relative File Names - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="File-Names.html#File-Names" title="File Names">
+<link rel="prev" href="File-Name-Components.html#File-Name-Components" title="File Name Components">
+<link rel="next" href="Directory-Names.html#Directory-Names" title="Directory Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Relative-File-Names"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Directory-Names.html#Directory-Names">Directory Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Name-Components.html#File-Name-Components">File Name Components</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names</a>
+<hr>
+</div>
+
+<h4 class="subsection">25.8.2 Absolute and Relative File Names</h4>
+
+<p><a name="index-absolute-file-name-1787"></a><a name="index-relative-file-name-1788"></a>
+  All the directories in the file system form a tree starting at the
+root directory.  A file name can specify all the directory names
+starting from the root of the tree; then it is called an <dfn>absolute</dfn>
+file name.  Or it can specify the position of the file in the tree
+relative to a default directory; then it is called a <dfn>relative</dfn> file
+name.  On Unix and GNU/Linux, an absolute file name starts with a slash
+or a tilde (`<samp><span class="samp">~</span></samp>'), and a relative one does not.  On MS-DOS and
+MS-Windows, an absolute file name starts with a slash or a backslash, or
+with a drive specification `<samp><var>x</var><span class="samp">:/</span></samp>', where <var>x</var> is the
+<dfn>drive letter</dfn>.  The rules on VMS are complicated.
+
+<div class="defun">
+&mdash; Function: <b>file-name-absolute-p</b><var> filename<a name="index-file_002dname_002dabsolute_002dp-1789"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if file <var>filename</var> is an absolute
+file name, <code>nil</code> otherwise.  On VMS, this function understands both
+Unix syntax and VMS syntax.
+
+     <pre class="example">          (file-name-absolute-p "~rms/foo")
+               =&gt; t
+          (file-name-absolute-p "rms/foo")
+               =&gt; nil
+          (file-name-absolute-p "/user/rms/foo")
+               =&gt; t
+     </pre>
+        </blockquote></div>
+
+   <p>Given a possibly relative file name, you can convert it to an
+absolute name using <code>expand-file-name</code> (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).  This function converts absolute file names to relative
+names:
+
+<div class="defun">
+&mdash; Function: <b>file-relative-name</b><var> filename &amp;optional directory<a name="index-file_002drelative_002dname-1790"></a></var><br>
+<blockquote><p>This function tries to return a relative name that is equivalent to
+<var>filename</var>, assuming the result will be interpreted relative to
+<var>directory</var> (an absolute directory name or directory file name). 
+If <var>directory</var> is omitted or <code>nil</code>, it defaults to the
+current buffer's default directory.
+
+        <p>On some operating systems, an absolute file name begins with a device
+name.  On such systems, <var>filename</var> has no relative equivalent based
+on <var>directory</var> if they start with two different device names.  In
+this case, <code>file-relative-name</code> returns <var>filename</var> in absolute
+form.
+
+     <pre class="example">          (file-relative-name "/foo/bar" "/foo/")
+               =&gt; "bar"
+          (file-relative-name "/foo/bar" "/hack/")
+               =&gt; "../foo/bar"
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

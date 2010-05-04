@@ -1,0 +1,190 @@
+<html lang="en">
+<head>
+<title>Bindat Spec - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Byte-Packing.html#Byte-Packing" title="Byte Packing">
+<link rel="next" href="Bindat-Functions.html#Bindat-Functions" title="Bindat Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Bindat-Spec"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bindat-Functions.html#Bindat-Functions">Bindat Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Packing</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.18.1 Describing Data Layout</h4>
+
+<p>To control unpacking and packing, you write a <dfn>data layout
+specification</dfn>, a special nested list describing named and typed
+<dfn>fields</dfn>.  This specification controls length of each field to be
+processed, and how to pack or unpack it.  We normally keep bindat specs
+in variables whose names end in `<samp><span class="samp">-bindat-spec</span></samp>'; that kind of name
+is automatically recognized as &ldquo;risky.&rdquo;
+
+   <p><a name="index-endianness-3106"></a><a name="index-big-endian-3107"></a><a name="index-little-endian-3108"></a><a name="index-network-byte-ordering-3109"></a>  A field's <dfn>type</dfn> describes the size (in bytes) of the object
+that the field represents and, in the case of multibyte fields, how
+the bytes are ordered within the field.  The two possible orderings
+are &ldquo;big endian&rdquo; (also known as &ldquo;network byte ordering&rdquo;) and
+&ldquo;little endian.&rdquo;  For instance, the number <code>#x23cd</code> (decimal
+9165) in big endian would be the two bytes <code>#x23</code> <code>#xcd</code>;
+and in little endian, <code>#xcd</code> <code>#x23</code>.  Here are the possible
+type values:
+
+     <dl>
+<dt><code>u8</code><dt><code>byte</code><dd>Unsigned byte, with length 1.
+
+     <br><dt><code>u16</code><dt><code>word</code><dt><code>short</code><dd>Unsigned integer in network byte order, with length 2.
+
+     <br><dt><code>u24</code><dd>Unsigned integer in network byte order, with length 3.
+
+     <br><dt><code>u32</code><dt><code>dword</code><dt><code>long</code><dd>Unsigned integer in network byte order, with length 4. 
+Note: These values may be limited by Emacs' integer implementation limits.
+
+     <br><dt><code>u16r</code><dt><code>u24r</code><dt><code>u32r</code><dd>Unsigned integer in little endian order, with length 2, 3 and 4, respectively.
+
+     <br><dt><code>str </code><var>len</var><dd>String of length <var>len</var>.
+
+     <br><dt><code>strz </code><var>len</var><dd>Zero-terminated string, in a fixed-size field with length <var>len</var>.
+
+     <br><dt><code>vec </code><var>len</var><code> [</code><var>type</var><code>]</code><dd>Vector of <var>len</var> elements of type <var>type</var>, or bytes if not
+<var>type</var> is specified. 
+The <var>type</var> is any of the simple types above, or another vector
+specified as a list <code>(vec </code><var>len</var><code> [</code><var>type</var><code>])</code>.
+
+     <br><dt><code>ip</code><dd>Four-byte vector representing an Internet address.  For example:
+<code>[127 0 0 1]</code> for localhost.
+
+     <br><dt><code>bits </code><var>len</var><dd>List of set bits in <var>len</var> bytes.  The bytes are taken in big
+endian order and the bits are numbered starting with <code>8 *
+</code><var>len</var><code> &minus; 1</code> and ending with zero.  For example: <code>bits
+2</code> unpacks <code>#x28</code> <code>#x1c</code> to <code>(2 3 4 11 13)</code> and
+<code>#x1c</code> <code>#x28</code> to <code>(3 5 10 11 12)</code>.
+
+     <br><dt><code>(eval </code><var>form</var><code>)</code><dd><var>form</var> is a Lisp expression evaluated at the moment the field is
+unpacked or packed.  The result of the evaluation should be one of the
+above-listed type specifications. 
+</dl>
+
+   <p>For a fixed-size field, the length <var>len</var> is given as an integer
+specifying the number of bytes in the field.
+
+   <p>When the length of a field is not fixed, it typically depends on the
+value of a preceding field.  In this case, the length <var>len</var> can be
+given either as a list <code>(</code><var>name</var><code> ...)</code> identifying a
+<dfn>field name</dfn> in the format specified for <code>bindat-get-field</code>
+below, or by an expression <code>(eval </code><var>form</var><code>)</code> where <var>form</var>
+should evaluate to an integer, specifying the field length.
+
+   <p>A field specification generally has the form <code>([</code><var>name</var><code>]
+</code><var>handler</var><code>)</code>.  The square braces indicate that <var>name</var> is
+optional.  (Don't use names that are symbols meaningful as type
+specifications (above) or handler specifications (below), since that
+would be ambiguous.)  <var>name</var> can be a symbol or the expression
+<code>(eval </code><var>form</var><code>)</code>, in which case <var>form</var> should evaluate to
+a symbol.
+
+   <p><var>handler</var> describes how to unpack or pack the field and can be one
+of the following:
+
+     <dl>
+<dt><var>type</var><dd>Unpack/pack this field according to the type specification <var>type</var>.
+
+     <br><dt><code>eval </code><var>form</var><dd>Evaluate <var>form</var>, a Lisp expression, for side-effect only.  If the
+field name is specified, the value is bound to that field name.
+
+     <br><dt><code>fill </code><var>len</var><dd>Skip <var>len</var> bytes.  In packing, this leaves them unchanged,
+which normally means they remain zero.  In unpacking, this means
+they are ignored.
+
+     <br><dt><code>align </code><var>len</var><dd>Skip to the next multiple of <var>len</var> bytes.
+
+     <br><dt><code>struct </code><var>spec-name</var><dd>Process <var>spec-name</var> as a sub-specification.  This describes a
+structure nested within another structure.
+
+     <br><dt><code>union </code><var>form</var><code> (</code><var>tag</var> <var>spec</var><code>)...</code><dd><!-- ??? I don't see how one would actually  use this. -->
+<!-- ??? what kind of expression would be useful for @var{form}? -->
+Evaluate <var>form</var>, a Lisp expression, find the first <var>tag</var>
+that matches it, and process its associated data layout specification
+<var>spec</var>.  Matching can occur in one of three ways:
+
+          <ul>
+<li>If a <var>tag</var> has the form <code>(eval </code><var>expr</var><code>)</code>, evaluate
+<var>expr</var> with the variable <code>tag</code> dynamically bound to the value
+of <var>form</var>.  A non-<code>nil</code> result indicates a match.
+
+          <li><var>tag</var> matches if it is <code>equal</code> to the value of <var>form</var>.
+
+          <li><var>tag</var> matches unconditionally if it is <code>t</code>. 
+</ul>
+
+     <br><dt><code>repeat </code><var>count</var> <var>field-specs</var><code>...</code><dd>Process the <var>field-specs</var> recursively, in order, then repeat
+starting from the first one, processing all the specs <var>count</var>
+times overall.  The <var>count</var> is given using the same formats as a
+field length&mdash;if an <code>eval</code> form is used, it is evaluated just once. 
+For correct operation, each spec in <var>field-specs</var> must include a name. 
+</dl>
+
+   <p>For the <code>(eval </code><var>form</var><code>)</code> forms used in a bindat specification,
+the <var>form</var> can access and update these dynamically bound variables
+during evaluation:
+
+     <dl>
+<dt><code>last</code><dd>Value of the last field processed.
+
+     <br><dt><code>bindat-raw</code><dd>The data as a byte array.
+
+     <br><dt><code>bindat-idx</code><dd>Current index (within <code>bindat-raw</code>) for unpacking or packing.
+
+     <br><dt><code>struct</code><dd>The alist containing the structured data that have been unpacked so
+far, or the entire structure being packed.  You can use
+<code>bindat-get-field</code> to access specific fields of this structure.
+
+     <br><dt><code>count</code><dt><code>index</code><dd>Inside a <code>repeat</code> block, these contain the maximum number of
+repetitions (as specified by the <var>count</var> parameter), and the
+current repetition number (counting from 0).  Setting <code>count</code> to
+zero will terminate the inner-most repeat block after the current
+repetition has completed. 
+</dl>
+
+   </body></html>
+

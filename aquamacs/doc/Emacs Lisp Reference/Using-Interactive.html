@@ -1,0 +1,184 @@
+<html lang="en">
+<head>
+<title>Using Interactive - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Commands.html#Defining-Commands" title="Defining Commands">
+<link rel="next" href="Interactive-Codes.html#Interactive-Codes" title="Interactive Codes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Using-Interactive"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Commands.html#Defining-Commands">Defining Commands</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.2.1 Using <code>interactive</code></h4>
+
+<p><a name="index-arguments_002c-interactive-entry-1166"></a>
+  This section describes how to write the <code>interactive</code> form that
+makes a Lisp function an interactively-callable command, and how to
+examine a command's <code>interactive</code> form.
+
+<div class="defun">
+&mdash; Special Form: <b>interactive</b><var> arg-descriptor<a name="index-interactive-1167"></a></var><br>
+<blockquote><p>This special form declares that the function in which it appears is a
+command, and that it may therefore be called interactively (via
+<kbd>M-x</kbd> or by entering a key sequence bound to it).  The argument
+<var>arg-descriptor</var> declares how to compute the arguments to the
+command when the command is called interactively.
+
+        <p>A command may be called from Lisp programs like any other function, but
+then the caller supplies the arguments and <var>arg-descriptor</var> has no
+effect.
+
+        <p>The <code>interactive</code> form has its effect because the command loop
+(actually, its subroutine <code>call-interactively</code>) scans through the
+function definition looking for it, before calling the function.  Once
+the function is called, all its body forms including the
+<code>interactive</code> form are executed, but at this time
+<code>interactive</code> simply returns <code>nil</code> without even evaluating its
+argument. 
+</p></blockquote></div>
+
+   <p>There are three possibilities for the argument <var>arg-descriptor</var>:
+
+     <ul>
+<li>It may be omitted or <code>nil</code>; then the command is called with no
+arguments.  This leads quickly to an error if the command requires one
+or more arguments.
+
+     <li>It may be a string; then its contents should consist of a code character
+followed by a prompt (which some code characters use and some ignore). 
+The prompt ends either with the end of the string or with a newline. 
+Here is a simple example:
+
+     <pre class="smallexample">          (interactive "bFrobnicate buffer: ")
+     </pre>
+     <p class="noindent">The code letter `<samp><span class="samp">b</span></samp>' says to read the name of an existing buffer,
+with completion.  The buffer name is the sole argument passed to the
+command.  The rest of the string is a prompt.
+
+     <p>If there is a newline character in the string, it terminates the prompt. 
+If the string does not end there, then the rest of the string should
+contain another code character and prompt, specifying another argument. 
+You can specify any number of arguments in this way.
+
+     <!-- Emacs 19 feature -->
+<p>The prompt string can use `<samp><span class="samp">%</span></samp>' to include previous argument values
+(starting with the first argument) in the prompt.  This is done using
+<code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>).  For example, here is how
+you could read the name of an existing buffer followed by a new name to
+give to that buffer:
+
+     <pre class="smallexample">          (interactive "bBuffer to rename: \nsRename buffer %s to: ")
+     </pre>
+     <p><a name="index-g_t_0040samp_007b_002a_007d-in-_0040code_007binteractive_007d-1168"></a><a name="index-read_002donly-buffers-in-interactive-1169"></a>If the first character in the string is `<samp><span class="samp">*</span></samp>', then an error is
+signaled if the buffer is read-only.
+
+     <p><a name="index-g_t_0040samp_007b_0040_0040_007d-in-_0040code_007binteractive_007d-1170"></a><!-- Emacs 19 feature -->
+If the first character in the string is `<samp><span class="samp">@</span></samp>', and if the key
+sequence used to invoke the command includes any mouse events, then
+the window associated with the first of those events is selected
+before the command is run.
+
+     <p>You can use `<samp><span class="samp">*</span></samp>' and `<samp><span class="samp">@</span></samp>' together; the order does not matter. 
+Actual reading of arguments is controlled by the rest of the prompt
+string (starting with the first character that is not `<samp><span class="samp">*</span></samp>' or
+`<samp><span class="samp">@</span></samp>').
+
+     <li>It may be a Lisp expression that is not a string; then it should be a
+form that is evaluated to get a list of arguments to pass to the
+command.  Usually this form will call various functions to read input
+from the user, most often through the minibuffer (see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>)
+or directly from the keyboard (see <a href="Reading-Input.html#Reading-Input">Reading Input</a>).
+
+     <p>Providing point or the mark as an argument value is also common, but
+if you do this <em>and</em> read input (whether using the minibuffer or
+not), be sure to get the integer values of point or the mark after
+reading.  The current buffer may be receiving subprocess output; if
+subprocess output arrives while the command is waiting for input, it
+could relocate point and the mark.
+
+     <p>Here's an example of what <em>not</em> to do:
+
+     <pre class="smallexample">          (interactive
+           (list (region-beginning) (region-end)
+                 (read-string "Foo: " nil 'my-history)))
+     </pre>
+     <p class="noindent">Here's how to avoid the problem, by examining point and the mark after
+reading the keyboard input:
+
+     <pre class="smallexample">          (interactive
+           (let ((string (read-string "Foo: " nil 'my-history)))
+             (list (region-beginning) (region-end) string)))
+     </pre>
+     <p><strong>Warning:</strong> the argument values should not include any data
+types that can't be printed and then read.  Some facilities save
+<code>command-history</code> in a file to be read in the subsequent
+sessions; if a command's arguments contain a data type that prints
+using `<samp><span class="samp">#&lt;...&gt;</span></samp>' syntax, those facilities won't work.
+
+     <p>There are, however, a few exceptions: it is ok to use a limited set of
+expressions such as <code>(point)</code>, <code>(mark)</code>,
+<code>(region-beginning)</code>, and <code>(region-end)</code>, because Emacs
+recognizes them specially and puts the expression (rather than its
+value) into the command history.  To see whether the expression you
+wrote is one of these exceptions, run the command, then examine
+<code>(car command-history)</code>. 
+</ul>
+
+   <p><a name="index-examining-the-_0040code_007binteractive_007d-form-1171"></a>
+
+<div class="defun">
+&mdash; Function: <b>interactive-form</b><var> function<a name="index-interactive_002dform-1172"></a></var><br>
+<blockquote><p>This function returns the <code>interactive</code> form of <var>function</var>. 
+If <var>function</var> is an interactively callable function
+(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>), the value is the command's
+<code>interactive</code> form <code>(interactive </code><var>spec</var><code>)</code>, which
+specifies how to compute its arguments.  Otherwise, the value is
+<code>nil</code>.  If <var>function</var> is a symbol, its function definition is
+used. 
+</p></blockquote></div>
+
+   </body></html>
+

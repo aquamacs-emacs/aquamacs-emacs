@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Intro Eval - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Evaluation.html#Evaluation" title="Evaluation">
+<link rel="next" href="Forms.html#Forms" title="Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Intro-Eval"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Forms.html#Forms">Forms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Evaluation.html#Evaluation">Evaluation</a>
+<hr>
+</div>
+
+<h3 class="section">9.1 Introduction to Evaluation</h3>
+
+<p>The Lisp interpreter, or evaluator, is the program that computes
+the value of an expression that is given to it.  When a function
+written in Lisp is called, the evaluator computes the value of the
+function by evaluating the expressions in the function body.  Thus,
+running any Lisp program really means running the Lisp interpreter.
+
+   <p>How the evaluator handles an object depends primarily on the data
+type of the object.
+
+   <p><a name="index-forms-486"></a><a name="index-expression-487"></a>  A Lisp object that is intended for evaluation is called an
+<dfn>expression</dfn> or a <dfn>form</dfn>.  The fact that expressions are data
+objects and not merely text is one of the fundamental differences
+between Lisp-like languages and typical programming languages.  Any
+object can be evaluated, but in practice only numbers, symbols, lists
+and strings are evaluated very often.
+
+   <p>It is very common to read a Lisp expression and then evaluate the
+expression, but reading and evaluation are separate activities, and
+either can be performed alone.  Reading per se does not evaluate
+anything; it converts the printed representation of a Lisp object to the
+object itself.  It is up to the caller of <code>read</code> whether this
+object is a form to be evaluated, or serves some entirely different
+purpose.  See <a href="Input-Functions.html#Input-Functions">Input Functions</a>.
+
+   <p>Do not confuse evaluation with command key interpretation.  The
+editor command loop translates keyboard input into a command (an
+interactively callable function) using the active keymaps, and then
+uses <code>call-interactively</code> to invoke the command.  The execution of
+the command itself involves evaluation if the command is written in
+Lisp, but that is not a part of command key interpretation itself. 
+See <a href="Command-Loop.html#Command-Loop">Command Loop</a>.
+
+   <p><a name="index-recursive-evaluation-488"></a>  Evaluation is a recursive process.  That is, evaluation of a form may
+call <code>eval</code> to evaluate parts of the form.  For example, evaluation
+of a function call first evaluates each argument of the function call,
+and then evaluates each form in the function body.  Consider evaluation
+of the form <code>(car x)</code>: the subform <code>x</code> must first be evaluated
+recursively, so that its value can be passed as an argument to the
+function <code>car</code>.
+
+   <p>Evaluation of a function call ultimately calls the function specified
+in it.  See <a href="Functions.html#Functions">Functions</a>.  The execution of the function may itself work
+by evaluating the function definition; or the function may be a Lisp
+primitive implemented in C, or it may be a byte-compiled function
+(see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>).
+
+   <p><a name="index-environment-489"></a>  The evaluation of forms takes place in a context called the
+<dfn>environment</dfn>, which consists of the current values and bindings of
+all Lisp variables.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  Whenever a form refers to a variable without
+creating a new binding for it, the value of the variable's binding in
+the current environment is used.  See <a href="Variables.html#Variables">Variables</a>.
+
+   <p><a name="index-side-effect-490"></a>  Evaluation of a form may create new environments for recursive
+evaluation by binding variables (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  These
+environments are temporary and vanish by the time evaluation of the form
+is complete.  The form may also make changes that persist; these changes
+are called <dfn>side effects</dfn>.  An example of a form that produces side
+effects is <code>(setq foo 1)</code>.
+
+   <p>The details of what evaluation means for each kind of form are
+described below (see <a href="Forms.html#Forms">Forms</a>).
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This definition of &ldquo;environment&rdquo; is
+specifically not intended to include all the data that can affect the
+result of a program.</p>
+
+   <p><hr></div>
+
+   </body></html>
+

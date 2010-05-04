@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Coordinates and Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Resizing-Windows.html#Resizing-Windows" title="Resizing Windows">
+<link rel="next" href="Window-Tree.html#Window-Tree" title="Window Tree">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Coordinates-and-Windows"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Tree.html#Window-Tree">Window Tree</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.16 Coordinates and Windows</h3>
+
+<p>This section describes how to relate screen coordinates to windows.
+
+<div class="defun">
+&mdash; Function: <b>window-at</b><var> x y &amp;optional frame<a name="index-window_002dat-2105"></a></var><br>
+<blockquote><p>This function returns the window containing the specified cursor
+position in the frame <var>frame</var>.  The coordinates <var>x</var> and <var>y</var>
+are measured in characters and count from the top left corner of the
+frame.  If they are out of range, <code>window-at</code> returns <code>nil</code>.
+
+        <p>If you omit <var>frame</var>, the selected frame is used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coordinates-in-window-p</b><var> coordinates window<a name="index-coordinates_002din_002dwindow_002dp-2106"></a></var><br>
+<blockquote><p>This function checks whether a particular frame position falls within
+the window <var>window</var>.
+
+        <p>The argument <var>coordinates</var> is a cons cell of the form <code>(</code><var>x</var><code>
+. </code><var>y</var><code>)</code>.  The coordinates <var>x</var> and <var>y</var> are measured in
+characters, and count from the top left corner of the screen or frame.
+
+        <p>The value returned by <code>coordinates-in-window-p</code> is non-<code>nil</code>
+if the coordinates are inside <var>window</var>.  The value also indicates
+what part of the window the position is in, as follows:
+
+          <dl>
+<dt><code>(</code><var>relx</var><code> . </code><var>rely</var><code>)</code><dd>The coordinates are inside <var>window</var>.  The numbers <var>relx</var> and
+<var>rely</var> are the equivalent window-relative coordinates for the
+specified position, counting from 0 at the top left corner of the
+window.
+
+          <br><dt><code>mode-line</code><dd>The coordinates are in the mode line of <var>window</var>.
+
+          <br><dt><code>header-line</code><dd>The coordinates are in the header line of <var>window</var>.
+
+          <br><dt><code>vertical-line</code><dd>The coordinates are in the vertical line between <var>window</var> and its
+neighbor to the right.  This value occurs only if the window doesn't
+have a scroll bar; positions in a scroll bar are considered outside the
+window for these purposes.
+
+          <br><dt><code>left-fringe</code><dt><code>right-fringe</code><dd>The coordinates are in the left or right fringe of the window.
+
+          <br><dt><code>left-margin</code><dt><code>right-margin</code><dd>The coordinates are in the left or right margin of the window.
+
+          <br><dt><code>nil</code><dd>The coordinates are not in any part of <var>window</var>. 
+</dl>
+
+        <p>The function <code>coordinates-in-window-p</code> does not require a frame as
+argument because it always uses the frame that <var>window</var> is on. 
+</p></blockquote></div>
+
+   </body></html>
+

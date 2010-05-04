@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Major Mode Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="next" href="Major-Mode-Conventions.html#Major-Mode-Conventions" title="Major Mode Conventions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Major-Mode-Basics"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.1 Major Mode Basics</h4>
+
+<p><a name="index-Fundamental-mode-1527"></a>
+  The least specialized major mode is called <dfn>Fundamental mode</dfn>. 
+This mode has no mode-specific definitions or variable settings, so each
+Emacs command behaves in its default manner, and each option is in its
+default state.  All other major modes redefine various keys and options. 
+For example, Lisp Interaction mode provides special key bindings for
+<kbd>C-j</kbd> (<code>eval-print-last-sexp</code>), &lt;TAB&gt;
+(<code>lisp-indent-line</code>), and other keys.
+
+   <p>When you need to write several editing commands to help you perform a
+specialized editing task, creating a new major mode is usually a good
+idea.  In practice, writing a major mode is easy (in contrast to
+writing a minor mode, which is often difficult).
+
+   <p>If the new mode is similar to an old one, it is often unwise to
+modify the old one to serve two purposes, since it may become harder
+to use and maintain.  Instead, copy and rename an existing major mode
+definition and alter the copy&mdash;or use <code>define-derived-mode</code> to
+define a <dfn>derived mode</dfn> (see <a href="Derived-Modes.html#Derived-Modes">Derived Modes</a>).  For example,
+Rmail Edit mode is a major mode that is very similar to Text mode
+except that it provides two additional commands.  Its definition is
+distinct from that of Text mode, but uses that of Text mode.
+
+   <p>Even if the new mode is not an obvious derivative of any other mode,
+it is convenient to use <code>define-derived-mode</code> with a <code>nil</code>
+parent argument, since it automatically enforces the most important
+coding conventions for you.
+
+   <p>For a very simple programming language major mode that handles
+comments and fontification, you can use <code>define-generic-mode</code>. 
+See <a href="Generic-Modes.html#Generic-Modes">Generic Modes</a>.
+
+   <p>Rmail Edit mode offers an example of changing the major mode
+temporarily for a buffer, so it can be edited in a different way (with
+ordinary Emacs commands rather than Rmail commands).  In such cases, the
+temporary major mode usually provides a command to switch back to the
+buffer's usual mode (Rmail mode, in this case).  You might be tempted to
+present the temporary redefinitions inside a recursive edit and restore
+the usual ones when the user exits; but this is a bad idea because it
+constrains the user's options when it is done in more than one buffer:
+recursive edits must be exited most-recently-entered first.  Using an
+alternative major mode avoids this limitation.  See <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>.
+
+   <p>The standard GNU Emacs Lisp library directory tree contains the code
+for several major modes, in files such as <samp><span class="file">text-mode.el</span></samp>,
+<samp><span class="file">texinfo.el</span></samp>, <samp><span class="file">lisp-mode.el</span></samp>, <samp><span class="file">c-mode.el</span></samp>, and
+<samp><span class="file">rmail.el</span></samp>.  They are found in various subdirectories of the
+<samp><span class="file">lisp</span></samp> directory.  You can study these libraries to see how modes
+are written.  Text mode is perhaps the simplest major mode aside from
+Fundamental mode.  Rmail mode is a complicated and specialized mode.
+
+   </body></html>
+

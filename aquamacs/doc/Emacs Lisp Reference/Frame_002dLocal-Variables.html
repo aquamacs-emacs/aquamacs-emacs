@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Frame-Local Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" title="Buffer-Local Variables">
+<link rel="next" href="Future-Local-Variables.html#Future-Local-Variables" title="Future Local Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Frame-Local-Variables"></a>
+<a name="Frame_002dLocal-Variables"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Future-Local-Variables.html#Future-Local-Variables">Future Local Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.11 Frame-Local Variables</h3>
+
+<p><a name="index-frame_002dlocal-variables-629"></a>
+  Just as variables can have buffer-local bindings, they can also have
+frame-local bindings.  These bindings belong to one frame, and are in
+effect when that frame is selected.  Frame-local bindings are actually
+frame parameters: you create a frame-local binding in a specific frame
+by calling <code>modify-frame-parameters</code> and specifying the variable
+name as the parameter name.
+
+   <p>To enable frame-local bindings for a certain variable, call the function
+<code>make-variable-frame-local</code>.
+
+<div class="defun">
+&mdash; Command: <b>make-variable-frame-local</b><var> variable<a name="index-make_002dvariable_002dframe_002dlocal-630"></a></var><br>
+<blockquote><p>Enable the use of frame-local bindings for <var>variable</var>.  This does
+not in itself create any frame-local bindings for the variable; however,
+if some frame already has a value for <var>variable</var> as a frame
+parameter, that value automatically becomes a frame-local binding.
+
+        <p>If <var>variable</var> does not have a default value, then calling this
+command will give it a default value of <code>nil</code>.  If <var>variable</var>
+already has a default value, that value remains unchanged.
+
+        <p>If the variable is terminal-local, this function signals an error,
+because such variables cannot have frame-local bindings as well. 
+See <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>.  A few variables that are implemented
+specially in Emacs can be buffer-local, but can never be frame-local.
+
+        <p>This command returns <var>variable</var>. 
+</p></blockquote></div>
+
+   <p>Buffer-local bindings take precedence over frame-local bindings.  Thus,
+consider a variable <code>foo</code>: if the current buffer has a buffer-local
+binding for <code>foo</code>, that binding is active; otherwise, if the
+selected frame has a frame-local binding for <code>foo</code>, that binding is
+active; otherwise, the default binding of <code>foo</code> is active.
+
+   <p>Here is an example.  First we prepare a few bindings for <code>foo</code>:
+
+<pre class="example">     (setq f1 (selected-frame))
+     (make-variable-frame-local 'foo)
+     
+     ;; <span class="roman">Make a buffer-local binding for </span><code>foo</code><span class="roman"> in `<samp>b1</samp>'.</span>
+     (set-buffer (get-buffer-create "b1"))
+     (make-local-variable 'foo)
+     (setq foo '(b 1))
+     
+     ;; <span class="roman">Make a frame-local binding for </span><code>foo</code><span class="roman"> in a new frame.</span>
+     ;; <span class="roman">Store that frame in </span><code>f2</code><span class="roman">.</span>
+     (setq f2 (make-frame))
+     (modify-frame-parameters f2 '((foo . (f 2))))
+</pre>
+   <p>Now we examine <code>foo</code> in various contexts.  Whenever the
+buffer `<samp><span class="samp">b1</span></samp>' is current, its buffer-local binding is in effect,
+regardless of the selected frame:
+
+<pre class="example">     (select-frame f1)
+     (set-buffer (get-buffer-create "b1"))
+     foo
+          =&gt; (b 1)
+     
+     (select-frame f2)
+     (set-buffer (get-buffer-create "b1"))
+     foo
+          =&gt; (b 1)
+</pre>
+   <p class="noindent">Otherwise, the frame gets a chance to provide the binding; when frame
+<code>f2</code> is selected, its frame-local binding is in effect:
+
+<pre class="example">     (select-frame f2)
+     (set-buffer (get-buffer "*scratch*"))
+     foo
+          =&gt; (f 2)
+</pre>
+   <p class="noindent">When neither the current buffer nor the selected frame provides
+a binding, the default binding is used:
+
+<pre class="example">     (select-frame f1)
+     (set-buffer (get-buffer "*scratch*"))
+     foo
+          =&gt; nil
+</pre>
+   <p class="noindent">When the active binding of a variable is a frame-local binding, setting
+the variable changes that binding.  You can observe the result with
+<code>frame-parameters</code>:
+
+<pre class="example">     (select-frame f2)
+     (set-buffer (get-buffer "*scratch*"))
+     (setq foo 'nobody)
+     (assq 'foo (frame-parameters f2))
+          =&gt; (foo . nobody)
+</pre>
+   </body></html>
+

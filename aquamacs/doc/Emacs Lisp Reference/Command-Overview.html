@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Command Overview - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="next" href="Defining-Commands.html#Defining-Commands" title="Defining Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Command-Overview"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Commands.html#Defining-Commands">Defining Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<h3 class="section">21.1 Command Loop Overview</h3>
+
+<p>The first thing the command loop must do is read a key sequence, which
+is a sequence of events that translates into a command.  It does this by
+calling the function <code>read-key-sequence</code>.  Your Lisp code can also
+call this function (see <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>).  Lisp programs can also
+do input at a lower level with <code>read-event</code> (see <a href="Reading-One-Event.html#Reading-One-Event">Reading One Event</a>) or discard pending input with <code>discard-input</code>
+(see <a href="Event-Input-Misc.html#Event-Input-Misc">Event Input Misc</a>).
+
+   <p>The key sequence is translated into a command through the currently
+active keymaps.  See <a href="Key-Lookup.html#Key-Lookup">Key Lookup</a>, for information on how this is done. 
+The result should be a keyboard macro or an interactively callable
+function.  If the key is <kbd>M-x</kbd>, then it reads the name of another
+command, which it then calls.  This is done by the command
+<code>execute-extended-command</code> (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
+
+   <p>To execute a command requires first reading the arguments for it. 
+This is done by calling <code>command-execute</code> (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).  For commands written in Lisp, the <code>interactive</code>
+specification says how to read the arguments.  This may use the prefix
+argument (see <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>) or may read with prompting
+in the minibuffer (see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>).  For example, the command
+<code>find-file</code> has an <code>interactive</code> specification which says to
+read a file name using the minibuffer.  The command's function body does
+not use the minibuffer; if you call this command from Lisp code as a
+function, you must supply the file name string as an ordinary Lisp
+function argument.
+
+   <p>If the command is a string or vector (i.e., a keyboard macro) then
+<code>execute-kbd-macro</code> is used to execute it.  You can call this
+function yourself (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>).
+
+   <p>To terminate the execution of a running command, type <kbd>C-g</kbd>.  This
+character causes <dfn>quitting</dfn> (see <a href="Quitting.html#Quitting">Quitting</a>).
+
+<div class="defun">
+&mdash; Variable: <b>pre-command-hook</b><var><a name="index-pre_002dcommand_002dhook-1160"></a></var><br>
+<blockquote><p>The editor command loop runs this normal hook before each command.  At
+that time, <code>this-command</code> contains the command that is about to
+run, and <code>last-command</code> describes the previous command. 
+See <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>post-command-hook</b><var><a name="index-post_002dcommand_002dhook-1161"></a></var><br>
+<blockquote><p>The editor command loop runs this normal hook after each command
+(including commands terminated prematurely by quitting or by errors),
+and also when the command loop is first entered.  At that time,
+<code>this-command</code> refers to the command that just ran, and
+<code>last-command</code> refers to the command before that. 
+</p></blockquote></div>
+
+   <p>Quitting is suppressed while running <code>pre-command-hook</code> and
+<code>post-command-hook</code>.  If an error happens while executing one of
+these hooks, it terminates execution of the hook, and clears the hook
+variable to <code>nil</code> so as to prevent an infinite loop of errors.
+
+   <p>A request coming into the Emacs server (see <a href="../emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a>) runs these two hooks just as a keyboard
+command does.
+
+   </body></html>
+

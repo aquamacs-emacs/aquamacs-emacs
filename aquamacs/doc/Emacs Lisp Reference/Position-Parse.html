@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Position Parse - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parsing-Expressions.html#Parsing-Expressions" title="Parsing Expressions">
+<link rel="prev" href="Motion-via-Parsing.html#Motion-via-Parsing" title="Motion via Parsing">
+<link rel="next" href="Parser-State.html#Parser-State" title="Parser State">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Position-Parse"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Parser-State.html#Parser-State">Parser State</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion-via-Parsing.html#Motion-via-Parsing">Motion via Parsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">35.6.2 Finding the Parse State for a Position</h4>
+
+<p>For syntactic analysis, such as in indentation, often the useful
+thing is to compute the syntactic state corresponding to a given buffer
+position.  This function does that conveniently.
+
+<div class="defun">
+&mdash; Function: <b>syntax-ppss</b><var> &amp;optional pos<a name="index-syntax_002dppss-2921"></a></var><br>
+<blockquote><p>This function returns the parser state (see next section) that the
+parser would reach at position <var>pos</var> starting from the beginning
+of the buffer.  This is equivalent to <code>(parse-partial-sexp
+(point-min) </code><var>pos</var><code>)</code>, except that <code>syntax-ppss</code> uses a cache
+to speed up the computation.  Due to this optimization, the 2nd value
+(previous complete subexpression) and 6th value (minimum parenthesis
+depth) of the returned parser state are not meaningful. 
+</p></blockquote></div>
+
+   <p><code>syntax-ppss</code> automatically hooks itself to
+<code>before-change-functions</code> to keep its cache consistent.  But
+updating can fail if <code>syntax-ppss</code> is called while
+<code>before-change-functions</code> is temporarily let-bound, or if the
+buffer is modified without obeying the hook, such as when using
+<code>inhibit-modification-hooks</code>.  For this reason, it is sometimes
+necessary to flush the cache manually.
+
+<div class="defun">
+&mdash; Function: <b>syntax-ppss-flush-cache</b><var> beg<a name="index-syntax_002dppss_002dflush_002dcache-2922"></a></var><br>
+<blockquote><p>This function flushes the cache used by <code>syntax-ppss</code>, starting at
+position <var>beg</var>. 
+</p></blockquote></div>
+
+   <p>Major modes can make <code>syntax-ppss</code> run faster by specifying
+where it needs to start parsing.
+
+<div class="defun">
+&mdash; Variable: <b>syntax-begin-function</b><var><a name="index-syntax_002dbegin_002dfunction-2923"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, it should be a function that moves to an
+earlier buffer position where the parser state is equivalent to
+<code>nil</code>&mdash;in other words, a position outside of any comment,
+string, or parenthesis.  <code>syntax-ppss</code> uses it to further
+optimize its computations, when the cache gives no help. 
+</p></blockquote></div>
+
+   </body></html>
+

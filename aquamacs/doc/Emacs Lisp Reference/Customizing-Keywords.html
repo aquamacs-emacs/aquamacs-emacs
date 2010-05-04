@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Customizing Keywords - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="prev" href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" title="Search-based Fontification">
+<link rel="next" href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" title="Other Font Lock Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Customizing-Keywords"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.6.3 Customizing Search-Based Fontification</h4>
+
+<p>You can use <code>font-lock-add-keywords</code> to add additional
+search-based fontification rules to a major mode, and
+<code>font-lock-remove-keywords</code> to removes rules.
+
+<div class="defun">
+&mdash; Function: <b>font-lock-add-keywords</b><var> mode keywords &amp;optional how<a name="index-font_002dlock_002dadd_002dkeywords-1612"></a></var><br>
+<blockquote><p>This function adds highlighting <var>keywords</var>, for the current buffer
+or for major mode <var>mode</var>.  The argument <var>keywords</var> should be a
+list with the same format as the variable <code>font-lock-keywords</code>.
+
+        <p>If <var>mode</var> is a symbol which is a major mode command name, such as
+<code>c-mode</code>, the effect is that enabling Font Lock mode in
+<var>mode</var> will add <var>keywords</var> to <code>font-lock-keywords</code>. 
+Calling with a non-<code>nil</code> value of <var>mode</var> is correct only in
+your <samp><span class="file">~/.emacs</span></samp> file.
+
+        <p>If <var>mode</var> is <code>nil</code>, this function adds <var>keywords</var> to
+<code>font-lock-keywords</code> in the current buffer.  This way of calling
+<code>font-lock-add-keywords</code> is usually used in mode hook functions.
+
+        <p>By default, <var>keywords</var> are added at the beginning of
+<code>font-lock-keywords</code>.  If the optional argument <var>how</var> is
+<code>set</code>, they are used to replace the value of
+<code>font-lock-keywords</code>.  If <var>how</var> is any other non-<code>nil</code>
+value, they are added at the end of <code>font-lock-keywords</code>.
+
+        <p>Some modes provide specialized support you can use in additional
+highlighting patterns.  See the variables
+<code>c-font-lock-extra-types</code>, <code>c++-font-lock-extra-types</code>,
+and <code>java-font-lock-extra-types</code>, for example.
+
+        <p><strong>Warning:</strong> major mode functions must not call
+<code>font-lock-add-keywords</code> under any circumstances, either directly
+or indirectly, except through their mode hooks.  (Doing so would lead
+to incorrect behavior for some minor modes.)  They should set up their
+rules for search-based fontification by setting
+<code>font-lock-keywords</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>font-lock-remove-keywords</b><var> mode keywords<a name="index-font_002dlock_002dremove_002dkeywords-1613"></a></var><br>
+<blockquote><p>This function removes <var>keywords</var> from <code>font-lock-keywords</code>
+for the current buffer or for major mode <var>mode</var>.  As in
+<code>font-lock-add-keywords</code>, <var>mode</var> should be a major mode
+command name or <code>nil</code>.  All the caveats and requirements for
+<code>font-lock-add-keywords</code> apply here too. 
+</p></blockquote></div>
+
+   <p>For example, this code
+
+<pre class="smallexample">     (font-lock-add-keywords 'c-mode
+      '(("\\&lt;\\(FIXME\\):" 1 font-lock-warning-face prepend)
+        ("\\&lt;\\(and\\|or\\|not\\)\\&gt;" . font-lock-keyword-face)))
+</pre>
+   <p class="noindent">adds two fontification patterns for C mode: one to fontify the word
+`<samp><span class="samp">FIXME</span></samp>', even in comments, and another to fontify the words
+`<samp><span class="samp">and</span></samp>', `<samp><span class="samp">or</span></samp>' and `<samp><span class="samp">not</span></samp>' as keywords.
+
+<p class="noindent">That example affects only C mode proper.  To add the same patterns to
+C mode <em>and</em> all modes derived from it, do this instead:
+
+<pre class="smallexample">     (add-hook 'c-mode-hook
+      (lambda ()
+       (font-lock-add-keywords nil
+        '(("\\&lt;\\(FIXME\\):" 1 font-lock-warning-face prepend)
+          ("\\&lt;\\(and\\|or\\|not\\)\\&gt;" .
+           font-lock-keyword-face)))))
+</pre>
+   </body></html>
+

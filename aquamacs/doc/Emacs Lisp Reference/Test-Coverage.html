@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Test Coverage - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugging.html#Debugging" title="Debugging">
+<link rel="prev" href="Syntax-Errors.html#Syntax-Errors" title="Syntax Errors">
+<link rel="next" href="Compilation-Errors.html#Compilation-Errors" title="Compilation Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Test-Coverage"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Compilation-Errors.html#Compilation-Errors">Compilation Errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugging.html#Debugging">Debugging</a>
+<hr>
+</div>
+
+<h3 class="section">18.4 Test Coverage</h3>
+
+<p><a name="index-coverage-testing-987"></a>
+<a name="index-testcover_002dstart-988"></a><a name="index-testcover_002dmark_002dall-989"></a><a name="index-testcover_002dnext_002dmark-990"></a>  You can do coverage testing for a file of Lisp code by loading the
+<code>testcover</code> library and using the command <kbd>M-x
+testcover-start &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd> to instrument the
+code.  Then test your code by calling it one or more times.  Then use
+the command <kbd>M-x testcover-mark-all</kbd> to display colored highlights
+on the code to show where coverage is insufficient.  The command
+<kbd>M-x testcover-next-mark</kbd> will move point forward to the next
+highlighted spot.
+
+   <p>Normally, a red highlight indicates the form was never completely
+evaluated; a brown highlight means it always evaluated to the same
+value (meaning there has been little testing of what is done with the
+result).  However, the red highlight is skipped for forms that can't
+possibly complete their evaluation, such as <code>error</code>.  The brown
+highlight is skipped for forms that are expected to always evaluate to
+the same value, such as <code>(setq x 14)</code>.
+
+   <p>For difficult cases, you can add do-nothing macros to your code to
+give advice to the test coverage tool.
+
+<div class="defun">
+&mdash; Macro: <b>1value</b><var> form<a name="index-g_t1value-991"></a></var><br>
+<blockquote><p>Evaluate <var>form</var> and return its value, but inform coverage testing
+that <var>form</var>'s value should always be the same. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>noreturn</b><var> form<a name="index-noreturn-992"></a></var><br>
+<blockquote><p>Evaluate <var>form</var>, informing coverage testing that <var>form</var> should
+never return.  If it ever does return, you get a run-time error. 
+</p></blockquote></div>
+
+   <p>Edebug also has a coverage testing feature (see <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>).  These features partly duplicate each other, and it would
+be cleaner to combine them.
+
+   </body></html>
+

@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Fontsets - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Faces.html#Faces" title="Faces">
+<link rel="prev" href="Font-Lookup.html#Font-Lookup" title="Font Lookup">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Fontsets"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Lookup.html#Font-Lookup">Font Lookup</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.12.9 Fontsets</h4>
+
+<p>A <dfn>fontset</dfn> is a list of fonts, each assigned to a range of
+character codes.  An individual font cannot display the whole range of
+characters that Emacs supports, but a fontset can.  Fontsets have names,
+just as fonts do, and you can use a fontset name in place of a font name
+when you specify the &ldquo;font&rdquo; for a frame or a face.  Here is
+information about defining a fontset under Lisp program control.
+
+<div class="defun">
+&mdash; Function: <b>create-fontset-from-fontset-spec</b><var> fontset-spec &amp;optional style-variant-p noerror<a name="index-create_002dfontset_002dfrom_002dfontset_002dspec-3274"></a></var><br>
+<blockquote><p>This function defines a new fontset according to the specification
+string <var>fontset-spec</var>.  The string should have this format:
+
+     <pre class="smallexample">          <var>fontpattern</var>, <span class="roman">[</span><var>charsetname</var>:<var>fontname</var><span class="roman">]...</span>
+     </pre>
+        <p class="noindent">Whitespace characters before and after the commas are ignored.
+
+        <p>The first part of the string, <var>fontpattern</var>, should have the form of
+a standard X font name, except that the last two fields should be
+`<samp><span class="samp">fontset-</span><var>alias</var></samp>'.
+
+        <p>The new fontset has two names, one long and one short.  The long name is
+<var>fontpattern</var> in its entirety.  The short name is
+`<samp><span class="samp">fontset-</span><var>alias</var></samp>'.  You can refer to the fontset by either
+name.  If a fontset with the same name already exists, an error is
+signaled, unless <var>noerror</var> is non-<code>nil</code>, in which case this
+function does nothing.
+
+        <p>If optional argument <var>style-variant-p</var> is non-<code>nil</code>, that says
+to create bold, italic and bold-italic variants of the fontset as well. 
+These variant fontsets do not have a short name, only a long one, which
+is made by altering <var>fontpattern</var> to indicate the bold or italic
+status.
+
+        <p>The specification string also says which fonts to use in the fontset. 
+See below for the details. 
+</p></blockquote></div>
+
+   <p>The construct `<samp><var>charset</var><span class="samp">:</span><var>font</var></samp>' specifies which font to
+use (in this fontset) for one particular character set.  Here,
+<var>charset</var> is the name of a character set, and <var>font</var> is the font
+to use for that character set.  You can use this construct any number of
+times in the specification string.
+
+   <p>For the remaining character sets, those that you don't specify
+explicitly, Emacs chooses a font based on <var>fontpattern</var>: it replaces
+`<samp><span class="samp">fontset-</span><var>alias</var></samp>' with a value that names one character set. 
+For the <acronym>ASCII</acronym> character set, `<samp><span class="samp">fontset-</span><var>alias</var></samp>' is replaced
+with `<samp><span class="samp">ISO8859-1</span></samp>'.
+
+   <p>In addition, when several consecutive fields are wildcards, Emacs
+collapses them into a single wildcard.  This is to prevent use of
+auto-scaled fonts.  Fonts made by scaling larger fonts are not usable
+for editing, and scaling a smaller font is not useful because it is
+better to use the smaller font in its own size, which Emacs does.
+
+   <p>Thus if <var>fontpattern</var> is this,
+
+<pre class="example">     -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24
+</pre>
+   <p class="noindent">the font specification for <acronym>ASCII</acronym> characters would be this:
+
+<pre class="example">     -*-fixed-medium-r-normal-*-24-*-ISO8859-1
+</pre>
+   <p class="noindent">and the font specification for Chinese GB2312 characters would be this:
+
+<pre class="example">     -*-fixed-medium-r-normal-*-24-*-gb2312*-*
+</pre>
+   <p>You may not have any Chinese font matching the above font
+specification.  Most X distributions include only Chinese fonts that
+have `<samp><span class="samp">song ti</span></samp>' or `<samp><span class="samp">fangsong ti</span></samp>' in the <var>family</var> field.  In
+such a case, `<samp><span class="samp">Fontset-</span><var>n</var></samp>' can be specified as below:
+
+<pre class="smallexample">     Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
+             chinese-gb2312:-*-*-medium-r-normal-*-24-*-gb2312*-*
+</pre>
+   <p class="noindent">Then, the font specifications for all but Chinese GB2312 characters have
+`<samp><span class="samp">fixed</span></samp>' in the <var>family</var> field, and the font specification for
+Chinese GB2312 characters has a wild card `<samp><span class="samp">*</span></samp>' in the <var>family</var>
+field.
+
+<div class="defun">
+&mdash; Function: <b>set-fontset-font</b><var> name character fontname &amp;optional frame<a name="index-set_002dfontset_002dfont-3275"></a></var><br>
+<blockquote><p>This function modifies the existing fontset <var>name</var> to
+use the font name <var>fontname</var> for the character <var>character</var>.
+
+        <p>If <var>name</var> is <code>nil</code>, this function modifies the default
+fontset, whose short name is `<samp><span class="samp">fontset-default</span></samp>'.
+
+        <p><var>character</var> may be a cons; <code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>, where
+<var>from</var> and <var>to</var> are non-generic characters.  In that case, use
+<var>fontname</var> for all characters in the range <var>from</var> and <var>to</var>
+(inclusive).
+
+        <p><var>character</var> may be a charset.  In that case, use
+<var>fontname</var> for all character in the charsets.
+
+        <p><var>fontname</var> may be a cons; <code>(</code><var>family</var><code> . </code><var>registry</var><code>)</code>,
+where <var>family</var> is a family name of a font (possibly including a
+foundry name at the head), <var>registry</var> is a registry name of a font
+(possibly including an encoding name at the tail).
+
+        <p>For instance, this changes the default fontset to use a font of which
+registry name is `<samp><span class="samp">JISX0208.1983</span></samp>' for all characters belonging to
+the charset <code>japanese-jisx0208</code>.
+
+     <pre class="smallexample">          (set-fontset-font nil 'japanese-jisx0208 '(nil . "JISX0208.1983"))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-displayable-p</b><var> char<a name="index-char_002ddisplayable_002dp-3276"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if Emacs ought to be able to display
+<var>char</var>.  More precisely, if the selected frame's fontset has a
+font to display the character set that <var>char</var> belongs to.
+
+        <p>Fontsets can specify a font on a per-character basis; when the fontset
+does that, this function's value may not be accurate. 
+</p></blockquote></div>
+
+   </body></html>
+

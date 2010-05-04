@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+<title>Autoload - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Loading.html#Loading" title="Loading">
+<link rel="prev" href="Loading-Non_002dASCII.html#Loading-Non_002dASCII" title="Loading Non-ASCII">
+<link rel="next" href="Repeated-Loading.html#Repeated-Loading" title="Repeated Loading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Autoload"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Repeated-Loading.html#Repeated-Loading">Repeated Loading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
+<hr>
+</div>
+
+<h3 class="section">15.5 Autoload</h3>
+
+<p><a name="index-autoload-779"></a>
+  The <dfn>autoload</dfn> facility allows you to make a function or macro
+known in Lisp, but put off loading the file that defines it.  The first
+call to the function automatically reads the proper file to install the
+real definition and other associated code, then runs the real definition
+as if it had been loaded all along.
+
+   <p>There are two ways to set up an autoloaded function: by calling
+<code>autoload</code>, and by writing a special &ldquo;magic&rdquo; comment in the
+source before the real definition.  <code>autoload</code> is the low-level
+primitive for autoloading; any Lisp program can call <code>autoload</code> at
+any time.  Magic comments are the most convenient way to make a function
+autoload, for packages installed along with Emacs.  These comments do
+nothing on their own, but they serve as a guide for the command
+<code>update-file-autoloads</code>, which constructs calls to <code>autoload</code>
+and arranges to execute them when Emacs is built.
+
+<div class="defun">
+&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-780"></a></var><br>
+<blockquote><p>This function defines the function (or macro) named <var>function</var> so as
+to load automatically from <var>filename</var>.  The string <var>filename</var>
+specifies the file to load to get the real definition of <var>function</var>.
+
+        <p>If <var>filename</var> does not contain either a directory name, or the
+suffix <code>.el</code> or <code>.elc</code>, then <code>autoload</code> insists on adding
+one of these suffixes, and it will not load from a file whose name is
+just <var>filename</var> with no added suffix.  (The variable
+<code>load-suffixes</code> specifies the exact required suffixes.)
+
+        <p>The argument <var>docstring</var> is the documentation string for the
+function.  Specifying the documentation string in the call to
+<code>autoload</code> makes it possible to look at the documentation without
+loading the function's real definition.  Normally, this should be
+identical to the documentation string in the function definition
+itself.  If it isn't, the function definition's documentation string
+takes effect when it is loaded.
+
+        <p>If <var>interactive</var> is non-<code>nil</code>, that says <var>function</var> can be
+called interactively.  This lets completion in <kbd>M-x</kbd> work without
+loading <var>function</var>'s real definition.  The complete interactive
+specification is not given here; it's not needed unless the user
+actually calls <var>function</var>, and when that happens, it's time to load
+the real definition.
+
+        <p>You can autoload macros and keymaps as well as ordinary functions. 
+Specify <var>type</var> as <code>macro</code> if <var>function</var> is really a macro. 
+Specify <var>type</var> as <code>keymap</code> if <var>function</var> is really a
+keymap.  Various parts of Emacs need to know this information without
+loading the real definition.
+
+        <p>An autoloaded keymap loads automatically during key lookup when a prefix
+key's binding is the symbol <var>function</var>.  Autoloading does not occur
+for other kinds of access to the keymap.  In particular, it does not
+happen when a Lisp program gets the keymap from the value of a variable
+and calls <code>define-key</code>; not even if the variable name is the same
+symbol <var>function</var>.
+
+        <p><a name="index-function-cell-in-autoload-781"></a>If <var>function</var> already has a non-void function definition that is not
+an autoload object, <code>autoload</code> does nothing and returns <code>nil</code>. 
+If the function cell of <var>function</var> is void, or is already an autoload
+object, then it is defined as an autoload object like this:
+
+     <pre class="example">          (autoload <var>filename</var> <var>docstring</var> <var>interactive</var> <var>type</var>)
+     </pre>
+        <p>For example,
+
+     <pre class="example">          (symbol-function 'run-prolog)
+               =&gt; (autoload "prolog" 169681 t nil)
+     </pre>
+        <p class="noindent">In this case, <code>"prolog"</code> is the name of the file to load, 169681
+refers to the documentation string in the
+<samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp> file (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>),
+<code>t</code> means the function is interactive, and <code>nil</code> that it is
+not a macro or a keymap. 
+</p></blockquote></div>
+
+   <p><a name="index-autoload-errors-782"></a>  The autoloaded file usually contains other definitions and may require
+or provide one or more features.  If the file is not completely loaded
+(due to an error in the evaluation of its contents), any function
+definitions or <code>provide</code> calls that occurred during the load are
+undone.  This is to ensure that the next attempt to call any function
+autoloading from this file will try again to load the file.  If not for
+this, then some of the functions in the file might be defined by the
+aborted load, but fail to work properly for the lack of certain
+subroutines not loaded successfully because they come later in the file.
+
+   <p>If the autoloaded file fails to define the desired Lisp function or
+macro, then an error is signaled with data <code>"Autoloading failed to
+define function </code><var>function-name</var><code>"</code>.
+
+   <p><a name="index-update_002dfile_002dautoloads-783"></a><a name="index-update_002ddirectory_002dautoloads-784"></a><a name="index-magic-autoload-comment-785"></a><a name="index-autoload-cookie-786"></a><a name="autoload-cookie"></a>
+  A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
+consists of `<samp><span class="samp">;;;###autoload</span></samp>', on a line by itself,
+just before the real definition of the function in its
+autoloadable source file.  The command <kbd>M-x update-file-autoloads</kbd>
+writes a corresponding <code>autoload</code> call into <samp><span class="file">loaddefs.el</span></samp>. 
+Building Emacs loads <samp><span class="file">loaddefs.el</span></samp> and thus calls <code>autoload</code>. 
+<kbd>M-x update-directory-autoloads</kbd> is even more powerful; it updates
+autoloads for all files in the current directory.
+
+   <p>The same magic comment can copy any kind of form into
+<samp><span class="file">loaddefs.el</span></samp>.  If the form following the magic comment is not a
+function-defining form or a <code>defcustom</code> form, it is copied
+verbatim.  &ldquo;Function-defining forms&rdquo; include <code>define-skeleton</code>,
+<code>define-derived-mode</code>, <code>define-generic-mode</code> and
+<code>define-minor-mode</code> as well as <code>defun</code> and
+<code>defmacro</code>.  To save space, a <code>defcustom</code> form is converted to
+a <code>defvar</code> in <samp><span class="file">loaddefs.el</span></samp>, with some additional information
+if it uses <code>:require</code>.
+
+   <p>You can also use a magic comment to execute a form at build time
+<em>without</em> executing it when the file itself is loaded.  To do this,
+write the form <em>on the same line</em> as the magic comment.  Since it
+is in a comment, it does nothing when you load the source file; but
+<kbd>M-x update-file-autoloads</kbd> copies it to <samp><span class="file">loaddefs.el</span></samp>, where
+it is executed while building Emacs.
+
+   <p>The following example shows how <code>doctor</code> is prepared for
+autoloading with a magic comment:
+
+<pre class="smallexample">     ;;;###autoload
+     (defun doctor ()
+       "Switch to *doctor* buffer and start giving psychotherapy."
+       (interactive)
+       (switch-to-buffer "*doctor*")
+       (doctor-mode))
+</pre>
+   <p class="noindent">Here's what that produces in <samp><span class="file">loaddefs.el</span></samp>:
+
+<pre class="smallexample">     (autoload (quote doctor) "doctor" "\
+     Switch to *doctor* buffer and start giving psychotherapy.
+     
+     \(fn)" t nil)
+</pre>
+   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-787"></a>The backslash and newline immediately following the double-quote are a
+convention used only in the preloaded uncompiled Lisp files such as
+<samp><span class="file">loaddefs.el</span></samp>; they tell <code>make-docfile</code> to put the
+documentation string in the <samp><span class="file">etc/DOC</span></samp> file.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>. 
+See also the commentary in <samp><span class="file">lib-src/make-docfile.c</span></samp>.  `<samp><span class="samp">(fn)</span></samp>'
+in the usage part of the documentation string is replaced with the
+function's name when the various help functions (see <a href="Help-Functions.html#Help-Functions">Help Functions</a>) display it.
+
+   <p>If you write a function definition with an unusual macro that is not
+one of the known and recognized function definition methods, use of an
+ordinary magic autoload comment would copy the whole definition into
+<code>loaddefs.el</code>.  That is not desirable.  You can put the desired
+<code>autoload</code> call into <code>loaddefs.el</code> instead by writing this:
+
+<pre class="smallexample">     ;;;###autoload (autoload 'foo "myfile")
+     (mydefunmacro foo
+       ...)
+</pre>
+   </body></html>
+

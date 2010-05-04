@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Vector Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
+<link rel="prev" href="Vectors.html#Vectors" title="Vectors">
+<link rel="next" href="Char_002dTables.html#Char_002dTables" title="Char-Tables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Vector-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Char_002dTables.html#Char_002dTables">Char-Tables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vectors.html#Vectors">Vectors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
+<hr>
+</div>
+
+<h3 class="section">6.5 Functions for Vectors</h3>
+
+<p>Here are some functions that relate to vectors:
+
+<div class="defun">
+&mdash; Function: <b>vectorp</b><var> object<a name="index-vectorp-397"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a vector.
+
+     <pre class="example">          (vectorp [a])
+               =&gt; t
+          (vectorp "asdf")
+               =&gt; nil
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>vector</b><var> &amp;rest objects<a name="index-vector-398"></a></var><br>
+<blockquote><p>This function creates and returns a vector whose elements are the
+arguments, <var>objects</var>.
+
+     <pre class="example">          (vector 'foo 23 [bar baz] "rats")
+               =&gt; [foo 23 [bar baz] "rats"]
+          (vector)
+               =&gt; []
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-vector</b><var> length object<a name="index-make_002dvector-399"></a></var><br>
+<blockquote><p>This function returns a new vector consisting of <var>length</var> elements,
+each initialized to <var>object</var>.
+
+     <pre class="example">          (setq sleepy (make-vector 9 'Z))
+               =&gt; [Z Z Z Z Z Z Z Z Z]
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>vconcat</b><var> &amp;rest sequences<a name="index-vconcat-400"></a></var><br>
+<blockquote><p><a name="index-copying-vectors-401"></a>This function returns a new vector containing all the elements of the
+<var>sequences</var>.  The arguments <var>sequences</var> may be true lists,
+vectors, strings or bool-vectors.  If no <var>sequences</var> are given, an
+empty vector is returned.
+
+        <p>The value is a newly constructed vector that is not <code>eq</code> to any
+existing vector.
+
+     <pre class="example">          (setq a (vconcat '(A B C) '(D E F)))
+               =&gt; [A B C D E F]
+          (eq a (vconcat a))
+               =&gt; nil
+          (vconcat)
+               =&gt; []
+          (vconcat [A B C] "aa" '(foo (6 7)))
+               =&gt; [A B C 97 97 foo (6 7)]
+     </pre>
+        <p>The <code>vconcat</code> function also allows byte-code function objects as
+arguments.  This is a special feature to make it easy to access the entire
+contents of a byte-code function object.  See <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>.
+
+        <p>In Emacs versions before 21, the <code>vconcat</code> function allowed
+integers as arguments, converting them to strings of digits, but that
+feature has been eliminated.  The proper way to convert an integer to
+a decimal number in this way is with <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) or <code>number-to-string</code> (see <a href="String-Conversion.html#String-Conversion">String Conversion</a>).
+
+        <p>For other concatenation functions, see <code>mapconcat</code> in <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>, <code>concat</code> in <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>, and <code>append</code>
+in <a href="Building-Lists.html#Building-Lists">Building Lists</a>. 
+</p></blockquote></div>
+
+   <p>The <code>append</code> function also provides a way to convert a vector into a
+list with the same elements:
+
+<pre class="example">     (setq avector [1 two (quote (three)) "four" [five]])
+          =&gt; [1 two (quote (three)) "four" [five]]
+     (append avector nil)
+          =&gt; (1 two (quote (three)) "four" [five])
+</pre>
+   </body></html>
+

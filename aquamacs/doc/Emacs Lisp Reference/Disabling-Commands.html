@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Disabling Commands - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="prev" href="Recursive-Editing.html#Recursive-Editing" title="Recursive Editing">
+<link rel="next" href="Command-History.html#Command-History" title="Command History">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Disabling-Commands"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Command-History.html#Command-History">Command History</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<h3 class="section">21.13 Disabling Commands</h3>
+
+<p><a name="index-disabled-command-1361"></a>
+  <dfn>Disabling a command</dfn> marks the command as requiring user
+confirmation before it can be executed.  Disabling is used for commands
+which might be confusing to beginning users, to prevent them from using
+the commands by accident.
+
+   <p><a name="index-disabled-1362"></a>  The low-level mechanism for disabling a command is to put a
+non-<code>nil</code> <code>disabled</code> property on the Lisp symbol for the
+command.  These properties are normally set up by the user's
+init file (see <a href="Init-File.html#Init-File">Init File</a>) with Lisp expressions such as this:
+
+<pre class="example">     (put 'upcase-region 'disabled t)
+</pre>
+   <p class="noindent">For a few commands, these properties are present by default (you can
+remove them in your init file if you wish).
+
+   <p>If the value of the <code>disabled</code> property is a string, the message
+saying the command is disabled includes that string.  For example:
+
+<pre class="example">     (put 'delete-region 'disabled
+          "Text deleted this way cannot be yanked back!\n")
+</pre>
+   <p>See <a href="../emacs/Disabling.html#Disabling">Disabling</a>, for the details on
+what happens when a disabled command is invoked interactively. 
+Disabling a command has no effect on calling it as a function from Lisp
+programs.
+
+<div class="defun">
+&mdash; Command: <b>enable-command</b><var> command<a name="index-enable_002dcommand-1363"></a></var><br>
+<blockquote><p>Allow <var>command</var> (a symbol) to be executed without special
+confirmation from now on, and alter the user's init file (see <a href="Init-File.html#Init-File">Init File</a>) so that this will apply to future sessions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>disable-command</b><var> command<a name="index-disable_002dcommand-1364"></a></var><br>
+<blockquote><p>Require special confirmation to execute <var>command</var> from now on, and
+alter the user's init file so that this will apply to future sessions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>disabled-command-function</b><var><a name="index-disabled_002dcommand_002dfunction-1365"></a></var><br>
+<blockquote><p>The value of this variable should be a function.  When the user
+invokes a disabled command interactively, this function is called
+instead of the disabled command.  It can use <code>this-command-keys</code>
+to determine what the user typed to run the command, and thus find the
+command itself.
+
+        <p>The value may also be <code>nil</code>.  Then all commands work normally,
+even disabled ones.
+
+        <p>By default, the value is a function that asks the user whether to
+proceed. 
+</p></blockquote></div>
+
+   </body></html>
+

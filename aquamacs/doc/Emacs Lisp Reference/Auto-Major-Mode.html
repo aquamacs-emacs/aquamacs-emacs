@@ -1,0 +1,235 @@
+<html lang="en">
+<head>
+<title>Auto Major Mode - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Major-Mode-Conventions.html#Major-Mode-Conventions" title="Major Mode Conventions">
+<link rel="next" href="Mode-Help.html#Mode-Help" title="Mode Help">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Auto-Major-Mode"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Help.html#Mode-Help">Mode Help</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.3 How Emacs Chooses a Major Mode</h4>
+
+<p><a name="index-major-mode_002c-automatic-selection-1540"></a>
+  Based on information in the file name or in the file itself, Emacs
+automatically selects a major mode for the new buffer when a file is
+visited.  It also processes local variables specified in the file text.
+
+<div class="defun">
+&mdash; Command: <b>fundamental-mode</b><var><a name="index-fundamental_002dmode-1541"></a></var><br>
+<blockquote><p>  Fundamental mode is a major mode that is not specialized for anything
+in particular.  Other major modes are defined in effect by comparison
+with this one&mdash;their definitions say what to change, starting from
+Fundamental mode.  The <code>fundamental-mode</code> function does <em>not</em>
+run any mode hooks; you're not supposed to customize it.  (If you want Emacs
+to behave differently in Fundamental mode, change the <em>global</em>
+state of Emacs.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>normal-mode</b><var> &amp;optional find-file<a name="index-normal_002dmode-1542"></a></var><br>
+<blockquote><p>This function establishes the proper major mode and buffer-local variable
+bindings for the current buffer.  First it calls <code>set-auto-mode</code>
+(see below), then it runs <code>hack-local-variables</code> to parse, and
+bind or evaluate as appropriate, the file's local variables
+(see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
+
+        <p>If the <var>find-file</var> argument to <code>normal-mode</code> is non-<code>nil</code>,
+<code>normal-mode</code> assumes that the <code>find-file</code> function is calling
+it.  In this case, it may process local variables in the `<samp><span class="samp">-*-</span></samp>'
+line or at the end of the file.  The variable
+<code>enable-local-variables</code> controls whether to do so.  See <a href="../emacs/File-Variables.html#File-Variables">Local Variables in Files</a>,
+for the syntax of the local variables section of a file.
+
+        <p>If you run <code>normal-mode</code> interactively, the argument
+<var>find-file</var> is normally <code>nil</code>.  In this case,
+<code>normal-mode</code> unconditionally processes any file local variables.
+
+        <p>If <code>normal-mode</code> processes the local variables list and this list
+specifies a major mode, that mode overrides any mode chosen by
+<code>set-auto-mode</code>.  If neither <code>set-auto-mode</code> nor
+<code>hack-local-variables</code> specify a major mode, the buffer stays in
+the major mode determined by <code>default-major-mode</code> (see below).
+
+        <p><a name="index-file-mode-specification-error-1543"></a><code>normal-mode</code> uses <code>condition-case</code> around the call to the
+major mode function, so errors are caught and reported as a `<samp><span class="samp">File
+mode specification error</span></samp>',  followed by the original error message. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-auto-mode</b><var> &amp;optional keep-mode-if-same<a name="index-set_002dauto_002dmode-1544"></a></var><br>
+<blockquote><p><a name="index-visited-file-mode-1545"></a>  This function selects the major mode that is appropriate for the
+current buffer.  It bases its decision (in order of precedence) on
+the `<samp><span class="samp">-*-</span></samp>'<!-- /@w --> line, on the `<samp><span class="samp">#!</span></samp>'<!-- /@w --> line (using
+<code>interpreter-mode-alist</code>), on the text at the beginning of the
+buffer (using <code>magic-mode-alist</code>), and finally on the visited
+file name (using <code>auto-mode-alist</code>).  See <a href="../emacs/Choosing-Modes.html#Choosing-Modes">How Major Modes are Chosen</a>.  However, this
+function does not look for the `<samp><span class="samp">mode:</span></samp>' local variable near the
+end of a file; the <code>hack-local-variables</code> function does that. 
+If <code>enable-local-variables</code> is <code>nil</code>, <code>set-auto-mode</code>
+does not check the `<samp><span class="samp">-*-</span></samp>'<!-- /@w --> line for a mode tag either.
+
+        <p>If <var>keep-mode-if-same</var> is non-<code>nil</code>, this function does not
+call the mode command if the buffer is already in the proper major
+mode.  For instance, <code>set-visited-file-name</code> sets this to
+<code>t</code> to avoid killing buffer local variables that the user may
+have set. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>default-major-mode</b><var><a name="index-default_002dmajor_002dmode-1546"></a></var><br>
+<blockquote><p>This variable holds the default major mode for new buffers.  The
+standard value is <code>fundamental-mode</code>.
+
+        <p>If the value of <code>default-major-mode</code> is <code>nil</code>, Emacs uses
+the (previously) current buffer's major mode as the default major mode
+of a new buffer.  However, if that major mode symbol has a <code>mode-class</code>
+property with value <code>special</code>, then it is not used for new buffers;
+Fundamental mode is used instead.  The modes that have this property are
+those such as Dired and Rmail that are useful only with text that has
+been specially prepared. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-buffer-major-mode</b><var> buffer<a name="index-set_002dbuffer_002dmajor_002dmode-1547"></a></var><br>
+<blockquote><p>This function sets the major mode of <var>buffer</var> to the value of
+<code>default-major-mode</code>; if that variable is <code>nil</code>, it uses the
+current buffer's major mode (if that is suitable).  As an exception,
+if <var>buffer</var>'s name is `<samp><span class="samp">*scratch*</span></samp>', it sets the mode to
+<code>initial-major-mode</code>.
+
+        <p>The low-level primitives for creating buffers do not use this function,
+but medium-level commands such as <code>switch-to-buffer</code> and
+<code>find-file-noselect</code> use it whenever they create buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>initial-major-mode</b><var><a name="index-initial_002dmajor_002dmode-1548"></a></var><br>
+<blockquote><p><a name="index-g_t_0040samp_007b_002ascratch_002a_007d-1549"></a>The value of this variable determines the major mode of the initial
+`<samp><span class="samp">*scratch*</span></samp>' buffer.  The value should be a symbol that is a major
+mode command.  The default value is <code>lisp-interaction-mode</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>interpreter-mode-alist</b><var><a name="index-interpreter_002dmode_002dalist-1550"></a></var><br>
+<blockquote><p>This variable specifies major modes to use for scripts that specify a
+command interpreter in a `<samp><span class="samp">#!</span></samp>' line.  Its value is an alist with
+elements of the form <code>(</code><var>interpreter</var><code> . </code><var>mode</var><code>)</code>; for
+example, <code>("perl" . perl-mode)</code> is one element present by
+default.  The element says to use mode <var>mode</var> if the file
+specifies an interpreter which matches <var>interpreter</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>magic-mode-alist</b><var><a name="index-magic_002dmode_002dalist-1551"></a></var><br>
+<blockquote><p>This variable's value is an alist with elements of the form
+<code>(</code><var>regexp</var><code> .  </code><var>function</var><code>)</code>, where <var>regexp</var> is a
+regular expression and <var>function</var> is a function or <code>nil</code>. 
+After visiting a file, <code>set-auto-mode</code> calls <var>function</var> if
+the text at the beginning of the buffer matches <var>regexp</var> and
+<var>function</var> is non-<code>nil</code>; if <var>function</var> is <code>nil</code>,
+<code>auto-mode-alist</code> gets to decide the mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>magic-fallback-mode-alist</b><var><a name="index-magic_002dfallback_002dmode_002dalist-1552"></a></var><br>
+<blockquote><p>This works like <code>magic-mode-alist</code>, except that it is handled
+only if <code>auto-mode-alist</code> does not specify a mode for this file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>auto-mode-alist</b><var><a name="index-auto_002dmode_002dalist-1553"></a></var><br>
+<blockquote><p>This variable contains an association list of file name patterns
+(regular expressions) and corresponding major mode commands.  Usually,
+the file name patterns test for suffixes, such as `<samp><span class="samp">.el</span></samp>' and
+`<samp><span class="samp">.c</span></samp>', but this need not be the case.  An ordinary element of the
+alist looks like <code>(</code><var>regexp</var><code> .  </code><var>mode-function</var><code>)</code>.
+
+        <p>For example,
+
+     <pre class="smallexample">          (("\\`/tmp/fol/" . text-mode)
+           ("\\.texinfo\\'" . texinfo-mode)
+           ("\\.texi\\'" . texinfo-mode)
+           ("\\.el\\'" . emacs-lisp-mode)
+           ("\\.c\\'" . c-mode)
+           ("\\.h\\'" . c-mode)
+           ...)
+     </pre>
+        <p>When you visit a file whose expanded file name (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>), with version numbers and backup suffixes removed using
+<code>file-name-sans-versions</code> (see <a href="File-Name-Components.html#File-Name-Components">File Name Components</a>), matches
+a <var>regexp</var>, <code>set-auto-mode</code> calls the corresponding
+<var>mode-function</var>.  This feature enables Emacs to select the proper
+major mode for most files.
+
+        <p>If an element of <code>auto-mode-alist</code> has the form <code>(</code><var>regexp</var>
+<var>function</var><code> t)</code>, then after calling <var>function</var>, Emacs searches
+<code>auto-mode-alist</code> again for a match against the portion of the file
+name that did not match before.  This feature is useful for
+uncompression packages: an entry of the form <code>("\\.gz\\'"
+</code><var>function</var><code> t)</code> can uncompress the file and then put the uncompressed
+file in the proper mode according to the name sans `<samp><span class="samp">.gz</span></samp>'.
+
+        <p>Here is an example of how to prepend several pattern pairs to
+<code>auto-mode-alist</code>.  (You might use this sort of expression in your
+init file.)
+
+     <pre class="smallexample">          (setq auto-mode-alist
+            (append
+             ;; <span class="roman">File name (within directory) starts with a dot.</span>
+             '(("/\\.[^/]*\\'" . fundamental-mode)
+               ;; <span class="roman">File name has no dot.</span>
+               ("[^\\./]*\\'" . fundamental-mode)
+               ;; <span class="roman">File name ends in `<samp>.C</samp>'.</span>
+               ("\\.C\\'" . c++-mode))
+             auto-mode-alist))
+     </pre>
+        </blockquote></div>
+
+   </body></html>
+

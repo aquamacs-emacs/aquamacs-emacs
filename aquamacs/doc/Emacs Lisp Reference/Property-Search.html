@@ -1,0 +1,206 @@
+<html lang="en">
+<head>
+<title>Property Search - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
+<link rel="prev" href="Changing-Properties.html#Changing-Properties" title="Changing Properties">
+<link rel="next" href="Special-Properties.html#Special-Properties" title="Special Properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Property-Search"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Special-Properties.html#Special-Properties">Special Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-Properties.html#Changing-Properties">Changing Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.19.3 Text Property Search Functions</h4>
+
+<p>In typical use of text properties, most of the time several or many
+consecutive characters have the same value for a property.  Rather than
+writing your programs to examine characters one by one, it is much
+faster to process chunks of text that have the same property value.
+
+   <p>Here are functions you can use to do this.  They use <code>eq</code> for
+comparing property values.  In all cases, <var>object</var> defaults to the
+current buffer.
+
+   <p>For high performance, it's very important to use the <var>limit</var>
+argument to these functions, especially the ones that search for a
+single property&mdash;otherwise, they may spend a long time scanning to the
+end of the buffer, if the property you are interested in does not change.
+
+   <p>These functions do not move point; instead, they return a position (or
+<code>nil</code>).  Remember that a position is always between two characters;
+the position returned by these functions is between two characters with
+different properties.
+
+<div class="defun">
+&mdash; Function: <b>next-property-change</b><var> pos &amp;optional object limit<a name="index-next_002dproperty_002dchange-2572"></a></var><br>
+<blockquote><p>The function scans the text forward from position <var>pos</var> in the
+string or buffer <var>object</var> till it finds a change in some text
+property, then returns the position of the change.  In other words, it
+returns the position of the first character beyond <var>pos</var> whose
+properties are not identical to those of the character just after
+<var>pos</var>.
+
+        <p>If <var>limit</var> is non-<code>nil</code>, then the scan ends at position
+<var>limit</var>.  If there is no property change before that point,
+<code>next-property-change</code> returns <var>limit</var>.
+
+        <p>The value is <code>nil</code> if the properties remain unchanged all the way
+to the end of <var>object</var> and <var>limit</var> is <code>nil</code>.  If the value
+is non-<code>nil</code>, it is a position greater than or equal to <var>pos</var>. 
+The value equals <var>pos</var> only when <var>limit</var> equals <var>pos</var>.
+
+        <p>Here is an example of how to scan the buffer by chunks of text within
+which all properties are constant:
+
+     <pre class="smallexample">          (while (not (eobp))
+            (let ((plist (text-properties-at (point)))
+                  (next-change
+                   (or (next-property-change (point) (current-buffer))
+                       (point-max))))
+              <span class="roman">Process text from point to </span><var>next-change</var><span class="roman">...</span>
+              (goto-char next-change)))
+     </pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>previous-property-change</b><var> pos &amp;optional object limit<a name="index-previous_002dproperty_002dchange-2573"></a></var><br>
+<blockquote><p>This is like <code>next-property-change</code>, but scans back from <var>pos</var>
+instead of forward.  If the value is non-<code>nil</code>, it is a position
+less than or equal to <var>pos</var>; it equals <var>pos</var> only if <var>limit</var>
+equals <var>pos</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-single-property-change</b><var> pos prop &amp;optional object limit<a name="index-next_002dsingle_002dproperty_002dchange-2574"></a></var><br>
+<blockquote><p>The function scans text for a change in the <var>prop</var> property, then
+returns the position of the change.  The scan goes forward from
+position <var>pos</var> in the string or buffer <var>object</var>.  In other
+words, this function returns the position of the first character
+beyond <var>pos</var> whose <var>prop</var> property differs from that of the
+character just after <var>pos</var>.
+
+        <p>If <var>limit</var> is non-<code>nil</code>, then the scan ends at position
+<var>limit</var>.  If there is no property change before that point,
+<code>next-single-property-change</code> returns <var>limit</var>.
+
+        <p>The value is <code>nil</code> if the property remains unchanged all the way to
+the end of <var>object</var> and <var>limit</var> is <code>nil</code>.  If the value is
+non-<code>nil</code>, it is a position greater than or equal to <var>pos</var>; it
+equals <var>pos</var> only if <var>limit</var> equals <var>pos</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>previous-single-property-change</b><var> pos prop &amp;optional object limit<a name="index-previous_002dsingle_002dproperty_002dchange-2575"></a></var><br>
+<blockquote><p>This is like <code>next-single-property-change</code>, but scans back from
+<var>pos</var> instead of forward.  If the value is non-<code>nil</code>, it is a
+position less than or equal to <var>pos</var>; it equals <var>pos</var> only if
+<var>limit</var> equals <var>pos</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-char-property-change</b><var> pos &amp;optional limit<a name="index-next_002dchar_002dproperty_002dchange-2576"></a></var><br>
+<blockquote><p>This is like <code>next-property-change</code> except that it considers
+overlay properties as well as text properties, and if no change is
+found before the end of the buffer, it returns the maximum buffer
+position rather than <code>nil</code> (in this sense, it resembles the
+corresponding overlay function <code>next-overlay-change</code>, rather than
+<code>next-property-change</code>).  There is no <var>object</var> operand
+because this function operates only on the current buffer.  It returns
+the next address at which either kind of property changes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>previous-char-property-change</b><var> pos &amp;optional limit<a name="index-previous_002dchar_002dproperty_002dchange-2577"></a></var><br>
+<blockquote><p>This is like <code>next-char-property-change</code>, but scans back from
+<var>pos</var> instead of forward, and returns the minimum buffer
+position if no change is found. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-single-char-property-change</b><var> pos prop &amp;optional object limit<a name="index-next_002dsingle_002dchar_002dproperty_002dchange-2578"></a></var><br>
+<blockquote><p>This is like <code>next-single-property-change</code> except that it
+considers overlay properties as well as text properties, and if no
+change is found before the end of the <var>object</var>, it returns the
+maximum valid position in <var>object</var> rather than <code>nil</code>.  Unlike
+<code>next-char-property-change</code>, this function <em>does</em> have an
+<var>object</var> operand; if <var>object</var> is not a buffer, only
+text-properties are considered. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>previous-single-char-property-change</b><var> pos prop &amp;optional object limit<a name="index-previous_002dsingle_002dchar_002dproperty_002dchange-2579"></a></var><br>
+<blockquote><p>This is like <code>next-single-char-property-change</code>, but scans back
+from <var>pos</var> instead of forward, and returns the minimum valid
+position in <var>object</var> if no change is found. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>text-property-any</b><var> start end prop value &amp;optional object<a name="index-text_002dproperty_002dany-2580"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if at least one character between
+<var>start</var> and <var>end</var> has a property <var>prop</var> whose value is
+<var>value</var>.  More precisely, it returns the position of the first such
+character.  Otherwise, it returns <code>nil</code>.
+
+        <p>The optional fifth argument, <var>object</var>, specifies the string or
+buffer to scan.  Positions are relative to <var>object</var>.  The default
+for <var>object</var> is the current buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>text-property-not-all</b><var> start end prop value &amp;optional object<a name="index-text_002dproperty_002dnot_002dall-2581"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if at least one character between
+<var>start</var> and <var>end</var> does not have a property <var>prop</var> with value
+<var>value</var>.  More precisely, it returns the position of the first such
+character.  Otherwise, it returns <code>nil</code>.
+
+        <p>The optional fifth argument, <var>object</var>, specifies the string or
+buffer to scan.  Positions are relative to <var>object</var>.  The default
+for <var>object</var> is the current buffer. 
+</p></blockquote></div>
+
+   </body></html>
+

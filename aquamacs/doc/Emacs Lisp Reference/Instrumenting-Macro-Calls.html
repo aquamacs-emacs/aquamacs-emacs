@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Instrumenting Macro Calls - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug-and-Macros.html#Edebug-and-Macros" title="Edebug and Macros">
+<link rel="next" href="Specification-List.html#Specification-List" title="Specification List">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Instrumenting-Macro-Calls"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Specification-List.html#Specification-List">Specification List</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.15.1 Instrumenting Macro Calls</h5>
+
+<p>When Edebug instruments an expression that calls a Lisp macro, it needs
+additional information about the macro to do the job properly.  This is
+because there is no a-priori way to tell which subexpressions of the
+macro call are forms to be evaluated.  (Evaluation may occur explicitly
+in the macro body, or when the resulting expansion is evaluated, or any
+time later.)
+
+   <p>Therefore, you must define an Edebug specification for each macro
+that Edebug will encounter, to explain the format of calls to that
+macro.  To do this, add a <code>debug</code> declaration to the macro
+definition.  Here is a simple example that shows the specification for
+the <code>for</code> example macro (see <a href="Argument-Evaluation.html#Argument-Evaluation">Argument Evaluation</a>).
+
+<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+       "Execute a simple \"for\" loop.
+     For example, (for i from 1 to 10 do (print i))."
+       (declare (debug (symbolp "from" form "to" form "do" &amp;rest form)))
+       ...)
+</pre>
+   <p>The Edebug specification says which parts of a call to the macro are
+forms to be evaluated.  For simple macros, the <var>specification</var>
+often looks very similar to the formal argument list of the macro
+definition, but specifications are much more general than macro
+arguments.  See <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>, for more explanation of
+the <code>declare</code> form.
+
+   <p>You can also define an edebug specification for a macro separately
+from the macro definition with <code>def-edebug-spec</code>.  Adding
+<code>debug</code> declarations is preferred, and more convenient, for macro
+definitions in Lisp, but <code>def-edebug-spec</code> makes it possible to
+define Edebug specifications for special forms implemented in C.
+
+<div class="defun">
+&mdash; Macro: <b>def-edebug-spec</b><var> macro specification<a name="index-def_002dedebug_002dspec-961"></a></var><br>
+<blockquote><p>Specify which expressions of a call to macro <var>macro</var> are forms to be
+evaluated.  <var>specification</var> should be the edebug specification. 
+Neither argument is evaluated.
+
+        <p>The <var>macro</var> argument can actually be any symbol, not just a macro
+name. 
+</p></blockquote></div>
+
+   <p>Here is a table of the possibilities for <var>specification</var> and how each
+directs processing of arguments.
+
+     <dl>
+<dt><code>t</code><dd>All arguments are instrumented for evaluation.
+
+     <br><dt><code>0</code><dd>None of the arguments is instrumented.
+
+     <br><dt>a symbol<dd>The symbol must have an Edebug specification which is used instead. 
+This indirection is repeated until another kind of specification is
+found.  This allows you to inherit the specification from another macro.
+
+     <br><dt>a list<dd>The elements of the list describe the types of the arguments of a
+calling form.  The possible elements of a specification list are
+described in the following sections. 
+</dl>
+
+   <p><a name="index-edebug_002deval_002dmacro_002dargs-962"></a>If a macro has no Edebug specification, neither through a <code>debug</code>
+declaration nor through a <code>def-edebug-spec</code> call, the variable
+<code>edebug-eval-macro-args</code> comes into play.  If it is <code>nil</code>,
+the default, none of the arguments is instrumented for evaluation. 
+If it is non-<code>nil</code>, all arguments are instrumented.
+
+   </body></html>
+

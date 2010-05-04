@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Text Representations - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="next" href="Converting-Representations.html#Converting-Representations" title="Converting Representations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Text-Representations"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Converting-Representations.html#Converting-Representations">Converting Representations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.1 Text Representations</h3>
+
+<p><a name="index-text-representations-2671"></a>
+  Emacs has two <dfn>text representations</dfn>&mdash;two ways to represent text
+in a string or buffer.  These are called <dfn>unibyte</dfn> and
+<dfn>multibyte</dfn>.  Each string, and each buffer, uses one of these two
+representations.  For most purposes, you can ignore the issue of
+representations, because Emacs converts text between them as
+appropriate.  Occasionally in Lisp programming you will need to pay
+attention to the difference.
+
+   <p><a name="index-unibyte-text-2672"></a>  In unibyte representation, each character occupies one byte and
+therefore the possible character codes range from 0 to 255.  Codes 0
+through 127 are <acronym>ASCII</acronym> characters; the codes from 128 through 255
+are used for one non-<acronym>ASCII</acronym> character set (you can choose which
+character set by setting the variable <code>nonascii-insert-offset</code>).
+
+   <p><a name="index-leading-code-2673"></a><a name="index-multibyte-text-2674"></a><a name="index-trailing-codes-2675"></a>  In multibyte representation, a character may occupy more than one
+byte, and as a result, the full range of Emacs character codes can be
+stored.  The first byte of a multibyte character is always in the range
+128 through 159 (octal 0200 through 0237).  These values are called
+<dfn>leading codes</dfn>.  The second and subsequent bytes of a multibyte
+character are always in the range 160 through 255 (octal 0240 through
+0377); these values are <dfn>trailing codes</dfn>.
+
+   <p>Some sequences of bytes are not valid in multibyte text: for example,
+a single isolated byte in the range 128 through 159 is not allowed.  But
+character codes 128 through 159 can appear in multibyte text,
+represented as two-byte sequences.  All the character codes 128 through
+255 are possible (though slightly abnormal) in multibyte text; they
+appear in multibyte buffers and strings when you do explicit encoding
+and decoding (see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>).
+
+   <p>In a buffer, the buffer-local value of the variable
+<code>enable-multibyte-characters</code> specifies the representation used. 
+The representation for a string is determined and recorded in the string
+when the string is constructed.
+
+<div class="defun">
+&mdash; Variable: <b>enable-multibyte-characters</b><var><a name="index-enable_002dmultibyte_002dcharacters-2676"></a></var><br>
+<blockquote><p>This variable specifies the current buffer's text representation. 
+If it is non-<code>nil</code>, the buffer contains multibyte text; otherwise,
+it contains unibyte text.
+
+        <p>You cannot set this variable directly; instead, use the function
+<code>set-buffer-multibyte</code> to change a buffer's representation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>default-enable-multibyte-characters</b><var><a name="index-default_002denable_002dmultibyte_002dcharacters-2677"></a></var><br>
+<blockquote><p>This variable's value is entirely equivalent to <code>(default-value
+'enable-multibyte-characters)</code>, and setting this variable changes that
+default value.  Setting the local binding of
+<code>enable-multibyte-characters</code> in a specific buffer is not allowed,
+but changing the default value is supported, and it is a reasonable
+thing to do, because it has no effect on existing buffers.
+
+        <p>The `<samp><span class="samp">--unibyte</span></samp>' command line option does its job by setting the
+default value to <code>nil</code> early in startup. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>position-bytes</b><var> position<a name="index-position_002dbytes-2678"></a></var><br>
+<blockquote><p>Return the byte-position corresponding to buffer position
+<var>position</var> in the current buffer.  This is 1 at the start of the
+buffer, and counts upward in bytes.  If <var>position</var> is out of
+range, the value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>byte-to-position</b><var> byte-position<a name="index-byte_002dto_002dposition-2679"></a></var><br>
+<blockquote><p>Return the buffer position corresponding to byte-position
+<var>byte-position</var> in the current buffer.  If <var>byte-position</var> is
+out of range, the value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>multibyte-string-p</b><var> string<a name="index-multibyte_002dstring_002dp-2680"></a></var><br>
+<blockquote><p>Return <code>t</code> if <var>string</var> is a multibyte string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-bytes</b><var> string<a name="index-string_002dbytes-2681"></a></var><br>
+<blockquote><p><a name="index-string_002c-number-of-bytes-2682"></a>This function returns the number of bytes in <var>string</var>. 
+If <var>string</var> is a multibyte string, this can be greater than
+<code>(length </code><var>string</var><code>)</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

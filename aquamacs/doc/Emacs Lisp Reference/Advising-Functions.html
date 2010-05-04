@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Advising Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
+<link rel="next" href="Debugging.html#Debugging" title="Debugging">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Advising-Functions"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging.html#Debugging">Debugging</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">17 Advising Emacs Lisp Functions</h2>
+
+<p><a name="index-advising-functions-842"></a>
+  The <dfn>advice</dfn> feature lets you add to the existing definition of
+a function, by <dfn>advising the function</dfn>.  This is a cleaner method
+for a library to customize functions defined within Emacs&mdash;cleaner
+than redefining the whole function.
+
+   <p><a name="index-piece-of-advice-843"></a>  Each function can have multiple <dfn>pieces of advice</dfn>, separately
+defined.  Each defined piece of advice can be <dfn>enabled</dfn> or
+<dfn>disabled</dfn> explicitly.  All the enabled pieces of advice for any given
+function actually take effect when you <dfn>activate</dfn> advice for that
+function, or when you define or redefine the function.  Note that
+enabling a piece of advice and activating advice for a function
+are not the same thing.
+
+   <p><strong>Usage Note:</strong> Advice is useful for altering the behavior of
+existing calls to an existing function.  If you want the new behavior
+for new calls, or for key bindings, you should define a new function
+(or a new command) which uses the existing function.
+
+   <p><strong>Usage note:</strong> Advising a function can cause confusion in
+debugging, since people who debug calls to the original function may
+not notice that it has been modified with advice.  Therefore, if you
+have the possibility to change the code of that function (or ask
+someone to do so) to run a hook, please solve the problem that way. 
+Advice should be reserved for the cases where you cannot get the
+function changed.
+
+   <p>In particular, this means that a file in Emacs should not put advice
+on a function in Emacs.  There are currently a few exceptions to this
+convention, but we aim to correct them.
+
+<ul class="menu">
+<li><a accesskey="1" href="Simple-Advice.html#Simple-Advice">Simple Advice</a>:            A simple example to explain the basics of advice. 
+<li><a accesskey="2" href="Defining-Advice.html#Defining-Advice">Defining Advice</a>:          Detailed description of <code>defadvice</code>. 
+<li><a accesskey="3" href="Around_002dAdvice.html#Around_002dAdvice">Around-Advice</a>:            Wrapping advice around a function's definition. 
+<li><a accesskey="4" href="Computed-Advice.html#Computed-Advice">Computed Advice</a>:          ...is to <code>defadvice</code> as <code>fset</code> is to <code>defun</code>. 
+<li><a accesskey="5" href="Activation-of-Advice.html#Activation-of-Advice">Activation of Advice</a>:     Advice doesn't do anything until you activate it. 
+<li><a accesskey="6" href="Enabling-Advice.html#Enabling-Advice">Enabling Advice</a>:          You can enable or disable each piece of advice. 
+<li><a accesskey="7" href="Preactivation.html#Preactivation">Preactivation</a>:            Preactivation is a way of speeding up the
+                              loading of compiled advice. 
+<li><a accesskey="8" href="Argument-Access-in-Advice.html#Argument-Access-in-Advice">Argument Access in Advice</a>:  How advice can access the function's arguments. 
+<li><a accesskey="9" href="Advising-Primitives.html#Advising-Primitives">Advising Primitives</a>:      Accessing arguments when advising a primitive. 
+<li><a href="Combined-Definition.html#Combined-Definition">Combined Definition</a>:      How advice is implemented. 
+</ul>
+
+   </body></html>
+

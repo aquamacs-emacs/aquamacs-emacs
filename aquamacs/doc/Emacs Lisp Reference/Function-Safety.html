@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Function Safety - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Inline-Functions.html#Inline-Functions" title="Inline Functions">
+<link rel="next" href="Related-Topics.html#Related-Topics" title="Related Topics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Function-Safety"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Related-Topics.html#Related-Topics">Related Topics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inline-Functions.html#Inline-Functions">Inline Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.11 Determining whether a Function is Safe to Call</h3>
+
+<p><a name="index-function-safety-703"></a><a name="index-safety-of-functions-704"></a>
+Some major modes such as SES call functions that are stored in user
+files.  (see <a href="../ses/index.html#Top">Top</a>, for more information on SES.)  User
+files sometimes have poor pedigrees&mdash;you can get a spreadsheet from
+someone you've just met, or you can get one through email from someone
+you've never met.  So it is risky to call a function whose source code
+is stored in a user file until you have determined that it is safe.
+
+<div class="defun">
+&mdash; Function: <b>unsafep</b><var> form &amp;optional unsafep-vars<a name="index-unsafep-705"></a></var><br>
+<blockquote><p>Returns <code>nil</code> if <var>form</var> is a <dfn>safe</dfn> Lisp expression, or
+returns a list that describes why it might be unsafe.  The argument
+<var>unsafep-vars</var> is a list of symbols known to have temporary
+bindings at this point; it is mainly used for internal recursive
+calls.  The current buffer is an implicit argument, which provides a
+list of buffer-local bindings. 
+</p></blockquote></div>
+
+   <p>Being quick and simple, <code>unsafep</code> does a very light analysis and
+rejects many Lisp expressions that are actually safe.  There are no
+known cases where <code>unsafep</code> returns <code>nil</code> for an unsafe
+expression.  However, a &ldquo;safe&rdquo; Lisp expression can return a string
+with a <code>display</code> property, containing an associated Lisp
+expression to be executed after the string is inserted into a buffer. 
+This associated expression can be a virus.  In order to be safe, you
+must delete properties from all strings calculated by user code before
+inserting them into buffers.
+
+   </body></html>
+

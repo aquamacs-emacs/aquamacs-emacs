@@ -1,0 +1,263 @@
+<html lang="en">
+<head>
+<title>Disassembly - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
+<link rel="prev" href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" title="Byte-Code Objects">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Disassembly"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
+<hr>
+</div>
+
+<h3 class="section">16.8 Disassembled Byte-Code</h3>
+
+<p><a name="index-disassembled-byte_002dcode-840"></a>
+  People do not write byte-code; that job is left to the byte compiler. 
+But we provide a disassembler to satisfy a cat-like curiosity.  The
+disassembler converts the byte-compiled code into humanly readable
+form.
+
+   <p>The byte-code interpreter is implemented as a simple stack machine. 
+It pushes values onto a stack of its own, then pops them off to use them
+in calculations whose results are themselves pushed back on the stack. 
+When a byte-code function returns, it pops a value off the stack and
+returns it as the value of the function.
+
+   <p>In addition to the stack, byte-code functions can use, bind, and set
+ordinary Lisp variables, by transferring values between variables and
+the stack.
+
+<div class="defun">
+&mdash; Command: <b>disassemble</b><var> object &amp;optional buffer-or-name<a name="index-disassemble-841"></a></var><br>
+<blockquote><p>This command displays the disassembled code for <var>object</var>.  In
+interactive use, or if <var>buffer-or-name</var> is <code>nil</code> or omitted,
+the output goes in a buffer named `<samp><span class="samp">*Disassemble*</span></samp>'.  If
+<var>buffer-or-name</var> is non-<code>nil</code>, it must be a buffer or the
+name of an existing buffer.  Then the output goes there, at point, and
+point is left before the output.
+
+        <p>The argument <var>object</var> can be a function name, a lambda expression
+or a byte-code object.  If it is a lambda expression, <code>disassemble</code>
+compiles it and disassembles the resulting compiled code. 
+</p></blockquote></div>
+
+   <p>Here are two examples of using the <code>disassemble</code> function.  We
+have added explanatory comments to help you relate the byte-code to the
+Lisp source; these do not appear in the output of <code>disassemble</code>. 
+These examples show unoptimized byte-code.  Nowadays byte-code is
+usually optimized, but we did not want to rewrite these examples, since
+they still serve their purpose.
+
+<pre class="example">     (defun factorial (integer)
+       "Compute factorial of an integer."
+       (if (= 1 integer) 1
+         (* integer (factorial (1- integer)))))
+          =&gt; factorial
+     
+     (factorial 4)
+          =&gt; 24
+     
+     (disassemble 'factorial)
+          -| byte-code for factorial:
+      doc: Compute factorial of an integer.
+      args: (integer)
+     
+     0   constant 1              ; <span class="roman">Push 1 onto stack.</span>
+     
+     1   varref   integer        ; <span class="roman">Get value of </span><code>integer</code>
+                                 ;   <span class="roman">from the environment</span>
+                                 ;   <span class="roman">and push the value</span>
+                                 ;   <span class="roman">onto the stack.</span>
+     
+     2   eqlsign                 ; <span class="roman">Pop top two values off stack,</span>
+                                 ;   <span class="roman">compare them,</span>
+                                 ;   <span class="roman">and push result onto stack.</span>
+     
+     3   goto-if-nil 10          ; <span class="roman">Pop and test top of stack;</span>
+                                 ;   <span class="roman">if </span><code>nil</code><span class="roman">, go to 10,</span>
+                                 ;   <span class="roman">else continue.</span>
+     
+     6   constant 1              ; <span class="roman">Push 1 onto top of stack.</span>
+     
+     7   goto     17             ; <span class="roman">Go to 17 (in this case, 1 will be</span>
+                                 ;   <span class="roman">returned by the function).</span>
+     
+     10  constant *              ; <span class="roman">Push symbol </span><code>*</code><span class="roman"> onto stack.</span>
+     
+     11  varref   integer        ; <span class="roman">Push value of </span><code>integer</code><span class="roman"> onto stack.</span>
+     
+     12  constant factorial      ; <span class="roman">Push </span><code>factorial</code><span class="roman"> onto stack.</span>
+     
+     13  varref   integer        ; <span class="roman">Push value of </span><code>integer</code><span class="roman"> onto stack.</span>
+     
+     14  sub1                    ; <span class="roman">Pop </span><code>integer</code><span class="roman">, decrement value,</span>
+                                 ;   <span class="roman">push new value onto stack.</span>
+     
+                                 ; <span class="roman">Stack now contains:</span>
+                                 ;   &minus; <span class="roman">decremented value of </span><code>integer</code>
+                                 ;   &minus; <code>factorial</code>
+                                 ;   &minus; <span class="roman">value of </span><code>integer</code>
+                                 ;   &minus; <code>*</code>
+     
+     15  call     1              ; <span class="roman">Call function </span><code>factorial</code><span class="roman"> using</span>
+                                 ;   <span class="roman">the first (i.e., the top) element</span>
+                                 ;   <span class="roman">of the stack as the argument;</span>
+                                 ;   <span class="roman">push returned value onto stack.</span>
+     
+                                 ; <span class="roman">Stack now contains:</span>
+                                 ;   &minus; <span class="roman">result of recursive</span>
+                                 ;        <span class="roman">call to </span><code>factorial</code>
+                                 ;   &minus; <span class="roman">value of </span><code>integer</code>
+                                 ;   &minus; <code>*</code>
+     
+     16  call     2              ; <span class="roman">Using the first two</span>
+                                 ;   <span class="roman">(i.e., the top two)</span>
+                                 ;   <span class="roman">elements of the stack</span>
+                                 ;   <span class="roman">as arguments,</span>
+                                 ;   <span class="roman">call the function </span><code>*</code><span class="roman">,</span>
+                                 ;   <span class="roman">pushing the result onto the stack.</span>
+     
+     17  return                  ; <span class="roman">Return the top element</span>
+                                 ;   <span class="roman">of the stack.</span>
+          =&gt; nil
+</pre>
+   <p>The <code>silly-loop</code> function is somewhat more complex:
+
+<pre class="example">     (defun silly-loop (n)
+       "Return time before and after N iterations of a loop."
+       (let ((t1 (current-time-string)))
+         (while (&gt; (setq n (1- n))
+                   0))
+         (list t1 (current-time-string))))
+          =&gt; silly-loop
+     
+     (disassemble 'silly-loop)
+          -| byte-code for silly-loop:
+      doc: Return time before and after N iterations of a loop.
+      args: (n)
+     
+     0   constant current-time-string  ; <span class="roman">Push</span>
+                                       ;   <code>current-time-string</code>
+                                       ;   <span class="roman">onto top of stack.</span>
+     
+     1   call     0              ; <span class="roman">Call </span><code>current-time-string</code>
+                                 ;   <span class="roman"> with no argument,</span>
+                                 ;   <span class="roman"> pushing result onto stack.</span>
+     
+     2   varbind  t1             ; <span class="roman">Pop stack and bind </span><code>t1</code>
+                                 ;   <span class="roman">to popped value.</span>
+     
+     3   varref   n              ; <span class="roman">Get value of </span><code>n</code><span class="roman"> from</span>
+                                 ;   <span class="roman">the environment and push</span>
+                                 ;   <span class="roman">the value onto the stack.</span>
+     
+     4   sub1                    ; <span class="roman">Subtract 1 from top of stack.</span>
+     
+     5   dup                     ; <span class="roman">Duplicate the top of the stack;</span>
+                                 ;   <span class="roman">i.e., copy the top of</span>
+                                 ;   <span class="roman">the stack and push the</span>
+                                 ;   <span class="roman">copy onto the stack.</span>
+     
+     6   varset   n              ; <span class="roman">Pop the top of the stack,</span>
+                                 ;   <span class="roman">and bind </span><code>n</code><span class="roman"> to the value.</span>
+     
+                                 ; <span class="roman">In effect, the sequence </span><code>dup varset</code>
+                                 ;   <span class="roman">copies the top of the stack</span>
+                                 ;   <span class="roman">into the value of </span><code>n</code>
+                                 ;   <span class="roman">without popping it.</span>
+     
+     7   constant 0              ; <span class="roman">Push 0 onto stack.</span>
+     
+     8   gtr                     ; <span class="roman">Pop top two values off stack,</span>
+                                 ;   <span class="roman">test if </span><var>n</var><span class="roman"> is greater than 0</span>
+                                 ;   <span class="roman">and push result onto stack.</span>
+     
+     9   goto-if-nil-else-pop 17 ; <span class="roman">Goto 17 if </span><code>n</code><span class="roman"> &lt;= 0</span>
+                                 ;   <span class="roman">(this exits the while loop).</span>
+                                 ;   <span class="roman">else pop top of stack</span>
+                                 ;   <span class="roman">and continue</span>
+     
+     12  constant nil            ; <span class="roman">Push </span><code>nil</code><span class="roman"> onto stack</span>
+                                 ;   <span class="roman">(this is the body of the loop).</span>
+     
+     13  discard                 ; <span class="roman">Discard result of the body</span>
+                                 ;   <span class="roman">of the loop (a while loop</span>
+                                 ;   <span class="roman">is always evaluated for</span>
+                                 ;   <span class="roman">its side effects).</span>
+     
+     14  goto     3              ; <span class="roman">Jump back to beginning</span>
+                                 ;   <span class="roman">of while loop.</span>
+     
+     17  discard                 ; <span class="roman">Discard result of while loop</span>
+                                 ;   <span class="roman">by popping top of stack.</span>
+                                 ;   <span class="roman">This result is the value </span><code>nil</code><span class="roman"> that</span>
+                                 ;   <span class="roman">was not popped by the goto at 9.</span>
+     
+     18  varref   t1             ; <span class="roman">Push value of </span><code>t1</code><span class="roman"> onto stack.</span>
+     
+     19  constant current-time-string  ; <span class="roman">Push</span>
+                                       ;   <code>current-time-string</code>
+                                       ;   <span class="roman">onto top of stack.</span>
+     
+     20  call     0              ; <span class="roman">Call </span><code>current-time-string</code><span class="roman"> again.</span>
+     
+     21  list2                   ; <span class="roman">Pop top two elements off stack,</span>
+                                 ;   <span class="roman">create a list of them,</span>
+                                 ;   <span class="roman">and push list onto stack.</span>
+     
+     22  unbind   1              ; <span class="roman">Unbind </span><code>t1</code><span class="roman"> in local environment.</span>
+     
+     23  return                  ; <span class="roman">Return value of the top of stack.</span>
+     
+          =&gt; nil
+</pre>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1998, 1999, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+</body></html>
+

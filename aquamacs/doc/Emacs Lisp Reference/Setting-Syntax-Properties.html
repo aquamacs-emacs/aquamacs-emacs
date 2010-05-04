@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Setting Syntax Properties - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="prev" href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" title="Syntactic Font Lock">
+<link rel="next" href="Multiline-Font-Lock.html#Multiline-Font-Lock" title="Multiline Font Lock">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 22.1.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
+     modify this GNU Manual, like GNU software.  Copies published by
+     the Free Software Foundation raise funds for GNU development.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+<a name="Setting-Syntax-Properties"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font Lock</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.6.9 Setting Syntax Properties</h4>
+
+<p>Font Lock mode can be used to update <code>syntax-table</code> properties
+automatically (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).  This is useful in
+languages for which a single syntax table by itself is not sufficient.
+
+<div class="defun">
+&mdash; Variable: <b>font-lock-syntactic-keywords</b><var><a name="index-font_002dlock_002dsyntactic_002dkeywords-1640"></a></var><br>
+<blockquote><p>This variable enables and controls updating <code>syntax-table</code>
+properties by Font Lock.  Its value should be a list of elements of
+this form:
+
+     <pre class="example">          (<var>matcher</var> <var>subexp</var> <var>syntax</var> <var>override</var> <var>laxmatch</var>)
+     </pre>
+        <p>The parts of this element have the same meanings as in the corresponding
+sort of element of <code>font-lock-keywords</code>,
+
+     <pre class="example">          (<var>matcher</var> <var>subexp</var> <var>facespec</var> <var>override</var> <var>laxmatch</var>)
+     </pre>
+        <p>However, instead of specifying the value <var>facespec</var> to use for the
+<code>face</code> property, it specifies the value <var>syntax</var> to use for
+the <code>syntax-table</code> property.  Here, <var>syntax</var> can be a string
+(as taken by <code>modify-syntax-entry</code>), a syntax table, a cons cell
+(as returned by <code>string-to-syntax</code>), or an expression whose value
+is one of those two types.  <var>override</var> cannot be <code>prepend</code> or
+<code>append</code>.
+
+        <p>For example, an element of the form:
+
+     <pre class="example">          ("\\$\\(#\\)" 1 ".")
+     </pre>
+        <p>highlights syntactically a hash character when following a dollar
+character, with a SYNTAX of <code>"."</code> (meaning punctuation syntax). 
+Assuming that the buffer syntax table specifies hash characters to
+have comment start syntax, the element will only highlight hash
+characters that do not follow dollar characters as comments
+syntactically.
+
+        <p>An element of the form:
+
+     <pre class="example">           ("\\('\\).\\('\\)"
+            (1 "\"")
+            (2 "\""))
+     </pre>
+        <p>highlights syntactically both single quotes which surround a single
+character, with a SYNTAX of <code>"\""</code> (meaning string quote syntax). 
+Assuming that the buffer syntax table does not specify single quotes
+to have quote syntax, the element will only highlight single quotes of
+the form `<samp><span class="samp">'</span><var>c</var><span class="samp">'</span></samp>' as strings syntactically.  Other forms, such
+as `<samp><span class="samp">foo'bar</span></samp>' or `<samp><span class="samp">'fubar'</span></samp>', will not be highlighted as
+strings.
+
+        <p>Major modes normally set this variable with <var>other-vars</var> in
+<code>font-lock-defaults</code>. 
+</p></blockquote></div>
+
+   </body></html>
+
