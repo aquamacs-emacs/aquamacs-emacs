@@ -6,10 +6,9 @@ pdfdir=$(shell pwd)
 srcdir=$(shell pwd)
 newdir=$(srcdir)/aquamacs
 destdir=$(srcdir)/../AquamacsHelp
-indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
-
 AQUAMACS_DIR=$(srcdir)/../..
 AQUAMACS_VERSION=$(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
+
 
 phrase=''
 newphrase=''
@@ -57,6 +56,6 @@ html: aquamacs.tex *.pdf
 	cp $(srcdir)/*.png $(destdir)/			     ; \
 	rm $(destdir)/WARNINGS
 	echo "Help files copied." ; \
-	$(indexer) $(destdir) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
-
-
+# Before 10.6, use the Help Indexer application instead of hiutil:
+	(hiutil -Cf $(destdir)/AquamacsHelp.helpindex $(destdir) -g -s en || \
+	$(indexer) $(destdir) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)
