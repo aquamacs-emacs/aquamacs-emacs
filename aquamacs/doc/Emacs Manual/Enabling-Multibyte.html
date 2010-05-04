@@ -3,7 +3,7 @@
 <title>Enabling Multibyte - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="International.html#International" title="International">
 <link rel="prev" href="International-Chars.html#International-Chars" title="International Chars">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Enabling-Multibyte"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Language-Environments.html#Language-Environments">Language Environments</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="International-Chars.html#International-Chars">International Chars</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
@@ -63,9 +63,9 @@ non-<acronym>ASCII</acronym> characters using multi-byte sequences.  Multibyte
 mode allows you to use all the supported languages and scripts without
 limitations.
 
-   <p><a name="index-turn-multibyte-support-on-or-off-1346"></a>  Under very special circumstances, you may want to disable multibyte
-character support, either for Emacs as a whole, or for a single
-buffer.  When multibyte characters are disabled in a buffer, we call
+   <p><a name="index-turn-multibyte-support-on-or-off-1362"></a>  Under very special circumstances, you may want to disable multibyte
+character support, for a specific buffer. 
+When multibyte characters are disabled in a buffer, we call
 that <dfn>unibyte mode</dfn>.  In unibyte mode, each character in the
 buffer has a character code ranging from 0 through 255 (0377 octal); 0
 through 127 (0177 octal) represent <acronym>ASCII</acronym> characters, and 128
@@ -77,27 +77,16 @@ characters.
 multibyte buffer to unibyte by saving it to a file, killing the
 buffer, and visiting the file again with <code>find-file-literally</code>. 
 Alternatively, you can use <kbd>C-x &lt;RET&gt; c</kbd>
-(<code>universal-coding-system-argument</code>) and specify `<samp><span class="samp">raw-text</span></samp>'
+(<code>universal-coding-system-argument</code>) and specify &lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo;
 as the coding system with which to visit or save a file.  See <a href="Text-Coding.html#Text-Coding">Text Coding</a>.  Unlike <code>find-file-literally</code>, finding a file as
-`<samp><span class="samp">raw-text</span></samp>' doesn't disable format conversion, uncompression, or
+&lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo; doesn't disable format conversion, uncompression, or
 auto mode selection.
 
-   <p><a name="index-enable_002dmultibyte_002dcharacters-1347"></a><a name="index-default_002denable_002dmultibyte_002dcharacters-1348"></a><a name="index-environment-variables_002c-and-non_002d_0040acronym_007bASCII_007d-characters-1349"></a>  To turn off multibyte character support by default, start Emacs with
-the `<samp><span class="samp">--unibyte</span></samp>' option (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), or set the
-environment variable <samp><span class="env">EMACS_UNIBYTE</span></samp>.  You can also customize
-<code>enable-multibyte-characters</code> or, equivalently, directly set the
-variable <code>default-enable-multibyte-characters</code> to <code>nil</code> in
-your init file to have basically the same effect as `<samp><span class="samp">--unibyte</span></samp>'. 
-With `<samp><span class="samp">--unibyte</span></samp>', multibyte strings are not created during
-initialization from the values of environment variables,
-<samp><span class="file">/etc/passwd</span></samp> entries etc., even if those contain
-non-<acronym>ASCII</acronym> characters.
-
-   <p><a name="index-Lisp-files_002c-and-multibyte-operation-1350"></a><a name="index-multibyte-operation_002c-and-Lisp-files-1351"></a><a name="index-unibyte-operation_002c-and-Lisp-files-1352"></a><a name="index-init-file_002c-and-non_002d_0040acronym_007bASCII_007d-characters-1353"></a>  Emacs normally loads Lisp files as multibyte, regardless of whether
-you used `<samp><span class="samp">--unibyte</span></samp>'.  This includes the Emacs initialization
+   <p><a name="index-Lisp-files_002c-and-multibyte-operation-1363"></a><a name="index-multibyte-operation_002c-and-Lisp-files-1364"></a><a name="index-unibyte-operation_002c-and-Lisp-files-1365"></a><a name="index-init-file_002c-and-non_002d_0040acronym_007bASCII_007d-characters-1366"></a>  Emacs normally loads Lisp files as multibyte. 
+This includes the Emacs initialization
 file, <samp><span class="file">.emacs</span></samp>, and the initialization files of Emacs packages
 such as Gnus.  However, you can specify unibyte loading for a
-particular Lisp file, by putting `<samp><span class="samp">-*-unibyte:&nbsp;t;-*-</span></samp>'<!-- /@w --> in a
+particular Lisp file, by putting &lsquo;<samp><span class="samp">-*-unibyte:&nbsp;t;-*-</span></samp>&rsquo;<!-- /@w --> in a
 comment on the first line (see <a href="File-Variables.html#File-Variables">File Variables</a>).  Then that file is
 always loaded as unibyte text.  The motivation for these conventions
 is that it is more reliable to always load any particular Lisp file in
@@ -113,12 +102,8 @@ convention (colon, backslash, etc.).  When multibyte characters
 are not enabled, nothing precedes the colon except a single dash. 
 See <a href="Mode-Line.html#Mode-Line">Mode Line</a>, for more details about this.
 
-   <p><a name="index-toggle_002denable_002dmultibyte_002dcharacters-1354"></a>  To convert a unibyte session to a multibyte session, set
-<code>default-enable-multibyte-characters</code> to <code>t</code>.  Buffers which
-were created in the unibyte session before you turn on multibyte
-support will stay unibyte.  You can turn on multibyte support in a
-specific buffer by invoking the command
-<code>toggle-enable-multibyte-characters</code> in that buffer.
+   <p><a name="index-toggle_002denable_002dmultibyte_002dcharacters-1367"></a>You can turn on multibyte support in a specific buffer by invoking the
+command <code>toggle-enable-multibyte-characters</code> in that buffer.
 
    </body></html>
 

@@ -3,32 +3,32 @@
 <title>Standard Hooks - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Standard-Keymaps.html#Standard-Keymaps" title="Standard Keymaps">
-<link rel="next" href="Index_general.html#Index" title="Index">
+<link rel="next" href="General_005fIndex.html#General_005fIndex" title="General_Index">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,9 +45,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Standard-Hooks"></a>
-Next:&nbsp;<a rel="next" accesskey="n" href="Index_general.html#Index">Index</a>,
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="General_005fIndex.html#General_005fIndex">General_Index</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
@@ -55,11 +55,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="appendix">Appendix I Standard Hooks</h2>
 
-<p><a name="index-standard-hooks-3703"></a><a name="index-hook-variables_002c-list-of-3704"></a>
+<p><a name="index-standard-hooks-3944"></a><a name="index-hook-variables_002c-list-of-3945"></a>
 The following is a list of hook variables that let you provide
 functions to be called from within Emacs on suitable occasions.
 
-   <p>Most of these variables have names ending with `<samp><span class="samp">-hook</span></samp>'.  They are
+   <p>Most of these variables have names ending with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;.  They are
 <dfn>normal hooks</dfn>, run by means of <code>run-hooks</code>.  The value of such
 a hook is a list of functions; the functions are called with no
 arguments and their values are completely ignored.  The recommended way
@@ -67,21 +67,27 @@ to put a new function on such a hook is to call <code>add-hook</code>.
 See <a href="Hooks.html#Hooks">Hooks</a>, for more information about using hooks.
 
    <p>Every major mode defines a mode hook named
-`<samp><var>modename</var><span class="samp">-mode-hook</span></samp>'.  The major mode command runs this
+&lsquo;<samp><var>modename</var><span class="samp">-mode-hook</span></samp>&rsquo;.  The major mode command runs this
 normal hook with <code>run-mode-hooks</code> as the very last thing it does. 
 See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.  Most minor modes have mode hooks too.  Mode hooks
 are omitted in the list below.
 
-   <p>The variables whose names end in `<samp><span class="samp">-hooks</span></samp>' or `<samp><span class="samp">-functions</span></samp>' are
+   <p>The variables whose names end in &lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo; are
 usually <dfn>abnormal hooks</dfn>; their values are lists of functions, but
 these functions are called in a special way (they are passed arguments,
 or their values are used). The variables whose names end in
-`<samp><span class="samp">-function</span></samp>' have single functions as their values.
+&lsquo;<samp><span class="samp">-function</span></samp>&rsquo; have single functions as their values.
+
+   <p>A special feature allows you to specify expressions to evaluate if and
+when a file is loaded (see <a href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for Loading</a>).  That feature is
+not exactly a hook, but does a similar job.
 
 <!-- We need to xref to where each hook is documented or else document -->
 <!-- it here. -->
-<dl>
-<dt><code>activate-mark-hook</code><dd>See <a href="The-Mark.html#The-Mark">The Mark</a>.
+     <dl>
+<dt><code>abbrev-expand-functions</code><dd>See <a href="Abbrev-Expansion.html#Abbrev-Expansion">Abbrev Expansion</a>.
+
+     <br><dt><code>activate-mark-hook</code><dd>See <a href="The-Mark.html#The-Mark">The Mark</a>.
 
      <br><dt><code>after-change-functions</code><dd>See <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>.
 
@@ -89,7 +95,7 @@ or their values are used). The variables whose names end in
 
      <br><dt><code>after-init-hook</code><dd>See <a href="Init-File.html#Init-File">Init File</a>.
 
-     <br><dt><code>after-insert-file-functions</code><dd>See <a href="Saving-Properties.html#Saving-Properties">Saving Properties</a>.
+     <br><dt><code>after-insert-file-functions</code><dd>See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.
 
      <br><dt><code>after-make-frame-functions</code><dd>See <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>.
 
@@ -103,6 +109,8 @@ or their values are used). The variables whose names end in
 
      <br><dt><code>before-change-functions</code><dd>See <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>.
 
+     <br><dt><code>before-hack-local-variables-hook</code><dd>See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
+
      <br><dt><code>before-init-hook</code><dd>See <a href="Init-File.html#Init-File">Init File</a>.
 
      <br><dt><code>before-make-frame-hook</code><dd>See <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>.
@@ -115,7 +123,13 @@ or their values are used). The variables whose names end in
 
      <br><dt><code>buffer-access-fontify-functions</code><dd>See <a href="Lazy-Properties.html#Lazy-Properties">Lazy Properties</a>.
 
+     <br><dt><code>calendar-initial-window-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
+
      <br><dt><code>calendar-load-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
+
+     <br><dt><code>calendar-today-invisible-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
+
+     <br><dt><code>calendar-today-visible-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
 
      <br><dt><code>change-major-mode-hook</code><dd>See <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>.
 
@@ -129,6 +143,10 @@ or their values are used). The variables whose names end in
 
      <br><dt><code>deactivate-mark-hook</code><dd>See <a href="The-Mark.html#The-Mark">The Mark</a>.
 
+     <br><dt><code>delete-frame-functions</code><dd>Functions to call when Emacs deletes a frame.  See <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>.
+
+     <br><dt><code>delete-terminal-functions</code><dd>Functions to call when Emacs deletes a terminal.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+
      <br><dt><code>desktop-after-read-hook</code><dd>Normal hook run after a successful <code>desktop-read</code>.  May be used
 to show a buffer list.  See <a href="../emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>.
 
@@ -138,10 +156,18 @@ May be used to show a dired buffer.  See <a href="../emacs/Saving-Emacs-Sessions
      <br><dt><code>desktop-save-hook</code><dd>Normal hook run before the desktop is saved in a desktop file.  This
 is useful for truncating history lists, for example.  See <a href="../emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>.
 
-     <br><dt><code>diary-display-hook</code><dd>See <a href="../emacs/Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>.
-
      <br><dt><code>diary-hook</code><dd>List of functions called after the display of the diary.  Can be used
 for appointment notification.
+
+     <br><dt><code>diary-list-entries-hook</code><dd>See <a href="../emacs/Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>.
+
+     <br><dt><code>diary-mark-entries-hook</code><dd>See <a href="../emacs/Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>.
+
+     <br><dt><code>diary-nongregorian-listing-hook</code><dd>See <a href="../emacs/Non_002dGregorian-Diary.html#Non_002dGregorian-Diary">Non-Gregorian Diary</a>.
+
+     <br><dt><code>diary-nongregorian-marking-hook</code><dd>See <a href="../emacs/Non_002dGregorian-Diary.html#Non_002dGregorian-Diary">Non-Gregorian Diary</a>.
+
+     <br><dt><code>diary-print-entries-hook</code><dd>See <a href="../emacs/Diary-Display.html#Diary-Display">Diary Display</a>.
 
      <br><dt><code>disabled-command-function</code><dd>See <a href="Disabling-Commands.html#Disabling-Commands">Disabling Commands</a>.
 
@@ -167,9 +193,9 @@ for appointment notification.
 
      <br><dt><code>font-lock-unfontify-buffer-function</code><dd>See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
 
-     <br><dt><code>font-lock-unfontify-region-function</code><dd>See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
+     <br><dt><code>hack-local-variables-hook</code><dd>See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
 
-     <br><dt><code>initial-calendar-window-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
+     <br><dt><code>font-lock-unfontify-region-function</code><dd>See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
 
      <br><dt><code>kbd-macro-termination-hook</code><dd>See <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>.
 
@@ -182,11 +208,7 @@ for appointment notification.
      <br><dt><code>kill-emacs-query-functions</code><dd>See <a href="Killing-Emacs.html#Killing-Emacs">Killing Emacs</a>.
 
      <br><dt><code>lisp-indent-function</code>
-<br><dt><code>list-diary-entries-hook</code><dd>See <a href="../emacs/Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>.
-
-     <br><dt><code>mail-setup-hook</code><dd>See <a href="../emacs/Mail-Mode-Misc.html#Mail-Mode-Misc">Mail Mode Miscellany</a>.
-
-     <br><dt><code>mark-diary-entries-hook</code><dd>See <a href="../emacs/Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>.
+<br><dt><code>mail-setup-hook</code><dd>See <a href="../emacs/Mail-Mode-Misc.html#Mail-Mode-Misc">Mail Mode Miscellany</a>.
 
      <br><dt><code>menu-bar-update-hook</code><dd>See <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>.
 
@@ -196,25 +218,19 @@ for appointment notification.
 
      <br><dt><code>mouse-position-function</code><dd>See <a href="Mouse-Position.html#Mouse-Position">Mouse Position</a>.
 
-     <br><dt><code>nongregorian-diary-listing-hook</code><dd>See <a href="../emacs/Hebrew_002fIslamic-Entries.html#Hebrew_002fIslamic-Entries">Hebrew/Islamic Entries</a>.
-
-     <br><dt><code>nongregorian-diary-marking-hook</code><dd>See <a href="../emacs/Hebrew_002fIslamic-Entries.html#Hebrew_002fIslamic-Entries">Hebrew/Islamic Entries</a>.
-
      <br><dt><code>occur-hook</code>
 <br><dt><code>post-command-hook</code><dd>See <a href="Command-Overview.html#Command-Overview">Command Overview</a>.
 
-     <br><dt><code>pre-abbrev-expand-hook</code><dd>See <a href="Abbrev-Expansion.html#Abbrev-Expansion">Abbrev Expansion</a>.
-
      <br><dt><code>pre-command-hook</code><dd>See <a href="Command-Overview.html#Command-Overview">Command Overview</a>.
 
-     <br><dt><code>print-diary-entries-hook</code><dd>See <a href="../emacs/Diary-Customizing.html#Diary-Customizing">Diary Customizing</a>.
-
-     <br><dt><code>redisplay-end-trigger-functions</code><dd>See <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>.
+     <br><dt><code>resume-tty-functions</code><dd>See <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>.
 
      <br><dt><code>scheme-indent-function</code>
 <br><dt><code>suspend-hook</code><dd>See <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>.
 
      <br><dt><code>suspend-resume-hook</code><dd>See <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>.
+
+     <br><dt><code>suspend-tty-functions</code><dd>See <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>.
 
      <br><dt><code>temp-buffer-setup-hook</code><dd>See <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>.
 
@@ -223,10 +239,6 @@ for appointment notification.
      <br><dt><code>temp-buffer-show-hook</code><dd>See <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>.
 
      <br><dt><code>term-setup-hook</code><dd>See <a href="Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>.
-
-     <br><dt><code>today-visible-calendar-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
-
-     <br><dt><code>today-invisible-calendar-hook</code><dd>See <a href="../emacs/Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>.
 
      <br><dt><code>window-configuration-change-hook</code><dd>See <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>.
 
@@ -240,11 +252,11 @@ for appointment notification.
 
      <br><dt><code>write-file-functions</code><dd>See <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>.
 
-     <br><dt><code>write-region-annotate-functions</code><dd>See <a href="Saving-Properties.html#Saving-Properties">Saving Properties</a>. 
+     <br><dt><code>write-region-annotate-functions</code><dd>See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>. 
 </dl>
 
 <!-- *-texinfo-*- -->
-<!-- Indexing guidelines -->
+<!-- General_Indexing guidelines -->
 <!-- I assume that all indexes will be combined. -->
 <!-- Therefore, if a generated findex and permutations -->
 <!-- cover the ways an index user would look up the entry, -->
@@ -257,5 +269,5 @@ for appointment notification.
 <!-- Similarly for explicit findex and vindex entries, e.g. "print example". -->
 <!-- Error codes are given cindex entries, e.g. "end-of-file error". -->
 <!-- pindex is used for .el files and Unix programs -->
-</body></html>
+   </body></html>
 

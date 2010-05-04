@@ -3,7 +3,7 @@
 <title>Tag Syntax - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Tags.html#Tags" title="Tags">
 <link rel="next" href="Create-Tags-Table.html#Create-Tags-Table" title="Create Tags Table">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Tag-Syntax"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Create-Tags-Table.html#Create-Tags-Table">Create Tags Table</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
 <hr>
@@ -62,27 +62,27 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
 <code>struct</code>, <code>union</code> and <code>enum</code>. 
 <code>#define</code> macro definitions, <code>#undef</code> and <code>enum</code>
 constants are also
-tags, unless you specify `<samp><span class="samp">--no-defines</span></samp>' when making the tags table. 
+tags, unless you specify &lsquo;<samp><span class="samp">--no-defines</span></samp>&rsquo; when making the tags table. 
 Similarly, global variables are tags, unless you specify
-`<samp><span class="samp">--no-globals</span></samp>', and so are struct members, unless you specify
-`<samp><span class="samp">--no-members</span></samp>'.  Use of `<samp><span class="samp">--no-globals</span></samp>', `<samp><span class="samp">--no-defines</span></samp>'
-and `<samp><span class="samp">--no-members</span></samp>' can make the tags table file much smaller.
+&lsquo;<samp><span class="samp">--no-globals</span></samp>&rsquo;, and so are struct members, unless you specify
+&lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo;.  Use of &lsquo;<samp><span class="samp">--no-globals</span></samp>&rsquo;, &lsquo;<samp><span class="samp">--no-defines</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo; can make the tags table file much smaller.
 
      <p>You can tag function declarations and external variables in addition
-to function definitions by giving the `<samp><span class="samp">--declarations</span></samp>' option to
+to function definitions by giving the &lsquo;<samp><span class="samp">--declarations</span></samp>&rsquo; option to
 <code>etags</code>.
 
      <li>In C++ code, in addition to all the tag constructs of C code, member
 functions are also recognized; member variables are also recognized,
-unless you use the `<samp><span class="samp">--no-members</span></samp>' option.  Tags for variables and
-functions in classes are named `<samp><var>class</var><span class="samp">::</span><var>variable</var></samp>' and
-`<samp><var>class</var><span class="samp">::</span><var>function</var></samp>'.  <code>operator</code> definitions have
-tag names like `<samp><span class="samp">operator+</span></samp>'.
+unless you use the &lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo; option.  Tags for variables and
+functions in classes are named &lsquo;<samp><var>class</var><span class="samp">::</span><var>variable</var></samp>&rsquo; and
+&lsquo;<samp><var>class</var><span class="samp">::</span><var>function</var></samp>&rsquo;.  <code>operator</code> definitions have
+tag names like &lsquo;<samp><span class="samp">operator+</span></samp>&rsquo;.
 
      <li>In Java code, tags include all the constructs recognized in C++, plus
 the <code>interface</code>, <code>extends</code> and <code>implements</code> constructs. 
 Tags for variables and functions in classes are named
-`<samp><var>class</var><span class="samp">.</span><var>variable</var></samp>' and `<samp><var>class</var><span class="samp">.</span><var>function</var></samp>'.
+&lsquo;<samp><var>class</var><span class="samp">.</span><var>variable</var></samp>&rsquo; and &lsquo;<samp><var>class</var><span class="samp">.</span><var>function</var></samp>&rsquo;.
 
      <li>In LaTeX text, the argument of any of the commands <code>\chapter</code>,
 <code>\section</code>, <code>\subsection</code>, <code>\subsubsection</code>,
@@ -98,17 +98,17 @@ command names.  For example,
 
      <pre class="example">          TEXTAGS="mycommand:myothercommand"
           export TEXTAGS
-     </pre>
+</pre>
      <p class="noindent">specifies (using Bourne shell syntax) that the commands
-`<samp><span class="samp">\mycommand</span></samp>' and `<samp><span class="samp">\myothercommand</span></samp>' also define tags.
+&lsquo;<samp><span class="samp">\mycommand</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\myothercommand</span></samp>&rsquo; also define tags.
 
      <li>In Lisp code, any function defined with <code>defun</code>, any variable
 defined with <code>defvar</code> or <code>defconst</code>, and in general the first
-argument of any expression that starts with `<samp><span class="samp">(def</span></samp>' in column zero is
+argument of any expression that starts with &lsquo;<samp><span class="samp">(def</span></samp>&rsquo; in column zero is
 a tag.
 
      <li>In Scheme code, tags include anything defined with <code>def</code> or with a
-construct whose name starts with `<samp><span class="samp">def</span></samp>'.  They also include variables
+construct whose name starts with &lsquo;<samp><span class="samp">def</span></samp>&rsquo;.  They also include variables
 set with <code>set!</code> at top level in the file. 
 </ul>
 
@@ -116,7 +116,7 @@ set with <code>set!</code> at top level in the file.
 
      <ul>
 <li>In Ada code, functions, procedures, packages, tasks and types are
-tags.  Use the `<samp><span class="samp">--packages-only</span></samp>' option to create tags for
+tags.  Use the &lsquo;<samp><span class="samp">--packages-only</span></samp>&rsquo; option to create tags for
 packages only.
 
      <p>In Ada, the same name can be used for different kinds of entity
@@ -127,12 +127,12 @@ easier to pick the definition you want, Ada tag name have suffixes
 indicating the type of entity:
 
           <dl>
-<dt>`<samp><span class="samp">/b</span></samp>'<dd>package body. 
-<br><dt>`<samp><span class="samp">/f</span></samp>'<dd>function. 
-<br><dt>`<samp><span class="samp">/k</span></samp>'<dd>task. 
-<br><dt>`<samp><span class="samp">/p</span></samp>'<dd>procedure. 
-<br><dt>`<samp><span class="samp">/s</span></samp>'<dd>package spec. 
-<br><dt>`<samp><span class="samp">/t</span></samp>'<dd>type. 
+<dt>&lsquo;<samp><span class="samp">/b</span></samp>&rsquo;<dd>package body. 
+<br><dt>&lsquo;<samp><span class="samp">/f</span></samp>&rsquo;<dd>function. 
+<br><dt>&lsquo;<samp><span class="samp">/k</span></samp>&rsquo;<dd>task. 
+<br><dt>&lsquo;<samp><span class="samp">/p</span></samp>&rsquo;<dd>procedure. 
+<br><dt>&lsquo;<samp><span class="samp">/s</span></samp>&rsquo;<dd>package spec. 
+<br><dt>&lsquo;<samp><span class="samp">/t</span></samp>&rsquo;<dd>type. 
 </dl>
 
      <p>Thus, <kbd>M-x find-tag &lt;RET&gt; bidule/b &lt;RET&gt;</kbd> will go
@@ -162,25 +162,25 @@ and all occurrences of <code>id=</code>.
      <li>In Lua input files, all functions are tags.
 
      <li>In makefiles, targets are tags; additionally, variables are tags
-unless you specify `<samp><span class="samp">--no-globals</span></samp>'.
+unless you specify &lsquo;<samp><span class="samp">--no-globals</span></samp>&rsquo;.
 
      <li>In Objective C code, tags include Objective C definitions for classes,
 class categories, methods and protocols.  Tags for variables and
-functions in classes are named `<samp><var>class</var><span class="samp">::</span><var>variable</var></samp>' and
-`<samp><var>class</var><span class="samp">::</span><var>function</var></samp>'.
+functions in classes are named &lsquo;<samp><var>class</var><span class="samp">::</span><var>variable</var></samp>&rsquo; and
+&lsquo;<samp><var>class</var><span class="samp">::</span><var>function</var></samp>&rsquo;.
 
      <li>In Pascal code, the tags are the functions and procedures defined in
 the file.
 
      <li>In Perl code, the tags are the packages, subroutines and variables
 defined by the <code>package</code>, <code>sub</code>, <code>my</code> and <code>local</code>
-keywords.  Use `<samp><span class="samp">--globals</span></samp>' if you want to tag global variables. 
-Tags for subroutines are named `<samp><var>package</var><span class="samp">::</span><var>sub</var></samp>'.  The
+keywords.  Use &lsquo;<samp><span class="samp">--globals</span></samp>&rsquo; if you want to tag global variables. 
+Tags for subroutines are named &lsquo;<samp><var>package</var><span class="samp">::</span><var>sub</var></samp>&rsquo;.  The
 name for subroutines defined in the default package is
-`<samp><span class="samp">main::</span><var>sub</var></samp>'.
+&lsquo;<samp><span class="samp">main::</span><var>sub</var></samp>&rsquo;.
 
      <li>In PHP code, tags are functions, classes and defines.  Vars are tags
-too, unless you use the `<samp><span class="samp">--no-members</span></samp>' option.
+too, unless you use the &lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo; option.
 
      <li>In PostScript code, the tags are the functions.
 

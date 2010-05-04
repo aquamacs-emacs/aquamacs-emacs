@@ -3,32 +3,32 @@
 <title>Change Hooks - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text.html#Text" title="Text">
 <link rel="prev" href="Atomic-Changes.html#Atomic-Changes" title="Atomic Changes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Change-Hooks"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 
 <h3 class="section">32.26 Change Hooks</h3>
 
-<p><a name="index-change-hooks-2661"></a><a name="index-hooks-for-text-changes-2662"></a>
+<p><a name="index-change-hooks-2761"></a><a name="index-hooks-for-text-changes-2762"></a>
   These hook variables let you arrange to take notice of all changes in
 all buffers (or in a particular buffer, if you make them buffer-local). 
 See also <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for how to detect changes to specific
@@ -66,7 +66,7 @@ will interfere in bizarre ways with the editing operations that call
 them.
 
 <div class="defun">
-&mdash; Variable: <b>before-change-functions</b><var><a name="index-before_002dchange_002dfunctions-2663"></a></var><br>
+&mdash; Variable: <b>before-change-functions</b><var><a name="index-before_002dchange_002dfunctions-2763"></a></var><br>
 <blockquote><p>This variable holds a list of functions to call before any buffer
 modification.  Each function gets two arguments, the beginning and end
 of the region that is about to change, represented as integers.  The
@@ -74,7 +74,7 @@ buffer that is about to change is always the current buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>after-change-functions</b><var><a name="index-after_002dchange_002dfunctions-2664"></a></var><br>
+&mdash; Variable: <b>after-change-functions</b><var><a name="index-after_002dchange_002dfunctions-2764"></a></var><br>
 <blockquote><p>This variable holds a list of functions to call after any buffer
 modification.  Each function receives three arguments: the beginning and
 end of the region just changed, and the length of the text that existed
@@ -87,11 +87,11 @@ changed text, its length is simply the difference between the first two
 arguments. 
 </p></blockquote></div>
 
-   <p>Output of messages into the `<samp><span class="samp">*Messages*</span></samp>' buffer does not
+   <p>Output of messages into the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer does not
 call these functions.
 
 <div class="defun">
-&mdash; Macro: <b>combine-after-change-calls</b><var> body<small class="dots">...</small><a name="index-combine_002dafter_002dchange_002dcalls-2665"></a></var><br>
+&mdash; Macro: <b>combine-after-change-calls</b><var> body<small class="dots">...</small><a name="index-combine_002dafter_002dchange_002dcalls-2765"></a></var><br>
 <blockquote><p>The macro executes <var>body</var> normally, but arranges to call the
 after-change functions just once for a series of several changes&mdash;if
 that seems safe.
@@ -113,50 +113,32 @@ because it may lead to inefficient behavior for some change hook
 functions. 
 </p></blockquote></div>
 
-   <p>The two variables above are temporarily bound to <code>nil</code> during the
-time that any of these functions is running.  This means that if one of
-these functions changes the buffer, that change won't run these
-functions.  If you do want a hook function to make changes that run
-these functions, make it bind these variables back to their usual
-values.
-
-   <p>One inconvenient result of this protective feature is that you cannot
-have a function in <code>after-change-functions</code> or
-<code>before-change-functions</code> which changes the value of that variable. 
-But that's not a real limitation.  If you want those functions to change
-the list of functions to run, simply add one fixed function to the hook,
-and code that function to look in another variable for other functions
-to call.  Here is an example:
-
-<pre class="example">     (setq my-own-after-change-functions nil)
-     (defun indirect-after-change-function (beg end len)
-       (let ((list my-own-after-change-functions))
-         (while list
-           (funcall (car list) beg end len)
-           (setq list (cdr list)))))
-     
-     (add-hooks 'after-change-functions
-                'indirect-after-change-function)
-</pre>
-   <div class="defun">
-&mdash; Variable: <b>first-change-hook</b><var><a name="index-first_002dchange_002dhook-2666"></a></var><br>
+<div class="defun">
+&mdash; Variable: <b>first-change-hook</b><var><a name="index-first_002dchange_002dhook-2766"></a></var><br>
 <blockquote><p>This variable is a normal hook that is run whenever a buffer is changed
 that was previously in the unmodified state. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-modification-hooks</b><var><a name="index-inhibit_002dmodification_002dhooks-2667"></a></var><br>
+&mdash; Variable: <b>inhibit-modification-hooks</b><var><a name="index-inhibit_002dmodification_002dhooks-2767"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, all of the change hooks are
 disabled; none of them run.  This affects all the hook variables
 described above in this section, as well as the hooks attached to
 certain special text properties (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>) and overlay
-properties (see <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>). 
+properties (see <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>).
+
+        <p>Also, this variable is bound to non-<code>nil</code> while running those
+same hook variables, so that by default modifying the buffer from
+a modification hook does not cause other modification hooks to be run. 
+If you do want modification hooks to be run in a particular piece of
+code that is itself run from a modification hook, then rebind locally
+<code>inhibit-modification-hooks</code> to <code>nil</code>. 
 </p></blockquote></div>
 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
 <!-- Copyright (C) 1998, 1999, 2001, 2002, 2003, 2004, -->
-<!-- 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

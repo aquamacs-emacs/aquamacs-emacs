@@ -3,33 +3,33 @@
 <title>String Conversion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
 <link rel="prev" href="Text-Comparison.html#Text-Comparison" title="Text Comparison">
 <link rel="next" href="Formatting-Strings.html#Formatting-Strings" title="Formatting Strings">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="String-Conversion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Comparison.html#Text-Comparison">Text Comparison</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
@@ -57,15 +57,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 <!-- node-name,  next,  previous,  up -->
 <h3 class="section">4.6 Conversion of Characters and Strings</h3>
 
-<p><a name="index-conversion-of-strings-239"></a>
-  This section describes functions for conversions between characters,
-strings and integers.  <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>)
-and <code>prin1-to-string</code>
-(see <a href="Output-Functions.html#Output-Functions">Output Functions</a>) can also convert Lisp objects into strings. 
-<code>read-from-string</code> (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>) can &ldquo;convert&rdquo; a
-string representation of a Lisp object into an object.  The functions
-<code>string-make-multibyte</code> and <code>string-make-unibyte</code> convert the
-text representation of a string (see <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>).
+<p><a name="index-conversion-of-strings-243"></a>
+  This section describes functions for converting between characters,
+strings and integers.  <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) and
+<code>prin1-to-string</code> (see <a href="Output-Functions.html#Output-Functions">Output Functions</a>) can also convert
+Lisp objects into strings.  <code>read-from-string</code> (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>) can &ldquo;convert&rdquo; a string representation of a Lisp object
+into an object.  The functions <code>string-make-multibyte</code> and
+<code>string-make-unibyte</code> convert the text representation of a string
+(see <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>).
 
    <p>See <a href="Documentation.html#Documentation">Documentation</a>, for functions that produce textual descriptions
 of text characters and general input events
@@ -73,55 +72,55 @@ of text characters and general input events
 are used primarily for making help messages.
 
 <div class="defun">
-&mdash; Function: <b>char-to-string</b><var> character<a name="index-char_002dto_002dstring-240"></a></var><br>
-<blockquote><p><a name="index-character-to-string-241"></a>This function returns a new string containing one character,
+&mdash; Function: <b>char-to-string</b><var> character<a name="index-char_002dto_002dstring-244"></a></var><br>
+<blockquote><p><a name="index-character-to-string-245"></a>This function returns a new string containing one character,
 <var>character</var>.  This function is semi-obsolete because the function
 <code>string</code> is more general.  See <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-to-char</b><var> string<a name="index-string_002dto_002dchar-242"></a></var><br>
-<blockquote><p><a name="index-string-to-character-243"></a>  This function returns the first character in <var>string</var>.  If the
+&mdash; Function: <b>string-to-char</b><var> string<a name="index-string_002dto_002dchar-246"></a></var><br>
+<blockquote><p><a name="index-string-to-character-247"></a>  This function returns the first character in <var>string</var>.  If the
 string is empty, the function returns 0.  The value is also 0 when the
 first character of <var>string</var> is the null character, <acronym>ASCII</acronym> code
 0.
 
      <pre class="example">          (string-to-char "ABC")
-               =&gt; 65
+               &rArr; 65
           
           (string-to-char "xyz")
-               =&gt; 120
+               &rArr; 120
           (string-to-char "")
-               =&gt; 0
+               &rArr; 0
           (string-to-char "\000")
-               =&gt; 0
-     </pre>
+               &rArr; 0
+</pre>
         <p>This function may be eliminated in the future if it does not seem useful
 enough to retain. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>number-to-string</b><var> number<a name="index-number_002dto_002dstring-244"></a></var><br>
-<blockquote><p><a name="index-integer-to-string-245"></a><a name="index-integer-to-decimal-246"></a>This function returns a string consisting of the printed base-ten
+&mdash; Function: <b>number-to-string</b><var> number<a name="index-number_002dto_002dstring-248"></a></var><br>
+<blockquote><p><a name="index-integer-to-string-249"></a><a name="index-integer-to-decimal-250"></a>This function returns a string consisting of the printed base-ten
 representation of <var>number</var>, which may be an integer or a floating
 point number.  The returned value starts with a minus sign if the argument is
 negative.
 
      <pre class="example">          (number-to-string 256)
-               =&gt; "256"
+               &rArr; "256"
           (number-to-string -23)
-               =&gt; "-23"
+               &rArr; "-23"
           (number-to-string -23.5)
-               =&gt; "-23.5"
-     </pre>
-        <p><a name="index-int_002dto_002dstring-247"></a><code>int-to-string</code> is a semi-obsolete alias for this function.
+               &rArr; "-23.5"
+</pre>
+        <p><a name="index-int_002dto_002dstring-251"></a><code>int-to-string</code> is a semi-obsolete alias for this function.
 
         <p>See also the function <code>format</code> in <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-to-number</b><var> string &amp;optional base<a name="index-string_002dto_002dnumber-248"></a></var><br>
-<blockquote><p><a name="index-string-to-number-249"></a>This function returns the numeric value of the characters in
+&mdash; Function: <b>string-to-number</b><var> string &amp;optional base<a name="index-string_002dto_002dnumber-252"></a></var><br>
+<blockquote><p><a name="index-string-to-number-253"></a>This function returns the numeric value of the characters in
 <var>string</var>.  If <var>base</var> is non-<code>nil</code>, it must be an integer
 between 2 and 16 (inclusive), and integers are converted in that base. 
 If <var>base</var> is <code>nil</code>, then base ten is used.  Floating point
@@ -140,17 +139,17 @@ plus or minus sign, nor the leading dot of a floating point number,
 this function returns 0.
 
      <pre class="example">          (string-to-number "256")
-               =&gt; 256
+               &rArr; 256
           (string-to-number "25 is a perfect square.")
-               =&gt; 25
+               &rArr; 25
           (string-to-number "X256")
-               =&gt; 0
+               &rArr; 0
           (string-to-number "-4.5")
-               =&gt; -4.5
+               &rArr; -4.5
           (string-to-number "1e5")
-               =&gt; 100000.0
-     </pre>
-        <p><a name="index-string_002dto_002dint-250"></a><code>string-to-int</code> is an obsolete alias for this function. 
+               &rArr; 100000.0
+</pre>
+        <p><a name="index-string_002dto_002dint-254"></a><code>string-to-int</code> is an obsolete alias for this function. 
 </p></blockquote></div>
 
    <p>Here are some other functions that can convert to or from a string:

@@ -3,32 +3,32 @@
 <title>Hooks for Loading - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Loading.html#Loading" title="Loading">
 <link rel="prev" href="Unloading.html#Unloading" title="Unloading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Hooks-for-Loading"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Unloading.html#Unloading">Unloading</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 <hr>
@@ -54,22 +54,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.10 Hooks for Loading</h3>
 
-<p><a name="index-loading-hooks-805"></a><a name="index-hooks-for-loading-806"></a>
-You can ask for code to be executed if and when a particular library is
-loaded, by calling <code>eval-after-load</code>.
+<p><a name="index-loading-hooks-835"></a><a name="index-hooks-for-loading-836"></a>
+You can ask for code to be executed each time Emacs loads a library,
+by using the variable <code>after-load-functions</code>:
 
 <div class="defun">
-&mdash; Function: <b>eval-after-load</b><var> library form<a name="index-eval_002dafter_002dload-807"></a></var><br>
+&mdash; Variable: <b>after-load-functions</b><var><a name="index-after_002dload_002dfunctions-837"></a></var><br>
+<blockquote><p>This abnormal hook is run after loading a file.  Each function in the
+hook is called with a single argument, the absolute filename of the
+file that was just loaded. 
+</p></blockquote></div>
+
+   <p>If you want code to be executed when a <em>particular</em> library is
+loaded, use the function <code>eval-after-load</code>:
+
+<div class="defun">
+&mdash; Function: <b>eval-after-load</b><var> library form<a name="index-eval_002dafter_002dload-838"></a></var><br>
 <blockquote><p>This function arranges to evaluate <var>form</var> at the end of loading
 the file <var>library</var>, each time <var>library</var> is loaded.  If
 <var>library</var> is already loaded, it evaluates <var>form</var> right away. 
 Don't forget to quote <var>form</var>!
 
         <p>You don't need to give a directory or extension in the file name
-<var>library</var>&mdash;normally you just give a bare file name, like this:
+<var>library</var>.  Normally, you just give a bare file name, like this:
 
      <pre class="example">          (eval-after-load "edebug" '(def-edebug-spec c-point t))
-     </pre>
+</pre>
         <p>To restrict which files can trigger the evaluation, include a
 directory or an extension or both in <var>library</var>.  Only a file whose
 absolute true name (i.e., the name with all symbolic links chased out)
@@ -79,7 +89,7 @@ example, <samp><span class="file">my_inst.elc</span></samp> or <samp><span class
 <samp><span class="file">my_inst.el</span></samp>:
 
      <pre class="example">          (eval-after-load "foo/bar/my_inst.elc" ...)
-     </pre>
+</pre>
         <p><var>library</var> can also be a feature (i.e. a symbol), in which case
 <var>form</var> is evaluated when <code>(provide </code><var>library</var><code>)</code> is called.
 
@@ -87,36 +97,35 @@ example, <samp><span class="file">my_inst.elc</span></samp> or <samp><span class
 execution of the rest of <var>form</var>. 
 </p></blockquote></div>
 
-   <p>In general, well-designed Lisp programs should not use this feature. 
-The clean and modular ways to interact with a Lisp library are (1)
-examine and set the library's variables (those which are meant for
-outside use), and (2) call the library's functions.  If you wish to
-do (1), you can do it immediately&mdash;there is no need to wait for when
-the library is loaded.  To do (2), you must load the library (preferably
-with <code>require</code>).
+   <p>Normally, well-designed Lisp programs should not use
+<code>eval-after-load</code>.  If you need to examine and set the variables
+defined in another library (those meant for outside use), you can do
+it immediately&mdash;there is no need to wait until the library is loaded. 
+If you need to call functions defined by that library, you should load
+the library, preferably with <code>require</code> (see <a href="Named-Features.html#Named-Features">Named Features</a>).
 
    <p>But it is OK to use <code>eval-after-load</code> in your personal
-customizations if you don't feel they must meet the design standards for
-programs meant for wider use.
+customizations if you don't feel that they must meet the design
+standards for programs meant for wider use.
 
 <div class="defun">
-&mdash; Variable: <b>after-load-alist</b><var><a name="index-after_002dload_002dalist-808"></a></var><br>
-<blockquote><p>This variable, an alist built by <code>eval-after-load</code>, holds the
-expressions to evaluate when particular libraries are loaded.  Each
-element looks like this:
+&mdash; Variable: <b>after-load-alist</b><var><a name="index-after_002dload_002dalist-839"></a></var><br>
+<blockquote><p>This variable stores an alist built by <code>eval-after-load</code>,
+containing the expressions to evaluate when certain libraries are
+loaded.  Each element looks like this:
 
      <pre class="example">          (<var>regexp-or-feature</var> <var>forms</var>...)
-     </pre>
+</pre>
         <p>The key <var>regexp-or-feature</var> is either a regular expression or a
-symbol, and the value is a list of forms.  The forms are evaluated when
-the key matches the absolute true name of the file being
-<code>load</code>ed or the symbol being <code>provide</code>d. 
+symbol, and the value is a list of forms.  The forms are evaluated
+when the key matches the absolute true name or feature name of the
+library being loaded. 
 </p></blockquote></div>
 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
 <!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 2001, 2002, 2003, 2004, -->
-<!-- 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

@@ -3,33 +3,33 @@
 <title>Yes-or-No Queries - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
 <link rel="prev" href="Completion.html#Completion" title="Completion">
 <link rel="next" href="Multiple-Queries.html#Multiple-Queries" title="Multiple Queries">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Yes-or-No-Queries"></a>
 <a name="Yes_002dor_002dNo-Queries"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Multiple-Queries.html#Multiple-Queries">Multiple Queries</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion.html#Completion">Completion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffe
 
 <h3 class="section">20.7 Yes-or-No Queries</h3>
 
-<p><a name="index-asking-the-user-questions-1119"></a><a name="index-querying-the-user-1120"></a><a name="index-yes_002dor_002dno-questions-1121"></a>
+<p><a name="index-asking-the-user-questions-1161"></a><a name="index-querying-the-user-1162"></a><a name="index-yes_002dor_002dno-questions-1163"></a>
   This section describes functions used to ask the user a yes-or-no
 question.  The function <code>y-or-n-p</code> can be answered with a single
 character; it is useful for questions where an inadvertent wrong answer
@@ -77,7 +77,7 @@ the call.
 <code>y-or-n-p</code> does not; but it seems best to describe them together.
 
 <div class="defun">
-&mdash; Function: <b>y-or-n-p</b><var> prompt<a name="index-y_002dor_002dn_002dp-1122"></a></var><br>
+&mdash; Function: <b>y-or-n-p</b><var> prompt<a name="index-y_002dor_002dn_002dp-1164"></a></var><br>
 <blockquote><p>This function asks the user a question, expecting input in the echo
 area.  It returns <code>t</code> if the user types <kbd>y</kbd>, <code>nil</code> if the
 user types <kbd>n</kbd>.  This function also accepts &lt;SPC&gt; to mean yes
@@ -88,16 +88,16 @@ is a single character, with no &lt;RET&gt; needed to terminate it.  Upper
 and lower case are equivalent.
 
         <p>&ldquo;Asking the question&rdquo; means printing <var>prompt</var> in the echo area,
-followed by the string `<samp><span class="samp">(y&nbsp;or&nbsp;n)&nbsp;</span></samp>'<!-- /@w -->.  If the input is not one of
+followed by the string &lsquo;<samp><span class="samp">(y&nbsp;or&nbsp;n)&nbsp;</span></samp>&rsquo;<!-- /@w -->.  If the input is not one of
 the expected answers (<kbd>y</kbd>, <kbd>n</kbd>, <kbd>&lt;SPC&gt;</kbd>,
 <kbd>&lt;DEL&gt;</kbd>, or something that quits), the function responds
-`<samp><span class="samp">Please answer y or n.</span></samp>', and repeats the request.
+&lsquo;<samp><span class="samp">Please answer y or n.</span></samp>&rsquo;, and repeats the request.
 
         <p>This function does not actually use the minibuffer, since it does not
 allow editing of the answer.  It actually uses the echo area (see <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>), which uses the same screen space as the minibuffer.  The
 cursor moves to the echo area while the question is being asked.
 
-        <p>The answers and their meanings, even `<samp><span class="samp">y</span></samp>' and `<samp><span class="samp">n</span></samp>', are not
+        <p>The answers and their meanings, even &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, are not
 hardwired.  The keymap <code>query-replace-map</code> specifies them. 
 See <a href="Search-and-Replace.html#Search-and-Replace">Search and Replace</a>.
 
@@ -125,13 +125,13 @@ invalid.  At the next prompt the user types <kbd>y</kbd>.
           ---------- Echo area ----------
           Do you need a lift? (y or n) y
           ---------- Echo area ----------
-     </pre>
+</pre>
         <p class="noindent">We show successive lines of echo area messages, but only one actually
 appears on the screen at a time. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>y-or-n-p-with-timeout</b><var> prompt seconds default-value<a name="index-y_002dor_002dn_002dp_002dwith_002dtimeout-1123"></a></var><br>
+&mdash; Function: <b>y-or-n-p-with-timeout</b><var> prompt seconds default-value<a name="index-y_002dor_002dn_002dp_002dwith_002dtimeout-1165"></a></var><br>
 <blockquote><p>Like <code>y-or-n-p</code>, except that if the user fails to answer within
 <var>seconds</var> seconds, this function stops waiting and returns
 <var>default-value</var>.  It works by setting up a timer; see <a href="Timers.html#Timers">Timers</a>. 
@@ -139,16 +139,16 @@ The argument <var>seconds</var> may be an integer or a floating point number.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>yes-or-no-p</b><var> prompt<a name="index-yes_002dor_002dno_002dp-1124"></a></var><br>
+&mdash; Function: <b>yes-or-no-p</b><var> prompt<a name="index-yes_002dor_002dno_002dp-1166"></a></var><br>
 <blockquote><p>This function asks the user a question, expecting input in the
-minibuffer.  It returns <code>t</code> if the user enters `<samp><span class="samp">yes</span></samp>',
-<code>nil</code> if the user types `<samp><span class="samp">no</span></samp>'.  The user must type &lt;RET&gt; to
+minibuffer.  It returns <code>t</code> if the user enters &lsquo;<samp><span class="samp">yes</span></samp>&rsquo;,
+<code>nil</code> if the user types &lsquo;<samp><span class="samp">no</span></samp>&rsquo;.  The user must type &lt;RET&gt; to
 finalize the response.  Upper and lower case are equivalent.
 
         <p><code>yes-or-no-p</code> starts by displaying <var>prompt</var> in the echo area,
-followed by `<samp><span class="samp">(yes&nbsp;or&nbsp;no)&nbsp;</span></samp>'<!-- /@w -->.  The user must type one of the
-expected responses; otherwise, the function responds `<samp><span class="samp">Please answer
-yes or no.</span></samp>', waits about two seconds and repeats the request.
+followed by &lsquo;<samp><span class="samp">(yes&nbsp;or&nbsp;no)&nbsp;</span></samp>&rsquo;<!-- /@w -->.  The user must type one of the
+expected responses; otherwise, the function responds &lsquo;<samp><span class="samp">Please answer
+yes or no.</span></samp>&rsquo;, waits about two seconds and repeats the request.
 
         <p><code>yes-or-no-p</code> requires more work from the user than
 <code>y-or-n-p</code> and is appropriate for more crucial decisions.
@@ -164,16 +164,16 @@ yes or no.</span></samp>', waits about two seconds and repeats the request.
           ---------- Buffer: minibuffer ----------
           Do you really want to remove everything? (yes or no)
           ---------- Buffer: minibuffer ----------
-     </pre>
+</pre>
         <p class="noindent">If the user first types <kbd>y &lt;RET&gt;</kbd>, which is invalid because this
-function demands the entire word `<samp><span class="samp">yes</span></samp>', it responds by displaying
+function demands the entire word &lsquo;<samp><span class="samp">yes</span></samp>&rsquo;, it responds by displaying
 these prompts, with a brief pause between them:
 
      <pre class="smallexample">          ---------- Buffer: minibuffer ----------
           Please answer yes or no.
           Do you really want to remove everything? (yes or no)
           ---------- Buffer: minibuffer ----------
-     </pre>
+</pre>
         </blockquote></div>
 
    </body></html>

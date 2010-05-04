@@ -3,33 +3,33 @@
 <title>Creating Keymaps - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
 <link rel="prev" href="Format-of-Keymaps.html#Format-of-Keymaps" title="Format of Keymaps">
 <link rel="next" href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" title="Inheritance and Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Creating-Keymaps"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps">Inheritance and Keymaps</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
@@ -56,19 +56,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.4 Creating Keymaps</h3>
 
-<p><a name="index-creating-keymaps-1395"></a>
+<p><a name="index-creating-keymaps-1446"></a>
   Here we describe the functions for creating keymaps.
 
 <div class="defun">
-&mdash; Function: <b>make-sparse-keymap</b><var> &amp;optional prompt<a name="index-make_002dsparse_002dkeymap-1396"></a></var><br>
+&mdash; Function: <b>make-sparse-keymap</b><var> &amp;optional prompt<a name="index-make_002dsparse_002dkeymap-1447"></a></var><br>
 <blockquote><p>This function creates and returns a new sparse keymap with no entries. 
 (A sparse keymap is the kind of keymap you usually want.)  The new
 keymap does not contain a char-table, unlike <code>make-keymap</code>, and
 does not bind any events.
 
      <pre class="example">          (make-sparse-keymap)
-              =&gt; (keymap)
-     </pre>
+              &rArr; (keymap)
+</pre>
         <p>If you specify <var>prompt</var>, that becomes the overall prompt string
 for the keymap.  You should specify this only for menu keymaps
 (see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).  A keymap with an overall prompt string will
@@ -79,7 +79,7 @@ the command loop to present a keyboard menu every time.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-keymap</b><var> &amp;optional prompt<a name="index-make_002dkeymap-1397"></a></var><br>
+&mdash; Function: <b>make-keymap</b><var> &amp;optional prompt<a name="index-make_002dkeymap-1448"></a></var><br>
 <blockquote><p>This function creates and returns a new full keymap.  That keymap
 contains a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) with slots for all
 characters without modifiers.  The new keymap initially binds all
@@ -88,14 +88,14 @@ event.  The argument <var>prompt</var> specifies a
 prompt string, as in <code>make-sparse-keymap</code>.
 
      <pre class="example">          (make-keymap)
-              =&gt; (keymap #^[t nil nil nil ... nil nil keymap])
-     </pre>
+              &rArr; (keymap #^[t nil nil nil ... nil nil keymap])
+</pre>
         <p>A full keymap is more efficient than a sparse keymap when it holds
 lots of bindings; for just a few, the sparse keymap is better. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>copy-keymap</b><var> keymap<a name="index-copy_002dkeymap-1398"></a></var><br>
+&mdash; Function: <b>copy-keymap</b><var> keymap<a name="index-copy_002dkeymap-1449"></a></var><br>
 <blockquote><p>This function returns a copy of <var>keymap</var>.  Any keymaps that
 appear directly as bindings in <var>keymap</var> are also copied recursively,
 and so on to any number of levels.  However, recursive copying does not
@@ -104,7 +104,7 @@ definition is a keymap; the same symbol appears in the new copy.
 <!-- Emacs 19 feature -->
 
      <pre class="example">          (setq map (copy-keymap (current-local-map)))
-          =&gt; (keymap
+          &rArr; (keymap
                ;; <span class="roman">(This implements meta characters.)</span>
                (27 keymap
                    (83 . center-paragraph)
@@ -112,10 +112,10 @@ definition is a keymap; the same symbol appears in the new copy.
                (9 . tab-to-tab-stop))
           
           (eq map (current-local-map))
-              =&gt; nil
+              &rArr; nil
           (equal map (current-local-map))
-              =&gt; t
-     </pre>
+              &rArr; t
+</pre>
         </blockquote></div>
 
    </body></html>

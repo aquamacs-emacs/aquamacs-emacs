@@ -3,7 +3,7 @@
 <title>Sexp Diary Entries - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
 <link rel="prev" href="Fancy-Diary-Display.html#Fancy-Diary-Display" title="Fancy Diary Display">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,27 +46,27 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Sexp-Diary-Entries"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.15.8 Sexp Entries and the Fancy Diary Display</h4>
+<h4 class="subsection">38.15.9 Sexp Entries and the Fancy Diary Display</h4>
 
-<p><a name="index-sexp-diary-entries-3448"></a>
-<a name="index-diary_002dsexp_002dentry_002dsymbol-3449"></a>  Sexp diary entries allow you to do more than just have complicated
+<p><a name="index-sexp-diary-entries-3472"></a>
+<a name="index-diary_002dsexp_002dentry_002dsymbol-3473"></a>  Sexp diary entries allow you to do more than just have complicated
 conditions under which a diary entry applies.  Sexp entries should be
-preceded by <code>diary-sexp-entry-symbol</code> (default `<samp><span class="samp">%%</span></samp>') in the
-diary file.  If you use the fancy diary display, sexp entries can
-generate the text of the entry depending on the date itself.
+preceded by <code>diary-sexp-entry-symbol</code> (default &lsquo;<samp><span class="samp">%%</span></samp>&rsquo;) in the
+diary file.  With the fancy diary display, sexp entries can generate the
+text of the entry depending on the date itself.
 
    <p>For example, an anniversary diary entry can insert
 the number of years since the anniversary date into the text of the
-diary entry.  Thus the `<samp><span class="samp">%d</span></samp>' in this diary entry:
+diary entry.  Thus the &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; in this diary entry:
 
-   <p><a name="index-diary_002danniversary-3450"></a>
+   <p><a name="index-diary_002danniversary-3474"></a>
 <pre class="smallexample">     %%(diary-anniversary 10 31 1948) Arthur's birthday (%d years old)
 </pre>
    <p class="noindent">gets replaced by the age, so on October 31, 1990 the entry appears in
@@ -85,7 +85,7 @@ the fancy diary buffer like this:
    <p>Similarly, cyclic diary entries can interpolate the number of repetitions
 that have occurred:
 
-   <p><a name="index-diary_002dcyclic-3451"></a>
+   <p><a name="index-diary_002dcyclic-3475"></a>
 <pre class="smallexample">     %%(diary-cyclic 50 1 1 1990) Renew medication (%d%s time)
 </pre>
    <p class="noindent">looks like this:
@@ -99,13 +99,13 @@ diary not only on the date of occurrence, but also on earlier dates.
 For example, if you want a reminder a week before your anniversary, you
 can use
 
-   <p><a name="index-diary_002dremind-3452"></a>
+   <p><a name="index-diary_002dremind-3476"></a>
 <pre class="smallexample">     %%(diary-remind '(diary-anniversary 12 22 1968) 7) Ed's anniversary
 </pre>
-   <p class="noindent">and the fancy diary will show `<samp><span class="samp">Ed's anniversary</span></samp>' both on December
+   <p class="noindent">and the fancy diary will show &lsquo;<samp><span class="samp">Ed's anniversary</span></samp>&rsquo; both on December
 15 and on December 22.
 
-   <p><a name="index-diary_002ddate-3453"></a>  The function <code>diary-date</code> applies to dates described by a month,
+   <p><a name="index-diary_002ddate-3477"></a>  The function <code>diary-date</code> applies to dates described by a month,
 day, year combination, each of which can be an integer, a list of
 integers, or <code>t</code> (meaning all values).  For example,
 
@@ -117,7 +117,7 @@ integers, or <code>t</code> (meaning all values).  For example,
 </pre>
    <p class="noindent">on October 22, November 22, and December 22 of every year.
 
-   <p><a name="index-diary_002dfloat-3454"></a>  The function <code>diary-float</code> allows you to describe diary entries
+   <p><a name="index-diary_002dfloat-3478"></a>  The function <code>diary-float</code> allows you to describe diary entries
 that apply to dates like the third Friday of November, or the last
 Tuesday in April.  The parameters are the <var>month</var>, <var>dayname</var>,
 and an index <var>n</var>.  The entry appears on the <var>n</var>th <var>dayname</var>
@@ -171,7 +171,7 @@ a sexp diary entry that matches those dates:
    <p>The following sexp diary entries take advantage of the ability (in the fancy
 diary display) to concoct diary entries whose text varies based on the date:
 
-   <p><a name="index-diary_002dsunrise_002dsunset-3455"></a><a name="index-diary_002dlunar_002dphases-3456"></a><a name="index-diary_002dday_002dof_002dyear-3457"></a><a name="index-diary_002diso_002ddate-3458"></a><a name="index-diary_002djulian_002ddate-3459"></a><a name="index-diary_002dastro_002dday_002dnumber-3460"></a><a name="index-diary_002dbahai_002ddate-3461"></a><a name="index-diary_002dchinese_002ddate-3462"></a><a name="index-diary_002dcoptic_002ddate-3463"></a><a name="index-diary_002dethiopic_002ddate-3464"></a><a name="index-diary_002dhebrew_002ddate-3465"></a><a name="index-diary_002dislamic_002ddate-3466"></a><a name="index-diary_002dfrench_002ddate-3467"></a><a name="index-diary_002dmayan_002ddate-3468"></a><a name="index-diary_002dpersian_002ddate-3469"></a>
+   <p><a name="index-diary_002dsunrise_002dsunset-3479"></a><a name="index-diary_002dlunar_002dphases-3480"></a><a name="index-diary_002dday_002dof_002dyear-3481"></a><a name="index-diary_002diso_002ddate-3482"></a><a name="index-diary_002djulian_002ddate-3483"></a><a name="index-diary_002dastro_002dday_002dnumber-3484"></a><a name="index-diary_002dbahai_002ddate-3485"></a><a name="index-diary_002dchinese_002ddate-3486"></a><a name="index-diary_002dcoptic_002ddate-3487"></a><a name="index-diary_002dethiopic_002ddate-3488"></a><a name="index-diary_002dhebrew_002ddate-3489"></a><a name="index-diary_002dislamic_002ddate-3490"></a><a name="index-diary_002dfrench_002ddate-3491"></a><a name="index-diary_002dmayan_002ddate-3492"></a><a name="index-diary_002dpersian_002ddate-3493"></a>
      <dl>
 <dt><code>%%(diary-sunrise-sunset)</code><dd>Make a diary entry for today's local times of sunrise and sunset. 
 <br><dt><code>%%(diary-lunar-phases)</code><dd>Make a diary entry for the phases (quarters) of the moon. 
@@ -198,13 +198,13 @@ calendar.
 </pre>
    <p class="noindent">causes every day's diary display to contain the equivalent date on the
 Hebrew calendar, if you are using the fancy diary display.  (With simple
-diary display, the literal line `<samp><span class="samp">&amp;%%(diary-hebrew-date)</span></samp>' appears in
+diary display, the literal line &lsquo;<samp><span class="samp">&amp;%%(diary-hebrew-date)</span></samp>&rsquo; appears in
 the diary for any date.)
 
    <p>This function has been used to construct certain standard Hebrew sexp
 diary entries:
 
-   <p><a name="index-rosh-hodesh-3470"></a><a name="index-diary_002dhebrew_002drosh_002dhodesh-3471"></a><a name="index-parasha_002c-weekly-3472"></a><a name="index-diary_002dhebrew_002dparasha-3473"></a><a name="index-candle-lighting-times-3474"></a><a name="index-diary_002dhebrew_002dsabbath_002dcandles-3475"></a><a name="index-omer-count-3476"></a><a name="index-diary_002dhebrew_002domer-3477"></a><a name="index-yahrzeits-3478"></a><a name="index-diary_002dhebrew_002dyahrzeit-3479"></a>
+   <p><a name="index-rosh-hodesh-3494"></a><a name="index-diary_002dhebrew_002drosh_002dhodesh-3495"></a><a name="index-parasha_002c-weekly-3496"></a><a name="index-diary_002dhebrew_002dparasha-3497"></a><a name="index-candle-lighting-times-3498"></a><a name="index-diary_002dhebrew_002dsabbath_002dcandles-3499"></a><a name="index-omer-count-3500"></a><a name="index-diary_002dhebrew_002domer-3501"></a><a name="index-yahrzeits-3502"></a><a name="index-diary_002dhebrew_002dyahrzeit-3503"></a>
      <dl>
 <dt><code>%%(diary-hebrew-rosh-hodesh)</code><dd>Make a diary entry that tells the occurrence and ritual announcement of each
 new Hebrew month. 
@@ -226,7 +226,8 @@ it returns a value that contains <var>mark</var>, as described above.
 
 <!-- This is part of the Emacs manual. -->
 <!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc. -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
+<!-- Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

@@ -3,33 +3,33 @@
 <title>Quitting - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
 <link rel="prev" href="Waiting.html#Waiting" title="Waiting">
 <link rel="next" href="Prefix-Command-Arguments.html#Prefix-Command-Arguments" title="Prefix Command Arguments">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,17 +46,17 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Quitting"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Waiting.html#Waiting">Waiting</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
 <hr>
 </div>
 
-<h3 class="section">21.10 Quitting</h3>
+<h3 class="section">21.11 Quitting</h3>
 
-<p><a name="index-g_t_0040kbd_007bC_002dg_007d-1328"></a><a name="index-quitting-1329"></a><a name="index-interrupt-Lisp-functions-1330"></a>
+<p><a name="index-g_t_0040kbd_007bC_002dg_007d-1379"></a><a name="index-quitting-1380"></a><a name="index-interrupt-Lisp-functions-1381"></a>
   Typing <kbd>C-g</kbd> while a Lisp function is running causes Emacs to
 <dfn>quit</dfn> whatever it is doing.  This means that control returns to the
 innermost active command loop.
@@ -98,7 +98,7 @@ about the special behavior of <kbd>C-g</kbd> in the command loop.  In the
 case of <code>read-quoted-char</code>, this is so that <kbd>C-q</kbd> can be used
 to quote a <kbd>C-g</kbd>.
 
-   <p><a name="index-preventing-quitting-1331"></a>  You can prevent quitting for a portion of a Lisp function by binding
+   <p><a name="index-preventing-quitting-1382"></a>  You can prevent quitting for a portion of a Lisp function by binding
 the variable <code>inhibit-quit</code> to a non-<code>nil</code> value.  Then,
 although <kbd>C-g</kbd> still sets <code>quit-flag</code> to <code>t</code> as usual, the
 usual result of this&mdash;a quit&mdash;is prevented.  Eventually,
@@ -108,7 +108,7 @@ binding is unwound at the end of a <code>let</code> form.  At that time, if
 immediately.  This behavior is ideal when you wish to make sure that
 quitting does not happen within a &ldquo;critical section&rdquo; of the program.
 
-   <p><a name="index-g_t_0040code_007bread_002dquoted_002dchar_007d-quitting-1332"></a>  In some functions (such as <code>read-quoted-char</code>), <kbd>C-g</kbd> is
+   <p><a name="index-g_t_0040code_007bread_002dquoted_002dchar_007d-quitting-1383"></a>  In some functions (such as <code>read-quoted-char</code>), <kbd>C-g</kbd> is
 handled in a special way that does not involve quitting.  This is done
 by reading the input with <code>inhibit-quit</code> bound to <code>t</code>, and
 setting <code>quit-flag</code> to <code>nil</code> before <code>inhibit-quit</code>
@@ -129,21 +129,21 @@ normal quitting is permitted after the first character of input.
          code))
 </pre>
    <div class="defun">
-&mdash; Variable: <b>quit-flag</b><var><a name="index-quit_002dflag-1333"></a></var><br>
+&mdash; Variable: <b>quit-flag</b><var><a name="index-quit_002dflag-1384"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, then Emacs quits immediately, unless
 <code>inhibit-quit</code> is non-<code>nil</code>.  Typing <kbd>C-g</kbd> ordinarily sets
 <code>quit-flag</code> non-<code>nil</code>, regardless of <code>inhibit-quit</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-quit</b><var><a name="index-inhibit_002dquit-1334"></a></var><br>
+&mdash; Variable: <b>inhibit-quit</b><var><a name="index-inhibit_002dquit-1385"></a></var><br>
 <blockquote><p>This variable determines whether Emacs should quit when <code>quit-flag</code>
 is set to a value other than <code>nil</code>.  If <code>inhibit-quit</code> is
 non-<code>nil</code>, then <code>quit-flag</code> has no special effect. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-local-quit</b><var> body<small class="dots">...</small><a name="index-with_002dlocal_002dquit-1335"></a></var><br>
+&mdash; Macro: <b>with-local-quit</b><var> body<small class="dots">...</small><a name="index-with_002dlocal_002dquit-1386"></a></var><br>
 <blockquote><p>This macro executes <var>body</var> forms in sequence, but allows quitting, at
 least locally, within <var>body</var> even if <code>inhibit-quit</code> was
 non-<code>nil</code> outside this construct.  It returns the value of the
@@ -168,7 +168,7 @@ normally bound to <code>t</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>keyboard-quit</b><var><a name="index-keyboard_002dquit-1336"></a></var><br>
+&mdash; Command: <b>keyboard-quit</b><var><a name="index-keyboard_002dquit-1387"></a></var><br>
 <blockquote><p>This function signals the <code>quit</code> condition with <code>(signal 'quit
 nil)</code>.  This is the same thing that quitting does.  (See <code>signal</code>
 in <a href="Errors.html#Errors">Errors</a>.) 

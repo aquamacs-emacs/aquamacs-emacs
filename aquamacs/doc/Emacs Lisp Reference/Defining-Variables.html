@@ -3,33 +3,33 @@
 <title>Defining Variables - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="Void-Variables.html#Void-Variables" title="Void Variables">
 <link rel="next" href="Tips-for-Defining.html#Tips-for-Defining" title="Tips for Defining">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Variables"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Tips-for-Defining.html#Tips-for-Defining">Tips for Defining</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Void-Variables.html#Void-Variables">Void Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.5 Defining Global Variables</h3>
 
-<p><a name="index-variable-definition-593"></a>
+<p><a name="index-variable-definition-600"></a>
   You may announce your intention to use a symbol as a global variable
 with a <dfn>variable definition</dfn>: a special form, either <code>defconst</code>
 or <code>defvar</code>.
@@ -78,7 +78,7 @@ declarations.  However, it does make a difference for initialization:
 <code>defvar</code> initializes it only if it is void.
 
 <div class="defun">
-&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-594"></a></var><br>
+&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-601"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a variable and can also
 initialize and document it.  The definition informs a person reading
 your code that <var>symbol</var> is used as a variable that might be set or
@@ -107,27 +107,27 @@ the main benefits of defining the variable.)  The documentation is
 stored in the symbol's <code>variable-documentation</code> property.  The
 Emacs help functions (see <a href="Documentation.html#Documentation">Documentation</a>) look for this property.
 
-        <p>If the variable is a user option that users would want to set
-interactively, you should use `<samp><span class="samp">*</span></samp>' as the first character of
-<var>doc-string</var>.  This lets users set the variable conveniently using
-the <code>set-variable</code> command.  Note that you should nearly always
-use <code>defcustom</code> instead of <code>defvar</code> to define these
-variables, so that users can use <kbd>M-x customize</kbd> and related
-commands to set them.  See <a href="Customization.html#Customization">Customization</a>.
+        <p>If the documentation string begins with the character &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, Emacs
+allows users to set it interactively using the <code>set-variable</code>
+command.  However, you should nearly always use <code>defcustom</code>
+instead of <code>defvar</code> to define such variables, so that users can
+use <kbd>M-x customize</kbd> and related commands to set them.  In that
+case, it is not necessary to begin the documentation string with
+&lsquo;<samp><span class="samp">*</span></samp>&rsquo;.  See <a href="Customization.html#Customization">Customization</a>.
 
         <p>Here are some examples.  This form defines <code>foo</code> but does not
 initialize it:
 
      <pre class="example">          (defvar foo)
-               =&gt; foo
-     </pre>
+               &rArr; foo
+</pre>
         <p>This example initializes the value of <code>bar</code> to <code>23</code>, and gives
 it a documentation string:
 
      <pre class="example">          (defvar bar 23
             "The normal weight of a bar.")
-               =&gt; bar
-     </pre>
+               &rArr; bar
+</pre>
         <p>The following form changes the documentation string for <code>bar</code>,
 making it a user option, but does not change the value, since <code>bar</code>
 already has a value.  (The addition <code>(1+ nil)</code> would get an error
@@ -135,10 +135,10 @@ if it were evaluated, but since it is not evaluated, there is no error.)
 
      <pre class="example">          (defvar bar (1+ nil)
             "*The normal weight of a bar.")
-               =&gt; bar
+               &rArr; bar
           bar
-               =&gt; 23
-     </pre>
+               &rArr; 23
+</pre>
         <p>Here is an equivalent expression for the <code>defvar</code> special form:
 
      <pre class="example">          (defvar <var>symbol</var> <var>value</var> <var>doc-string</var>)
@@ -149,13 +149,15 @@ if it were evaluated, but since it is not evaluated, there is no error.)
             (if '<var>doc-string</var>
               (put '<var>symbol</var> 'variable-documentation '<var>doc-string</var>))
             '<var>symbol</var>)
-     </pre>
+</pre>
         <p>The <code>defvar</code> form returns <var>symbol</var>, but it is normally used
 at top level in a file where its value does not matter. 
 </p></blockquote></div>
 
+   <p><a name="index-constant-variables-602"></a>
+
 <div class="defun">
-&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-595"></a></var><br>
+&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-603"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a value and initializes it. 
 It informs a person reading your code that <var>symbol</var> has a standard
 global value, established here, that should not be changed by the user
@@ -174,17 +176,17 @@ by anyone (attempts by the Indiana State Legislature notwithstanding).
 As the second form illustrates, however, this is only advisory.
 
      <pre class="example">          (defconst pi 3.1415 "Pi to five places.")
-               =&gt; pi
+               &rArr; pi
           (setq pi 3)
-               =&gt; pi
+               &rArr; pi
           pi
-               =&gt; 3
-     </pre>
+               &rArr; 3
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>user-variable-p</b><var> variable<a name="index-user_002dvariable_002dp-596"></a></var><br>
-<blockquote><p><a name="index-user-option-597"></a>This function returns <code>t</code> if <var>variable</var> is a user option&mdash;a
+&mdash; Function: <b>user-variable-p</b><var> variable<a name="index-user_002dvariable_002dp-604"></a></var><br>
+<blockquote><p><a name="index-user-option-605"></a>This function returns <code>t</code> if <var>variable</var> is a user option&mdash;a
 variable intended to be set by the user for customization&mdash;and
 <code>nil</code> otherwise.  (Variables other than user options exist for the
 internal purposes of Lisp programs, and users need not know about them.)
@@ -192,11 +194,11 @@ internal purposes of Lisp programs, and users need not know about them.)
         <p>User option variables are distinguished from other variables either
 though being declared using <code>defcustom</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> or by the first character
 of their <code>variable-documentation</code> property.  If the property exists
-and is a string, and its first character is `<samp><span class="samp">*</span></samp>', then the variable
+and is a string, and its first character is &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, then the variable
 is a user option.  Aliases of user options are also user options. 
 </p></blockquote></div>
 
-   <p><a name="index-variable_002dinteractive-598"></a>  If a user option variable has a <code>variable-interactive</code> property,
+   <p><a name="index-variable_002dinteractive-606"></a>  If a user option variable has a <code>variable-interactive</code> property,
 the <code>set-variable</code> command uses that value to control reading the
 new value for the variable.  The property's value is used as if it were
 specified in <code>interactive</code> (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>).  However,
@@ -216,7 +218,7 @@ load the file before making a local binding for the variable.
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> They may also be
 declared equivalently in <samp><span class="file">cus-start.el</span></samp>.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

@@ -3,32 +3,32 @@
 <title>Suspending Emacs - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Getting-Out.html#Getting-Out" title="Getting Out">
 <link rel="prev" href="Killing-Emacs.html#Killing-Emacs" title="Killing Emacs">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Suspending-Emacs"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Killing-Emacs.html#Killing-Emacs">Killing Emacs</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Out.html#Getting-Out">Getting Out</a>
 <hr>
@@ -54,64 +54,70 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Out.html#Getting-Out">Getting O
 
 <h4 class="subsection">39.2.2 Suspending Emacs</h4>
 
-<p><a name="index-suspending-Emacs-3491"></a>
-  <dfn>Suspending Emacs</dfn> means stopping Emacs temporarily and returning
-control to its superior process, which is usually the shell.  This
-allows you to resume editing later in the same Emacs process, with the
-same buffers, the same kill ring, the same undo history, and so on.  To
-resume Emacs, use the appropriate command in the parent shell&mdash;most
-likely <code>fg</code>.
+<p><a name="index-suspending-Emacs-3719"></a>
+  On text-only terminals, it is possible to <dfn>suspend Emacs</dfn>, which
+means stopping Emacs temporarily and returning control to its superior
+process, which is usually the shell.  This allows you to resume
+editing later in the same Emacs process, with the same buffers, the
+same kill ring, the same undo history, and so on.  To resume Emacs,
+use the appropriate command in the parent shell&mdash;most likely
+<code>fg</code>.
+
+   <p><a name="index-controlling-terminal-3720"></a>  Suspending works only on a terminal device from which the Emacs
+session was started.  We call that device the <dfn>controlling
+terminal</dfn> of the session.  Suspending is not allowed if the
+controlling terminal is a graphical terminal.
 
    <p>Some operating systems do not support suspension of jobs; on these
 systems, &ldquo;suspension&rdquo; actually creates a new shell temporarily as a
 subprocess of Emacs.  Then you would exit the shell to return to Emacs.
 
-   <p>Suspension is not useful with window systems, because the Emacs job
-may not have a parent that can resume it again, and in any case you can
-give input to some other job such as a shell merely by moving to a
-different window.  Therefore, suspending is not allowed when Emacs is using
-a window system (X, MS Windows, or Mac).
-
 <div class="defun">
-&mdash; Function: <b>suspend-emacs</b><var> &amp;optional string<a name="index-suspend_002demacs-3492"></a></var><br>
+&mdash; Command: <b>suspend-emacs</b><var> &amp;optional string<a name="index-suspend_002demacs-3721"></a></var><br>
 <blockquote><p>This function stops Emacs and returns control to the superior process. 
 If and when the superior process resumes Emacs, <code>suspend-emacs</code>
 returns <code>nil</code> to its caller in Lisp.
 
-        <p>If <var>string</var> is non-<code>nil</code>, its characters are sent to be read
-as terminal input by Emacs's superior shell.  The characters in
+        <p>This function works only on the controlling terminal of the Emacs
+session; to relinquish control of other tty devices, use
+<code>suspend-tty</code> (see below).  If the Emacs session uses more than
+one terminal, you must delete the frames on all the other terminals
+before suspending Emacs, or this function signals an error. 
+See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+
+        <p>If <var>string</var> is non-<code>nil</code>, its characters are sent to Emacs's
+superior shell, to be read as terminal input.  The characters in
 <var>string</var> are not echoed by the superior shell; only the results
 appear.
 
         <p>Before suspending, <code>suspend-emacs</code> runs the normal hook
-<code>suspend-hook</code>.
-
-        <p>After the user resumes Emacs, <code>suspend-emacs</code> runs the normal hook
-<code>suspend-resume-hook</code>.  See <a href="Hooks.html#Hooks">Hooks</a>.
+<code>suspend-hook</code>.  After the user resumes Emacs,
+<code>suspend-emacs</code> runs the normal hook <code>suspend-resume-hook</code>. 
+See <a href="Hooks.html#Hooks">Hooks</a>.
 
         <p>The next redisplay after resumption will redraw the entire screen,
-unless the variable <code>no-redraw-on-reenter</code> is non-<code>nil</code>
-(see <a href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>).
+unless the variable <code>no-redraw-on-reenter</code> is non-<code>nil</code>. 
+See <a href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>.
 
-        <p>In the following example, note that `<samp><span class="samp">pwd</span></samp>' is not echoed after
+        <p>In the following example, note that &lsquo;<samp><span class="samp">pwd</span></samp>&rsquo; is not echoed after
 Emacs is suspended.  But it is read and executed by the shell.
 
      <pre class="smallexample">          (suspend-emacs)
-               =&gt; nil
+               &rArr; nil
           
           (add-hook 'suspend-hook
                     (function (lambda ()
                                 (or (y-or-n-p
                                       "Really suspend? ")
                                     (error "Suspend canceled")))))
-               =&gt; (lambda nil
+               &rArr; (lambda nil
                     (or (y-or-n-p "Really suspend? ")
                         (error "Suspend canceled")))
           (add-hook 'suspend-resume-hook
                     (function (lambda () (message "Resumed!"))))
-               =&gt; (lambda nil (message "Resumed!"))
+               &rArr; (lambda nil (message "Resumed!"))
           (suspend-emacs "pwd")
-               =&gt; nil
+               &rArr; nil
           ---------- Buffer: Minibuffer ----------
           Really suspend? <kbd>y</kbd>
           ---------- Buffer: Minibuffer ----------
@@ -122,18 +128,66 @@ Emacs is suspended.  But it is read and executed by the shell.
           
           ---------- Echo Area ----------
           Resumed!
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>suspend-hook</b><var><a name="index-suspend_002dhook-3493"></a></var><br>
+&mdash; Variable: <b>suspend-hook</b><var><a name="index-suspend_002dhook-3722"></a></var><br>
 <blockquote><p>This variable is a normal hook that Emacs runs before suspending. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>suspend-resume-hook</b><var><a name="index-suspend_002dresume_002dhook-3494"></a></var><br>
+&mdash; Variable: <b>suspend-resume-hook</b><var><a name="index-suspend_002dresume_002dhook-3723"></a></var><br>
 <blockquote><p>This variable is a normal hook that Emacs runs on resuming
 after a suspension. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>suspend-tty</b><var> &amp;optional tty<a name="index-suspend_002dtty-3724"></a></var><br>
+<blockquote><p>If <var>tty</var> specifies a terminal device used by Emacs, this function
+relinquishes the device and restores it to its prior state.  Frames
+that used the device continue to exist, but are not updated and Emacs
+doesn't read input from them.  <var>tty</var> can be a terminal object, a
+frame (meaning the terminal for that frame), or <code>nil</code> (meaning
+the terminal for the selected frame).  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+
+        <p>If <var>tty</var> is already suspended, this function does nothing.
+
+        <p><a name="index-suspend_002dtty_002dfunctions-3725"></a>This function runs the hook <code>suspend-tty-functions</code>, passing the
+terminal object as an argument to each function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>resume-tty</b><var> &amp;optional tty<a name="index-resume_002dtty-3726"></a></var><br>
+<blockquote><p>This function resumes the previously suspended terminal device
+<var>tty</var>; <var>tty</var> can be a terminal object, a frame (meaning the
+terminal for that frame), or <code>nil</code> (meaning the terminal for the
+selected frame).
+
+        <p><a name="index-resume_002dtty_002dfunctions-3727"></a>This function reopens the terminal device, re-initializes it, and
+redraws its with that terminal's selected frame.  It then runs the
+hook <code>resume-tty-functions</code>, passing the terminal object as an
+argument to each function.
+
+        <p>If the same device is already used by another Emacs terminal, this
+function signals an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>controlling-tty-p</b><var> &amp;optional terminal<a name="index-controlling_002dtty_002dp-3728"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>terminal</var> is the
+controlling terminal of the Emacs session; <code>terminal</code> can be a
+terminal object, a frame (meaning the terminal for that frame), or
+<code>nil</code> (meaning the terminal for the selected frame). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>suspend-frame</b><var><a name="index-suspend_002dframe-3729"></a></var><br>
+<blockquote><p>This command <dfn>suspends</dfn> a frame.  For GUI frames, it calls
+<code>iconify-frame</code> (see <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>); for text-only
+frames, it calls either <code>suspend-emacs</code> or <code>suspend-tty</code>,
+depending on whether the frame is displayed on the controlling
+terminal device or not. 
 </p></blockquote></div>
 
    </body></html>

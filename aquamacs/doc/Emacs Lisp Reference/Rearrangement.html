@@ -3,32 +3,32 @@
 <title>Rearrangement - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
 <link rel="prev" href="Setcdr.html#Setcdr" title="Setcdr">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Rearrangement"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Setcdr.html#Setcdr">Setcdr</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Lists.html#Modifying-Lists">M
 
 <h4 class="subsection">5.6.3 Functions that Rearrange Lists</h4>
 
-<p><a name="index-rearrangement-of-lists-330"></a><a name="index-modification-of-lists-331"></a>
+<p><a name="index-rearrangement-of-lists-334"></a><a name="index-modification-of-lists-335"></a>
   Here are some functions that rearrange lists &ldquo;destructively&rdquo; by
 modifying the <span class="sc">cdr</span>s of their component cons cells.  We call these
 functions &ldquo;destructive&rdquo; because they chew up the original lists passed
@@ -65,32 +65,32 @@ is the returned value.
 that modifies cons cells.
 
 <div class="defun">
-&mdash; Function: <b>nconc</b><var> &amp;rest lists<a name="index-nconc-332"></a></var><br>
-<blockquote><p><a name="index-concatenating-lists-333"></a><a name="index-joining-lists-334"></a>This function returns a list containing all the elements of <var>lists</var>. 
+&mdash; Function: <b>nconc</b><var> &amp;rest lists<a name="index-nconc-336"></a></var><br>
+<blockquote><p><a name="index-concatenating-lists-337"></a><a name="index-joining-lists-338"></a>This function returns a list containing all the elements of <var>lists</var>. 
 Unlike <code>append</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>), the <var>lists</var> are
 <em>not</em> copied.  Instead, the last <span class="sc">cdr</span> of each of the
 <var>lists</var> is changed to refer to the following list.  The last of the
 <var>lists</var> is not altered.  For example:
 
      <pre class="example">          (setq x '(1 2 3))
-               =&gt; (1 2 3)
+               &rArr; (1 2 3)
           (nconc x '(4 5))
-               =&gt; (1 2 3 4 5)
+               &rArr; (1 2 3 4 5)
           x
-               =&gt; (1 2 3 4 5)
-     </pre>
+               &rArr; (1 2 3 4 5)
+</pre>
         <p>Since the last argument of <code>nconc</code> is not itself modified, it is
 reasonable to use a constant list, such as <code>'(4 5)</code>, as in the
 above example.  For the same reason, the last argument need not be a
 list:
 
      <pre class="example">          (setq x '(1 2 3))
-               =&gt; (1 2 3)
+               &rArr; (1 2 3)
           (nconc x 'z)
-               =&gt; (1 2 3 . z)
+               &rArr; (1 2 3 . z)
           x
-               =&gt; (1 2 3 . z)
-     </pre>
+               &rArr; (1 2 3 . z)
+</pre>
         <p>However, the other arguments (all but the last) must be lists.
 
         <p>A common pitfall is to use a quoted constant list as a non-last
@@ -101,23 +101,23 @@ each time you run it!  Here is what happens:
             (nconc '(foo) x))           ;   <code>foo</code><span class="roman"> to the front of its arg.</span>
           
           (symbol-function 'add-foo)
-               =&gt; (lambda (x) (nconc (quote (foo)) x))
+               &rArr; (lambda (x) (nconc (quote (foo)) x))
           
           (setq xx (add-foo '(1 2)))    ; <span class="roman">It seems to work.</span>
-               =&gt; (foo 1 2)
+               &rArr; (foo 1 2)
           (setq xy (add-foo '(3 4)))    ; <span class="roman">What happened?</span>
-               =&gt; (foo 1 2 3 4)
+               &rArr; (foo 1 2 3 4)
           (eq xx xy)
-               =&gt; t
+               &rArr; t
           
           (symbol-function 'add-foo)
-               =&gt; (lambda (x) (nconc (quote (foo 1 2 3 4) x)))
-     </pre>
+               &rArr; (lambda (x) (nconc (quote (foo 1 2 3 4) x)))
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>nreverse</b><var> list<a name="index-nreverse-335"></a></var><br>
-<blockquote><p><a name="index-reversing-a-list-336"></a>  This function reverses the order of the elements of <var>list</var>. 
+&mdash; Function: <b>nreverse</b><var> list<a name="index-nreverse-339"></a></var><br>
+<blockquote><p><a name="index-reversing-a-list-340"></a>  This function reverses the order of the elements of <var>list</var>. 
 Unlike <code>reverse</code>, <code>nreverse</code> alters its argument by reversing
 the <span class="sc">cdr</span>s in the cons cells forming the list.  The cons cell that
 used to be the last one in <var>list</var> becomes the first cons cell of the
@@ -126,20 +126,20 @@ value.
         <p>For example:
 
      <pre class="example">          (setq x '(a b c))
-               =&gt; (a b c)
+               &rArr; (a b c)
           x
-               =&gt; (a b c)
+               &rArr; (a b c)
           (nreverse x)
-               =&gt; (c b a)
+               &rArr; (c b a)
           ;; <span class="roman">The cons cell that was first is now last.</span>
           x
-               =&gt; (a)
-     </pre>
+               &rArr; (a)
+</pre>
         <p>To avoid confusion, we usually store the result of <code>nreverse</code>
 back in the same variable which held the original list:
 
      <pre class="example">          (setq x (nreverse x))
-     </pre>
+</pre>
         <p>Here is the <code>nreverse</code> of our favorite example, <code>(a b c)</code>,
 presented graphically:
 
@@ -151,12 +151,12 @@ presented graphically:
            -------------    |   --------- | -    |   -------- | -
                             |             |      |            |
                              -------------        ------------
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>sort</b><var> list predicate<a name="index-sort-337"></a></var><br>
-<blockquote><p><a name="index-stable-sort-338"></a><a name="index-sorting-lists-339"></a>This function sorts <var>list</var> stably, though destructively, and
+&mdash; Function: <b>sort</b><var> list predicate<a name="index-sort-341"></a></var><br>
+<blockquote><p><a name="index-stable-sort-342"></a><a name="index-sorting-lists-343"></a>This function sorts <var>list</var> stably, though destructively, and
 returns the sorted list.  It compares elements using <var>predicate</var>.  A
 stable sort is one in which elements with equal sort keys maintain their
 relative order before and after the sort.  Stability is important when
@@ -190,12 +190,12 @@ appears in a different position in the list due to the change of
 <span class="sc">cdr</span>s.  For example:
 
      <pre class="example">          (setq nums '(1 3 2 6 5 4 0))
-               =&gt; (1 3 2 6 5 4 0)
+               &rArr; (1 3 2 6 5 4 0)
           (sort nums '&lt;)
-               =&gt; (0 1 2 3 4 5 6)
+               &rArr; (0 1 2 3 4 5 6)
           nums
-               =&gt; (1 2 3 4 5 6)
-     </pre>
+               &rArr; (1 2 3 4 5 6)
+</pre>
         <p class="noindent"><strong>Warning</strong>: Note that the list in <code>nums</code> no longer contains
 0; this is the same cons cell that it was before, but it is no longer
 the first one in the list.  Don't assume a variable that formerly held
@@ -204,7 +204,7 @@ of <code>sort</code> and use that.  Most often we store the result back into
 the variable that held the original list:
 
      <pre class="example">          (setq nums (sort nums '&lt;))
-     </pre>
+</pre>
         <p>See <a href="Sorting.html#Sorting">Sorting</a>, for more functions that perform sorting. 
 See <code>documentation</code> in <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>, for a
 useful example of <code>sort</code>. 

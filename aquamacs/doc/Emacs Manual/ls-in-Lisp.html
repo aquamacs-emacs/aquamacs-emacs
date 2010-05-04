@@ -3,7 +3,7 @@
 <title>ls in Lisp - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
 <link rel="prev" href="Windows-Files.html#Windows-Files" title="Windows Files">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="ls-in-Lisp"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Windows-HOME.html#Windows-HOME">Windows HOME</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-Files.html#Windows-Files">Windows Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Window
 
 <h3 class="section">G.3 Emulation of <code>ls</code> on MS-Windows</h3>
 
-<p><a name="index-Dired_002c-and-MS_002dWindows_002fMS_002dDOS-4298"></a><a name="index-g_t_0040code_007bls_007d-emulation-4299"></a>
+<p><a name="index-Dired_002c-and-MS_002dWindows_002fMS_002dDOS-4324"></a><a name="index-g_t_0040code_007bls_007d-emulation-4325"></a>
   Dired normally uses the external program <code>ls</code> (or its close
 work-alike) to produce the directory listing displayed in Dired
 buffers (see <a href="Dired.html#Dired">Dired</a>).  However, MS-Windows and MS-DOS systems don't
@@ -77,26 +77,26 @@ does support: <samp><span class="option">-A</span></samp>, <samp><span class="op
 supported (it appends the character that classifies the file, but does
 not prevent symlink following).
 
-   <p><a name="index-ls_002dlisp_002duse_002dinsert_002ddirectory_002dprogram-4300"></a>  On MS-Windows and MS-DOS, <samp><span class="file">ls-lisp.el</span></samp> is preloaded when Emacs
+   <p><a name="index-ls_002dlisp_002duse_002dinsert_002ddirectory_002dprogram-4326"></a>  On MS-Windows and MS-DOS, <samp><span class="file">ls-lisp.el</span></samp> is preloaded when Emacs
 is built, so the Lisp emulation of <code>ls</code> is always used on those
 platforms.  If you have a ported <code>ls</code>, setting
 <code>ls-lisp-use-insert-directory-program</code> to a non-<code>nil</code> value
 will revert to using an external program named by the variable
 <code>insert-directory-program</code>.
 
-   <p><a name="index-ls_002dlisp_002dignore_002dcase-4301"></a>  By default, <samp><span class="file">ls-lisp.el</span></samp> uses a case-sensitive sort order for
+   <p><a name="index-ls_002dlisp_002dignore_002dcase-4327"></a>  By default, <samp><span class="file">ls-lisp.el</span></samp> uses a case-sensitive sort order for
 the directory listing it produces; this is so the listing looks the
 same as on other platforms.  If you wish that the files be sorted in
 case-insensitive order, set the variable <code>ls-lisp-ignore-case</code> to
 a non-<code>nil</code> value.
 
-   <p><a name="index-ls_002dlisp_002ddirs_002dfirst-4302"></a>  By default, files and subdirectories are sorted together, to emulate
+   <p><a name="index-ls_002dlisp_002ddirs_002dfirst-4328"></a>  By default, files and subdirectories are sorted together, to emulate
 the behavior of <code>ls</code>.  However, native MS-Windows/MS-DOS file
 managers list the directories before the files; if you want that
 behavior, customize the option <code>ls-lisp-dirs-first</code> to a
 non-<code>nil</code> value.
 
-   <p><a name="index-ls_002dlisp_002dverbosity-4303"></a>  The variable <code>ls-lisp-verbosity</code> controls the file attributes
+   <p><a name="index-ls_002dlisp_002dverbosity-4329"></a>  The variable <code>ls-lisp-verbosity</code> controls the file attributes
 that <samp><span class="file">ls-lisp.el</span></samp> displays.  The value should be a list that
 contains one or more of the symbols <code>links</code>, <code>uid</code>, and
 <code>gid</code>.  <code>links</code> means display the count of different file
@@ -107,7 +107,7 @@ means display the numerical identifier of the file owner's group.  The
 default value is <code>(links uid gid)</code> i.e. all the 3 optional
 attributes are displayed.
 
-   <p><a name="index-ls_002dlisp_002demulation-4304"></a>  The variable <code>ls-lisp-emulation</code> controls the flavour of the
+   <p><a name="index-ls_002dlisp_002demulation-4330"></a>  The variable <code>ls-lisp-emulation</code> controls the flavour of the
 <code>ls</code> emulation by setting the defaults for the 3 options
 described above: <code>ls-lisp-ignore-case</code>,
 <code>ls-lisp-dirs-first</code>, and <code>ls-lisp-verbosity</code>.  The value of
@@ -135,12 +135,12 @@ on Windows, since many users of Emacs on those platforms prefer the
 you will have to set the value from your <samp><span class="file">.emacs</span></samp> file and then
 restart Emacs, since <samp><span class="file">ls-lisp.el</span></samp> is preloaded.
 
-   <p><a name="index-ls_002dlisp_002dsupport_002dshell_002dwildcards-4305"></a>  The variable <code>ls-lisp-support-shell-wildcards</code> controls how
+   <p><a name="index-ls_002dlisp_002dsupport_002dshell_002dwildcards-4331"></a>  The variable <code>ls-lisp-support-shell-wildcards</code> controls how
 file-name patterns are supported: if it is non-<code>nil</code> (the
 default), they are treated as shell-style wildcards; otherwise they
 are treated as Emacs regular expressions.
 
-   <p><a name="index-ls_002dlisp_002dformat_002dtime_002dlist-4306"></a>  The variable <code>ls-lisp-format-time-list</code> defines how to format
+   <p><a name="index-ls_002dlisp_002dformat_002dtime_002dlist-4332"></a>  The variable <code>ls-lisp-format-time-list</code> defines how to format
 the date and time of files.  <em>The value of this variable is
 ignored</em>, unless Emacs cannot determine the current locale.  (However,
 if the value of <code>ls-lisp-use-localized-time-format</code> is
@@ -150,18 +150,18 @@ the current locale is available; see below.)
    <p>The value of <code>ls-lisp-format-time-list</code> is a list of 2 strings. 
 The first string is used if the file was modified within the current
 year, while the second string is used for older files.  In each of
-these two strings you can use `<samp><span class="samp">%</span></samp>'-sequences to substitute parts
+these two strings you can use &lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences to substitute parts
 of the time.  For example:
 <pre class="lisp">     ("%b %e %H:%M" "%b %e  %Y")
 </pre>
-   <p class="noindent">Note that the strings substituted for these `<samp><span class="samp">%</span></samp>'-sequences depend
+   <p class="noindent">Note that the strings substituted for these &lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences depend
 on the current locale.  See <a href="../elisp/Time-Parsing.html#Time-Parsing">Time Parsing</a>, for more about format time specs.
 
-   <p><a name="index-ls_002dlisp_002duse_002dlocalized_002dtime_002dformat-4307"></a>  Normally, Emacs formats the file time stamps in either traditional
+   <p><a name="index-ls_002dlisp_002duse_002dlocalized_002dtime_002dformat-4333"></a>  Normally, Emacs formats the file time stamps in either traditional
 or ISO-style time format.  However, if the value of the variable
 <code>ls-lisp-use-localized-time-format</code> is non-<code>nil</code>, Emacs
 formats file time stamps according to what
-<code>ls-lisp-format-time-list</code> specifies.  The `<samp><span class="samp">%</span></samp>'-sequences in
+<code>ls-lisp-format-time-list</code> specifies.  The &lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences in
 <code>ls-lisp-format-time-list</code> produce locale-dependent month and day
 names, which might cause misalignment of columns in Dired display.
 

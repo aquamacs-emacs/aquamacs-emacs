@@ -3,33 +3,33 @@
 <title>Create/Delete Dirs - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Contents-of-Directories.html#Contents-of-Directories" title="Contents of Directories">
 <link rel="next" href="Magic-File-Names.html#Magic-File-Names" title="Magic File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,41 +46,64 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Create%2fDelete-Dirs"></a>
 <a name="Create_002fDelete-Dirs"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Contents-of-Directories.html#Contents-of-Directories">Contents of Directories</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
 </div>
 
-<h3 class="section">25.10 Creating and Deleting Directories</h3>
+<h3 class="section">25.10 Creating, Copying and Deleting Directories</h3>
 
-<p><a name="index-creating-and-deleting-directories-1823"></a><!-- Emacs 19 features -->
+<p><a name="index-creating_002c-copying-and-deleting-directories-1881"></a><!-- Emacs 19 features -->
 
    <p>Most Emacs Lisp file-manipulation functions get errors when used on
 files that are directories.  For example, you cannot delete a directory
 with <code>delete-file</code>.  These special functions exist to create and
 delete directories.
 
+   <p><a name="index-mkdir-1882"></a>
+
 <div class="defun">
-&mdash; Function: <b>make-directory</b><var> dirname &amp;optional parents<a name="index-make_002ddirectory-1824"></a></var><br>
-<blockquote><p>This function creates a directory named <var>dirname</var>. 
-If <var>parents</var> is non-<code>nil</code>, as is always the case in an
+&mdash; Command: <b>make-directory</b><var> dirname &amp;optional parents<a name="index-make_002ddirectory-1883"></a></var><br>
+<blockquote><p>This command creates a directory named <var>dirname</var>.  If
+<var>parents</var> is non-<code>nil</code>, as is always the case in an
 interactive call, that means to create the parent directories first,
-if they don't already exist. 
+if they don't already exist.
+
+        <p><code>mkdir</code> is an alias for this. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-directory</b><var> dirname<a name="index-delete_002ddirectory-1825"></a></var><br>
-<blockquote><p>This function deletes the directory named <var>dirname</var>.  The function
-<code>delete-file</code> does not work for files that are directories; you
-must use <code>delete-directory</code> for them.  If the directory contains
-any files, <code>delete-directory</code> signals an error.
+&mdash; Command: <b>copy-directory</b><var> dirname newname &amp;optional keep-time parents<a name="index-copy_002ddirectory-1884"></a></var><br>
+<blockquote><p>This command copies the directory named <var>dirname</var> to
+<var>newname</var>.  If <var>newname</var> names an existing directory,
+<var>dirname</var> will be copied to a subdirectory there.
 
-        <p>This function only follows symbolic links at the level of parent
-directories. 
+        <p>It always sets the file modes of the copied files to match the
+corresponding original file.
+
+        <p>The third arg <var>keep-time</var> non-<code>nil</code> means to preserve the
+modification time of the copied files.  A prefix arg makes
+<var>keep-time</var> non-<code>nil</code>.
+
+        <p>Noninteractively, the last argument <var>parents</var> says whether to
+create parent directories if they don't exist.  Interactively,
+this happens by default. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-directory</b><var> dirname &amp;optional recursive<a name="index-delete_002ddirectory-1885"></a></var><br>
+<blockquote><p>This command deletes the directory named <var>dirname</var>.  The function
+<code>delete-file</code> does not work for files that are directories; you
+must use <code>delete-directory</code> for them.  If <var>recursive</var> is
+<code>nil</code>, and the directory contains any files,
+<code>delete-directory</code> signals an error.
+
+        <p><code>delete-directory</code> only follows symbolic links at the level of
+parent directories. 
 </p></blockquote></div>
 
    </body></html>

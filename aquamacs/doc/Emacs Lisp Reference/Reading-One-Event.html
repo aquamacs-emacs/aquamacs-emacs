@@ -3,33 +3,33 @@
 <title>Reading One Event - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Reading-Input.html#Reading-Input" title="Reading Input">
 <link rel="prev" href="Key-Sequence-Input.html#Key-Sequence-Input" title="Key Sequence Input">
 <link rel="next" href="Event-Mod.html#Event-Mod" title="Event Mod">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,24 +46,22 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Reading-One-Event"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Event-Mod.html#Event-Mod">Event Mod</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Reading Input</a>
 <hr>
 </div>
 
-<h4 class="subsection">21.7.2 Reading One Event</h4>
+<h4 class="subsection">21.8.2 Reading One Event</h4>
 
-<p><a name="index-reading-a-single-event-1294"></a><a name="index-event_002c-reading-only-one-1295"></a>
-  The lowest level functions for command input are those that read a
-single event.
-
-   <p>None of the three functions below suppresses quitting.
+<p><a name="index-reading-a-single-event-1344"></a><a name="index-event_002c-reading-only-one-1345"></a>
+  The lowest level functions for command input are <code>read-event</code>,
+<code>read-char</code>, and <code>read-char-exclusive</code>.
 
 <div class="defun">
-&mdash; Function: <b>read-event</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002devent-1296"></a></var><br>
+&mdash; Function: <b>read-event</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002devent-1346"></a></var><br>
 <blockquote><p>This function reads and returns the next event of command input, waiting
 if necessary until an event is available.  Events can come directly from
 the user or from a keyboard macro.
@@ -111,12 +109,12 @@ returning.  See <a href="Help-Functions.html#Help-Functions">Help Functions</a>.
 right-arrow function key:
 
      <pre class="example">          (read-event)
-               =&gt; right
-     </pre>
+               &rArr; right
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-char</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar-1297"></a></var><br>
+&mdash; Function: <b>read-char</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar-1347"></a></var><br>
 <blockquote><p>This function reads and returns a character of command input.  If the
 user generates an event which is not a character (i.e. a mouse click or
 function key event), <code>read-char</code> signals an error.  The arguments
@@ -130,29 +128,50 @@ is <kbd>1</kbd>.  Then <code>eval-expression</code> displays its return value in
 the echo area.
 
      <pre class="example">          (read-char)
-               =&gt; 49
+               &rArr; 49
           
           ;; <span class="roman">We assume here you use </span><kbd>M-:</kbd><span class="roman"> to evaluate this.</span>
           (symbol-function 'foo)
-               =&gt; "^[:(read-char)^M1"
+               &rArr; "^[:(read-char)^M1"
           (execute-kbd-macro 'foo)
                -| 49
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-char-exclusive</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar_002dexclusive-1298"></a></var><br>
+&mdash; Function: <b>read-char-exclusive</b><var> &amp;optional prompt inherit-input-method seconds<a name="index-read_002dchar_002dexclusive-1348"></a></var><br>
 <blockquote><p>This function reads and returns a character of command input.  If the
 user generates an event which is not a character,
 <code>read-char-exclusive</code> ignores it and reads another event, until it
 gets a character.  The arguments work as in <code>read-event</code>. 
 </p></blockquote></div>
 
+   <p>None of the above functions suppress quitting.
+
 <div class="defun">
-&mdash; Variable: <b>num-nonmacro-input-events</b><var><a name="index-num_002dnonmacro_002dinput_002devents-1299"></a></var><br>
+&mdash; Variable: <b>num-nonmacro-input-events</b><var><a name="index-num_002dnonmacro_002dinput_002devents-1349"></a></var><br>
 <blockquote><p>This variable holds the total number of input events received so far
 from the terminal&mdash;not counting those generated by keyboard macros. 
+</p></blockquote></div>
+
+   <p>We emphasize that, unlike <code>read-key-sequence</code>, the functions
+<code>read-event</code>, <code>read-char</code>, and <code>read-char-exclusive</code> do
+not perform the translations described in <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>. 
+If you wish to read a single key taking these translations into
+account, use the function <code>read-key</code>:
+
+<div class="defun">
+&mdash; Function: <b>read-key</b><var> &amp;optional prompt<a name="index-read_002dkey-1350"></a></var><br>
+<blockquote><p>This function reads a single key.  It is &ldquo;intermediate&rdquo; between
+<code>read-key-sequence</code> and <code>read-event</code>.  Unlike the former, it
+reads a single key, not a key sequence.  Unlike the latter, it does
+not return a raw event, but decodes and translates the user input
+according to <code>input-decode-map</code>, <code>local-function-key-map</code>,
+and <code>key-translation-map</code> (see <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>).
+
+        <p>The argument <var>prompt</var> is either a string to be displayed in the
+echo area as a prompt, or <code>nil</code>, meaning not to display a prompt. 
 </p></blockquote></div>
 
    </body></html>

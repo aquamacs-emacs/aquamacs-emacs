@@ -3,32 +3,32 @@
 <title>Example Major Modes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link rel="prev" href="Mode-Hooks.html#Mode-Hooks" title="Mode Hooks">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Example-Major-Modes"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
 <hr>
@@ -130,12 +130,12 @@ the default value, and we'll delete it in a future version.)
        (run-mode-hooks 'text-mode-hook)) ; <span class="roman">Finally, this permits the user to</span>
                                          ;   <span class="roman">customize the mode with a hook.</span>
 </pre>
-   <p><a name="index-g_t_0040file_007blisp_002dmode_002eel_007d-1566"></a>  The three Lisp modes (Lisp mode, Emacs Lisp mode, and Lisp
+   <p><a name="index-g_t_0040file_007blisp_002dmode_002eel_007d-1622"></a>  The three Lisp modes (Lisp mode, Emacs Lisp mode, and Lisp
 Interaction mode) have more features than Text mode and the code is
 correspondingly more complicated.  Here are excerpts from
 <samp><span class="file">lisp-mode.el</span></samp> that illustrate how these modes are written.
 
-   <p><a name="index-syntax-table-example-1567"></a>
+   <p><a name="index-syntax-table-example-1623"></a>
 <pre class="smallexample">     ;; <span class="roman">Create mode-specific table variables.</span>
      (defvar lisp-mode-syntax-table nil "")
      (defvar lisp-mode-abbrev-table nil "")
@@ -144,12 +144,12 @@ correspondingly more complicated.  Here are excerpts from
        (let ((table (make-syntax-table)))
          (let ((i 0))
      
-           ;; <span class="roman">Set syntax of chars up to `<samp>0</samp>' to say they are</span>
+           ;; <span class="roman">Set syntax of chars up to &lsquo;</span><samp><span class="samp">0</span></samp><span class="roman">&rsquo; to say they are</span>
            ;;   <span class="roman">part of symbol names but not words.</span>
-           ;;   <span class="roman">(The digit `<samp>0</samp>' is </span><code>48</code><span class="roman"> in the <acronym>ASCII</acronym> character set.)</span>
+           ;;   <span class="roman">(The digit &lsquo;</span><samp><span class="samp">0</span></samp><span class="roman">&rsquo; is </span><code>48</code><span class="roman"> in the <acronym>ASCII</acronym> character set.)</span>
            (while (&lt; i ?0)
-     	(modify-syntax-entry i "_   " table)
-     	(setq i (1+ i)))
+             (modify-syntax-entry i "_   " table)
+             (setq i (1+ i)))
            ;; <span class="roman">... similar code follows for other character ranges.</span>
            ;; <span class="roman">Then set the syntax codes for characters that are special in Lisp.</span>
            (modify-syntax-entry ?  "    " table)
@@ -182,7 +182,7 @@ each calls the following function to set various variables:
 </pre>
    <p>In Lisp and most programming languages, we want the paragraph
 commands to treat only blank lines as paragraph separators.  And the
-modes should undestand the Lisp conventions for comments.  The rest of
+modes should understand the Lisp conventions for comments.  The rest of
 <code>lisp-mode-variables</code> sets this up:
 
 <pre class="smallexample">       (make-local-variable 'paragraph-start)

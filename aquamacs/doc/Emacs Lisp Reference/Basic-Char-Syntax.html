@@ -3,32 +3,32 @@
 <title>Basic Char Syntax - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Character-Type.html#Character-Type" title="Character Type">
 <link rel="next" href="General-Escape-Syntax.html#General-Escape-Syntax" title="General Escape Syntax">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Basic-Char-Syntax"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="General-Escape-Syntax.html#General-Escape-Syntax">General Escape Syntax</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Character-Type.html#Character-Type">Character Type</a>
 <hr>
@@ -63,53 +63,53 @@ syntax formats that Emacs Lisp provides for characters.  These syntax
 formats start with a question mark.
 
    <p>The usual read syntax for alphanumeric characters is a question mark
-followed by the character; thus, `<samp><span class="samp">?A</span></samp>' for the character
-<kbd>A</kbd>, `<samp><span class="samp">?B</span></samp>' for the character <kbd>B</kbd>, and `<samp><span class="samp">?a</span></samp>' for the
+followed by the character; thus, &lsquo;<samp><span class="samp">?A</span></samp>&rsquo; for the character
+<kbd>A</kbd>, &lsquo;<samp><span class="samp">?B</span></samp>&rsquo; for the character <kbd>B</kbd>, and &lsquo;<samp><span class="samp">?a</span></samp>&rsquo; for the
 character <kbd>a</kbd>.
 
    <p>For example:
 
-<pre class="example">     ?Q =&gt; 81     ?q =&gt; 113
+<pre class="example">     ?Q &rArr; 81     ?q &rArr; 113
 </pre>
    <p>You can use the same syntax for punctuation characters, but it is
-often a good idea to add a `<samp><span class="samp">\</span></samp>' so that the Emacs commands for
-editing Lisp code don't get confused.  For example, `<samp><span class="samp">?\(</span></samp>' is the
-way to write the open-paren character.  If the character is `<samp><span class="samp">\</span></samp>',
-you <em>must</em> use a second `<samp><span class="samp">\</span></samp>' to quote it: `<samp><span class="samp">?\\</span></samp>'.
+often a good idea to add a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; so that the Emacs commands for
+editing Lisp code don't get confused.  For example, &lsquo;<samp><span class="samp">?\(</span></samp>&rsquo; is the
+way to write the open-paren character.  If the character is &lsquo;<samp><span class="samp">\</span></samp>&rsquo;,
+you <em>must</em> use a second &lsquo;<samp><span class="samp">\</span></samp>&rsquo; to quote it: &lsquo;<samp><span class="samp">?\\</span></samp>&rsquo;.
 
    <p><a name="index-whitespace-55"></a><a name="index-bell-character-56"></a><a name="index-g_t_0040samp_007b_005ca_007d-57"></a><a name="index-backspace-58"></a><a name="index-g_t_0040samp_007b_005cb_007d-59"></a><a name="index-tab-_0028ASCII-character_0029-60"></a><a name="index-g_t_0040samp_007b_005ct_007d-61"></a><a name="index-vertical-tab-62"></a><a name="index-g_t_0040samp_007b_005cv_007d-63"></a><a name="index-formfeed-64"></a><a name="index-g_t_0040samp_007b_005cf_007d-65"></a><a name="index-newline-66"></a><a name="index-g_t_0040samp_007b_005cn_007d-67"></a><a name="index-return-_0028ASCII-character_0029-68"></a><a name="index-g_t_0040samp_007b_005cr_007d-69"></a><a name="index-escape-_0028ASCII-character_0029-70"></a><a name="index-g_t_0040samp_007b_005ce_007d-71"></a><a name="index-space-_0028ASCII-character_0029-72"></a><a name="index-g_t_0040samp_007b_005cs_007d-73"></a>  You can express the characters control-g, backspace, tab, newline,
-vertical tab, formfeed, space, return, del, and escape as `<samp><span class="samp">?\a</span></samp>',
-`<samp><span class="samp">?\b</span></samp>', `<samp><span class="samp">?\t</span></samp>', `<samp><span class="samp">?\n</span></samp>', `<samp><span class="samp">?\v</span></samp>', `<samp><span class="samp">?\f</span></samp>',
-`<samp><span class="samp">?\s</span></samp>', `<samp><span class="samp">?\r</span></samp>', `<samp><span class="samp">?\d</span></samp>', and `<samp><span class="samp">?\e</span></samp>', respectively. 
-(`<samp><span class="samp">?\s</span></samp>' followed by a dash has a different meaning&mdash;it applies
+vertical tab, formfeed, space, return, del, and escape as &lsquo;<samp><span class="samp">?\a</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">?\b</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\t</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\n</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\v</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\f</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">?\s</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\r</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?\d</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">?\e</span></samp>&rsquo;, respectively. 
+(&lsquo;<samp><span class="samp">?\s</span></samp>&rsquo; followed by a dash has a different meaning&mdash;it applies
 the &ldquo;super&rdquo; modifier to the following character.)  Thus,
 
-<pre class="example">     ?\a =&gt; 7                 ; <span class="roman">control-g, </span><kbd>C-g</kbd>
-     ?\b =&gt; 8                 ; <span class="roman">backspace, &lt;BS&gt;, </span><kbd>C-h</kbd>
-     ?\t =&gt; 9                 ; <span class="roman">tab, &lt;TAB&gt;, </span><kbd>C-i</kbd>
-     ?\n =&gt; 10                ; <span class="roman">newline, </span><kbd>C-j</kbd>
-     ?\v =&gt; 11                ; <span class="roman">vertical tab, </span><kbd>C-k</kbd>
-     ?\f =&gt; 12                ; <span class="roman">formfeed character, </span><kbd>C-l</kbd>
-     ?\r =&gt; 13                ; <span class="roman">carriage return, &lt;RET&gt;, </span><kbd>C-m</kbd>
-     ?\e =&gt; 27                ; <span class="roman">escape character, &lt;ESC&gt;, </span><kbd>C-[</kbd>
-     ?\s =&gt; 32                ; <span class="roman">space character, &lt;SPC&gt;</span>
-     ?\\ =&gt; 92                ; <span class="roman">backslash character, </span><kbd>\</kbd>
-     ?\d =&gt; 127               ; <span class="roman">delete character, &lt;DEL&gt;</span>
+<pre class="example">     ?\a &rArr; 7                 ; <span class="roman">control-g, </span><kbd>C-g</kbd>
+     ?\b &rArr; 8                 ; <span class="roman">backspace, &lt;BS&gt;, </span><kbd>C-h</kbd>
+     ?\t &rArr; 9                 ; <span class="roman">tab, &lt;TAB&gt;, </span><kbd>C-i</kbd>
+     ?\n &rArr; 10                ; <span class="roman">newline, </span><kbd>C-j</kbd>
+     ?\v &rArr; 11                ; <span class="roman">vertical tab, </span><kbd>C-k</kbd>
+     ?\f &rArr; 12                ; <span class="roman">formfeed character, </span><kbd>C-l</kbd>
+     ?\r &rArr; 13                ; <span class="roman">carriage return, &lt;RET&gt;, </span><kbd>C-m</kbd>
+     ?\e &rArr; 27                ; <span class="roman">escape character, &lt;ESC&gt;, </span><kbd>C-[</kbd>
+     ?\s &rArr; 32                ; <span class="roman">space character, &lt;SPC&gt;</span>
+     ?\\ &rArr; 92                ; <span class="roman">backslash character, </span><kbd>\</kbd>
+     ?\d &rArr; 127               ; <span class="roman">delete character, &lt;DEL&gt;</span>
 </pre>
    <p><a name="index-escape-sequence-74"></a>  These sequences which start with backslash are also known as
 <dfn>escape sequences</dfn>, because backslash plays the role of an
 &ldquo;escape character&rdquo;; this terminology has nothing to do with the
-character &lt;ESC&gt;.  `<samp><span class="samp">\s</span></samp>' is meant for use in character
+character &lt;ESC&gt;.  &lsquo;<samp><span class="samp">\s</span></samp>&rsquo; is meant for use in character
 constants; in string constants, just write the space.
 
    <p>A backslash is allowed, and harmless, preceding any character without
-a special escape meaning; thus, `<samp><span class="samp">?\+</span></samp>' is equivalent to `<samp><span class="samp">?+</span></samp>'. 
+a special escape meaning; thus, &lsquo;<samp><span class="samp">?\+</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">?+</span></samp>&rsquo;. 
 There is no reason to add a backslash before most characters.  However,
 you should add a backslash before any of the characters
-`<samp><span class="samp">()\|;'`"#.,</span></samp>' to avoid confusing the Emacs commands for editing
+&lsquo;<samp><span class="samp">()\|;'`"#.,</span></samp>&rsquo; to avoid confusing the Emacs commands for editing
 Lisp code.  You can also add a backslash before whitespace characters such as
 space, tab, newline and formfeed.  However, it is cleaner to use one of
-the easily readable escape sequences, such as `<samp><span class="samp">\t</span></samp>' or `<samp><span class="samp">\s</span></samp>',
+the easily readable escape sequences, such as &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\s</span></samp>&rsquo;,
 instead of an actual whitespace character such as a tab or a space. 
 (If you do write backslash followed by a space, you should write
 an extra space after the character constant to separate it from the

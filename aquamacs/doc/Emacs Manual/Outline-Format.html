@@ -3,7 +3,7 @@
 <title>Outline Format - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Outline-Mode.html#Outline-Mode" title="Outline Mode">
 <link rel="next" href="Outline-Motion.html#Outline-Motion" title="Outline Motion">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Outline-Format"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Motion.html#Outline-Motion">Outline Motion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>
 <hr>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline
 
 <h4 class="subsection">29.8.1 Format of Outlines</h4>
 
-<p><a name="index-heading-lines-_0028Outline-mode_0029-1635"></a><a name="index-body-lines-_0028Outline-mode_0029-1636"></a>  Outline mode assumes that the lines in the buffer are of two types:
+<p><a name="index-heading-lines-_0028Outline-mode_0029-1653"></a><a name="index-body-lines-_0028Outline-mode_0029-1654"></a>  Outline mode assumes that the lines in the buffer are of two types:
 <dfn>heading lines</dfn> and <dfn>body lines</dfn>.  A heading line represents a
 topic in the outline.  Heading lines start with one or more stars; the
 number of stars determines the depth of the heading in the outline
@@ -86,7 +86,7 @@ an example:
 collectively an <dfn>entry</dfn>.  A heading line together with all following
 deeper heading lines and their body lines is called a <dfn>subtree</dfn>.
 
-   <p><a name="index-outline_002dregexp-1637"></a>  You can customize the criterion for distinguishing heading lines by
+   <p><a name="index-outline_002dregexp-1655"></a>  You can customize the criterion for distinguishing heading lines by
 setting the variable <code>outline-regexp</code>.  (The recommended ways to
 do this are in a major mode function or with a file local variable.) 
 Any line whose beginning has a match for this regexp is considered a
@@ -95,18 +95,18 @@ margin) do not count.
 
    <p>The length of the matching text determines the level of the heading;
 longer matches make a more deeply nested level.  Thus, for example, if
-a text formatter has commands `<samp><span class="samp">@chapter</span></samp>', `<samp><span class="samp">@section</span></samp>' and
-`<samp><span class="samp">@subsection</span></samp>' to divide the document into chapters and sections,
+a text formatter has commands &lsquo;<samp><span class="samp">@chapter</span></samp>&rsquo;, &lsquo;<samp><span class="samp">@section</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">@subsection</span></samp>&rsquo; to divide the document into chapters and sections,
 you could make those lines count as heading lines by setting
-<code>outline-regexp</code> to `<samp><span class="samp">"@chap\\|@\\(sub\\)*section"</span></samp>'.  Note
-the trick: the two words `<samp><span class="samp">chapter</span></samp>' and `<samp><span class="samp">section</span></samp>' are equally
-long, but by defining the regexp to match only `<samp><span class="samp">chap</span></samp>' we ensure
+<code>outline-regexp</code> to &lsquo;<samp><span class="samp">"@chap\\|@\\(sub\\)*section"</span></samp>&rsquo;.  Note
+the trick: the two words &lsquo;<samp><span class="samp">chapter</span></samp>&rsquo; and &lsquo;<samp><span class="samp">section</span></samp>&rsquo; are equally
+long, but by defining the regexp to match only &lsquo;<samp><span class="samp">chap</span></samp>&rsquo; we ensure
 that the length of the text matched on a chapter heading is shorter,
 so that Outline mode will know that sections are contained in
 chapters.  This works as long as no other command starts with
-`<samp><span class="samp">@chap</span></samp>'.
+&lsquo;<samp><span class="samp">@chap</span></samp>&rsquo;.
 
-   <p><a name="index-outline_002dlevel-1638"></a>  You can explicitly specify a rule for calculating the level of a
+   <p><a name="index-outline_002dlevel-1656"></a>  You can explicitly specify a rule for calculating the level of a
 heading line by setting the variable <code>outline-level</code>.  The value
 of <code>outline-level</code> should be a function that takes no arguments
 and returns the level of the current heading.  The recommended ways to

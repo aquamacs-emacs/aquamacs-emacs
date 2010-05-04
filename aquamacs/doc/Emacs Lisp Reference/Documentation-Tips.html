@@ -3,33 +3,33 @@
 <title>Documentation Tips - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Tips.html#Tips" title="Tips">
 <link rel="prev" href="Warning-Tips.html#Warning-Tips" title="Warning Tips">
 <link rel="next" href="Comment-Tips.html#Comment-Tips" title="Comment Tips">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Documentation-Tips"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Comment-Tips.html#Comment-Tips">Comment Tips</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Warning-Tips.html#Warning-Tips">Warning Tips</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
@@ -56,8 +56,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.6 Tips for Documentation Strings</h3>
 
-<p><a name="index-documentation-strings_002c-conventions-and-tips-3599"></a>
-<a name="index-checkdoc_002dminor_002dmode-3600"></a>  Here are some tips and conventions for the writing of documentation
+<p><a name="index-documentation-strings_002c-conventions-and-tips-3838"></a>
+<a name="index-checkdoc_002dminor_002dmode-3839"></a>  Here are some tips and conventions for the writing of documentation
 strings.  You can check many of these conventions by running the command
 <kbd>M-x checkdoc-minor-mode</kbd>.
 
@@ -110,19 +110,19 @@ important arguments.
      <li>When a function's documentation string mentions the value of an argument
 of the function, use the argument name in capital letters as if it were
 a name for that value.  Thus, the documentation string of the function
-<code>eval</code> refers to its second argument as `<samp><span class="samp">FORM</span></samp>', because the
+<code>eval</code> refers to its second argument as &lsquo;<samp><span class="samp">FORM</span></samp>&rsquo;, because the
 actual argument name is <code>form</code>:
 
      <pre class="example">          Evaluate FORM and return its value.
-     </pre>
+</pre>
      <p>Also write metasyntactic variables in capital letters, such as when you
 show the decomposition of a list or vector into subunits, some of which
-may vary.  `<samp><span class="samp">KEY</span></samp>' and `<samp><span class="samp">VALUE</span></samp>' in the following example
+may vary.  &lsquo;<samp><span class="samp">KEY</span></samp>&rsquo; and &lsquo;<samp><span class="samp">VALUE</span></samp>&rsquo; in the following example
 illustrate this practice:
 
      <pre class="example">          The argument TABLE should be an alist whose elements
           have the form (KEY . VALUE).  Here, KEY is ...
-     </pre>
+</pre>
      <li>Never change the case of a Lisp symbol when you mention it in a doc
 string.  If the symbol's name is <code>foo</code>, write &ldquo;foo,&rdquo; not
 &ldquo;Foo&rdquo; (which is a different symbol).
@@ -144,83 +144,82 @@ line.  This looks nice in the source code, but looks bizarre when users
 view the documentation.  Remember that the indentation before the
 starting double-quote is not part of the string!
 
-     <p><a name="Docstring-hyperlinks"></a>
-<li>When a documentation string refers to a Lisp symbol, write it as it
+     <p><a name="Docstring-hyperlinks"></a><li>When a documentation string refers to a Lisp symbol, write it as it
 would be printed (which usually means in lower case), with single-quotes
-around it.  For example: `<samp><span class="samp">lambda</span></samp>'.  There are two exceptions: write
+around it.  For example: &lsquo;<samp><span class="samp">lambda</span></samp>&rsquo;.  There are two exceptions: write
 t and nil without single-quotes.  (In this manual, we use a different
 convention, with single-quotes for all symbols.)
 
-     <p><a name="index-hyperlinks-in-documentation-strings-3601"></a>Help mode automatically creates a hyperlink when a documentation string
+     <p><a name="index-hyperlinks-in-documentation-strings-3840"></a>Help mode automatically creates a hyperlink when a documentation string
 uses a symbol name inside single quotes, if the symbol has either a
 function or a variable definition.  You do not need to do anything
 special to make use of this feature.  However, when a symbol has both a
 function definition and a variable definition, and you want to refer to
 just one of them, you can specify which one by writing one of the words
-`<samp><span class="samp">variable</span></samp>', `<samp><span class="samp">option</span></samp>', `<samp><span class="samp">function</span></samp>', or `<samp><span class="samp">command</span></samp>',
+&lsquo;<samp><span class="samp">variable</span></samp>&rsquo;, &lsquo;<samp><span class="samp">option</span></samp>&rsquo;, &lsquo;<samp><span class="samp">function</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">command</span></samp>&rsquo;,
 immediately before the symbol name.  (Case makes no difference in
 recognizing these indicator words.)  For example, if you write
 
      <pre class="example">          This function sets the variable `buffer-file-name'.
-     </pre>
+</pre>
      <p class="noindent">then the hyperlink will refer only to the variable documentation of
 <code>buffer-file-name</code>, and not to its function documentation.
 
      <p>If a symbol has a function definition and/or a variable definition, but
 those are irrelevant to the use of the symbol that you are documenting,
-you can write the words `<samp><span class="samp">symbol</span></samp>' or `<samp><span class="samp">program</span></samp>' before the
+you can write the words &lsquo;<samp><span class="samp">symbol</span></samp>&rsquo; or &lsquo;<samp><span class="samp">program</span></samp>&rsquo; before the
 symbol name to prevent making any hyperlink.  For example,
 
      <pre class="example">          If the argument KIND-OF-RESULT is the symbol `list',
           this function returns a list of all the objects
           that satisfy the criterion.
-     </pre>
+</pre>
      <p class="noindent">does not make a hyperlink to the documentation, irrelevant here, of the
 function <code>list</code>.
 
      <p>Normally, no hyperlink is made for a variable without variable
 documentation.  You can force a hyperlink for such variables by
-preceding them with one of the words `<samp><span class="samp">variable</span></samp>' or
-`<samp><span class="samp">option</span></samp>'.
+preceding them with one of the words &lsquo;<samp><span class="samp">variable</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">option</span></samp>&rsquo;.
 
      <p>Hyperlinks for faces are only made if the face name is preceded or
-followed by the word `<samp><span class="samp">face</span></samp>'.  In that case, only the face
+followed by the word &lsquo;<samp><span class="samp">face</span></samp>&rsquo;.  In that case, only the face
 documentation will be shown, even if the symbol is also defined as a
 variable or as a function.
 
      <p>To make a hyperlink to Info documentation, write the name of the Info
-node (or anchor) in single quotes, preceded by `<samp><span class="samp">info node</span></samp>',
-`<samp><span class="samp">Info node</span></samp>', `<samp><span class="samp">info anchor</span></samp>' or `<samp><span class="samp">Info anchor</span></samp>'.  The Info
-file name defaults to `<samp><span class="samp">emacs</span></samp>'.  For example,
+node (or anchor) in single quotes, preceded by &lsquo;<samp><span class="samp">info node</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Info node</span></samp>&rsquo;, &lsquo;<samp><span class="samp">info anchor</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Info anchor</span></samp>&rsquo;.  The Info
+file name defaults to &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.  For example,
 
      <pre class="smallexample">          See Info node `Font Lock' and Info node `(elisp)Font Lock Basics'.
-     </pre>
+</pre>
      <p>Finally, to create a hyperlink to URLs, write the URL in single
-quotes, preceded by `<samp><span class="samp">URL</span></samp>'. For example,
+quotes, preceded by &lsquo;<samp><span class="samp">URL</span></samp>&rsquo;. For example,
 
      <pre class="smallexample">          The home page for the GNU project has more information (see URL
           `http://www.gnu.org/').
-     </pre>
+</pre>
      <li>Don't write key sequences directly in documentation strings.  Instead,
-use the `<samp><span class="samp">\\[...]</span></samp>' construct to stand for them.  For example,
-instead of writing `<samp><span class="samp">C-f</span></samp>', write the construct
-`<samp><span class="samp">\\[forward-char]</span></samp>'.  When Emacs displays the documentation string,
+use the &lsquo;<samp><span class="samp">\\[...]</span></samp>&rsquo; construct to stand for them.  For example,
+instead of writing &lsquo;<samp><span class="samp">C-f</span></samp>&rsquo;, write the construct
+&lsquo;<samp><span class="samp">\\[forward-char]</span></samp>&rsquo;.  When Emacs displays the documentation string,
 it substitutes whatever key is currently bound to <code>forward-char</code>. 
-(This is normally `<samp><span class="samp">C-f</span></samp>', but it may be some other character if the
+(This is normally &lsquo;<samp><span class="samp">C-f</span></samp>&rsquo;, but it may be some other character if the
 user has moved key bindings.)  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
 
      <li>In documentation strings for a major mode, you will want to refer to the
 key bindings of that mode's local map, rather than global ones. 
-Therefore, use the construct `<samp><span class="samp">\\&lt;...&gt;</span></samp>' once in the
+Therefore, use the construct &lsquo;<samp><span class="samp">\\&lt;...&gt;</span></samp>&rsquo; once in the
 documentation string to specify which key map to use.  Do this before
-the first use of `<samp><span class="samp">\\[...]</span></samp>'.  The text inside the
-`<samp><span class="samp">\\&lt;...&gt;</span></samp>' should be the name of the variable containing the
+the first use of &lsquo;<samp><span class="samp">\\[...]</span></samp>&rsquo;.  The text inside the
+&lsquo;<samp><span class="samp">\\&lt;...&gt;</span></samp>&rsquo; should be the name of the variable containing the
 local keymap for the major mode.
 
-     <p>It is not practical to use `<samp><span class="samp">\\[...]</span></samp>' very many times, because
+     <p>It is not practical to use &lsquo;<samp><span class="samp">\\[...]</span></samp>&rsquo; very many times, because
 display of the documentation string will become slow.  So use this to
 describe the most important commands in your major mode, and then use
-`<samp><span class="samp">\\{...}</span></samp>' to display the rest of the mode's keymap.
+&lsquo;<samp><span class="samp">\\{...}</span></samp>&rsquo; to display the rest of the mode's keymap.
 
      <li>For consistency, phrase the verb in the first sentence of a function's
 documentation string as an imperative&mdash;for instance, use &ldquo;Return the
@@ -240,7 +239,7 @@ write a backslash before the open-parenthesis, like this:
 
      <pre class="example">          The argument FOO can be either a number
           \(a buffer position) or a string (a file name).
-     </pre>
+</pre>
      <p>This prevents the open-parenthesis from being treated as the start of a
 defun (see <a href="../emacs/Defuns.html#Defuns">Defuns</a>).
 
@@ -253,15 +252,20 @@ returned.&rdquo;
 Instead of, &ldquo;Cause Emacs to display text in boldface,&rdquo; write just
 &ldquo;Display text in boldface.&rdquo;
 
+     <li>Avoid using &ldquo;iff&rdquo; (a mathematics term meaning &ldquo;if and only if&rdquo;),
+since many people are unfamiliar with it and mistake it for a typo.  In
+most cases, the meaning is clear with just &ldquo;if&rdquo;.  Otherwise, try to
+find an alternate phrasing that conveys the meaning.
+
      <li>When a command is meaningful only in a certain mode or situation,
 do mention that in the documentation string.  For example,
 the documentation of <code>dired-find-file</code> is:
 
      <pre class="example">          In Dired, visit the file or directory named on this line.
-     </pre>
+</pre>
      <li>When you define a variable that users ought to set interactively, you
 normally should use <code>defcustom</code>.  However, if for some reason you
-use <code>defvar</code> instead, start the doc string with a `<samp><span class="samp">*</span></samp>'. 
+use <code>defvar</code> instead, start the doc string with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;. 
 See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
 
      <li>The documentation string for a variable that is a yes-or-no flag should

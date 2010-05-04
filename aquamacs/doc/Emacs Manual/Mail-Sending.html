@@ -3,19 +3,19 @@
 <title>Mail Sending - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mail-Mode.html#Mail-Mode" title="Mail Mode">
+<link rel="up" href="Mail-Commands.html#Mail-Commands" title="Mail Commands">
 <link rel="next" href="Header-Editing.html#Header-Editing" title="Header Editing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,61 +46,73 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Mail-Sending"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Header-Editing.html#Header-Editing">Header Editing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Mode.html#Mail-Mode">Mail Mode</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Commands.html#Mail-Commands">Mail Commands</a>
 <hr>
 </div>
 
 <h4 class="subsection">35.4.1 Mail Sending</h4>
 
-<p>Mail mode has two commands for sending the message you have been
-editing:
+<p>There are two commands to send a message you have been editing:
 
      <dl>
-<dt><kbd>C-c C-s</kbd><dd>Send the message, and leave the mail buffer selected (<code>mail-send</code>). 
-<br><dt><kbd>C-c C-c</kbd><dd>Send the message, and select some other buffer (<code>mail-send-and-exit</code>). 
+<dt><kbd>C-c C-c</kbd><dd>Send the message, and deselect the mail buffer (<code>message-send-and-exit</code>). 
+<br><dt><kbd>C-c C-s</kbd><dd>Send the message, and leave the mail buffer selected (<code>message-send</code>). 
 </dl>
 
-   <p><a name="index-C_002dc-C_002ds-_0040r_007b_0028Mail-mode_0029_007d-2695"></a><a name="index-C_002dc-C_002dc-_0040r_007b_0028Mail-mode_0029_007d-2696"></a><a name="index-mail_002dsend-2697"></a><a name="index-mail_002dsend_002dand_002dexit-2698"></a><a name="index-mail_002dsend_002dhook-2699"></a>  <kbd>C-c C-s</kbd> (<code>mail-send</code>) sends the message and marks the mail
-buffer unmodified, but leaves that buffer selected so that you can
-modify the message (perhaps with new recipients) and send it again. 
-<kbd>C-c C-c</kbd> (<code>mail-send-and-exit</code>) sends and then deletes the
-window or switches to another buffer.  It puts the mail buffer at the
-lowest priority for reselection by default, since you are finished with
-using it.  This is the usual way to send the message.  Sending a message
-runs the hook <code>mail-send-hook</code>.
+   <p><a name="index-C_002dc-C_002ds-_0040r_007b_0028Message-mode_0029_007d-2714"></a><a name="index-C_002dc-C_002dc-_0040r_007b_0028Message-mode_0029_007d-2715"></a><a name="index-message_002dsend-2716"></a>  If you want to send a message and be done with it, type <kbd>C-c
+C-c</kbd> (<code>mail-send-and-exit</code>).  This sends the message and then
+either deletes the window or switches to another buffer.  It also
+&ldquo;buries&rdquo; the mail buffer, putting it at the lowest priority for
+reselection.  This is the usual command for sending a message.
 
-<!-- Options not mentioned: mail-interactive, mail-use-dsn. -->
-<p>In a file-visiting buffer, sending the message does not clear the
+   <p><a name="index-message_002dsend_002dand_002dexit-2717"></a>  The command <kbd>C-c C-s</kbd> (<code>message-send</code>) sends the message
+and marks the mail buffer unmodified, but leaves the buffer selected. 
+Use this command if you want to modify the message (perhaps with new
+recipients) and send it again.
+
+   <p><a name="index-message_002dsend_002dhook-2718"></a>  Sending a message runs the hook <code>message-send-hook</code>.
+
+   <p>In a file-visiting buffer, sending the message does not clear the
 modified flag, because only saving the file should do that.  Also, you
 don't get a warning if you try to send the same message twice.
 
-<!-- This is indexed in mule.texi, node "Recognize Coding". -->
-<!-- @vindex sendmail-coding-system -->
-<p>When you send a message that contains non-<acronym>ASCII</acronym> characters, they need
-to be encoded with a coding system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).  Usually
-the coding system is specified automatically by your chosen language
-environment (see <a href="Language-Environments.html#Language-Environments">Language Environments</a>).  You can explicitly specify
-the coding system for outgoing mail by setting the variable
-<code>sendmail-coding-system</code> (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).
-
-   <p>If the coding system thus determined does not handle the characters in
-a particular message, Emacs asks you to select the coding system to use,
+   <p><a name="index-sendmail_002dcoding_002dsystem-2719"></a>  When you send a message containing non-<acronym>ASCII</acronym> characters,
+they need to be encoded with a coding system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>). 
+Usually the coding system is specified automatically by your chosen
+language environment (see <a href="Language-Environments.html#Language-Environments">Language Environments</a>).  You can
+explicitly specify the coding system for outgoing mail by setting the
+variable <code>sendmail-coding-system</code> (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).  If
+the coding system thus determined does not handle the characters in a
+particular message, Emacs asks you to select the coding system to use,
 showing a list of possible coding systems.
 
-<!-- Not mentioned: mail-send-nonascii. -->
-<p><a name="index-SMTP-2700"></a><a name="index-Feedmail-2701"></a><a name="index-Sendmail-2702"></a><a name="index-Mailclient-2703"></a><a name="index-send_002dmail_002dfunction-2704"></a>  The variable <code>send-mail-function</code> controls how the default mail
-user agent sends mail.  It should be set to a function.  In most cases,
-the default is <code>sendmail-send-it</code>, which delivers mail using the
-Sendmail installation on the local host.  On Mac OS X and MS-Windows,
-however, the default is normally <code>mailclient-send-it</code> (see
-<samp><span class="file">mailclient.el</span></samp>).  To send mail through an SMTP
-server, set <code>send-mail-function</code> to <code>smtpmail-send-it</code> and set
-up the Emacs SMTP library (see <a href="../smtpmail/index.html#Top">Emacs SMTP Library</a>).  Another option is <code>feedmail-send-it</code> (see
-the commentary section of the <samp><span class="file">feedmail.el</span></samp> package). 
-<!-- FIXME Some details of Mailclient would probably be good. -->
+   <p><a name="index-SMTP-2720"></a><a name="index-Feedmail-2721"></a><a name="index-Sendmail-2722"></a><a name="index-Mailclient-2723"></a><a name="index-send_002dmail_002dfunction-2724"></a>  The variable <code>send-mail-function</code> controls how the default mail
+user agent sends mail.  Its value should be a function, which can be
+one of the following:
+
+     <dl>
+<dt><code>sendmail-send-it</code><dd>Send mail using the system's default <samp><span class="command">sendmail</span></samp> (or
+<samp><span class="command">sendmail</span></samp>-compatible) program.  This is the default on Unix
+and GNU, and works provided the system is a valid <dfn>mail host</dfn>
+(that is, provided it can deliver mail via SMTP).
+
+     <br><dt><code>mailclient-send-it</code><dd>Pass the mail buffer on to the system's designated mail client (see
+<samp><span class="file">mailclient.el</span></samp>).  This is the default on Mac OS X and
+MS-Windows.
+
+     <br><dt><code>smtpmail-send-it</code><dd>Send mail through an external mail host (e.g., your Internet service
+provider's SMTP server).  You will need to tell Emacs how to contact
+the SMTP server, by customizing the variables
+<code>smtpmail-smtp-server</code> and <code>smtpmail-auth-credentials</code>. 
+See <a href="../smtpmail/index.html#Top">Emacs SMTP Library</a>.
+
+     <br><dt><code>feedmail-send-it</code><dd>This is similar to <code>sendmail-send-it</code>, but allows you to queue
+messages for later sending.  See the commentary section in the file
+<samp><span class="file">feedmail.el</span></samp> for more information. 
+</dl>
 
    </body></html>
 

@@ -3,7 +3,7 @@
 <title>Diff Mode - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Comparing-Files.html#Comparing-Files" title="Comparing Files">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Diff-Mode"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Comparing-Files.html#Comparing-Files">Comparing Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">22.10 Diff Mode</h3>
 
-<p><a name="index-Diff-mode-936"></a><a name="index-diff_002dmode-937"></a><a name="index-patches_002c-editing-938"></a>
+<p><a name="index-Diff-mode-940"></a><a name="index-diff_002dmode-941"></a><a name="index-patches_002c-editing-942"></a>
   Diff mode is a major mode used for the output of <kbd>M-x diff</kbd> and
 other similar commands, as well as the output of the <samp><span class="command">diff</span></samp>
 program.  This kind of output is called a <dfn>patch</dfn>, because it can
@@ -65,7 +65,7 @@ be passed to the <samp><span class="command">patch</span></samp> command to auto
 specified changes.  To select Diff mode manually, type <kbd>M-x
 diff-mode</kbd>.
 
-   <p><a name="index-hunk_002c-diff-939"></a>  The changes specified in a patch are grouped into <dfn>hunks</dfn>, which
+   <p><a name="index-hunk_002c-diff-943"></a>  The changes specified in a patch are grouped into <dfn>hunks</dfn>, which
 are contiguous chunks of text that contain one or more changed lines. 
 Hunks can also include unchanged lines to provide context for the
 changes.  Each hunk is preceded by a <dfn>hunk header</dfn>, which
@@ -73,7 +73,7 @@ specifies the old and new line numbers at which the hunk occurs.  Diff
 mode highlights each hunk header, to distinguish it from the actual
 contents of the hunk.
 
-   <p><a name="index-diff_002dupdate_002don_002dthe_002dfly-940"></a>  You can edit a Diff mode buffer like any other buffer.  (If it is
+   <p><a name="index-diff_002dupdate_002don_002dthe_002dfly-944"></a>  You can edit a Diff mode buffer like any other buffer.  (If it is
 read-only, you need to make it writable first.  See <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.) 
 Whenever you change a hunk, Diff mode attempts to automatically
 correct the line numbers in the hunk headers, to ensure that the diff
@@ -88,43 +88,43 @@ visit the corresponding source locations.  See <a href="Compilation-Mode.html#Co
 manipulate and apply parts of patches:
 
      <dl>
-<dt><kbd>M-n</kbd><dd><a name="index-diff_002dhunk_002dnext-941"></a>Move to the next hunk-start (<code>diff-hunk-next</code>).
+<dt><kbd>M-n</kbd><dd><a name="index-diff_002dhunk_002dnext-945"></a>Move to the next hunk-start (<code>diff-hunk-next</code>).
 
-     <br><dt><kbd>M-p</kbd><dd><a name="index-diff_002dhunk_002dprev-942"></a>Move to the previous hunk-start (<code>diff-hunk-prev</code>).
+     <br><dt><kbd>M-p</kbd><dd><a name="index-diff_002dhunk_002dprev-946"></a>Move to the previous hunk-start (<code>diff-hunk-prev</code>).
 
-     <br><dt><kbd>M-}</kbd><dd><a name="index-diff_002dfile_002dnext-943"></a>Move to the next file-start, in a multi-file patch
+     <br><dt><kbd>M-}</kbd><dd><a name="index-diff_002dfile_002dnext-947"></a>Move to the next file-start, in a multi-file patch
 (<code>diff-file-next</code>).
 
-     <br><dt><kbd>M-{</kbd><dd><a name="index-diff_002dfile_002dprev-944"></a>Move to the previous file-start, in a multi-file patch
+     <br><dt><kbd>M-{</kbd><dd><a name="index-diff_002dfile_002dprev-948"></a>Move to the previous file-start, in a multi-file patch
 (<code>diff-file-prev</code>).
 
-     <br><dt><kbd>M-k</kbd><dd><a name="index-diff_002dhunk_002dkill-945"></a>Kill the hunk at point (<code>diff-hunk-kill</code>).
+     <br><dt><kbd>M-k</kbd><dd><a name="index-diff_002dhunk_002dkill-949"></a>Kill the hunk at point (<code>diff-hunk-kill</code>).
 
-     <br><dt><kbd>M-K</kbd><dd><a name="index-diff_002dfile_002dkill-946"></a>In a multi-file patch, kill the current file part. 
+     <br><dt><kbd>M-K</kbd><dd><a name="index-diff_002dfile_002dkill-950"></a>In a multi-file patch, kill the current file part. 
 (<code>diff-file-kill</code>).
 
-     <br><dt><kbd>C-c C-a</kbd><dd><a name="index-diff_002dapply_002dhunk-947"></a>Apply this hunk to its target file (<code>diff-apply-hunk</code>).  With a
+     <br><dt><kbd>C-c C-a</kbd><dd><a name="index-diff_002dapply_002dhunk-951"></a>Apply this hunk to its target file (<code>diff-apply-hunk</code>).  With a
 prefix argument of <kbd>C-u</kbd>, revert this hunk.
 
-     <br><dt><kbd>C-c C-b</kbd><dd><a name="index-diff_002drefine_002dhunk-948"></a>Highlight the changes of the hunk at point with a finer granularity
+     <br><dt><kbd>C-c C-b</kbd><dd><a name="index-diff_002drefine_002dhunk-952"></a>Highlight the changes of the hunk at point with a finer granularity
 (<code>diff-refine-hunk</code>).  This allows you to see exactly which parts
 of each changed line were actually changed.
 
-     <br><dt><kbd>C-c C-c</kbd><dd><a name="index-diff_002dgoto_002dsource-949"></a>Go to the source file and line corresponding to this hunk
+     <br><dt><kbd>C-c C-c</kbd><dd><a name="index-diff_002dgoto_002dsource-953"></a>Go to the source file and line corresponding to this hunk
 (<code>diff-goto-source</code>).
 
-     <br><dt><kbd>C-c C-e</kbd><dd><a name="index-diff_002dediff_002dpatch-950"></a>Start an Ediff session with the patch (<code>diff-ediff-patch</code>). 
+     <br><dt><kbd>C-c C-e</kbd><dd><a name="index-diff_002dediff_002dpatch-954"></a>Start an Ediff session with the patch (<code>diff-ediff-patch</code>). 
 See <a href="../ediff/index.html#Top">Ediff</a>.
 
-     <br><dt><kbd>C-c C-n</kbd><dd><a name="index-diff_002drestrict_002dview-951"></a>Restrict the view to the current hunk (<code>diff-restrict-view</code>). 
+     <br><dt><kbd>C-c C-n</kbd><dd><a name="index-diff_002drestrict_002dview-955"></a>Restrict the view to the current hunk (<code>diff-restrict-view</code>). 
 See <a href="Narrowing.html#Narrowing">Narrowing</a>.  With a prefix argument of <kbd>C-u</kbd>, restrict the
 view to the current file of a multiple-file patch.  To widen again,
 use <kbd>C-x n w</kbd> (<code>widen</code>).
 
-     <br><dt><kbd>C-c C-r</kbd><dd><a name="index-diff_002dreverse_002ddirection-952"></a>Reverse the direction of comparison for the entire buffer
+     <br><dt><kbd>C-c C-r</kbd><dd><a name="index-diff_002dreverse_002ddirection-956"></a>Reverse the direction of comparison for the entire buffer
 (<code>diff-reverse-direction</code>).
 
-     <br><dt><kbd>C-c C-s</kbd><dd><a name="index-diff_002dsplit_002dhunk-953"></a>Split the hunk at point (<code>diff-split-hunk</code>).  This is for
+     <br><dt><kbd>C-c C-s</kbd><dd><a name="index-diff_002dsplit_002dhunk-957"></a>Split the hunk at point (<code>diff-split-hunk</code>).  This is for
 manually editing patches, and only works with the <dfn>unified diff
 format</dfn> produced by the <samp><span class="option">-u</span></samp> or <samp><span class="option">--unified</span></samp> options to
 the <samp><span class="command">diff</span></samp> program.  If you need to split a hunk in the
@@ -132,19 +132,19 @@ the <samp><span class="command">diff</span></samp> program.  If you need to spli
 <samp><span class="option">--context</span></samp> options to <samp><span class="command">diff</span></samp>, first convert the buffer
 to the unified diff format with <kbd>C-c C-u</kbd>.
 
-     <br><dt><kbd>C-c C-d</kbd><dd><a name="index-diff_002dunified_002d_003econtext-954"></a>Convert the entire buffer to the <dfn>context diff format</dfn>
+     <br><dt><kbd>C-c C-d</kbd><dd><a name="index-diff_002dunified_002d_003econtext-958"></a>Convert the entire buffer to the <dfn>context diff format</dfn>
 (<code>diff-unified-&gt;context</code>).  With a prefix argument, convert only
 the text within the region.
 
-     <br><dt><kbd>C-c C-u</kbd><dd><a name="index-diff_002dcontext_002d_003eunified-955"></a>Convert the entire buffer to unified diff format
+     <br><dt><kbd>C-c C-u</kbd><dd><a name="index-diff_002dcontext_002d_003eunified-959"></a>Convert the entire buffer to unified diff format
 (<code>diff-context-&gt;unified</code>).  With a prefix argument, convert
 unified format to context format.  When the mark is active, convert
 only the text within the region.
 
-     <br><dt><kbd>C-c C-w</kbd><dd><a name="index-diff_002drefine_002dhunk-956"></a>Refine the current hunk so that it disregards changes in whitespace
+     <br><dt><kbd>C-c C-w</kbd><dd><a name="index-diff_002drefine_002dhunk-960"></a>Refine the current hunk so that it disregards changes in whitespace
 (<code>diff-refine-hunk</code>).
 
-     <br><dt><kbd>C-x 4 A</kbd><dd><a name="index-diff_002dadd_002dchange_002dlog_002dentries_002dother_002dwindow-957"></a><a name="index-add_002dchange_002dlog_002dentry_002dother_002dwindow_0040r_007b_002c-in-Diff-mode_007d-958"></a>Generate a ChangeLog entry, like <kbd>C-x 4 a</kbd> does (see <a href="Change-Log.html#Change-Log">Change Log</a>), for each one of the hunks
+     <br><dt><kbd>C-x 4 A</kbd><dd><a name="index-diff_002dadd_002dchange_002dlog_002dentries_002dother_002dwindow-961"></a><a name="index-add_002dchange_002dlog_002dentry_002dother_002dwindow_0040r_007b_002c-in-Diff-mode_007d-962"></a>Generate a ChangeLog entry, like <kbd>C-x 4 a</kbd> does (see <a href="Change-Log.html#Change-Log">Change Log</a>), for each one of the hunks
 (<code>diff-add-change-log-entries-other-window</code>).  This creates a
 skeleton of the log of changes that you can later fill with the actual
 descriptions of the changes.  <kbd>C-x 4 a</kbd> itself in Diff mode
@@ -152,7 +152,7 @@ operates on behalf of the current hunk's file, but gets the function
 name from the patch itself.  This is useful for making log entries for
 functions that are deleted by the patch.
 
-     <br><dt><kbd>M-x diff-show-trailing-whitespaces RET</kbd><dd><a name="index-diff_002dshow_002dtrailing_002dwhitespaces-959"></a>Highlight trailing whitespace characters, except for those used by the
+     <br><dt><kbd>M-x diff-show-trailing-whitespaces RET</kbd><dd><a name="index-diff_002dshow_002dtrailing_002dwhitespaces-963"></a>Highlight trailing whitespace characters, except for those used by the
 patch syntax (see <a href="Useless-Whitespace.html#Useless-Whitespace">Useless Whitespace</a>). 
 </dl>
 

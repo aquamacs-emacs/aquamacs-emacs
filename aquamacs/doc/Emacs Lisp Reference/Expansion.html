@@ -3,33 +3,33 @@
 <title>Expansion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Macros.html#Macros" title="Macros">
 <link rel="prev" href="Simple-Macro.html#Simple-Macro" title="Simple Macro">
 <link rel="next" href="Compiling-Macros.html#Compiling-Macros" title="Compiling Macros">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Expansion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Macro.html#Simple-Macro">Simple Macro</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
 
 <h3 class="section">13.2 Expansion of a Macro Call</h3>
 
-<p><a name="index-expansion-of-macros-708"></a><a name="index-macro-call-709"></a>
+<p><a name="index-expansion-of-macros-734"></a><a name="index-macro-call-735"></a>
   A macro call looks just like a function call in that it is a list which
 starts with the name of the macro.  The rest of the elements of the list
 are the arguments of the macro.
@@ -89,8 +89,8 @@ this is unusual.
 <code>macroexpand</code>.
 
 <div class="defun">
-&mdash; Function: <b>macroexpand</b><var> form &amp;optional environment<a name="index-macroexpand-710"></a></var><br>
-<blockquote><p><a name="index-macro-expansion-711"></a>This function expands <var>form</var>, if it is a macro call.  If the result
+&mdash; Function: <b>macroexpand</b><var> form &amp;optional environment<a name="index-macroexpand-736"></a></var><br>
+<blockquote><p><a name="index-macro-expansion-737"></a>This function expands <var>form</var>, if it is a macro call.  If the result
 is another macro call, it is expanded in turn, until something which is
 not a macro call results.  That is the value returned by
 <code>macroexpand</code>.  If <var>form</var> is not a macro call to begin with, it
@@ -110,22 +110,22 @@ uses this feature.
 
      <pre class="smallexample">          (defmacro inc (var)
               (list 'setq var (list '1+ var)))
-               =&gt; inc
+               &rArr; inc
           
           (macroexpand '(inc r))
-               =&gt; (setq r (1+ r))
+               &rArr; (setq r (1+ r))
           
           (defmacro inc2 (var1 var2)
               (list 'progn (list 'inc var1) (list 'inc var2)))
-               =&gt; inc2
+               &rArr; inc2
           
           (macroexpand '(inc2 r s))
-               =&gt; (progn (inc r) (inc s))  ; <code>inc</code><span class="roman"> not expanded here.</span>
-     </pre>
+               &rArr; (progn (inc r) (inc s))  ; <code>inc</code><span class="roman"> not expanded here.</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>macroexpand-all</b><var> form &amp;optional environment<a name="index-macroexpand_002dall-712"></a></var><br>
+&mdash; Function: <b>macroexpand-all</b><var> form &amp;optional environment<a name="index-macroexpand_002dall-738"></a></var><br>
 <blockquote><p><code>macroexpand-all</code> expands macros like <code>macroexpand</code>, but
 will look for and expand all macros in <var>form</var>, not just at the
 top-level.  If no macros are expanded, the return value is <code>eq</code>
@@ -136,8 +136,8 @@ to <var>form</var>.
 expand the embedded calls to <code>inc</code>:
 
      <pre class="smallexample">          (macroexpand-all '(inc2 r s))
-               =&gt; (progn (setq r (1+ r)) (setq s (1+ s)))
-     </pre>
+               &rArr; (progn (setq r (1+ r)) (setq s (1+ s)))
+</pre>
         </blockquote></div>
 
    </body></html>

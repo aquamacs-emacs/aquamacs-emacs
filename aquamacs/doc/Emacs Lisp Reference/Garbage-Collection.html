@@ -3,33 +3,33 @@
 <title>Garbage Collection - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
 <link rel="prev" href="Pure-Storage.html#Pure-Storage" title="Pure Storage">
 <link rel="next" href="Memory-Usage.html#Memory-Usage" title="Memory Usage">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Garbage-Collection"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Pure-Storage.html#Pure-Storage">Pure Storage</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
@@ -56,8 +56,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Inte
 
 <h3 class="appendixsec">E.3 Garbage Collection</h3>
 
-<p><a name="index-garbage-collection-3619"></a>
-<a name="index-memory-allocation-3620"></a>  When a program creates a list or the user defines a new function (such
+<p><a name="index-garbage-collection-3860"></a>
+<a name="index-memory-allocation-3861"></a>  When a program creates a list or the user defines a new function (such
 as by loading a library), that data is placed in normal storage.  If
 normal storage runs low, then Emacs asks the operating system to
 allocate more memory in blocks of 1k bytes.  Each block is used for one
@@ -87,20 +87,20 @@ might as well be reused, since no one will miss them.  The second
 (&ldquo;sweep&rdquo;) phase of the garbage collector arranges to reuse them.
 
 <!-- ??? Maybe add something describing weak hash tables here? -->
-<p><a name="index-free-list-3621"></a>  The sweep phase puts unused cons cells onto a <dfn>free list</dfn>
+   <p><a name="index-free-list-3862"></a>  The sweep phase puts unused cons cells onto a <dfn>free list</dfn>
 for future allocation; likewise for symbols and markers.  It compacts
 the accessible strings so they occupy fewer 8k blocks; then it frees the
 other 8k blocks.  Vectors, buffers, windows, and other large objects are
 individually allocated and freed using <code>malloc</code> and <code>free</code>.
 
-   <p><a name="index-CL-note_002d_002d_002dallocate-more-storage-3622"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002dallocate-more-storage-3863"></a><blockquote>
 <b>Common Lisp note:</b> Unlike other Lisps, GNU Emacs Lisp does not
 call the garbage collector when the free list is empty.  Instead, it
 simply requests the operating system to allocate more storage, and
 processing continues until <code>gc-cons-threshold</code> bytes have been
 used.
 
-        <p>This means that you can make sure that the garbage collector will not
+   <p>This means that you can make sure that the garbage collector will not
 run during a certain portion of a Lisp program by calling the garbage
 collector explicitly just before it (provided that portion of the
 program does not use so much space as to force a second garbage
@@ -108,7 +108,7 @@ collection).
 </blockquote>
 
 <div class="defun">
-&mdash; Command: <b>garbage-collect</b><var><a name="index-garbage_002dcollect-3623"></a></var><br>
+&mdash; Command: <b>garbage-collect</b><var><a name="index-garbage_002dcollect-3864"></a></var><br>
 <blockquote><p>This command runs a garbage collection, and returns information on
 the amount of space in use.  (Garbage collection can also occur
 spontaneously if you use more than <code>gc-cons-threshold</code> bytes of
@@ -125,15 +125,15 @@ information:
            (<var>used-floats</var> . <var>free-floats</var>)
            (<var>used-intervals</var> . <var>free-intervals</var>)
            (<var>used-strings</var> . <var>free-strings</var>))
-     </pre>
+</pre>
         <p>Here is an example:
 
      <pre class="example">          (garbage-collect)
-               =&gt; ((106886 . 13184) (9769 . 0)
+               &rArr; ((106886 . 13184) (9769 . 0)
                           (7731 . 4651) 347543 121628
                           (31 . 94) (1273 . 168)
                           (25474 . 3569))
-     </pre>
+</pre>
         <p>Here is a table explaining each element:
 
           <dl>
@@ -184,21 +184,21 @@ collection can not be done in this situation.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>garbage-collection-messages</b><var><a name="index-garbage_002dcollection_002dmessages-3624"></a></var><br>
+&mdash; User Option: <b>garbage-collection-messages</b><var><a name="index-garbage_002dcollection_002dmessages-3865"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, Emacs displays a message at the
 beginning and end of garbage collection.  The default value is
 <code>nil</code>, meaning there are no such messages. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>post-gc-hook</b><var><a name="index-post_002dgc_002dhook-3625"></a></var><br>
+&mdash; Variable: <b>post-gc-hook</b><var><a name="index-post_002dgc_002dhook-3866"></a></var><br>
 <blockquote><p>This is a normal hook that is run at the end of garbage collection. 
 Garbage collection is inhibited while the hook functions run, so be
 careful writing them. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>gc-cons-threshold</b><var><a name="index-gc_002dcons_002dthreshold-3626"></a></var><br>
+&mdash; User Option: <b>gc-cons-threshold</b><var><a name="index-gc_002dcons_002dthreshold-3867"></a></var><br>
 <blockquote><p>The value of this variable is the number of bytes of storage that must
 be allocated for Lisp objects after one garbage collection in order to
 trigger another garbage collection.  A cons cell counts as eight bytes,
@@ -221,7 +221,7 @@ until the subsequent garbage collection, at which time
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>gc-cons-percentage</b><var><a name="index-gc_002dcons_002dpercentage-3627"></a></var><br>
+&mdash; User Option: <b>gc-cons-percentage</b><var><a name="index-gc_002dcons_002dpercentage-3868"></a></var><br>
 <blockquote><p>The value of this variable specifies the amount of consing before a
 garbage collection occurs, as a fraction of the current heap size. 
 This criterion and <code>gc-cons-threshold</code> apply in parallel, and
@@ -239,7 +239,7 @@ memory Emacs is currently using.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>memory-limit</b><var><a name="index-memory_002dlimit-3628"></a></var><br>
+&mdash; Function: <b>memory-limit</b><var><a name="index-memory_002dlimit-3869"></a></var><br>
 <blockquote><p>This function returns the address of the last byte Emacs has allocated,
 divided by 1024.  We divide the value by 1024 to make sure it fits in a
 Lisp integer.
@@ -249,26 +249,26 @@ memory usage.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>memory-full</b><var><a name="index-memory_002dfull-3629"></a></var><br>
+&mdash; Variable: <b>memory-full</b><var><a name="index-memory_002dfull-3870"></a></var><br>
 <blockquote><p>This variable is <code>t</code> if Emacs is close to out of memory for Lisp
 objects, and <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>memory-use-counts</b><var><a name="index-memory_002duse_002dcounts-3630"></a></var><br>
+&mdash; Function: <b>memory-use-counts</b><var><a name="index-memory_002duse_002dcounts-3871"></a></var><br>
 <blockquote><p>This returns a list of numbers that count the number of objects
 created in this Emacs session.  Each of these counters increments for
 a certain kind of object.  See the documentation string for details. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>gcs-done</b><var><a name="index-gcs_002ddone-3631"></a></var><br>
+&mdash; Variable: <b>gcs-done</b><var><a name="index-gcs_002ddone-3872"></a></var><br>
 <blockquote><p>This variable contains the total number of garbage collections
 done so far in this Emacs session. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>gc-elapsed</b><var><a name="index-gc_002delapsed-3632"></a></var><br>
+&mdash; Variable: <b>gc-elapsed</b><var><a name="index-gc_002delapsed-3873"></a></var><br>
 <blockquote><p>This variable contains the total number of seconds of elapsed time
 during garbage collection so far in this Emacs session, as a floating
 point number. 

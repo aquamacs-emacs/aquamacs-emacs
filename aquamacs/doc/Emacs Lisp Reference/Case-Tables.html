@@ -3,32 +3,32 @@
 <title>Case Tables - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
 <link rel="prev" href="Case-Conversion.html#Case-Conversion" title="Case Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Case-Tables"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Case-Conversion.html#Case-Conversion">Case Conversion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
 <hr>
@@ -86,56 +86,56 @@ maps for both lower case and upper case.
 
    <p>The extra table <var>canonicalize</var> maps each character to a canonical
 equivalent; any two characters that are related by case-conversion have
-the same canonical equivalent character.  For example, since `<samp><span class="samp">a</span></samp>'
-and `<samp><span class="samp">A</span></samp>' are related by case-conversion, they should have the same
-canonical equivalent character (which should be either `<samp><span class="samp">a</span></samp>' for both
-of them, or `<samp><span class="samp">A</span></samp>' for both of them).
+the same canonical equivalent character.  For example, since &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">A</span></samp>&rsquo; are related by case-conversion, they should have the same
+canonical equivalent character (which should be either &lsquo;<samp><span class="samp">a</span></samp>&rsquo; for both
+of them, or &lsquo;<samp><span class="samp">A</span></samp>&rsquo; for both of them).
 
    <p>The extra table <var>equivalences</var> is a map that cyclically permutes
 each equivalence class (of characters with the same canonical
-equivalent).  (For ordinary <acronym>ASCII</acronym>, this would map `<samp><span class="samp">a</span></samp>' into
-`<samp><span class="samp">A</span></samp>' and `<samp><span class="samp">A</span></samp>' into `<samp><span class="samp">a</span></samp>', and likewise for each set of
+equivalent).  (For ordinary <acronym>ASCII</acronym>, this would map &lsquo;<samp><span class="samp">a</span></samp>&rsquo; into
+&lsquo;<samp><span class="samp">A</span></samp>&rsquo; and &lsquo;<samp><span class="samp">A</span></samp>&rsquo; into &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, and likewise for each set of
 equivalent characters.)
 
-   <p>When you construct a case table, you can provide <code>nil</code> for
+   <p>When constructing a case table, you can provide <code>nil</code> for
 <var>canonicalize</var>; then Emacs fills in this slot from the lower case
 and upper case mappings.  You can also provide <code>nil</code> for
 <var>equivalences</var>; then Emacs fills in this slot from
 <var>canonicalize</var>.  In a case table that is actually in use, those
-components are non-<code>nil</code>.  Do not try to specify <var>equivalences</var>
-without also specifying <var>canonicalize</var>.
+components are non-<code>nil</code>.  Do not try to specify
+<var>equivalences</var> without also specifying <var>canonicalize</var>.
 
    <p>Here are the functions for working with case tables:
 
 <div class="defun">
-&mdash; Function: <b>case-table-p</b><var> object<a name="index-case_002dtable_002dp-271"></a></var><br>
+&mdash; Function: <b>case-table-p</b><var> object<a name="index-case_002dtable_002dp-275"></a></var><br>
 <blockquote><p>This predicate returns non-<code>nil</code> if <var>object</var> is a valid case
 table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-standard-case-table</b><var> table<a name="index-set_002dstandard_002dcase_002dtable-272"></a></var><br>
+&mdash; Function: <b>set-standard-case-table</b><var> table<a name="index-set_002dstandard_002dcase_002dtable-276"></a></var><br>
 <blockquote><p>This function makes <var>table</var> the standard case table, so that it will
 be used in any buffers created subsequently. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>standard-case-table</b><var><a name="index-standard_002dcase_002dtable-273"></a></var><br>
+&mdash; Function: <b>standard-case-table</b><var><a name="index-standard_002dcase_002dtable-277"></a></var><br>
 <blockquote><p>This returns the standard case table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-case-table</b><var><a name="index-current_002dcase_002dtable-274"></a></var><br>
+&mdash; Function: <b>current-case-table</b><var><a name="index-current_002dcase_002dtable-278"></a></var><br>
 <blockquote><p>This function returns the current buffer's case table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-case-table</b><var> table<a name="index-set_002dcase_002dtable-275"></a></var><br>
+&mdash; Function: <b>set-case-table</b><var> table<a name="index-set_002dcase_002dtable-279"></a></var><br>
 <blockquote><p>This sets the current buffer's case table to <var>table</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-case-table</b><var> table body<small class="dots">...</small><a name="index-with_002dcase_002dtable-276"></a></var><br>
+&mdash; Macro: <b>with-case-table</b><var> table body<small class="dots">...</small><a name="index-with_002dcase_002dtable-280"></a></var><br>
 <blockquote><p>The <code>with-case-table</code> macro saves the current case table, makes
 <var>table</var> the current case table, evaluates the <var>body</var> forms,
 and finally restores the case table.  The return value is the value of
@@ -143,9 +143,9 @@ the last form in <var>body</var>.  The case table is restored even in case
 of an abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>). 
 </p></blockquote></div>
 
-   <p>Some language environments may modify the case conversions of
+   <p>Some language environments modify the case conversions of
 <acronym>ASCII</acronym> characters; for example, in the Turkish language
-environment, the <acronym>ASCII</acronym> character `<samp><span class="samp">I</span></samp>' is downcased into
+environment, the <acronym>ASCII</acronym> character &lsquo;<samp><span class="samp">I</span></samp>&rsquo; is downcased into
 a Turkish &ldquo;dotless i&rdquo;.  This can interfere with code that requires
 ordinary ASCII case conversion, such as implementations of
 <acronym>ASCII</acronym>-based network protocols.  In that case, use the
@@ -154,7 +154,7 @@ which stores the unmodified case table for the <acronym>ASCII</acronym>
 character set.
 
 <div class="defun">
-&mdash; Variable: <b>ascii-case-table</b><var><a name="index-ascii_002dcase_002dtable-277"></a></var><br>
+&mdash; Variable: <b>ascii-case-table</b><var><a name="index-ascii_002dcase_002dtable-281"></a></var><br>
 <blockquote><p>The case table for the <acronym>ASCII</acronym> character set.  This should not be
 modified by any language environment settings. 
 </p></blockquote></div>
@@ -166,25 +166,25 @@ See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.  Normally you 
 the standard case table.
 
 <div class="defun">
-&mdash; Function: <b>set-case-syntax-pair</b><var> uc lc case-table<a name="index-set_002dcase_002dsyntax_002dpair-278"></a></var><br>
+&mdash; Function: <b>set-case-syntax-pair</b><var> uc lc case-table<a name="index-set_002dcase_002dsyntax_002dpair-282"></a></var><br>
 <blockquote><p>This function specifies a pair of corresponding letters, one upper case
 and one lower case. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-case-syntax-delims</b><var> l r case-table<a name="index-set_002dcase_002dsyntax_002ddelims-279"></a></var><br>
+&mdash; Function: <b>set-case-syntax-delims</b><var> l r case-table<a name="index-set_002dcase_002dsyntax_002ddelims-283"></a></var><br>
 <blockquote><p>This function makes characters <var>l</var> and <var>r</var> a matching pair of
 case-invariant delimiters. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-case-syntax</b><var> char syntax case-table<a name="index-set_002dcase_002dsyntax-280"></a></var><br>
+&mdash; Function: <b>set-case-syntax</b><var> char syntax case-table<a name="index-set_002dcase_002dsyntax-284"></a></var><br>
 <blockquote><p>This function makes <var>char</var> case-invariant, with syntax
 <var>syntax</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>describe-buffer-case-table</b><var><a name="index-describe_002dbuffer_002dcase_002dtable-281"></a></var><br>
+&mdash; Command: <b>describe-buffer-case-table</b><var><a name="index-describe_002dbuffer_002dcase_002dtable-285"></a></var><br>
 <blockquote><p>This command displays a description of the contents of the current
 buffer's case table. 
 </p></blockquote></div>
@@ -192,7 +192,7 @@ buffer's case table.
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
 <!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

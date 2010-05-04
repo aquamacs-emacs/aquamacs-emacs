@@ -3,32 +3,32 @@
 <title>Other Plists - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Property-Lists.html#Property-Lists" title="Property Lists">
 <link rel="prev" href="Symbol-Plists.html#Symbol-Plists" title="Symbol Plists">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Other-Plists"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbol-Plists.html#Symbol-Plists">Symbol Plists</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Property-Lists.html#Property-Lists">Property Lists</a>
 <hr>
@@ -58,27 +58,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Property-Lists.html#Property-Lists">Pro
 that are stored in places other than symbols:
 
 <div class="defun">
-&mdash; Function: <b>plist-get</b><var> plist property<a name="index-plist_002dget-477"></a></var><br>
-<blockquote><p>This returns the value of the <var>property</var> property
-stored in the property list <var>plist</var>.  For example,
+&mdash; Function: <b>plist-get</b><var> plist property<a name="index-plist_002dget-480"></a></var><br>
+<blockquote><p>This returns the value of the <var>property</var> property stored in the
+property list <var>plist</var>.  It accepts a malformed <var>plist</var>
+argument.  If <var>property</var> is not found in the <var>plist</var>, it
+returns <code>nil</code>.  For example,
 
      <pre class="example">          (plist-get '(foo 4) 'foo)
-               =&gt; 4
+               &rArr; 4
           (plist-get '(foo 4 bad) 'foo)
-               =&gt; 4
+               &rArr; 4
+          (plist-get '(foo 4 bad) 'bad)
+               &rArr; <code>nil</code>
           (plist-get '(foo 4 bad) 'bar)
-               =&gt; <code>wrong-type-argument</code> error
-     </pre>
-        <p>It accepts a malformed <var>plist</var> argument and always returns <code>nil</code>
-if <var>property</var> is not found in the <var>plist</var>.  For example,
-
-     <pre class="example">          (plist-get '(foo 4 bad) 'bar)
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>plist-put</b><var> plist property value<a name="index-plist_002dput-478"></a></var><br>
+&mdash; Function: <b>plist-put</b><var> plist property value<a name="index-plist_002dput-481"></a></var><br>
 <blockquote><p>This stores <var>value</var> as the value of the <var>property</var> property in
 the property list <var>plist</var>.  It may modify <var>plist</var> destructively,
 or it may construct a new list structure without altering the old.  The
@@ -86,12 +84,12 @@ function returns the modified property list, so you can store that back
 in the place where you got <var>plist</var>.  For example,
 
      <pre class="example">          (setq my-plist '(bar t foo 4))
-               =&gt; (bar t foo 4)
+               &rArr; (bar t foo 4)
           (setq my-plist (plist-put my-plist 'foo 69))
-               =&gt; (bar t foo 69)
+               &rArr; (bar t foo 69)
           (setq my-plist (plist-put my-plist 'quux '(a)))
-               =&gt; (bar t foo 69 quux (a))
-     </pre>
+               &rArr; (bar t foo 69 quux (a))
+</pre>
         </blockquote></div>
 
    <p>You could define <code>put</code> in terms of <code>plist-put</code> as follows:
@@ -101,19 +99,19 @@ in the place where you got <var>plist</var>.  For example,
                  (plist-put (symbol-plist symbol) prop value)))
 </pre>
    <div class="defun">
-&mdash; Function: <b>lax-plist-get</b><var> plist property<a name="index-lax_002dplist_002dget-479"></a></var><br>
+&mdash; Function: <b>lax-plist-get</b><var> plist property<a name="index-lax_002dplist_002dget-482"></a></var><br>
 <blockquote><p>Like <code>plist-get</code> except that it compares properties
 using <code>equal</code> instead of <code>eq</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>lax-plist-put</b><var> plist property value<a name="index-lax_002dplist_002dput-480"></a></var><br>
+&mdash; Function: <b>lax-plist-put</b><var> plist property value<a name="index-lax_002dplist_002dput-483"></a></var><br>
 <blockquote><p>Like <code>plist-put</code> except that it compares properties
 using <code>equal</code> instead of <code>eq</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>plist-member</b><var> plist property<a name="index-plist_002dmember-481"></a></var><br>
+&mdash; Function: <b>plist-member</b><var> plist property<a name="index-plist_002dmember-484"></a></var><br>
 <blockquote><p>This returns non-<code>nil</code> if <var>plist</var> contains the given
 <var>property</var>.  Unlike <code>plist-get</code>, this allows you to distinguish
 between a missing property and a property with the value <code>nil</code>. 
@@ -124,7 +122,7 @@ The value is actually the tail of <var>plist</var> whose <code>car</code> is
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
 <!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1998, 2001, 2002, 2003, -->
-<!-- 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

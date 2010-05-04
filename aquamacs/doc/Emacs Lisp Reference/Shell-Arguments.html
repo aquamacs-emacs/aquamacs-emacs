@@ -3,33 +3,33 @@
 <title>Shell Arguments - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Processes.html#Processes" title="Processes">
 <link rel="prev" href="Subprocess-Creation.html#Subprocess-Creation" title="Subprocess Creation">
 <link rel="next" href="Synchronous-Processes.html#Synchronous-Processes" title="Synchronous Processes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Shell-Arguments"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.2 Shell Arguments</h3>
 
-<p><a name="index-arguments-for-shell-commands-3010"></a><a name="index-shell-command-arguments-3011"></a>
+<p><a name="index-arguments-for-shell-commands-3184"></a><a name="index-shell-command-arguments-3185"></a>
   Lisp programs sometimes need to run a shell and give it a command
 that contains file names that were specified by the user.  These
 programs ought to be able to support any valid file name.  But the shell
@@ -65,7 +65,7 @@ occur in the file name, they will confuse the shell.  To handle these
 characters, use the function <code>shell-quote-argument</code>:
 
 <div class="defun">
-&mdash; Function: <b>shell-quote-argument</b><var> argument<a name="index-shell_002dquote_002dargument-3012"></a></var><br>
+&mdash; Function: <b>shell-quote-argument</b><var> argument<a name="index-shell_002dquote_002dargument-3186"></a></var><br>
 <blockquote><p>This function returns a string which represents, in shell syntax,
 an argument whose actual contents are <var>argument</var>.  It should
 work reliably to concatenate the return value into a shell command
@@ -78,12 +78,12 @@ function.
 
      <pre class="example">          ;; <span class="roman">This example shows the behavior on GNU and Unix systems.</span>
           (shell-quote-argument "foo &gt; bar")
-               =&gt; "foo\\ \\&gt;\\ bar"
+               &rArr; "foo\\ \\&gt;\\ bar"
           
           ;; <span class="roman">This example shows the behavior on MS-DOS and MS-Windows.</span>
           (shell-quote-argument "foo &gt; bar")
-               =&gt; "\"foo &gt; bar\""
-     </pre>
+               &rArr; "\"foo &gt; bar\""
+</pre>
         <p>Here's an example of using <code>shell-quote-argument</code> to construct
 a shell command:
 
@@ -91,8 +91,45 @@ a shell command:
                   (shell-quote-argument oldfile)
                   " "
                   (shell-quote-argument newfile))
-     </pre>
+</pre>
         </blockquote></div>
+
+   <p><a name="index-quoting-and-unquoting-shell-command-line-3187"></a>  The following two functions are useful for creating shell commands
+from individual argument strings, and taking shell command lines apart
+into individual arguments.
+
+<div class="defun">
+&mdash; Function: <b>split-string-and-unquote</b><var> string &amp;optional separators<a name="index-split_002dstring_002dand_002dunquote-3188"></a></var><br>
+<blockquote><p>This function splits <var>string</var> into substrings at matches for the
+regular expression <var>separators</var>, like <code>split-string</code> does
+(see <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>); in addition, it removes quoting from the
+substrings.  It then makes a list of the substrings and returns it.
+
+        <p>If <var>separators</var> is omitted or <code>nil</code>, it defaults to
+<code>"\\s-+"</code>, which is a regular expression that matches one or more
+characters with whitespace syntax (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
+
+        <p>This function performs two types of quoting: enclosing a whole string
+in double quotes <code>"..."</code>, and quoting individual characters
+with a backslash escape &lsquo;<samp><span class="samp">\</span></samp>&rsquo;.  The latter is also used in Lisp
+strings, so this function can handle those as well. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>combine-and-quote-strings</b><var> list-of-strings &amp;optional separator<a name="index-combine_002dand_002dquote_002dstrings-3189"></a></var><br>
+<blockquote><p>This function concatenates <var>list-of-strings</var> into a single string,
+quoting each string as necessary.  It also sticks the <var>separator</var>
+string between each pair of strings; if <var>separator</var> is omitted or
+<code>nil</code>, it defaults to <code>" "</code>.  The return value is the
+resulting string.
+
+        <p>The strings in <var>list-of-strings</var> that need quoting are those that
+include <var>separator</var> as their substring.  Quoting a string encloses
+it in double quotes <code>"..."</code>.  In the simplest case, if you
+are consing a shell command from the individual command-line
+arguments, every argument that includes embedded blanks will be
+quoted. 
+</p></blockquote></div>
 
    </body></html>
 

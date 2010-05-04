@@ -3,33 +3,33 @@
 <title>Printing in Edebug - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Edebug.html#Edebug" title="Edebug">
 <link rel="prev" href="Eval-List.html#Eval-List" title="Eval List">
 <link rel="next" href="Trace-Buffer.html#Trace-Buffer" title="Trace Buffer">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Printing-in-Edebug"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Eval-List.html#Eval-List">Eval List</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
@@ -56,24 +56,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
 
 <h4 class="subsection">18.2.11 Printing in Edebug</h4>
 
-<p><a name="index-printing-_0028Edebug_0029-942"></a><a name="index-printing-circular-structures-943"></a><a name="index-cust_002dprint-944"></a>  If an expression in your program produces a value containing circular
+<p><a name="index-printing-_0028Edebug_0029-973"></a><a name="index-printing-circular-structures-974"></a><a name="index-cust_002dprint-975"></a>  If an expression in your program produces a value containing circular
 list structure, you may get an error when Edebug attempts to print it.
 
    <p>One way to cope with circular structure is to set <code>print-length</code>
 or <code>print-level</code> to truncate the printing.  Edebug does this for
-you; it binds <code>print-length</code> and <code>print-level</code> to 50 if they
-were <code>nil</code>.  (Actually, the variables <code>edebug-print-length</code>
-and <code>edebug-print-level</code> specify the values to use within Edebug.) 
-See <a href="Output-Variables.html#Output-Variables">Output Variables</a>.
+you; it binds <code>print-length</code> and <code>print-level</code> to the values
+of the variables <code>edebug-print-length</code> and
+<code>edebug-print-level</code> (so long as they have non-<code>nil</code>
+values).  See <a href="Output-Variables.html#Output-Variables">Output Variables</a>.
 
 <div class="defun">
-&mdash; User Option: <b>edebug-print-length</b><var><a name="index-edebug_002dprint_002dlength-945"></a></var><br>
+&mdash; User Option: <b>edebug-print-length</b><var><a name="index-edebug_002dprint_002dlength-976"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, Edebug binds <code>print-length</code> to this value while
 printing results.  The default value is <code>50</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>edebug-print-level</b><var><a name="index-edebug_002dprint_002dlevel-946"></a></var><br>
+&mdash; User Option: <b>edebug-print-level</b><var><a name="index-edebug_002dprint_002dlevel-977"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, Edebug binds <code>print-level</code> to this value while
 printing results.  The default value is <code>50</code>. 
 </p></blockquote></div>
@@ -87,14 +87,14 @@ to a non-<code>nil</code> value.
 <pre class="example">     (setq a '(x y))
      (setcar a a)
 </pre>
-   <p class="noindent">Custom printing prints this as `<samp><span class="samp">Result: #1=(#1# y)</span></samp>'.  The
-`<samp><span class="samp">#1=</span></samp>' notation labels the structure that follows it with the label
-`<samp><span class="samp">1</span></samp>', and the `<samp><span class="samp">#1#</span></samp>' notation references the previously labeled
+   <p class="noindent">Custom printing prints this as &lsquo;<samp><span class="samp">Result: #1=(#1# y)</span></samp>&rsquo;.  The
+&lsquo;<samp><span class="samp">#1=</span></samp>&rsquo; notation labels the structure that follows it with the label
+&lsquo;<samp><span class="samp">1</span></samp>&rsquo;, and the &lsquo;<samp><span class="samp">#1#</span></samp>&rsquo; notation references the previously labeled
 structure.  This notation is used for any shared elements of lists or
 vectors.
 
 <div class="defun">
-&mdash; User Option: <b>edebug-print-circle</b><var><a name="index-edebug_002dprint_002dcircle-947"></a></var><br>
+&mdash; User Option: <b>edebug-print-circle</b><var><a name="index-edebug_002dprint_002dcircle-978"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, Edebug binds <code>print-circle</code> to this value while
 printing results.  The default value is <code>t</code>. 
 </p></blockquote></div>

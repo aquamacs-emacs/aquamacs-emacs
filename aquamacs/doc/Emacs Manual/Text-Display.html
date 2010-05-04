@@ -3,7 +3,7 @@
 <title>Text Display - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Optional-Mode-Line.html#Optional-Mode-Line" title="Optional Mode Line">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Text-Display"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Cursor-Display.html#Cursor-Display">Cursor Display</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -57,33 +57,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">18.15 How Text Is Displayed</h3>
 
-<p><a name="index-characters-_0028in-text_0029-592"></a>
+<p><a name="index-characters-_0028in-text_0029-595"></a>
   <acronym>ASCII</acronym> printing characters (octal codes 040 through 0176) in Emacs
 buffers are displayed with their graphics, as are non-<acronym>ASCII</acronym> multibyte
 printing characters (octal codes above 0400).
 
-   <p><a name="index-tab_002dwidth-593"></a><a name="index-default_002dtab_002dwidth-594"></a>  Some <acronym>ASCII</acronym> control characters are displayed in special
+   <p><a name="index-tab_002dwidth-596"></a>  Some <acronym>ASCII</acronym> control characters are displayed in special
 ways.  The newline character (octal code 012) is displayed by starting
 a new line.  The tab character (octal code 011) is displayed by moving
 to the next tab stop column (normally every 8 columns).  The number of
 spaces per tab is controlled by the variable <code>tab-width</code>, which
 must have an integer value between 1 and 1000, inclusive, and is made
-local by changing it.  Note that how the tab character in the buffer
+buffer-local by changing it.  Note that how the tab character in the buffer
 is displayed has nothing to do with the definition of &lt;TAB&gt; as a
-command.  The variable <code>default-tab-width</code> controls the default
-value of this variable for buffers where you have not set it locally.
+command.
 
    <p>Other <acronym>ASCII</acronym> control characters are normally displayed as a caret
-(`<samp><span class="samp">^</span></samp>') followed by the non-control version of the character; thus,
-control-A is displayed as `<samp><span class="samp">^A</span></samp>'.  The caret appears in face
+(&lsquo;<samp><span class="samp">^</span></samp>&rsquo;) followed by the non-control version of the character; thus,
+control-A is displayed as &lsquo;<samp><span class="samp">^A</span></samp>&rsquo;.  The caret appears in face
 <code>escape-glyph</code>.
 
    <p>Non-<acronym>ASCII</acronym> characters 0200 through 0237 (octal) are
 displayed with octal escape sequences; thus, character code 0230
-(octal) is displayed as `<samp><span class="samp">\230</span></samp>'.  The backslash appears in face
+(octal) is displayed as &lsquo;<samp><span class="samp">\230</span></samp>&rsquo;.  The backslash appears in face
 <code>escape-glyph</code>.
 
-   <p><a name="index-ctl_002darrow-595"></a>  If the variable <code>ctl-arrow</code> is <code>nil</code>, control characters in
+   <p><a name="index-ctl_002darrow-597"></a>  If the variable <code>ctl-arrow</code> is <code>nil</code>, control characters in
 the buffer are displayed with octal escape sequences, except for newline
 and tab.  Altering the value of <code>ctl-arrow</code> makes it local to the
 current buffer; until that time, the default value is in effect.  The
@@ -96,7 +95,7 @@ graphics.  In unibyte mode, if you enable European display they are
 displayed using their graphics (assuming your terminal supports them),
 otherwise as escape sequences.  See <a href="Unibyte-Mode.html#Unibyte-Mode">Unibyte Mode</a>.
 
-   <p><a name="index-nobreak_002dchar_002ddisplay-596"></a><a name="index-no_002dbreak-space_002c-display-597"></a><a name="index-no_002dbreak-hyphen_002c-display-598"></a><a name="index-soft-hyphen_002c-display-599"></a>  Some character sets define &ldquo;no-break&rdquo; versions of the space and
+   <p><a name="index-nobreak_002dchar_002ddisplay-598"></a><a name="index-no_002dbreak-space_002c-display-599"></a><a name="index-no_002dbreak-hyphen_002c-display-600"></a><a name="index-soft-hyphen_002c-display-601"></a>  Some character sets define &ldquo;no-break&rdquo; versions of the space and
 hyphen characters, which are used where a line should not be broken. 
 Emacs normally displays these characters with special faces
 (respectively, <code>nobreak-space</code> and <code>escape-glyph</code>) to

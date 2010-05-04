@@ -441,6 +441,21 @@ specified in `shell-file-name'."
   (format "Aquamacs Help (%s)"
 	  aquamacs-version))
 
+(defun aquamacs-manual-name (manual)
+  ;; This assumes that book name and book folder are same
+  ;; Alternatively, we could read our own Info.plist
+  ;; or have the Makefile store this somewhere in loadefs.
+  (let ((manual-version
+	 (with-temp-buffer
+	   (insert-file-contents-literally
+	    (concat aquamacs-mac-application-bundle-directory
+		    (format "/Contents/Resources/%s/VERSION"
+			    manual)))
+	   (buffer-substring (point-min) (1- (point-max))))))
+  (format "%s (%s)"
+	  manual
+	  manual-version)))
+
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
@@ -449,12 +464,12 @@ specified in `shell-file-name'."
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"
   (interactive)
-  (ns-open-help-anchor "index" "Emacs Manual"))
+  (ns-open-help-anchor "index" (aquamacs-manual-name "Emacs Manual")))
 
 (defun aquamacs-elisp-reference ()
   "Show the Emacs Lisp Reference"
   (interactive)
-  (ns-open-help-anchor "index" "Emacs Lisp Reference"))
+  (ns-open-help-anchor "index" (aquamacs-manual-name "Emacs Lisp Reference")))
 
 
 ;; it's imporant to make sure that the following are in the Info.plist file:

@@ -3,33 +3,33 @@
 <title>Window System Selections - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
 <link rel="prev" href="Pointer-Shape.html#Pointer-Shape" title="Pointer Shape">
 <link rel="next" href="Drag-and-Drop.html#Drag-and-Drop" title="Drag and Drop">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,17 +46,17 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Window-System-Selections"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.18 Window System Selections</h3>
+<h3 class="section">29.19 Window System Selections</h3>
 
-<p><a name="index-selection-_0028for-window-systems_0029-2227"></a>
+<p><a name="index-selection-_0028for-window-systems_0029-2329"></a>
 The X server records a set of <dfn>selections</dfn> which permit transfer of
 data between application programs.  The various selections are
 distinguished by <dfn>selection types</dfn>, represented in Emacs by
@@ -64,7 +64,7 @@ symbols.  X clients including Emacs can read or set the selection for
 any given type.
 
 <div class="defun">
-&mdash; Command: <b>x-set-selection</b><var> type data<a name="index-x_002dset_002dselection-2228"></a></var><br>
+&mdash; Command: <b>x-set-selection</b><var> type data<a name="index-x_002dset_002dselection-2330"></a></var><br>
 <blockquote><p>This function sets a &ldquo;selection&rdquo; in the X server.  It takes two
 arguments: a selection type <var>type</var>, and the value to assign to it,
 <var>data</var>.  If <var>data</var> is <code>nil</code>, it means to clear out the
@@ -86,7 +86,7 @@ names, in accord with X Window System conventions.  If <var>type</var> is
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-get-selection</b><var> &amp;optional type data-type<a name="index-x_002dget_002dselection-2229"></a></var><br>
+&mdash; Function: <b>x-get-selection</b><var> &amp;optional type data-type<a name="index-x_002dget_002dselection-2331"></a></var><br>
 <blockquote><p>This function accesses selections set up by Emacs or by other X
 clients.  It takes two optional arguments, <var>type</var> and
 <var>data-type</var>.  The default for <var>type</var>, the selection type, is
@@ -104,21 +104,20 @@ with X conventions.)  The default for <var>data-type</var> is
 <code>STRING</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-cut-buffer-2230"></a>The X server also has a set of eight numbered <dfn>cut buffers</dfn> which can
+   <p><a name="index-cut-buffer-2332"></a>The X server also has a set of eight numbered <dfn>cut buffers</dfn> which can
 store text or other data being moved between applications.  Cut buffers
 are considered obsolete, but Emacs supports them for the sake of X
 clients that still use them.  Cut buffers are numbered from 0 to 7.
 
 <div class="defun">
-&mdash; Function: <b>x-get-cut-buffer</b><var> &amp;optional n<a name="index-x_002dget_002dcut_002dbuffer-2231"></a></var><br>
+&mdash; Function: <b>x-get-cut-buffer</b><var> &amp;optional n<a name="index-x_002dget_002dcut_002dbuffer-2333"></a></var><br>
 <blockquote><p>This function returns the contents of cut buffer number <var>n</var>. 
 If omitted <var>n</var> defaults to 0. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-set-cut-buffer</b><var> string &amp;optional push<a name="index-x_002dset_002dcut_002dbuffer-2232"></a></var><br>
-<blockquote><p><a name="Definition-of-x_002dset_002dcut_002dbuffer"></a>
-This function stores <var>string</var> into the first cut buffer (cut buffer
+&mdash; Function: <b>x-set-cut-buffer</b><var> string &amp;optional push<a name="index-x_002dset_002dcut_002dbuffer-2334"></a></var><br>
+<blockquote><p><a name="Definition-of-x_002dset_002dcut_002dbuffer"></a>This function stores <var>string</var> into the first cut buffer (cut buffer
 0).  If <var>push</var> is <code>nil</code>, only the first cut buffer is changed. 
 If <var>push</var> is non-<code>nil</code>, that says to move the values down
 through the series of cut buffers, much like the way successive kills in
@@ -128,43 +127,25 @@ the third, and so on through all eight cut buffers.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>selection-coding-system</b><var><a name="index-selection_002dcoding_002dsystem-2233"></a></var><br>
+&mdash; User Option: <b>selection-coding-system</b><var><a name="index-selection_002dcoding_002dsystem-2335"></a></var><br>
 <blockquote><p>This variable specifies the coding system to use when reading and
 writing selections or the clipboard.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.  The default is <code>compound-text-with-extensions</code>, which
 converts to the text representation that X11 normally uses. 
 </p></blockquote></div>
 
-   <p><a name="index-clipboard-support-_0028for-MS_002dWindows_0029-2234"></a>When Emacs runs on MS-Windows, it does not implement X selections in
+   <p><a name="index-clipboard-support-_0028for-MS_002dWindows_0029-2336"></a>When Emacs runs on MS-Windows, it does not implement X selections in
 general, but it does support the clipboard.  <code>x-get-selection</code>
 and <code>x-set-selection</code> on MS-Windows support the text data type
 only; if the clipboard holds other types of data, Emacs treats the
 clipboard as empty.
 
-   <p><a name="index-scrap-support-_0028for-Mac-OS_0029-2235"></a>On Mac OS, selection-like data transfer between applications is
-performed through a mechanism called <dfn>scraps</dfn>.  The clipboard is a
-particular scrap named <code>com.apple.scrap.clipboard</code>.  Types of scrap
-data are called <dfn>scrap flavor types</dfn>, which are identified by
-four-char codes such as <code>TEXT</code>.  Emacs associates a selection with
-a scrap, and a selection type with a scrap flavor type via
-<code>mac-scrap-name</code> and <code>mac-ostype</code> properties, respectively.
-
-<pre class="example">     (get 'CLIPBOARD 'mac-scrap-name)
-          =&gt; "com.apple.scrap.clipboard"
-     (get 'com.apple.traditional-mac-plain-text 'mac-ostype)
-          =&gt; "TEXT"
-</pre>
-   <p>Conventionally, selection types for scrap flavor types on Mac OS have
-the form of <acronym title="Uniform Type Identifier">UTI</acronym> (Uniform Type Identifier) such as
-<code>com.apple.traditional-mac-plain-text</code>,
-<code>public.utf16-plain-text</code>, and <code>public.file-url</code>.
-
 <div class="defun">
-&mdash; User Option: <b>x-select-enable-clipboard</b><var><a name="index-x_002dselect_002denable_002dclipboard-2236"></a></var><br>
+&mdash; User Option: <b>x-select-enable-clipboard</b><var><a name="index-x_002dselect_002denable_002dclipboard-2337"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, the Emacs yank functions consult the
 clipboard before the primary selection, and the kill functions store in
 the clipboard as well as the primary selection.  Otherwise they do not
 access the clipboard at all.  The default is <code>nil</code> on most systems,
-but <code>t</code> on MS-Windows and Mac. 
+but <code>t</code> on MS-Windows. 
 </p></blockquote></div>
 
    </body></html>

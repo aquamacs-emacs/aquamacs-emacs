@@ -3,32 +3,32 @@
 <title>Basic Windows - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
 <link rel="next" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Basic-Windows"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
@@ -54,69 +54,35 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 
 <h3 class="section">28.1 Basic Concepts of Emacs Windows</h3>
 
-<p><a name="index-window-1966"></a><a name="index-selected-window-1967"></a>
+<p><a name="index-window-2037"></a><a name="index-selected-window-2038"></a>
   A <dfn>window</dfn> in Emacs is the physical area of the screen in which a
 buffer is displayed.  The term is also used to refer to a Lisp object that
 represents that screen area in Emacs Lisp.  It should be
 clear from the context which is meant.
 
-   <p>Emacs groups windows into frames.  A frame represents an area of
-screen available for Emacs to use.  Each frame always contains at least
-one window, but you can subdivide it vertically or horizontally into
-multiple nonoverlapping Emacs windows.
+   <p>Emacs groups windows into frames; see <a href="Frames.html#Frames">Frames</a>.  A frame
+represents an area of screen available for Emacs to use.  Each frame
+always contains at least one window, but you can subdivide it
+vertically or horizontally into multiple, nonoverlapping Emacs
+windows.
 
    <p>In each frame, at any time, one and only one window is designated as
 <dfn>selected within the frame</dfn>.  The frame's cursor appears in that
 window, but the other windows have &ldquo;non-selected&rdquo; cursors, normally
-less visible.  At any time, one frame is the selected frame; and the
-window selected within that frame is <dfn>the selected window</dfn>.  The
-selected window's buffer is usually the current buffer (except when
-<code>set-buffer</code> has been used).  See <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
-
-<div class="defun">
-&mdash; Variable: <b>cursor-in-non-selected-windows</b><var><a name="index-cursor_002din_002dnon_002dselected_002dwindows-1968"></a></var><br>
-<blockquote><p>If this variable is <code>nil</code>, Emacs displays only one cursor,
-in the selected window.  Other windows have no cursor at all. 
-</p></blockquote></div>
+less visible.  (See <a href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>, for customizing this.)  At
+any time, one frame is the selected frame; and the window selected
+within that frame is <dfn>the selected window</dfn>.  The selected window's
+buffer is usually the current buffer (except when <code>set-buffer</code> has
+been used); see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
 
    <p>For practical purposes, a window exists only while it is displayed in
 a frame.  Once removed from the frame, the window is effectively deleted
 and should not be used, <em>even though there may still be references
-to it</em> from other Lisp objects.  Restoring a saved window configuration
-is the only way for a window no longer on the screen to come back to
-life.  (See <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>.)
+to it</em> from other Lisp objects; see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>.  Restoring a
+saved window configuration is the only way for a window no longer on the
+screen to come back to life; see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>.
 
-   <p>Each window has the following attributes:
-
-     <ul>
-<li>containing frame
-
-     <li>window height
-
-     <li>window width
-
-     <li>window edges with respect to the screen or frame
-
-     <li>the buffer it displays
-
-     <li>position within the buffer at the upper left of the window
-
-     <li>amount of horizontal scrolling, in columns
-
-     <li>point
-
-     <li>the mark
-
-     <li>how recently the window was selected
-
-     <li>fringe settings
-
-     <li>display margins
-
-     <li>scroll-bar settings
-</ul>
-
-   <p><a name="index-multiple-windows-1969"></a>  Users create multiple windows so they can look at several buffers at
+   <p><a name="index-multiple-windows-2039"></a>  Users create multiple windows so they can look at several buffers at
 once.  Lisp libraries use multiple windows for a variety of reasons, but
 most often to display related information.  In Rmail, for example, you
 can move through a summary buffer in one window while the other window
@@ -129,18 +95,15 @@ more X windows as frames, and subdivides them into
 Emacs windows.  When you use Emacs on a character-only terminal, Emacs
 treats the whole terminal screen as one frame.
 
-   <p><a name="index-terminal-screen-1970"></a><a name="index-screen-of-terminal-1971"></a><a name="index-tiled-windows-1972"></a>  Most window systems support arbitrarily located overlapping windows. 
+   <p><a name="index-terminal-screen-2040"></a><a name="index-screen-of-terminal-2041"></a><a name="index-tiled-windows-2042"></a>  Most window systems support arbitrarily located overlapping windows. 
 In contrast, Emacs windows are <dfn>tiled</dfn>; they never overlap, and
 together they fill the whole screen or frame.  Because of the way in
-which Emacs creates new windows and resizes them, not all conceivable
-tilings of windows on an Emacs frame are actually possible. 
-See <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>, and <a href="Size-of-Window.html#Size-of-Window">Size of Window</a>.
-
-   <p>See <a href="Display.html#Display">Display</a>, for information on how the contents of the
-window's buffer are displayed in the window.
+which Emacs creates new windows (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>) and resizes
+them (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>), not all conceivable tilings of windows
+on an Emacs frame are actually possible.
 
 <div class="defun">
-&mdash; Function: <b>windowp</b><var> object<a name="index-windowp-1973"></a></var><br>
+&mdash; Function: <b>windowp</b><var> object<a name="index-windowp-2043"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a window. 
 </p></blockquote></div>
 

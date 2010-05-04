@@ -3,7 +3,7 @@
 <title>Terminal Init - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Init-File.html#Init-File" title="Init File">
 <link rel="prev" href="Init-Examples.html#Init-Examples" title="Init Examples">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Terminal-Init"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Find-Init.html#Find-Init">Find Init</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Examples.html#Init-Examples">Init Examples</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init-File">Init File</a>
@@ -61,7 +61,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init-File">Init File</a>
 it is run on that type of terminal.  For a terminal type named
 <var>termtype</var>, the library is called <samp><span class="file">term/</span><var>termtype</var></samp> and it is
 found by searching the directories <code>load-path</code> as usual and trying the
-suffixes `<samp><span class="samp">.elc</span></samp>' and `<samp><span class="samp">.el</span></samp>'.  Normally it appears in the
+suffixes &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; and &lsquo;<samp><span class="samp">.el</span></samp>&rsquo;.  Normally it appears in the
 subdirectory <samp><span class="file">term</span></samp> of the directory where most Emacs libraries are
 kept.
 
@@ -76,16 +76,16 @@ function keys that Termcap does not specify.
 
    <p>When the terminal type contains a hyphen, only the part of the name
 before the first hyphen is significant in choosing the library name. 
-Thus, terminal types `<samp><span class="samp">aaa-48</span></samp>' and `<samp><span class="samp">aaa-30-rv</span></samp>' both use
+Thus, terminal types &lsquo;<samp><span class="samp">aaa-48</span></samp>&rsquo; and &lsquo;<samp><span class="samp">aaa-30-rv</span></samp>&rsquo; both use
 the library <samp><span class="file">term/aaa</span></samp>.  The code in the library can use
 <code>(getenv "TERM")</code> to find the full terminal type name.
 
-   <p><a name="index-term_002dfile_002dprefix-4040"></a>  The library's name is constructed by concatenating the value of the
+   <p><a name="index-term_002dfile_002dprefix-4074"></a>  The library's name is constructed by concatenating the value of the
 variable <code>term-file-prefix</code> and the terminal type.  Your <samp><span class="file">.emacs</span></samp>
 file can prevent the loading of the terminal-specific library by setting
 <code>term-file-prefix</code> to <code>nil</code>.
 
-   <p><a name="index-term_002dsetup_002dhook-4041"></a>  Emacs runs the hook <code>term-setup-hook</code> at the end of
+   <p><a name="index-term_002dsetup_002dhook-4075"></a>  Emacs runs the hook <code>term-setup-hook</code> at the end of
 initialization, after both your <samp><span class="file">.emacs</span></samp> file and any
 terminal-specific library have been read in.  Add hook functions to this
 hook if you wish to override part of any of the terminal-specific

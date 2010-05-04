@@ -3,32 +3,32 @@
 <title>Display Margins - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display-Property.html#Display-Property" title="Display Property">
 <link rel="prev" href="Other-Display-Specs.html#Other-Display-Specs" title="Other Display Specs">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,48 +45,51 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Display-Margins"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property">Display Property</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.15.4 Displaying in the Margins</h4>
+<h4 class="subsection">38.15.5 Displaying in the Margins</h4>
 
-<p><a name="index-display-margins-3318"></a><a name="index-margins_002c-display-3319"></a>
-  A buffer can have blank areas called <dfn>display margins</dfn> on the left
-and on the right.  Ordinary text never appears in these areas, but you
-can put things into the display margins using the <code>display</code>
-property.
+<p><a name="index-display-margins-3531"></a><a name="index-margins_002c-display-3532"></a>
+  A buffer can have blank areas called <dfn>display margins</dfn> on the
+left and on the right.  Ordinary text never appears in these areas,
+but you can put things into the display margins using the
+<code>display</code> property.  There is currently no way to make text or
+images in the margin mouse-sensitive.
 
-   <p>To put text in the left or right display margin of the window, use a
-display specification of the form <code>(margin right-margin)</code> or
-<code>(margin left-margin)</code> on it.  To put an image in a display margin,
-use that display specification along with the display specification for
-the image.  Unfortunately, there is currently no way to make
-text or images in the margin mouse-sensitive.
+   <p>The way to display something in the margins is to specify it in a
+margin display specification in the <code>display</code> property of some
+text.  This is a replacing display specification, meaning that the
+text you put it on does not get displayed; the margin display appears,
+but that text does not.
 
-   <p>If you put such a display specification directly on text in the
-buffer, the specified margin display appears <em>instead of</em> that
-buffer text itself.  To put something in the margin <em>in
-association with</em> certain buffer text without preventing or altering
-the display of that text, put a <code>before-string</code> property on the
-text and put the display specification on the contents of the
-before-string.
+   <p>A margin display specification looks like <code>((margin
+right-margin) </code><var>spec</var><code>)</code> or <code>((margin left-margin) </code><var>spec</var><code>)</code>. 
+Here, <var>spec</var> is another display specification that says what to
+display in the margin.  Typically it is a string of text to display,
+or an image descriptor.
+
+   <p>To display something in the margin <em>in association with</em>
+certain buffer text, without altering or preventing the display of
+that text, put a <code>before-string</code> property on the text and put the
+margin display specification on the contents of the before-string.
 
    <p>Before the display margins can display anything, you must give
 them a nonzero width.  The usual way to do that is to set these
 variables:
 
 <div class="defun">
-&mdash; Variable: <b>left-margin-width</b><var><a name="index-left_002dmargin_002dwidth-3320"></a></var><br>
+&mdash; Variable: <b>left-margin-width</b><var><a name="index-left_002dmargin_002dwidth-3533"></a></var><br>
 <blockquote><p>This variable specifies the width of the left margin. 
 It is buffer-local in all buffers. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>right-margin-width</b><var><a name="index-right_002dmargin_002dwidth-3321"></a></var><br>
+&mdash; Variable: <b>right-margin-width</b><var><a name="index-right_002dmargin_002dwidth-3534"></a></var><br>
 <blockquote><p>This variable specifies the width of the right margin. 
 It is buffer-local in all buffers. 
 </p></blockquote></div>
@@ -99,14 +102,14 @@ Thus, you can make changes take effect by calling
    <p>You can also set the margin widths immediately.
 
 <div class="defun">
-&mdash; Function: <b>set-window-margins</b><var> window left &amp;optional right<a name="index-set_002dwindow_002dmargins-3322"></a></var><br>
+&mdash; Function: <b>set-window-margins</b><var> window left &amp;optional right<a name="index-set_002dwindow_002dmargins-3535"></a></var><br>
 <blockquote><p>This function specifies the margin widths for window <var>window</var>. 
 The argument <var>left</var> controls the left margin and
 <var>right</var> controls the right margin (default <code>0</code>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-margins</b><var> &amp;optional window<a name="index-window_002dmargins-3323"></a></var><br>
+&mdash; Function: <b>window-margins</b><var> &amp;optional window<a name="index-window_002dmargins-3536"></a></var><br>
 <blockquote><p>This function returns the left and right margins of <var>window</var>
 as a cons cell of the form <code>(</code><var>left</var><code> . </code><var>right</var><code>)</code>. 
 If <var>window</var> is <code>nil</code>, the selected window is used. 

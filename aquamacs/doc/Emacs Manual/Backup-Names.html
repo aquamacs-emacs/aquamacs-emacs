@@ -3,7 +3,7 @@
 <title>Backup Names - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Backup.html#Backup" title="Backup">
 <link rel="next" href="Backup-Deletion.html#Backup-Deletion" title="Backup Deletion">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Backup-Names"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Backup-Deletion.html#Backup-Deletion">Backup Deletion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
 <hr>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
 <h5 class="subsubsection">22.3.2.1 Single or Numbered Backups</h5>
 
 <p>When Emacs makes a backup file, its name is normally constructed by
-appending `<samp><span class="samp">~</span></samp>' to the file name being edited; thus, the backup
+appending &lsquo;<samp><span class="samp">~</span></samp>&rsquo; to the file name being edited; thus, the backup
 file for <samp><span class="file">eval.c</span></samp> would be <samp><span class="file">eval.c~</span></samp>.
 
    <p>If access control stops Emacs from writing backup files under the usual
@@ -65,12 +65,12 @@ directory.  Only one such file can exist, so only the most recently
 made such backup is available.
 
    <p>Emacs can also make <dfn>numbered backup files</dfn>.  Numbered backup
-file names contain `<samp><span class="samp">.~</span></samp>', the number, and another `<samp><span class="samp">~</span></samp>' after
+file names contain &lsquo;<samp><span class="samp">.~</span></samp>&rsquo;, the number, and another &lsquo;<samp><span class="samp">~</span></samp>&rsquo; after
 the original file name.  Thus, the backup files of <samp><span class="file">eval.c</span></samp> would
 be called <samp><span class="file">eval.c.~1~</span></samp>, <samp><span class="file">eval.c.~2~</span></samp>, and so on, all the way
 through names like <samp><span class="file">eval.c.~259~</span></samp> and beyond.
 
-   <p><a name="index-version_002dcontrol-852"></a>  The variable <code>version-control</code> determines whether to make
+   <p><a name="index-version_002dcontrol-856"></a>  The variable <code>version-control</code> determines whether to make
 single backup files or multiple numbered backup files.  Its possible
 values are:
 
@@ -89,16 +89,16 @@ have Emacs set <code>version-control</code> locally whenever you visit a
 given file (see <a href="File-Variables.html#File-Variables">File Variables</a>).  Some modes, such as Rmail mode,
 set this variable.
 
-   <p><a name="index-g_t_0040env_007bVERSION_005fCONTROL_007d-environment-variable-853"></a>  If you set the environment variable <samp><span class="env">VERSION_CONTROL</span></samp>, to tell
+   <p><a name="index-g_t_0040env_007bVERSION_005fCONTROL_007d-environment-variable-857"></a>  If you set the environment variable <samp><span class="env">VERSION_CONTROL</span></samp>, to tell
 various GNU utilities what to do with backup files, Emacs also obeys the
 environment variable by setting the Lisp variable <code>version-control</code>
-accordingly at startup.  If the environment variable's value is `<samp><span class="samp">t</span></samp>'
-or `<samp><span class="samp">numbered</span></samp>', then <code>version-control</code> becomes <code>t</code>; if the
-value is `<samp><span class="samp">nil</span></samp>' or `<samp><span class="samp">existing</span></samp>', then <code>version-control</code>
-becomes <code>nil</code>; if it is `<samp><span class="samp">never</span></samp>' or `<samp><span class="samp">simple</span></samp>', then
+accordingly at startup.  If the environment variable's value is &lsquo;<samp><span class="samp">t</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">numbered</span></samp>&rsquo;, then <code>version-control</code> becomes <code>t</code>; if the
+value is &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; or &lsquo;<samp><span class="samp">existing</span></samp>&rsquo;, then <code>version-control</code>
+becomes <code>nil</code>; if it is &lsquo;<samp><span class="samp">never</span></samp>&rsquo; or &lsquo;<samp><span class="samp">simple</span></samp>&rsquo;, then
 <code>version-control</code> becomes <code>never</code>.
 
-   <p><a name="index-backup_002ddirectory_002dalist-854"></a>  You can customize the variable <code>backup-directory-alist</code> to
+   <p><a name="index-backup_002ddirectory_002dalist-858"></a>  You can customize the variable <code>backup-directory-alist</code> to
 specify that files matching certain patterns should be backed up in
 specific directories.  This variable applies to both single and
 numbered backups.  A typical use is to add an element <code>("." 
@@ -110,7 +110,7 @@ backups in the invisible subdirectory <samp><span class="file">.~</span></samp> 
 directory.  Emacs creates the directory, if necessary, to make the
 backup.
 
-   <p><a name="index-make_002dbackup_002dfile_002dname_002dfunction-855"></a>  If you define the variable <code>make-backup-file-name-function</code> to
+   <p><a name="index-make_002dbackup_002dfile_002dname_002dfunction-859"></a>  If you define the variable <code>make-backup-file-name-function</code> to
 a suitable Lisp function, that overrides the usual way Emacs
 constructs backup file names.
 

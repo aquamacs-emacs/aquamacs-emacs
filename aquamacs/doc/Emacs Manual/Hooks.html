@@ -3,7 +3,7 @@
 <title>Hooks - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="Examining.html#Examining" title="Examining">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Hooks"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Locals.html#Locals">Locals</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Examining.html#Examining">Examining</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h4 class="subsection">57.3.2 Hooks</h4>
 
-<p><a name="index-hook-3953"></a><a name="index-running-a-hook-3954"></a>
+<p><a name="index-hook-3977"></a><a name="index-running-a-hook-3978"></a>
   <dfn>Hooks</dfn> are an important mechanism for customizing Emacs.  A
 hook is a Lisp variable which holds a list of functions, to be called
 on some well-defined occasion.  (This is called <dfn>running the
@@ -74,14 +74,14 @@ also used in other contexts.  For example, the hook
 <code>kill-emacs-hook</code> runs just before quitting the Emacs job
 (see <a href="Exiting.html#Exiting">Exiting</a>).
 
-   <p><a name="index-normal-hook-3955"></a>  Most Emacs hooks are <dfn>normal hooks</dfn>.  This means that running the
+   <p><a name="index-normal-hook-3979"></a>  Most Emacs hooks are <dfn>normal hooks</dfn>.  This means that running the
 hook operates by calling all the hook functions, unconditionally, with
 no arguments.  We have made an effort to keep most hooks normal so that
 you can use them in a uniform way.  Every variable in Emacs whose name
-ends in `<samp><span class="samp">-hook</span></samp>' is a normal hook.
+ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo; is a normal hook.
 
-   <p><a name="index-abnormal-hook-3956"></a>  There are also a few <dfn>abnormal hooks</dfn>.  These variables' names end
-in `<samp><span class="samp">-hooks</span></samp>' or `<samp><span class="samp">-functions</span></samp>', instead of `<samp><span class="samp">-hook</span></samp>'.  What
+   <p><a name="index-abnormal-hook-3980"></a>  There are also a few <dfn>abnormal hooks</dfn>.  These variables' names end
+in &lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;, instead of &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;.  What
 makes these hooks abnormal is that there is something peculiar about the
 way its functions are called&mdash;perhaps they are given arguments, or
 perhaps the values they return are used in some way.  For example,
@@ -90,7 +90,7 @@ as soon as one hook function returns a non-<code>nil</code> value, the rest
 are not called at all.  The documentation of each abnormal hook variable
 explains in detail what is peculiar about it.
 
-   <p><a name="index-add_002dhook-3957"></a>  You can set a hook variable with <code>setq</code> like any other Lisp
+   <p><a name="index-add_002dhook-3981"></a>  You can set a hook variable with <code>setq</code> like any other Lisp
 variable, but the recommended way to add a hook function to a hook
 (either normal or abnormal) is by calling <code>add-hook</code>. 
 See <a href="../elisp/Hooks.html#Hooks">Hooks</a>.
@@ -122,7 +122,7 @@ they are executed does not matter.  Any dependence on the order is
 &ldquo;asking for trouble.&rdquo;  However, the order is predictable: the most
 recently added hook functions are executed first.
 
-   <p><a name="index-remove_002dhook-3958"></a>  If you play with adding various different versions of a hook
+   <p><a name="index-remove_002dhook-3982"></a>  If you play with adding various different versions of a hook
 function by calling <code>add-hook</code> over and over, remember that all
 the versions you added will remain in the hook variable together.  You
 can clear out individual functions by calling <code>remove-hook</code>, or

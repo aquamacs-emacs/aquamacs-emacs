@@ -3,33 +3,33 @@
 <title>Logging Messages - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="The-Echo-Area.html#The-Echo-Area" title="The Echo Area">
 <link rel="prev" href="Progress.html#Progress" title="Progress">
 <link rel="next" href="Echo-Area-Customization.html#Echo-Area-Customization" title="Echo Area Customization">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,55 +46,55 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Logging-Messages"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Echo-Area-Customization.html#Echo-Area-Customization">Echo Area Customization</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Progress.html#Progress">Progress</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.4.3 Logging Messages in `<samp><span class="samp">*Messages*</span></samp>'</h4>
+<h4 class="subsection">38.4.3 Logging Messages in &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo;</h4>
 
-<p><a name="index-logging-echo_002darea-messages-3149"></a>
+<p><a name="index-logging-echo_002darea-messages-3346"></a>
   Almost all the messages displayed in the echo area are also recorded
-in the `<samp><span class="samp">*Messages*</span></samp>' buffer so that the user can refer back to
+in the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer so that the user can refer back to
 them.  This includes all the messages that are output with
 <code>message</code>.
 
 <div class="defun">
-&mdash; User Option: <b>message-log-max</b><var><a name="index-message_002dlog_002dmax-3150"></a></var><br>
-<blockquote><p>This variable specifies how many lines to keep in the `<samp><span class="samp">*Messages*</span></samp>'
+&mdash; User Option: <b>message-log-max</b><var><a name="index-message_002dlog_002dmax-3347"></a></var><br>
+<blockquote><p>This variable specifies how many lines to keep in the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo;
 buffer.  The value <code>t</code> means there is no limit on how many lines to
 keep.  The value <code>nil</code> disables message logging entirely.  Here's
 how to display a message and prevent it from being logged:
 
      <pre class="example">          (let (message-log-max)
             (message ...))
-     </pre>
+</pre>
         </blockquote></div>
 
-   <p>To make `<samp><span class="samp">*Messages*</span></samp>' more convenient for the user, the logging
+   <p>To make &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; more convenient for the user, the logging
 facility combines successive identical messages.  It also combines
 successive related messages for the sake of two cases: question
 followed by answer, and a series of progress messages.
 
    <p>A &ldquo;question followed by an answer&rdquo; means two messages like the
-ones produced by <code>y-or-n-p</code>: the first is `<samp><var>question</var></samp>',
-and the second is `<samp><var>question</var><span class="samp">...</span><var>answer</var></samp>'.  The first
+ones produced by <code>y-or-n-p</code>: the first is &lsquo;<samp><var>question</var></samp>&rsquo;,
+and the second is &lsquo;<samp><var>question</var><span class="samp">...</span><var>answer</var></samp>&rsquo;.  The first
 message conveys no additional information beyond what's in the second,
 so logging the second message discards the first from the log.
 
    <p>A &ldquo;series of progress messages&rdquo; means successive messages like
 those produced by <code>make-progress-reporter</code>.  They have the form
-`<samp><var>base</var><span class="samp">...</span><var>how-far</var></samp>', where <var>base</var> is the same each
+&lsquo;<samp><var>base</var><span class="samp">...</span><var>how-far</var></samp>&rsquo;, where <var>base</var> is the same each
 time, while <var>how-far</var> varies.  Logging each message in the series
 discards the previous one, provided they are consecutive.
 
    <p>The functions <code>make-progress-reporter</code> and <code>y-or-n-p</code>
 don't have to do anything special to activate the message log
 combination feature.  It operates whenever two consecutive messages
-are logged that share a common prefix ending in `<samp><span class="samp">...</span></samp>'.
+are logged that share a common prefix ending in &lsquo;<samp><span class="samp">...</span></samp>&rsquo;.
 
    </body></html>
 

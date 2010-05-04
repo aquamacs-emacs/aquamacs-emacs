@@ -3,33 +3,33 @@
 <title>Specification List - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Edebug-and-Macros.html#Edebug-and-Macros" title="Edebug and Macros">
 <link rel="prev" href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls" title="Instrumenting Macro Calls">
 <link rel="next" href="Backtracking.html#Backtracking" title="Backtracking">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Specification-List"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Backtracking.html#Backtracking">Backtracking</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>
@@ -56,11 +56,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Edebug-and-Macros.html#Edebug-and-Macro
 
 <h5 class="subsubsection">18.2.15.2 Specification List</h5>
 
-<p><a name="index-Edebug-specification-list-963"></a>A <dfn>specification list</dfn> is required for an Edebug specification if
+<p><a name="index-Edebug-specification-list-994"></a>A <dfn>specification list</dfn> is required for an Edebug specification if
 some arguments of a macro call are evaluated while others are not.  Some
 elements in a specification list match one or more arguments, but others
 modify the processing of all following elements.  The latter, called
-<dfn>specification keywords</dfn>, are symbols beginning with `<samp><span class="samp">&amp;</span></samp>' (such
+<dfn>specification keywords</dfn>, are symbols beginning with &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo; (such
 as <code>&amp;optional</code>).
 
    <p>A specification list may contain sublists which match arguments that are
@@ -70,8 +70,8 @@ levels.  Specification keywords apply only to the remainder of the
 sublist or group they are contained in.
 
    <p>When a specification list involves alternatives or repetition, matching
-it against an actual macro call may require backtracking. 
-See <a href="Backtracking.html#Backtracking">Backtracking</a>, for more details.
+it against an actual macro call may require backtracking.  For more
+details, see <a href="Backtracking.html#Backtracking">Backtracking</a>.
 
    <p>Edebug specifications provide the power of regular expression matching,
 plus some context-free grammar constructs: the matching of sublists with
@@ -88,7 +88,9 @@ examples):
 
      <br><dt><code>form</code><dd>A single evaluated expression, which is instrumented.
 
-     <br><dt><code>place</code><dd><a name="index-edebug_002dunwrap-964"></a>A place to store a value, as in the Common Lisp <code>setf</code> construct.
+     <br><dt><code>place</code><dd><!-- I can't see that this index entry is useful without any explanation. -->
+<!-- @findex edebug-unwrap -->
+A place to store a value, as in the Common Lisp <code>setf</code> construct.
 
      <br><dt><code>body</code><dd>Short for <code>&amp;rest form</code>.  See <code>&amp;rest</code> below.
 
@@ -146,28 +148,28 @@ a list specification.
 current argument list level; otherwise it fails.  See sublist
 specifications and the backquote example.
 
-     <br><dt><code>gate</code><dd><a name="index-preventing-backtracking-965"></a>No argument is matched but backtracking through the gate is disabled
+     <br><dt><code>gate</code><dd><a name="index-preventing-backtracking-995"></a>No argument is matched but backtracking through the gate is disabled
 while matching the remainder of the specifications at this level.  This
 is primarily used to generate more specific syntax error messages.  See
 <a href="Backtracking.html#Backtracking">Backtracking</a>, for more details.  Also see the <code>let</code> example.
 
-     <br><dt><var>other-symbol</var><dd><a name="index-indirect-specifications-966"></a>Any other symbol in a specification list may be a predicate or an
+     <br><dt><var>other-symbol</var><dd><a name="index-indirect-specifications-996"></a>Any other symbol in a specification list may be a predicate or an
 indirect specification.
 
      <p>If the symbol has an Edebug specification, this <dfn>indirect
 specification</dfn> should be either a list specification that is used in
 place of the symbol, or a function that is called to process the
 arguments.  The specification may be defined with <code>def-edebug-spec</code>
-just as for macros. See the <code>defun</code> example.
+just as for macros.  See the <code>defun</code> example.
 
      <p>Otherwise, the symbol should be a predicate.  The predicate is called
 with the argument and the specification fails if the predicate returns
-<code>nil</code>.  In either case, that argument is not instrumented.
+<code>nil</code>, and the argument is not instrumented.
 
      <p>Some suitable predicates include <code>symbolp</code>, <code>integerp</code>,
 <code>stringp</code>, <code>vectorp</code>, and <code>atom</code>.
 
-     <br><dt><code>[</code><var>elements</var><code>...]</code><dd><a name="index-g_t_005b_0040dots_007b_007d_005d-_0028Edebug_0029-967"></a>A vector of elements groups the elements into a single <dfn>group
+     <br><dt><code>[</code><var>elements</var><code>...]</code><dd><a name="index-g_t_005b_0040dots_007b_007d_005d-_0028Edebug_0029-997"></a>A vector of elements groups the elements into a single <dfn>group
 specification</dfn>.  Its meaning has nothing to do with vectors.
 
      <br><dt><code>"</code><var>string</var><code>"</code><dd>The argument should be a symbol named <var>string</var>.  This specification
@@ -180,7 +182,7 @@ of <var>symbol</var> is the <var>string</var>, but the string form is preferred.
      <br><dt><code>(</code><var>elements</var><code>...)</code><dd>Any other list is a <dfn>sublist specification</dfn> and the argument must be
 a list whose elements match the specification <var>elements</var>.
 
-     <p><a name="index-dotted-lists-_0028Edebug_0029-968"></a>A sublist specification may be a dotted list and the corresponding list
+     <p><a name="index-dotted-lists-_0028Edebug_0029-998"></a>A sublist specification may be a dotted list and the corresponding list
 argument may then be a dotted list.  Alternatively, the last <span class="sc">cdr</span> of a
 dotted list specification may be another sublist specification (via a
 grouping or an indirect specification, e.g., <code>(spec .  [(more
@@ -196,7 +198,7 @@ sublist-elements...)</code>.
 </dl>
 
 <!-- Need to document extensions with &symbol and :symbol -->
-<p>Here is a list of additional specifications that may appear only after
+   <p>Here is a list of additional specifications that may appear only after
 <code>&amp;define</code>.  See the <code>defun</code> example.
 
      <dl>
@@ -212,10 +214,10 @@ static component to the name of the definition.  It may be used more
 than once.
 
      <br><dt><code>arg</code><dd>The argument, a symbol, is the name of an argument of the defining form. 
-However, lambda-list keywords (symbols starting with `<samp><span class="samp">&amp;</span></samp>')
+However, lambda-list keywords (symbols starting with &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;)
 are not allowed.
 
-     <br><dt><code>lambda-list</code><dd><a name="index-lambda_002dlist-_0028Edebug_0029-969"></a>This matches a lambda list&mdash;the argument list of a lambda expression.
+     <br><dt><code>lambda-list</code><dd><a name="index-lambda_002dlist-_0028Edebug_0029-999"></a>This matches a lambda list&mdash;the argument list of a lambda expression.
 
      <br><dt><code>def-body</code><dd>The argument is the body of code in a definition.  This is like
 <code>body</code>, described above, but a definition body must be instrumented
@@ -224,7 +226,7 @@ the definition.  Use <code>def-body</code> for the highest level list of forms
 within the definition.
 
      <br><dt><code>def-form</code><dd>The argument is a single, highest-level form in a definition.  This is
-like <code>def-body</code>, except use this to match a single form rather than
+like <code>def-body</code>, except it is used to match a single form rather than
 a list of forms.  As a special case, <code>def-form</code> also means that
 tracing information is not output when the form is executed.  See the
 <code>interactive</code> example. 

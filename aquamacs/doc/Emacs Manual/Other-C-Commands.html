@@ -3,7 +3,7 @@
 <title>Other C Commands - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="C-Modes.html#C-Modes" title="C Modes">
 <link rel="prev" href="Hungry-Delete.html#Hungry-Delete" title="Hungry Delete">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,30 +46,30 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Other-C-Commands"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Hungry-Delete.html#Hungry-Delete">Hungry Delete</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="C-Modes.html#C-Modes">C Modes</a>
 <hr>
 </div>
 
-<h4 class="subsection">30.11.4 Other Commands for C Mode</h4>
+<h4 class="subsection">30.12.4 Other Commands for C Mode</h4>
 
      <dl>
-<dt><kbd>C-c C-w</kbd><dt><kbd>M-x c-subword-mode</kbd><dd><a name="index-c_002dsubword_002dmode-2141"></a>Enable (or disable) <dfn>subword mode</dfn>.  In subword mode, Emacs's word
+<dt><kbd>C-c C-w</kbd><dt><kbd>M-x subword-mode</kbd><dd><a name="index-subword_002dmode-2162"></a>Enable (or disable) <dfn>subword mode</dfn>.  In subword mode, Emacs's word
 commands recognize upper case letters in
-`<samp><span class="samp">StudlyCapsIdentifiers</span></samp>' as word boundaries.  This is indicated by
-the flag `<samp><span class="samp">/w</span></samp>' on the mode line after the mode name
-(e.g. `<samp><span class="samp">C/law</span></samp>').  You can even use <kbd>M-x c-subword-mode</kbd> in
+&lsquo;<samp><span class="samp">StudlyCapsIdentifiers</span></samp>&rsquo; as word boundaries.  This is indicated by
+the flag &lsquo;<samp><span class="samp">/w</span></samp>&rsquo; on the mode line after the mode name
+(e.g. &lsquo;<samp><span class="samp">C/law</span></samp>&rsquo;).  You can even use <kbd>M-x subword-mode</kbd> in
 non-CC Mode buffers.
 
      <p>In the GNU project, we recommend using underscores to separate words
 within an identifier in C or C++, rather than using case distinctions.
 
-     <br><dt><kbd>M-x c-context-line-break</kbd><dd><a name="index-c_002dcontext_002dline_002dbreak-2142"></a>This command inserts a line break and indents the new line in a manner
+     <br><dt><kbd>M-x c-context-line-break</kbd><dd><a name="index-c_002dcontext_002dline_002dbreak-2163"></a>This command inserts a line break and indents the new line in a manner
 appropriate to the context.  In normal code, it does the work of
 <kbd>C-j</kbd> (<code>newline-and-indent</code>), in a C preprocessor line it
-additionally inserts a `<samp><span class="samp">\</span></samp>' at the line break, and within comments
+additionally inserts a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; at the line break, and within comments
 it's like <kbd>M-j</kbd> (<code>c-indent-new-comment-line</code>).
 
      <p><code>c-context-line-break</code> isn't bound to a key by default, but it
@@ -80,16 +80,16 @@ the keymap is loaded before we try to change it.
      <pre class="smallexample">          (defun my-bind-clb ()
             (define-key c-mode-base-map "\C-j" 'c-context-line-break))
           (add-hook 'c-initialization-hook 'my-bind-clb)
-     </pre>
+</pre>
      <br><dt><kbd>C-M-h</kbd><dd>Put mark at the end of a function definition, and put point at the
 beginning (<code>c-mark-function</code>).
 
-     <br><dt><kbd>M-q</kbd><dd><a name="index-M_002dq-_0040r_007b_0028C-mode_0029_007d-2143"></a><a name="index-c_002dfill_002dparagraph-2144"></a>Fill a paragraph, handling C and C++ comments (<code>c-fill-paragraph</code>). 
+     <br><dt><kbd>M-q</kbd><dd><a name="index-M_002dq-_0040r_007b_0028C-mode_0029_007d-2164"></a><a name="index-c_002dfill_002dparagraph-2165"></a>Fill a paragraph, handling C and C++ comments (<code>c-fill-paragraph</code>). 
 If any part of the current line is a comment or within a comment, this
 command fills the comment or the paragraph of it that point is in,
 preserving the comment indentation and comment delimiters.
 
-     <br><dt><kbd>C-c C-e</kbd><dd><a name="index-macro-expansion-in-C-2145"></a><a name="index-expansion-of-C-macros-2146"></a><a name="index-c_002dmacro_002dexpand-2147"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028C-mode_0029_007d-2148"></a>Run the C preprocessor on the text in the region, and show the result,
+     <br><dt><kbd>C-c C-e</kbd><dd><a name="index-macro-expansion-in-C-2166"></a><a name="index-expansion-of-C-macros-2167"></a><a name="index-c_002dmacro_002dexpand-2168"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028C-mode_0029_007d-2169"></a>Run the C preprocessor on the text in the region, and show the result,
 which includes the expansion of all the macro calls
 (<code>c-macro-expand</code>).  The buffer text before the region is also
 included in preprocessing, for the sake of macros defined there, but the
@@ -99,32 +99,32 @@ output from this part isn't shown.
 figure out precisely how the macros expand.  With this command, you
 don't have to figure it out; you can see the expansions.
 
-     <br><dt><kbd>C-c C-\</kbd><dd><a name="index-c_002dbackslash_002dregion-2149"></a><a name="index-C_002dc-C_002d_005c-_0040r_007b_0028C-mode_0029_007d-2150"></a>Insert or align `<samp><span class="samp">\</span></samp>' characters at the ends of the lines of the
+     <br><dt><kbd>C-c C-\</kbd><dd><a name="index-c_002dbackslash_002dregion-2170"></a><a name="index-C_002dc-C_002d_005c-_0040r_007b_0028C-mode_0029_007d-2171"></a>Insert or align &lsquo;<samp><span class="samp">\</span></samp>&rsquo; characters at the ends of the lines of the
 region (<code>c-backslash-region</code>).  This is useful after writing or
 editing a C macro definition.
 
-     <p>If a line already ends in `<samp><span class="samp">\</span></samp>', this command adjusts the amount of
-whitespace before it.  Otherwise, it inserts a new `<samp><span class="samp">\</span></samp>'.  However,
-the last line in the region is treated specially; no `<samp><span class="samp">\</span></samp>' is
-inserted on that line, and any `<samp><span class="samp">\</span></samp>' there is deleted.
+     <p>If a line already ends in &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, this command adjusts the amount of
+whitespace before it.  Otherwise, it inserts a new &lsquo;<samp><span class="samp">\</span></samp>&rsquo;.  However,
+the last line in the region is treated specially; no &lsquo;<samp><span class="samp">\</span></samp>&rsquo; is
+inserted on that line, and any &lsquo;<samp><span class="samp">\</span></samp>&rsquo; there is deleted.
 
-     <br><dt><kbd>M-x cpp-highlight-buffer</kbd><dd><a name="index-preprocessor-highlighting-2151"></a><a name="index-cpp_002dhighlight_002dbuffer-2152"></a>Highlight parts of the text according to its preprocessor conditionals. 
-This command displays another buffer named `<samp><span class="samp">*CPP Edit*</span></samp>', which
+     <br><dt><kbd>M-x cpp-highlight-buffer</kbd><dd><a name="index-preprocessor-highlighting-2172"></a><a name="index-cpp_002dhighlight_002dbuffer-2173"></a>Highlight parts of the text according to its preprocessor conditionals. 
+This command displays another buffer named &lsquo;<samp><span class="samp">*CPP Edit*</span></samp>&rsquo;, which
 serves as a graphic menu for selecting how to display particular kinds
 of conditionals and their contents.  After changing various settings,
-click on `<samp><span class="samp">[A]pply these settings</span></samp>' (or go to that buffer and type
+click on &lsquo;<samp><span class="samp">[A]pply these settings</span></samp>&rsquo; (or go to that buffer and type
 <kbd>a</kbd>) to rehighlight the C mode buffer accordingly.
 
-     <br><dt><kbd>C-c C-s</kbd><dd><a name="index-c_002dshow_002dsyntactic_002dinformation-2153"></a><a name="index-C_002dc-C_002ds-_0040r_007b_0028C-mode_0029_007d-2154"></a>Display the syntactic information about the current source line
+     <br><dt><kbd>C-c C-s</kbd><dd><a name="index-c_002dshow_002dsyntactic_002dinformation-2174"></a><a name="index-C_002dc-C_002ds-_0040r_007b_0028C-mode_0029_007d-2175"></a>Display the syntactic information about the current source line
 (<code>c-show-syntactic-information</code>).  This information directs how
 the line is indented.
 
-     <br><dt><kbd>M-x cwarn-mode</kbd><dt><kbd>M-x global-cwarn-mode</kbd><dd><a name="index-cwarn_002dmode-2155"></a><a name="index-global_002dcwarn_002dmode-2156"></a><a name="index-global_002dcwarn_002dmode-2157"></a><a name="index-CWarn-mode-2158"></a><a name="index-suspicious-constructions-in-C_002c-C_002b_002b-2159"></a>CWarn minor mode highlights certain suspicious C and C++ constructions:
+     <br><dt><kbd>M-x cwarn-mode</kbd><dt><kbd>M-x global-cwarn-mode</kbd><dd><a name="index-cwarn_002dmode-2176"></a><a name="index-global_002dcwarn_002dmode-2177"></a><a name="index-global_002dcwarn_002dmode-2178"></a><a name="index-CWarn-mode-2179"></a><a name="index-suspicious-constructions-in-C_002c-C_002b_002b-2180"></a>CWarn minor mode highlights certain suspicious C and C++ constructions:
 
           <ul>
 <li>Assignments inside expressions. 
-<li>Semicolon following immediately after `<samp><span class="samp">if</span></samp>', `<samp><span class="samp">for</span></samp>', and `<samp><span class="samp">while</span></samp>'
-(except after a `<samp><span class="samp">do ... while</span></samp>' statement);
+<li>Semicolon following immediately after &lsquo;<samp><span class="samp">if</span></samp>&rsquo;, &lsquo;<samp><span class="samp">for</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">while</span></samp>&rsquo;
+(except after a &lsquo;<samp><span class="samp">do ... while</span></samp>&rsquo; statement);
 <li>C++ functions with reference parameters. 
 </ul>
 
@@ -134,14 +134,14 @@ global-cwarn-mode</kbd> or by customizing the variable
 <code>global-cwarn-mode</code>.  You must also enable Font Lock mode to make
 it work.
 
-     <br><dt><kbd>M-x hide-ifdef-mode</kbd><dd><a name="index-hide_002difdef_002dmode-2160"></a><a name="index-Hide_002difdef-mode-2161"></a><a name="index-hide_002difdef_002dshadow-2162"></a>Hide-ifdef minor mode hides selected code within `<samp><span class="samp">#if</span></samp>' and
-`<samp><span class="samp">#ifdef</span></samp>' preprocessor blocks.  If you change the variable
+     <br><dt><kbd>M-x hide-ifdef-mode</kbd><dd><a name="index-hide_002difdef_002dmode-2181"></a><a name="index-Hide_002difdef-mode-2182"></a><a name="index-hide_002difdef_002dshadow-2183"></a>Hide-ifdef minor mode hides selected code within &lsquo;<samp><span class="samp">#if</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">#ifdef</span></samp>&rsquo; preprocessor blocks.  If you change the variable
 <code>hide-ifdef-shadow</code> to <code>t</code>, Hide-ifdef minor mode
 &ldquo;shadows&rdquo; preprocessor blocks by displaying them with a less
 prominent face, instead of hiding them entirely.  See the
 documentation string of <code>hide-ifdef-mode</code> for more information.
 
-     <br><dt><kbd>M-x ff-find-related-file</kbd><dd><a name="index-related-files-2163"></a><a name="index-ff_002dfind_002drelated_002dfile-2164"></a><a name="index-ff_002drelated_002dfile_002dalist-2165"></a>Find a file &ldquo;related&rdquo; in a special way to the file visited by the
+     <br><dt><kbd>M-x ff-find-related-file</kbd><dd><a name="index-related-files-2184"></a><a name="index-ff_002dfind_002drelated_002dfile-2185"></a><a name="index-ff_002drelated_002dfile_002dalist-2186"></a>Find a file &ldquo;related&rdquo; in a special way to the file visited by the
 current buffer.  Typically this will be the header file corresponding
 to a C/C++ source file, or vice versa.  The variable
 <code>ff-related-file-alist</code> specifies how to compute related file

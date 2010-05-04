@@ -3,7 +3,7 @@
 <title>Rmail Deletion - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Rmail.html#Rmail" title="Rmail">
 <link rel="prev" href="Rmail-Motion.html#Rmail-Motion" title="Rmail Motion">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Rmail-Deletion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Inbox.html#Rmail-Inbox">Rmail Inbox</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Motion.html#Rmail-Motion">Rmail Motion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
@@ -57,12 +57,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 
 <h3 class="section">36.4 Deleting Messages</h3>
 
-<p><a name="index-deletion-_0028Rmail_0029-2792"></a>  When you no longer need to keep a message, you can <dfn>delete</dfn> it.  This
+<p><a name="index-deletion-_0028Rmail_0029-2814"></a>  When you no longer need to keep a message, you can <dfn>delete</dfn> it.  This
 flags it as ignorable, and some Rmail commands pretend it is no longer
 present; but it still has its place in the Rmail file, and still has its
 message number.
 
-   <p><a name="index-expunging-_0028Rmail_0029-2793"></a>  <dfn>Expunging</dfn> the Rmail file actually removes the deleted messages. 
+   <p><a name="index-expunging-_0028Rmail_0029-2815"></a>  <dfn>Expunging</dfn> the Rmail file actually removes the deleted messages. 
 The remaining messages are renumbered consecutively. 
 <!-- The following is neither true (there is also unforward, sorting, -->
 <!-- etc), nor especially interesting. -->
@@ -79,7 +79,7 @@ message and undelete it (<code>rmail-undelete-previous-message</code>).
 <br><dt><kbd>x</kbd><dd>Expunge the Rmail file (<code>rmail-expunge</code>). 
 </dl>
 
-   <p><a name="index-d-_0040r_007b_0028Rmail_0029_007d-2794"></a><a name="index-C_002dd-_0040r_007b_0028Rmail_0029_007d-2795"></a><a name="index-rmail_002ddelete_002dforward-2796"></a><a name="index-rmail_002ddelete_002dbackward-2797"></a>  There are two Rmail commands for deleting messages.  Both delete the
+   <p><a name="index-d-_0040r_007b_0028Rmail_0029_007d-2816"></a><a name="index-C_002dd-_0040r_007b_0028Rmail_0029_007d-2817"></a><a name="index-rmail_002ddelete_002dforward-2818"></a><a name="index-rmail_002ddelete_002dbackward-2819"></a>  There are two Rmail commands for deleting messages.  Both delete the
 current message and select another message.  <kbd>d</kbd>
 (<code>rmail-delete-forward</code>) moves to the following message, skipping
 messages already deleted, while <kbd>C-d</kbd> (<code>rmail-delete-backward</code>)
@@ -90,12 +90,12 @@ to <kbd>C-d</kbd>.  Note that the Rmail summary versions of these commands
 behave slightly differently (see <a href="Rmail-Summary-Edit.html#Rmail-Summary-Edit">Rmail Summary Edit</a>).
 
 <!-- mention other hooks, eg show message hook? -->
-<p><a name="index-rmail_002ddelete_002dmessage_002dhook-2798"></a>  Whenever Rmail deletes a message, it runs the hook
+   <p><a name="index-rmail_002ddelete_002dmessage_002dhook-2820"></a>  Whenever Rmail deletes a message, it runs the hook
 <code>rmail-delete-message-hook</code>.  When the hook functions are invoked,
 the message has been marked deleted, but it is still the current message
 in the Rmail buffer.
 
-   <p><a name="index-undeletion-_0028Rmail_0029-2799"></a><a name="index-x-_0040r_007b_0028Rmail_0029_007d-2800"></a><a name="index-rmail_002dexpunge-2801"></a><a name="index-u-_0040r_007b_0028Rmail_0029_007d-2802"></a><a name="index-rmail_002dundelete_002dprevious_002dmessage-2803"></a>  To make all the deleted messages finally vanish from the Rmail file,
+   <p><a name="index-undeletion-_0028Rmail_0029-2821"></a><a name="index-x-_0040r_007b_0028Rmail_0029_007d-2822"></a><a name="index-rmail_002dexpunge-2823"></a><a name="index-u-_0040r_007b_0028Rmail_0029_007d-2824"></a><a name="index-rmail_002dundelete_002dprevious_002dmessage-2825"></a>  To make all the deleted messages finally vanish from the Rmail file,
 type <kbd>x</kbd> (<code>rmail-expunge</code>).  Until you do this, you can still
 <dfn>undelete</dfn> the deleted messages.  The undeletion command, <kbd>u</kbd>
 (<code>rmail-undelete-previous-message</code>), is designed to cancel the
@@ -114,8 +114,8 @@ you can eventually get back to the message that you intend to
 undelete.  You can also select a particular deleted message with
 the <kbd>M-p</kbd> command, then type <kbd>u</kbd> to undelete it.
 
-   <p>A deleted message has the `<samp><span class="samp">deleted</span></samp>' attribute, and as a result
-`<samp><span class="samp">deleted</span></samp>' appears in the mode line when the current message is
+   <p>A deleted message has the &lsquo;<samp><span class="samp">deleted</span></samp>&rsquo; attribute, and as a result
+&lsquo;<samp><span class="samp">deleted</span></samp>&rsquo; appears in the mode line when the current message is
 deleted.  In fact, deleting or undeleting a message is nothing more than
 adding or removing this attribute.  See <a href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>.
 

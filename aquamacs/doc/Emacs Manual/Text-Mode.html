@@ -3,7 +3,7 @@
 <title>Text Mode - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text.html#Text" title="Text">
 <link rel="prev" href="Case.html#Case" title="Case">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Text-Mode"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Case.html#Case">Case</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 
 <h3 class="section">29.7 Text Mode</h3>
 
-<p><a name="index-Text-mode-1617"></a><a name="index-mode_002c-Text-1618"></a><a name="index-text_002dmode-1619"></a>
+<p><a name="index-Text-mode-1635"></a><a name="index-mode_002c-Text-1636"></a><a name="index-text_002dmode-1637"></a>
   When you edit files of text in a human language, it's more convenient
 to use Text mode rather than Fundamental mode.  To enter Text mode, type
 <kbd>M-x text-mode</kbd>.
@@ -67,7 +67,7 @@ paragraphs.  As a result, paragraphs can be indented, and adaptive
 filling determines what indentation to use when filling a paragraph. 
 See <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>.
 
-   <p><a name="index-TAB-_0040r_007b_0028Text-mode_0029_007d-1620"></a>  Text mode defines &lt;TAB&gt; to run <code>indent-relative</code>
+   <p><a name="index-TAB-_0040r_007b_0028Text-mode_0029_007d-1638"></a>  Text mode defines &lt;TAB&gt; to run <code>indent-relative</code>
 (see <a href="Indentation.html#Indentation">Indentation</a>), so that you can conveniently indent a line like
 the previous line.
 
@@ -75,10 +75,10 @@ the previous line.
 you explicitly invoke them.  It changes the syntax table so that
 single-quotes are considered part of words.  However, if a word starts
 with single-quotes, these are treated as a prefix for purposes such as
-capitalization.  That is, <kbd>M-c</kbd> will convert `<samp><span class="samp">'hello'</span></samp>' into
-`<samp><span class="samp">'Hello'</span></samp>', as expected.
+capitalization.  That is, <kbd>M-c</kbd> will convert &lsquo;<samp><span class="samp">'hello'</span></samp>&rsquo; into
+&lsquo;<samp><span class="samp">'Hello'</span></samp>&rsquo;, as expected.
 
-   <p><a name="index-Paragraph_002dIndent-Text-mode-1621"></a><a name="index-mode_002c-Paragraph_002dIndent-Text-1622"></a><a name="index-paragraph_002dindent_002dtext_002dmode-1623"></a><a name="index-paragraph_002dindent_002dminor_002dmode-1624"></a>  If you indent the first lines of paragraphs, then you should use
+   <p><a name="index-Paragraph_002dIndent-Text-mode-1639"></a><a name="index-mode_002c-Paragraph_002dIndent-Text-1640"></a><a name="index-paragraph_002dindent_002dtext_002dmode-1641"></a><a name="index-paragraph_002dindent_002dminor_002dmode-1642"></a>  If you indent the first lines of paragraphs, then you should use
 Paragraph-Indent Text mode rather than Text mode.  In this mode, you
 do not need to have blank lines between paragraphs, because the
 first-line indentation is sufficient to start a paragraph; however
@@ -88,19 +88,19 @@ paragraph-indent-minor-mode</kbd> to enable an equivalent minor mode in
 situations where you can't change the major mode&mdash;in mail
 composition, for instance.
 
-   <p><a name="index-M_002dTAB-_0040r_007b_0028Text-mode_0029_007d-1625"></a>  Text mode, and all the modes based on it, define <kbd>M-&lt;TAB&gt;</kbd>
+   <p><a name="index-M_002dTAB-_0040r_007b_0028Text-mode_0029_007d-1643"></a>  Text mode, and all the modes based on it, define <kbd>M-&lt;TAB&gt;</kbd>
 as the command <code>ispell-complete-word</code>, which performs completion
 of the partial word in the buffer before point, using the spelling
 dictionary as the space of possible words.  See <a href="Spelling.html#Spelling">Spelling</a>.  If your
 window manager defines <kbd>M-&lt;TAB&gt;</kbd> to switch windows, you can
 type <kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd>.
 
-   <p><a name="index-text_002dmode_002dhook-1626"></a>  Entering Text mode runs the hook <code>text-mode-hook</code>.  Other major
+   <p><a name="index-text_002dmode_002dhook-1644"></a>  Entering Text mode runs the hook <code>text-mode-hook</code>.  Other major
 modes related to Text mode also run this hook, followed by hooks of
-their own; this includes Paragraph-Indent Text mode, Nroff mode, TeX
-mode, Outline mode, and Mail mode.  Hook functions on
-<code>text-mode-hook</code> can look at the value of <code>major-mode</code> to see
-which of these modes is actually being entered.  See <a href="Hooks.html#Hooks">Hooks</a>.
+their own; this includes Paragraph-Indent Text mode, Nroff mode,
+TeX mode, Outline mode, and Message mode.  Hook functions on
+<code>text-mode-hook</code> can look at the value of <code>major-mode</code> to
+see which of these modes is actually being entered.  See <a href="Hooks.html#Hooks">Hooks</a>.
 
    </body></html>
 

@@ -3,32 +3,32 @@
 <title>Parameter Access - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
 <link rel="next" href="Initial-Parameters.html#Initial-Parameters" title="Initial Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Parameter-Access"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Initial-Parameters.html#Initial-Parameters">Initial Parameters</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>
 <hr>
@@ -58,7 +58,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters"
 frame.
 
 <div class="defun">
-&mdash; Function: <b>frame-parameter</b><var> frame parameter<a name="index-frame_002dparameter-2138"></a></var><br>
+&mdash; Function: <b>frame-parameter</b><var> frame parameter<a name="index-frame_002dparameter-2233"></a></var><br>
 <blockquote><p>This function returns the value of the parameter <var>parameter</var> (a
 symbol) of <var>frame</var>.  If <var>frame</var> is <code>nil</code>, it returns the
 selected frame's parameter.  If <var>frame</var> has no setting for
@@ -66,24 +66,34 @@ selected frame's parameter.  If <var>frame</var> has no setting for
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>frame-parameters</b><var> &amp;optional frame<a name="index-frame_002dparameters-2139"></a></var><br>
+&mdash; Function: <b>frame-parameters</b><var> &amp;optional frame<a name="index-frame_002dparameters-2234"></a></var><br>
 <blockquote><p>The function <code>frame-parameters</code> returns an alist listing all the
 parameters of <var>frame</var> and their values.  If <var>frame</var> is
 <code>nil</code> or omitted, this returns the selected frame's parameters
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>modify-frame-parameters</b><var> frame alist<a name="index-modify_002dframe_002dparameters-2140"></a></var><br>
+&mdash; Function: <b>modify-frame-parameters</b><var> frame alist<a name="index-modify_002dframe_002dparameters-2235"></a></var><br>
 <blockquote><p>This function alters the parameters of frame <var>frame</var> based on the
 elements of <var>alist</var>.  Each element of <var>alist</var> has the form
 <code>(</code><var>parm</var><code> . </code><var>value</var><code>)</code>, where <var>parm</var> is a symbol naming a
 parameter.  If you don't mention a parameter in <var>alist</var>, its value
 doesn't change.  If <var>frame</var> is <code>nil</code>, it defaults to the selected
-frame. 
+frame.
+
+        <p>You can use this function to define frame-local bindings for
+variables, see <a href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables">Frame-Local Variables</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>modify-all-frames-parameters</b><var> alist<a name="index-modify_002dall_002dframes_002dparameters-2141"></a></var><br>
+&mdash; Function: <b>set-frame-parameter</b><var> frame parm value<a name="index-set_002dframe_002dparameter-2236"></a></var><br>
+<blockquote><p>This function sets the frame parameter <var>parm</var> to the specified
+<var>value</var>.  If <var>frame</var> is <code>nil</code>, it defaults to the
+selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>modify-all-frames-parameters</b><var> alist<a name="index-modify_002dall_002dframes_002dparameters-2237"></a></var><br>
 <blockquote><p>This function alters the frame parameters of all existing frames
 according to <var>alist</var>, then modifies <code>default-frame-alist</code>
 (and, if necessary, <code>initial-frame-alist</code>) to apply the same

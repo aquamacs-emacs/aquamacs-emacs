@@ -461,6 +461,7 @@ install-aquamacs: mkdir
 	    cd -) ; \
 	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
 	  ( echo "Setting Aquamacs version: $(AQUAMACS_VERSION)" ; \
+	    perl -p0777i -e 's/!EMACS_VERSION!/$(version)/sg' ${ns_appdir}/Contents/Info.plist ; \
 	    perl -p0777i -e 's/!AQUAMACS_VERSION!/$(AQUAMACS_VERSION)/sg' ${ns_appdir}/Contents/Info.plist ) ; \
 	  rm -r $(ns_appresdir)/site-lisp 2>/dev/null ; \
 	  touch $(ns_appdir) ; \

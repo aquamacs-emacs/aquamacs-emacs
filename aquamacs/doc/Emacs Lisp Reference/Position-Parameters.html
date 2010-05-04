@@ -3,33 +3,33 @@
 <title>Position Parameters - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
 <link rel="prev" href="Basic-Parameters.html#Basic-Parameters" title="Basic Parameters">
 <link rel="next" href="Size-Parameters.html#Size-Parameters" title="Size Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Position-Parameters"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Size-Parameters.html#Size-Parameters">Size Parameters</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Parameters.html#Basic-Parameters">Basic Parameters</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>
@@ -60,25 +60,30 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 text-only terminals they count characters or lines instead.
 
      <dl>
-<dt><code>left</code><dd>The screen position of the left edge, in pixels, with respect to the
-left edge of the screen.  The value may be a positive number <var>pos</var>,
-or a list of the form <code>(+ </code><var>pos</var><code>)</code> which permits specifying a
-negative <var>pos</var> value.
+<dt><code>left</code><dd>The position, in pixels, of the left (or right) edge of the frame with
+respect to the left (or right) edge of the screen.  The value may be:
 
-     <p>A negative number &minus;<var>pos</var>, or a list of the form <code>(-
-</code><var>pos</var><code>)</code>, actually specifies the position of the right edge of the
-window with respect to the right edge of the screen.  A positive value
-of <var>pos</var> counts toward the left.  <strong>Reminder:</strong> if the
-parameter is a negative integer &minus;<var>pos</var>, then <var>pos</var> is
-positive.
+          <dl>
+<dt>an integer<dd>A positive integer relates the left edge of the frame to the left edge
+of the screen.  A negative integer relates the right frame edge to the
+right screen edge.
+
+          <br><dt><code>(+ </code><var>pos</var><code>)</code><dd>This specifies the position of the left frame edge relative to the left
+screen edge.  The integer <var>pos</var> may be positive or negative; a
+negative value specifies a position outside the screen.
+
+          <br><dt><code>(- </code><var>pos</var><code>)</code><dd>This specifies the position of the right frame edge relative to the right
+screen edge.  The integer <var>pos</var> may be positive or negative; a
+negative value specifies a position outside the screen. 
+</dl>
 
      <p>Some window managers ignore program-specified positions.  If you want to
 be sure the position you specify is not ignored, specify a
 non-<code>nil</code> value for the <code>user-position</code> parameter as well.
 
-     <br><dt><code>top</code><dd>The screen position of the top edge, in pixels, with respect to the
-top edge of the screen.  It works just like <code>left</code>, except vertically
-instead of horizontally.
+     <br><dt><code>top</code><dd>The screen position of the top (or bottom) edge, in pixels, with respect
+to the top (or bottom) edge of the screen.  It works just like
+<code>left</code>, except vertically instead of horizontally.
 
      <br><dt><code>icon-left</code><dd>The screen position of the left edge <em>of the frame's icon</em>, in
 pixels, counting from the left edge of the screen.  This takes effect if

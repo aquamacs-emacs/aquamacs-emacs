@@ -3,32 +3,32 @@
 <title>Testing Accessibility - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
 <link rel="next" href="Kinds-of-Files.html#Kinds-of-Files" title="Kinds of Files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Testing-Accessibility"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Kinds-of-Files.html#Kinds-of-Files">Kinds of Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
 <hr>
@@ -55,14 +55,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 <!-- node-name,  next,  previous,  up -->
 <h4 class="subsection">25.6.1 Testing Accessibility</h4>
 
-<p><a name="index-accessibility-of-a-file-1727"></a><a name="index-file-accessibility-1728"></a>
+<p><a name="index-accessibility-of-a-file-1785"></a><a name="index-file-accessibility-1786"></a>
   These functions test for permission to access a file in specific
 ways.  Unless explicitly stated otherwise, they recursively follow
 symbolic links for their file name arguments, at all levels (at the
 level of the file itself and at all levels of parent directories).
 
 <div class="defun">
-&mdash; Function: <b>file-exists-p</b><var> filename<a name="index-file_002dexists_002dp-1729"></a></var><br>
+&mdash; Function: <b>file-exists-p</b><var> filename<a name="index-file_002dexists_002dp-1787"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if a file named <var>filename</var> appears
 to exist.  This does not mean you can necessarily read the file, only
 that you can find out its attributes.  (On Unix and GNU/Linux, this is
@@ -81,22 +81,22 @@ name only if the target file exists.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-readable-p</b><var> filename<a name="index-file_002dreadable_002dp-1730"></a></var><br>
+&mdash; Function: <b>file-readable-p</b><var> filename<a name="index-file_002dreadable_002dp-1788"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if a file named <var>filename</var> exists
 and you can read it.  It returns <code>nil</code> otherwise.
 
      <pre class="example">          (file-readable-p "files.texi")
-               =&gt; t
+               &rArr; t
           (file-exists-p "/usr/spool/mqueue")
-               =&gt; t
+               &rArr; t
           (file-readable-p "/usr/spool/mqueue")
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>file-executable-p</b><var> filename<a name="index-file_002dexecutable_002dp-1731"></a></var><br>
+&mdash; Function: <b>file-executable-p</b><var> filename<a name="index-file_002dexecutable_002dp-1789"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if a file named <var>filename</var> exists and
 you can execute it.  It returns <code>nil</code> otherwise.  On Unix and
 GNU/Linux, if the file is a directory, execute permission means you can
@@ -105,7 +105,7 @@ open those files if their modes permit.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-writable-p</b><var> filename<a name="index-file_002dwritable_002dp-1732"></a></var><br>
+&mdash; Function: <b>file-writable-p</b><var> filename<a name="index-file_002dwritable_002dp-1790"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the file <var>filename</var> can be written
 or created by you, and <code>nil</code> otherwise.  A file is writable if the
 file exists and you can write it.  It is creatable if it does not exist,
@@ -117,17 +117,17 @@ parent directory does not exist, even though the user could create such
 a directory.
 
      <pre class="example">          (file-writable-p "~/foo")
-               =&gt; t
+               &rArr; t
           (file-writable-p "/foo")
-               =&gt; nil
+               &rArr; nil
           (file-writable-p "~/no-such-dir/foo")
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>file-accessible-directory-p</b><var> dirname<a name="index-file_002daccessible_002ddirectory_002dp-1733"></a></var><br>
+&mdash; Function: <b>file-accessible-directory-p</b><var> dirname<a name="index-file_002daccessible_002ddirectory_002dp-1791"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if you have permission to open existing
 files in the directory whose name as a file is <var>dirname</var>;
 otherwise (or if there is no such directory), it returns <code>nil</code>. 
@@ -138,21 +138,21 @@ The value of <var>dirname</var> may be either a directory name (such as
         <p>Example: after the following,
 
      <pre class="example">          (file-accessible-directory-p "/foo")
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         <p class="noindent">we can deduce that any attempt to read a file in <samp><span class="file">/foo/</span></samp> will
 give an error. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>access-file</b><var> filename string<a name="index-access_002dfile-1734"></a></var><br>
+&mdash; Function: <b>access-file</b><var> filename string<a name="index-access_002dfile-1792"></a></var><br>
 <blockquote><p>This function opens file <var>filename</var> for reading, then closes it and
 returns <code>nil</code>.  However, if the open fails, it signals an error
 using <var>string</var> as the error message text. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-ownership-preserved-p</b><var> filename<a name="index-file_002downership_002dpreserved_002dp-1735"></a></var><br>
+&mdash; Function: <b>file-ownership-preserved-p</b><var> filename<a name="index-file_002downership_002dpreserved_002dp-1793"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if deleting the file <var>filename</var> and
 then creating it anew would keep the file's owner unchanged.  It also
 returns <code>t</code> for nonexistent files.
@@ -164,8 +164,8 @@ follow symbolic links at all levels of parent directories.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-newer-than-file-p</b><var> filename1 filename2<a name="index-file_002dnewer_002dthan_002dfile_002dp-1736"></a></var><br>
-<blockquote><p><a name="index-file-age-1737"></a><a name="index-file-modification-time-1738"></a>This function returns <code>t</code> if the file <var>filename1</var> is
+&mdash; Function: <b>file-newer-than-file-p</b><var> filename1 filename2<a name="index-file_002dnewer_002dthan_002dfile_002dp-1794"></a></var><br>
+<blockquote><p><a name="index-file-age-1795"></a><a name="index-file-modification-time-1796"></a>This function returns <code>t</code> if the file <var>filename1</var> is
 newer than file <var>filename2</var>.  If <var>filename1</var> does not
 exist, it returns <code>nil</code>.  If <var>filename1</var> does exist, but
 <var>filename2</var> does not, it returns <code>t</code>.
@@ -175,14 +175,14 @@ on the 19th, <samp><span class="file">aug-20</span></samp> was written on the 20
 <samp><span class="file">no-file</span></samp> doesn't exist at all.
 
      <pre class="example">          (file-newer-than-file-p "aug-19" "aug-20")
-               =&gt; nil
+               &rArr; nil
           (file-newer-than-file-p "aug-20" "aug-19")
-               =&gt; t
+               &rArr; t
           (file-newer-than-file-p "aug-19" "no-file")
-               =&gt; t
+               &rArr; t
           (file-newer-than-file-p "no-file" "aug-19")
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         <p>You can use <code>file-attributes</code> to get a file's last modification
 time as a list of two numbers.  See <a href="File-Attributes.html#File-Attributes">File Attributes</a>. 
 </p></blockquote></div>

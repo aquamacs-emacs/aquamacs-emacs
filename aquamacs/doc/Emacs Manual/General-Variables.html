@@ -3,7 +3,7 @@
 <title>General Variables - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Environment.html#Environment" title="Environment">
 <link rel="next" href="Misc-Variables.html#Misc-Variables" title="Misc Variables">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="General-Variables"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Misc-Variables.html#Misc-Variables">Misc Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Environment.html#Environment">Environment</a>
 <hr>
@@ -63,10 +63,6 @@ variables to be set, but it uses their values if they are set.
      <dl>
 <dt><samp><span class="env">CDPATH</span></samp><dd>Used by the <code>cd</code> command to search for the directory you specify,
 when you specify a relative directory name. 
-<br><dt><samp><span class="env">EMACS_UNIBYTE</span></samp><dd><a name="index-unibyte-operation_002c-environment-variable-4158"></a>Defining this environment variable with a nonempty value directs Emacs
-to do almost everything with single-byte buffers and strings.  It is
-equivalent to using the `<samp><span class="samp">--unibyte</span></samp>' command-line option on each
-invocation.  See <a href="Initial-Options.html#Initial-Options">Initial Options</a>. 
 <br><dt><samp><span class="env">EMACSDATA</span></samp><dd>Directory for the architecture-independent files that come with Emacs. 
 This is used to initialize the Lisp variable <code>data-directory</code>. 
 <br><dt><samp><span class="env">EMACSDOC</span></samp><dd>Directory for the documentation string file,
@@ -76,9 +72,9 @@ variable <code>doc-directory</code>.
 to search for Emacs Lisp files&mdash;used to initialize <code>load-path</code>. 
 <br><dt><samp><span class="env">EMACSPATH</span></samp><dd>A colon-separated list of directories to search for executable
 files&mdash;used to initialize <code>exec-path</code>. 
-<br><dt><samp><span class="env">EMAIL</span></samp><dd><a name="index-user_002dmail_002daddress_0040r_007b_002c-initialization_007d-4159"></a>Your email address; used to initialize the Lisp variable
+<br><dt><samp><span class="env">EMAIL</span></samp><dd><a name="index-user_002dmail_002daddress_0040r_007b_002c-initialization_007d-4188"></a>Your email address; used to initialize the Lisp variable
 <code>user-mail-address</code>, which the Emacs mail interface puts into
-the `<samp><span class="samp">From</span></samp>' header of outgoing messages (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
+the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; header of outgoing messages (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
 <br><dt><samp><span class="env">ESHELL</span></samp><dd>Used for shell-mode to override the <samp><span class="env">SHELL</span></samp> environment variable. 
 <br><dt><samp><span class="env">HISTFILE</span></samp><dd>The name of the file that shell commands are saved in between logins. 
 This variable defaults to <samp><span class="file">~/.bash_history</span></samp> if you use Bash, to
@@ -87,7 +83,7 @@ otherwise.
 <br><dt><samp><span class="env">HOME</span></samp><dd>The location of your files in the directory tree; used for
 expansion of file names starting with a tilde (<samp><span class="file">~</span></samp>).  On MS-DOS,
 it defaults to the directory from which Emacs was started, with
-`<samp><span class="samp">/bin</span></samp>' removed from the end if it was present.  On Windows, the
+&lsquo;<samp><span class="samp">/bin</span></samp>&rsquo; removed from the end if it was present.  On Windows, the
 default value of <samp><span class="env">HOME</span></samp> is the <samp><span class="file">Application Data</span></samp>
 subdirectory of the user profile directory (normally, this is
 <samp><span class="file">C:/Documents and Settings/</span><var>username</var><span class="file">/Application Data</span></samp>,
@@ -104,13 +100,13 @@ by the environment variables <samp><span class="env">LC_COLLATE</span></samp> fo
 messages, <samp><span class="env">LC_MONETARY</span></samp> for monetary formats, <samp><span class="env">LC_NUMERIC</span></samp> for
 numbers, and <samp><span class="env">LC_TIME</span></samp> for dates and times.  If one of these
 variables is not set, the category defaults to the value of the
-<samp><span class="env">LANG</span></samp> environment variable, or to the default `<samp><span class="samp">C</span></samp>' locale if
+<samp><span class="env">LANG</span></samp> environment variable, or to the default &lsquo;<samp><span class="samp">C</span></samp>&rsquo; locale if
 <samp><span class="env">LANG</span></samp> is not set.  But if <samp><span class="env">LC_ALL</span></samp> is specified, it overrides
 the settings of all the other locale environment variables.
 
      <p>On MS-Windows, if <samp><span class="env">LANG</span></samp> is not already set in the environment
 when Emacs starts, Emacs sets it based on the system-wide default
-language, which you can set in the `<samp><span class="samp">Regional Settings</span></samp>' Control Panel
+language, which you can set in the &lsquo;<samp><span class="samp">Regional Settings</span></samp>&rsquo; Control Panel
 on some versions of MS-Windows.
 
      <p>The value of the <samp><span class="env">LC_CTYPE</span></samp> category is
@@ -136,12 +132,12 @@ Used by the Gnus package.
 inside Emacs. 
 <br><dt><samp><span class="env">SMTPSERVER</span></samp><dd>The name of the outgoing mail server.  Used by the SMTP library
 (see <a href="../smtpmail/index.html#Top">Top</a>). 
-<a name="index-background-mode_002c-on-_0040command_007bxterm_007d-4160"></a><br><dt><samp><span class="env">TERM</span></samp><dd>The type of the terminal that Emacs is using.  This variable must be
+<a name="index-background-mode_002c-on-_0040command_007bxterm_007d-4189"></a><br><dt><samp><span class="env">TERM</span></samp><dd>The type of the terminal that Emacs is using.  This variable must be
 set unless Emacs is run in batch mode.  On MS-DOS, it defaults to
-`<samp><span class="samp">internal</span></samp>', which specifies a built-in terminal emulation that
+&lsquo;<samp><span class="samp">internal</span></samp>&rsquo;, which specifies a built-in terminal emulation that
 handles the machine's own display.  If the value of <samp><span class="env">TERM</span></samp> indicates
 that Emacs runs in non-windowed mode from <samp><span class="command">xterm</span></samp> or a similar
-terminal emulator, the background mode defaults to `<samp><span class="samp">light</span></samp>', and
+terminal emulator, the background mode defaults to &lsquo;<samp><span class="samp">light</span></samp>&rsquo;, and
 Emacs will choose colors that are appropriate for a light background. 
 <br><dt><samp><span class="env">TERMCAP</span></samp><dd>The name of the termcap library file describing how to program the
 terminal specified by the <samp><span class="env">TERM</span></samp> variable.  This defaults to
@@ -153,7 +149,7 @@ environment when Emacs starts, Emacs defines a default value as
 appropriate for the country code returned by DOS.  On MS-Windows, Emacs
 does not use <samp><span class="env">TZ</span></samp> at all. 
 <br><dt><samp><span class="env">USER</span></samp><dd>The user's login name.  See also <samp><span class="env">LOGNAME</span></samp>.  On MS-DOS, this
-defaults to `<samp><span class="samp">root</span></samp>'. 
+defaults to &lsquo;<samp><span class="samp">root</span></samp>&rsquo;. 
 <br><dt><samp><span class="env">VERSION_CONTROL</span></samp><dd>Used to initialize the <code>version-control</code> variable (see <a href="Backup-Names.html#Backup-Names">Backup Names</a>). 
 </dl>
 
@@ -165,7 +161,7 @@ it pertains to Unix and GNU/Linux systems.  On MS-DOS and MS-Windows,
 the directories are separated by semi-colons instead, since DOS/Windows
 file names might include a colon after a drive letter.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

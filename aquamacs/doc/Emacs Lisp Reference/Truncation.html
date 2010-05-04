@@ -3,33 +3,33 @@
 <title>Truncation - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Forcing-Redisplay.html#Forcing-Redisplay" title="Forcing Redisplay">
 <link rel="next" href="The-Echo-Area.html#The-Echo-Area" title="The Echo Area">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Truncation"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.3 Truncation</h3>
 
-<p><a name="index-line-wrapping-3125"></a><a name="index-line-truncation-3126"></a><a name="index-continuation-lines-3127"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-3128"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-3129"></a>
+<p><a name="index-line-wrapping-3321"></a><a name="index-line-truncation-3322"></a><a name="index-continuation-lines-3323"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-3324"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-3325"></a>
   When a line of text extends beyond the right edge of a window, Emacs
 can <dfn>continue</dfn> the line (make it &ldquo;wrap&rdquo; to the next screen
 line), or <dfn>truncate</dfn> the line (limit it to one screen line).  The
@@ -68,48 +68,74 @@ boundary.  See <a href="Filling.html#Filling">Filling</a>.
 
    <p>On a graphical display, tiny arrow images in the window fringes
 indicate truncated and continued lines (see <a href="Fringes.html#Fringes">Fringes</a>).  On a text
-terminal, a `<samp><span class="samp">$</span></samp>' in the rightmost column of the window indicates
-truncation; a `<samp><span class="samp">\</span></samp>' on the rightmost column indicates a line that
+terminal, a &lsquo;<samp><span class="samp">$</span></samp>&rsquo; in the rightmost column of the window indicates
+truncation; a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; on the rightmost column indicates a line that
 &ldquo;wraps.&rdquo;  (The display table can specify alternate characters to use
 for this; see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
 
 <div class="defun">
-&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-3130"></a></var><br>
-<blockquote><p>This buffer-local variable controls how Emacs displays lines that extend
-beyond the right edge of the window.  The default is <code>nil</code>, which
-specifies continuation.  If the value is non-<code>nil</code>, then these
-lines are truncated.
-
-        <p>If the variable <code>truncate-partial-width-windows</code> is non-<code>nil</code>,
-then truncation is always used for side-by-side windows (within one
-frame) regardless of the value of <code>truncate-lines</code>. 
+&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-3326"></a></var><br>
+<blockquote><p>If this buffer-local variable is non-<code>nil</code>, lines that extend
+beyond the right edge of the window are truncated; otherwise, they are
+continued.  As a special exception, the variable
+<code>truncate-partial-width-windows</code> takes precedence in
+<dfn>partial-width</dfn> windows (i.e., windows that do not occupy the
+entire frame width). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>default-truncate-lines</b><var><a name="index-default_002dtruncate_002dlines-3131"></a></var><br>
-<blockquote><p>This variable is the default value for <code>truncate-lines</code>, for
-buffers that do not have buffer-local values for it. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-3132"></a></var><br>
-<blockquote><p>This variable controls display of lines that extend beyond the right
-edge of the window, in side-by-side windows (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>). 
-If it is non-<code>nil</code>, these lines are truncated; otherwise,
-<code>truncate-lines</code> says what to do with them. 
+&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-3327"></a></var><br>
+<blockquote><p>This variable controls line truncation in <dfn>partial-width</dfn> windows. 
+A partial-width window is one that does not occupy the entire frame
+width (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).  If the value is <code>nil</code>, line
+truncation is determined by the variable <code>truncate-lines</code> (see
+above).  If the value is an integer <var>n</var>, lines are truncated if
+the partial-width window has fewer than <var>n</var> columns, regardless of
+the value of <code>truncate-lines</code>; if the partial-width window has
+<var>n</var> or more columns, line truncation is determined by
+<code>truncate-lines</code>.  For any other non-<code>nil</code> value, lines are
+truncated in every partial-width window, regardless of the value of
+<code>truncate-lines</code>. 
 </p></blockquote></div>
 
    <p>When horizontal scrolling (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>) is in use in
 a window, that forces truncation.
 
+<div class="defun">
+&mdash; Variable: <b>wrap-prefix</b><var><a name="index-wrap_002dprefix-3328"></a></var><br>
+<blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
+&ldquo;prefix&rdquo; that is prepended to every continuation line at
+display-time.  (If lines are truncated, the wrap-prefix is never
+used.)  It may be a string, an image, or a stretch-glyph; the value is
+interpreted in the same way as a <code>display</code> text property. 
+See <a href="Display-Property.html#Display-Property">Display Property</a>.
+
+        <p>A wrap-prefix may also be specified for regions of text, using the
+<code>wrap-prefix</code> text or overlay property.  This takes precedence
+over the <code>wrap-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>line-prefix</b><var><a name="index-line_002dprefix-3329"></a></var><br>
+<blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
+&ldquo;prefix&rdquo; that is prepended to every non-continuation line at
+display-time.  It may be a string, an image, or a stretch-glyph; the
+value is interpreted in the same way as a <code>display</code> text
+property.  See <a href="Display-Property.html#Display-Property">Display Property</a>.
+
+        <p>A line-prefix may also be specified for regions of text using the
+<code>line-prefix</code> text or overlay property.  This takes precedence
+over the <code>line-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
+</p></blockquote></div>
+
    <p>If your buffer contains <em>very</em> long lines, and you use
-continuation to display them, just thinking about them can make Emacs
-redisplay slow.  The column computation and indentation functions also
-become slow.  Then you might find it advisable to set
+continuation to display them, computing the continuation lines can
+make Emacs redisplay slow.  The column computation and indentation
+functions also become slow.  Then you might find it advisable to set
 <code>cache-long-line-scans</code> to <code>t</code>.
 
 <div class="defun">
-&mdash; Variable: <b>cache-long-line-scans</b><var><a name="index-cache_002dlong_002dline_002dscans-3133"></a></var><br>
+&mdash; Variable: <b>cache-long-line-scans</b><var><a name="index-cache_002dlong_002dline_002dscans-3330"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, various indentation and motion
 functions, and Emacs redisplay, cache the results of scanning the
 buffer, and consult the cache to avoid rescanning regions of the buffer

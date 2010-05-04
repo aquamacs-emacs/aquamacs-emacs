@@ -3,7 +3,7 @@
 <title>Fortran Comments - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Fortran.html#Fortran" title="Fortran">
 <link rel="prev" href="Fortran-Indent.html#Fortran-Indent" title="Fortran Indent">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,33 +47,33 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Fortran-Comments"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Fortran-Autofill.html#Fortran-Autofill">Fortran Autofill</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Fortran-Indent.html#Fortran-Indent">Fortran Indent</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Fortran.html#Fortran">Fortran</a>
 <hr>
 </div>
 
-<h4 class="subsection">30.13.3 Fortran Comments</h4>
+<h4 class="subsection">30.14.3 Fortran Comments</h4>
 
 <p>The usual Emacs comment commands assume that a comment can follow a
 line of code.  In Fortran 77, the standard comment syntax requires an
 entire line to be just a comment.  Therefore, Fortran mode replaces the
 standard Emacs comment commands and defines some new variables.
 
-   <p><a name="index-fortran_002dcomment_002dline_002dstart-2211"></a>  Fortran mode can also handle the Fortran 90 comment syntax where
-comments start with `<samp><span class="samp">!</span></samp>' and can follow other text.  Because only
+   <p><a name="index-fortran_002dcomment_002dline_002dstart-2232"></a>  Fortran mode can also handle the Fortran 90 comment syntax where
+comments start with &lsquo;<samp><span class="samp">!</span></samp>&rsquo; and can follow other text.  Because only
 some Fortran 77 compilers accept this syntax, Fortran mode will not
 insert such comments unless you have said in advance to do so.  To do
-this, set the variable <code>fortran-comment-line-start</code> to `<samp><span class="samp">"!"</span></samp>'. 
+this, set the variable <code>fortran-comment-line-start</code> to &lsquo;<samp><span class="samp">"!"</span></samp>&rsquo;. 
 If you use an unusual value, you may also need to adjust
 <code>fortran-comment-line-start-skip</code>.
 
      <dl>
 <dt><kbd>M-;</kbd><dd>Align comment or insert new comment (<code>comment-dwim</code>).
 
-     <br><dt><kbd>C-x ;</kbd><dd>Applies to nonstandard `<samp><span class="samp">!</span></samp>' comments only.
+     <br><dt><kbd>C-x ;</kbd><dd>Applies to nonstandard &lsquo;<samp><span class="samp">!</span></samp>&rsquo; comments only.
 
      <br><dt><kbd>C-c ;</kbd><dd>Turn all lines of the region into comments, or (with argument) turn them back
 into real code (<code>fortran-comment-region</code>). 
@@ -86,18 +86,18 @@ and aligned.  Inserting and aligning comments are not the same in
 Fortran mode as in other modes.
 
    <p>When a new comment must be inserted, if the current line is blank, a
-full-line comment is inserted.  On a non-blank line, a nonstandard `<samp><span class="samp">!</span></samp>'
+full-line comment is inserted.  On a non-blank line, a nonstandard &lsquo;<samp><span class="samp">!</span></samp>&rsquo;
 comment is inserted if you have said you want to use them.  Otherwise a
 full-line comment is inserted on a new line before the current line.
 
-   <p>Nonstandard `<samp><span class="samp">!</span></samp>' comments are aligned like comments in other
+   <p>Nonstandard &lsquo;<samp><span class="samp">!</span></samp>&rsquo; comments are aligned like comments in other
 languages, but full-line comments are different.  In a standard full-line
 comment, the comment delimiter itself must always appear in column zero. 
 What can be aligned is the text within the comment.  You can choose from
 three styles of alignment by setting the variable
 <code>fortran-comment-indent-style</code> to one of these values:
 
-   <p><a name="index-fortran_002dcomment_002dindent_002dstyle-2212"></a><a name="index-fortran_002dcomment_002dline_002dextra_002dindent-2213"></a>
+   <p><a name="index-fortran_002dcomment_002dindent_002dstyle-2233"></a><a name="index-fortran_002dcomment_002dline_002dextra_002dindent-2234"></a>
      <dl>
 <dt><code>fixed</code><dd>Align the text at a fixed column, which is the sum of
 <code>fortran-comment-line-extra-indent</code> and the minimum statement
@@ -114,12 +114,12 @@ for tab format style.
      <br><dt><code>nil</code><dd>Don't move text in full-line comments automatically. 
 </dl>
 
-   <p><a name="index-fortran_002dcomment_002dindent_002dchar-2214"></a>  In addition, you can specify the character to be used to indent within
+   <p><a name="index-fortran_002dcomment_002dindent_002dchar-2235"></a>  In addition, you can specify the character to be used to indent within
 full-line comments by setting the variable
 <code>fortran-comment-indent-char</code> to the single-character string you want
 to use.
 
-   <p><a name="index-fortran_002ddirective_002dre-2215"></a>  Compiler directive lines, or preprocessor lines, have much the same
+   <p><a name="index-fortran_002ddirective_002dre-2236"></a>  Compiler directive lines, or preprocessor lines, have much the same
 appearance as comment lines.  It is important, though, that such lines
 never be indented at all, no matter what the value of
 <code>fortran-comment-indent-style</code>.  The variable
@@ -128,13 +128,13 @@ lines are directives.  Matching lines are never indented, and receive
 distinctive font-locking.
 
    <p>The normal Emacs comment command <kbd>C-x ;</kbd> has not been redefined.  If
-you use `<samp><span class="samp">!</span></samp>' comments, this command can be used with them.  Otherwise
+you use &lsquo;<samp><span class="samp">!</span></samp>&rsquo; comments, this command can be used with them.  Otherwise
 it is useless in Fortran mode.
 
-   <p><a name="index-C_002dc-_003b-_0040r_007b_0028Fortran-mode_0029_007d-2216"></a><a name="index-fortran_002dcomment_002dregion-2217"></a><a name="index-fortran_002dcomment_002dregion-2218"></a>  The command <kbd>C-c ;</kbd> (<code>fortran-comment-region</code>) turns all the
-lines of the region into comments by inserting the string `<samp><span class="samp">C$$$</span></samp>' at
+   <p><a name="index-C_002dc-_003b-_0040r_007b_0028Fortran-mode_0029_007d-2237"></a><a name="index-fortran_002dcomment_002dregion-2238"></a><a name="index-fortran_002dcomment_002dregion-2239"></a>  The command <kbd>C-c ;</kbd> (<code>fortran-comment-region</code>) turns all the
+lines of the region into comments by inserting the string &lsquo;<samp><span class="samp">C$$$</span></samp>&rsquo; at
 the front of each one.  With a numeric argument, it turns the region
-back into live code by deleting `<samp><span class="samp">C$$$</span></samp>' from the front of each line
+back into live code by deleting &lsquo;<samp><span class="samp">C$$$</span></samp>&rsquo; from the front of each line
 in it.  The string used for these comments can be controlled by setting
 the variable <code>fortran-comment-region</code>.  Note that here we have an
 example of a command and a variable with the same name; these two uses

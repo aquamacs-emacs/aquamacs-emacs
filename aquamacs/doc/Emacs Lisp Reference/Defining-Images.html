@@ -3,33 +3,33 @@
 <title>Defining Images - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Images.html#Images" title="Images">
 <link rel="prev" href="Other-Image-Types.html#Other-Image-Types" title="Other Image Types">
 <link rel="next" href="Showing-Images.html#Showing-Images" title="Showing Images">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,21 +46,21 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Images"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Showing-Images.html#Showing-Images">Showing Images</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Other-Image-Types.html#Other-Image-Types">Other Image Types</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.7 Defining Images</h4>
+<h4 class="subsection">38.16.9 Defining Images</h4>
 
 <p>The functions <code>create-image</code>, <code>defimage</code> and
 <code>find-image</code> provide convenient ways to create image descriptors.
 
 <div class="defun">
-&mdash; Function: <b>create-image</b><var> file-or-data &amp;optional type data-p &amp;rest props<a name="index-create_002dimage-3336"></a></var><br>
+&mdash; Function: <b>create-image</b><var> file-or-data &amp;optional type data-p &amp;rest props<a name="index-create_002dimage-3551"></a></var><br>
 <blockquote><p>This function creates and returns an image descriptor which uses the
 data in <var>file-or-data</var>.  <var>file-or-data</var> can be a file name or
 a string containing the image data; <var>data-p</var> should be <code>nil</code>
@@ -75,13 +75,13 @@ from the file's name.
 properties&mdash;for example,
 
      <pre class="example">          (create-image "foo.xpm" 'xpm nil :heuristic-mask t)
-     </pre>
+</pre>
         <p>The function returns <code>nil</code> if images of this type are not
 supported.  Otherwise it returns an image descriptor. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>defimage</b><var> symbol specs &amp;optional doc<a name="index-defimage-3337"></a></var><br>
+&mdash; Macro: <b>defimage</b><var> symbol specs &amp;optional doc<a name="index-defimage-3552"></a></var><br>
 <blockquote><p>This macro defines <var>symbol</var> as an image name.  The arguments
 <var>specs</var> is a list which specifies how to display the image. 
 The third argument, <var>doc</var>, is an optional documentation string.
@@ -97,7 +97,7 @@ example:
      <pre class="example">          (defimage test-image
             ((:type xpm :file "~/test1.xpm")
              (:type xbm :file "~/test1.xbm")))
-     </pre>
+</pre>
         <p><code>defimage</code> tests each argument, one by one, to see if it is
 usable&mdash;that is, if the type is supported and the file exists.  The
 first usable argument is used to make an image descriptor which is
@@ -108,7 +108,7 @@ as <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-image</b><var> specs<a name="index-find_002dimage-3338"></a></var><br>
+&mdash; Function: <b>find-image</b><var> specs<a name="index-find_002dimage-3553"></a></var><br>
 <blockquote><p>This function provides a convenient way to find an image satisfying one
 of a list of image specifications <var>specs</var>.
 
@@ -126,7 +126,7 @@ returned.  If no specification is satisfied, <code>nil</code> is returned.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>image-load-path</b><var><a name="index-image_002dload_002dpath-3339"></a></var><br>
+&mdash; Variable: <b>image-load-path</b><var><a name="index-image_002dload_002dpath-3554"></a></var><br>
 <blockquote><p>This variable's value is a list of locations in which to search for
 image files.  If an element is a string or a variable symbol whose
 value is a string, the string is taken to be the name of a directory
@@ -143,11 +143,11 @@ image <samp><span class="file">images/foo/bar.xpm</span></samp> within <code>dat
 should specify the image as follows:
 
      <pre class="example">          (defimage foo-image '((:type xpm :file "foo/bar.xpm")))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>image-load-path-for-library</b><var> library image &amp;optional path no-error<a name="index-image_002dload_002dpath_002dfor_002dlibrary-3340"></a></var><br>
+&mdash; Function: <b>image-load-path-for-library</b><var> library image &amp;optional path no-error<a name="index-image_002dload_002dpath_002dfor_002dlibrary-3555"></a></var><br>
 <blockquote><p>This function returns a suitable search path for images used by the
 Lisp package <var>library</var>.
 
@@ -177,7 +177,7 @@ with versions of Emacs that lack the variable <code>image-load-path</code>:
                                         (when (boundp 'image-load-path)
                                           image-load-path))))
             (mh-tool-bar-folder-buttons-init))
-     </pre>
+</pre>
         </blockquote></div>
 
    </body></html>

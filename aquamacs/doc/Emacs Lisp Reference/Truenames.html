@@ -3,33 +3,33 @@
 <title>Truenames - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
 <link rel="prev" href="Kinds-of-Files.html#Kinds-of-Files" title="Kinds of Files">
 <link rel="next" href="File-Attributes.html#File-Attributes" title="File Attributes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Truenames"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="File-Attributes.html#File-Attributes">File Attributes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Kinds-of-Files.html#Kinds-of-Files">Kinds of Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
@@ -56,36 +56,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 
 <h4 class="subsection">25.6.3 Truenames</h4>
 
-<p><a name="index-truename-_0028of-file_0029-1743"></a>
+<p><a name="index-truename-_0028of-file_0029-1801"></a>
 <!-- Emacs 19 features -->
   The <dfn>truename</dfn> of a file is the name that you get by following
 symbolic links at all levels until none remain, then simplifying away
-`<samp><span class="samp">.</span></samp>' and `<samp><span class="samp">..</span></samp>' appearing as name components.  This results
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo; and &lsquo;<samp><span class="samp">..</span></samp>&rsquo; appearing as name components.  This results
 in a sort of canonical name for the file.  A file does not always have a
 unique truename; the number of distinct truenames a file has is equal to
 the number of hard links to the file.  However, truenames are useful
 because they eliminate symbolic links as a cause of name variation.
 
 <div class="defun">
-&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-1744"></a></var><br>
+&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-1802"></a></var><br>
 <blockquote><p>The function <code>file-truename</code> returns the truename of the file
 <var>filename</var>.  The argument must be an absolute file name.
 
         <p>This function does not expand environment variables.  Only
 <code>substitute-in-file-name</code> does that.  See <a href="Definition-of-substitute_002din_002dfile_002dname.html#Definition-of-substitute_002din_002dfile_002dname">Definition of substitute-in-file-name</a>.
 
-        <p>If you may need to follow symbolic links preceding `<samp><span class="samp">..</span></samp>'
+        <p>If you may need to follow symbolic links preceding &lsquo;<samp><span class="samp">..</span></samp>&rsquo;
 appearing as a name component, you should make sure to call
 <code>file-truename</code> without prior direct or indirect calls to
 <code>expand-file-name</code>, as otherwise the file name component
-immediately preceding `<samp><span class="samp">..</span></samp>' will be &ldquo;simplified away&rdquo; before
+immediately preceding &lsquo;<samp><span class="samp">..</span></samp>&rsquo; will be &ldquo;simplified away&rdquo; before
 <code>file-truename</code> is called.  To eliminate the need for a call to
-<code>expand-file-name</code>, <code>file-truename</code> handles `<samp><span class="samp">~</span></samp>' in the
+<code>expand-file-name</code>, <code>file-truename</code> handles &lsquo;<samp><span class="samp">~</span></samp>&rsquo; in the
 same way that <code>expand-file-name</code> does.  See <a href="File-Name-Expansion.html#File-Name-Expansion">Functions that Expand Filenames</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-1745"></a></var><br>
+&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-1803"></a></var><br>
 <blockquote><p>This function follows symbolic links, starting with <var>filename</var>,
 until it finds a file name which is not the name of a symbolic link. 
 Then it returns that file name.  This function does <em>not</em> follow
@@ -104,10 +104,10 @@ we would have:
 
 <pre class="example">     (file-chase-links "/usr/foo/hello")
           ;; <span class="roman">This does not follow the links in the parent directories.</span>
-          =&gt; "/usr/foo/hello"
+          &rArr; "/usr/foo/hello"
      (file-truename "/usr/foo/hello")
-          ;; <span class="roman">Assuming that <samp>/home</samp> is not a symbolic link.</span>
-          =&gt; "/home/foo/hello"
+          ;; <span class="roman">Assuming that </span><samp><span class="file">/home</span></samp><span class="roman"> is not a symbolic link.</span>
+          &rArr; "/home/foo/hello"
 </pre>
    <p>See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>, for related information.
 

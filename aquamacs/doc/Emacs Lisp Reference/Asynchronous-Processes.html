@@ -3,33 +3,33 @@
 <title>Asynchronous Processes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Processes.html#Processes" title="Processes">
 <link rel="prev" href="Synchronous-Processes.html#Synchronous-Processes" title="Synchronous Processes">
 <link rel="next" href="Deleting-Processes.html#Deleting-Processes" title="Deleting Processes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Asynchronous-Processes"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-Processes.html#Deleting-Processes">Deleting Processes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.4 Creating an Asynchronous Process</h3>
 
-<p><a name="index-asynchronous-subprocess-3019"></a>
+<p><a name="index-asynchronous-subprocess-3199"></a>
   After an <dfn>asynchronous process</dfn> is created, Emacs and the subprocess
 both continue running immediately.  The process thereafter runs
 in parallel with Emacs, and the two can communicate with each other
@@ -69,12 +69,12 @@ delay.
    <p>Here we describe how to create an asynchronous process.
 
 <div class="defun">
-&mdash; Function: <b>start-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dprocess-3020"></a></var><br>
+&mdash; Function: <b>start-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dprocess-3200"></a></var><br>
 <blockquote><p>This function creates a new asynchronous subprocess and starts the
 program <var>program</var> running in it.  It returns a process object that
 stands for the new subprocess in Lisp.  The argument <var>name</var>
 specifies the name for the process object; if a process with this name
-already exists, then <var>name</var> is modified (by appending `<samp><span class="samp">&lt;1&gt;</span></samp>',
+already exists, then <var>name</var> is modified (by appending &lsquo;<samp><span class="samp">&lt;1&gt;</span></samp>&rsquo;,
 etc.) to be unique.  The buffer <var>buffer-or-name</var> is the buffer to
 associate with the process.
 
@@ -83,17 +83,17 @@ line arguments for the program.
 
         <p>In the example below, the first process is started and runs (rather,
 sleeps) for 100 seconds.  Meanwhile, the second process is started, and
-given the name `<samp><span class="samp">my-process&lt;1&gt;</span></samp>' for the sake of uniqueness.  It
-inserts the directory listing at the end of the buffer `<samp><span class="samp">foo</span></samp>',
+given the name &lsquo;<samp><span class="samp">my-process&lt;1&gt;</span></samp>&rsquo; for the sake of uniqueness.  It
+inserts the directory listing at the end of the buffer &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;,
 before the first process finishes.  Then it finishes, and a message to
 that effect is inserted in the buffer.  Much later, the first process
 finishes, and another message is inserted in the buffer for it.
 
      <pre class="smallexample">          (start-process "my-process" "foo" "sleep" "100")
-               =&gt; #&lt;process my-process&gt;
+               &rArr; #&lt;process my-process&gt;
           
           (start-process "my-process" "foo" "ls" "-l" "/user/lewis/bin")
-               =&gt; #&lt;process my-process&lt;1&gt;&gt;
+               &rArr; #&lt;process my-process&lt;1&gt;&gt;
           
           ---------- Buffer: foo ----------
           total 2
@@ -104,15 +104,38 @@ finishes, and another message is inserted in the buffer for it.
           
           Process my-process finished
           ---------- Buffer: foo ----------
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>start-process-shell-command</b><var> name buffer-or-name command &amp;rest command-args<a name="index-start_002dprocess_002dshell_002dcommand-3021"></a></var><br>
+&mdash; Function: <b>start-file-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dfile_002dprocess-3201"></a></var><br>
+<blockquote><p>Like <code>start-process</code>, this function starts a new asynchronous
+subprocess running <var>program</var> in it, and returns its process
+object&mdash;when <code>default-directory</code> is not a magic file name.
+
+        <p>If <code>default-directory</code> is magic, the function invokes its file
+handler instead.  This handler ought to run <var>program</var>, perhaps on
+the local host, perhaps on a remote host that corresponds to
+<code>default-directory</code>.  In the latter case, the local part of
+<code>default-directory</code> becomes the working directory of the process.
+
+        <p>This function does not try to invoke file name handlers for
+<var>program</var> or for the <var>program-args</var>.
+
+        <p>Depending on the implementation of the file handler, it might not be
+possible to apply <code>process-filter</code> or <code>process-sentinel</code> to
+the resulting process object (see <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>, see <a href="Sentinels.html#Sentinels">Sentinels</a>).
+
+        <p>Some file handlers may not support <code>start-file-process</code> (for
+example <code>ange-ftp-hook-function</code>).  In such cases, the function
+does nothing and returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>start-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dprocess_002dshell_002dcommand-3202"></a></var><br>
 <blockquote><p>This function is like <code>start-process</code> except that it uses a shell
 to execute the specified command.  The argument <var>command</var> is a shell
-command name, and <var>command-args</var> are the arguments for the shell
-command.  The variable <code>shell-file-name</code> specifies which shell to
+command name.  The variable <code>shell-file-name</code> specifies which shell to
 use.
 
         <p>The point of running a program through the shell, rather than directly
@@ -124,8 +147,15 @@ characters do <em>not</em> have their special shell meanings.  See <a href="Shel
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>process-connection-type</b><var><a name="index-process_002dconnection_002dtype-3022"></a></var><br>
-<blockquote><p><a name="index-pipes-3023"></a><a name="index-g_t_0040acronym_007bPTY_007ds-3024"></a>This variable controls the type of device used to communicate with
+&mdash; Function: <b>start-file-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dfile_002dprocess_002dshell_002dcommand-3203"></a></var><br>
+<blockquote><p>This function is like <code>start-process-shell-command</code>, but uses
+<code>start-file-process</code> internally.  By this, <var>command</var> can be
+executed also on remote hosts, depending on <code>default-directory</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>process-connection-type</b><var><a name="index-process_002dconnection_002dtype-3204"></a></var><br>
+<blockquote><p><a name="index-pipes-3205"></a><a name="index-g_t_0040acronym_007bPTY_007ds-3206"></a>This variable controls the type of device used to communicate with
 asynchronous subprocesses.  If it is non-<code>nil</code>, then <acronym>PTY</acronym>s are
 used, when available.  Otherwise, pipes are used.
 
@@ -144,7 +174,7 @@ with one subprocess by binding the variable around the call to
 
      <pre class="smallexample">          (let ((process-connection-type nil))  ; <span class="roman">Use a pipe.</span>
             (start-process ...))
-     </pre>
+</pre>
         <p>To determine whether a given subprocess actually got a pipe or a
 <acronym>PTY</acronym>, use the function <code>process-tty-name</code> (see <a href="Process-Information.html#Process-Information">Process Information</a>). 
 </p></blockquote></div>

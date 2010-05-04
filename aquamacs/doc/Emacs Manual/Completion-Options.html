@@ -3,7 +3,7 @@
 <title>Completion Options - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Completion.html#Completion" title="Completion">
 <link rel="prev" href="Strict-Completion.html#Strict-Completion" title="Strict Completion">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Completion-Options"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Strict-Completion.html#Strict-Completion">Strict Completion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
 <hr>
@@ -60,7 +60,7 @@ commands never display the completion list buffer; you must type
 <kbd>?</kbd>  to display the list.  If the value is <code>lazy</code>, Emacs only
 shows the completion list buffer on the second attempt to complete. 
 In other words, if there is nothing to complete, the first &lt;TAB&gt;
-echoes `<samp><span class="samp">Next char not unique</span></samp>'; the second &lt;TAB&gt; does the
+echoes &lsquo;<samp><span class="samp">Next char not unique</span></samp>&rsquo;; the second &lt;TAB&gt; does the
 completion list buffer.
 
    <p><a name="index-completion_002dignored_002dextensions-177"></a><a name="index-ignored-file-names_002c-in-completion-178"></a>  When completing file names, certain file names are usually ignored. 
@@ -68,10 +68,10 @@ The variable <code>completion-ignored-extensions</code> contains a list of
 strings; a file name ending in any of those strings is ignored as a
 completion candidate.  The standard value of this variable has several
 elements including <code>".o"</code>, <code>".elc"</code>, and <code>"~"</code>.  For
-example, if a directory contains `<samp><span class="samp">foo.c</span></samp>' and `<samp><span class="samp">foo.elc</span></samp>',
-`<samp><span class="samp">foo</span></samp>' completes to `<samp><span class="samp">foo.c</span></samp>'.  However, if <em>all</em> possible
+example, if a directory contains &lsquo;<samp><span class="samp">foo.c</span></samp>&rsquo; and &lsquo;<samp><span class="samp">foo.elc</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; completes to &lsquo;<samp><span class="samp">foo.c</span></samp>&rsquo;.  However, if <em>all</em> possible
 completions end in &ldquo;ignored&rdquo; strings, they are not ignored: in the
-previous example, `<samp><span class="samp">foo.e</span></samp>' completes to `<samp><span class="samp">foo.elc</span></samp>'. 
+previous example, &lsquo;<samp><span class="samp">foo.e</span></samp>&rsquo; completes to &lsquo;<samp><span class="samp">foo.elc</span></samp>&rsquo;. 
 Displaying a list of possible completions disregards
 <code>completion-ignored-extensions</code>; it shows them all.
 
@@ -94,11 +94,13 @@ default value is <code>nil</code>).
 using the variable <code>completion-styles</code>.  Its value should be a
 list of symbols, each representing a <dfn>completion style</dfn>; valid
 style symbols are <code>basic</code>, <code>partial-completion</code>,
-<code>emacs22</code>, and <code>emacs21</code>.  When completing, Emacs attempts
-to use the first completion style in the list; if this does not return
-any completion alternatives, it tries the next completion style in the
-list, and so on.  The completion rules described in <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a> correspond to the default value of <code>completion-styles</code>,
-which is <code>(basic partial-completion emacs22)</code>.
+<code>emacs22</code>, <code>emacs21</code>, and <code>initials</code>.  When completing,
+Emacs attempts to use the first completion style in the list; if this
+does not return any completion alternatives, it tries the next
+completion style in the list, and so on.  The completion rules
+described in <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a> correspond to the default value
+of <code>completion-styles</code>, which is <code>(basic partial-completion
+emacs22)</code>.
 
    <p><a name="index-Icomplete-mode-183"></a><a name="index-icomplete_002dmode-184"></a>  Icomplete mode presents a constantly-updated display that tells you
 what completions are available for the text you've entered so far.  The

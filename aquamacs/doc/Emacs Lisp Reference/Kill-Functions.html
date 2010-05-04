@@ -3,33 +3,33 @@
 <title>Kill Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
 <link rel="prev" href="Kill-Ring-Concepts.html#Kill-Ring-Concepts" title="Kill Ring Concepts">
 <link rel="next" href="Yanking.html#Yanking" title="Yanking">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Kill-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Yanking.html#Yanking">Yanking</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-Ring-Concepts.html#Kill-Ring-Concepts">Kill Ring Concepts</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>
@@ -59,14 +59,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The K
 
 <p><code>kill-region</code> is the usual subroutine for killing text.  Any
 command that calls this function is a &ldquo;kill command&rdquo; (and should
-probably have `<samp><span class="samp">kill</span></samp>' in its name).  <code>kill-region</code> puts the
+probably have &lsquo;<samp><span class="samp">kill</span></samp>&rsquo; in its name).  <code>kill-region</code> puts the
 newly killed text in a new element at the beginning of the kill ring or
 adds it to the most recent element.  It determines automatically (using
 <code>last-command</code>) whether the previous command was a kill command,
 and if so appends the killed text to the most recent entry.
 
 <div class="defun">
-&mdash; Command: <b>kill-region</b><var> start end &amp;optional yank-handler<a name="index-kill_002dregion-2448"></a></var><br>
+&mdash; Command: <b>kill-region</b><var> start end &amp;optional yank-handler<a name="index-kill_002dregion-2551"></a></var><br>
 <blockquote><p>This function kills the text in the region defined by <var>start</var> and
 <var>end</var>.  The text is deleted but saved in the kill ring, along with
 its text properties.  The value is always <code>nil</code>.
@@ -75,7 +75,7 @@ its text properties.  The value is always <code>nil</code>.
 the mark.
 
      <!-- Emacs 19 feature -->
-<p>If the buffer or text is read-only, <code>kill-region</code> modifies the kill
+        <p>If the buffer or text is read-only, <code>kill-region</code> modifies the kill
 ring just the same, then signals an error without modifying the buffer. 
 This is convenient because it lets the user use a series of kill
 commands to copy text from a read-only buffer into the kill ring.
@@ -88,14 +88,14 @@ onto the kill ring, like other text properties.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>kill-read-only-ok</b><var><a name="index-kill_002dread_002donly_002dok-2449"></a></var><br>
+&mdash; User Option: <b>kill-read-only-ok</b><var><a name="index-kill_002dread_002donly_002dok-2552"></a></var><br>
 <blockquote><p>If this option is non-<code>nil</code>, <code>kill-region</code> does not signal an
 error if the buffer or text is read-only.  Instead, it simply returns,
 updating the kill ring but not changing the buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>copy-region-as-kill</b><var> start end<a name="index-copy_002dregion_002das_002dkill-2450"></a></var><br>
+&mdash; Command: <b>copy-region-as-kill</b><var> start end<a name="index-copy_002dregion_002das_002dkill-2553"></a></var><br>
 <blockquote><p>This command saves the region defined by <var>start</var> and <var>end</var> on
 the kill ring (including text properties), but does not delete the text
 from the buffer.  It returns <code>nil</code>.

@@ -3,32 +3,32 @@
 <title>Reverting - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" title="Backups and Auto-Saving">
 <link rel="prev" href="Auto_002dSaving.html#Auto_002dSaving" title="Auto-Saving">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Reverting"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>
 <hr>
@@ -59,7 +59,7 @@ about them, you can get rid of them by reading in the previous version
 of the file with the <code>revert-buffer</code> command.  See <a href="../emacs/Reverting.html#Reverting">Reverting a Buffer</a>.
 
 <div class="defun">
-&mdash; Command: <b>revert-buffer</b><var> &amp;optional ignore-auto noconfirm preserve-modes<a name="index-revert_002dbuffer-1887"></a></var><br>
+&mdash; Command: <b>revert-buffer</b><var> &amp;optional ignore-auto noconfirm preserve-modes<a name="index-revert_002dbuffer-1953"></a></var><br>
 <blockquote><p>This command replaces the buffer text with the text of the visited
 file on disk.  This action undoes all changes since the file was visited
 or saved.
@@ -92,7 +92,7 @@ the buffer.  Preserving any additional markers would be problematical.
 the variables described in the rest of this section.
 
 <div class="defun">
-&mdash; User Option: <b>revert-without-query</b><var><a name="index-revert_002dwithout_002dquery-1888"></a></var><br>
+&mdash; User Option: <b>revert-without-query</b><var><a name="index-revert_002dwithout_002dquery-1954"></a></var><br>
 <blockquote><p>This variable holds a list of files that should be reverted without
 query.  The value is a list of regular expressions.  If the visited file
 name matches one of these regular expressions, and the file has changed
@@ -104,9 +104,8 @@ reverts the file without asking the user for confirmation.
 buffer-local bindings for these variables:
 
 <div class="defun">
-&mdash; Variable: <b>revert-buffer-function</b><var><a name="index-revert_002dbuffer_002dfunction-1889"></a></var><br>
-<blockquote><p><a name="Definition-of-revert_002dbuffer_002dfunction"></a>
-The value of this variable is the function to use to revert this
+&mdash; Variable: <b>revert-buffer-function</b><var><a name="index-revert_002dbuffer_002dfunction-1955"></a></var><br>
+<blockquote><p><a name="Definition-of-revert_002dbuffer_002dfunction"></a>The value of this variable is the function to use to revert this
 buffer.  If non-<code>nil</code>, it should be a function with two optional
 arguments to do the work of reverting.  The two optional arguments,
 <var>ignore-auto</var> and <var>noconfirm</var>, are the arguments that
@@ -120,7 +119,7 @@ regenerate the contents.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>revert-buffer-insert-file-contents-function</b><var><a name="index-revert_002dbuffer_002dinsert_002dfile_002dcontents_002dfunction-1890"></a></var><br>
+&mdash; Variable: <b>revert-buffer-insert-file-contents-function</b><var><a name="index-revert_002dbuffer_002dinsert_002dfile_002dcontents_002dfunction-1956"></a></var><br>
 <blockquote><p>The value of this variable, if non-<code>nil</code>, specifies the function to use to
 insert the updated contents when reverting this buffer.  The function
 receives two arguments: first the file name to use; second, <code>t</code> if
@@ -134,14 +133,14 @@ hooks listed below.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>before-revert-hook</b><var><a name="index-before_002drevert_002dhook-1891"></a></var><br>
+&mdash; Variable: <b>before-revert-hook</b><var><a name="index-before_002drevert_002dhook-1957"></a></var><br>
 <blockquote><p>This normal hook is run by <code>revert-buffer</code> before
 inserting the modified contents&mdash;but only if
 <code>revert-buffer-function</code> is <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>after-revert-hook</b><var><a name="index-after_002drevert_002dhook-1892"></a></var><br>
+&mdash; Variable: <b>after-revert-hook</b><var><a name="index-after_002drevert_002dhook-1958"></a></var><br>
 <blockquote><p>This normal hook is run by <code>revert-buffer</code> after inserting
 the modified contents&mdash;but only if <code>revert-buffer-function</code> is
 <code>nil</code>. 
@@ -150,7 +149,7 @@ the modified contents&mdash;but only if <code>revert-buffer-function</code> is
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
 <!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, 2002, -->
-<!-- 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
+<!-- 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

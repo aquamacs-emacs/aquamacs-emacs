@@ -3,32 +3,32 @@
 <title>Network Processes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Low_002dLevel-Network.html#Low_002dLevel-Network" title="Low-Level Network">
 <link rel="next" href="Network-Options.html#Network-Options" title="Network Options">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,21 +45,21 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Network-Processes"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Network-Options.html#Network-Options">Network Options</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>
 <hr>
 </div>
 
-<h4 class="subsection">37.16.1 <code>make-network-process</code></h4>
+<h4 class="subsection">37.17.1 <code>make-network-process</code></h4>
 
 <p>The basic function for creating network connections and network
 servers is <code>make-network-process</code>.  It can do either of those
 jobs, depending on the arguments you give it.
 
 <div class="defun">
-&mdash; Function: <b>make-network-process</b><var> &amp;rest args<a name="index-make_002dnetwork_002dprocess-3096"></a></var><br>
+&mdash; Function: <b>make-network-process</b><var> &amp;rest args<a name="index-make_002dnetwork_002dprocess-3281"></a></var><br>
 <blockquote><p>This function creates a network connection or server and returns the
 process object that represents it.  The arguments <var>args</var> are a
 list of keyword/argument pairs.  Omitting a keyword is always
@@ -73,7 +73,8 @@ necessary to make it unique.
 
           <br><dt>:type <var>type</var><dd>Specify the communication type.  A value of <code>nil</code> specifies a
 stream connection (the default); <code>datagram</code> specifies a datagram
-connection.  Both connections and servers can be of either type.
+connection; <code>seqpacket</code> specifies a &ldquo;sequenced packet stream&rdquo;
+connection.  Both connections and servers can be of these types.
 
           <br><dt>:server <var>server-flag</var><dd>If <var>server-flag</var> is non-<code>nil</code>, create a server.  Otherwise,
 create a connection.  For a stream type server, <var>server-flag</var> may
@@ -162,11 +163,6 @@ is to determine the coding systems from the data.
 See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
 
           <br><dt>:filter <var>filter</var><dd>Initialize the process filter to <var>filter</var>.
-
-          <br><dt>:filter-multibyte <var>bool</var><dd>If <var>bool</var> is non-<code>nil</code>, strings given to the process filter
-are multibyte, otherwise they are unibyte.  If you don't specify this
-keyword at all, the default is that the strings are multibyte if
-<code>default-enable-multibyte-characters</code> is non-<code>nil</code>.
 
           <br><dt>:sentinel <var>sentinel</var><dd>Initialize the process sentinel to <var>sentinel</var>.
 

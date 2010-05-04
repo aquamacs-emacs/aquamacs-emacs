@@ -3,33 +3,33 @@
 <title>Compiler Errors - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
 <link rel="prev" href="Eval-During-Compile.html#Eval-During-Compile" title="Eval During Compile">
 <link rel="next" href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" title="Byte-Code Objects">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Compiler-Errors"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
@@ -56,9 +56,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.6 Compiler Errors</h3>
 
-<p><a name="index-compiler-errors-835"></a>
+<p><a name="index-compiler-errors-866"></a>
   Byte compilation outputs all errors and warnings into the buffer
-`<samp><span class="samp">*Compile-Log*</span></samp>'.  The messages include file names and line
+&lsquo;<samp><span class="samp">*Compile-Log*</span></samp>&rsquo;.  The messages include file names and line
 numbers that identify the location of the problem.  The usual Emacs
 commands for operating on compiler diagnostics work properly on
 these messages.
@@ -78,9 +78,14 @@ function <var>func</var> by conditionalizing the function call on an
 <code>if</code>, and <var>func</var> must appear quoted in the call to
 <code>fboundp</code>.  (This feature operates for <code>cond</code> as well.)
 
-   <p>Likewise, you can suppress a compiler warning for an unbound variable
-<var>variable</var> by conditionalizing its use on a <code>boundp</code> test,
-like this:
+   <p>You can tell the compiler that a function is defined using
+<code>declare-function</code> (see <a href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>).  Likewise, you
+can tell the compiler that a variable is defined using <code>defvar</code>
+with no initial value.
+
+   <p>You can suppress the compiler warning for a specific use of an
+undefined variable <var>variable</var> by conditionalizing its use on a
+<code>boundp</code> test, like this:
 
 <pre class="example">     (if (boundp '<var>variable</var>) ...<var>variable</var>...)
 </pre>
@@ -88,20 +93,24 @@ like this:
 <code>if</code>, and <var>variable</var> must appear quoted in the call to
 <code>boundp</code>.
 
-   <p>You can suppress any compiler warnings using the construct
-<code>with-no-warnings</code>:
+   <p>You can suppress any and all compiler warnings within a certain
+expression using the construct <code>with-no-warnings</code>:
 
 <!-- This is implemented with a defun, but conceptually it is -->
 <!-- a special form. -->
 <div class="defun">
-&mdash; Special Form: <b>with-no-warnings</b><var> body<small class="dots">...</small><a name="index-with_002dno_002dwarnings-836"></a></var><br>
+&mdash; Special Form: <b>with-no-warnings</b><var> body<small class="dots">...</small><a name="index-with_002dno_002dwarnings-867"></a></var><br>
 <blockquote><p>In execution, this is equivalent to <code>(progn </code><var>body</var><code>...)</code>,
 but the compiler does not issue warnings for anything that occurs
 inside <var>body</var>.
 
         <p>We recommend that you use this construct around the smallest
-possible piece of code. 
+possible piece of code, to avoid missing possible warnings other than one
+one you intend to suppress. 
 </p></blockquote></div>
+
+   <p>More precise control of warnings is possible by setting the variable
+<code>byte-compile-warnings</code>.
 
    </body></html>
 

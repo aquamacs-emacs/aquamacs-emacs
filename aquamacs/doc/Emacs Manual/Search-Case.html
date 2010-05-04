@@ -3,7 +3,7 @@
 <title>Search Case - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Search.html#Search" title="Search">
 <link rel="prev" href="Regexp-Example.html#Regexp-Example" title="Regexp Example">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Search-Case"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Replace.html#Replace">Replace</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Regexp-Example.html#Regexp-Example">Regexp Example</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
@@ -59,14 +59,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
 
 <p>Searches in Emacs normally ignore the case of the text they are
 searching through, if you specify the text in lower case.  Thus, if
-you specify searching for `<samp><span class="samp">foo</span></samp>', then `<samp><span class="samp">Foo</span></samp>' and `<samp><span class="samp">foo</span></samp>'
+you specify searching for &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">Foo</span></samp>&rsquo; and &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;
 are also considered a match.  Regexps, and in particular character
-sets, are included: `<samp><span class="samp">[ab]</span></samp>' would match `<samp><span class="samp">a</span></samp>' or `<samp><span class="samp">A</span></samp>' or
-`<samp><span class="samp">b</span></samp>' or `<samp><span class="samp">B</span></samp>'.
+sets, are included: &lsquo;<samp><span class="samp">[ab]</span></samp>&rsquo; would match &lsquo;<samp><span class="samp">a</span></samp>&rsquo; or &lsquo;<samp><span class="samp">A</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; or &lsquo;<samp><span class="samp">B</span></samp>&rsquo;.
 
    <p>An upper-case letter anywhere in the incremental search string makes
-the search case-sensitive.  Thus, searching for `<samp><span class="samp">Foo</span></samp>' does not find
-`<samp><span class="samp">foo</span></samp>' or `<samp><span class="samp">FOO</span></samp>'.  This applies to regular expression search as
+the search case-sensitive.  Thus, searching for &lsquo;<samp><span class="samp">Foo</span></samp>&rsquo; does not find
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; or &lsquo;<samp><span class="samp">FOO</span></samp>&rsquo;.  This applies to regular expression search as
 well as to string search.  The effect ceases if you delete the
 upper-case letter from the search string.
 
@@ -76,14 +76,13 @@ current incremental search to the next one, but it does override the
 effect of adding or removing an upper-case letter in the current
 search.
 
-   <p><a name="index-case_002dfold_002dsearch-681"></a><a name="index-default_002dcase_002dfold_002dsearch-682"></a>  If you set the variable <code>case-fold-search</code> to <code>nil</code>, then
+   <p><a name="index-case_002dfold_002dsearch-686"></a>  If you set the variable <code>case-fold-search</code> to <code>nil</code>, then
 all letters must match exactly, including case.  This is a per-buffer
-variable; altering the variable affects only the current buffer, but
-there is a default value in <code>default-case-fold-search</code> that you
-can also set.  See <a href="Locals.html#Locals">Locals</a>.  This variable applies to nonincremental
-searches also, including those performed by the replace commands
-(see <a href="Replace.html#Replace">Replace</a>) and the minibuffer history matching commands
-(see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>).
+variable; altering the variable normally affects only the current buffer,
+unless you change its default value.  See <a href="Locals.html#Locals">Locals</a>. 
+This variable applies to nonincremental searches also, including those
+performed by the replace commands (see <a href="Replace.html#Replace">Replace</a>) and the minibuffer
+history matching commands (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>).
 
    <p>Several related variables control case-sensitivity of searching and
 matching for specific commands or activities.  For instance,

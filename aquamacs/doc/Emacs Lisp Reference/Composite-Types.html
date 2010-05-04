@@ -3,33 +3,33 @@
 <title>Composite Types - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Customization-Types.html#Customization-Types" title="Customization Types">
 <link rel="prev" href="Simple-Types.html#Simple-Types" title="Simple Types">
 <link rel="next" href="Splicing-into-Lists.html#Splicing-into-Lists" title="Splicing into Lists">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Composite-Types"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Splicing-into-Lists.html#Splicing-into-Lists">Splicing into Lists</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Types.html#Simple-Types">Simple Types</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-Types">Customization Types</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-
 
 <h4 class="subsection">14.4.2 Composite Types</h4>
 
-<p><a name="index-Composite-Types-_0028customization_0029-749"></a>
+<p><a name="index-Composite-Types-_0028customization_0029-778"></a>
   When none of the simple types is appropriate, you can use composite
 types, which build new types from other types or from specified data. 
 The specified types or data are called the <dfn>arguments</dfn> of the
@@ -93,6 +93,10 @@ string, and the third a function.
      <p>In the customization buffer, each element is displayed and edited
 separately, according to the type specified for it.
 
+     <br><dt><code>(group </code><var>element-types</var><code>...)</code><dd>This works like <code>list</code> except for the formatting
+of text in the Custom buffer.  <code>list</code> labels each
+element value with its tag; <code>group</code> does not.
+
      <br><dt><code>(vector </code><var>element-types</var><code>...)</code><dd>Like <code>list</code> except that the value must be a vector instead of a
 list.  The elements work the same as in <code>list</code>.
 
@@ -112,8 +116,8 @@ verbatim, you might write the customization type this way,
 
      <pre class="example">          (choice (integer :tag "Number of spaces")
                   (string :tag "Literal text"))
-     </pre>
-     <p class="noindent">so that the menu offers `<samp><span class="samp">Number of spaces</span></samp>' and `<samp><span class="samp">Literal text</span></samp>'.
+</pre>
+     <p class="noindent">so that the menu offers &lsquo;<samp><span class="samp">Number of spaces</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Literal text</span></samp>&rsquo;.
 
      <p>In any alternative for which <code>nil</code> is not a valid value, other than
 a <code>const</code>, you should specify a valid default for that alternative
@@ -126,7 +130,7 @@ most general last.  Here's an example of proper usage:
 
      <pre class="example">          (choice (const :tag "Off" nil)
                   symbol (sexp :tag "Other"))
-     </pre>
+</pre>
      <p class="noindent">This way, the special value <code>nil</code> is not treated like other
 symbols, and symbols are not treated like other Lisp expressions.
 
@@ -148,7 +152,7 @@ For example,
      <pre class="example">          (choice (const :tag "Yes" t)
                   (const :tag "No" nil)
                   (const :tag "Ask" foo))
-     </pre>
+</pre>
      <p class="noindent">describes a variable for which <code>t</code> means yes, <code>nil</code> means no,
 and <code>foo</code> means &ldquo;ask.&rdquo;
 
@@ -161,12 +165,12 @@ For example,
      <pre class="example">          (choice (const :tag "Yes" t)
                   (const :tag "No" nil)
                   (other :tag "Ask" foo))
-     </pre>
+</pre>
      <p class="noindent">describes a variable for which <code>t</code> means yes, <code>nil</code> means no,
-and anything else means &ldquo;ask.&rdquo;  If the user chooses `<samp><span class="samp">Ask</span></samp>' from
+and anything else means &ldquo;ask.&rdquo;  If the user chooses &lsquo;<samp><span class="samp">Ask</span></samp>&rsquo; from
 the menu of alternatives, that specifies the value <code>foo</code>; but any
 other value (not <code>t</code>, <code>nil</code> or <code>foo</code>) displays as
-`<samp><span class="samp">Ask</span></samp>', just like <code>foo</code>.
+&lsquo;<samp><span class="samp">Ask</span></samp>&rsquo;, just like <code>foo</code>.
 
      <br><dt><code>(function-item </code><var>function</var><code>)</code><dd>Like <code>const</code>, but used for values which are functions.  This
 displays the documentation string as well as the function name. 
@@ -193,18 +197,18 @@ nonspecific types such as <code>integer</code> in a <code>set</code>.
 shown here:
 
      <pre class="example">          (set (const :bold) (const :italic))
-     </pre>
+</pre>
      <p>Sometimes they describe possible elements in an alist:
 
      <pre class="example">          (set (cons :tag "Height" (const height) integer)
                (cons :tag "Width" (const width) integer))
-     </pre>
+</pre>
      <p class="noindent">That lets the user specify a height value optionally
 and a width value optionally.
 
      <br><dt><code>(repeat </code><var>element-type</var><code>)</code><dd>The value must be a list and each element of the list must fit the type
 <var>element-type</var>.  This appears in the customization buffer as a
-list of elements, with `<samp><span class="samp">[INS]</span></samp>' and `<samp><span class="samp">[DEL]</span></samp>' buttons for adding
+list of elements, with &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[DEL]</span></samp>&rsquo; buttons for adding
 more elements or removing elements.
 
      <br><dt><code>(restricted-sexp :match-alternatives </code><var>criteria</var><code>)</code><dd>This is the most general composite type construct.  The value may be
@@ -226,7 +230,7 @@ in the list says that <var>object</var> itself is an acceptable value.
 
      <pre class="example">          (restricted-sexp :match-alternatives
                            (integerp 't 'nil))
-     </pre>
+</pre>
      <p class="noindent">allows integers, <code>t</code> and <code>nil</code> as legitimate values.
 
      <p>The customization buffer shows all legitimate values using their read
@@ -241,10 +245,10 @@ in a composite type:
 purposes.  This is useful for a type that appears inside of a
 <code>choice</code>.
 
-     <br><dt><code>:match-alternatives </code><var>criteria</var><dd><a name="index-match_002dalternatives_0040r_007b_002c-customization-keyword_007d-750"></a>Use <var>criteria</var> to match possible values.  This is used only in
+     <br><dt><code>:match-alternatives </code><var>criteria</var><dd><a name="index-match_002dalternatives_0040r_007b_002c-customization-keyword_007d-779"></a>Use <var>criteria</var> to match possible values.  This is used only in
 <code>restricted-sexp</code>.
 
-     <br><dt><code>:args </code><var>argument-list</var><dd><a name="index-args_0040r_007b_002c-customization-keyword_007d-751"></a>Use the elements of <var>argument-list</var> as the arguments of the type
+     <br><dt><code>:args </code><var>argument-list</var><dd><a name="index-args_0040r_007b_002c-customization-keyword_007d-780"></a>Use the elements of <var>argument-list</var> as the arguments of the type
 construct.  For instance, <code>(const :args (foo))</code> is equivalent to
 <code>(const foo)</code>.  You rarely need to write <code>:args</code> explicitly,
 because normally the arguments are recognized automatically as

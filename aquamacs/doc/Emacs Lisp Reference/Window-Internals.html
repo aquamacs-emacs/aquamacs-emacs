@@ -3,33 +3,33 @@
 <title>Window Internals - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Object-Internals.html#Object-Internals" title="Object Internals">
 <link rel="prev" href="Buffer-Internals.html#Buffer-Internals" title="Buffer Internals">
 <link rel="next" href="Process-Internals.html#Process-Internals" title="Process Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Window-Internals"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Process-Internals.html#Process-Internals">Process Internals</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Internals.html#Buffer-Internals">Buffer Internals</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals">Object Internals</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 
 <h4 class="appendixsubsec">E.6.2 Window Internals</h4>
 
-<p><a name="index-internals_002c-of-window-3657"></a><a name="index-window-internals-3658"></a>
+<p><a name="index-internals_002c-of-window-3898"></a><a name="index-window-internals-3899"></a>
   Windows have the following accessible fields:
 
      <dl>
@@ -73,39 +73,32 @@ except to shape their child windows.  Emacs Lisp programs usually have
 no access to the parent windows; they operate on the windows at the
 leaves of the tree, which actually display buffers.
 
-     <p>The following four fields also describe the window tree structure.
+     <br><dt><code>hchild</code><dt><code>vchild</code><dd>These fields contain the window's leftmost child and its topmost child
+respectively.  <code>hchild</code> is used if the window is subdivided
+horizontally by child windows, and <code>vchild</code> if it is subdivided
+vertically.
 
-     <br><dt><code>hchild</code><dd>In a window subdivided horizontally by child windows, the leftmost child. 
-Otherwise, <code>nil</code>.
+     <br><dt><code>next</code><dt><code>prev</code><dd>The next sibling and previous sibling of this window.  <code>next</code> is
+<code>nil</code> if the window is the rightmost or bottommost in its group;
+<code>prev</code> is <code>nil</code> if it is the leftmost or topmost in its
+group.
 
-     <br><dt><code>vchild</code><dd>In a window subdivided vertically by child windows, the topmost child. 
-Otherwise, <code>nil</code>.
+     <br><dt><code>left_col</code><dd>The left-hand edge of the window, measured in columns, relative to the
+leftmost column in the frame (column 0).
 
-     <br><dt><code>next</code><dd>The next sibling of this window.  It is <code>nil</code> in a window that is
-the rightmost or bottommost of a group of siblings.
+     <br><dt><code>top_line</code><dd>The top edge of the window, measured in lines, relative to the topmost
+line in the frame (line 0).
 
-     <br><dt><code>prev</code><dd>The previous sibling of this window.  It is <code>nil</code> in a window that
-is the leftmost or topmost of a group of siblings.
+     <br><dt><code>total_cols</code><dt><code>total_lines</code><dd>The width and height of the window, measured in columns and lines
+respectively.  The width includes the scroll bar and fringes, and/or
+the separator line on the right of the window (if any).
 
-     <br><dt><code>left</code><dd>This is the left-hand edge of the window, measured in columns.  (The
-leftmost column on the screen is column&nbsp;0<!-- /@w -->.)
+     <br><dt><code>buffer</code><dd>The buffer that the window is displaying.
 
-     <br><dt><code>top</code><dd>This is the top edge of the window, measured in lines.  (The top line on
-the screen is line&nbsp;0<!-- /@w -->.)
+     <br><dt><code>start</code><dd>A marker pointing to the position in the buffer that is the first
+character displayed in the window.
 
-     <br><dt><code>height</code><dd>The height of the window, measured in lines.
-
-     <br><dt><code>width</code><dd>The width of the window, measured in columns.  This width includes the
-scroll bar and fringes, and/or the separator line on the right of the
-window (if any).
-
-     <br><dt><code>buffer</code><dd>The buffer that the window is displaying.  This may change often during
-the life of the window.
-
-     <br><dt><code>start</code><dd>The position in the buffer that is the first character to be displayed
-in the window.
-
-     <br><dt><code>pointm</code><dd><a name="index-window-point-internals-3659"></a>This is the value of point in the current buffer when this window is
+     <br><dt><code>pointm</code><dd><a name="index-window-point-internals-3900"></a>This is the value of point in the current buffer when this window is
 selected; when it is not selected, it retains its previous value.
 
      <br><dt><code>force_start</code><dd>If this flag is non-<code>nil</code>, it says that the window has been
@@ -120,11 +113,6 @@ gets invisible.
 
      <br><dt><code>start_at_line_beg</code><dd>Non-<code>nil</code> means current value of <code>start</code> was the beginning of a line
 when it was chosen.
-
-     <br><dt><code>too_small_ok</code><dd>Non-<code>nil</code> means don't delete this window for becoming &ldquo;too small.&rdquo;
-
-     <br><dt><code>height_fixed_p</code><dd>This field is temporarily set to 1 to fix the height of the selected
-window when the echo area is resized.
 
      <br><dt><code>use_time</code><dd>This is the last time that the window was selected.  The function
 <code>get-lru-window</code> uses this field.
@@ -145,11 +133,9 @@ window was last updated.
 
      <br><dt><code>vertical_scroll_bar</code><dd>This window's vertical scroll bar.
 
-     <br><dt><code>left_margin_width</code><dd>The width of the left margin in this window, or <code>nil</code> not to
-specify it (in which case the buffer's value of <code>left-margin-width</code>
-is used.
-
-     <br><dt><code>right_margin_width</code><dd>Likewise for the right margin.
+     <br><dt><code>left_margin_width</code><dt><code>right_margin_width</code><dd>The widths of the left and right margins in this window.  A value of
+<code>nil</code> means to use the buffer's value of <code>left-margin-width</code>
+or <code>right-margin-width</code>.
 
      <br><dt><code>window_end_pos</code><dd>This is computed as <code>z</code> minus the buffer position of the last glyph
 in the current matrix of the window.  The value is only valid if
@@ -164,9 +150,6 @@ in the current matrix of the window.  The value is only valid if
 valid.  This is <code>nil</code> if nontrivial redisplay is preempted since in that
 case the display that <code>window_end_pos</code> was computed for did not get
 onto the screen.
-
-     <br><dt><code>redisplay_end_trigger</code><dd>If redisplay in this window goes beyond this buffer position, it runs
-the <code>redisplay-end-trigger-hook</code>.
 
      <br><dt><code>cursor</code><dd>A structure describing where the cursor is in this window.
 

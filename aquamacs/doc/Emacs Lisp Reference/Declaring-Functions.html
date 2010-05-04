@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Declaring Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Inline-Functions.html#Inline-Functions" title="Inline Functions">
+<link rel="next" href="Function-Safety.html#Function-Safety" title="Function Safety">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Declaring-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Safety.html#Function-Safety">Function Safety</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inline-Functions.html#Inline-Functions">Inline Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.11 Telling the Compiler that a Function is Defined</h3>
+
+<p><a name="index-function-declaration-725"></a><a name="index-declaring-functions-726"></a><a name="index-declare_002dfunction-727"></a>
+Byte-compiling a file often produces warnings about functions that the
+compiler doesn't know about (see <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>).  Sometimes this
+indicates a real problem, but usually the functions in question are
+defined in other files which would be loaded if that code is run.  For
+example, byte-compiling <samp><span class="file">fortran.el</span></samp> used to warn:
+
+<pre class="smallexample">     In end of data:
+     fortran.el:2152:1:Warning: the function `gud-find-c-expr' is not known
+         to be defined.
+</pre>
+   <p>In fact, <code>gud-find-c-expr</code> is only used in the function that
+Fortran mode uses for the local value of
+<code>gud-find-expr-function</code>, which is a callback from GUD; if it is
+called, the GUD functions will be loaded.  When you know that such a
+warning does not indicate a real problem, it is good to suppress the
+warning.  That makes new warnings which might mean real problems more
+visible.  You do that with <code>declare-function</code>.
+
+   <p>All you need to do is add a <code>declare-function</code> statement before the
+first use of the function in question:
+
+<pre class="smallexample">     (declare-function gud-find-c-expr "gud.el" nil)
+</pre>
+   <p>This says that <code>gud-find-c-expr</code> is defined in <samp><span class="file">gud.el</span></samp> (the
+&lsquo;<samp><span class="samp">.el</span></samp>&rsquo; can be omitted).  The compiler takes for granted that that file
+really defines the function, and does not check.
+
+   <p>The optional third argument specifies the argument list of
+<code>gud-find-c-expr</code>.  In this case, it takes no arguments
+(<code>nil</code> is different from not specifying a value).  In other
+cases, this might be something like <code>(file &amp;optional overwrite)</code>. 
+You don't have to specify the argument list, but if you do the
+byte compiler can check that the calls match the declaration.
+
+<div class="defun">
+&mdash; Macro: <b>declare-function</b><var> function file &amp;optional arglist fileonly<a name="index-declare_002dfunction-728"></a></var><br>
+<blockquote><p>Tell the byte compiler to assume that <var>function</var> is defined, with
+arguments <var>arglist</var>, and that the definition should come from the
+file <var>file</var>.  <var>fileonly</var> non-<code>nil</code> means only check that
+<var>file</var> exists, not that it actually defines <var>function</var>. 
+</p></blockquote></div>
+
+   <p>To verify that these functions really are declared where
+<code>declare-function</code> says they are, use <code>check-declare-file</code>
+to check all <code>declare-function</code> calls in one source file, or use
+<code>check-declare-directory</code> check all the files in and under a
+certain directory.
+
+   <p>These commands find the file that ought to contain a function's
+definition using <code>locate-library</code>; if that finds no file, they
+expand the definition file name relative to the directory of the file
+that contains the <code>declare-function</code> call.
+
+   <p>You can also say that a function is defined by C code by specifying a
+file name ending in &lsquo;<samp><span class="samp">.c</span></samp>&rsquo; or &lsquo;<samp><span class="samp">.m</span></samp>&rsquo;.  <code>check-declare-file</code>
+looks for these files in the C source code directory.  This is useful
+only when you call a function that is defined only on certain systems. 
+Most of the primitive functions of Emacs are always defined so they will
+never give you a warning.
+
+   <p>Sometimes a file will optionally use functions from an external package. 
+If you prefix the filename in the <code>declare-function</code> statement with
+&lsquo;<samp><span class="samp">ext:</span></samp>&rsquo;, then it will be checked if it is found, otherwise skipped
+without error.
+
+   <p>There are some function definitions that &lsquo;<samp><span class="samp">check-declare</span></samp>&rsquo; does not
+understand (e.g. <code>defstruct</code> and some other macros).  In such cases,
+you can pass a non-<code>nil</code> <var>fileonly</var> argument to
+<code>declare-function</code>, meaning to only check that the file exists, not
+that it actually defines the function.  Note that to do this without
+having to specify an argument list, you should set the <var>arglist</var>
+argument to <code>t</code> (because <code>nil</code> means an empty argument list, as
+opposed to an unspecified one).
+
+   </body></html>
+

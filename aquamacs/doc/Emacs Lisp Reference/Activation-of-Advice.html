@@ -3,33 +3,33 @@
 <title>Activation of Advice - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
 <link rel="prev" href="Computed-Advice.html#Computed-Advice" title="Computed Advice">
 <link rel="next" href="Enabling-Advice.html#Enabling-Advice" title="Enabling Advice">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Activation-of-Advice"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Enabling-Advice.html#Enabling-Advice">Enabling Advice</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Computed-Advice.html#Computed-Advice">Computed Advice</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functi
 
 <h3 class="section">17.5 Activation of Advice</h3>
 
-<p><a name="index-activating-advice-857"></a><a name="index-advice_002c-activating-858"></a>
+<p><a name="index-activating-advice-888"></a><a name="index-advice_002c-activating-889"></a>
 By default, advice does not take effect when you define it&mdash;only when
 you <dfn>activate</dfn> advice for the function that was advised.  However,
 the advice will be activated automatically if you define or redefine
@@ -86,7 +86,7 @@ advice.  If it is <code>nil</code> or a negative number, what happens
 depends on <code>ad-default-compilation-action</code> as described below.
 
 <div class="defun">
-&mdash; Command: <b>ad-activate</b><var> function &amp;optional compile<a name="index-ad_002dactivate-859"></a></var><br>
+&mdash; Command: <b>ad-activate</b><var> function &amp;optional compile<a name="index-ad_002dactivate-890"></a></var><br>
 <blockquote><p>This command activates all the advice defined for <var>function</var>. 
 </p></blockquote></div>
 
@@ -95,44 +95,44 @@ active.  But if there is new advice, added since the previous time you
 activated advice for <var>function</var>, it activates the new advice.
 
 <div class="defun">
-&mdash; Command: <b>ad-deactivate</b><var> function<a name="index-ad_002ddeactivate-860"></a></var><br>
+&mdash; Command: <b>ad-deactivate</b><var> function<a name="index-ad_002ddeactivate-891"></a></var><br>
 <blockquote><p>This command deactivates the advice for <var>function</var>. 
-<a name="index-deactivating-advice-861"></a><!-- @cindex advice, deactivating   "advice, activating" is just above -->
+<a name="index-deactivating-advice-892"></a><!-- @cindex advice, deactivating   "advice, activating" is just above -->
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-update</b><var> function &amp;optional compile<a name="index-ad_002dupdate-862"></a></var><br>
+&mdash; Command: <b>ad-update</b><var> function &amp;optional compile<a name="index-ad_002dupdate-893"></a></var><br>
 <blockquote><p>This command activates the advice for <var>function</var>
 if its advice is already activated.  This is useful
 if you change the advice. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-activate-all</b><var> &amp;optional compile<a name="index-ad_002dactivate_002dall-863"></a></var><br>
+&mdash; Command: <b>ad-activate-all</b><var> &amp;optional compile<a name="index-ad_002dactivate_002dall-894"></a></var><br>
 <blockquote><p>This command activates the advice for all functions. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-deactivate-all</b><var><a name="index-ad_002ddeactivate_002dall-864"></a></var><br>
+&mdash; Command: <b>ad-deactivate-all</b><var><a name="index-ad_002ddeactivate_002dall-895"></a></var><br>
 <blockquote><p>This command deactivates the advice for all functions. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-update-all</b><var> &amp;optional compile<a name="index-ad_002dupdate_002dall-865"></a></var><br>
+&mdash; Command: <b>ad-update-all</b><var> &amp;optional compile<a name="index-ad_002dupdate_002dall-896"></a></var><br>
 <blockquote><p>This command activates the advice for all functions
 whose advice is already activated.  This is useful
 if you change the advice of some functions. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-activate-regexp</b><var> regexp &amp;optional compile<a name="index-ad_002dactivate_002dregexp-866"></a></var><br>
+&mdash; Command: <b>ad-activate-regexp</b><var> regexp &amp;optional compile<a name="index-ad_002dactivate_002dregexp-897"></a></var><br>
 <blockquote><p>This command activates all pieces of advice whose names match
 <var>regexp</var>.  More precisely, it activates all advice for any function
 which has at least one piece of advice that matches <var>regexp</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-deactivate-regexp</b><var> regexp<a name="index-ad_002ddeactivate_002dregexp-867"></a></var><br>
+&mdash; Command: <b>ad-deactivate-regexp</b><var> regexp<a name="index-ad_002ddeactivate_002dregexp-898"></a></var><br>
 <blockquote><p>This command deactivates all pieces of advice whose names match
 <var>regexp</var>.  More precisely, it deactivates all advice for any
 function which has at least one piece of advice that matches
@@ -140,10 +140,10 @@ function which has at least one piece of advice that matches
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-update-regexp</b><var> regexp &amp;optional compile<a name="index-ad_002dupdate_002dregexp-868"></a></var><br>
+&mdash; Command: <b>ad-update-regexp</b><var> regexp &amp;optional compile<a name="index-ad_002dupdate_002dregexp-899"></a></var><br>
 <blockquote><p>This command activates pieces of advice whose names match <var>regexp</var>,
 but only those for functions whose advice is already activated. 
-<a name="index-reactivating-advice-869"></a>
+<a name="index-reactivating-advice-900"></a>
 Reactivating a function's advice is useful for putting into effect all
 the changes that have been made in its advice (including enabling and
 disabling specific pieces of advice; see <a href="Enabling-Advice.html#Enabling-Advice">Enabling Advice</a>) since the
@@ -151,26 +151,26 @@ last time it was activated.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-start-advice</b><var><a name="index-ad_002dstart_002dadvice-870"></a></var><br>
+&mdash; Command: <b>ad-start-advice</b><var><a name="index-ad_002dstart_002dadvice-901"></a></var><br>
 <blockquote><p>Turn on automatic advice activation when a function is defined or
 redefined.  This is the default mode. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-stop-advice</b><var><a name="index-ad_002dstop_002dadvice-871"></a></var><br>
+&mdash; Command: <b>ad-stop-advice</b><var><a name="index-ad_002dstop_002dadvice-902"></a></var><br>
 <blockquote><p>Turn off automatic advice activation when a function is defined or
 redefined. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>ad-default-compilation-action</b><var><a name="index-ad_002ddefault_002dcompilation_002daction-872"></a></var><br>
+&mdash; User Option: <b>ad-default-compilation-action</b><var><a name="index-ad_002ddefault_002dcompilation_002daction-903"></a></var><br>
 <blockquote><p>This variable controls whether to compile the combined definition
 that results from activating advice for a function.
 
         <p>A value of <code>always</code> specifies to compile unconditionally. 
 A value of <code>never</code> specifies never compile the advice.
 
-        <p>A value of <code>maybe</code> specifies to compile if the byte-compiler is
+        <p>A value of <code>maybe</code> specifies to compile if the byte compiler is
 already loaded.  A value of <code>like-original</code> specifies to compile
 the advice if the original definition of the advised function is
 compiled or a built-in function.

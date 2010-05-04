@@ -3,7 +3,7 @@
 <title>Version Control Systems - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Introduction-to-VC.html#Introduction-to-VC" title="Introduction to VC">
 <link rel="prev" href="Why-Version-Control_003f.html#Why-Version-Control_003f" title="Why Version Control?">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Version-Control-Systems"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="VCS-Concepts.html#VCS-Concepts">VCS Concepts</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Why-Version-Control_003f.html#Why-Version-Control_003f">Why Version Control?</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Introduction-to-VC.html#Introduction-to-VC">Introduction to VC</a>
@@ -57,27 +57,27 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Introduction-to-VC.html#Introduction-to
 
 <h5 class="subsubsection">32.1.1.2 Supported Version Control Systems</h5>
 
-<p><a name="index-back-end-_0028version-control_0029-2394"></a>  VC currently works with many different version control systems or
+<p><a name="index-back-end-_0028version-control_0029-2416"></a>  VC currently works with many different version control systems or
 <dfn>back ends</dfn>:
 
      
-<a name="index-SCCS-2395"></a>
+<a name="index-SCCS-2417"></a>
 <ul><li>SCCS was the first version control system ever built, and was long ago
 superseded by more advanced ones.  VC compensates for certain features
 missing in SCCS (e.g., tag names for releases) by implementing them
 itself.  Other VC features, such as multiple branches, are simply
 unavailable.  Since SCCS is non-free, we recommend avoiding it.
 
-     <p><a name="index-CSSC-2396"></a><li>CSSC is a free replacement for SCCS.  You should use CSSC only if, for
+     <p><a name="index-CSSC-2418"></a><li>CSSC is a free replacement for SCCS.  You should use CSSC only if, for
 some reason, you cannot use a more recent and better-designed version
 control system.
 
-     <p><a name="index-RCS-2397"></a><li>RCS is the free version control system around which VC was initially
+     <p><a name="index-RCS-2419"></a><li>RCS is the free version control system around which VC was initially
 built.  Almost everything you can do with RCS can be done through VC. 
 However, you cannot use RCS over the network, and it only works at the
 level of individual files rather than projects.
 
-     <p><a name="index-CVS-2398"></a><li>CVS is the free version control system that was, until recently (circa
+     <p><a name="index-CVS-2420"></a><li>CVS is the free version control system that was, until recently (circa
 2008), used by the majority of free software projects.  Nowadays, it
 is slowly being superseded by newer systems.  CVS allows concurrent
 multi-user development either locally or over the network.  It lacks
@@ -87,12 +87,12 @@ still need to call CVS from the command line.  Note also that before
 using CVS you must set up a repository, which is a subject too complex
 to treat here.
 
-     <p><a name="index-SVN-2399"></a><a name="index-Subversion-2400"></a><li>Subversion (SVN) is a free version control system designed to be
+     <p><a name="index-SVN-2421"></a><a name="index-Subversion-2422"></a><li>Subversion (SVN) is a free version control system designed to be
 similar to CVS but without its problems.  It supports atomic commits
 of filesets, and versioning of directories, symbolic links, meta-data,
 renames, copies, and deletes.
 
-     <p><a name="index-GNU-Arch-2401"></a><a name="index-Arch-2402"></a><li>GNU Arch is a version control system designed for distributed work. 
+     <p><a name="index-GNU-Arch-2423"></a><a name="index-Arch-2424"></a><li>GNU Arch is a version control system designed for distributed work. 
 It differs in many ways from older systems like CVS and RCS.  It
 provides different methods for interoperating between users, support
 for offline operations, and good branching and merging features.  It
@@ -100,7 +100,7 @@ also supports atomic commits of filesets and file moving/renaming.  VC
 does not support all operations provided by GNU Arch, so you must
 sometimes invoke it from the command line.
 
-     <p><a name="index-git-2403"></a><li>Git is a distributed version control system invented by Linus Torvalds to support
+     <p><a name="index-git-2425"></a><li>Git is a distributed version control system invented by Linus Torvalds to support
 development of Linux (his kernel).  It supports atomic commits of filesets and
 file moving/renaming.  One significant feature of git is that it
 largely abolishes the notion of a single centralized repository;
@@ -109,13 +109,13 @@ coordination is done through repository-sync operations.  VC supports
 most git operations, with the exception of news merges and repository
 syncing; these must be done from the command line.
 
-     <p><a name="index-hg-2404"></a><a name="index-Mercurial-2405"></a><li>Mercurial (hg) is a distributed version control system broadly
+     <p><a name="index-hg-2426"></a><a name="index-Mercurial-2427"></a><li>Mercurial (hg) is a distributed version control system broadly
 resembling GNU Arch and git, with atomic fileset commits and file
 moving/renaming.  Like git, it is fully decentralized.  VC supports
 most Mercurial commands, with the exception of repository sync
 operations; this needs to be done from the command line.
 
-     <p><a name="index-bzr-2406"></a><a name="index-Bazaar-2407"></a><li>Bazaar (bzr) is a distributed version control system that supports both
+     <p><a name="index-bzr-2428"></a><a name="index-Bazaar-2429"></a><li>Bazaar (bzr) is a distributed version control system that supports both
 repository-based and distributed versioning, with atomic fileset
 commits and file moving/renaming.  VC supports most basic editing
 operations under Bazaar. 

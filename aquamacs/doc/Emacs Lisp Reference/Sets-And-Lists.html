@@ -3,33 +3,33 @@
 <title>Sets And Lists - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Lists.html#Lists" title="Lists">
 <link rel="prev" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
 <link rel="next" href="Association-Lists.html#Association-Lists" title="Association Lists">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Sets-And-Lists"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Association-Lists.html#Association-Lists">Association Lists</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
 
 <h3 class="section">5.7 Using Lists as Sets</h3>
 
-<p><a name="index-lists-as-sets-340"></a><a name="index-sets-341"></a>
+<p><a name="index-lists-as-sets-344"></a><a name="index-sets-345"></a>
   A list can represent an unordered mathematical set&mdash;simply consider a
 value an element of a set if it appears in the list, and ignore the
 order of the list.  To form the union of two sets, use <code>append</code> (as
@@ -65,7 +65,7 @@ long as you don't mind having duplicate elements).  You can remove
 functions for sets include <code>memq</code> and <code>delq</code>, and their
 <code>equal</code> versions, <code>member</code> and <code>delete</code>.
 
-   <p><a name="index-CL-note_002d_002d_002dlack-_0040code_007bunion_007d_002c-_0040code_007bintersection_007d-342"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002dlack-_0040code_007bunion_007d_002c-_0040code_007bintersection_007d-346"></a><blockquote>
 <b>Common Lisp note:</b> Common Lisp has functions <code>union</code> (which
 avoids duplicate elements) and <code>intersection</code> for set operations,
 but GNU Emacs Lisp does not have them.  You can write them in Lisp if
@@ -73,24 +73,24 @@ you wish.
 </blockquote>
 
 <div class="defun">
-&mdash; Function: <b>memq</b><var> object list<a name="index-memq-343"></a></var><br>
-<blockquote><p><a name="index-membership-in-a-list-344"></a>This function tests to see whether <var>object</var> is a member of
+&mdash; Function: <b>memq</b><var> object list<a name="index-memq-347"></a></var><br>
+<blockquote><p><a name="index-membership-in-a-list-348"></a>This function tests to see whether <var>object</var> is a member of
 <var>list</var>.  If it is, <code>memq</code> returns a list starting with the
 first occurrence of <var>object</var>.  Otherwise, it returns <code>nil</code>. 
-The letter `<samp><span class="samp">q</span></samp>' in <code>memq</code> says that it uses <code>eq</code> to
+The letter &lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>memq</code> says that it uses <code>eq</code> to
 compare <var>object</var> against the elements of the list.  For example:
 
      <pre class="example">          (memq 'b '(a b c b a))
-               =&gt; (b c b a)
+               &rArr; (b c b a)
           (memq '(2) '((1) (2)))    ; <code>(2)</code><span class="roman"> and </span><code>(2)</code><span class="roman"> are not </span><code>eq</code><span class="roman">.</span>
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delq</b><var> object list<a name="index-delq-345"></a></var><br>
-<blockquote><p><a name="index-deleting-list-elements-346"></a>This function destructively removes all elements <code>eq</code> to
-<var>object</var> from <var>list</var>.  The letter `<samp><span class="samp">q</span></samp>' in <code>delq</code> says
+&mdash; Function: <b>delq</b><var> object list<a name="index-delq-349"></a></var><br>
+<blockquote><p><a name="index-deleting-list-elements-350"></a>This function destructively removes all elements <code>eq</code> to
+<var>object</var> from <var>list</var>.  The letter &lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>delq</code> says
 that it uses <code>eq</code> to compare <var>object</var> against the elements of
 the list, like <code>memq</code> and <code>remq</code>. 
 </p></blockquote></div>
@@ -105,15 +105,15 @@ after those elements:
 removing it involves changing the <span class="sc">cdr</span>s (see <a href="Setcdr.html#Setcdr">Setcdr</a>).
 
 <pre class="example">     (setq sample-list '(a b c (4)))
-          =&gt; (a b c (4))
+          &rArr; (a b c (4))
      (delq 'a sample-list)
-          =&gt; (b c (4))
+          &rArr; (b c (4))
      sample-list
-          =&gt; (a b c (4))
+          &rArr; (a b c (4))
      (delq 'c sample-list)
-          =&gt; (a b (4))
+          &rArr; (a b (4))
      sample-list
-          =&gt; (a b (4))
+          &rArr; (a b (4))
 </pre>
    <p>Note that <code>(delq 'c sample-list)</code> modifies <code>sample-list</code> to
 splice out the third element, but <code>(delq 'a sample-list)</code> does not
@@ -129,29 +129,29 @@ into the variable that held the original list:
 and the <code>(4)</code> in the <code>sample-list</code> are not <code>eq</code>:
 
 <pre class="example">     (delq '(4) sample-list)
-          =&gt; (a c (4))
+          &rArr; (a c (4))
      
      If you want to delete elements that are <code>equal</code> to a given value,
      use <code>delete</code> (see below).
 </pre>
    <div class="defun">
-&mdash; Function: <b>remq</b><var> object list<a name="index-remq-347"></a></var><br>
+&mdash; Function: <b>remq</b><var> object list<a name="index-remq-351"></a></var><br>
 <blockquote><p>This function returns a copy of <var>list</var>, with all elements removed
-which are <code>eq</code> to <var>object</var>.  The letter `<samp><span class="samp">q</span></samp>' in <code>remq</code>
+which are <code>eq</code> to <var>object</var>.  The letter &lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>remq</code>
 says that it uses <code>eq</code> to compare <var>object</var> against the elements
 of <code>list</code>.
 
      <pre class="example">          (setq sample-list '(a b c a b c))
-               =&gt; (a b c a b c)
+               &rArr; (a b c a b c)
           (remq 'a sample-list)
-               =&gt; (b c b c)
+               &rArr; (b c b c)
           sample-list
-               =&gt; (a b c a b c)
-     </pre>
+               &rArr; (a b c a b c)
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>memql</b><var> object list<a name="index-memql-348"></a></var><br>
+&mdash; Function: <b>memql</b><var> object list<a name="index-memql-352"></a></var><br>
 <blockquote><p>The function <code>memql</code> tests to see whether <var>object</var> is a member
 of <var>list</var>, comparing members with <var>object</var> using <code>eql</code>,
 so floating point elements are compared by value. 
@@ -161,10 +161,10 @@ its first occurrence in <var>list</var>.  Otherwise, it returns <code>nil</code>
         <p>Compare this with <code>memq</code>:
 
      <pre class="example">          (memql 1.2 '(1.1 1.2 1.3))  ; <code>1.2</code><span class="roman"> and </span><code>1.2</code><span class="roman"> are </span><code>eql</code><span class="roman">.</span>
-               =&gt; (1.2 1.3)
+               &rArr; (1.2 1.3)
           (memq 1.2 '(1.1 1.2 1.3))  ; <code>1.2</code><span class="roman"> and </span><code>1.2</code><span class="roman"> are not </span><code>eq</code><span class="roman">.</span>
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
    <p>The following three functions are like <code>memq</code>, <code>delq</code> and
@@ -172,7 +172,7 @@ its first occurrence in <var>list</var>.  Otherwise, it returns <code>nil</code>
 elements.  See <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>.
 
 <div class="defun">
-&mdash; Function: <b>member</b><var> object list<a name="index-member-349"></a></var><br>
+&mdash; Function: <b>member</b><var> object list<a name="index-member-353"></a></var><br>
 <blockquote><p>The function <code>member</code> tests to see whether <var>object</var> is a member
 of <var>list</var>, comparing members with <var>object</var> using <code>equal</code>. 
 If <var>object</var> is a member, <code>member</code> returns a list starting with
@@ -181,17 +181,17 @@ its first occurrence in <var>list</var>.  Otherwise, it returns <code>nil</code>
         <p>Compare this with <code>memq</code>:
 
      <pre class="example">          (member '(2) '((1) (2)))  ; <code>(2)</code><span class="roman"> and </span><code>(2)</code><span class="roman"> are </span><code>equal</code><span class="roman">.</span>
-               =&gt; ((2))
+               &rArr; ((2))
           (memq '(2) '((1) (2)))    ; <code>(2)</code><span class="roman"> and </span><code>(2)</code><span class="roman"> are not </span><code>eq</code><span class="roman">.</span>
-               =&gt; nil
+               &rArr; nil
           ;; <span class="roman">Two strings with the same contents are </span><code>equal</code><span class="roman">.</span>
           (member "foo" '("foo" "bar"))
-               =&gt; ("foo" "bar")
-     </pre>
+               &rArr; ("foo" "bar")
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete</b><var> object sequence<a name="index-delete-350"></a></var><br>
+&mdash; Function: <b>delete</b><var> object sequence<a name="index-delete-354"></a></var><br>
 <blockquote><p>If <code>sequence</code> is a list, this function destructively removes all
 elements <code>equal</code> to <var>object</var> from <var>sequence</var>.  For lists,
 <code>delete</code> is to <code>delq</code> as <code>member</code> is to <code>memq</code>: it
@@ -207,34 +207,34 @@ removed.
 
      <pre class="example">          (setq l '((2) (1) (2)))
           (delete '(2) l)
-               =&gt; ((1))
+               &rArr; ((1))
           l
-               =&gt; ((2) (1))
+               &rArr; ((2) (1))
           ;; <span class="roman">If you want to change </span><code>l</code><span class="roman"> reliably,</span>
           ;; <span class="roman">write </span><code>(setq l (delete elt l))</code><span class="roman">.</span>
           (setq l '((2) (1) (2)))
           (delete '(1) l)
-               =&gt; ((2) (2))
+               &rArr; ((2) (2))
           l
-               =&gt; ((2) (2))
+               &rArr; ((2) (2))
           ;; <span class="roman">In this case, it makes no difference whether you set </span><code>l</code><span class="roman">,</span>
           ;; <span class="roman">but you should do so for the sake of the other case.</span>
           (delete '(2) [(2) (1) (2)])
-               =&gt; [(1)]
-     </pre>
+               &rArr; [(1)]
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove</b><var> object sequence<a name="index-remove-351"></a></var><br>
+&mdash; Function: <b>remove</b><var> object sequence<a name="index-remove-355"></a></var><br>
 <blockquote><p>This function is the non-destructive counterpart of <code>delete</code>.  It
 returns a copy of <code>sequence</code>, a list, vector, or string, with
 elements <code>equal</code> to <code>object</code> removed.  For example:
 
      <pre class="example">          (remove '(2) '((2) (1) (2)))
-               =&gt; ((1))
+               &rArr; ((1))
           (remove '(2) [(2) (1) (2)])
-               =&gt; [(1)]
-     </pre>
+               &rArr; [(1)]
+</pre>
         </blockquote></div>
 
    <blockquote>
@@ -245,7 +245,7 @@ elements.
 </blockquote>
 
 <div class="defun">
-&mdash; Function: <b>member-ignore-case</b><var> object list<a name="index-member_002dignore_002dcase-352"></a></var><br>
+&mdash; Function: <b>member-ignore-case</b><var> object list<a name="index-member_002dignore_002dcase-356"></a></var><br>
 <blockquote><p>This function is like <code>member</code>, except that <var>object</var> should
 be a string and that it ignores differences in letter-case and text
 representation: upper-case and lower-case letters are treated as
@@ -254,7 +254,7 @@ comparison.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-dups</b><var> list<a name="index-delete_002ddups-353"></a></var><br>
+&mdash; Function: <b>delete-dups</b><var> list<a name="index-delete_002ddups-357"></a></var><br>
 <blockquote><p>This function destructively removes all <code>equal</code> duplicates from
 <var>list</var>, stores the result in <var>list</var> and returns it.  Of
 several <code>equal</code> occurrences of an element in <var>list</var>,

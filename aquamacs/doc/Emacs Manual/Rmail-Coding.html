@@ -3,7 +3,7 @@
 <title>Rmail Coding - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Rmail.html#Rmail" title="Rmail">
 <link rel="prev" href="Rmail-Display.html#Rmail-Display" title="Rmail Display">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Rmail-Coding"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Editing.html#Rmail-Editing">Rmail Editing</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Display.html#Rmail-Display">Rmail Display</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
@@ -57,26 +57,26 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 
 <h3 class="section">36.14 Rmail and Coding Systems</h3>
 
-<p><a name="index-decoding-mail-messages-_0028Rmail_0029-2893"></a>  Rmail automatically decodes messages which contain non-<acronym>ASCII</acronym>
+<p><a name="index-decoding-mail-messages-_0028Rmail_0029-2915"></a>  Rmail automatically decodes messages which contain non-<acronym>ASCII</acronym>
 characters, just as Emacs does with files you visit and with subprocess
-output.  Rmail uses the standard `<samp><span class="samp">charset=</span><var>charset</var></samp>' header in
+output.  Rmail uses the standard &lsquo;<samp><span class="samp">charset=</span><var>charset</var></samp>&rsquo; header in
 the message, if any, to determine how the message was encoded by the
 sender.  It maps <var>charset</var> into the corresponding Emacs coding
 system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), and uses that coding system to decode
-message text.  If the message header doesn't have the `<samp><span class="samp">charset</span></samp>'
+message text.  If the message header doesn't have the &lsquo;<samp><span class="samp">charset</span></samp>&rsquo;
 specification, or if <var>charset</var> is not recognized,
 Rmail chooses the coding system with the usual Emacs heuristics and
 defaults (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).
 
-   <p><a name="index-fixing-incorrectly-decoded-mail-messages-2894"></a>  Occasionally, a message is decoded incorrectly, either because Emacs
-guessed the wrong coding system in the absence of the `<samp><span class="samp">charset</span></samp>'
+   <p><a name="index-fixing-incorrectly-decoded-mail-messages-2916"></a>  Occasionally, a message is decoded incorrectly, either because Emacs
+guessed the wrong coding system in the absence of the &lsquo;<samp><span class="samp">charset</span></samp>&rsquo;
 specification, or because the specification was inaccurate.  For
 example, a misconfigured mailer could send a message with a
-`<samp><span class="samp">charset=iso-8859-1</span></samp>' header when the message is actually encoded
+&lsquo;<samp><span class="samp">charset=iso-8859-1</span></samp>&rsquo; header when the message is actually encoded
 in <code>koi8-r</code>.  When you see the message text garbled, or some of
 its characters displayed as empty boxes, this may have happened.
 
-   <p><a name="index-rmail_002dredecode_002dbody-2895"></a>  You can correct the problem by decoding the message again using the
+   <p><a name="index-rmail_002dredecode_002dbody-2917"></a>  You can correct the problem by decoding the message again using the
 right coding system, if you can figure out or guess which one is
 right.  To do this, invoke the <kbd>M-x rmail-redecode-body</kbd> command. 
 It reads the name of a coding system, and then redecodes the message

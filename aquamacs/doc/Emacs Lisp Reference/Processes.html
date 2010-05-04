@@ -3,32 +3,32 @@
 <title>Processes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Abbrevs.html#Abbrevs" title="Abbrevs">
 <link rel="next" href="Display.html#Display" title="Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Processes"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Display.html#Display">Display</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrevs.html#Abbrevs">Abbrevs</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">37 Processes</h2>
 
-<p><a name="index-child-process-2995"></a><a name="index-parent-process-2996"></a><a name="index-subprocess-2997"></a><a name="index-process-2998"></a>
+<p><a name="index-child-process-3169"></a><a name="index-parent-process-3170"></a><a name="index-subprocess-3171"></a><a name="index-process-3172"></a>
   In the terminology of operating systems, a <dfn>process</dfn> is a space in
 which a program can execute.  Emacs runs in a process.  Emacs Lisp
 programs can invoke other programs in processes of their own.  These are
@@ -74,10 +74,13 @@ signals, obtain status information, receive output from the process, or
 send input to it.
 
 <div class="defun">
-&mdash; Function: <b>processp</b><var> object<a name="index-processp-2999"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>object</var> is a process,
-<code>nil</code> otherwise. 
+&mdash; Function: <b>processp</b><var> object<a name="index-processp-3173"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> represents an Emacs
+subprocess, <code>nil</code> otherwise. 
 </p></blockquote></div>
+
+   <p>In addition to subprocesses of the current Emacs session, you can
+also access other processes running on your machine.  See <a href="System-Processes.html#System-Processes">System Processes</a>.
 
 <ul class="menu">
 <li><a accesskey="1" href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>:       Functions that start subprocesses. 
@@ -92,6 +95,7 @@ send input to it.
 <li><a accesskey="9" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>:     Collecting output from an asynchronous subprocess. 
 <li><a href="Sentinels.html#Sentinels">Sentinels</a>:                 Sentinels run when process run-status changes. 
 <li><a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>:         Whether to query if exiting will kill a process. 
+<li><a href="System-Processes.html#System-Processes">System Processes</a>:          Accessing other processes running on your system. 
 <li><a href="Transaction-Queues.html#Transaction-Queues">Transaction Queues</a>: 	     Transaction-based communication with subprocesses. 
 <li><a href="Network.html#Network">Network</a>:                   Opening network connections. 
 <li><a href="Network-Servers.html#Network-Servers">Network Servers</a>:           Network servers let Emacs accept net connections. 
@@ -99,6 +103,7 @@ send input to it.
 <li><a href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>:         Lower-level but more general function
                                to create connections and servers. 
 <li><a href="Misc-Network.html#Misc-Network">Misc Network</a>:              Additional relevant functions for network connections. 
+<li><a href="Serial-Ports.html#Serial-Ports">Serial Ports</a>:              Communicating with serial ports. 
 <li><a href="Byte-Packing.html#Byte-Packing">Byte Packing</a>:              Using bindat to pack and unpack binary data. 
 </ul>
 

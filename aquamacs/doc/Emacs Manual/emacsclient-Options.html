@@ -3,7 +3,7 @@
 <title>emacsclient Options - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Emacs-Server.html#Emacs-Server" title="Emacs Server">
 <link rel="prev" href="Invoking-emacsclient.html#Invoking-emacsclient" title="Invoking emacsclient">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="emacsclient-Options"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Invoking-emacsclient.html#Invoking-emacsclient">Invoking emacsclient</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs-Server">Emacs Server</a>
 <hr>
@@ -55,13 +55,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs-Server">Emacs S
 
 <h3 class="section">42.2 <code>emacsclient</code> Options</h3>
 
-<p><a name="index-g_t_0040code_007bemacsclient_007d-options-3685"></a>
+<p><a name="index-g_t_0040code_007bemacsclient_007d-options-3708"></a>
   You can pass some optional arguments to the <samp><span class="command">emacsclient</span></samp>
 program, such as:
 
 <pre class="example">     emacsclient -c +12 <var>file1</var> +4:3 <var>file2</var>
 </pre>
-   <p class="noindent">The `<samp><span class="samp">+</span><var>line</var></samp>' or `<samp><span class="samp">+</span><var>line</var><span class="samp">:</span><var>column</var></samp>' arguments
+   <p class="noindent">The &lsquo;<samp><span class="samp">+</span><var>line</var></samp>&rsquo; or &lsquo;<samp><span class="samp">+</span><var>line</var><span class="samp">:</span><var>column</var></samp>&rsquo; arguments
 specify line numbers, or line and column numbers, for the next file
 argument.  These behave like the command line arguments for Emacs
 itself.  See <a href="Action-Arguments.html#Action-Arguments">Action Arguments</a>.
@@ -70,39 +70,39 @@ itself.  See <a href="Action-Arguments.html#Action-Arguments">Action Arguments</
 listed below:
 
      <dl>
-<dt>`<samp><span class="samp">-a </span><var>command</var></samp>'<dt>`<samp><span class="samp">--alternate-editor=</span><var>command</var></samp>'<dd>Specify a command to run if <code>emacsclient</code> fails to contact Emacs. 
+<dt>&lsquo;<samp><span class="samp">-a </span><var>command</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--alternate-editor=</span><var>command</var></samp>&rsquo;<dd>Specify a command to run if <code>emacsclient</code> fails to contact Emacs. 
 This is useful when running <code>emacsclient</code> in a script.  For
 example, the following setting for the <samp><span class="env">EDITOR</span></samp> environment
 variable will always give you an editor, even if no Emacs server is
 running:
 
      <pre class="example">          EDITOR="emacsclient --alternate-editor emacs +%d %s"
-     </pre>
+</pre>
      <p class="noindent">As a special exception, if <var>command</var> is the empty string, then
 <code>emacsclient</code> starts Emacs in daemon mode and then tries
 connecting again.
 
-     <p><a name="index-g_t_0040env_007bALTERNATE_005fEDITOR_007d-environment-variable-3686"></a>The environment variable <samp><span class="env">ALTERNATE_EDITOR</span></samp> has the same effect as
-the `<samp><span class="samp">-a</span></samp>' option.  If both are present, the latter takes
+     <p><a name="index-g_t_0040env_007bALTERNATE_005fEDITOR_007d-environment-variable-3709"></a>The environment variable <samp><span class="env">ALTERNATE_EDITOR</span></samp> has the same effect as
+the &lsquo;<samp><span class="samp">-a</span></samp>&rsquo; option.  If both are present, the latter takes
 precedence.
 
-     <br><dt>`<samp><span class="samp">-c</span></samp>'<dd>Create a new graphical frame, instead of using an existing Emacs
+     <br><dt>&lsquo;<samp><span class="samp">-c</span></samp>&rsquo;<dd>Create a new graphical frame, instead of using an existing Emacs
 frame.  Emacs 23 can create a graphical frame even if it was started
 in a text-only terminal, provided it is able to connect to a graphical
 display.  If no graphical display is available, Emacs creates a new
 text-only terminal frame (see <a href="Frames.html#Frames">Frames</a>).  If you omit a filename
-argument while supplying the `<samp><span class="samp">-c</span></samp>' option, the new frame displays
-the `<samp><span class="samp">*scratch*</span></samp>' buffer (see <a href="Buffers.html#Buffers">Buffers</a>).
+argument while supplying the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; option, the new frame displays
+the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer (see <a href="Buffers.html#Buffers">Buffers</a>).
 
-     <br><dt>`<samp><span class="samp">-d </span><var>display</var></samp>'<dt>`<samp><span class="samp">--display=</span><var>display</var></samp>'<dd>Tell Emacs to open the given files on the X display <var>display</var>
+     <br><dt>&lsquo;<samp><span class="samp">-d </span><var>display</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--display=</span><var>display</var></samp>&rsquo;<dd>Tell Emacs to open the given files on the X display <var>display</var>
 (assuming there is more than one X display available).
 
-     <br><dt>`<samp><span class="samp">-e</span></samp>'<dt>`<samp><span class="samp">--eval</span></samp>'<dd>Tell Emacs to evaluate some Emacs Lisp code, instead of visiting some
+     <br><dt>&lsquo;<samp><span class="samp">-e</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--eval</span></samp>&rsquo;<dd>Tell Emacs to evaluate some Emacs Lisp code, instead of visiting some
 files.  When this option is given, the arguments to
 <samp><span class="command">emacsclient</span></samp> are interpreted as a list of expressions to
 evaluate, <em>not</em> as a list of files to visit.
 
-     <br><dt>`<samp><span class="samp">-f </span><var>server-file</var></samp>'<dt>`<samp><span class="samp">--server-file=</span><var>server-file</var></samp>'<dd><a name="index-g_t_0040env_007bEMACS_005fSERVER_005fFILE_007d-environment-variable-3687"></a><a name="index-server-file-3688"></a><a name="index-server_002duse_002dtcp-3689"></a><a name="index-server_002dhost-3690"></a>Specify a <dfn>server file</dfn> for connecting to an Emacs server via TCP.
+     <br><dt>&lsquo;<samp><span class="samp">-f </span><var>server-file</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--server-file=</span><var>server-file</var></samp>&rsquo;<dd><a name="index-g_t_0040env_007bEMACS_005fSERVER_005fFILE_007d-environment-variable-3710"></a><a name="index-server-file-3711"></a><a name="index-server_002duse_002dtcp-3712"></a><a name="index-server_002dhost-3713"></a>Specify a <dfn>server file</dfn> for connecting to an Emacs server via TCP.
 
      <p>An Emacs server usually uses an operating system feature called a
 &ldquo;local socket&rdquo; to listen for connections.  Some operating systems,
@@ -114,8 +114,8 @@ the server file is in <samp><span class="file">~/.emacs.d/server/</span></samp>.
 Windows, if <samp><span class="command">emacsclient</span></samp> does not find the server file there,
 it looks in the <samp><span class="file">.emacs.d/server/</span></samp> subdirectory of the directory
 pointed to by the <samp><span class="env">APPDATA</span></samp> environment variable.  You can tell
-<samp><span class="command">emacsclient</span></samp> to use a specific server file with the `<samp><span class="samp">-f</span></samp>'
-or `<samp><span class="samp">--server-file</span></samp>' option, or by setting the
+<samp><span class="command">emacsclient</span></samp> to use a specific server file with the &lsquo;<samp><span class="samp">-f</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">--server-file</span></samp>&rsquo; option, or by setting the
 <samp><span class="env">EMACS_SERVER_FILE</span></samp> environment variable.
 
      <p>Even if local sockets are available, you can tell Emacs to use TCP by
@@ -127,29 +127,29 @@ runs, and (ii) provide <samp><span class="command">emacsclient</span></samp> wit
 (One convenient way to do the latter is to put the server file on a
 networked file system such as NFS.)
 
-     <br><dt>`<samp><span class="samp">-n</span></samp>'<dt>`<samp><span class="samp">--no-wait</span></samp>'<dd>Let <samp><span class="command">emacsclient</span></samp> exit immediately, instead of waiting until
+     <br><dt>&lsquo;<samp><span class="samp">-n</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--no-wait</span></samp>&rsquo;<dd>Let <samp><span class="command">emacsclient</span></samp> exit immediately, instead of waiting until
 all server buffers are finished.  You can take as long as you like to
 edit the server buffers within Emacs, and they are <em>not</em> killed
 when you type <kbd>C-x #</kbd> in them.
 
-     <br><dt>`<samp><span class="samp">-s </span><var>server-name</var></samp>'<dt>`<samp><span class="samp">--socket-name=</span><var>server-name</var></samp>'<dd>Connect to the Emacs server named <var>server-name</var>.  The server name
+     <br><dt>&lsquo;<samp><span class="samp">-s </span><var>server-name</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--socket-name=</span><var>server-name</var></samp>&rsquo;<dd>Connect to the Emacs server named <var>server-name</var>.  The server name
 is given by the variable <code>server-name</code> on the Emacs server.  If
 this option is omitted, <samp><span class="command">emacsclient</span></samp> connects to the first
 server it finds.  (This option is not supported on MS-Windows.)
 
-     <br><dt>`<samp><span class="samp">-t</span></samp>'<dt>`<samp><span class="samp">--tty</span></samp>'<dt>`<samp><span class="samp">-nw</span></samp>'<dd>Create a new Emacs frame on the current text-only terminal, instead of
+     <br><dt>&lsquo;<samp><span class="samp">-t</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--tty</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">-nw</span></samp>&rsquo;<dd>Create a new Emacs frame on the current text-only terminal, instead of
 using an existing Emacs frame.  Emacs 23 can open a text-only terminal
 even if it was started in another text-only terminal, or on a
 graphical display.  If you omit a filename argument while supplying
-this option, the new frame displays the `<samp><span class="samp">*scratch*</span></samp>' buffer. 
+this option, the new frame displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer. 
 See <a href="Buffers.html#Buffers">Buffers</a>. 
 </dl>
 
    <p>If you type <kbd>C-x C-c</kbd> (<code>save-buffers-kill-terminal</code>) in an
-Emacs frame created with <samp><span class="command">emacsclient</span></samp>, via the `<samp><span class="samp">-c</span></samp>' or
-`<samp><span class="samp">-t</span></samp>' options, Emacs deletes the frame instead of killing the
+Emacs frame created with <samp><span class="command">emacsclient</span></samp>, via the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; options, Emacs deletes the frame instead of killing the
 Emacs process itself.  On a text-only terminal frame created with the
-`<samp><span class="samp">-t</span></samp>' option, this returns control to the terminal.  Emacs also
+&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; option, this returns control to the terminal.  Emacs also
 marks all the server buffers for the client as finished, as though you
 had typed <kbd>C-x #</kbd> in all of them.
 

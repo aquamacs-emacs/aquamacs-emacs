@@ -3,33 +3,33 @@
 <title>Temporary Displays - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Selective-Display.html#Selective-Display" title="Selective Display">
 <link rel="next" href="Overlays.html#Overlays" title="Overlays">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Temporary-Displays"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Overlays.html#Overlays">Overlays</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-Display.html#Selective-Display">Selective Display</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -61,7 +61,7 @@ buffer and then present it to the user for perusal rather than for
 editing.  Many help commands use this feature.
 
 <div class="defun">
-&mdash; Special Form: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3177"></a></var><br>
+&mdash; Special Form: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3375"></a></var><br>
 <blockquote><p>This function executes <var>forms</var> while arranging to insert any output
 they print into the buffer named <var>buffer-name</var>, which is first
 created if necessary, and put into Help mode.  Finally, the buffer is
@@ -98,7 +98,7 @@ of this construct; they are listed below.
           (with-output-to-temp-buffer "foo"
               (print 20)
               (print standard-output))
-          =&gt; #&lt;buffer foo&gt;
+          &rArr; #&lt;buffer foo&gt;
           
           ---------- Buffer: foo ----------
           20
@@ -106,11 +106,11 @@ of this construct; they are listed below.
           #&lt;buffer foo&gt;
           
           ---------- Buffer: foo ----------
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3178"></a></var><br>
+&mdash; User Option: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3376"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, <code>with-output-to-temp-buffer</code>
 calls it as a function to do the job of displaying a help buffer.  The
 function gets one argument, which is the buffer it should display.
@@ -122,7 +122,7 @@ selected.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3179"></a></var><br>
+&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3377"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> before
 evaluating <var>body</var>.  When the hook runs, the temporary buffer is
 current.  This hook is normally set up with a function to put the
@@ -130,17 +130,14 @@ buffer in Help mode.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3180"></a></var><br>
+&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3378"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> after
 displaying the temporary buffer.  When the hook runs, the temporary buffer
-is current, and the window it was displayed in is selected.  This hook
-is normally set up with a function to make the buffer read only, and
-find function names and variable names in it, provided the major mode
-is Help mode. 
+is current, and the window it was displayed in is selected. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3181"></a></var><br>
+&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3379"></a></var><br>
 <blockquote><p>This function momentarily displays <var>string</var> in the current buffer at
 <var>position</var>.  It has no effect on the undo list or on the buffer's
 modification status.
@@ -176,7 +173,7 @@ second line:
             "**** Important Message! ****"
             (point) ?\r
             "Type RET when done reading")
-          =&gt; t
+          &rArr; t
           
           ---------- Buffer: foo ----------
           This is the contents of foo.
@@ -186,7 +183,7 @@ second line:
           ---------- Echo Area ----------
           Type RET when done reading
           ---------- Echo Area ----------
-     </pre>
+</pre>
         </blockquote></div>
 
    </body></html>

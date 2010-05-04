@@ -3,20 +3,20 @@
 <title>Mail Aliases - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
 <link rel="prev" href="Mail-Headers.html#Mail-Headers" title="Mail Headers">
-<link rel="next" href="Mail-Mode.html#Mail-Mode" title="Mail Mode">
+<link rel="next" href="Mail-Commands.html#Mail-Commands" title="Mail Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,9 +47,9 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Mail-Aliases"></a>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Mode.html#Mail-Mode">Mail Mode</a>,
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Commands.html#Mail-Commands">Mail Commands</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Headers.html#Mail-Headers">Mail Headers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>
 <hr>
@@ -57,102 +57,56 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending
 
 <h3 class="section">35.3 Mail Aliases</h3>
 
-<p><a name="index-mail-aliases-2682"></a><a name="index-g_t_0040file_007b_002emailrc_007d-file-2683"></a><a name="index-mailrc-file-2684"></a>
-  You can define <dfn>mail aliases</dfn> in a file named <samp><span class="file">~/.mailrc</span></samp>. 
-These are short mnemonic names which stand for mail addresses or groups of
-mail addresses.  Like many other mail programs, Emacs expands aliases
-when they occur in the `<samp><span class="samp">To</span></samp>', `<samp><span class="samp">From</span></samp>', `<samp><span class="samp">CC</span></samp>', `<samp><span class="samp">BCC</span></samp>', and
-`<samp><span class="samp">Reply-to</span></samp>' fields, plus their `<samp><span class="samp">Resent-</span></samp>' variants. 
-<!-- The list is defined by mail-address-field-regexp. -->
+<p><a name="index-mail-aliases-2707"></a><a name="index-g_t_0040file_007b_002emailrc_007d-file-2708"></a><a name="index-mailrc-file-2709"></a><a name="index-mail_002dpersonal_002dalias_002dfile-2710"></a>
+  You can define <dfn>mail aliases</dfn>, which are short mnemonic names
+that stand for mail addresses or groups of mail addresses.  By
+default, mail aliases are defined in the file <samp><span class="file">~/.mailrc</span></samp>.  You
+can specify a different file name to use, by setting the variable
+<code>mail-personal-alias-file</code>.
 
-   <p>To define an alias in <samp><span class="file">~/.mailrc</span></samp>, write a line in the following
+   <p>To define an alias in <samp><span class="file">.mailrc</span></samp>, write a line in the following
 format:
 
-<pre class="example">     alias <var>shortaddress</var> <var>fulladdresses</var>
+<pre class="example">     alias <var>nick</var> <var>fulladdresses</var>
 </pre>
-   <p class="noindent">Here <var>fulladdresses</var> stands for one or more mail addresses for
-<var>shortaddress</var> to expand into.  Separate multiple addresses with
-spaces; if an address contains a space, quote the whole address with a
-pair of double quotes.
-
-   <p>For instance, to make <code>maingnu</code> stand for
-<code>gnu@gnu.org</code> plus a local address of your own, put in
+   <p class="noindent">This means that <var>nick</var> should expand into <var>fulladdresses</var>,
+where <var>fulladdresses</var> can be either a single address, or multiple
+addresses separated with spaces.  For instance, to make <code>maingnu</code>
+stand for <code>gnu@gnu.org</code> plus a local address of your own, put in
 this line:
 
 <pre class="example">     alias maingnu gnu@gnu.org local-gnu
 </pre>
-   <p class="noindent">Addresses specified in this way should use double quotes around an
-entire address when the address contains spaces.  But you need not
-include double quotes around parts of the address, such as the person's
-full name.  Emacs puts them in if they are needed.  For example,
+   <p class="noindent">If an address contains a space, quote the whole address with a pair of
+double quotes, like this:
 
 <pre class="example">     alias jsmith "John Q. Smith &lt;none@example.com&gt;"
 </pre>
-   <p class="noindent">is correct in `<samp><span class="samp">.mailrc</span></samp>'.  Emacs will insert the address as
-`<samp><span class="samp">"John Q. Smith" &lt;none@example.com&gt;</span></samp>'.
+   <p class="noindent">Note that you need not include double quotes around individual parts
+of the address, such as the person's full name.  Emacs puts them in if
+they are needed.  For instance, it inserts the above address as
+&lsquo;<samp><span class="samp">"John Q. Smith" &lt;none@example.com&gt;</span></samp>&rsquo;.
 
-   <p>Emacs also recognizes &ldquo;include&rdquo; commands in `<samp><span class="samp">.mailrc</span></samp>' files. 
-They look like this:
+   <p>Emacs also recognizes &ldquo;include&rdquo; commands in <samp><span class="file">.mailrc</span></samp>.  They
+look like this:
 
 <pre class="example">     source <var>filename</var>
 </pre>
-   <p class="noindent">The file <samp><span class="file">~/.mailrc</span></samp> is used primarily by other mail-reading
-programs; it can contain various other commands.  Emacs ignores
-everything in it except for alias definitions and include commands.
+   <p class="noindent">The <samp><span class="file">.mailrc</span></samp> file is not unique to Emacs; many other
+mail-reading programs use it for mail aliases, and it can contain
+various other commands.  However, Emacs ignores everything except
+alias definitions and include commands.
 
-   <p><a name="index-define_002dmail_002dalias-2685"></a>  Another way to define a mail alias, within Emacs alone, is with the
-<code>define-mail-alias</code> command.  It prompts for the alias and then the
-full address.  You can use it to define aliases in your <samp><span class="file">.emacs</span></samp>
-file, like this:
+   <p><a name="index-mail_002dabbrev_002dinsert_002dalias-2711"></a>  Mail aliases expand as abbrevs&mdash;that is to say, as soon as you type
+a word-separator character after an alias (see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>).  This
+expansion takes place only within the &lsquo;<samp><span class="samp">To</span></samp>&rsquo;, &lsquo;<samp><span class="samp">From</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">CC</span></samp>&rsquo;, &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">Reply-to</span></samp>&rsquo; header fields (plus their
+&lsquo;<samp><span class="samp">Resent-</span></samp>&rsquo; variants); it does not take place in other header
+fields, such as &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo;.
 
-<pre class="example">     (define-mail-alias "maingnu" "gnu@gnu.org")
-</pre>
-   <p><a name="index-mail_002daliases-2686"></a>  <code>define-mail-alias</code> records aliases by adding them to a
-variable named <code>mail-aliases</code>.  If you are comfortable with
-manipulating Lisp lists, you can set <code>mail-aliases</code> directly.  The
-initial value of <code>mail-aliases</code> is <code>t</code>, which means that
-Emacs should read <samp><span class="file">.mailrc</span></samp> to get the proper value.
+   <p>You can also insert an aliased address directly, using the command
+<kbd>M-x mail-abbrev-insert-alias</kbd>.  This reads an alias name, with
+completion, and inserts its definition at point.
 
-   <p><a name="index-mail_002dpersonal_002dalias_002dfile-2687"></a>  You can specify a different file name to use instead of
-<samp><span class="file">~/.mailrc</span></samp> by setting the variable
-<code>mail-personal-alias-file</code>.
-
-<!-- There is also mail-alias-file for the system aliases. -->
-<p><a name="index-expand_002dmail_002daliases-2688"></a>  Normally, Emacs expands aliases when you send the message.  You do not
-need to expand mail aliases before sending the message, but you can
-expand them if you want to see where the mail will actually go.  To do
-this, use the command <kbd>M-x expand-mail-aliases</kbd>; it expands all mail
-aliases currently present in the mail headers that hold addresses.
-
-   <p>If you like, you can have mail aliases expand as abbrevs, as soon as
-you type them in (see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>).  To enable this feature, execute the
-following:
-
-<pre class="example">     (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
-</pre>
-   <p class="noindent"><a name="index-define_002dmail_002dabbrev-2689"></a><a name="index-mail_002dabbrevs-2690"></a>This can go in your <samp><span class="file">.emacs</span></samp> file.  See <a href="Hooks.html#Hooks">Hooks</a>.  If you use this
-feature, you must use <code>define-mail-abbrev</code> instead of
-<code>define-mail-alias</code>; the latter does not work with this package. 
-Note that the mail abbreviation package uses the variable
-<code>mail-abbrevs</code> instead of <code>mail-aliases</code>, and that all alias
-names are converted to lower case.
-
-   <p><a name="index-C_002dc-C_002da-_0040r_007b_0028Mail-mode_0029_007d-2691"></a><a name="index-mail_002dabbrev_002dinsert_002dalias-2692"></a>  The mail abbreviation package also provides the <kbd>C-c C-a</kbd>
-(<code>mail-abbrev-insert-alias</code>) command, which reads an alias
-name (with completion) and inserts its definition at point.  This is
-useful when editing the message text itself or a header field such as
-`<samp><span class="samp">Subject</span></samp>' in which Emacs does not normally expand aliases.
-
-   <p>Note that abbrevs expand only if you insert a word-separator character
-afterward.  However, you can rebind <kbd>C-n</kbd> and <kbd>M-&gt;</kbd> to cause
-expansion as well.  Here's how to do that:
-
-<pre class="smallexample">     (add-hook 'mail-mode-hook
-         (lambda ()
-           (define-key
-             mail-mode-map [remap next-line] 'mail-abbrev-next-line)
-           (define-key
-             mail-mode-map [remap end-of-buffer] 'mail-abbrev-end-of-buffer)))
-</pre>
    </body></html>
 

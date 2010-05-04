@@ -3,33 +3,33 @@
 <title>High-Level Completion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Completion.html#Completion" title="Completion">
 <link rel="prev" href="Completion-Commands.html#Completion-Commands" title="Completion Commands">
 <link rel="next" href="Reading-File-Names.html#Reading-File-Names" title="Reading File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,16 +46,16 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="High-Level-Completion"></a>
 <a name="High_002dLevel-Completion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Commands.html#Completion-Commands">Completion Commands</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
 <hr>
 </div>
 
-<h4 class="subsection">20.6.4 High-Level Completion  Functions</h4>
+<h4 class="subsection">20.6.4 High-Level Completion Functions</h4>
 
 <p>This section describes the higher-level convenient functions for
 reading certain sorts of names with completion.
@@ -66,30 +66,27 @@ reading the arguments for a command, in the <code>interactive</code>
 specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
 
 <div class="defun">
-&mdash; Function: <b>read-buffer</b><var> prompt &amp;optional default existing<a name="index-read_002dbuffer-1104"></a></var><br>
+&mdash; Function: <b>read-buffer</b><var> prompt &amp;optional default require-match<a name="index-read_002dbuffer-1138"></a></var><br>
 <blockquote><p>This function reads the name of a buffer and returns it as a string. 
 The argument <var>default</var> is the default name to use, the value to
 return if the user exits with an empty minibuffer.  If non-<code>nil</code>,
-it should be a string or a buffer.  It is mentioned in the prompt, but
-is not inserted in the minibuffer as initial input.
+it should be a string, a list of strings, or a buffer.  If it is
+a list, the default value is the first element of this list.  It is
+mentioned in the prompt, but is not inserted in the minibuffer as
+initial input.
 
         <p>The argument <var>prompt</var> should be a string ending with a colon and a
 space.  If <var>default</var> is non-<code>nil</code>, the function inserts it in
 <var>prompt</var> before the colon to follow the convention for reading from
 the minibuffer with a default value (see <a href="Programming-Tips.html#Programming-Tips">Programming Tips</a>).
 
-        <p>If <var>existing</var> is non-<code>nil</code>, then the name specified must be
-that of an existing buffer.  The usual commands to exit the minibuffer
-do not exit if the text is not valid, and &lt;RET&gt; does completion to
-attempt to find a valid name.  If <var>existing</var> is neither <code>nil</code>
-nor <code>t</code>, confirmation is required after completion.  (However,
-<var>default</var> is not checked for validity; it is returned, whatever it
-is, if the user exits with the minibuffer empty.)
+        <p>The optional argument <var>require-match</var> has the same meaning as in
+<code>completing-read</code>.  See <a href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>.
 
-        <p>In the following example, the user enters `<samp><span class="samp">minibuffer.t</span></samp>', and
-then types &lt;RET&gt;.  The argument <var>existing</var> is <code>t</code>, and the
-only buffer name starting with the given input is
-`<samp><span class="samp">minibuffer.texi</span></samp>', so that name is the value.
+        <p>In the following example, the user enters &lsquo;<samp><span class="samp">minibuffer.t</span></samp>&rsquo;, and
+then types &lt;RET&gt;.  The argument <var>require-match</var> is <code>t</code>,
+and the only buffer name starting with the given input is
+&lsquo;<samp><span class="samp">minibuffer.texi</span></samp>&rsquo;, so that name is the value.
 
      <pre class="example">          (read-buffer "Buffer name: " "foo" t)
           ;; <span class="roman">After evaluation of the preceding expression,</span>
@@ -101,12 +98,12 @@ only buffer name starting with the given input is
           ---------- Buffer: Minibuffer ----------
           
           ;; <span class="roman">The user types </span><kbd>minibuffer.t &lt;RET&gt;</kbd><span class="roman">.</span>
-               =&gt; "minibuffer.texi"
-     </pre>
+               &rArr; "minibuffer.texi"
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>read-buffer-function</b><var><a name="index-read_002dbuffer_002dfunction-1105"></a></var><br>
+&mdash; User Option: <b>read-buffer-function</b><var><a name="index-read_002dbuffer_002dfunction-1139"></a></var><br>
 <blockquote><p>This variable specifies how to read buffer names.  For example, if you
 set this variable to <code>iswitchb-read-buffer</code>, all Emacs commands
 that call <code>read-buffer</code> to read a buffer name will actually use the
@@ -114,7 +111,13 @@ that call <code>read-buffer</code> to read a buffer name will actually use the
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-command</b><var> prompt &amp;optional default<a name="index-read_002dcommand-1106"></a></var><br>
+&mdash; User Option: <b>read-buffer-completion-ignore-case</b><var><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase-1140"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, <code>read-buffer</code> ignores case
+when performing completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-command</b><var> prompt &amp;optional default<a name="index-read_002dcommand-1141"></a></var><br>
 <blockquote><p>This function reads the name of a command and returns it as a Lisp
 symbol.  The argument <var>prompt</var> is used as in
 <code>read-from-minibuffer</code>.  Recall that a command is anything for
@@ -122,11 +125,12 @@ which <code>commandp</code> returns <code>t</code>, and a command name is a symb
 for which <code>commandp</code> returns <code>t</code>.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.
 
         <p>The argument <var>default</var> specifies what to return if the user enters
-null input.  It can be a symbol or a string; if it is a string,
-<code>read-command</code> interns it before returning it.  If <var>default</var> is
-<code>nil</code>, that means no default has been specified; then if the user
-enters null input, the return value is <code>(intern "")</code>, that is, a
-symbol whose name is an empty string.
+null input.  It can be a symbol, a string or a list of strings.  If it
+is a string, <code>read-command</code> interns it before returning it. 
+If it is a list, <code>read-command</code> returns the first element of this list. 
+If <var>default</var> is <code>nil</code>, that means no default has been
+specified; then if the user enters null input, the return value is
+<code>(intern "")</code>, that is, a symbol whose name is an empty string.
 
      <pre class="example">          (read-command "Command name? ")
           
@@ -136,7 +140,7 @@ symbol whose name is an empty string.
           ---------- Buffer: Minibuffer ----------
           Command name?
           ---------- Buffer: Minibuffer ----------
-     </pre>
+</pre>
         <p class="noindent">If the user types <kbd>forward-c &lt;RET&gt;</kbd>, then this function returns
 <code>forward-char</code>.
 
@@ -145,25 +149,26 @@ symbol whose name is an empty string.
 complete in the set of extant Lisp symbols, and it uses the
 <code>commandp</code> predicate so as to accept only command names:
 
-        <p><a name="index-g_t_0040code_007bcommandp_007d-example-1107"></a>
+        <p><a name="index-g_t_0040code_007bcommandp_007d-example-1142"></a>
      <pre class="example">          (read-command <var>prompt</var>)
           ==
           (intern (completing-read <var>prompt</var> obarray
                                    'commandp t nil))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-variable</b><var> prompt &amp;optional default<a name="index-read_002dvariable-1108"></a></var><br>
-<blockquote><p><a name="Definition-of-read_002dvariable"></a>
-This function reads the name of a user variable and returns it as a
+&mdash; Function: <b>read-variable</b><var> prompt &amp;optional default<a name="index-read_002dvariable-1143"></a></var><br>
+<blockquote><p><a name="Definition-of-read_002dvariable"></a>This function reads the name of a user variable and returns it as a
 symbol.
 
-        <p>The argument <var>default</var> specifies what to return if the user enters
-null input.  It can be a symbol or a string; if it is a string,
-<code>read-variable</code> interns it before returning it.  If <var>default</var>
-is <code>nil</code>, that means no default has been specified; then if the
-user enters null input, the return value is <code>(intern "")</code>.
+        <p>The argument <var>default</var> specifies the default value to return if
+the user enters null input.  It can be a symbol, a string, or a list
+of strings.  If it is a string, <code>read-variable</code> interns it to
+make the default value.  If it is a list, <code>read-variable</code> interns
+the first element.  If <var>default</var> is <code>nil</code>, that means no
+default has been specified; then if the user enters null input, the
+return value is <code>(intern "")</code>.
 
      <pre class="example">          (read-variable "Variable name? ")
           
@@ -174,7 +179,7 @@ user enters null input, the return value is <code>(intern "")</code>.
           ---------- Buffer: Minibuffer ----------
           Variable name? -!-
           ---------- Buffer: Minibuffer ----------
-     </pre>
+</pre>
         <p class="noindent">If the user then types <kbd>fill-p &lt;RET&gt;</kbd>, <code>read-variable</code>
 returns <code>fill-prefix</code>.
 
@@ -182,14 +187,37 @@ returns <code>fill-prefix</code>.
 but uses the predicate <code>user-variable-p</code> instead of
 <code>commandp</code>:
 
-        <p><a name="index-g_t_0040code_007buser_002dvariable_002dp_007d-example-1109"></a>
+        <p><a name="index-g_t_0040code_007buser_002dvariable_002dp_007d-example-1144"></a>
      <pre class="example">          (read-variable <var>prompt</var>)
           ==
           (intern
            (completing-read <var>prompt</var> obarray
                             'user-variable-p t nil))
-     </pre>
+</pre>
         </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>read-color</b><var> &amp;optional prompt convert allow-empty display<a name="index-read_002dcolor-1145"></a></var><br>
+<blockquote><p>This function reads a string that is a color specification, either the
+color's name or an RGB hex value such as <code>#RRRGGGBBB</code>.  It
+prompts with <var>prompt</var> (default: <code>"Color (name or #R+G+B+):"</code>)
+and provides completion for color names, but not for hex RGB values. 
+In addition to names of standard colors, completion candidates include
+the foreground and background colors at point.
+
+        <p>Valid RGB values are described in <a href="Color-Names.html#Color-Names">Color Names</a>.
+
+        <p>The function's return value is the color name typed by the user in the
+minibuffer.  However, when called interactively or if the optional
+argument <var>convert</var> is non-<code>nil</code>, it converts the name into
+the color's RGB value and returns that value as a string.  If an
+invalid color name was specified, this function signals an error,
+except that empty color names are allowed when <code>allow-empty</code> is
+non-<code>nil</code> and the user enters null input.
+
+        <p>Interactively, or when <var>display</var> is non-<code>nil</code>, the return
+value is also displayed in the echo area. 
+</p></blockquote></div>
 
    <p>See also the functions <code>read-coding-system</code> and
 <code>read-non-nil-coding-system</code>, in <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">User-Chosen Coding Systems</a>,

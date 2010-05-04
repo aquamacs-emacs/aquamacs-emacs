@@ -3,33 +3,33 @@
 <title>Low-Level Parsing - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Parsing-Expressions.html#Parsing-Expressions" title="Parsing Expressions">
 <link rel="prev" href="Parser-State.html#Parser-State" title="Parser State">
 <link rel="next" href="Control-Parsing.html#Control-Parsing" title="Control Parsing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Low-Level-Parsing"></a>
 <a name="Low_002dLevel-Parsing"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Control-Parsing.html#Control-Parsing">Control Parsing</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Parser-State.html#Parser-State">Parser State</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>
@@ -62,14 +62,14 @@ to start at a given position with a certain state, and parse up to
 a specified end position.
 
 <div class="defun">
-&mdash; Function: <b>parse-partial-sexp</b><var> start limit &amp;optional target-depth stop-before state stop-comment<a name="index-parse_002dpartial_002dsexp-2931"></a></var><br>
+&mdash; Function: <b>parse-partial-sexp</b><var> start limit &amp;optional target-depth stop-before state stop-comment<a name="index-parse_002dpartial_002dsexp-3098"></a></var><br>
 <blockquote><p>This function parses a sexp in the current buffer starting at
 <var>start</var>, not scanning past <var>limit</var>.  It stops at position
 <var>limit</var> or when certain criteria described below are met, and sets
 point to the location where parsing stops.  It returns a parser state
 describing the status of the parse at the point where it stops.
 
-        <p><a name="index-parenthesis-depth-2932"></a>If the third argument <var>target-depth</var> is non-<code>nil</code>, parsing
+        <p><a name="index-parenthesis-depth-3099"></a>If the third argument <var>target-depth</var> is non-<code>nil</code>, parsing
 stops if the depth in parentheses becomes equal to <var>target-depth</var>. 
 The depth starts at 0, or at whatever is given in <var>state</var>.
 

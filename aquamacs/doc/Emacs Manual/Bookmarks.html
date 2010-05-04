@@ -3,7 +3,7 @@
 <title>Bookmarks - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Registers.html#Registers" title="Registers">
 <link rel="prev" href="RegFiles.html#RegFiles" title="RegFiles">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Bookmarks"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="RegFiles.html#RegFiles">RegFiles</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Registers.html#Registers">Registers</a>
 <hr>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Registers.html#Registers">Registers</a>
 
 <h3 class="section">17.7 Bookmarks</h3>
 
-<p><a name="index-bookmarks-430"></a>
+<p><a name="index-bookmarks-431"></a>
   <dfn>Bookmarks</dfn> are somewhat like registers in that they record
 positions you can jump to.  Unlike registers, they have long names, and
 they persist automatically from one Emacs session to the next.  The
@@ -65,23 +65,23 @@ various files.
      <dl>
 <dt><kbd>C-x r m &lt;RET&gt;</kbd><dd>Set the bookmark for the visited file, at point.
 
-     <br><dt><kbd>C-x r m </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dset-431"></a>Set the bookmark named <var>bookmark</var> at point (<code>bookmark-set</code>).
+     <br><dt><kbd>C-x r m </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dset-432"></a>Set the bookmark named <var>bookmark</var> at point (<code>bookmark-set</code>).
 
-     <br><dt><kbd>C-x r b </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002djump-432"></a>Jump to the bookmark named <var>bookmark</var> (<code>bookmark-jump</code>).
+     <br><dt><kbd>C-x r b </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002djump-433"></a>Jump to the bookmark named <var>bookmark</var> (<code>bookmark-jump</code>).
 
-     <br><dt><kbd>C-x r l</kbd><dd><a name="index-list_002dbookmarks-433"></a>List all bookmarks (<code>list-bookmarks</code>).
+     <br><dt><kbd>C-x r l</kbd><dd><a name="index-list_002dbookmarks-434"></a>List all bookmarks (<code>list-bookmarks</code>).
 
-     <br><dt><kbd>M-x bookmark-save</kbd><dd><a name="index-bookmark_002dsave-434"></a>Save all the current bookmark values in the default bookmark file. 
+     <br><dt><kbd>M-x bookmark-save</kbd><dd><a name="index-bookmark_002dsave-435"></a>Save all the current bookmark values in the default bookmark file. 
 </dl>
 
-   <p><a name="index-C_002dx-r-m-435"></a><a name="index-bookmark_002dset-436"></a><a name="index-C_002dx-r-b-437"></a><a name="index-bookmark_002djump-438"></a>  The prototypical use for bookmarks is to record one current position
+   <p><a name="index-C_002dx-r-m-436"></a><a name="index-bookmark_002dset-437"></a><a name="index-C_002dx-r-b-438"></a><a name="index-bookmark_002djump-439"></a>  The prototypical use for bookmarks is to record one current position
 in each of several files.  So the command <kbd>C-x r m</kbd>, which sets a
 bookmark, uses the visited file name as the default for the bookmark
 name.  If you name each bookmark after the file it points to, then you
 can conveniently revisit any of those files with <kbd>C-x r b</kbd>, and move
 to the position of the bookmark at the same time.
 
-   <p><a name="index-C_002dx-r-l-439"></a>  To display a list of all your bookmarks in a separate buffer, type
+   <p><a name="index-C_002dx-r-l-440"></a>  To display a list of all your bookmarks in a separate buffer, type
 <kbd>C-x r l</kbd> (<code>list-bookmarks</code>).  If you switch to that buffer,
 you can use it to edit your bookmark definitions or annotate the
 bookmarks.  Type <kbd>C-h m</kbd> in the bookmark buffer for more
@@ -94,13 +94,13 @@ bookmark values.  You can also save the bookmarks at any time with the
 default bookmark file automatically.  This saving and loading is how
 bookmarks persist from one Emacs session to the next.
 
-   <p><a name="index-bookmark_002dsave_002dflag-440"></a>  If you set the variable <code>bookmark-save-flag</code> to 1, each command
+   <p><a name="index-bookmark_002dsave_002dflag-441"></a>  If you set the variable <code>bookmark-save-flag</code> to 1, each command
 that sets a bookmark will also save your bookmarks; this way, you
 don't lose any bookmark values even if Emacs crashes.  (The value, if
 a number, says how many bookmark modifications should go by between
 saving.)
 
-   <p><a name="index-bookmark_002dsearch_002dsize-441"></a>  Bookmark position values are saved with surrounding context, so that
+   <p><a name="index-bookmark_002dsearch_002dsize-442"></a>  Bookmark position values are saved with surrounding context, so that
 <code>bookmark-jump</code> can find the proper position even if the file is
 modified slightly.  The variable <code>bookmark-search-size</code> says how
 many characters of context to record on each side of the bookmark's
@@ -109,25 +109,26 @@ position.
    <p>Here are some additional commands for working with bookmarks:
 
      <dl>
-<dt><kbd>M-x bookmark-load &lt;RET&gt; </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dload-442"></a>Load a file named <var>filename</var> that contains a list of bookmark
+<dt><kbd>M-x bookmark-load &lt;RET&gt; </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dload-443"></a>Load a file named <var>filename</var> that contains a list of bookmark
 values.  You can use this command, as well as <code>bookmark-write</code>, to
 work with other files of bookmark values in addition to your default
 bookmark file.
 
-     <br><dt><kbd>M-x bookmark-write &lt;RET&gt; </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dwrite-443"></a>Save all the current bookmark values in the file <var>filename</var>.
+     <br><dt><kbd>M-x bookmark-write &lt;RET&gt; </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dwrite-444"></a>Save all the current bookmark values in the file <var>filename</var>.
 
-     <br><dt><kbd>M-x bookmark-delete &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002ddelete-444"></a>Delete the bookmark named <var>bookmark</var>.
+     <br><dt><kbd>M-x bookmark-delete &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002ddelete-445"></a>Delete the bookmark named <var>bookmark</var>.
 
-     <br><dt><kbd>M-x bookmark-insert-location &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dinsert_002dlocation-445"></a>Insert in the buffer the name of the file that bookmark <var>bookmark</var>
+     <br><dt><kbd>M-x bookmark-insert-location &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dinsert_002dlocation-446"></a>Insert in the buffer the name of the file that bookmark <var>bookmark</var>
 points to.
 
-     <br><dt><kbd>M-x bookmark-insert &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dinsert-446"></a>Insert in the buffer the <em>contents</em> of the file that bookmark
+     <br><dt><kbd>M-x bookmark-insert &lt;RET&gt; </kbd><var>bookmark</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-bookmark_002dinsert-447"></a>Insert in the buffer the <em>contents</em> of the file that bookmark
 <var>bookmark</var> points to. 
 </dl>
 
 <!-- This is part of the Emacs manual. -->
 <!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc. -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
+<!-- Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

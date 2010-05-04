@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Window Parameters - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Window-Configurations.html#Window-Configurations" title="Window Configurations">
+<link rel="next" href="Window-Hooks.html#Window-Hooks" title="Window Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-Parameters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Hooks.html#Window-Hooks">Window Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Configurations.html#Window-Configurations">Window Configurations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.20 Window Parameters</h3>
+
+<p><a name="index-window-parameters-2199"></a>
+This sections describes how window parameters can be used to associate
+additional information with windows.
+
+<div class="defun">
+&mdash; Function: <b>window-parameter</b><var> window parameter<a name="index-window_002dparameter-2200"></a></var><br>
+<blockquote><p>This function returns <var>window</var>'s value for <var>parameter</var>.  The
+default for <var>window</var> is the selected window.  If <var>window</var>
+has no setting for <var>parameter</var>, this function returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-parameters</b><var> &amp;optional window<a name="index-window_002dparameters-2201"></a></var><br>
+<blockquote><p>This function returns all parameters of <var>window</var> and their values. 
+The default for <var>window</var> is the selected window.  The return value
+is an association list of elements of the form <code>(</code><var>parameter</var><code>
+. </code><var>value</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-window-parameter</b><var> window parameter value<a name="index-set_002dwindow_002dparameter-2202"></a></var><br>
+<blockquote><p>This function sets <var>window</var>'s value of <var>parameter</var> to
+<var>value</var> and returns <var>value</var>.  The default for <var>window</var>
+is the selected window. 
+</p></blockquote></div>
+
+   <p>Currently, window parameters are not saved in window configurations and
+consequently not restored by <code>set-window-configuration</code>.  Hence,
+any change of a parameter introduced via <code>set-window-parameter</code> can
+be undone only by invoking <code>set-window-parameter</code> for the same
+parameter again.  Since <code>save-window-excursion</code> relies on window
+configurations (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>), window parameters are
+not saved and restored by that special form, either.
+
+   </body></html>
+

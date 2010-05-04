@@ -3,7 +3,7 @@
 <title>Persistent Mark - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Mark.html#Mark" title="Mark">
 <link rel="prev" href="Shift-Selection.html#Shift-Selection" title="Shift Selection">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Persistent-Mark"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Shift-Selection.html#Shift-Selection">Shift Selection</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
 <hr>
@@ -70,10 +70,10 @@ would be a nuisance.  As a special exception, the region is
 temporarily highlighted if you set it with the mouse (see <a href="Setting-Mark.html#Setting-Mark">Setting Mark</a>), or with shift-selection (see <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>).
 
    <p><a name="index-transient_002dmark_002dmode-331"></a>  To turn off Transient Mark mode, type <kbd>M-x transient-mark-mode</kbd>. 
-This command toggles the mode; you can use the same command to turn
-Transient Mark mode on again.  You can also turn off Transient Mark
-mode using the menu bar: in the `<samp><span class="samp">Options</span></samp>' menu, toggle the
-`<samp><span class="samp">Active Region Highlighting</span></samp>' menu item.
+This command toggles the mode; you can use the same command to turn it
+on again.  You can also toggle Transient Mark mode using the
+&lsquo;<samp><span class="samp">Active Region Highlighting</span></samp>&rsquo; menu item in the &lsquo;<samp><span class="samp">Options</span></samp>&rsquo;
+menu.
 
    <p>Here are the details of how Emacs behaves when Transient Mark mode
 is off:
@@ -88,19 +88,18 @@ positions of the point and the mark (see <a href="Setting-Mark.html#Setting-Mark
      <li>Many commands that insert text, such as <kbd>C-y</kbd> (<code>yank</code>),
 position point and the mark at opposite ends of the inserted text, so
 that the region consists of the text just inserted.  You can tell when
-a command sets the mark because it displays `<samp><span class="samp">Mark set</span></samp>' in the
+a command sets the mark because it displays &lsquo;<samp><span class="samp">Mark set</span></samp>&rsquo; in the
 echo area.
 
      <li>Many commands that move point long distances, like <kbd>M-&lt;</kbd> and
 <kbd>C-s</kbd>, first set the mark where point was.
 
-     <li>Some commands, which ordinarily operate on the region when the mark is
-active, instead act on the entire buffer.  For instance, <kbd>C-x u</kbd>
-normally reverses changes within the region if the mark is active;
-when Transient Mark mode is off, it acts on the entire buffer. 
-However, you can type <kbd>C-u C-x u</kbd> to make it operate on the
-region.  See <a href="Undo.html#Undo">Undo</a>.  Other commands that act this way are identified
-in their own documentation. 
+     <li>Some commands, which ordinarily act on the region when the mark is
+active, no longer do so.  For example, normally <kbd>M-%</kbd>
+(<code>query-replace</code>) performs replacements within the region, if the
+mark is active.  When Transient Mark mode is off, it always operates
+from point to the end of the buffer.  Commands that act this way are
+identified in their own documentation. 
 </ul>
 
    <p>While Transient Mark mode is off, you can activate it temporarily
@@ -112,9 +111,9 @@ Transient Mark mode just once, until the mark is deactivated.  (This
 is not really a separate command; you are using the <kbd>C-&lt;SPC&gt;</kbd>
 command twice.)
 
-     <br><dt><kbd>C-u C-x C-x</kbd><dd><a name="index-C_002du-C_002dx-C_002dx-333"></a>Activate the mark without changing it; enable Transient Mark mode just
-once, until the mark is deactivated.  (This is the <kbd>C-x C-x</kbd>
-command, <code>exchange-point-and-mark</code>, with a prefix argument.) 
+     <br><dt><kbd>C-u C-x C-x</kbd><dd><a name="index-C_002du-C_002dx-C_002dx-333"></a>Activate the mark and enable Transient Mark mode temporarily, until
+the mark is next deactivated.  (This is the <kbd>C-x C-x</kbd> command,
+<code>exchange-point-and-mark</code>, with a prefix argument.) 
 </dl>
 
    <p>These commands set or activate the mark, and enable Transient Mark
@@ -125,15 +124,15 @@ mode momentarily gives you a way to use these commands on the region.
 
 <!-- This is part of the Emacs manual. -->
 <!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc. -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
-<div class="footnote">
+   <div class="footnote">
 <hr>
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> It is also sometimes called <dfn>Zmacs mode</dfn>, because
 the Zmacs editor on the MIT Lisp Machine handled the mark in a similar
 way.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

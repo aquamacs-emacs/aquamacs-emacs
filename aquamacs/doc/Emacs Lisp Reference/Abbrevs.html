@@ -3,32 +3,32 @@
 <title>Abbrevs - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
 <link rel="next" href="Processes.html#Processes" title="Processes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Abbrevs"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Processes.html#Processes">Processes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">36 Abbrevs and Abbrev Expansion</h2>
 
-<p><a name="index-abbrev-2962"></a><!-- @cindex abbrev table  Redundant with "abbrev". -->
+<p><a name="index-abbrev-3129"></a><!-- @cindex abbrev table  Redundant with "abbrev". -->
 
    <p>An abbreviation or <dfn>abbrev</dfn> is a string of characters that may be
 expanded to a longer string.  The user can insert the abbrev string and
@@ -67,23 +67,24 @@ table</dfn>.  Each buffer has a local abbrev table, but normally all buffers
 in the same major mode share one abbrev table.  There is also a global
 abbrev table.  Normally both are used.
 
-   <p>An abbrev table is represented as an obarray containing a symbol for
-each abbreviation.  The symbol's name is the abbreviation; its value
-is the expansion; its function definition is the hook function to do
-the expansion (see <a href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>); its property list cell
-typically contains the use count, the number of times the abbreviation
-has been expanded.  Alternatively, the use count is on the
-<code>count</code> property and the system-abbrev flag is on the
-<code>system-type</code> property.  Abbrevs with a non-<code>nil</code>
-<code>system-type</code> property are called &ldquo;system&rdquo; abbrevs.  They are
-usually defined by modes or packages, instead of by the user, and are
-treated specially in certain respects.
+   <p>An abbrev table is represented as an obarray.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>, for information about obarrays.  Each abbreviation is
+represented by a symbol in the obarray.  The symbol's name is the
+abbreviation; its value is the expansion; its function definition is
+the hook function for performing the expansion (see <a href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>); and its property list cell contains various additional
+properties, including the use count and the number of times the
+abbreviation has been expanded (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).
+
+   <p><a name="index-system-abbrev-3130"></a>  Certain abbrevs, called <dfn>system abbrevs</dfn>, are defined by a major
+mode instead of the user.  A system abbrev is identified by its
+non-<code>nil</code> <code>:system</code> property (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>). 
+When abbrevs are saved to an abbrev file, system abbrevs are omitted. 
+See <a href="Abbrev-Files.html#Abbrev-Files">Abbrev Files</a>.
 
    <p>Because the symbols used for abbrevs are not interned in the usual
 obarray, they will never appear as the result of reading a Lisp
 expression; in fact, normally they are never used except by the code
 that handles abbrevs.  Therefore, it is safe to use them in an
-extremely nonstandard way.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.
+extremely nonstandard way.
 
    <p>For the user-level commands for abbrevs, see <a href="../emacs/Abbrevs.html#Abbrevs">Abbrev Mode</a>.
 
@@ -94,6 +95,10 @@ extremely nonstandard way.  See <a href="Creating-Symbols.html#Creating-Symbols"
 <li><a accesskey="4" href="Abbrev-Files.html#Abbrev-Files">Files</a>:           Saving abbrevs in files. 
 <li><a accesskey="5" href="Abbrev-Expansion.html#Abbrev-Expansion">Expansion</a>:   Controlling expansion; expansion subroutines. 
 <li><a accesskey="6" href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>:       Abbrev tables used by various major modes. 
+<li><a accesskey="7" href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>:            How to read and set abbrev properties. 
+                                Which properties have which effect. 
+<li><a accesskey="8" href="Abbrev-Table-Properties.html#Abbrev-Table-Properties">Abbrev Table Properties</a>:      How to read and set abbrev table properties. 
+                                Which properties have which effect. 
 </ul>
 
    </body></html>

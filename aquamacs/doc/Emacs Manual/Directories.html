@@ -3,7 +3,7 @@
 <title>Directories - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="File-Aliases.html#File-Aliases" title="File Aliases">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Directories"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Comparing-Files.html#Comparing-Files">Comparing Files</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Aliases.html#File-Aliases">File Aliases</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">22.8 File Directories</h3>
 
-<p><a name="index-file-directory-915"></a><a name="index-directory-listing-916"></a>  The file system groups files into <dfn>directories</dfn>.  A <dfn>directory
+<p><a name="index-file-directory-919"></a><a name="index-directory-listing-920"></a>  The file system groups files into <dfn>directories</dfn>.  A <dfn>directory
 listing</dfn> is a list of all the files in a directory.  Emacs provides
 commands to create and delete directories, and to make directory
 listings in brief format (file names only) and verbose format (sizes,
@@ -68,11 +68,11 @@ feature called Dired; see <a href="Dired.html#Dired">Dired</a>.
 <dt><kbd>C-x C-d </kbd><var>dir-or-pattern</var><kbd> &lt;RET&gt;</kbd><dd>Display a brief directory listing (<code>list-directory</code>). 
 <br><dt><kbd>C-u C-x C-d </kbd><var>dir-or-pattern</var><kbd> &lt;RET&gt;</kbd><dd>Display a verbose directory listing. 
 <br><dt><kbd>M-x make-directory &lt;RET&gt; </kbd><var>dirname</var><kbd> &lt;RET&gt;</kbd><dd>Create a new directory named <var>dirname</var>. 
-<br><dt><kbd>M-x delete-directory &lt;RET&gt; </kbd><var>dirname</var><kbd> &lt;RET&gt;</kbd><dd>Delete the directory named <var>dirname</var>.  It must be empty,
-or you get an error. 
+<br><dt><kbd>M-x delete-directory &lt;RET&gt; </kbd><var>dirname</var><kbd> &lt;RET&gt;</kbd><dd>Delete the directory named <var>dirname</var>.  If it isn't empty,
+you will be asked whether you want to delete it recursively. 
 </dl>
 
-   <p><a name="index-list_002ddirectory-917"></a><a name="index-C_002dx-C_002dd-918"></a>  The command to display a directory listing is <kbd>C-x C-d</kbd>
+   <p><a name="index-list_002ddirectory-921"></a><a name="index-C_002dx-C_002dd-922"></a>  The command to display a directory listing is <kbd>C-x C-d</kbd>
 (<code>list-directory</code>).  It reads using the minibuffer a file name
 which is either a directory to be listed or a wildcard-containing
 pattern for the files to be listed.  For example,
@@ -87,9 +87,9 @@ example of specifying a file name pattern:
    <p>Normally, <kbd>C-x C-d</kbd> displays a brief directory listing containing
 just file names.  A numeric argument (regardless of value) tells it to
 make a verbose listing including sizes, dates, and owners (like
-`<samp><span class="samp">ls -l</span></samp>').
+&lsquo;<samp><span class="samp">ls -l</span></samp>&rsquo;).
 
-   <p><a name="index-list_002ddirectory_002dbrief_002dswitches-919"></a><a name="index-list_002ddirectory_002dverbose_002dswitches-920"></a>  The text of a directory listing is mostly obtained by running
+   <p><a name="index-list_002ddirectory_002dbrief_002dswitches-923"></a><a name="index-list_002ddirectory_002dverbose_002dswitches-924"></a>  The text of a directory listing is mostly obtained by running
 <code>ls</code> in an inferior process.  Two Emacs variables control the
 switches passed to <code>ls</code>: <code>list-directory-brief-switches</code> is
 a string giving the switches to use in brief listings (<code>"-CF"</code> by
@@ -97,7 +97,7 @@ default), and <code>list-directory-verbose-switches</code> is a string
 giving the switches to use in a verbose listing (<code>"-l"</code> by
 default).
 
-   <p><a name="index-directory_002dfree_002dspace_002dprogram-921"></a><a name="index-directory_002dfree_002dspace_002dargs-922"></a>  In verbose directory listings, Emacs adds information about the
+   <p><a name="index-directory_002dfree_002dspace_002dprogram-925"></a><a name="index-directory_002dfree_002dspace_002dargs-926"></a>  In verbose directory listings, Emacs adds information about the
 amount of free space on the disk that contains the directory.  To do
 this, it runs the program specified by
 <code>directory-free-space-program</code> with arguments
@@ -105,12 +105,12 @@ this, it runs the program specified by
 
    <p>The command <kbd>M-x delete-directory</kbd> prompts for a directory name
 using the minibuffer, and deletes the directory if it is empty.  If
-the directory is not empty, this signals an error.  On systems that
-have a &ldquo;Trash&rdquo; or &ldquo;Recycle Bin&rdquo; feature, you can make this command
-move the specified directory to the Trash or Recycle Bin, instead of
-deleting it outright, by changing the variable
-<code>delete-by-moving-to-trash</code> to <code>t</code>.  See <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>,
-for more information about using the Trash.
+the directory is not empty, you will be asked whether you want to
+delete it recursively.  On systems that have a &ldquo;Trash&rdquo; or &ldquo;Recycle
+Bin&rdquo; feature, you can make this command move the specified directory
+to the Trash or Recycle Bin, instead of deleting it outright, by
+changing the variable <code>delete-by-moving-to-trash</code> to <code>t</code>. 
+See <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>, for more information about using the Trash.
 
    </body></html>
 

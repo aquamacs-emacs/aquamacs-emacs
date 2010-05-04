@@ -3,33 +3,33 @@
 <title>Where Defined - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Loading.html#Loading" title="Loading">
 <link rel="prev" href="Named-Features.html#Named-Features" title="Named Features">
 <link rel="next" href="Unloading.html#Unloading" title="Unloading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Where-Defined"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Unloading.html#Unloading">Unloading</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Named-Features.html#Named-Features">Named Features</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
@@ -57,28 +57,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 <h3 class="section">15.8 Which File Defined a Certain Symbol</h3>
 
 <div class="defun">
-&mdash; Function: <b>symbol-file</b><var> symbol &amp;optional type<a name="index-symbol_002dfile-798"></a></var><br>
+&mdash; Function: <b>symbol-file</b><var> symbol &amp;optional type<a name="index-symbol_002dfile-829"></a></var><br>
 <blockquote><p>This function returns the name of the file that defined <var>symbol</var>. 
-If <var>type</var> is <code>nil</code>, then any kind of definition is
-acceptable.  If <var>type</var> is <code>defun</code> or <code>defvar</code>, that
-specifies function definition only or variable definition only.
+If <var>type</var> is <code>nil</code>, then any kind of definition is acceptable. 
+If <var>type</var> is <code>defun</code>, <code>defvar</code>, or <code>defface</code>, that
+specifies function definition, variable definition, or face definition
+only.
 
-        <p>The value is normally an absolute file name.  It can also be
-<code>nil</code>, if the definition is not associated with any file. 
+        <p>The value is normally an absolute file name.  It can also be <code>nil</code>,
+if the definition is not associated with any file.  If <var>symbol</var>
+specifies an autoloaded function, the value can be a relative file name
+without extension. 
 </p></blockquote></div>
 
    <p>The basis for <code>symbol-file</code> is the data in the variable
 <code>load-history</code>.
 
 <div class="defun">
-&mdash; Variable: <b>load-history</b><var><a name="index-load_002dhistory-799"></a></var><br>
-<blockquote><p>This variable's value is an alist connecting library file names with the
-names of functions and variables they define, the features they provide,
-and the features they require.
+&mdash; Variable: <b>load-history</b><var><a name="index-load_002dhistory-830"></a></var><br>
+<blockquote><p>This value of this variable is an alist that associates the names of
+loaded library files with the names of the functions and variables
+they defined, as well as the features they provided or required.
 
-        <p>Each element is a list and describes one library.  The <span class="sc">car</span> of the
-list is the absolute file name of the library, as a string.  The rest
-of the list elements have these forms:
+        <p>Each element in this alist describes one loaded library (including
+libraries that are preloaded at startup).  It is a list whose <span class="sc">car</span>
+is the absolute file name of the library (a string).  The rest of the
+list elements have these forms:
 
           <dl>
 <dt><var>var</var><dd>The symbol <var>var</var> was defined as a variable. 
@@ -88,6 +92,7 @@ redefined it as a function.  The following element is always
 <code>(defun . </code><var>fun</var><code>)</code>, which represents defining <var>fun</var> as a
 function. 
 <br><dt><code>(autoload . </code><var>fun</var><code>)</code><dd>The function <var>fun</var> was defined as an autoload. 
+<br><dt><code>(defface . </code><var>face</var><code>)</code><dd>The face <var>face</var> was defined. 
 <br><dt><code>(require . </code><var>feature</var><code>)</code><dd>The feature <var>feature</var> was required. 
 <br><dt><code>(provide . </code><var>feature</var><code>)</code><dd>The feature <var>feature</var> was provided. 
 </dl>

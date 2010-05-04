@@ -3,32 +3,32 @@
 <title>Image Cache - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Images.html#Images" title="Images">
 <link rel="prev" href="Showing-Images.html#Showing-Images" title="Showing Images">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,26 +45,61 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Image-Cache"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Showing-Images.html#Showing-Images">Showing Images</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.9 Image Cache</h4>
+<h4 class="subsection">38.16.11 Image Cache</h4>
 
-<p><a name="index-image-cache-3347"></a>
-  Emacs stores images in an image cache when it displays them, so it can
-display them again more efficiently.  It removes an image from the cache
-when it hasn't been displayed for a specified period of time.
+<p><a name="index-image-cache-3562"></a>
+  Emacs caches images so that it can display them again more
+efficiently.  When Emacs displays an image, it searches the image
+cache for an existing image specification <code>equal</code> to the desired
+specification.  If a match is found, the image is displayed from the
+cache; otherwise, Emacs loads the image normally.
 
-   <p>When an image is looked up in the cache, its specification is compared
-with cached image specifications using <code>equal</code>.  This means that
-all images with equal specifications share the same image in the cache.
+   <p>Occasionally, you may need to tell Emacs to refresh the images
+associated with a given image specification.  For example, suppose you
+display an image using a specification that contains a <code>:file</code>
+property.  The image is automatically cached, and subsequent displays
+of that image, with the same image specification, will use the image
+cache.  If the image file changes in the meantime, Emacs would be
+displaying the old version of the image.  In such a situation, you can
+&ldquo;refresh&rdquo; the image by calling <code>image-refresh</code>.
+
+   <p>In Emacs' current implementation, each graphical terminal possesses
+an image cache, which is shared by all the frames on that terminal
+(see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  Thus, refreshing an image in one frame
+also refreshes it in all other frames on the same terminal.
 
 <div class="defun">
-&mdash; Variable: <b>image-cache-eviction-delay</b><var><a name="index-image_002dcache_002deviction_002ddelay-3348"></a></var><br>
+&mdash; Function: <b>image-refresh</b><var> spec &amp;optional frame<a name="index-image_002drefresh-3563"></a></var><br>
+<blockquote><p>This function refreshes any images with image specifications
+<code>equal</code> to <var>spec</var> on frame <var>frame</var>.  If <var>frame</var> is
+<code>nil</code>, it defaults to the selected frame.  If <var>frame</var> is
+<code>t</code>, the refresh is applied to all existing frames. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>clear-image-cache</b><var> &amp;optional filter<a name="index-clear_002dimage_002dcache-3564"></a></var><br>
+<blockquote><p>This function clears an image cache, removing all the images stored in
+it.  If <var>filter</var> is omitted or <code>nil</code>, it clears the cache for
+the selected frame.  If <var>filter</var> is a frame, it clears the cache
+for that frame.  If <var>filter</var> is <code>t</code>, all image caches are
+cleared.  Otherwise, <var>filter</var> is taken to be a file name, and all
+images associated with that file name are removed from all image
+caches. 
+</p></blockquote></div>
+
+   <p>If an image in the image cache has not been displayed for a specified
+period of time, Emacs removes it from the cache and frees the
+associated memory.
+
+<div class="defun">
+&mdash; Variable: <b>image-cache-eviction-delay</b><var><a name="index-image_002dcache_002deviction_002ddelay-3565"></a></var><br>
 <blockquote><p>This variable specifies the number of seconds an image can remain in the
 cache without being displayed.  When an image is not displayed for this
 length of time, Emacs removes it from the image cache.
@@ -72,13 +107,6 @@ length of time, Emacs removes it from the image cache.
         <p>If the value is <code>nil</code>, Emacs does not remove images from the cache
 except when you explicitly clear it.  This mode can be useful for
 debugging. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>clear-image-cache</b><var> &amp;optional frame<a name="index-clear_002dimage_002dcache-3349"></a></var><br>
-<blockquote><p>This function clears the image cache.  If <var>frame</var> is non-<code>nil</code>,
-only the cache for that frame is cleared.  Otherwise all frames' caches
-are cleared. 
 </p></blockquote></div>
 
    </body></html>

@@ -3,7 +3,7 @@
 <title>Kill Buffer - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffers.html#Buffers" title="Buffers">
 <link rel="prev" href="Misc-Buffer.html#Misc-Buffer" title="Misc Buffer">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Kill-Buffer"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Several-Buffers.html#Several-Buffers">Several Buffers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 
 <h3 class="section">23.4 Killing Buffers</h3>
 
-<p><a name="index-killing-buffers-1077"></a>  If you continue an Emacs session for a while, you may accumulate a
+<p><a name="index-killing-buffers-1082"></a>  If you continue an Emacs session for a while, you may accumulate a
 large number of buffers.  You may then find it convenient to <dfn>kill</dfn>
 the buffers you no longer need.  On most operating systems, killing a
 buffer releases its space back to the operating system so that other
@@ -69,7 +69,7 @@ programs can use it.  Here are some commands for killing buffers:
 <br><dt><kbd>M-x kill-matching-buffers</kbd><dd>Offer to kill all buffers matching a regular expression. 
 </dl>
 
-   <p><a name="index-kill_002dbuffer-1078"></a><a name="index-C_002dx-k-1079"></a>  <kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
+   <p><a name="index-kill_002dbuffer-1083"></a><a name="index-C_002dx-k-1084"></a>  <kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
 specify in the minibuffer.  The default, used if you type just
 &lt;RET&gt; in the minibuffer, is to kill the current buffer.  If you
 kill the current buffer, another buffer becomes current: one that was
@@ -77,12 +77,12 @@ current in the recent past but is not displayed in any window now.  If
 you ask to kill a file-visiting buffer that is modified, then you must
 confirm with <kbd>yes</kbd> before the buffer is killed.
 
-   <p><a name="index-kill_002dsome_002dbuffers-1080"></a>  The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one
+   <p><a name="index-kill_002dsome_002dbuffers-1085"></a>  The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one
 by one.  An answer of <kbd>y</kbd> means to kill the buffer, just like
 <code>kill-buffer</code>.  This command ignores buffers whose names begin
 with a space, which are used internally by Emacs.
 
-   <p><a name="index-kill_002dmatching_002dbuffers-1081"></a>  The command <kbd>M-x kill-matching-buffers</kbd> prompts for a regular
+   <p><a name="index-kill_002dmatching_002dbuffers-1086"></a>  The command <kbd>M-x kill-matching-buffers</kbd> prompts for a regular
 expression and kills all buffers whose names match that expression. 
 See <a href="Regexps.html#Regexps">Regexps</a>.  Like <code>kill-some-buffers</code>, it asks for
 confirmation before each kill.  This command normally ignores buffers
@@ -93,10 +93,10 @@ with a prefix argument.
    <p>The buffer menu feature is also convenient for killing various
 buffers.  See <a href="Several-Buffers.html#Several-Buffers">Several Buffers</a>.
 
-   <p><a name="index-kill_002dbuffer_002dhook-1082"></a>  If you want to do something special every time a buffer is killed, you
+   <p><a name="index-kill_002dbuffer_002dhook-1087"></a>  If you want to do something special every time a buffer is killed, you
 can add hook functions to the hook <code>kill-buffer-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
 
-   <p><a name="index-clean_002dbuffer_002dlist-1083"></a>  If you run one Emacs session for a period of days, as many people do,
+   <p><a name="index-clean_002dbuffer_002dlist-1088"></a>  If you run one Emacs session for a period of days, as many people do,
 it can fill up with buffers that you used several days ago.  The command
 <kbd>M-x clean-buffer-list</kbd> is a convenient way to purge them; it kills
 all the unmodified buffers that you have not used for a long time.  An
@@ -105,7 +105,7 @@ however, you can specify certain buffers that should never be killed
 automatically, and others that should be killed if they have been unused
 for a mere hour.
 
-   <p><a name="index-Midnight-mode-1084"></a><a name="index-midnight_002dmode-1085"></a><a name="index-midnight_002dhook-1086"></a>  You can also have this buffer purging done for you, every day at
+   <p><a name="index-Midnight-mode-1089"></a><a name="index-midnight_002dmode-1090"></a><a name="index-midnight_002dhook-1091"></a>  You can also have this buffer purging done for you, every day at
 midnight, by enabling Midnight mode.  Midnight mode operates each day
 at midnight; at that time, it runs <code>clean-buffer-list</code>, or
 whichever functions you have placed in the normal hook

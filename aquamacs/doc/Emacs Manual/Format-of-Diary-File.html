@@ -3,7 +3,7 @@
 <title>Format of Diary File - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Diary.html#Diary" title="Diary">
 <link rel="prev" href="Displaying-the-Diary.html#Displaying-the-Diary" title="Displaying the Diary">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Format-of-Diary-File"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Date-Formats.html#Date-Formats">Date Formats</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Displaying-the-Diary.html#Displaying-the-Diary">Displaying the Diary</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
@@ -57,8 +57,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
 
 <h4 class="subsection">38.10.2 The Diary File</h4>
 
-<p><a name="index-diary-file-3321"></a>
-<a name="index-diary_002dfile-3322"></a>  Your <dfn>diary file</dfn> is a file that records events associated with
+<p><a name="index-diary-file-3345"></a>
+<a name="index-diary_002dfile-3346"></a>  Your <dfn>diary file</dfn> is a file that records events associated with
 particular dates.  The name of the diary file is specified by the
 variable <code>diary-file</code>; <samp><span class="file">~/diary</span></samp> is the default.  The
 <code>calendar</code> utility program supports a subset of the format allowed
@@ -74,18 +74,9 @@ first must begin with whitespace to indicate they continue a previous
 entry.  Lines that do not begin with valid dates and do not continue a
 preceding entry are ignored.
 
-   <p><a name="index-diary_002dnonmarking_002dsymbol-3323"></a>  You can inhibit the marking of certain diary entries in the calendar
-window; to do this, insert an ampersand <code>diary-nonmarking-symbol</code>
-(default `<samp><span class="samp">&amp;</span></samp>') at the beginning of the entry, before the date.  This
-has no effect on display of the entry in the diary window; it affects
-only marks on dates in the calendar window.  Nonmarking entries are
-especially useful for generic entries that would otherwise mark many
-different dates.
-
-   <p>If the first line of a diary entry consists only of the date or day
-name with no following blanks or punctuation, then the diary window
-display doesn't include that line; only the continuation lines appear. 
-For example, this entry:
+   <p>You can also use a format where the first line of a diary entry
+consists only of the date or day name (with no following blanks or
+punctuation).  For example:
 
 <pre class="example">     02/11/1989
            Bill B. visits Princeton today
@@ -95,24 +86,21 @@ For example, this entry:
            7:30pm Dinner at George's
            8:00-10:00pm concert
 </pre>
-   <p class="noindent">appears in the diary window without the date line at the beginning. 
-This style of entry looks neater when you display just a single day's
-entries, but can cause confusion if you ask for more than one day's
-entries.
+   <p class="noindent">This entry will have a different appearance if you use the simple diary
+display
+(see <a href="Diary-Display.html#Diary-Display">Diary Display</a>). 
+The simple diary display omits the date line at the beginning; only the
+continuation lines appear.  This style of entry looks neater when you
+display just a single day's entries, but can cause confusion if you ask
+for more than one day's entries.
 
-   <p>You can edit the diary entries as they appear in the window, but it is
-important to remember that the buffer displayed contains the <em>entire</em>
-diary file, with portions of it concealed from view.  This means, for
-instance, that the <kbd>C-f</kbd> (<code>forward-char</code>) command can put point
-at what appears to be the end of the line, but what is in reality the
-middle of some concealed line.
-
-   <p><em>Be careful when editing the diary entries!</em>  Inserting
-additional lines or adding/deleting characters in the middle of a
-visible line cannot cause problems, but editing at the end of a line may
-not do what you expect.  Deleting a line may delete other invisible
-entries that follow it.  Before editing the diary, it is best to display
-the entire file with <kbd>s</kbd> (<code>diary-show-all-entries</code>).
+   <p><a name="index-diary_002dnonmarking_002dsymbol-3347"></a>  You can inhibit the marking of certain diary entries in the calendar
+window; to do this, insert an ampersand <code>diary-nonmarking-symbol</code>
+(default &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;) at the beginning of the entry, before the date.  This
+has no effect on display of the entry in the diary window; it affects
+only marks on dates in the calendar window.  Nonmarking entries are
+especially useful for generic entries that would otherwise mark many
+different dates.
 
    </body></html>
 

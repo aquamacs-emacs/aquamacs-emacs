@@ -3,33 +3,33 @@
 <title>Synchronous Processes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Processes.html#Processes" title="Processes">
 <link rel="prev" href="Shell-Arguments.html#Shell-Arguments" title="Shell Arguments">
 <link rel="next" href="Asynchronous-Processes.html#Asynchronous-Processes" title="Asynchronous Processes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Synchronous-Processes"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.3 Creating a Synchronous Process</h3>
 
-<p><a name="index-synchronous-subprocess-3013"></a>
+<p><a name="index-synchronous-subprocess-3190"></a>
   After a <dfn>synchronous process</dfn> is created, Emacs waits for the
 process to terminate before continuing.  Starting Dired on GNU or
 Unix<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> is an example of this: it
@@ -81,7 +81,7 @@ subprocess by <code>call-process-region</code> is encoded using a coding
 system, much like text written into a file.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
 <div class="defun">
-&mdash; Function: <b>call-process</b><var> program &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess-3014"></a></var><br>
+&mdash; Function: <b>call-process</b><var> program &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess-3191"></a></var><br>
 <blockquote><p>This function calls <var>program</var> in a separate process and waits for
 it to finish.
 
@@ -144,23 +144,23 @@ exit status of the subprocess; 0 means success, and any other value
 means failure.  If the process terminated with a signal,
 <code>call-process</code> returns a string describing the signal.
 
-        <p>In the examples below, the buffer `<samp><span class="samp">foo</span></samp>' is current.
+        <p>In the examples below, the buffer &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; is current.
 
      <pre class="smallexample">          (call-process "pwd" nil t)
-               =&gt; 0
+               &rArr; 0
           
           ---------- Buffer: foo ----------
           /usr/user/lewis/manual
           ---------- Buffer: foo ----------
           
           (call-process "grep" nil "bar" nil "lewis" "/etc/passwd")
-               =&gt; 0
+               &rArr; 0
           
           ---------- Buffer: bar ----------
           lewis:5LTsHm66CSWKg:398:21:Bil Lewis:/user/lewis:/bin/csh
           
           ---------- Buffer: bar ----------
-     </pre>
+</pre>
         <p>Here is a good example of the use of <code>call-process</code>, which used to
 be found in the definition of <code>insert-directory</code>:
 
@@ -168,11 +168,11 @@ be found in the definition of <code>insert-directory</code>:
                         (if full-directory-p
                             (concat (file-name-as-directory file) ".")
                           file))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-file</b><var> program &amp;optional infile buffer display &amp;rest args<a name="index-process_002dfile-3015"></a></var><br>
+&mdash; Function: <b>process-file</b><var> program &amp;optional infile buffer display &amp;rest args<a name="index-process_002dfile-3192"></a></var><br>
 <blockquote><p>This function processes files synchronously in a separate process.  It
 is similar to <code>call-process</code> but may invoke a file handler based
 on the value of the variable <code>default-directory</code>.  The current
@@ -214,7 +214,21 @@ file names.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-process-region</b><var> start end program &amp;optional delete destination display &amp;rest args<a name="index-call_002dprocess_002dregion-3016"></a></var><br>
+&mdash; Variable: <b>process-file-side-effects</b><var><a name="index-process_002dfile_002dside_002deffects-3193"></a></var><br>
+<blockquote><p>This variable indicates, whether a call of <code>process-file</code> changes
+remote files.
+
+        <p>Per default, this variable is always set to <code>t</code>, meaning that a
+call of <code>process-file</code> could potentially change any file on a
+remote host.  When set to <code>nil</code>, a file handler could optimize
+its behaviour with respect to remote file attributes caching.
+
+        <p>This variable should never be changed by <code>setq</code>.  Instead of, it
+shall be set only by let-binding. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>call-process-region</b><var> start end program &amp;optional delete destination display &amp;rest args<a name="index-call_002dprocess_002dregion-3194"></a></var><br>
 <blockquote><p>This function sends the text from <var>start</var> to <var>end</var> as
 standard input to a process running <var>program</var>.  It deletes the text
 sent if <var>delete</var> is non-<code>nil</code>; this is useful when
@@ -239,7 +253,7 @@ subprocess terminated.
 
         <p>In the following example, we use <code>call-process-region</code> to run the
 <code>cat</code> utility, with standard input being the first five characters
-in buffer `<samp><span class="samp">foo</span></samp>' (the word `<samp><span class="samp">input</span></samp>').  <code>cat</code> copies its
+in buffer &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; (the word &lsquo;<samp><span class="samp">input</span></samp>&rsquo;).  <code>cat</code> copies its
 standard input into its standard output.  Since the argument
 <var>destination</var> is <code>t</code>, this output is inserted in the current
 buffer.
@@ -249,12 +263,12 @@ buffer.
           ---------- Buffer: foo ----------
           
           (call-process-region 1 6 "cat" nil t)
-               =&gt; 0
+               &rArr; 0
           
           ---------- Buffer: foo ----------
           inputinput-!-
           ---------- Buffer: foo ----------
-     </pre>
+</pre>
         <p>The <code>shell-command-on-region</code> command uses
 <code>call-process-region</code> like this:
 
@@ -265,11 +279,11 @@ buffer.
            buffer               ; <span class="roman">Send output to </span><code>buffer</code><span class="roman">.</span>
            nil                  ; <span class="roman">No redisplay during output.</span>
            "-c" command)        ; <span class="roman">Arguments for the shell.</span>
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-process-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess_002dshell_002dcommand-3017"></a></var><br>
+&mdash; Function: <b>call-process-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess_002dshell_002dcommand-3195"></a></var><br>
 <blockquote><p>This function executes the shell command <var>command</var> synchronously
 in a separate process.  The final arguments <var>args</var> are additional
 arguments to add at the end of <var>command</var>.  The other arguments
@@ -277,9 +291,32 @@ are handled as in <code>call-process</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>shell-command-to-string</b><var> command<a name="index-shell_002dcommand_002dto_002dstring-3018"></a></var><br>
+&mdash; Function: <b>process-file-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-process_002dfile_002dshell_002dcommand-3196"></a></var><br>
+<blockquote><p>This function is like <code>call-process-shell-command</code>, but uses
+<code>process-file</code> internally.  Depending on <code>default-directory</code>,
+<var>command</var> can be executed also on remote hosts. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>shell-command-to-string</b><var> command<a name="index-shell_002dcommand_002dto_002dstring-3197"></a></var><br>
 <blockquote><p>This function executes <var>command</var> (a string) as a shell command,
 then returns the command's output as a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-lines</b><var> program &amp;rest args<a name="index-process_002dlines-3198"></a></var><br>
+<blockquote><p>This function runs <var>program</var> in a separate process, waits for it
+to finish, and returns its output as a list of strings.  Each string
+in the list holds a single line of text output by the program; the
+end-of-line characters are stripped from each line.  The arguments
+beyond <var>program</var>, <var>args</var>, are strings that specify
+command-line arguments with which to run the program.
+
+        <p>If <var>program</var> exits with a non-zero exit status, this function
+signals an error.
+
+        <p>This function works by calling <code>call-process</code>, so program output
+is decoded in the same way as for <code>call-process</code>. 
 </p></blockquote></div>
 
    <div class="footnote">
@@ -287,7 +324,7 @@ then returns the command's output as a string.
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> On other systems, Emacs uses a Lisp emulation of
 <code>ls</code>; see <a href="Contents-of-Directories.html#Contents-of-Directories">Contents of Directories</a>.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

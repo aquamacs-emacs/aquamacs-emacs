@@ -1,9 +1,9 @@
 <html lang="en">
 <head>
-<title>VC Status - GNU Emacs Manual</title>
+<title>VC Change Log - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Secondary-VC-Commands.html#Secondary-VC-Commands" title="Secondary VC Commands">
 <link rel="prev" href="Registering.html#Registering" title="Registering">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,28 +47,40 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
+<a name="VC-Change-Log"></a>
 <p>
-<a name="VC-Status"></a>
 Next:&nbsp;<a rel="next" accesskey="n" href="VC-Undo.html#VC-Undo">VC Undo</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Registering.html#Registering">Registering</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary-VC-Commands">Secondary VC Commands</a>
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.5.2 VC Status Commands</h5>
+<h5 class="subsubsection">32.1.5.2 VC Change Log</h5>
 
      <dl>
-<dt><kbd>C-x v l</kbd><dd>Display revision control state and change history. 
+<dt><kbd>C-x v l</kbd><dd>Display revision control state and change history
+(<code>vc-print-log</code>).
+
+     <br><dt><kbd>C-x v L</kbd><dd>Display the change history for the current repository
+(<code>vc-print-root-log</code>). 
 </dl>
 
-   <p><a name="index-C_002dx-v-l-2445"></a><a name="index-vc_002dprint_002dlog-2446"></a>  To view the detailed revision control status and history of a file,
-type <kbd>C-x v l</kbd> (<code>vc-print-log</code>).  This pops up a special
-buffer named `<samp><span class="samp">*vc-change-log*</span></samp>', in a new window, that displays
-the history of changes to the current file, including the text of the
-log entries.  The point is centered at the revision of the file that
-is currently being visited.
+   <p><a name="index-C_002dx-v-l-2467"></a><a name="index-vc_002dprint_002dlog-2468"></a>  The command <kbd>C-x v l</kbd> (<code>vc-print-log</code>) displays a buffer
+named &lsquo;<samp><span class="samp">*vc-change-log*</span></samp>&rsquo; in a new window.  This buffer lists the
+changes to the current file, including the associated log entries. 
+(These are the log entries associated with the version control system,
+i.e. the ones you enter via the &lsquo;<samp><span class="samp">*VC-Log*</span></samp>&rsquo; buffer.  See <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>.)  Point is centered at the revision of the file currently
+being visited.  With a prefix argument, the command prompts for the
+revision to center on, and the maximum number of revisions to display. 
+You can call this command from a Dired buffer (see <a href="Dired.html#Dired">Dired</a>).
 
-   <p>In the `<samp><span class="samp">*vc-change-log*</span></samp>' buffer, you can use the following keys
+   <p><a name="index-vc_002dprint_002droot_002dlog-2469"></a>  Type <kbd>C-x v L</kbd> (<code>vc-print-root-log</code>) to display a
+&lsquo;<samp><span class="samp">*vc-change-log*</span></samp>&rsquo; buffer showing the history of the
+version-controlled directory tree as a whole.  With a prefix argument,
+the command prompts for the maximum number of revisions to display. 
+RCS, SCCS, and CVS do not support this feature.
+
+   <p>In the &lsquo;<samp><span class="samp">*vc-change-log*</span></samp>&rsquo; buffer, you can use the following keys
 to move between the logs of revisions and of files, to view past
 revisions, to modify change comments, to view annotations and to view
 diffs:
@@ -110,6 +122,15 @@ revision indicated at the current line and the next earlier revision.
 This is useful to see all the changes to all files that the revision
 indicated on the current line did when it was committed. 
 </dl>
+
+   <p><a name="index-vc_002dlog_002dshow_002dlimit-2470"></a>Because fetching many log entries can be slow, the
+&lsquo;<samp><span class="samp">*vc-change-log*</span></samp>&rsquo; buffer displays no more than 2000 revisions by
+default.  The variable <code>vc-log-show-limit</code> specifies this limit;
+if you set the value to zero, that removes the limit.  You can also
+increase the number of revisions shown in an existing
+&lsquo;<samp><span class="samp">*vc-change-log*</span></samp>&rsquo; buffer by clicking on the &lsquo;<samp><span class="samp">Show 2X
+entries</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Show unlimited entries</span></samp>&rsquo; buttons at the end of the
+buffer.  However, RCS, SCCS, and CVS do not support this feature.
 
    </body></html>
 

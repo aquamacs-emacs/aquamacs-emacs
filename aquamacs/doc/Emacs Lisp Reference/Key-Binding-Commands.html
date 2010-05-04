@@ -3,33 +3,33 @@
 <title>Key Binding Commands - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
 <link rel="prev" href="Translation-Keymaps.html#Translation-Keymaps" title="Translation Keymaps">
 <link rel="next" href="Scanning-Keymaps.html#Scanning-Keymaps" title="Scanning Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Key-Binding-Commands"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Scanning-Keymaps.html#Scanning-Keymaps">Scanning Keymaps</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
@@ -79,7 +79,7 @@ changing key bindings.  They work by calling <code>define-key</code>.
    <p class="noindent">redefines the first (leftmost) mouse button, entered with the Meta key, to
 set point where you click.
 
-   <p><a name="index-non_002d_0040acronym_007bASCII_007d-text-in-keybindings-1483"></a>  Be careful when using non-<acronym>ASCII</acronym> text characters in Lisp
+   <p><a name="index-non_002d_0040acronym_007bASCII_007d-text-in-keybindings-1539"></a>  Be careful when using non-<acronym>ASCII</acronym> text characters in Lisp
 specifications of keys to bind.  If these are read as multibyte text, as
 they usually will be in a Lisp file (see <a href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>), you
 must type the keys as multibyte too.  For instance, if you use this:
@@ -102,19 +102,19 @@ construct the key sequence string using <code>multibyte-char-to-unibyte</code>
 or <code>string-make-unibyte</code> (see <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>).
 
 <div class="defun">
-&mdash; Command: <b>global-set-key</b><var> key binding<a name="index-global_002dset_002dkey-1484"></a></var><br>
+&mdash; Command: <b>global-set-key</b><var> key binding<a name="index-global_002dset_002dkey-1540"></a></var><br>
 <blockquote><p>This function sets the binding of <var>key</var> in the current global map
 to <var>binding</var>.
 
      <pre class="smallexample">          (global-set-key <var>key</var> <var>binding</var>)
           ==
           (define-key (current-global-map) <var>key</var> <var>binding</var>)
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>global-unset-key</b><var> key<a name="index-global_002dunset_002dkey-1485"></a></var><br>
-<blockquote><p><a name="index-unbinding-keys-1486"></a>This function removes the binding of <var>key</var> from the current
+&mdash; Command: <b>global-unset-key</b><var> key<a name="index-global_002dunset_002dkey-1541"></a></var><br>
+<blockquote><p><a name="index-unbinding-keys-1542"></a>This function removes the binding of <var>key</var> from the current
 global map.
 
         <p>One use of this function is in preparation for defining a longer key
@@ -122,38 +122,38 @@ that uses <var>key</var> as a prefix&mdash;which would not be allowed if
 <var>key</var> has a non-prefix binding.  For example:
 
      <pre class="smallexample">          (global-unset-key "\C-l")
-              =&gt; nil
+              &rArr; nil
           (global-set-key "\C-l\C-l" 'redraw-display)
-              =&gt; nil
-     </pre>
+              &rArr; nil
+</pre>
         <p>This function is implemented simply using <code>define-key</code>:
 
      <pre class="smallexample">          (global-unset-key <var>key</var>)
           ==
           (define-key (current-global-map) <var>key</var> nil)
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>local-set-key</b><var> key binding<a name="index-local_002dset_002dkey-1487"></a></var><br>
+&mdash; Command: <b>local-set-key</b><var> key binding<a name="index-local_002dset_002dkey-1543"></a></var><br>
 <blockquote><p>This function sets the binding of <var>key</var> in the current local
 keymap to <var>binding</var>.
 
      <pre class="smallexample">          (local-set-key <var>key</var> <var>binding</var>)
           ==
           (define-key (current-local-map) <var>key</var> <var>binding</var>)
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>local-unset-key</b><var> key<a name="index-local_002dunset_002dkey-1488"></a></var><br>
+&mdash; Command: <b>local-unset-key</b><var> key<a name="index-local_002dunset_002dkey-1544"></a></var><br>
 <blockquote><p>This function removes the binding of <var>key</var> from the current
 local map.
 
      <pre class="smallexample">          (local-unset-key <var>key</var>)
           ==
           (define-key (current-local-map) <var>key</var> nil)
-     </pre>
+</pre>
         </blockquote></div>
 
    </body></html>

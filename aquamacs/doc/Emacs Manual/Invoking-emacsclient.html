@@ -3,7 +3,7 @@
 <title>Invoking emacsclient - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Emacs-Server.html#Emacs-Server" title="Emacs Server">
 <link rel="next" href="emacsclient-Options.html#emacsclient-Options" title="emacsclient Options">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Invoking-emacsclient"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs-Server">Emacs Server</a>
 <hr>
@@ -55,9 +55,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs-Server">Emacs S
 
 <h3 class="section">42.1 Invoking <code>emacsclient</code></h3>
 
-<p><a name="index-g_t_0040code_007bemacsclient_007d-invocation-3679"></a>
+<p><a name="index-g_t_0040code_007bemacsclient_007d-invocation-3702"></a>
   The simplest way to use the <samp><span class="command">emacsclient</span></samp> program is to run
-the shell command `<samp><span class="samp">emacsclient </span><var>file</var></samp>', where <var>file</var> is a
+the shell command &lsquo;<samp><span class="samp">emacsclient </span><var>file</var></samp>&rsquo;, where <var>file</var> is a
 file name.  This connects to an Emacs server, and tells that Emacs
 process to visit <var>file</var> in one of its existing frames&mdash;either a
 graphical frame, or one in a text-only terminal (see <a href="Frames.html#Frames">Frames</a>).  You
@@ -66,21 +66,23 @@ can then select that frame to begin editing.
    <p>If there is no Emacs server, the <samp><span class="command">emacsclient</span></samp> program halts
 with an error message.  If the Emacs process has no existing
 frame&mdash;which can happen if it was started as a daemon (see <a href="Emacs-Server.html#Emacs-Server">Emacs Server</a>)&mdash;then Emacs opens a frame on the terminal in which you
-called <samp><span class="command">emacsclient</span></samp>, as though you had used the `<samp><span class="samp">-t</span></samp>'
-option (see <a href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>).
+called <samp><span class="command">emacsclient</span></samp>.
 
-   <p>On a graphical display, switching to the Emacs server is
-straightforward&mdash;just select its (system-level) window.  If you are
-using a text-only terminal, there are two ways to switch between
-<samp><span class="command">emacsclient</span></samp>'s shell and the Emacs server: (i) run the Emacs
-server and <samp><span class="command">emacsclient</span></samp> on different virtual terminals, and
-switch to the Emacs server's virtual terminal after calling
-<samp><span class="command">emacsclient</span></samp>; or (ii) call <samp><span class="command">emacsclient</span></samp> from within
-the Emacs server itself, using Shell mode (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>)
-or Term mode (see <a href="Term-Mode.html#Term-Mode">Term Mode</a>); <code>emacsclient</code> blocks only the
-subshell under Emacs, and you can still use Emacs to edit the file.
+   <p>You can also force <samp><span class="command">emacsclient</span></samp> to open a new frame on a
+graphical display, or on a text-only terminal, using the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; options.  See <a href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>.
 
-   <p><a name="index-C_002dx-_0023-3680"></a><a name="index-server_002dedit-3681"></a>  When you finish editing <var>file</var> in the Emacs server, type
+   <p>If you are running on a single text-only terminal, you can switch
+between <samp><span class="command">emacsclient</span></samp>'s shell and the Emacs server using one
+of two methods: (i) run the Emacs server and <samp><span class="command">emacsclient</span></samp> on
+different virtual terminals, and switch to the Emacs server's virtual
+terminal after calling <samp><span class="command">emacsclient</span></samp>; or (ii) call
+<samp><span class="command">emacsclient</span></samp> from within the Emacs server itself, using Shell
+mode (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>) or Term mode (see <a href="Term-Mode.html#Term-Mode">Term Mode</a>);
+<code>emacsclient</code> blocks only the subshell under Emacs, and you can
+still use Emacs to edit the file.
+
+   <p><a name="index-C_002dx-_0023-3703"></a><a name="index-server_002dedit-3704"></a>  When you finish editing <var>file</var> in the Emacs server, type
 <kbd>C-x #</kbd> (<code>server-edit</code>) in its buffer.  This saves the file
 and sends a message back to the <samp><span class="command">emacsclient</span></samp> program, telling
 it to exit.  Programs that use <samp><span class="env">EDITOR</span></samp> usually wait for the
@@ -88,7 +90,7 @@ it to exit.  Programs that use <samp><span class="env">EDITOR</span></samp> usua
 something else.
 
    <p>You can also call <samp><span class="command">emacsclient</span></samp> with multiple file name
-arguments: `<samp><span class="samp">emacsclient </span><var>file1</var> <var>file2</var><span class="samp"> ...</span></samp>' tells the
+arguments: &lsquo;<samp><span class="samp">emacsclient </span><var>file1</var> <var>file2</var><span class="samp"> ...</span></samp>&rsquo; tells the
 Emacs server to visit <var>file1</var>, <var>file2</var>, and so forth.  Emacs
 selects the buffer visiting <var>file1</var>, and buries the other buffers
 at the bottom of the buffer list (see <a href="Buffers.html#Buffers">Buffers</a>).  The
@@ -96,7 +98,7 @@ at the bottom of the buffer list (see <a href="Buffers.html#Buffers">Buffers</a>
 finished (i.e., once you have typed <kbd>C-x #</kbd> in each server
 buffer).
 
-   <p><a name="index-server_002dkill_002dnew_002dbuffers-3682"></a><a name="index-server_002dtemp_002dfile_002dregexp-3683"></a>  Finishing with a server buffer also kills the buffer, unless it
+   <p><a name="index-server_002dkill_002dnew_002dbuffers-3705"></a><a name="index-server_002dtemp_002dfile_002dregexp-3706"></a>  Finishing with a server buffer also kills the buffer, unless it
 already existed in the Emacs session before the server was asked to
 create it.  However, if you set <code>server-kill-new-buffers</code> to
 <code>nil</code>, then a different criterion is used: finishing with a
@@ -110,9 +112,9 @@ server buffer manually if you wish; you don't have to arrive at it
 with <kbd>C-x #</kbd>.  But <kbd>C-x #</kbd> is the way to tell
 <samp><span class="command">emacsclient</span></samp> that you are finished.
 
-   <p><a name="index-server_002dwindow-3684"></a>  If you set the variable <code>server-window</code> to a window or a frame,
-<kbd>C-x #</kbd> always displays the next server buffer in that window or
-in that frame.
+   <p><a name="index-server_002dwindow-3707"></a>  If you set the value of the variable <code>server-window</code> to a
+window or a frame, <kbd>C-x #</kbd> always displays the next server buffer
+in that window or in that frame.
 
    </body></html>
 

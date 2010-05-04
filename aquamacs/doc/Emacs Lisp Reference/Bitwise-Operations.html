@@ -3,33 +3,33 @@
 <title>Bitwise Operations - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Numbers.html#Numbers" title="Numbers">
 <link rel="prev" href="Rounding-Operations.html#Rounding-Operations" title="Rounding Operations">
 <link rel="next" href="Math-Functions.html#Math-Functions" title="Math Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Bitwise-Operations"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Math-Functions.html#Math-Functions">Math Functions</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Rounding-Operations.html#Rounding-Operations">Rounding Operations</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.8 Bitwise Operations on Integers</h3>
 
-<p><a name="index-bitwise-arithmetic-186"></a><a name="index-logical-arithmetic-187"></a>
+<p><a name="index-bitwise-arithmetic-190"></a><a name="index-logical-arithmetic-191"></a>
   In a computer, an integer is represented as a binary number, a
 sequence of <dfn>bits</dfn> (digits which are either zero or one).  A bitwise
 operation acts on the individual bits of such a sequence.  For example,
@@ -66,8 +66,8 @@ reproducing the same pattern &ldquo;moved over.&rdquo;
    <p>The bitwise operations in Emacs Lisp apply only to integers.
 
 <div class="defun">
-&mdash; Function: <b>lsh</b><var> integer1 count<a name="index-lsh-188"></a></var><br>
-<blockquote><p><a name="index-logical-shift-189"></a><code>lsh</code>, which is an abbreviation for <dfn>logical shift</dfn>, shifts the
+&mdash; Function: <b>lsh</b><var> integer1 count<a name="index-lsh-192"></a></var><br>
+<blockquote><p><a name="index-logical-shift-193"></a><code>lsh</code>, which is an abbreviation for <dfn>logical shift</dfn>, shifts the
 bits in <var>integer1</var> to the left <var>count</var> places, or to the right
 if <var>count</var> is negative, bringing zeros into the vacated bits.  If
 <var>count</var> is negative, <code>lsh</code> shifts zeros into the leftmost
@@ -79,15 +79,15 @@ place to the left.  We show only the low-order eight bits of the binary
 pattern; the rest are all zero.
 
      <pre class="example">          (lsh 5 1)
-               =&gt; 10
+               &rArr; 10
           ;; <span class="roman">Decimal 5 becomes decimal 10.</span>
-          00000101 =&gt; 00001010
+          00000101 &rArr; 00001010
           
           (lsh 7 1)
-               =&gt; 14
+               &rArr; 14
           ;; <span class="roman">Decimal 7 becomes decimal 14.</span>
-          00000111 =&gt; 00001110
-     </pre>
+          00000111 &rArr; 00001110
+</pre>
         <p class="noindent">As the examples illustrate, shifting the pattern of bits one place to
 the left produces a number that is twice the value of the previous
 number.
@@ -96,48 +96,48 @@ number.
 like this (with 8-bit binary numbers):
 
      <pre class="example">          (lsh 3 2)
-               =&gt; 12
+               &rArr; 12
           ;; <span class="roman">Decimal 3 becomes decimal 12.</span>
-          00000011 =&gt; 00001100
-     </pre>
+          00000011 &rArr; 00001100
+</pre>
         <p>On the other hand, shifting one place to the right looks like this:
 
      <pre class="example">          (lsh 6 -1)
-               =&gt; 3
+               &rArr; 3
           ;; <span class="roman">Decimal 6 becomes decimal 3.</span>
-          00000110 =&gt; 00000011
+          00000110 &rArr; 00000011
           
           (lsh 5 -1)
-               =&gt; 2
+               &rArr; 2
           ;; <span class="roman">Decimal 5 becomes decimal 2.</span>
-          00000101 =&gt; 00000010
-     </pre>
+          00000101 &rArr; 00000010
+</pre>
         <p class="noindent">As the example illustrates, shifting one place to the right divides the
 value of a positive integer by two, rounding downward.
 
         <p>The function <code>lsh</code>, like all Emacs Lisp arithmetic functions, does
 not check for overflow, so shifting left can discard significant bits
 and change the sign of the number.  For example, left shifting
-268,435,455 produces &minus;2 on a 29-bit machine:
+536,870,911 produces &minus;2 on a 30-bit machine:
 
-     <pre class="example">          (lsh 268435455 1)          ; <span class="roman">left shift</span>
-               =&gt; -2
-     </pre>
-        <p>In binary, in the 29-bit implementation, the argument looks like this:
+     <pre class="example">          (lsh 536870911 1)          ; <span class="roman">left shift</span>
+               &rArr; -2
+</pre>
+        <p>In binary, in the 30-bit implementation, the argument looks like this:
 
-     <pre class="example">          ;; <span class="roman">Decimal 268,435,455</span>
-          0 1111  1111 1111  1111 1111  1111 1111
-     </pre>
+     <pre class="example">          ;; <span class="roman">Decimal 536,870,911</span>
+          01 1111  1111 1111  1111 1111  1111 1111
+</pre>
         <p class="noindent">which becomes the following when left shifted:
 
      <pre class="example">          ;; <span class="roman">Decimal &minus;2</span>
-          1 1111  1111 1111  1111 1111  1111 1110
-     </pre>
+          11 1111  1111 1111  1111 1111  1111 1110
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ash</b><var> integer1 count<a name="index-ash-190"></a></var><br>
-<blockquote><p><a name="index-arithmetic-shift-191"></a><code>ash</code> (<dfn>arithmetic shift</dfn>) shifts the bits in <var>integer1</var>
+&mdash; Function: <b>ash</b><var> integer1 count<a name="index-ash-194"></a></var><br>
+<blockquote><p><a name="index-arithmetic-shift-195"></a><code>ash</code> (<dfn>arithmetic shift</dfn>) shifts the bits in <var>integer1</var>
 to the left <var>count</var> places, or to the right if <var>count</var>
 is negative.
 
@@ -149,48 +149,48 @@ is negative.
         <p>Thus, with <code>ash</code>, shifting the pattern of bits one place to the right
 looks like this:
 
-     <pre class="example">          (ash -6 -1) =&gt; -3
+     <pre class="example">          (ash -6 -1) &rArr; -3
           ;; <span class="roman">Decimal &minus;6 becomes decimal &minus;3.</span>
-          1 1111  1111 1111  1111 1111  1111 1010
-               =&gt;
-          1 1111  1111 1111  1111 1111  1111 1101
-     </pre>
+          11 1111  1111 1111  1111 1111  1111 1010
+               &rArr;
+          11 1111  1111 1111  1111 1111  1111 1101
+</pre>
         <p>In contrast, shifting the pattern of bits one place to the right with
 <code>lsh</code> looks like this:
 
-     <pre class="example">          (lsh -6 -1) =&gt; 268435453
-          ;; <span class="roman">Decimal &minus;6 becomes decimal 268,435,453.</span>
-          1 1111  1111 1111  1111 1111  1111 1010
-               =&gt;
-          0 1111  1111 1111  1111 1111  1111 1101
-     </pre>
+     <pre class="example">          (lsh -6 -1) &rArr; 536870909
+          ;; <span class="roman">Decimal &minus;6 becomes decimal 536,870,909.</span>
+          11 1111  1111 1111  1111 1111  1111 1010
+               &rArr;
+          01 1111  1111 1111  1111 1111  1111 1101
+</pre>
         <p>Here are other examples:
 
      <!-- !!! Check if lined up in smallbook format!  XDVI shows problem -->
-<!-- with smallbook but not with regular book! -rjc 16mar92 -->
-<pre class="smallexample">                             ;  <span class="roman">             29-bit binary values</span>
+     <!-- with smallbook but not with regular book! -rjc 16mar92 -->
+     <pre class="smallexample">                             ;  <span class="roman">             30-bit binary values</span>
           
-          (lsh 5 2)          ;   5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-               =&gt; 20         ;      =  <span class="roman">0 0000  0000 0000  0000 0000  0001 0100</span>
+          (lsh 5 2)          ;   5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+               &rArr; 20         ;      =  <span class="roman">00 0000  0000 0000  0000 0000  0001 0100</span>
           (ash 5 2)
-               =&gt; 20
-          (lsh -5 2)         ;  -5  =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1011</span>
-               =&gt; -20        ;      =  <span class="roman">1 1111  1111 1111  1111 1111  1110 1100</span>
+               &rArr; 20
+          (lsh -5 2)         ;  -5  =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1011</span>
+               &rArr; -20        ;      =  <span class="roman">11 1111  1111 1111  1111 1111  1110 1100</span>
           (ash -5 2)
-               =&gt; -20
-          (lsh 5 -2)         ;   5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-               =&gt; 1          ;      =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0001</span>
+               &rArr; -20
+          (lsh 5 -2)         ;   5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+               &rArr; 1          ;      =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0001</span>
           (ash 5 -2)
-               =&gt; 1
-          (lsh -5 -2)        ;  -5  =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1011</span>
-               =&gt; 134217726  ;      =  <span class="roman">0 0111  1111 1111  1111 1111  1111 1110</span>
-          (ash -5 -2)        ;  -5  =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1011</span>
-               =&gt; -2         ;      =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1110</span>
-     </pre>
+               &rArr; 1
+          (lsh -5 -2)        ;  -5  =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1011</span>
+               &rArr; 268435454  ;      =  <span class="roman">00 0111  1111 1111  1111 1111  1111 1110</span>
+          (ash -5 -2)        ;  -5  =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1011</span>
+               &rArr; -2         ;      =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1110</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>logand</b><var> &amp;rest ints-or-markers<a name="index-logand-192"></a></var><br>
+&mdash; Function: <b>logand</b><var> &amp;rest ints-or-markers<a name="index-logand-196"></a></var><br>
 <blockquote><p>This function returns the &ldquo;logical and&rdquo; of the arguments: the
 <var>n</var>th bit is set in the result if, and only if, the <var>n</var>th bit is
 set in all the arguments.  (&ldquo;Set&rdquo; means that the value of the bit is 1
@@ -206,83 +206,83 @@ the arguments, so the rightmost two bits of the returned value are 0's.
      <p class="noindent">Therefore,
 
      <pre class="example">          (logand 13 12)
-               =&gt; 12
-     </pre>
+               &rArr; 12
+</pre>
         <p>If <code>logand</code> is not passed any argument, it returns a value of
 &minus;1.  This number is an identity element for <code>logand</code>
 because its binary representation consists entirely of ones.  If
 <code>logand</code> is passed just one argument, it returns that argument.
 
-     <pre class="smallexample">                             ; <span class="roman">               29-bit binary values</span>
+     <pre class="smallexample">                             ; <span class="roman">               30-bit binary values</span>
           
-          (logand 14 13)     ; 14  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1110</span>
-                             ; 13  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1101</span>
-               =&gt; 12         ; 12  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1100</span>
+          (logand 14 13)     ; 14  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1110</span>
+                             ; 13  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1101</span>
+               &rArr; 12         ; 12  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1100</span>
           
-          (logand 14 13 4)   ; 14  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1110</span>
-                             ; 13  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1101</span>
-                             ;  4  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0100</span>
-               =&gt; 4          ;  4  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0100</span>
+          (logand 14 13 4)   ; 14  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1110</span>
+                             ; 13  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1101</span>
+                             ;  4  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0100</span>
+               &rArr; 4          ;  4  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0100</span>
           
           (logand)
-               =&gt; -1         ; -1  =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1111</span>
-     </pre>
+               &rArr; -1         ; -1  =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1111</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>logior</b><var> &amp;rest ints-or-markers<a name="index-logior-193"></a></var><br>
+&mdash; Function: <b>logior</b><var> &amp;rest ints-or-markers<a name="index-logior-197"></a></var><br>
 <blockquote><p>This function returns the &ldquo;inclusive or&rdquo; of its arguments: the <var>n</var>th bit
 is set in the result if, and only if, the <var>n</var>th bit is set in at least
 one of the arguments.  If there are no arguments, the result is zero,
 which is an identity element for this operation.  If <code>logior</code> is
 passed just one argument, it returns that argument.
 
-     <pre class="smallexample">                             ; <span class="roman">              29-bit binary values</span>
+     <pre class="smallexample">                             ; <span class="roman">              30-bit binary values</span>
           
-          (logior 12 5)      ; 12  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1100</span>
-                             ;  5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-               =&gt; 13         ; 13  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1101</span>
+          (logior 12 5)      ; 12  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1100</span>
+                             ;  5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+               &rArr; 13         ; 13  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1101</span>
           
-          (logior 12 5 7)    ; 12  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1100</span>
-                             ;  5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-                             ;  7  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0111</span>
-               =&gt; 15         ; 15  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1111</span>
-     </pre>
+          (logior 12 5 7)    ; 12  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1100</span>
+                             ;  5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+                             ;  7  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0111</span>
+               &rArr; 15         ; 15  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1111</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>logxor</b><var> &amp;rest ints-or-markers<a name="index-logxor-194"></a></var><br>
+&mdash; Function: <b>logxor</b><var> &amp;rest ints-or-markers<a name="index-logxor-198"></a></var><br>
 <blockquote><p>This function returns the &ldquo;exclusive or&rdquo; of its arguments: the
 <var>n</var>th bit is set in the result if, and only if, the <var>n</var>th bit is
 set in an odd number of the arguments.  If there are no arguments, the
 result is 0, which is an identity element for this operation.  If
 <code>logxor</code> is passed just one argument, it returns that argument.
 
-     <pre class="smallexample">                             ; <span class="roman">              29-bit binary values</span>
+     <pre class="smallexample">                             ; <span class="roman">              30-bit binary values</span>
           
-          (logxor 12 5)      ; 12  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1100</span>
-                             ;  5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-               =&gt; 9          ;  9  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1001</span>
+          (logxor 12 5)      ; 12  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1100</span>
+                             ;  5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+               &rArr; 9          ;  9  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1001</span>
           
-          (logxor 12 5 7)    ; 12  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1100</span>
-                             ;  5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
-                             ;  7  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0111</span>
-               =&gt; 14         ; 14  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 1110</span>
-     </pre>
+          (logxor 12 5 7)    ; 12  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1100</span>
+                             ;  5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
+                             ;  7  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0111</span>
+               &rArr; 14         ; 14  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 1110</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>lognot</b><var> integer<a name="index-lognot-195"></a></var><br>
+&mdash; Function: <b>lognot</b><var> integer<a name="index-lognot-199"></a></var><br>
 <blockquote><p>This function returns the logical complement of its argument: the <var>n</var>th
 bit is one in the result if, and only if, the <var>n</var>th bit is zero in
 <var>integer</var>, and vice-versa.
 
      <pre class="example">          (lognot 5)
-               =&gt; -6
-          ;;  5  =  <span class="roman">0 0000  0000 0000  0000 0000  0000 0101</span>
+               &rArr; -6
+          ;;  5  =  <span class="roman">00 0000  0000 0000  0000 0000  0000 0101</span>
           ;; <span class="roman">becomes</span>
-          ;; -6  =  <span class="roman">1 1111  1111 1111  1111 1111  1111 1010</span>
-     </pre>
+          ;; -6  =  <span class="roman">11 1111  1111 1111  1111 1111  1111 1010</span>
+</pre>
         </blockquote></div>
 
    </body></html>

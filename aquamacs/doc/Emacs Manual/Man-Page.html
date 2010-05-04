@@ -3,7 +3,7 @@
 <title>Man Page - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Documentation.html#Documentation" title="Documentation">
 <link rel="prev" href="Info-Lookup.html#Info-Lookup" title="Info Lookup">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Man-Page"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Info-Lookup.html#Info-Lookup">Info Lookup</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Documentation</a>
@@ -57,51 +57,51 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 
 <h4 class="subsection">30.6.2 Man Page Lookup</h4>
 
-<p><a name="index-manual-page-2060"></a>  On Unix, the main form of on-line documentation was the <dfn>manual
+<p><a name="index-manual-page-2076"></a>  On Unix, the main form of on-line documentation was the <dfn>manual
 page</dfn> or <dfn>man page</dfn>.  In the GNU operating system, we aim to
 replace man pages with better-organized manuals that you can browse
 with Info (see <a href="Misc-Help.html#Misc-Help">Misc Help</a>).  This process is not finished, so it is
 still useful to read manual pages.
 
-   <p><a name="index-manual_002dentry-2061"></a>  You can read the man page for an operating system command, library
+   <p><a name="index-manual_002dentry-2077"></a>  You can read the man page for an operating system command, library
 function, or system call, with the <kbd>M-x man</kbd> command.  It
 runs the <code>man</code> program to format the man page; if the system
 permits, it runs <code>man</code> asynchronously, so that you can keep on
 editing while the page is being formatted.  (On MS-DOS and MS-Windows
 3, you cannot edit while Emacs waits for <code>man</code> to finish.)  The
-result goes in a buffer named `<samp><span class="samp">*Man </span><var>topic</var><span class="samp">*</span></samp>'.  These buffers
+result goes in a buffer named &lsquo;<samp><span class="samp">*Man </span><var>topic</var><span class="samp">*</span></samp>&rsquo;.  These buffers
 use a special major mode, Man mode, that facilitates scrolling and
 jumping to other manual pages.  For details, type <kbd>C-h m</kbd> while in
 a man page buffer.
 
-   <p><a name="index-sections-of-manual-pages-2062"></a>  Each man page belongs to one of ten or more <dfn>sections</dfn>, each
+   <p><a name="index-sections-of-manual-pages-2078"></a>  Each man page belongs to one of ten or more <dfn>sections</dfn>, each
 named by a digit or by a digit and a letter.  Sometimes there are
 multiple man pages with the same name in different sections.  To read
 a man page from a specific section, type
-`<samp><var>topic</var><span class="samp">(</span><var>section</var><span class="samp">)</span></samp>' or `<samp><var>section</var> <var>topic</var></samp>'
+&lsquo;<samp><var>topic</var><span class="samp">(</span><var>section</var><span class="samp">)</span></samp>&rsquo; or &lsquo;<samp><var>section</var> <var>topic</var></samp>&rsquo;
 when <kbd>M-x manual-entry</kbd> prompts for the topic.  For example, to
 read the man page for the C library function <code>chmod</code> (as opposed
 to a command of the same name), type <kbd>M-x manual-entry &lt;RET&gt;
 chmod(2) &lt;RET&gt;</kbd>.  (<code>chmod</code> is a system call, so it is in
-section `<samp><span class="samp">2</span></samp>'.)
+section &lsquo;<samp><span class="samp">2</span></samp>&rsquo;.)
 
-   <p><a name="index-Man_002dswitches-2063"></a>  If you do not specify a section, the results depend on how the
+   <p><a name="index-Man_002dswitches-2079"></a>  If you do not specify a section, the results depend on how the
 <code>man</code> program works on your system.  Some of them display only
 the first man page they find.  Others display all man pages that have
 the specified name, so you can move between them with the <kbd>M-n</kbd>
 and <kbd>M-p</kbd> keys<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
 The mode line shows how many manual pages are present in the Man buffer.
 
-   <p><a name="index-Man_002dfontify_002dmanpage_002dflag-2064"></a>  By default, Emacs highlights the text in man pages.  For a long man
+   <p><a name="index-Man_002dfontify_002dmanpage_002dflag-2080"></a>  By default, Emacs highlights the text in man pages.  For a long man
 page, highlighting can take substantial time.  You can turn off
 highlighting of man pages by setting the variable
 <code>Man-fontify-manpage-flag</code> to <code>nil</code>.
 
-   <p><a name="index-Man_002dfontify_002dmanpage-2065"></a>  If you insert the text of a man page into an Emacs buffer in some
+   <p><a name="index-Man_002dfontify_002dmanpage-2081"></a>  If you insert the text of a man page into an Emacs buffer in some
 other fashion, you can use the command <kbd>M-x Man-fontify-manpage</kbd> to
 perform the same conversions that <kbd>M-x manual-entry</kbd> does.
 
-   <p><a name="index-woman-2066"></a><a name="index-manual-pages_002c-on-MS_002dDOS_002fMS_002dWindows-2067"></a>  An alternative way of reading manual pages is the <kbd>M-x woman</kbd>
+   <p><a name="index-woman-2082"></a><a name="index-manual-pages_002c-on-MS_002dDOS_002fMS_002dWindows-2083"></a>  An alternative way of reading manual pages is the <kbd>M-x woman</kbd>
 command<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  Unlike <kbd>M-x man</kbd>, it does not run any external
 programs to format and display the man pages; instead it does the job
 in Emacs Lisp, so it works on systems such as MS-Windows, where the
@@ -130,7 +130,7 @@ them.
    <div class="footnote">
 <hr>
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> On some systems, the <code>man</code> program
-accepts a `<samp><span class="samp">-a</span></samp>' command-line option which tells it to display all
+accepts a &lsquo;<samp><span class="samp">-a</span></samp>&rsquo; command-line option which tells it to display all
 the man pages for the specified topic.  If you want this behavior, you
 can add this option to the value of the variable <code>Man-switches</code>.</p>
 
@@ -138,7 +138,7 @@ can add this option to the value of the variable <code>Man-switches</code>.</p>
 for &ldquo;w/o (without) man,&rdquo; since it doesn't use the <code>man</code>
 program.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

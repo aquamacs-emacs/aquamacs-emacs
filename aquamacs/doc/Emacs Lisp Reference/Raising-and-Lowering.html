@@ -3,33 +3,33 @@
 <title>Raising and Lowering - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
 <link rel="prev" href="Visibility-of-Frames.html#Visibility-of-Frames" title="Visibility of Frames">
 <link rel="next" href="Frame-Configurations.html#Frame-Configurations" title="Frame Configurations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,15 +46,15 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Raising-and-Lowering"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.11 Raising and Lowering Frames</h3>
+<h3 class="section">29.12 Raising and Lowering Frames</h3>
 
 <p>Most window systems use a desktop metaphor.  Part of this metaphor is
 the idea that windows are stacked in a notional third dimension
@@ -64,28 +64,29 @@ the one underneath.  Even a window at the bottom of the stack can be
 seen if no other window overlaps it.
 
 <!-- @cindex raising a frame  redundant with raise-frame -->
-<p><a name="index-lowering-a-frame-2203"></a>  A window's place in this ordering is not fixed; in fact, users tend
+   <p><a name="index-lowering-a-frame-2305"></a>  A window's place in this ordering is not fixed; in fact, users tend
 to change the order frequently.  <dfn>Raising</dfn> a window means moving
 it &ldquo;up,&rdquo; to the top of the stack.  <dfn>Lowering</dfn> a window means
 moving it to the bottom of the stack.  This motion is in the notional
 third dimension only, and does not change the position of the window
 on the screen.
 
-   <p>You can raise and lower Emacs frame Windows with these functions:
+   <p>With Emacs, frames constitute the windows in the metaphor sketched
+above. You can raise and lower frames using these functions:
 
 <div class="defun">
-&mdash; Command: <b>raise-frame</b><var> &amp;optional frame<a name="index-raise_002dframe-2204"></a></var><br>
+&mdash; Command: <b>raise-frame</b><var> &amp;optional frame<a name="index-raise_002dframe-2306"></a></var><br>
 <blockquote><p>This function raises frame <var>frame</var> (default, the selected frame). 
 If <var>frame</var> is invisible or iconified, this makes it visible. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>lower-frame</b><var> &amp;optional frame<a name="index-lower_002dframe-2205"></a></var><br>
+&mdash; Command: <b>lower-frame</b><var> &amp;optional frame<a name="index-lower_002dframe-2307"></a></var><br>
 <blockquote><p>This function lowers frame <var>frame</var> (default, the selected frame). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>minibuffer-auto-raise</b><var><a name="index-minibuffer_002dauto_002draise-2206"></a></var><br>
+&mdash; User Option: <b>minibuffer-auto-raise</b><var><a name="index-minibuffer_002dauto_002draise-2308"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, activation of the minibuffer raises the frame
 that the minibuffer window is in. 
 </p></blockquote></div>

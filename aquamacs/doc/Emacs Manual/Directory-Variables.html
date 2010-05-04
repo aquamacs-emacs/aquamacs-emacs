@@ -3,7 +3,7 @@
 <title>Directory Variables - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="File-Variables.html#File-Variables" title="File Variables">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Directory-Variables"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Variables.html#File-Variables">File Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <hr>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h4 class="subsection">57.3.5 Per-Directory Local Variables</h4>
 
-<p><a name="index-local-variables_002c-for-all-files-in-a-directory-3975"></a><a name="index-directory-local-variables-3976"></a><a name="index-per_002ddirectory-local-variables-3977"></a>
+<p><a name="index-local-variables_002c-for-all-files-in-a-directory-4005"></a><a name="index-directory-local-variables-4006"></a><a name="index-per_002ddirectory-local-variables-4007"></a>
   A <dfn>project</dfn> is a collection of files on which you work together. 
 Usually, the project's files are kept in one or more directories. 
 Occasionally, you may wish to define Emacs settings that are common to
@@ -65,7 +65,7 @@ all the files that belong to the project.
 files in a specific directory: you can put a special file in that
 directory, or you can define a <dfn>project class</dfn> for that directory.
 
-   <p><a name="index-g_t_0040file_007b_002edir_002dlocals_002eel_007d-file-3978"></a>  If you put a file with a special name <samp><span class="file">.dir-locals.el</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> in a directory, Emacs will read it when it visits any file in that
+   <p><a name="index-g_t_0040file_007b_002edir_002dlocals_002eel_007d-file-4008"></a>  If you put a file with a special name <samp><span class="file">.dir-locals.el</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> in a directory, Emacs will read it when it visits any file in that
 directory or any of its subdirectories, and apply the settings it
 specifies to the file's buffer.  Emacs searches for
 <samp><span class="file">.dir-locals.el</span></samp> starting in the directory of the visited file,
@@ -75,7 +75,7 @@ skipped for remote files.)
    <p>The <samp><span class="file">.dir-locals.el</span></samp> file should hold a specially-constructed
 list.  This list maps Emacs mode names (symbols) to alists; each alist
 specifies values for variables to use when the respective mode is
-turned on.  The special mode name `<samp><span class="samp">nil</span></samp>' means that its alist
+turned on.  The special mode name &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; means that its alist
 applies to any mode.  Instead of a mode name, you can specify a string
 that is a name of a subdirectory of the project's directory; then the
 corresponding alist applies to all the files in that subdirectory.
@@ -91,14 +91,21 @@ corresponding alist applies to all the files in that subdirectory.
        . ((nil . ((change-log-default-name . "ChangeLog.local"))))))
 </pre>
    <p class="noindent">This example shows some settings for a hypothetical project.  It sets
-`<samp><span class="samp">indent-tabs-mode</span></samp>', <code>tab-width</code>, and <code>fill-column</code> for
+&lsquo;<samp><span class="samp">indent-tabs-mode</span></samp>&rsquo;, <code>tab-width</code>, and <code>fill-column</code> for
 any file in the project's directory tree, and it sets the indentation
 style for any C or Java source file.  Finally, it specifies a different
 <samp><span class="file">ChangeLog</span></samp> file name for any file in the <samp><span class="file">src/imported</span></samp>
 subdirectory of the directory where you put the <samp><span class="file">.dir-locals.el</span></samp>
 file.
 
-   <p><a name="index-dir_002dlocals_002dset_002dclass_002dvariables-3979"></a><a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-3980"></a>  Another method of specifying directory-local variables is to explicitly
+   <p><a name="index-add_002ddir_002dlocal_002dvariable-4009"></a><a name="index-delete_002ddir_002dlocal_002dvariable-4010"></a><a name="index-copy_002dfile_002dlocals_002dto_002ddir_002dlocals-4011"></a>  You can edit the <samp><span class="file">.dir-locals.el</span></samp> file by hand, or use the
+command <code>add-dir-local-variable</code>.  This prompts for a mode (or
+subdirectory), variable and value, and adds an entry to the file. 
+The command <code>delete-dir-local-variable</code> deletes an entry.  The
+command <code>copy-file-locals-to-dir-locals</code> copies file local
+variables (see <a href="File-Variables.html#File-Variables">File Variables</a>) to the <samp><span class="file">.dir-locals.el</span></samp> file.
+
+   <p><a name="index-dir_002dlocals_002dset_002dclass_002dvariables-4012"></a><a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-4013"></a>  Another method of specifying directory-local variables is to explicitly
 define a project class using <code>dir-locals-set-class-variables</code>, and
 then tell Emacs which directories correspond to that class, using
 <code>dir-locals-set-directory-class</code>.  You can put calls to these functions
@@ -126,7 +133,7 @@ to 8+3 file names, the name of the file will be truncated by the OS to
 <samp><span class="file">_dir-loc.el</span></samp>. 
 </p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

@@ -3,33 +3,33 @@
 <title>Deleting Windows - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
 <link rel="prev" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
 <link rel="next" href="Selecting-Windows.html#Selecting-Windows" title="Selecting Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Deleting-Windows"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 
 <h3 class="section">28.3 Deleting Windows</h3>
 
-<p><a name="index-deleting-windows-1981"></a>
+<p><a name="index-deleting-windows-2051"></a>
 A window remains visible on its frame unless you <dfn>delete</dfn> it by
 calling certain functions that delete windows.  A deleted window cannot
 appear on the screen, but continues to exist as a Lisp object until
@@ -65,12 +65,12 @@ of a window aside from restoring a saved window configuration
 (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).  Restoring a window configuration also
 deletes any windows that aren't part of that configuration.
 
-   <p>When you delete a window, the space it took up is given to one
-adjacent sibling.
+   <p>When you delete a window, the space it took up is given to one of
+its sibling windows adjacent to it.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>window-live-p</b><var> window<a name="index-window_002dlive_002dp-1982"></a></var><br>
+&mdash; Function: <b>window-live-p</b><var> window<a name="index-window_002dlive_002dp-2052"></a></var><br>
 <blockquote><p>This function returns <code>nil</code> if <var>window</var> is deleted, and
 <code>t</code> otherwise.
 
@@ -79,28 +79,25 @@ using a deleted window as if it were live.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-window</b><var> &amp;optional window<a name="index-delete_002dwindow-1983"></a></var><br>
-<blockquote><p>This function removes <var>window</var> from display, and returns <code>nil</code>. 
-If <var>window</var> is omitted, then the selected window is deleted.  An
-error is signaled if there is only one window when <code>delete-window</code>
-is called. 
+&mdash; Command: <b>delete-window</b><var> &amp;optional window<a name="index-delete_002dwindow-2053"></a></var><br>
+<blockquote><p>This function removes <var>window</var> from display and returns <code>nil</code>. 
+The default for <var>window</var> is the selected window.  An error is
+signaled if <var>window</var> is the only window on its frame. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-other-windows</b><var> &amp;optional window<a name="index-delete_002dother_002dwindows-1984"></a></var><br>
+&mdash; Command: <b>delete-other-windows</b><var> &amp;optional window<a name="index-delete_002dother_002dwindows-2054"></a></var><br>
 <blockquote><p>This function makes <var>window</var> the only window on its frame, by
-deleting the other windows in that frame.  If <var>window</var> is omitted or
-<code>nil</code>, then the selected window is used by default.
-
-        <p>The return value is <code>nil</code>. 
+deleting the other windows in that frame.  The default for <var>window</var>
+is the selected window.  The return value is <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-windows-on</b><var> buffer-or-name &amp;optional frame<a name="index-delete_002dwindows_002don-1985"></a></var><br>
+&mdash; Command: <b>delete-windows-on</b><var> &amp;optional buffer-or-name frame<a name="index-delete_002dwindows_002don-2055"></a></var><br>
 <blockquote><p>This function deletes all windows showing <var>buffer-or-name</var>.  If
-there are no windows showing <var>buffer-or-name</var>, it does nothing. 
-<var>buffer-or-name</var> must be a buffer or the name of an existing
-buffer.
+there are no windows showing <var>buffer-or-name</var>, it does nothing.  The
+optional argument <var>buffer-or-name</var> may be a buffer or the name of an
+existing buffer and defaults to the current buffer.
 
         <p><code>delete-windows-on</code> operates frame by frame.  If a frame has
 several windows showing different buffers, then those showing
@@ -108,13 +105,16 @@ several windows showing different buffers, then those showing
 space.  If all windows in some frame are showing <var>buffer-or-name</var>
 (including the case where there is only one window), then the frame
 winds up with a single window showing another buffer chosen with
-<code>other-buffer</code>.  See <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>.
+<code>other-buffer</code> (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>).  If, however, the window
+showing <var>buffer-or-name</var> is dedicated to its buffer
+(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>), and there are other frames left, that
+window's frame is deleted.
 
-        <p>The argument <var>frame</var> controls which frames to operate on.  This
-function does not use it in quite the same way as the other functions
-which scan all windows; specifically, the values <code>t</code> and <code>nil</code>
-have the opposite of their meanings in other functions.  Here are the
-full details:
+        <p>The optional argument <var>frame</var> specifies which frames to operate on. 
+This function does not use it in quite the same way as the other
+functions which scan all windows; specifically, the values <code>t</code> and
+<code>nil</code> have the opposite of their meanings in other functions.  Here
+are the full details:
 
           <ul>
 <li>If it is <code>nil</code>, operate on all frames. 

@@ -3,33 +3,33 @@
 <title>Forcing Redisplay - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Refresh-Screen.html#Refresh-Screen" title="Refresh Screen">
 <link rel="next" href="Truncation.html#Truncation" title="Truncation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Forcing-Redisplay"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Truncation.html#Truncation">Truncation</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -56,14 +56,62 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.2 Forcing Redisplay</h3>
 
-<p><a name="index-forcing-redisplay-3121"></a>
-  Emacs redisplay normally stops if input arrives, and does not happen
+<p><a name="index-forcing-redisplay-3316"></a>
+  Emacs normally tries to redisplay the screen whenever it waits for
+input.  With the following function, you can request an immediate
+attempt to redisplay, in the middle of Lisp code, without actually
+waiting for input.
+
+<div class="defun">
+&mdash; Function: <b>redisplay</b><var> &amp;optional force<a name="index-redisplay-3317"></a></var><br>
+<blockquote><p>This function tries immediately to redisplay, provided there are no
+pending input events.
+
+        <p>If the optional argument <var>force</var> is non-<code>nil</code>, it does all
+pending redisplay work even if input is available, with no
+pre-emption.
+
+        <p>The function returns <code>t</code> if it actually tried to redisplay, and
+<code>nil</code> otherwise.  A value of <code>t</code> does not mean that
+redisplay proceeded to completion; it could have been pre-empted by
+newly arriving terminal input. 
+</p></blockquote></div>
+
+   <p><code>redisplay</code> with no argument tries immediately to redisplay,
+but has no effect on the usual rules for what parts of the screen to
+redisplay.  By contrast, the following function adds certain windows
+to the pending redisplay work (as if their contents had completely
+changed), but doesn't immediately try to do any redisplay work.
+
+<div class="defun">
+&mdash; Function: <b>force-window-update</b><var> &amp;optional object<a name="index-force_002dwindow_002dupdate-3318"></a></var><br>
+<blockquote><p>This function forces some or all windows to be updated on next
+redisplay.  If <var>object</var> is a window, it requires eventual
+redisplay of that window.  If <var>object</var> is a buffer or buffer name,
+it requires eventual redisplay of all windows displaying that buffer. 
+If <var>object</var> is <code>nil</code> (or omitted), it requires eventual
+redisplay of all windows. 
+</p></blockquote></div>
+
+   <p><code>force-window-update</code> does not do a redisplay immediately. 
+(Emacs will do that when it waits for input.)  Rather, its effect is
+to put more work on the queue to be done by redisplay whenever there
+is a chance.
+
+   <p>Emacs redisplay normally stops if input arrives, and does not happen
 at all if input is available before it starts.  Most of the time, this
 is exactly what you want.  However, you can prevent preemption by
 binding <code>redisplay-dont-pause</code> to a non-<code>nil</code> value.
 
 <div class="defun">
-&mdash; Variable: <b>redisplay-preemption-period</b><var><a name="index-redisplay_002dpreemption_002dperiod-3122"></a></var><br>
+&mdash; Variable: <b>redisplay-dont-pause</b><var><a name="index-redisplay_002ddont_002dpause-3319"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, pending input does not
+prevent or halt redisplay; redisplay occurs, and finishes,
+regardless of whether input is available. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>redisplay-preemption-period</b><var><a name="index-redisplay_002dpreemption_002dperiod-3320"></a></var><br>
 <blockquote><p>This variable specifies how many seconds Emacs waits between checks
 for new input during redisplay.  (The default is 0.1 seconds.)  If
 input has arrived when Emacs checks, it pre-empts redisplay and
@@ -74,24 +122,6 @@ redisplay, and redisplay cannot be preempted by input.
 
         <p>This variable is only obeyed on graphical terminals.  For
 text terminals, see <a href="Terminal-Output.html#Terminal-Output">Terminal Output</a>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Variable: <b>redisplay-dont-pause</b><var><a name="index-redisplay_002ddont_002dpause-3123"></a></var><br>
-<blockquote><p>If this variable is non-<code>nil</code>, pending input does not
-prevent or halt redisplay; redisplay occurs, and finishes,
-regardless of whether input is available. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>redisplay</b><var> &amp;optional force<a name="index-redisplay-3124"></a></var><br>
-<blockquote><p>This function performs an immediate redisplay provided there are no
-pending input events.  This is equivalent to <code>(sit-for 0)</code>.
-
-        <p>If the optional argument <var>force</var> is non-<code>nil</code>, it forces an
-immediate and complete redisplay even if input is available.
-
-        <p>Returns <code>t</code> if redisplay was performed, or <code>nil</code> otherwise. 
 </p></blockquote></div>
 
    </body></html>

@@ -3,32 +3,32 @@
 <title>Hooks - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Modes.html#Modes" title="Modes">
 <link rel="next" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Hooks"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Major-Modes.html#Major-Modes">Major Modes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 <hr>
@@ -54,16 +54,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 
 <h3 class="section">23.1 Hooks</h3>
 
-<p><a name="index-hooks-1517"></a>
+<p><a name="index-hooks-1573"></a>
   A <dfn>hook</dfn> is a variable where you can store a function or functions
 to be called on a particular occasion by an existing program.  Emacs
 provides hooks for the sake of customization.  Most often, hooks are set
 up in the init file (see <a href="Init-File.html#Init-File">Init File</a>), but Lisp programs can set them also. 
 See <a href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>, for a list of standard hook variables.
 
-   <p><a name="index-normal-hook-1518"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
+   <p><a name="index-normal-hook-1574"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
 contain lists of functions to be called with no arguments.  By
-convention, whenever the hook name ends in `<samp><span class="samp">-hook</span></samp>', that tells
+convention, whenever the hook name ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that tells
 you it is normal.  We try to make all hooks normal, as much as
 possible, so that you can use them in a uniform way.
 
@@ -82,7 +82,7 @@ the valid kinds of functions that <code>funcall</code> accepts (see <a href="Wha
 <code>add-hook</code> knows how to deal with this.  You can add hooks either
 globally or buffer-locally with <code>add-hook</code>.
 
-   <p><a name="index-abnormal-hook-1519"></a>  If the hook variable's name does not end with `<samp><span class="samp">-hook</span></samp>', that
+   <p><a name="index-abnormal-hook-1575"></a>  If the hook variable's name does not end with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that
 indicates it is probably an <dfn>abnormal hook</dfn>.  That means the hook
 functions are called with arguments, or their return values are used
 in some way.  The hook's documentation says how the functions are
@@ -90,103 +90,14 @@ called.  You can use <code>add-hook</code> to add a function to an abnormal
 hook, but you must write the function to follow the hook's calling
 convention.
 
-   <p>By convention, abnormal hook names end in `<samp><span class="samp">-functions</span></samp>' or
-`<samp><span class="samp">-hooks</span></samp>'.  If the variable's name ends in `<samp><span class="samp">-function</span></samp>', then
+   <p>By convention, abnormal hook names end in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo;.  If the variable's name ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;, then
 its value is just a single function, not a list of functions.
 
-   <p>Here's an example that uses a mode hook to turn on Auto Fill mode when
-in Lisp Interaction mode:
-
-<pre class="example">     (add-hook 'lisp-interaction-mode-hook 'turn-on-auto-fill)
-</pre>
-   <p>At the appropriate time, Emacs uses the <code>run-hooks</code> function to
-run particular hooks.
-
-<div class="defun">
-&mdash; Function: <b>run-hooks</b><var> &amp;rest hookvars<a name="index-run_002dhooks-1520"></a></var><br>
-<blockquote><p>This function takes one or more normal hook variable names as
-arguments, and runs each hook in turn.  Each argument should be a
-symbol that is a normal hook variable.  These arguments are processed
-in the order specified.
-
-        <p>If a hook variable has a non-<code>nil</code> value, that value should be a
-list of functions.  <code>run-hooks</code> calls all the functions, one by
-one, with no arguments.
-
-        <p>The hook variable's value can also be a single function&mdash;either a
-lambda expression or a symbol with a function definition&mdash;which
-<code>run-hooks</code> calls.  But this usage is obsolete. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs-1521"></a></var><br>
-<blockquote><p>This function is the way to run an abnormal hook and always call all
-of the hook functions.  It calls each of the hook functions one by
-one, passing each of them the arguments <var>args</var>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args-until-failure</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs_002duntil_002dfailure-1522"></a></var><br>
-<blockquote><p>This function is the way to run an abnormal hook until one of the hook
-functions fails.  It calls each of the hook functions, passing each of
-them the arguments <var>args</var>, until some hook function returns
-<code>nil</code>.  It then stops and returns <code>nil</code>.  If none of the
-hook functions return <code>nil</code>, it returns a non-<code>nil</code> value. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args-until-success</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs_002duntil_002dsuccess-1523"></a></var><br>
-<blockquote><p>This function is the way to run an abnormal hook until a hook function
-succeeds.  It calls each of the hook functions, passing each of them
-the arguments <var>args</var>, until some hook function returns
-non-<code>nil</code>.  Then it stops, and returns whatever was returned by
-the last hook function that was called.  If all hook functions return
-<code>nil</code>, it returns <code>nil</code> as well. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>add-hook</b><var> hook function &amp;optional append local<a name="index-add_002dhook-1524"></a></var><br>
-<blockquote><p>This function is the handy way to add function <var>function</var> to hook
-variable <var>hook</var>.  You can use it for abnormal hooks as well as for
-normal hooks.  <var>function</var> can be any Lisp function that can accept
-the proper number of arguments for <var>hook</var>.  For example,
-
-     <pre class="example">          (add-hook 'text-mode-hook 'my-text-hook-function)
-     </pre>
-        <p class="noindent">adds <code>my-text-hook-function</code> to the hook called <code>text-mode-hook</code>.
-
-        <p>If <var>function</var> is already present in <var>hook</var> (comparing using
-<code>equal</code>), then <code>add-hook</code> does not add it a second time.
-
-        <p>It is best to design your hook functions so that the order in which they
-are executed does not matter.  Any dependence on the order is &ldquo;asking
-for trouble.&rdquo;  However, the order is predictable: normally,
-<var>function</var> goes at the front of the hook list, so it will be
-executed first (barring another <code>add-hook</code> call).  If the optional
-argument <var>append</var> is non-<code>nil</code>, the new hook function goes at
-the end of the hook list and will be executed last.
-
-        <p><code>add-hook</code> can handle the cases where <var>hook</var> is void or its
-value is a single function; it sets or changes the value to a list of
-functions.
-
-        <p>If <var>local</var> is non-<code>nil</code>, that says to add <var>function</var> to
-the buffer-local hook list instead of to the global hook list.  If
-needed, this makes the hook buffer-local and adds <code>t</code> to the
-buffer-local value.  The latter acts as a flag to run the hook
-functions in the default value as well as in the local value. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>remove-hook</b><var> hook function &amp;optional local<a name="index-remove_002dhook-1525"></a></var><br>
-<blockquote><p>This function removes <var>function</var> from the hook variable
-<var>hook</var>.  It compares <var>function</var> with elements of <var>hook</var>
-using <code>equal</code>, so it works for both symbols and lambda
-expressions.
-
-        <p>If <var>local</var> is non-<code>nil</code>, that says to remove <var>function</var>
-from the buffer-local hook list instead of from the global hook list. 
-</p></blockquote></div>
+<ul class="menu">
+<li><a accesskey="1" href="Running-Hooks.html#Running-Hooks">Running Hooks</a>:       How to run a hook. 
+<li><a accesskey="2" href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>:       How to put functions on a hook, or remove them. 
+</ul>
 
    </body></html>
 

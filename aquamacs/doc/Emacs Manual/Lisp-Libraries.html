@@ -3,7 +3,7 @@
 <title>Lisp Libraries - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Building.html#Building" title="Building">
 <link rel="prev" href="Executing-Lisp.html#Executing-Lisp" title="Executing Lisp">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Lisp-Libraries"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Executing-Lisp.html#Executing-Lisp">Executing Lisp</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
@@ -57,24 +57,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 
 <h3 class="section">31.8 Libraries of Lisp Code for Emacs</h3>
 
-<p><a name="index-libraries-2358"></a><a name="index-loading-Lisp-code-2359"></a>
+<p><a name="index-libraries-2380"></a><a name="index-loading-Lisp-code-2381"></a>
   Lisp code for Emacs editing commands is stored in files whose names
 conventionally end in <samp><span class="file">.el</span></samp>.  This ending tells Emacs to edit them in
 Emacs-Lisp mode (see <a href="Executing-Lisp.html#Executing-Lisp">Executing Lisp</a>).
 
-   <p><a name="index-byte-code-2360"></a>  Emacs Lisp code can be compiled into byte-code, which loads faster,
+   <p><a name="index-byte-code-2382"></a>  Emacs Lisp code can be compiled into byte-code, which loads faster,
 takes up less space, and executes faster.  See <a href="../elisp/Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>.  By
 convention, the compiled code for a library goes in a separate file
-whose name ends in `<samp><span class="samp">.elc</span></samp>'.  Thus, the compiled code for
+whose name ends in &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo;.  Thus, the compiled code for
 <samp><span class="file">foo.el</span></samp> goes in <samp><span class="file">foo.elc</span></samp>.
 
-   <p><a name="index-load_002dfile-2361"></a>  To execute a file of Emacs Lisp code, use <kbd>M-x load-file</kbd>.  This
+   <p><a name="index-load_002dfile-2383"></a>  To execute a file of Emacs Lisp code, use <kbd>M-x load-file</kbd>.  This
 command reads a file name using the minibuffer and then executes the
 contents of that file as Lisp code.  It is not necessary to visit the
 file first; in any case, this command reads the file as found on disk,
 not text in an Emacs buffer.
 
-   <p><a name="index-load-2362"></a><a name="index-load_002dlibrary-2363"></a>  Once a file of Lisp code is installed in the Emacs Lisp library
+   <p><a name="index-load-2384"></a><a name="index-load_002dlibrary-2385"></a>  Once a file of Lisp code is installed in the Emacs Lisp library
 directories, users can load it using <kbd>M-x load-library</kbd>.  Programs
 can load it by calling <code>load</code>, a more primitive function that is
 similar but accepts some additional arguments.
@@ -94,7 +94,7 @@ recompile it.  Nonetheless, it loads <samp><var>lib</var><span class="file">.elc
 because people often leave unfinished edits the source file, and don't
 recompile it until they think it is ready to use.
 
-   <p><a name="index-load_002dpath-2364"></a>  The variable <code>load-path</code> specifies the sequence of directories
+   <p><a name="index-load_002dpath-2386"></a>  The variable <code>load-path</code> specifies the sequence of directories
 searched by <kbd>M-x load-library</kbd>.  Its value should be a list of
 strings that are directory names; in addition, <code>nil</code> in this list
 stands for the current default directory.  (Generally, it is not a
@@ -110,13 +110,15 @@ your own, put them in a single directory and add that directory to
 
 <pre class="example">     (add-to-list 'load-path "/path/to/lisp/libraries")
 </pre>
-   <p><a name="index-autoload-2365"></a>  Often you do not have to give any command to load a library, because
-the commands defined in the library are set up to <dfn>autoload</dfn> that
-library.  Trying to run any of those commands calls <code>load</code> to load
-the library; this replaces the autoload definitions with the real ones
-from the library.
+   <p><a name="index-autoload-2387"></a>  Some commands are <dfn>autoloaded</dfn>: when you run them, Emacs will
+automatically load the associated library first.  For instance, the
+<code>compile</code> and <code>compilation-mode</code> commands
+(see <a href="Compilation.html#Compilation">Compilation</a>) are autoloaded; if you call either command,
+Emacs automatically loads the <code>compile</code> library.  In contrast,
+the command <code>recompile</code> is not autoloaded, so it is unavailable
+until you load the <code>compile</code> library.
 
-   <p><a name="index-load_002ddangerous_002dlibraries-2366"></a><a name="index-Lisp-files-byte_002dcompiled-by-XEmacs-2367"></a>  By default, Emacs refuses to load compiled Lisp files which were
+   <p><a name="index-load_002ddangerous_002dlibraries-2388"></a><a name="index-Lisp-files-byte_002dcompiled-by-XEmacs-2389"></a>  By default, Emacs refuses to load compiled Lisp files which were
 compiled with XEmacs, a modified versions of Emacs&mdash;they can cause
 Emacs to crash.  Set the variable <code>load-dangerous-libraries</code> to
 <code>t</code> if you want to try loading them.

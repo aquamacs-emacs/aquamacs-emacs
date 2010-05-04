@@ -3,33 +3,33 @@
 <title>Modification Time - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffers.html#Buffers" title="Buffers">
 <link rel="prev" href="Buffer-Modification.html#Buffer-Modification" title="Buffer Modification">
 <link rel="next" href="Read-Only-Buffers.html#Read-Only-Buffers" title="Read Only Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Modification-Time"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 <!-- node-name,  next,  previous,  up -->
 <h3 class="section">27.6 Buffer Modification Time</h3>
 
-<p><a name="index-comparing-file-modification-time-1929"></a><a name="index-modification-time-of-buffer-1930"></a>
+<p><a name="index-comparing-file-modification-time-1995"></a><a name="index-modification-time-of-buffer-1996"></a>
   Suppose that you visit a file and make changes in its buffer, and
 meanwhile the file itself is changed on disk.  At this point, saving the
 buffer would overwrite the changes in the file.  Occasionally this may
@@ -67,7 +67,7 @@ described below before saving the file.  (See <a href="File-Attributes.html#File
 for how to examine a file's modification time.)
 
 <div class="defun">
-&mdash; Function: <b>verify-visited-file-modtime</b><var> buffer<a name="index-verify_002dvisited_002dfile_002dmodtime-1931"></a></var><br>
+&mdash; Function: <b>verify-visited-file-modtime</b><var> buffer<a name="index-verify_002dvisited_002dfile_002dmodtime-1997"></a></var><br>
 <blockquote><p>This function compares what <var>buffer</var> has recorded for the
 modification time of its visited file against the actual modification
 time of the file as recorded by the operating system.  The two should be
@@ -89,7 +89,7 @@ been deleted.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>clear-visited-file-modtime</b><var><a name="index-clear_002dvisited_002dfile_002dmodtime-1932"></a></var><br>
+&mdash; Function: <b>clear-visited-file-modtime</b><var><a name="index-clear_002dvisited_002dfile_002dmodtime-1998"></a></var><br>
 <blockquote><p>This function clears out the record of the last modification time of
 the file being visited by the current buffer.  As a result, the next
 attempt to save this buffer will not complain of a discrepancy in
@@ -102,7 +102,7 @@ file should not be done.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>visited-file-modtime</b><var><a name="index-visited_002dfile_002dmodtime-1933"></a></var><br>
+&mdash; Function: <b>visited-file-modtime</b><var><a name="index-visited_002dfile_002dmodtime-1999"></a></var><br>
 <blockquote><p>This function returns the current buffer's recorded last file
 modification time, as a list of the form <code>(</code><var>high</var> <var>low</var><code>)</code>. 
 (This is the same format that <code>file-attributes</code> uses to return
@@ -123,7 +123,7 @@ the last modification time of that directory, as recorded by Dired.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>set-visited-file-modtime</b><var> &amp;optional time<a name="index-set_002dvisited_002dfile_002dmodtime-1934"></a></var><br>
+&mdash; Function: <b>set-visited-file-modtime</b><var> &amp;optional time<a name="index-set_002dvisited_002dfile_002dmodtime-2000"></a></var><br>
 <blockquote><p>This function updates the buffer's record of the last modification time
 of the visited file, to the value specified by <var>time</var> if <var>time</var>
 is not <code>nil</code>, and otherwise to the last modification time of the
@@ -140,14 +140,14 @@ reason.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ask-user-about-supersession-threat</b><var> filename<a name="index-ask_002duser_002dabout_002dsupersession_002dthreat-1935"></a></var><br>
+&mdash; Function: <b>ask-user-about-supersession-threat</b><var> filename<a name="index-ask_002duser_002dabout_002dsupersession_002dthreat-2001"></a></var><br>
 <blockquote><p>This function is used to ask a user how to proceed after an attempt to
 modify an buffer visiting file <var>filename</var> when the file is newer
 than the buffer text.  Emacs detects this because the modification
 time of the file on disk is newer than the last save-time of the
 buffer.  This means some other program has probably altered the file.
 
-        <p><a name="index-file_002dsupersession-1936"></a>Depending on the user's answer, the function may return normally, in
+        <p><a name="index-file_002dsupersession-2002"></a>Depending on the user's answer, the function may return normally, in
 which case the modification of the buffer proceeds, or it may signal a
 <code>file-supersession</code> error with data <code>(</code><var>filename</var><code>)</code>, in which
 case the proposed buffer modification is not allowed.

@@ -1,0 +1,221 @@
+<html lang="en">
+<head>
+<title>Character Properties - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Character-Codes.html#Character-Codes" title="Character Codes">
+<link rel="next" href="Character-Sets.html#Character-Sets" title="Character Sets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Character-Properties"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Character-Sets.html#Character-Sets">Character Sets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Codes.html#Character-Codes">Character Codes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.5 Character Properties</h3>
+
+<p><a name="index-character-properties-2799"></a>A <dfn>character property</dfn> is a named attribute of a character that
+specifies how the character behaves and how it should be handled
+during text processing and display.  Thus, character properties are an
+important part of specifying the character's semantics.
+
+   <p>On the whole, Emacs follows the Unicode Standard in its implementation
+of character properties.  In particular, Emacs supports the
+<a href="http://www.unicode.org/reports/tr23/">Unicode Character Property Model</a>, and the Emacs character property database is derived from the
+Unicode Character Database (<acronym>UCD</acronym>).  See the
+<a href="http://www.unicode.org/versions/Unicode5.0.0/ch04.pdf">Character Properties chapter of the Unicode Standard</a>, for a detailed
+description of Unicode character properties and their meaning.  This
+section assumes you are already familiar with that chapter of the
+Unicode Standard, and want to apply that knowledge to Emacs Lisp
+programs.
+
+   <p>In Emacs, each property has a name, which is a symbol, and a set of
+possible values, whose types depend on the property; if a character
+does not have a certain property, the value is <code>nil</code>.  As a
+general rule, the names of character properties in Emacs are produced
+from the corresponding Unicode properties by downcasing them and
+replacing each &lsquo;<samp><span class="samp">_</span></samp>&rsquo; character with a dash &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  For example,
+<code>Canonical_Combining_Class</code> becomes
+<code>canonical-combining-class</code>.  However, sometimes we shorten the
+names to make their use easier.
+
+   <p>Here is the full list of value types for all the character
+properties that Emacs knows about:
+
+     <dl>
+<dt><code>name</code><dd>This property corresponds to the Unicode <code>Name</code> property.  The
+value is a string consisting of upper-case Latin letters A to Z,
+digits, spaces, and hyphen &lsquo;<samp><span class="samp">-</span></samp>&rsquo; characters.
+
+     <br><dt><code>general-category</code><dd>This property corresponds to the Unicode <code>General_Category</code>
+property.  The value is a symbol whose name is a 2-letter abbreviation
+of the character's classification.
+
+     <br><dt><code>canonical-combining-class</code><dd>Corresponds to the Unicode <code>Canonical_Combining_Class</code> property. 
+The value is an integer number.
+
+     <br><dt><code>bidi-class</code><dd>Corresponds to the Unicode <code>Bidi_Class</code> property.  The value is a
+symbol whose name is the Unicode <dfn>directional type</dfn> of the
+character.
+
+     <br><dt><code>decomposition</code><dd>Corresponds to the Unicode <code>Decomposition_Type</code> and
+<code>Decomposition_Value</code> properties.  The value is a list, whose
+first element may be a symbol representing a compatibility formatting
+tag, such as <code>small</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>; the other elements are characters that give the compatibility
+decomposition sequence of this character.
+
+     <br><dt><code>decimal-digit-value</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
+characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Digit</span></samp>&rsquo;.  The value is an
+integer number.
+
+     <br><dt><code>digit</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
+characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Decimal</span></samp>&rsquo;.  The value is
+an integer number.  Examples of such characters include compatibility
+subscript and superscript digits, for which the value is the
+corresponding number.
+
+     <br><dt><code>numeric-value</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
+characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Numeric</span></samp>&rsquo;.  The value of
+this property is an integer or a floating-point number.  Examples of
+characters that have this property include fractions, subscripts,
+superscripts, Roman numerals, currency numerators, and encircled
+numbers.  For example, the value of this property for the character
+<code>U+2155</code> (<span class="sc">vulgar fraction one fifth</span>) is <code>0.2</code>.
+
+     <br><dt><code>mirrored</code><dd>Corresponds to the Unicode <code>Bidi_Mirrored</code> property.  The value
+of this property is a symbol, either <code>Y</code> or <code>N</code>.
+
+     <br><dt><code>old-name</code><dd>Corresponds to the Unicode <code>Unicode_1_Name</code> property.  The value
+is a string.
+
+     <br><dt><code>iso-10646-comment</code><dd>Corresponds to the Unicode <code>ISO_Comment</code> property.  The value is
+a string.
+
+     <br><dt><code>uppercase</code><dd>Corresponds to the Unicode <code>Simple_Uppercase_Mapping</code> property. 
+The value of this property is a single character.
+
+     <br><dt><code>lowercase</code><dd>Corresponds to the Unicode <code>Simple_Lowercase_Mapping</code> property. 
+The value of this property is a single character.
+
+     <br><dt><code>titlecase</code><dd>Corresponds to the Unicode <code>Simple_Titlecase_Mapping</code> property. 
+<dfn>Title case</dfn> is a special form of a character used when the first
+character of a word needs to be capitalized.  The value of this
+property is a single character. 
+</dl>
+
+<div class="defun">
+&mdash; Function: <b>get-char-code-property</b><var> char propname<a name="index-get_002dchar_002dcode_002dproperty-2800"></a></var><br>
+<blockquote><p>This function returns the value of <var>char</var>'s <var>propname</var> property.
+
+     <pre class="example">          (get-char-code-property ?  'general-category)
+               &rArr; Zs
+          (get-char-code-property ?1  'general-category)
+               &rArr; Nd
+          (get-char-code-property ?\u2084 'digit-value) ; subscript 4
+               &rArr; 4
+          (get-char-code-property ?\u2155 'numeric-value) ; one fifth
+               &rArr; 1/5
+          (get-char-code-property ?\u2163 'numeric-value) ; Roman IV
+               &rArr; \4
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-code-property-description</b><var> prop value<a name="index-char_002dcode_002dproperty_002ddescription-2801"></a></var><br>
+<blockquote><p>This function returns the description string of property <var>prop</var>'s
+<var>value</var>, or <code>nil</code> if <var>value</var> has no description.
+
+     <pre class="example">          (char-code-property-description 'general-category 'Zs)
+               &rArr; "Separator, Space"
+          (char-code-property-description 'general-category 'Nd)
+               &rArr; "Number, Decimal Digit"
+          (char-code-property-description 'numeric-value '1/5)
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>put-char-code-property</b><var> char propname value<a name="index-put_002dchar_002dcode_002dproperty-2802"></a></var><br>
+<blockquote><p>This function stores <var>value</var> as the value of the property
+<var>propname</var> for the character <var>char</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>char-script-table</b><var><a name="index-char_002dscript_002dtable-2803"></a></var><br>
+<blockquote><p>The value of this variable is a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) that
+specifies, for each character, a symbol whose name is the script to
+which the character belongs, according to the Unicode Standard
+classification of the Unicode code space into script-specific blocks. 
+This char-table has a single extra slot whose value is the list of all
+script symbols. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>char-width-table</b><var><a name="index-char_002dwidth_002dtable-2804"></a></var><br>
+<blockquote><p>The value of this variable is a char-table that specifies the width of
+each character in columns that it will occupy on the screen. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>printable-chars</b><var><a name="index-printable_002dchars-2805"></a></var><br>
+<blockquote><p>The value of this variable is a char-table that specifies, for each
+character, whether it is printable or not.  That is, if evaluating
+<code>(aref printable-chars char)</code> results in <code>t</code>, the character
+is printable, and if it results in <code>nil</code>, it is not. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+Note that the Unicode spec writes these tag names inside
+&lsquo;<samp><span class="samp">&lt;..&gt;</span></samp>&rsquo; brackets.  The tag names in Emacs do not include the
+brackets; e.g., Unicode specifies &lsquo;<samp><span class="samp">&lt;small&gt;</span></samp>&rsquo; where Emacs uses
+&lsquo;<samp><span class="samp">small</span></samp>&rsquo;. 
+</p>
+
+   <hr></div>
+
+   </body></html>
+

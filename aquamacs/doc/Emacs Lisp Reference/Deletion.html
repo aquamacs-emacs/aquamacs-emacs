@@ -3,33 +3,33 @@
 <title>Deletion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text.html#Text" title="Text">
 <link rel="prev" href="Commands-for-Insertion.html#Commands-for-Insertion" title="Commands for Insertion">
 <link rel="next" href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" title="User-Level Deletion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Deletion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="User_002dLevel-Deletion.html#User_002dLevel-Deletion">User-Level Deletion</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands-for-Insertion.html#Commands-for-Insertion">Commands for Insertion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
@@ -56,8 +56,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 
 <h3 class="section">32.6 Deleting Text</h3>
 
-<p><a name="index-text-deletion-2430"></a>
-<a name="index-deleting-text-vs-killing-2431"></a>  Deletion means removing part of the text in a buffer, without saving
+<p><a name="index-text-deletion-2533"></a>
+<a name="index-deleting-text-vs-killing-2534"></a>  Deletion means removing part of the text in a buffer, without saving
 it in the kill ring (see <a href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>).  Deleted text can't be
 yanked, but can be reinserted using the undo mechanism (see <a href="Undo.html#Undo">Undo</a>). 
 Some deletion functions do save text in the kill ring in some special
@@ -66,7 +66,7 @@ cases.
    <p>All of the deletion functions operate on the current buffer.
 
 <div class="defun">
-&mdash; Command: <b>erase-buffer</b><var><a name="index-erase_002dbuffer-2432"></a></var><br>
+&mdash; Command: <b>erase-buffer</b><var><a name="index-erase_002dbuffer-2535"></a></var><br>
 <blockquote><p>This function deletes the entire text of the current buffer
 (<em>not</em> just the accessible portion), leaving it
 empty.  If the buffer is read-only, it signals a <code>buffer-read-only</code>
@@ -82,7 +82,7 @@ be compared with that of the former text.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-region</b><var> start end<a name="index-delete_002dregion-2433"></a></var><br>
+&mdash; Command: <b>delete-region</b><var> start end<a name="index-delete_002dregion-2536"></a></var><br>
 <blockquote><p>This command deletes the text between positions <var>start</var> and
 <var>end</var> in the current buffer, and returns <code>nil</code>.  If point was
 inside the deleted region, its value afterward is <var>start</var>. 
@@ -90,7 +90,7 @@ Otherwise, point relocates with the surrounding text, as markers do.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-and-extract-region</b><var> start end<a name="index-delete_002dand_002dextract_002dregion-2434"></a></var><br>
+&mdash; Function: <b>delete-and-extract-region</b><var> start end<a name="index-delete_002dand_002dextract_002dregion-2537"></a></var><br>
 <blockquote><p>This function deletes the text between positions <var>start</var> and
 <var>end</var> in the current buffer, and returns a string containing the
 text just deleted.
@@ -101,7 +101,7 @@ markers do.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-char</b><var> count &amp;optional killp<a name="index-delete_002dchar-2435"></a></var><br>
+&mdash; Command: <b>delete-char</b><var> count &amp;optional killp<a name="index-delete_002dchar-2538"></a></var><br>
 <blockquote><p>This command deletes <var>count</var> characters directly after point, or
 before point if <var>count</var> is negative.  If <var>killp</var> is
 non-<code>nil</code>, then it saves the deleted characters in the kill ring.
@@ -116,8 +116,8 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-backward-char</b><var> count &amp;optional killp<a name="index-delete_002dbackward_002dchar-2436"></a></var><br>
-<blockquote><p><a name="index-deleting-previous-char-2437"></a>This command deletes <var>count</var> characters directly before point, or
+&mdash; Command: <b>delete-backward-char</b><var> count &amp;optional killp<a name="index-delete_002dbackward_002dchar-2539"></a></var><br>
+<blockquote><p><a name="index-deleting-previous-char-2540"></a>This command deletes <var>count</var> characters directly before point, or
 after point if <var>count</var> is negative.  If <var>killp</var> is
 non-<code>nil</code>, then it saves the deleted characters in the kill ring.
 
@@ -131,8 +131,8 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>backward-delete-char-untabify</b><var> count &amp;optional killp<a name="index-backward_002ddelete_002dchar_002duntabify-2438"></a></var><br>
-<blockquote><p><a name="index-tab-deletion-2439"></a>This command deletes <var>count</var> characters backward, changing tabs
+&mdash; Command: <b>backward-delete-char-untabify</b><var> count &amp;optional killp<a name="index-backward_002ddelete_002dchar_002duntabify-2541"></a></var><br>
+<blockquote><p><a name="index-tab-deletion-2542"></a>This command deletes <var>count</var> characters backward, changing tabs
 into spaces.  When the next character to be deleted is a tab, it is
 first replaced with the proper number of spaces to preserve alignment
 and then one of those spaces is deleted instead of the tab.  If
@@ -153,7 +153,7 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>backward-delete-char-untabify-method</b><var><a name="index-backward_002ddelete_002dchar_002duntabify_002dmethod-2440"></a></var><br>
+&mdash; User Option: <b>backward-delete-char-untabify-method</b><var><a name="index-backward_002ddelete_002dchar_002duntabify_002dmethod-2543"></a></var><br>
 <blockquote><p>This option specifies how <code>backward-delete-char-untabify</code> should
 deal with whitespace.  Possible values include <code>untabify</code>, the
 default, meaning convert a tab to many spaces and delete one;

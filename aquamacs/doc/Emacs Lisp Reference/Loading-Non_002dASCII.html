@@ -3,33 +3,33 @@
 <title>Loading Non-ASCII - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Loading.html#Loading" title="Loading">
 <link rel="prev" href="Library-Search.html#Library-Search" title="Library Search">
 <link rel="next" href="Autoload.html#Autoload" title="Autoload">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Loading-Non-ASCII"></a>
 <a name="Loading-Non_002dASCII"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Autoload.html#Autoload">Autoload</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Library-Search.html#Library-Search">Library Search</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
@@ -70,7 +70,7 @@ See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
    <p>To make the results more predictable, Emacs always performs decoding
 into the multibyte representation when loading Lisp files, even if it
-was started with the `<samp><span class="samp">--unibyte</span></samp>' option.  This means that string
+was started with the &lsquo;<samp><span class="samp">--unibyte</span></samp>&rsquo; option.  This means that string
 constants with non-<acronym>ASCII</acronym> characters translate into multibyte
 strings.  The only exception is when a particular file specifies no
 decoding.
@@ -78,16 +78,13 @@ decoding.
    <p>The reason Emacs is designed this way is so that Lisp programs give
 predictable results, regardless of how Emacs was started.  In addition,
 this enables programs that depend on using multibyte text to work even
-in a unibyte Emacs.  Of course, such programs should be designed to
-notice whether the user prefers unibyte or multibyte text, by checking
-<code>default-enable-multibyte-characters</code>, and convert representations
-appropriately.
+in a unibyte Emacs.
 
    <p>In most Emacs Lisp programs, the fact that non-<acronym>ASCII</acronym> strings are
 multibyte strings should not be noticeable, since inserting them in
 unibyte buffers converts them to unibyte automatically.  However, if
 this does make a difference, you can force a particular Lisp file to be
-interpreted as unibyte by writing `<samp><span class="samp">-*-unibyte: t;-*-</span></samp>' in a
+interpreted as unibyte by writing &lsquo;<samp><span class="samp">-*-unibyte: t;-*-</span></samp>&rsquo; in a
 comment on the file's first line.  With that designator, the file will
 unconditionally be interpreted as unibyte, even in an ordinary
 multibyte Emacs session.  This can matter when making keybindings to

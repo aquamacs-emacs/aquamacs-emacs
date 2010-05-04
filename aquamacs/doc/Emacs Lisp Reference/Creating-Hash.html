@@ -3,32 +3,32 @@
 <title>Creating Hash - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Hash-Tables.html#Hash-Tables" title="Hash Tables">
 <link rel="next" href="Hash-Access.html#Hash-Access" title="Hash Access">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Creating-Hash"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Hash-Access.html#Hash-Access">Hash Access</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
 <hr>
@@ -54,12 +54,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tabl
 
 <h3 class="section">7.1 Creating Hash Tables</h3>
 
-<p><a name="index-creating-hash-tables-423"></a>
+<p><a name="index-creating-hash-tables-426"></a>
   The principal function for creating a hash table is
 <code>make-hash-table</code>.
 
 <div class="defun">
-&mdash; Function: <b>make-hash-table</b><var> &amp;rest keyword-args<a name="index-make_002dhash_002dtable-424"></a></var><br>
+&mdash; Function: <b>make-hash-table</b><var> &amp;rest keyword-args<a name="index-make_002dhash_002dtable-427"></a></var><br>
 <blockquote><p>This function creates a new hash table according to the specified
 arguments.  The arguments should consist of alternating keywords
 (particular symbols recognized specially) and values corresponding to
@@ -147,13 +147,39 @@ of the nominal size.  The default for <var>threshold</var> is 0.8.
         </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>makehash</b><var> &amp;optional test<a name="index-makehash-425"></a></var><br>
+&mdash; Function: <b>makehash</b><var> &amp;optional test<a name="index-makehash-428"></a></var><br>
 <blockquote><p>This is equivalent to <code>make-hash-table</code>, but with a different style
 argument list.  The argument <var>test</var> specifies the method
 of key lookup.
 
         <p>This function is obsolete. Use <code>make-hash-table</code> instead. 
 </p></blockquote></div>
+
+   <p>You can also create a new hash table using the printed representation
+for hash tables.  The Lisp reader can read this printed
+representation, provided each element in the specified hash table has
+a valid read syntax (see <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>).  For instance,
+the following specifies a new hash table containing the keys
+<code>key1</code> and <code>key2</code> (both symbols) associated with <code>val1</code>
+(a symbol) and <code>300</code> (a number) respectively.
+
+<pre class="example">     #s(hash-table size 30 data (key1 val1 key2 300))
+</pre>
+   <p class="noindent">The printed representation for a hash table consists of &lsquo;<samp><span class="samp">#s</span></samp>&rsquo;
+followed by a list beginning with &lsquo;<samp><span class="samp">hash-table</span></samp>&rsquo;.  The rest of the
+list should consist of zero or more property-value pairs specifying
+the hash table's properties and initial contents.  The properties and
+values are read literally.  Valid property names are <code>size</code>,
+<code>test</code>, <code>weakness</code>, <code>rehash-size</code>,
+<code>rehash-threshold</code>, and <code>data</code>.  The <code>data</code> property
+should be a list of key-value pairs for the initial contents; the
+other properties have the same meanings as the matching
+<code>make-hash-table</code> keywords (<code>:size</code>, <code>:test</code>, etc.),
+described above.
+
+   <p>Note that you cannot specify a hash table whose initial contents
+include objects that have no read syntax, such as buffers and frames. 
+Such objects may be added to the hash table after it is created.
 
    </body></html>
 

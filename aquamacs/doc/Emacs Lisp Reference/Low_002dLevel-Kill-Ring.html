@@ -3,33 +3,33 @@
 <title>Low-Level Kill Ring - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
 <link rel="prev" href="Yank-Commands.html#Yank-Commands" title="Yank Commands">
 <link rel="next" href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring" title="Internals of Kill Ring">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Low-Level-Kill-Ring"></a>
 <a name="Low_002dLevel-Kill-Ring"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring">Internals of Kill Ring</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Yank-Commands.html#Yank-Commands">Yank Commands</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>
@@ -63,7 +63,7 @@ take care of interaction with window system selections
 (see <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>).
 
 <div class="defun">
-&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2457"></a></var><br>
+&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2560"></a></var><br>
 <blockquote><p>The function <code>current-kill</code> rotates the yanking pointer, which
 designates the &ldquo;front&rdquo; of the kill ring, by <var>n</var> places (from newer
 kills to older ones), and returns the text at that place in the ring.
@@ -76,16 +76,18 @@ returns the <var>n</var>th kill, counting from the current yanking pointer.
 <code>current-kill</code> calls the value of
 <code>interprogram-paste-function</code> (documented below) before
 consulting the kill ring.  If that value is a function and calling it
-returns a string, <code>current-kill</code> pushes that string onto the kill
-ring and returns it.  It also sets the yanking pointer to point to
-that new entry, regardless of the value of <var>do-not-move</var>. 
-Otherwise, <code>current-kill</code> does not treat a zero value for <var>n</var>
-specially: it returns the entry pointed at by the yanking pointer and
-does not move the yanking pointer. 
+returns a string or a list of several string, <code>current-kill</code>
+pushes the strings onto the kill ring and returns the first string. 
+It also sets the yanking pointer to point to the kill-ring entry of
+the first string returned by <code>interprogram-paste-function</code>,
+regardless of the value of <var>do-not-move</var>.  Otherwise,
+<code>current-kill</code> does not treat a zero value for <var>n</var> specially:
+it returns the entry pointed at by the yanking pointer and does not
+move the yanking pointer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-new</b><var> string &amp;optional replace yank-handler<a name="index-kill_002dnew-2458"></a></var><br>
+&mdash; Function: <b>kill-new</b><var> string &amp;optional replace yank-handler<a name="index-kill_002dnew-2561"></a></var><br>
 <blockquote><p>This function pushes the text <var>string</var> onto the kill ring and
 makes the yanking pointer point to it.  It discards the oldest entry
 if appropriate.  It also invokes the value of
@@ -103,7 +105,7 @@ See <a href="Yanking.html#Yanking">Yanking</a>.  Note that if <var>yank-handler<
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-append</b><var> string before-p &amp;optional yank-handler<a name="index-kill_002dappend-2459"></a></var><br>
+&mdash; Function: <b>kill-append</b><var> string before-p &amp;optional yank-handler<a name="index-kill_002dappend-2562"></a></var><br>
 <blockquote><p>This function appends the text <var>string</var> to the first entry in the
 kill ring and makes the yanking pointer point to the combined entry. 
 Normally <var>string</var> goes at the end of the entry, but if
@@ -117,7 +119,7 @@ instead of replacing the original first entry with it.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2460"></a></var><br>
+&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2563"></a></var><br>
 <blockquote><p>This variable provides a way of transferring killed text from other
 programs, when you are using a window system.  Its value should be
 <code>nil</code> or a function of no arguments.
@@ -127,13 +129,23 @@ programs, when you are using a window system.  Its value should be
 then that value is used as the &ldquo;most recent kill.&rdquo;  If it returns
 <code>nil</code>, then the front of the kill ring is used.
 
-        <p>The normal use of this hook is to get the window system's primary
+        <p>To facilitate support for window systems that support multiple
+selections, this function may also return a list of strings.  In that
+case, the first string is used as the &ldquo;most recent kill&rdquo;, and all
+the other strings are pushed onto the kill ring, for easy access by
+<code>yank-pop</code>.
+
+        <p>The normal use of this function is to get the window system's primary
 selection as the most recent kill, even if the selection belongs to
-another application.  See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>. 
+another application.  See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>.  However, if
+the selection was provided by the current Emacs session, this function
+should return <code>nil</code>.  (If it is hard to tell whether Emacs or
+some other program provided the selection, it should be good enough to
+use <code>string=</code> to compare it with the last text Emacs provided.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2461"></a></var><br>
+&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2564"></a></var><br>
 <blockquote><p>This variable provides a way of communicating killed text to other
 programs, when you are using a window system.  Its value should be
 <code>nil</code> or a function of one required and one optional argument.
@@ -143,7 +155,7 @@ it with the new first element of the kill ring as the first argument.
 The second, optional, argument has the same meaning as the <var>push</var>
 argument to <code>x-set-cut-buffer</code> (see <a href="Definition-of-x_002dset_002dcut_002dbuffer.html#Definition-of-x_002dset_002dcut_002dbuffer">Definition of x-set-cut-buffer</a>) and only affects the second and later cut buffers.
 
-        <p>The normal use of this hook is to set the window system's primary
+        <p>The normal use of this function is to set the window system's primary
 selection (and first cut buffer) from the newly killed text. 
 See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>. 
 </p></blockquote></div>

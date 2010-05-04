@@ -3,33 +3,33 @@
 <title>Invisible Text - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Warnings.html#Warnings" title="Warnings">
 <link rel="next" href="Selective-Display.html#Selective-Display" title="Selective Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Invisible-Text"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Selective-Display.html#Selective-Display">Selective Display</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Warnings.html#Warnings">Warnings</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.6 Invisible Text</h3>
 
-<p><a name="index-invisible-text-3170"></a>You can make characters <dfn>invisible</dfn>, so that they do not appear on
+<p><a name="index-invisible-text-3367"></a>You can make characters <dfn>invisible</dfn>, so that they do not appear on
 the screen, with the <code>invisible</code> property.  This can be either a
 text property (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) or a property of an overlay
 (see <a href="Overlays.html#Overlays">Overlays</a>).  Cursor motion also partly ignores these
@@ -85,7 +85,7 @@ this variable is very fast, much faster than scanning all the text in
 the buffer looking for properties to change.
 
 <div class="defun">
-&mdash; Variable: <b>buffer-invisibility-spec</b><var><a name="index-buffer_002dinvisibility_002dspec-3171"></a></var><br>
+&mdash; Variable: <b>buffer-invisibility-spec</b><var><a name="index-buffer_002dinvisibility_002dspec-3368"></a></var><br>
 <blockquote><p>This variable specifies which kinds of <code>invisible</code> properties
 actually make a character invisible.  Setting this variable makes it
 buffer-local.
@@ -113,7 +113,7 @@ a sequence of such characters displays as an ellipsis.
 <code>buffer-invisibility-spec</code> and removing elements from it.
 
 <div class="defun">
-&mdash; Function: <b>add-to-invisibility-spec</b><var> element<a name="index-add_002dto_002dinvisibility_002dspec-3172"></a></var><br>
+&mdash; Function: <b>add-to-invisibility-spec</b><var> element<a name="index-add_002dto_002dinvisibility_002dspec-3369"></a></var><br>
 <blockquote><p>This function adds the element <var>element</var> to
 <code>buffer-invisibility-spec</code>.  If <code>buffer-invisibility-spec</code>
 was <code>t</code>, it changes to a list, <code>(t)</code>, so that text whose
@@ -121,7 +121,7 @@ was <code>t</code>, it changes to a list, <code>(t)</code>, so that text whose
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove-from-invisibility-spec</b><var> element<a name="index-remove_002dfrom_002dinvisibility_002dspec-3173"></a></var><br>
+&mdash; Function: <b>remove-from-invisibility-spec</b><var> element<a name="index-remove_002dfrom_002dinvisibility_002dspec-3370"></a></var><br>
 <blockquote><p>This removes the element <var>element</var> from
 <code>buffer-invisibility-spec</code>.  This does nothing if <var>element</var>
 is not in the list. 
@@ -145,11 +145,25 @@ major mode should use the mode's own name as an element of
      ;; <span class="roman">Or respectively:</span>
      (remove-from-invisibility-spec 'my-symbol)
 </pre>
-   <p><a name="index-line_002dmove_002dignore_002dinvisible-3174"></a>  Ordinarily, functions that operate on text or move point do not care
+   <p>You can check for invisibility using the following function:
+
+<div class="defun">
+&mdash; Function: <b>invisible-p</b><var> pos-or-prop<a name="index-invisible_002dp-3371"></a></var><br>
+<blockquote><p>If <var>pos-or-prop</var> is a marker or number, this function returns a
+non-<code>nil</code> value if the text at that position is invisible.
+
+        <p>If <var>pos-or-prop</var> is any other kind of Lisp object, that is taken
+to mean a possible value of the <code>invisible</code> text or overlay
+property.  In that case, this function returns a non-<code>nil</code> value
+if that value would cause text to become invisible, based on the
+current value of <code>buffer-invisibility-spec</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-line_002dmove_002dignore_002dinvisible-3372"></a>  Ordinarily, functions that operate on text or move point do not care
 whether the text is invisible.  The user-level line motion commands
-explicitly ignore invisible newlines if
-<code>line-move-ignore-invisible</code> is non-<code>nil</code> (the default), but
-only because they are explicitly programmed to do so.
+ignore invisible newlines if <code>line-move-ignore-invisible</code> is
+non-<code>nil</code> (the default), but only because they are explicitly
+programmed to do so.
 
    <p>However, if a command ends with point inside or immediately before
 invisible text, the main editing loop moves point further forward or

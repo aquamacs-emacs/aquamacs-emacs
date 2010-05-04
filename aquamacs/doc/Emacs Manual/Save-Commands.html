@@ -3,7 +3,7 @@
 <title>Save Commands - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Saving.html#Saving" title="Saving">
 <link rel="next" href="Backup.html#Backup" title="Backup">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Save-Commands"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Backup.html#Backup">Backup</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Saving.html#Saving">Saving</a>
 <hr>
@@ -66,7 +66,7 @@ With prefix argument (<kbd>C-u</kbd>), mark the current buffer as changed.
 <br><dt><kbd>M-x set-visited-file-name</kbd><dd>Change the file name under which the current buffer will be saved. 
 </dl>
 
-   <p><a name="index-C_002dx-C_002ds-837"></a><a name="index-save_002dbuffer-838"></a>  When you wish to save the file and make your changes permanent, type
+   <p><a name="index-C_002dx-C_002ds-841"></a><a name="index-save_002dbuffer-842"></a>  When you wish to save the file and make your changes permanent, type
 <kbd>C-x C-s</kbd> (<code>save-buffer</code>).  After saving is finished, <kbd>C-x C-s</kbd>
 displays a message like this:
 
@@ -82,7 +82,7 @@ like this in the echo area:
    <p>With a prefix argument, <kbd>C-u C-x C-s</kbd>, Emacs also marks the buffer
 to be backed up when the next save is done.  See <a href="Backup.html#Backup">Backup</a>.
 
-   <p><a name="index-C_002dx-s-839"></a><a name="index-save_002dsome_002dbuffers-840"></a>  The command <kbd>C-x s</kbd> (<code>save-some-buffers</code>) offers to save any
+   <p><a name="index-C_002dx-s-843"></a><a name="index-save_002dsome_002dbuffers-844"></a>  The command <kbd>C-x s</kbd> (<code>save-some-buffers</code>) offers to save any
 or all modified buffers.  It asks you what to do with each buffer.  The
 possible responses are analogous to those of <code>query-replace</code>:
 
@@ -106,13 +106,13 @@ changes you would be saving.  This calls the command
    <p><kbd>C-x C-c</kbd>, the key sequence to exit Emacs, invokes
 <code>save-some-buffers</code> and therefore asks the same questions.
 
-   <p><a name="index-M_002d_007e-841"></a><a name="index-not_002dmodified-842"></a>  If you have changed a buffer but do not wish to save the changes,
+   <p><a name="index-M_002d_007e-845"></a><a name="index-not_002dmodified-846"></a>  If you have changed a buffer but do not wish to save the changes,
 you should take some action to prevent it.  Otherwise, each time you
 use <kbd>C-x s</kbd> or <kbd>C-x C-c</kbd>, you are liable to save this buffer
 by mistake.  One thing you can do is type <kbd>M-~</kbd>
 (<code>not-modified</code>), which clears out the indication that the buffer
 is modified.  If you do this, none of the save commands will believe
-that the buffer needs to be saved.  (`<samp><span class="samp">~</span></samp>' is often used as a
+that the buffer needs to be saved.  (&lsquo;<samp><span class="samp">~</span></samp>&rsquo; is often used as a
 mathematical symbol for `not'; thus <kbd>M-~</kbd> is `not', metafied.) 
 Alternatively, you can cancel all the changes made since the file was
 visited or saved, by reading the text from the file again.  This is
@@ -120,7 +120,7 @@ called <dfn>reverting</dfn>.  See <a href="Reverting.html#Reverting">Reverting</
 the changes by repeating the undo command <kbd>C-x u</kbd> until you have
 undone all the changes; but reverting is easier.)
 
-   <p><a name="index-set_002dvisited_002dfile_002dname-843"></a>  <kbd>M-x set-visited-file-name</kbd> alters the name of the file that the
+   <p><a name="index-set_002dvisited_002dfile_002dname-847"></a>  <kbd>M-x set-visited-file-name</kbd> alters the name of the file that the
 current buffer is visiting.  It reads the new file name using the
 minibuffer.  Then it marks the buffer as visiting that file name, and
 changes the buffer name correspondingly.  <code>set-visited-file-name</code>
@@ -129,7 +129,7 @@ records inside Emacs in case you do save later.  It also marks the
 buffer as &ldquo;modified&rdquo; so that <kbd>C-x C-s</kbd> in that buffer
 <em>will</em> save.
 
-   <p><a name="index-C_002dx-C_002dw-844"></a><a name="index-write_002dfile-845"></a>  If you wish to mark the buffer as visiting a different file and save
+   <p><a name="index-C_002dx-C_002dw-848"></a><a name="index-write_002dfile-849"></a>  If you wish to mark the buffer as visiting a different file and save
 it right away, use <kbd>C-x C-w</kbd> (<code>write-file</code>).  This is
 equivalent to <code>set-visited-file-name</code> followed by <kbd>C-x C-s</kbd>,
 except that <kbd>C-x C-w</kbd> asks for confirmation if the file exists. 

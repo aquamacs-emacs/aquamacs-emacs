@@ -3,7 +3,7 @@
 <title>Other Repeating Search - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Search.html#Search" title="Search">
 <link rel="prev" href="Replace.html#Replace" title="Replace">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Other-Repeating-Search"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Replace.html#Replace">Replace</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
 <hr>
@@ -61,18 +61,28 @@ no upper-case letters and <code>case-fold-search</code> is non-<code>nil</code>.
 Aside from <code>occur</code> and its variants, all operate on the text from
 point to the end of the buffer, or on the region if it is active.
 
-   <p><a name="index-list_002dmatching_002dlines-697"></a><a name="index-occur-698"></a><a name="index-multi_002doccur-699"></a><a name="index-multi_002doccur_002din_002dmatching_002dbuffers-700"></a><a name="index-how_002dmany-701"></a><a name="index-flush_002dlines-702"></a><a name="index-keep_002dlines-703"></a>
+   <p><a name="index-list_002dmatching_002dlines-701"></a><a name="index-occur-702"></a><a name="index-multi_002doccur-703"></a><a name="index-multi_002doccur_002din_002dmatching_002dbuffers-704"></a><a name="index-how_002dmany-705"></a><a name="index-flush_002dlines-706"></a><a name="index-keep_002dlines-707"></a>
      <dl>
-<dt><kbd>M-x occur &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Display a list showing each line in the buffer that contains a match
-for <var>regexp</var>.  To limit the search to part of the buffer, narrow
-to that part (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  A numeric argument <var>n</var>
-specifies that <var>n</var> lines of context are to be displayed before and
-after each matching line.  Currently, <code>occur</code> can not correctly
-handle multiline matches.
+<dt><kbd>M-x multi-isearch-buffers</kbd><dd>Prompt for one or more buffer names, ending with &lt;RET&gt;; then,
+begin a multi-buffer incremental search in those buffers.  (If the
+search fails in one buffer, the next <kbd>C-s</kbd> tries searching the
+next specified buffer, and so forth.)  With a prefix argument, prompt
+for a regexp and begin a multi-buffer incremental search in buffers
+matching that regexp.
 
-     <p><a name="index-RET-_0040r_007b_0028Occur-mode_0029_007d-704"></a><a name="index-o-_0040r_007b_0028Occur-mode_0029_007d-705"></a><a name="index-C_002do-_0040r_007b_0028Occur-mode_0029_007d-706"></a>The buffer `<samp><span class="samp">*Occur*</span></samp>' containing the output serves as a menu for
+     <br><dt><kbd>M-x multi-isearch-buffers-regexp</kbd><dd>This command is just like <code>multi-isearch-buffers</code>, except it
+performs an incremental regexp search.
+
+     <br><dt><kbd>M-x occur</kbd><dd>Prompt for a regexp, and display a list showing each line in the
+buffer that contains a match for it.  To limit the search to part of
+the buffer, narrow to that part (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  A numeric
+argument <var>n</var> specifies that <var>n</var> lines of context are to be
+displayed before and after each matching line.  Currently,
+<code>occur</code> can not correctly handle multiline matches.
+
+     <p><a name="index-RET-_0040r_007b_0028Occur-mode_0029_007d-708"></a><a name="index-o-_0040r_007b_0028Occur-mode_0029_007d-709"></a><a name="index-C_002do-_0040r_007b_0028Occur-mode_0029_007d-710"></a>The buffer &lsquo;<samp><span class="samp">*Occur*</span></samp>&rsquo; containing the output serves as a menu for
 finding the occurrences in their original context.  Click
-<kbd>Mouse-2</kbd> on an occurrence listed in `<samp><span class="samp">*Occur*</span></samp>', or position
+<kbd>Mouse-2</kbd> on an occurrence listed in &lsquo;<samp><span class="samp">*Occur*</span></samp>&rsquo;, or position
 point there and type &lt;RET&gt;; this switches to the buffer that was
 searched and moves point to the original of the chosen occurrence. 
 <kbd>o</kbd> and <kbd>C-o</kbd> display the match in another window; <kbd>C-o</kbd>
@@ -81,49 +91,50 @@ does not select it.
      <p>After using <kbd>M-x occur</kbd>, you can use <code>next-error</code> to visit
 the occurrences found, one by one.  <a href="Compilation-Mode.html#Compilation-Mode">Compilation Mode</a>.
 
-     <p><a name="index-M_002ds-o-707"></a><br><dt><kbd>M-s o</kbd><dd>Run <code>occur</code> using the search string of the last incremental
+     <p><a name="index-M_002ds-o-711"></a><br><dt><kbd>M-s o</kbd><dd>Run <code>occur</code> using the search string of the last incremental
 string search.  You can also run <kbd>M-s o</kbd> when an incremental
 search is active; this uses the current search string.
 
      <br><dt><kbd>M-x list-matching-lines</kbd><dd>Synonym for <kbd>M-x occur</kbd>.
 
-     <br><dt><kbd>M-x multi-occur &lt;RET&gt; </kbd><var>buffers</var><kbd> &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>This function is just like <code>occur</code>, except it is able to search
-through multiple buffers.  It asks you to specify the buffer names one by one.
+     <br><dt><kbd>M-x multi-occur</kbd><dd>This command is just like <code>occur</code>, except it is able to search
+through multiple buffers.  It asks you to specify the buffer names one
+by one.
 
-     <br><dt><kbd>M-x multi-occur-in-matching-buffers &lt;RET&gt; </kbd><var>bufregexp</var><kbd> &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>This function is similar to <code>multi-occur</code>, except the buffers to
-search are specified by a regular expression that matches visited
-file names.  With a prefix argument, it uses the regular expression to match
-buffer names instead.
+     <br><dt><kbd>M-x multi-occur-in-matching-buffers</kbd><dd>This command is similar to <code>multi-occur</code>, except the buffers to
+search are specified by a regular expression that matches visited file
+names.  With a prefix argument, it uses the regular expression to
+match buffer names instead.
 
-     <br><dt><kbd>M-x how-many &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Print the number of matches for <var>regexp</var> that exist in the buffer
-after point.  If the region is active, this operates on the region
-instead.
+     <br><dt><kbd>M-x how-many</kbd><dd>Prompt for a regexp, and print the number of matches for it in the
+buffer after point.  If the region is active, this operates on the
+region instead.
 
-     <br><dt><kbd>M-x flush-lines &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>This command deletes each line that contains a match for <var>regexp</var>,
-operating on the text after point; it deletes the current line if it
-contains a match starting after point.  If the region is active, it
-operates on the region instead; if a line partially contained in the
-region contains a match entirely contained in the region, it is
-deleted.
+     <br><dt><kbd>M-x flush-lines</kbd><dd>Prompt for a regexp, and delete each line that contains a match for
+it, operating on the text after point.  This command deletes the
+current line if it contains a match starting after point.  If the
+region is active, it operates on the region instead; if a line
+partially contained in the region contains a match entirely contained
+in the region, it is deleted.
 
      <p>If a match is split across lines, <code>flush-lines</code> deletes all those
 lines.  It deletes the lines before starting to look for the next
 match; hence, it ignores a match starting on the same line at which
 another match ended.
 
-     <br><dt><kbd>M-x keep-lines &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>This command deletes each line that <em>does not</em> contain a match
-for <var>regexp</var>, operating on the text after point; if point is not
-at the beginning of a line, it always keeps the current line.  If the
-region is active, the command operates on the region instead; it never
-deletes lines that are only partially contained in the region (a
-newline that ends a line counts as part of that line).
+     <br><dt><kbd>M-x keep-lines</kbd><dd>Prompt for a regexp, and delete each line that <em>does not</em> contain
+a match for it, operating on the text after point.  If point is not at
+the beginning of a line, this command always keeps the current line. 
+If the region is active, the command operates on the region instead;
+it never deletes lines that are only partially contained in the region
+(a newline that ends a line counts as part of that line).
 
      <p>If a match is split across lines, this command keeps all those lines. 
 </dl>
 
 <!-- This is part of the Emacs manual. -->
 <!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2001, 2002, -->
-<!-- 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc. -->
+<!-- 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

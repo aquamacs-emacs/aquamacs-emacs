@@ -3,33 +3,33 @@
 <title>Changing Files - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
 <link rel="next" href="File-Names.html#File-Names" title="File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Changing-Files"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="File-Names.html#File-Names">File Names</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Information-about-Files.html#Information-about-Files">Information about Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <h3 class="section">25.7 Changing File Names and Attributes</h3>
 
 <!-- @cindex renaming files  Duplicates rename-file -->
-<p><a name="index-copying-files-1756"></a><a name="index-deleting-files-1757"></a><a name="index-linking-files-1758"></a><a name="index-setting-modes-of-files-1759"></a>
+<p><a name="index-copying-files-1816"></a><a name="index-deleting-files-1817"></a><a name="index-linking-files-1818"></a><a name="index-setting-modes-of-files-1819"></a>
   The functions in this section rename, copy, delete, link, and set the
 modes of files.
 
@@ -81,8 +81,8 @@ argument is itself a symbolic link, then only <code>copy-file</code>
 replaces it with its (recursive) target.
 
 <div class="defun">
-&mdash; Command: <b>add-name-to-file</b><var> oldname newname &amp;optional ok-if-already-exists<a name="index-add_002dname_002dto_002dfile-1760"></a></var><br>
-<blockquote><p><a name="index-file-with-multiple-names-1761"></a><a name="index-file-hard-link-1762"></a>This function gives the file named <var>oldname</var> the additional name
+&mdash; Command: <b>add-name-to-file</b><var> oldname newname &amp;optional ok-if-already-exists<a name="index-add_002dname_002dto_002dfile-1820"></a></var><br>
+<blockquote><p><a name="index-file-with-multiple-names-1821"></a><a name="index-file-hard-link-1822"></a>This function gives the file named <var>oldname</var> the additional name
 <var>newname</var>.  This means that <var>newname</var> becomes a new &ldquo;hard
 link&rdquo; to <var>oldname</var>.
 
@@ -92,35 +92,35 @@ link&rdquo; to <var>oldname</var>.
      <pre class="example">          % ls -li fo*
           81908 -rw-rw-rw-  1 rms       29 Aug 18 20:32 foo
           84302 -rw-rw-rw-  1 rms       24 Aug 18 20:31 foo3
-     </pre>
+</pre>
         <p>Now we create a hard link, by calling <code>add-name-to-file</code>, then list
 the files again.  This shows two names for one file, <samp><span class="file">foo</span></samp> and
 <samp><span class="file">foo2</span></samp>.
 
      <pre class="example">          (add-name-to-file "foo" "foo2")
-               =&gt; nil
+               &rArr; nil
           
           % ls -li fo*
           81908 -rw-rw-rw-  2 rms       29 Aug 18 20:32 foo
           81908 -rw-rw-rw-  2 rms       29 Aug 18 20:32 foo2
           84302 -rw-rw-rw-  1 rms       24 Aug 18 20:31 foo3
-     </pre>
+</pre>
         <p>Finally, we evaluate the following:
 
      <pre class="example">          (add-name-to-file "foo" "foo3" t)
-     </pre>
+</pre>
         <p class="noindent">and list the files again.  Now there are three names
 for one file: <samp><span class="file">foo</span></samp>, <samp><span class="file">foo2</span></samp>, and <samp><span class="file">foo3</span></samp>.  The old
 contents of <samp><span class="file">foo3</span></samp> are lost.
 
      <pre class="example">          (add-name-to-file "foo1" "foo3")
-               =&gt; nil
+               &rArr; nil
           
           % ls -li fo*
           81908 -rw-rw-rw-  3 rms       29 Aug 18 20:32 foo
           81908 -rw-rw-rw-  3 rms       29 Aug 18 20:32 foo2
           81908 -rw-rw-rw-  3 rms       29 Aug 18 20:32 foo3
-     </pre>
+</pre>
         <p>This function is meaningless on operating systems where multiple names
 for one file are not allowed.  Some systems implement multiple names
 by copying the file instead.
@@ -129,7 +129,7 @@ by copying the file instead.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>rename-file</b><var> filename newname &amp;optional ok-if-already-exists<a name="index-rename_002dfile-1763"></a></var><br>
+&mdash; Command: <b>rename-file</b><var> filename newname &amp;optional ok-if-already-exists<a name="index-rename_002dfile-1823"></a></var><br>
 <blockquote><p>This command renames the file <var>filename</var> as <var>newname</var>.
 
         <p>If <var>filename</var> has additional names aside from <var>filename</var>, it
@@ -139,7 +139,7 @@ same effect as renaming, aside from momentary intermediate states.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>copy-file</b><var> oldname newname &amp;optional ok-if-exists time preserve-uid-gid<a name="index-copy_002dfile-1764"></a></var><br>
+&mdash; Command: <b>copy-file</b><var> oldname newname &amp;optional ok-if-exists time preserve-uid-gid<a name="index-copy_002dfile-1824"></a></var><br>
 <blockquote><p>This command copies the file <var>oldname</var> to <var>newname</var>.  An
 error is signaled if <var>oldname</var> does not exist.  If <var>newname</var>
 names a directory, it copies <var>oldname</var> into that directory,
@@ -163,19 +163,19 @@ the correct permissions to do so.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>make-symbolic-link</b><var> filename newname &amp;optional ok-if-exists<a name="index-make_002dsymbolic_002dlink-1765"></a></var><br>
-<blockquote><p><a name="index-ln-1766"></a><a name="index-file_002dalready_002dexists-1767"></a>This command makes a symbolic link to <var>filename</var>, named
-<var>newname</var>.  This is like the shell command `<samp><span class="samp">ln -s
-</span><var>filename</var> <var>newname</var></samp>'.
+&mdash; Command: <b>make-symbolic-link</b><var> filename newname &amp;optional ok-if-exists<a name="index-make_002dsymbolic_002dlink-1825"></a></var><br>
+<blockquote><p><a name="index-ln-1826"></a><a name="index-file_002dalready_002dexists-1827"></a>This command makes a symbolic link to <var>filename</var>, named
+<var>newname</var>.  This is like the shell command &lsquo;<samp><span class="samp">ln -s
+</span><var>filename</var> <var>newname</var></samp>&rsquo;.
 
         <p>This function is not available on systems that don't support symbolic
 links. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-file</b><var> filename<a name="index-delete_002dfile-1768"></a></var><br>
-<blockquote><p><a name="index-rm-1769"></a>This command deletes the file <var>filename</var>, like the shell command
-`<samp><span class="samp">rm </span><var>filename</var></samp>'.  If the file has multiple names, it continues
+&mdash; Command: <b>delete-file</b><var> filename<a name="index-delete_002dfile-1828"></a></var><br>
+<blockquote><p><a name="index-rm-1829"></a>This command deletes the file <var>filename</var>, like the shell command
+&lsquo;<samp><span class="samp">rm </span><var>filename</var></samp>&rsquo;.  If the file has multiple names, it continues
 to exist under the other names.
 
         <p>A suitable kind of <code>file-error</code> error is signaled if the file does
@@ -190,23 +190,25 @@ levels of parent directories.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>define-logical-name</b><var> varname string<a name="index-define_002dlogical_002dname-1770"></a></var><br>
-<blockquote><p>This function defines the logical name <var>varname</var> to have the value
-<var>string</var>.  It is available only on VMS. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>set-file-modes</b><var> filename mode<a name="index-set_002dfile_002dmodes-1771"></a></var><br>
+&mdash; Command: <b>set-file-modes</b><var> filename mode<a name="index-set_002dfile_002dmodes-1830"></a></var><br>
 <blockquote><p>This function sets mode bits of <var>filename</var> to <var>mode</var> (which
-must be an integer).  Only the low 12 bits of <var>mode</var> are used. 
-This function recursively follows symbolic links at all levels for
+must be an integer when the function is called non-interactively). 
+Only the low 12 bits of <var>mode</var> are used.
+
+        <p>Interactively, <var>mode</var> is read from the minibuffer using
+<code>read-file-modes</code>, which accepts mode bits either as a number or
+as a character string representing the mode bits symbolically.  See
+the description of <code>read-file-modes</code> below for the supported
+forms of symbolic notation for mode bits.
+
+        <p>This function recursively follows symbolic links at all levels for
 <var>filename</var>. 
 </p></blockquote></div>
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>set-default-file-modes</b><var> mode<a name="index-set_002ddefault_002dfile_002dmodes-1772"></a></var><br>
-<blockquote><p><a name="index-umask-1773"></a>This function sets the default file protection for new files created by
+&mdash; Function: <b>set-default-file-modes</b><var> mode<a name="index-set_002ddefault_002dfile_002dmodes-1831"></a></var><br>
+<blockquote><p><a name="index-umask-1832"></a>This function sets the default file protection for new files created by
 Emacs and its subprocesses.  Every file created with Emacs initially has
 this protection, or a subset of it (<code>write-region</code> will not give a
 file execute permission even if the default file protection allows
@@ -218,34 +220,56 @@ low 9 bits of <var>mode</var> are meaningful.  You can use the Lisp construct
 for octal character codes to enter <var>mode</var>; for example,
 
      <pre class="example">          (set-default-file-modes ?\644)
-     </pre>
+</pre>
         <p>Saving a modified version of an existing file does not count as creating
 the file; it preserves the existing file's mode, whatever that is.  So
 the default file protection has no effect. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>default-file-modes</b><var><a name="index-default_002dfile_002dmodes-1774"></a></var><br>
+&mdash; Function: <b>default-file-modes</b><var><a name="index-default_002dfile_002dmodes-1833"></a></var><br>
 <blockquote><p>This function returns the current default protection value. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-file-times</b><var> filename &amp;optional time<a name="index-set_002dfile_002dtimes-1775"></a></var><br>
+&mdash; Function: <b>read-file-modes</b><var> &amp;optional prompt base-file<a name="index-read_002dfile_002dmodes-1834"></a></var><br>
+<blockquote><p>This function reads file mode bits from the minibuffer.  The optional
+argument <var>prompt</var> specifies a non-default prompt.  Second optional
+argument <var>base-file</var> is the name of a file on whose permissions to
+base the mode bits that this function returns, if what the user types
+specifies mode bits relative to permissions of an existing file.
+
+        <p>If user input represents an octal number, this function returns that
+number.  If it is a complete symbolic specification of mode bits, as
+in <code>"u=rwx"</code>, the function converts it to the equivalent numeric
+value using <code>file-modes-symbolic-to-number</code> and returns the
+result.  If the specification is relative, as in <code>"o+g"</code>, then
+the permissions on which the specification is based are taken from the
+mode bits of <var>base-file</var>.  If <var>base-file</var> is omitted or
+<code>nil</code>, the function uses <code>0</code> as the base mode bits.  The
+complete and relative specifications can be combined, as in
+<code>"u+r,g+rx,o+r,g-w"</code>.  See <a href="../coreutils/File-Permissions.html#File-Permissions">File Permissions</a>, for detailed description of
+symbolic mode bits specifications. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-modes-symbolic-to-number</b><var> modes &amp;optional base-modes<a name="index-file_002dmodes_002dsymbolic_002dto_002dnumber-1835"></a></var><br>
+<blockquote><p>This subroutine converts a symbolic specification of file mode bits in
+<var>modes</var> into the equivalent numeric value.  If the symbolic
+specification is based on an existing file, that file's mode bits are
+taken from the optional argument <var>base-modes</var>; if that argument is
+omitted or <code>nil</code>, it defaults to zero, i.e. no access rights at
+all. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-file-times</b><var> filename &amp;optional time<a name="index-set_002dfile_002dtimes-1836"></a></var><br>
 <blockquote><p>This function sets the access and modification times of <var>filename</var>
 to <var>time</var>.  The return value is <code>t</code> if the times are successfully
 set, otherwise it is <code>nil</code>.  <var>time</var> defaults to the current
 time and must be in the format returned by <code>current-time</code>
 (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>). 
 </p></blockquote></div>
-
-   <p><a name="index-MS_002dDOS-and-file-modes-1776"></a><a name="index-file-modes-and-MS_002dDOS-1777"></a>  On MS-DOS, there is no such thing as an &ldquo;executable&rdquo; file mode bit. 
-So Emacs considers a file executable if its name ends in one of the
-standard executable extensions, such as <samp><span class="file">.com</span></samp>, <samp><span class="file">.bat</span></samp>,
-<samp><span class="file">.exe</span></samp>, and some others.  Files that begin with the Unix-standard
-`<samp><span class="samp">#!</span></samp>' signature, such as shell and Perl scripts, are also considered
-as executable files.  This is reflected in the values returned by
-<code>file-modes</code> and <code>file-attributes</code>.  Directories are also
-reported with executable bit set, for compatibility with Unix.
 
    </body></html>
 

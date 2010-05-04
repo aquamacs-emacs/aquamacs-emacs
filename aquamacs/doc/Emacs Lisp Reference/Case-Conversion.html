@@ -3,33 +3,33 @@
 <title>Case Conversion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
 <link rel="prev" href="Formatting-Strings.html#Formatting-Strings" title="Formatting Strings">
 <link rel="next" href="Case-Tables.html#Case-Tables" title="Case Tables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Case-Conversion"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Case-Tables.html#Case-Tables">Case Tables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
@@ -57,67 +57,66 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 <!-- node-name, next, previous, up -->
 <h3 class="section">4.8 Case Conversion in Lisp</h3>
 
-<p><a name="index-upper-case-262"></a><a name="index-lower-case-263"></a><a name="index-character-case-264"></a><a name="index-case-conversion-in-Lisp-265"></a>
+<p><a name="index-upper-case-266"></a><a name="index-lower-case-267"></a><a name="index-character-case-268"></a><a name="index-case-conversion-in-Lisp-269"></a>
   The character case functions change the case of single characters or
 of the contents of strings.  The functions normally convert only
-alphabetic characters (the letters `<samp><span class="samp">A</span></samp>' through `<samp><span class="samp">Z</span></samp>' and
-`<samp><span class="samp">a</span></samp>' through `<samp><span class="samp">z</span></samp>', as well as non-<acronym>ASCII</acronym> letters); other
+alphabetic characters (the letters &lsquo;<samp><span class="samp">A</span></samp>&rsquo; through &lsquo;<samp><span class="samp">Z</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; through &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, as well as non-<acronym>ASCII</acronym> letters); other
 characters are not altered.  You can specify a different case
 conversion mapping by specifying a case table (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).
 
    <p>These functions do not modify the strings that are passed to them as
 arguments.
 
-   <p>The examples below use the characters `<samp><span class="samp">X</span></samp>' and `<samp><span class="samp">x</span></samp>' which have
+   <p>The examples below use the characters &lsquo;<samp><span class="samp">X</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; which have
 <acronym>ASCII</acronym> codes 88 and 120 respectively.
 
 <div class="defun">
-&mdash; Function: <b>downcase</b><var> string-or-char<a name="index-downcase-266"></a></var><br>
-<blockquote><p>This function converts a character or a string to lower case.
+&mdash; Function: <b>downcase</b><var> string-or-char<a name="index-downcase-270"></a></var><br>
+<blockquote><p>This function converts <var>string-or-char</var>, which should be either a
+character or a string, to lower case.
 
-        <p>When the argument to <code>downcase</code> is a string, the function creates
-and returns a new string in which each letter in the argument that is
-upper case is converted to lower case.  When the argument to
-<code>downcase</code> is a character, <code>downcase</code> returns the
-corresponding lower case character.  This value is an integer.  If the
-original character is lower case, or is not a letter, then the value
-equals the original character.
+        <p>When <var>string-or-char</var> is a string, this function returns a new
+string in which each letter in the argument that is upper case is
+converted to lower case.  When <var>string-or-char</var> is a character,
+this function returns the corresponding lower case character (an
+integer); if the original character is lower case, or is not a letter,
+the return value is equal to the original character.
 
      <pre class="example">          (downcase "The cat in the hat")
-               =&gt; "the cat in the hat"
+               &rArr; "the cat in the hat"
           
           (downcase ?X)
-               =&gt; 120
-     </pre>
+               &rArr; 120
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>upcase</b><var> string-or-char<a name="index-upcase-267"></a></var><br>
-<blockquote><p>This function converts a character or a string to upper case.
+&mdash; Function: <b>upcase</b><var> string-or-char<a name="index-upcase-271"></a></var><br>
+<blockquote><p>This function converts <var>string-or-char</var>, which should be either a
+character or a string, to upper case.
 
-        <p>When the argument to <code>upcase</code> is a string, the function creates
-and returns a new string in which each letter in the argument that is
-lower case is converted to upper case.
-
-        <p>When the argument to <code>upcase</code> is a character, <code>upcase</code>
-returns the corresponding upper case character.  This value is an integer. 
-If the original character is upper case, or is not a letter, then the
-value returned equals the original character.
+        <p>When <var>string-or-char</var> is a string, this function returns a new
+string in which each letter in the argument that is lower case is
+converted to upper case.  When <var>string-or-char</var> is a character,
+this function returns the corresponding upper case character (an
+integer); if the original character is upper case, or is not a letter,
+the return value is equal to the original character.
 
      <pre class="example">          (upcase "The cat in the hat")
-               =&gt; "THE CAT IN THE HAT"
+               &rArr; "THE CAT IN THE HAT"
           
           (upcase ?x)
-               =&gt; 88
-     </pre>
+               &rArr; 88
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>capitalize</b><var> string-or-char<a name="index-capitalize-268"></a></var><br>
-<blockquote><p><a name="index-capitalization-269"></a>This function capitalizes strings or characters.  If
-<var>string-or-char</var> is a string, the function creates and returns a new
-string, whose contents are a copy of <var>string-or-char</var> in which each
-word has been capitalized.  This means that the first character of each
+&mdash; Function: <b>capitalize</b><var> string-or-char<a name="index-capitalize-272"></a></var><br>
+<blockquote><p><a name="index-capitalization-273"></a>This function capitalizes strings or characters.  If
+<var>string-or-char</var> is a string, the function returns a new string
+whose contents are a copy of <var>string-or-char</var> in which each word
+has been capitalized.  This means that the first character of each
 word is converted to upper case, and the rest are converted to lower
 case.
 
@@ -125,22 +124,22 @@ case.
 are assigned to the word constituent syntax class in the current syntax
 table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
 
-        <p>When the argument to <code>capitalize</code> is a character, <code>capitalize</code>
-has the same result as <code>upcase</code>.
+        <p>When <var>string-or-char</var> is a character, this function does the same
+thing as <code>upcase</code>.
 
      <pre class="example">          (capitalize "The cat in the hat")
-               =&gt; "The Cat In The Hat"
+               &rArr; "The Cat In The Hat"
           
           (capitalize "THE 77TH-HATTED CAT")
-               =&gt; "The 77th-Hatted Cat"
+               &rArr; "The 77th-Hatted Cat"
           
           (capitalize ?x)
-               =&gt; 88
-     </pre>
+               &rArr; 88
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>upcase-initials</b><var> string-or-char<a name="index-upcase_002dinitials-270"></a></var><br>
+&mdash; Function: <b>upcase-initials</b><var> string-or-char<a name="index-upcase_002dinitials-274"></a></var><br>
 <blockquote><p>If <var>string-or-char</var> is a string, this function capitalizes the
 initials of the words in <var>string-or-char</var>, without altering any
 letters other than the initials.  It returns a new string whose
@@ -155,8 +154,8 @@ table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Tab
 <code>upcase-initials</code> has the same result as <code>upcase</code>.
 
      <pre class="example">          (upcase-initials "The CAT in the hAt")
-               =&gt; "The CAT In The HAt"
-     </pre>
+               &rArr; "The CAT In The HAt"
+</pre>
         </blockquote></div>
 
    <p>See <a href="Text-Comparison.html#Text-Comparison">Text Comparison</a>, for functions that compare strings; some of

@@ -3,32 +3,32 @@
 <title>Self-Evaluating Forms - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Forms.html#Forms" title="Forms">
 <link rel="next" href="Symbol-Forms.html#Symbol-Forms" title="Symbol Forms">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,9 +45,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Self-Evaluating-Forms"></a>
 <a name="Self_002dEvaluating-Forms"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Symbol-Forms.html#Symbol-Forms">Symbol Forms</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Forms.html#Forms">Forms</a>
 <hr>
@@ -55,23 +55,23 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Forms.html#Forms">Forms</a>
 
 <h4 class="subsection">9.2.1 Self-Evaluating Forms</h4>
 
-<p><a name="index-vector-evaluation-491"></a><a name="index-literal-evaluation-492"></a><a name="index-self_002devaluating-form-493"></a>
-  A <dfn>self-evaluating form</dfn> is any form that is not a list or symbol. 
-Self-evaluating forms evaluate to themselves: the result of evaluation
-is the same object that was evaluated.  Thus, the number 25 evaluates to
-25, and the string <code>"foo"</code> evaluates to the string <code>"foo"</code>. 
-Likewise, evaluation of a vector does not cause evaluation of the
-elements of the vector&mdash;it returns the same vector with its contents
-unchanged.
+<p><a name="index-vector-evaluation-494"></a><a name="index-literal-evaluation-495"></a><a name="index-self_002devaluating-form-496"></a>
+  A <dfn>self-evaluating form</dfn> is any form that is not a list or
+symbol.  Self-evaluating forms evaluate to themselves: the result of
+evaluation is the same object that was evaluated.  Thus, the number 25
+evaluates to 25, and the string <code>"foo"</code> evaluates to the string
+<code>"foo"</code>.  Likewise, evaluating a vector does not cause evaluation
+of the elements of the vector&mdash;it returns the same vector with its
+contents unchanged.
 
 <pre class="example">     '123               ; <span class="roman">A number, shown without evaluation.</span>
-          =&gt; 123
+          &rArr; 123
      123                ; <span class="roman">Evaluated as usual---result is the same.</span>
-          =&gt; 123
+          &rArr; 123
      (eval '123)        ; <span class="roman">Evaluated ``by hand''---result is the same.</span>
-          =&gt; 123
+          &rArr; 123
      (eval (eval '123)) ; <span class="roman">Evaluating twice changes nothing.</span>
-          =&gt; 123
+          &rArr; 123
 </pre>
    <p>It is common to write numbers, characters, strings, and even vectors
 in Lisp code, taking advantage of the fact that they self-evaluate. 
@@ -82,11 +82,11 @@ program.  Here is an example:
 
 <pre class="example">     ;; <span class="roman">Build an expression containing a buffer object.</span>
      (setq print-exp (list 'print (current-buffer)))
-          =&gt; (print #&lt;buffer eval.texi&gt;)
+          &rArr; (print #&lt;buffer eval.texi&gt;)
      ;; <span class="roman">Evaluate it.</span>
      (eval print-exp)
           -| #&lt;buffer eval.texi&gt;
-          =&gt; #&lt;buffer eval.texi&gt;
+          &rArr; #&lt;buffer eval.texi&gt;
 </pre>
    </body></html>
 

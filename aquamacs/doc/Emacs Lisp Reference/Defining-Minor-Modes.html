@@ -3,32 +3,32 @@
 <title>Defining Minor Modes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Minor-Modes.html#Minor-Modes" title="Minor Modes">
 <link rel="prev" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" title="Keymaps and Minor Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Minor-Modes"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes">Keymaps and Minor Modes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Minor-Modes.html#Minor-Modes">Minor Modes</a>
 <hr>
@@ -58,7 +58,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minor-Modes.html#Minor-Modes">Minor Mod
 implementing a mode in one self-contained definition.
 
 <div class="defun">
-&mdash; Macro: <b>define-minor-mode</b><var> mode doc </var>[<var>init-value </var>[<var>lighter </var>[<var>keymap</var>]]]<var> keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dminor_002dmode-1574"></a></var><br>
+&mdash; Macro: <b>define-minor-mode</b><var> mode doc </var>[<var>init-value </var>[<var>lighter </var>[<var>keymap</var>]]]<var> keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dminor_002dmode-1630"></a></var><br>
 <blockquote><p>This macro defines a new minor mode whose name is <var>mode</var> (a
 symbol).  It defines a command named <var>mode</var> to toggle the minor
 mode, with <var>doc</var> as its documentation string.  It also defines a
@@ -76,7 +76,7 @@ It can be a variable name, whose value is the keymap, or it can be an alist
 specifying bindings in this form:
 
      <pre class="example">          (<var>key-sequence</var> . <var>definition</var>)
-     </pre>
+</pre>
         <p>The above three arguments <var>init-value</var>, <var>lighter</var>, and
 <var>keymap</var> can be (partially) omitted when <var>keyword-args</var> are
 used.  The <var>keyword-args</var> consist of keywords followed by
@@ -84,7 +84,7 @@ corresponding values.  A few keywords have special meanings:
 
           <dl>
 <dt><code>:group </code><var>group</var><dd>Custom group name to use in all generated <code>defcustom</code> forms. 
-Defaults to <var>mode</var> without the possible trailing `<samp><span class="samp">-mode</span></samp>'. 
+Defaults to <var>mode</var> without the possible trailing &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;. 
 <strong>Warning:</strong> don't use this default group name unless you have
 written a <code>defgroup</code> to define that group properly.  See <a href="Group-Definitions.html#Group-Definitions">Group Definitions</a>.
 
@@ -124,7 +124,7 @@ and will always be loaded by that time, enabling it by default is
 harmless.  But these are unusual circumstances.  Normally, the
 initial value must be <code>nil</code>.
 
-   <p><a name="index-easy_002dmmode_002ddefine_002dminor_002dmode-1575"></a>  The name <code>easy-mmode-define-minor-mode</code> is an alias
+   <p><a name="index-easy_002dmmode_002ddefine_002dminor_002dmode-1631"></a>  The name <code>easy-mmode-define-minor-mode</code> is an alias
 for this macro.
 
    <p>Here is an example of using <code>define-minor-mode</code>:
@@ -180,7 +180,7 @@ minor modes don't need any.
       :group 'hunger)
 </pre>
    <div class="defun">
-&mdash; Macro: <b>define-globalized-minor-mode</b><var> global-mode mode turn-on keyword-args<small class="dots">...</small><a name="index-define_002dglobalized_002dminor_002dmode-1576"></a></var><br>
+&mdash; Macro: <b>define-globalized-minor-mode</b><var> global-mode mode turn-on keyword-args<small class="dots">...</small><a name="index-define_002dglobalized_002dminor_002dmode-1632"></a></var><br>
 <blockquote><p>This defines a global toggle named <var>global-mode</var> whose meaning is
 to enable or disable the buffer-local minor mode <var>mode</var> in all
 buffers.  To turn on the minor mode in a buffer, it uses the function

@@ -3,33 +3,33 @@
 <title>Derived Modes - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link rel="prev" href="Mode-Help.html#Mode-Help" title="Mode Help">
 <link rel="next" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Derived-Modes"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Help.html#Mode-Help">Mode Help</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
@@ -56,13 +56,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Mod
 
 <h4 class="subsection">23.2.5 Defining Derived Modes</h4>
 
-<p><a name="index-derived-mode-1559"></a>
+<p><a name="index-derived-mode-1615"></a>
   It's often useful to define a new major mode in terms of an existing
 one.  An easy way to do this is to use <code>define-derived-mode</code>.
 
 <div class="defun">
-&mdash; Macro: <b>define-derived-mode</b><var> variant parent name docstring keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dderived_002dmode-1560"></a></var><br>
-<blockquote><p>This construct defines <var>variant</var> as a major mode command, using
+&mdash; Macro: <b>define-derived-mode</b><var> variant parent name docstring keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dderived_002dmode-1616"></a></var><br>
+<blockquote><p>This macro defines <var>variant</var> as a major mode command, using
 <var>name</var> as the string form of the mode name.  <var>variant</var> and
 <var>parent</var> should be unquoted symbols.
 
@@ -95,6 +95,12 @@ runs this hook, after running the hooks of its ancestor modes, with
 <var>parent</var> with <var>body</var>.  The command <var>variant</var>
 evaluates the forms in <var>body</var> after setting up all its usual
 overrides, just before running the mode hooks.
+
+        <p>If <var>parent</var> has a non-<code>nil</code> <code>mode-class</code> symbol
+property, then <code>define-derived-mode</code> sets the <code>mode-class</code>
+property of <var>variant</var> to the same value.  This ensures, for
+example, that if <var>parent</var> is a special mode, then <var>variant</var> is
+also a special mode (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
 
         <p>You can also specify <code>nil</code> for <var>parent</var>.  This gives the new
 mode no parent.  Then <code>define-derived-mode</code> behaves as described
@@ -140,7 +146,7 @@ define the specified customization group.
           
           (define-key hypertext-mode-map
             [down-mouse-3] 'do-hyper-link)
-     </pre>
+</pre>
         <p>Do not write an <code>interactive</code> spec in the definition;
 <code>define-derived-mode</code> does that automatically. 
 </p></blockquote></div>

@@ -3,33 +3,33 @@
 <title>Prefix Command Arguments - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
 <link rel="prev" href="Quitting.html#Quitting" title="Quitting">
 <link rel="next" href="Recursive-Editing.html#Recursive-Editing" title="Recursive Editing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,17 +46,17 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Prefix-Command-Arguments"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Quitting.html#Quitting">Quitting</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
 <hr>
 </div>
 
-<h3 class="section">21.11 Prefix Command Arguments</h3>
+<h3 class="section">21.12 Prefix Command Arguments</h3>
 
-<p><a name="index-prefix-argument-1337"></a><a name="index-raw-prefix-argument-1338"></a><a name="index-numeric-prefix-argument-1339"></a>
+<p><a name="index-prefix-argument-1388"></a><a name="index-raw-prefix-argument-1389"></a><a name="index-numeric-prefix-argument-1390"></a>
   Most Emacs commands can use a <dfn>prefix argument</dfn>, a number
 specified before the command itself.  (Don't confuse prefix arguments
 with prefix keys.)  The prefix argument is at all times represented by a
@@ -132,7 +132,7 @@ value of the prefix argument directly in the variable
 <code>current-prefix-arg</code>, but this is less clean.
 
 <div class="defun">
-&mdash; Function: <b>prefix-numeric-value</b><var> arg<a name="index-prefix_002dnumeric_002dvalue-1340"></a></var><br>
+&mdash; Function: <b>prefix-numeric-value</b><var> arg<a name="index-prefix_002dnumeric_002dvalue-1391"></a></var><br>
 <blockquote><p>This function returns the numeric meaning of a valid raw prefix argument
 value, <var>arg</var>.  The argument may be a symbol, a number, or a list. 
 If it is <code>nil</code>, the value 1 is returned; if it is <code>-</code>, the
@@ -142,14 +142,14 @@ returned.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>current-prefix-arg</b><var><a name="index-current_002dprefix_002darg-1341"></a></var><br>
+&mdash; Variable: <b>current-prefix-arg</b><var><a name="index-current_002dprefix_002darg-1392"></a></var><br>
 <blockquote><p>This variable holds the raw prefix argument for the <em>current</em>
 command.  Commands may examine it directly, but the usual method for
 accessing it is with <code>(interactive "P")</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>prefix-arg</b><var><a name="index-prefix_002darg-1342"></a></var><br>
+&mdash; Variable: <b>prefix-arg</b><var><a name="index-prefix_002darg-1393"></a></var><br>
 <blockquote><p>The value of this variable is the raw prefix argument for the
 <em>next</em> editing command.  Commands such as <code>universal-argument</code>
 that specify prefix arguments for the following command work by setting
@@ -157,7 +157,7 @@ this variable.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-prefix-arg</b><var><a name="index-last_002dprefix_002darg-1343"></a></var><br>
+&mdash; Variable: <b>last-prefix-arg</b><var><a name="index-last_002dprefix_002darg-1394"></a></var><br>
 <blockquote><p>The raw prefix argument value used by the previous command. 
 </p></blockquote></div>
 
@@ -165,14 +165,14 @@ this variable.
 following command.  Do not call them for any other reason.
 
 <div class="defun">
-&mdash; Command: <b>universal-argument</b><var><a name="index-universal_002dargument-1344"></a></var><br>
+&mdash; Command: <b>universal-argument</b><var><a name="index-universal_002dargument-1395"></a></var><br>
 <blockquote><p>This command reads input and specifies a prefix argument for the
 following command.  Don't call this command yourself unless you know
 what you are doing. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>digit-argument</b><var> arg<a name="index-digit_002dargument-1345"></a></var><br>
+&mdash; Command: <b>digit-argument</b><var> arg<a name="index-digit_002dargument-1396"></a></var><br>
 <blockquote><p>This command adds to the prefix argument for the following command.  The
 argument <var>arg</var> is the raw prefix argument as it was before this
 command; it is used to compute the updated prefix argument.  Don't call
@@ -180,7 +180,7 @@ this command yourself unless you know what you are doing.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>negative-argument</b><var> arg<a name="index-negative_002dargument-1346"></a></var><br>
+&mdash; Command: <b>negative-argument</b><var> arg<a name="index-negative_002dargument-1397"></a></var><br>
 <blockquote><p>This command adds to the numeric argument for the next command.  The
 argument <var>arg</var> is the raw prefix argument as it was before this
 command; its value is negated to form the new prefix argument.  Don't

@@ -3,7 +3,7 @@
 <title>Basic Keyboard Macro - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
 <link rel="next" href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" title="Keyboard Macro Ring">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Basic-Keyboard-Macro"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring">Keyboard Macro Ring</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
 <hr>
@@ -67,16 +67,16 @@ execute the most recent keyboard macro
 (<code>apply-macro-to-region-lines</code>). 
 </dl>
 
-   <p><a name="index-F3-755"></a><a name="index-F4-756"></a><a name="index-kmacro_002dstart_002dmacro_002dor_002dinsert_002dcounter-757"></a><a name="index-kmacro_002dend_002dor_002dcall_002dmacro-758"></a><a name="index-kmacro_002dend_002dand_002dcall_002dmacro-759"></a>  To start defining a keyboard macro, type &lt;F3&gt;.  From then on,
+   <p><a name="index-F3-759"></a><a name="index-F4-760"></a><a name="index-kmacro_002dstart_002dmacro_002dor_002dinsert_002dcounter-761"></a><a name="index-kmacro_002dend_002dor_002dcall_002dmacro-762"></a><a name="index-kmacro_002dend_002dand_002dcall_002dmacro-763"></a>  To start defining a keyboard macro, type &lt;F3&gt;.  From then on,
 your keys continue to be executed, but also become part of the
-definition of the macro.  `<samp><span class="samp">Def</span></samp>' appears in the mode line to
+definition of the macro.  &lsquo;<samp><span class="samp">Def</span></samp>&rsquo; appears in the mode line to
 remind you of what is going on.  When you are finished, type &lt;F4&gt;
 (<code>kmacro-end-or-call-macro</code>) to terminate the definition.  For
 example,
 
 <pre class="example">     &lt;F3&gt; M-f foo &lt;F4&gt;
 </pre>
-   <p class="noindent">defines a macro to move forward a word and then insert `<samp><span class="samp">foo</span></samp>'. 
+   <p class="noindent">defines a macro to move forward a word and then insert &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;. 
 Note that &lt;F3&gt; and &lt;F4&gt; do not become part of the macro.
 
    <p>After defining the macro, you can call it with &lt;F4&gt;.  For the
@@ -84,7 +84,7 @@ above example, this has the same effect as typing <kbd>M-f foo</kbd> again.
 (Note the two roles of the &lt;F4&gt; command: it ends the macro if you
 are in the process of defining one, or calls the last macro
 otherwise.)  You can also supply &lt;F4&gt; with a numeric prefix
-argument `<samp><span class="samp">n</span></samp>', which means to invoke the macro `<samp><span class="samp">n</span></samp>' times.  An
+argument &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, which means to invoke the macro &lsquo;<samp><span class="samp">n</span></samp>&rsquo; times.  An
 argument of zero repeats the macro indefinitely, until it gets an
 error or you type <kbd>C-g</kbd> (or, on MS-DOS, <kbd>C-&lt;BREAK&gt;</kbd>).
 
@@ -92,7 +92,7 @@ error or you type <kbd>C-g</kbd> (or, on MS-DOS, <kbd>C-&lt;BREAK&gt;</kbd>).
 with keyboard macros: if you wish to repeat an operation at regularly
 spaced places in the text, include a motion command as part of the
 macro.  In this case, repeating the macro inserts the string
-`<samp><span class="samp">foo</span></samp>' after each successive word.
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; after each successive word.
 
    <p>After terminating the definition of a keyboard macro, you can append
 more keystrokes to its definition by typing <kbd>C-u &lt;F3&gt;</kbd>.  This
@@ -113,7 +113,7 @@ you entered the macro.  For example,
 <pre class="example">     &lt;F3&gt; C-a C-k C-x b foo &lt;RET&gt; C-y C-x b &lt;RET&gt; &lt;F4&gt;
 </pre>
    <p class="noindent">defines a macro that kills the current line, yanks it into the buffer
-`<samp><span class="samp">foo</span></samp>', then returns to the original buffer.
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo;, then returns to the original buffer.
 
    <p>Most keyboard commands work as usual in a keyboard macro definition,
 with some exceptions.  Typing <kbd>C-g</kbd> (<code>keyboard-quit</code>) quits
@@ -128,12 +128,12 @@ original mouse position of that event, the position that the mouse had
 while you were defining the macro.  The effect of this may be hard to
 predict.
 
-   <p><a name="index-apply_002dmacro_002dto_002dregion_002dlines-760"></a><a name="index-C_002dx-C_002dk-r-761"></a>  The command <kbd>C-x C-k r</kbd> (<code>apply-macro-to-region-lines</code>)
+   <p><a name="index-apply_002dmacro_002dto_002dregion_002dlines-764"></a><a name="index-C_002dx-C_002dk-r-765"></a>  The command <kbd>C-x C-k r</kbd> (<code>apply-macro-to-region-lines</code>)
 repeats the last defined keyboard macro on each line that begins in
 the region.  It does this line by line, by moving point to the
 beginning of the line and then executing the macro.
 
-   <p><a name="index-C_002dx-_0028-762"></a><a name="index-C_002dx-_0029-763"></a><a name="index-C_002dx-e-764"></a><a name="index-kmacro_002dstart_002dmacro-765"></a><a name="index-kmacro_002dend_002dmacro-766"></a>  In addition to the &lt;F3&gt; and &lt;F4&gt; commands described above,
+   <p><a name="index-C_002dx-_0028-766"></a><a name="index-C_002dx-_0029-767"></a><a name="index-C_002dx-e-768"></a><a name="index-kmacro_002dstart_002dmacro-769"></a><a name="index-kmacro_002dend_002dmacro-770"></a>  In addition to the &lt;F3&gt; and &lt;F4&gt; commands described above,
 Emacs also supports an older set of keybindings for defining and
 executing keyboard macros.  To begin a macro definition, type <kbd>C-x
 (</kbd> (<code>kmacro-start-macro</code>); as with &lt;F3&gt;, a prefix argument

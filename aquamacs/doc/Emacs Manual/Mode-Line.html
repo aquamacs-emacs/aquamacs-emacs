@@ -3,7 +3,7 @@
 <title>Mode Line - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Screen.html#Screen" title="Screen">
 <link rel="prev" href="Echo-Area.html#Echo-Area" title="Echo Area">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Mode-Line"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Menu-Bar.html#Menu-Bar">Menu Bar</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Echo-Area.html#Echo-Area">Echo Area</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Screen.html#Screen">Screen</a>
@@ -76,17 +76,17 @@ character set and newline convention used for the current buffer.
 Normally, Emacs handles these settings intelligently, but it is
 sometimes useful to have this information.
 
-   <p><var>cs</var> describes the character set of the buffer (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).  If it is a dash (`<samp><span class="samp">-</span></samp>'), that indicates the default
+   <p><var>cs</var> describes the character set of the buffer (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).  If it is a dash (&lsquo;<samp><span class="samp">-</span></samp>&rsquo;), that indicates the default
 state of affairs: no special character set handling, except for the
-end-of-line translations described in the next paragraph.  `<samp><span class="samp">=</span></samp>'
+end-of-line translations described in the next paragraph.  &lsquo;<samp><span class="samp">=</span></samp>&rsquo;
 means no conversion whatsoever.  Letters represent various nontrivial
-<dfn>coding systems</dfn>&mdash;for example, `<samp><span class="samp">1</span></samp>' represents ISO Latin-1. 
+<dfn>coding systems</dfn>&mdash;for example, &lsquo;<samp><span class="samp">1</span></samp>&rsquo; represents ISO Latin-1. 
 On a text-only terminal, <var>cs</var> is preceded by two additional
 characters that describe the coding system for keyboard input and the
 coding system for terminal output.  Furthermore, if you are using an
 input method, <var>cs</var> is preceded by a string that identifies the
-input method, which takes the form `<samp><var>i</var><span class="samp">&gt;</span></samp>', `<samp><var>i</var><span class="samp">+</span></samp>',
-or `<samp><var>i</var><span class="samp">@</span></samp>' (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).
+input method, which takes the form &lsquo;<samp><var>i</var><span class="samp">&gt;</span></samp>&rsquo;, &lsquo;<samp><var>i</var><span class="samp">+</span></samp>&rsquo;,
+or &lsquo;<samp><var>i</var><span class="samp">@</span></samp>&rsquo; (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).
 
    <p><a name="index-end_002dof_002dline-conversion_002c-mode_002dline-indication-14"></a>  The character after <var>cs</var> is usually a colon.  However, under
 some circumstances a different string is displayed, which indicates a
@@ -94,27 +94,27 @@ nontrivial end-of-line convention.  Usually, lines of text are
 separated by <dfn>newline characters</dfn>, but two other conventions are
 sometimes used.  The MS-DOS convention is to use a &ldquo;carriage-return&rdquo;
 character followed by a &ldquo;linefeed&rdquo; character; when editing such
-files, the colon changes to either a backslash (`<samp><span class="samp">\</span></samp>') or
-`<samp><span class="samp">(DOS)</span></samp>', depending on the operating system.  The Macintosh
+files, the colon changes to either a backslash (&lsquo;<samp><span class="samp">\</span></samp>&rsquo;) or
+&lsquo;<samp><span class="samp">(DOS)</span></samp>&rsquo;, depending on the operating system.  The Macintosh
 end-of-line convention is to use a &ldquo;carriage-return&rdquo; character
 instead of a newline; when editing such files, the colon indicator
-changes to either a forward slash (`<samp><span class="samp">/</span></samp>') or `<samp><span class="samp">(Mac)</span></samp>'.  On some
-systems, Emacs displays `<samp><span class="samp">(Unix)</span></samp>' instead of the colon for files
+changes to either a forward slash (&lsquo;<samp><span class="samp">/</span></samp>&rsquo;) or &lsquo;<samp><span class="samp">(Mac)</span></samp>&rsquo;.  On some
+systems, Emacs displays &lsquo;<samp><span class="samp">(Unix)</span></samp>&rsquo; instead of the colon for files
 that use newline as the line separator.
 
    <p>The next element on the mode line is the string indicated by
-<var>ch</var>.  This shows two dashes (`<samp><span class="samp">--</span></samp>') if the buffer displayed
+<var>ch</var>.  This shows two dashes (&lsquo;<samp><span class="samp">--</span></samp>&rsquo;) if the buffer displayed
 in the window has the same contents as the corresponding file on the
 disk; i.e., if the buffer is &ldquo;unmodified&rdquo;.  If the buffer is
-modified, it shows two stars (`<samp><span class="samp">**</span></samp>').  For a read-only buffer, it
-shows `<samp><span class="samp">%*</span></samp>' if the buffer is modified, and `<samp><span class="samp">%%</span></samp>' otherwise.
+modified, it shows two stars (&lsquo;<samp><span class="samp">**</span></samp>&rsquo;).  For a read-only buffer, it
+shows &lsquo;<samp><span class="samp">%*</span></samp>&rsquo; if the buffer is modified, and &lsquo;<samp><span class="samp">%%</span></samp>&rsquo; otherwise.
 
-   <p>The character after <var>ch</var> is normally a dash (`<samp><span class="samp">-</span></samp>'). 
+   <p>The character after <var>ch</var> is normally a dash (&lsquo;<samp><span class="samp">-</span></samp>&rsquo;). 
 However, if the default-directory for the current buffer is on a
-remote machine, `<samp><span class="samp">@</span></samp>' is displayed instead (see <a href="File-Names.html#File-Names">File Names</a>).
+remote machine, &lsquo;<samp><span class="samp">@</span></samp>&rsquo; is displayed instead (see <a href="File-Names.html#File-Names">File Names</a>).
 
    <p><var>fr</var> gives the selected frame name (see <a href="Frames.html#Frames">Frames</a>).  It appears
-only on text-only terminals.  The initial frame's name is `<samp><span class="samp">F1</span></samp>'.
+only on text-only terminals.  The initial frame's name is &lsquo;<samp><span class="samp">F1</span></samp>&rsquo;.
 
    <p><var>buf</var> is the name of the buffer displayed in the window. 
 Usually, this is the same as the name of a file you are editing. 
@@ -122,14 +122,14 @@ See <a href="Buffers.html#Buffers">Buffers</a>.
 
    <p><var>pos</var> tells you whether there is additional text above the top of
 the window, or below the bottom.  If your buffer is small and it is all
-visible in the window, <var>pos</var> is `<samp><span class="samp">All</span></samp>'.  Otherwise, it is
-`<samp><span class="samp">Top</span></samp>' if you are looking at the beginning of the buffer, `<samp><span class="samp">Bot</span></samp>'
-if you are looking at the end of the buffer, or `<samp><var>nn</var><span class="samp">%</span></samp>', where
+visible in the window, <var>pos</var> is &lsquo;<samp><span class="samp">All</span></samp>&rsquo;.  Otherwise, it is
+&lsquo;<samp><span class="samp">Top</span></samp>&rsquo; if you are looking at the beginning of the buffer, &lsquo;<samp><span class="samp">Bot</span></samp>&rsquo;
+if you are looking at the end of the buffer, or &lsquo;<samp><var>nn</var><span class="samp">%</span></samp>&rsquo;, where
 <var>nn</var> is the percentage of the buffer above the top of the window. 
 With Size Indication mode, you can display the size of the buffer as
 well.  See <a href="Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a>.
 
-   <p><var>line</var> is the character `<samp><span class="samp">L</span></samp>' followed by the line number at
+   <p><var>line</var> is the character &lsquo;<samp><span class="samp">L</span></samp>&rsquo; followed by the line number at
 point.  (You can display the current column number too, by turning on
 Column Number mode.  See <a href="Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a>.)
 
@@ -148,13 +148,13 @@ additional features on top of the major mode.  See <a href="Minor-Modes.html#Min
 
    <p>Some features are listed together with the minor modes whenever they
 are turned on, even through they are not really minor modes. 
-`<samp><span class="samp">Narrow</span></samp>' means that the buffer being displayed has editing
+&lsquo;<samp><span class="samp">Narrow</span></samp>&rsquo; means that the buffer being displayed has editing
 restricted to only a portion of its text (see <a href="Narrowing.html#Narrowing">Narrowing</a>). 
-`<samp><span class="samp">Def</span></samp>' means that a keyboard macro is currently being defined
+&lsquo;<samp><span class="samp">Def</span></samp>&rsquo; means that a keyboard macro is currently being defined
 (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>).
 
    <p>In addition, if Emacs is inside a recursive editing level, square
-brackets (`<samp><span class="samp">[...]</span></samp>') appear around the parentheses that
+brackets (&lsquo;<samp><span class="samp">[...]</span></samp>&rsquo;) appear around the parentheses that
 surround the modes.  If Emacs is in one recursive editing level within
 another, double square brackets appear, and so on.  Since recursive
 editing levels affect Emacs globally, not just one buffer, the square

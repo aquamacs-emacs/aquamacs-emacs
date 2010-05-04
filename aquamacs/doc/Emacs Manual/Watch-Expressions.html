@@ -3,19 +3,20 @@
 <title>Watch Expressions - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" title="GDB Graphical Interface">
 <link rel="prev" href="Other-GDB_002dUI-Buffers.html#Other-GDB_002dUI-Buffers" title="Other GDB-UI Buffers">
+<link rel="next" href="Reverse-Debugging.html#Reverse-Debugging" title="Reverse Debugging">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +47,9 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Watch-Expressions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reverse-Debugging.html#Reverse-Debugging">Reverse Debugging</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Other-GDB_002dUI-Buffers.html#Other-GDB_002dUI-Buffers">Other GDB-UI Buffers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>
 <hr>
@@ -55,8 +57,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GDB-Graphical-Interface.html#GDB-Graphi
 
 <h5 class="subsubsection">31.6.5.6 Watch Expressions</h5>
 
-<p><a name="index-Watching-expressions-in-GDB-2347"></a>
-<a name="index-gud_002dwatch-2348"></a><a name="index-C_002dx-C_002da-C_002dw-_0040r_007b_0028GUD_0029_007d-2349"></a>  If you want to see how a variable changes each time your program
+<p><a name="index-Watching-expressions-in-GDB-2369"></a>
+<a name="index-gud_002dwatch-2370"></a><a name="index-C_002dx-C_002da-C_002dw-_0040r_007b_0028GUD_0029_007d-2371"></a>  If you want to see how a variable changes each time your program
 stops, move point into the variable name and click on the watch icon
 in the tool bar (<code>gud-watch</code>) or type <kbd>C-x C-a C-w</kbd>.  If you
 specify a prefix argument, you can enter the variable name in the
@@ -77,33 +79,33 @@ for confirmation before expanding the expression if its number of
 immediate children exceeds the value of the variable
 <code>gdb-max-children</code>.
 
-   <p><a name="index-D-_0040r_007b_0028GDB-speedbar_0029_007d-2350"></a><a name="index-gdb_002dvar_002ddelete-2351"></a>  To delete a complex watch expression, move point to the root
+   <p><a name="index-D-_0040r_007b_0028GDB-speedbar_0029_007d-2372"></a><a name="index-gdb_002dvar_002ddelete-2373"></a>  To delete a complex watch expression, move point to the root
 expression in the speedbar and type <kbd>D</kbd> (<code>gdb-var-delete</code>).
 
-   <p><a name="index-RET-_0040r_007b_0028GDB-speedbar_0029_007d-2352"></a><a name="index-gdb_002dedit_002dvalue-2353"></a>  To edit a variable with a simple data type, or a simple element of a
+   <p><a name="index-RET-_0040r_007b_0028GDB-speedbar_0029_007d-2374"></a><a name="index-gdb_002dedit_002dvalue-2375"></a>  To edit a variable with a simple data type, or a simple element of a
 complex data type, move point there in the speedbar and type &lt;RET&gt;
 (<code>gdb-edit-value</code>).  Or you can click <kbd>Mouse-2</kbd> on a value to
 edit it.  Either way, this reads the new value using the minibuffer.
 
-   <p><a name="index-gdb_002dshow_002dchanged_002dvalues-2354"></a>  If you set the variable <code>gdb-show-changed-values</code> to
+   <p><a name="index-gdb_002dshow_002dchanged_002dvalues-2376"></a>  If you set the variable <code>gdb-show-changed-values</code> to
 non-<code>nil</code> (the default value), Emacs uses
 <code>font-lock-warning-face</code> to highlight values that have recently
 changed and <code>shadow</code> face to make variables which have gone out of
 scope less noticeable.  When a variable goes out of scope you can't
 edit its value.
 
-   <p><a name="index-gdb_002ddelete_002dout_002dof_002dscope-2355"></a>  If the variable <code>gdb-delete-out-of-scope</code> is non-<code>nil</code>
+   <p><a name="index-gdb_002ddelete_002dout_002dof_002dscope-2377"></a>  If the variable <code>gdb-delete-out-of-scope</code> is non-<code>nil</code>
 (the default value), Emacs automatically deletes watch expressions
 which go out of scope.  Sometimes, when re-entering the same function,
 it may be useful to set this value to <code>nil</code> so that you don't
 need to recreate the watch expression.
 
-   <p><a name="index-gdb_002duse_002dcolon_002dcolon_002dnotation-2356"></a>  If the variable <code>gdb-use-colon-colon-notation</code> is
-non-<code>nil</code>, Emacs uses the `<samp><var>function</var><span class="samp">::</span><var>variable</var></samp>'
+   <p><a name="index-gdb_002duse_002dcolon_002dcolon_002dnotation-2378"></a>  If the variable <code>gdb-use-colon-colon-notation</code> is
+non-<code>nil</code>, Emacs uses the &lsquo;<samp><var>function</var><span class="samp">::</span><var>variable</var></samp>&rsquo;
 format.  This allows the user to display watch expressions which share
 the same variable name.  The default value is <code>nil</code>.
 
-   <p><a name="index-gdb_002dspeedbar_002dauto_002draise-2357"></a>To automatically raise the speedbar every time the display of watch
+   <p><a name="index-gdb_002dspeedbar_002dauto_002draise-2379"></a>To automatically raise the speedbar every time the display of watch
 expressions updates, set <code>gdb-speedbar-auto-raise</code> to
 non-<code>nil</code>.  This can be useful if you are debugging with a full
 screen Emacs frame.

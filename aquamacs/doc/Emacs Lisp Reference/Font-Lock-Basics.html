@@ -3,32 +3,32 @@
 <title>Font Lock Basics - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
 <link rel="next" href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" title="Search-based Fontification">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Font-Lock-Basics"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
 <hr>
@@ -61,26 +61,29 @@ variable.  The value assigned to this variable is used, if and when Font
 Lock mode is enabled, to set all the other variables.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-defaults</b><var><a name="index-font_002dlock_002ddefaults-1609"></a></var><br>
+&mdash; Variable: <b>font-lock-defaults</b><var><a name="index-font_002dlock_002ddefaults-1663"></a></var><br>
 <blockquote><p>This variable is set by major modes, as a buffer-local variable, to
 specify how to fontify text in that mode.  It automatically becomes
 buffer-local when you set it.  If its value is <code>nil</code>, Font-Lock
-mode does no highlighting, and you can use the `<samp><span class="samp">Faces</span></samp>' menu
-(under `<samp><span class="samp">Edit</span></samp>' and then `<samp><span class="samp">Text Properties</span></samp>' in the menu bar) to
+mode does no highlighting, and you can use the &lsquo;<samp><span class="samp">Faces</span></samp>&rsquo; menu
+(under &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; and then &lsquo;<samp><span class="samp">Text Properties</span></samp>&rsquo; in the menu bar) to
 assign faces explicitly to text in the buffer.
 
         <p>If non-<code>nil</code>, the value should look like this:
 
      <pre class="example">          (<var>keywords</var> [<var>keywords-only</var> [<var>case-fold</var>
            [<var>syntax-alist</var> [<var>syntax-begin</var> <var>other-vars</var>...]]]])
-     </pre>
+</pre>
         <p>The first element, <var>keywords</var>, indirectly specifies the value of
 <code>font-lock-keywords</code> which directs search-based fontification. 
 It can be a symbol, a variable or a function whose value is the list
 to use for <code>font-lock-keywords</code>.  It can also be a list of
 several such symbols, one for each possible level of fontification. 
-The first symbol specifies how to do level 1 fontification, the second
-symbol how to do level 2, and so on.  See <a href="Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Font Lock</a>.
+The first symbol specifies the &lsquo;<samp><span class="samp">mode default</span></samp>&rsquo; level of
+fontification, the next symbol level 1 fontification, the next level 2,
+and so on.  The &lsquo;<samp><span class="samp">mode default</span></samp>&rsquo; level is normally the same as level
+1.  It is used when <code>font-lock-maximum-decoration</code> has a <code>nil</code>
+value.  See <a href="Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Font Lock</a>.
 
         <p>The second element, <var>keywords-only</var>, specifies the value of the
 variable <code>font-lock-keywords-only</code>.  If this is omitted or

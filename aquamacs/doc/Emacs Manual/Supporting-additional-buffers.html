@@ -3,7 +3,7 @@
 <title>Supporting additional buffers - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Autorevert.html#Autorevert" title="Autorevert">
 <link rel="prev" href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" title="Auto Reverting Dired">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Supporting-additional-buffers"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Reverting-Dired.html#Auto-Reverting-Dired">Auto Reverting Dired</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Autorevert.html#Autorevert">Autorevert</a>
 <hr>
@@ -64,7 +64,7 @@ support for auto-reverting new types of buffers.
    <p>In addition, it <em>must</em> have a <code>buffer-stale-function</code>.
 
 <div class="defun">
-&mdash; Variable: <b>buffer-stale-function</b><var><a name="index-buffer_002dstale_002dfunction-892"></a></var><br>
+&mdash; Variable: <b>buffer-stale-function</b><var><a name="index-buffer_002dstale_002dfunction-896"></a></var><br>
 <blockquote><p>The value of this variable is a function to check whether a non-file
 buffer needs reverting.  This should be a function with one optional
 argument <var>noconfirm</var>.  The function should return non-<code>nil</code>
@@ -83,14 +83,14 @@ If the function is only going to be used for auto-reverting, you can
 ignore the <var>noconfirm</var> argument.
 
         <p>If you just want to automatically auto-revert every
-<code>auto-revert-interval</code> seconds, use:
+<code>auto-revert-interval</code> seconds (like the Buffer Menu), use:
 
      <pre class="example">          (set (make-local-variable 'buffer-stale-function)
                #'(lambda (&amp;optional noconfirm) 'fast))
-     </pre>
+</pre>
         <p class="noindent">in the buffer's mode function.
 
-        <p>The special return value `<samp><span class="samp">fast</span></samp>' tells the caller that the need
+        <p>The special return value &lsquo;<samp><span class="samp">fast</span></samp>&rsquo; tells the caller that the need
 for reverting was not checked, but that reverting the buffer is fast. 
 It also tells Auto Revert not to print any revert messages, even if
 <code>auto-revert-verbose</code> is non-<code>nil</code>.  This is important, as
@@ -106,7 +106,7 @@ auto-reverting.
    <p>The buffer will only auto-revert if it is marked unmodified.  Hence,
 you will have to make sure that various functions mark the buffer
 modified if and only if either the buffer contains information that
-might be lost by reverting or there is reason to believe that the user
+might be lost by reverting, or there is reason to believe that the user
 might be inconvenienced by auto-reverting, because he is actively
 working on the buffer.  The user can always override this by manually
 adjusting the modified status of the buffer.  To support this, calling
@@ -118,17 +118,17 @@ as a consequence of auto-reverting.  Of course, moving point might be
 inevitable if the buffer radically changes.
 
    <p>You should make sure that the <code>revert-buffer-function</code> does not
-print messages that unnecessarily duplicate Auto Revert's own messages
-if <code>auto-revert-verbose</code> is <code>t</code> and effectively override a
-<code>nil</code> value for <code>auto-revert-verbose</code>.  Hence, adapting a
-mode for auto-reverting often involves getting rid of such messages. 
-This is especially important for buffers that automatically
-auto-revert every <code>auto-revert-interval</code> seconds.
+print messages that unnecessarily duplicate Auto Revert's own messages,
+displayed if <code>auto-revert-verbose</code> is <code>t</code>, and effectively
+override a <code>nil</code> value for <code>auto-revert-verbose</code>.  Hence,
+adapting a mode for auto-reverting often involves getting rid of such
+messages.  This is especially important for buffers that automatically
+revert every <code>auto-revert-interval</code> seconds.
 
-   <p>Also, you may want to update the documentation string of
-<code>global-auto-revert-non-file-buffers</code>.
+   <p>If the new auto-reverting is part of Emacs, you should mention it
+in the documentation string of <code>global-auto-revert-non-file-buffers</code>.
 
-   <p>Finally, you should add a section to this chapter.  This section
+   <p>Similarly, you should add a section to this chapter.  This section
 should at the very least make clear whether enabling auto-reverting
 for the buffer reliably assures that all information in the buffer is
 completely up to date (or will be after <code>auto-revert-interval</code>

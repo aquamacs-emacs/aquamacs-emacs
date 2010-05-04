@@ -3,33 +3,33 @@
 <title>Building Lists - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Lists.html#Lists" title="Lists">
 <link rel="prev" href="List-Elements.html#List-Elements" title="List Elements">
 <link rel="next" href="List-Variables.html#List-Variables" title="List Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Building-Lists"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="List-Variables.html#List-Variables">List Variables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="List-Elements.html#List-Elements">List Elements</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
@@ -57,14 +57,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
 <!-- node-name,  next,  previous,  up -->
 <h3 class="section">5.4 Building Cons Cells and Lists</h3>
 
-<p><a name="index-cons-cells-310"></a><a name="index-building-lists-311"></a>
+<p><a name="index-cons-cells-314"></a><a name="index-building-lists-315"></a>
   Many functions build lists, as lists reside at the very heart of Lisp. 
 <code>cons</code> is the fundamental list-building function; however, it is
 interesting to note that <code>list</code> is used more times in the source
 code for Emacs than <code>cons</code>.
 
 <div class="defun">
-&mdash; Function: <b>cons</b><var> object1 object2<a name="index-cons-312"></a></var><br>
+&mdash; Function: <b>cons</b><var> object1 object2<a name="index-cons-316"></a></var><br>
 <blockquote><p>This function is the most basic function for building new list
 structure.  It creates a new cons cell, making <var>object1</var> the
 <span class="sc">car</span>, and <var>object2</var> the <span class="sc">cdr</span>.  It then returns the new
@@ -72,59 +72,59 @@ cons cell.  The arguments <var>object1</var> and <var>object2</var> may be any
 Lisp objects, but most often <var>object2</var> is a list.
 
      <pre class="example">          (cons 1 '(2))
-               =&gt; (1 2)
+               &rArr; (1 2)
           (cons 1 '())
-               =&gt; (1)
+               &rArr; (1)
           (cons 1 2)
-               =&gt; (1 . 2)
-     </pre>
-        <p><a name="index-consing-313"></a><code>cons</code> is often used to add a single element to the front of a
+               &rArr; (1 . 2)
+</pre>
+        <p><a name="index-consing-317"></a><code>cons</code> is often used to add a single element to the front of a
 list.  This is called <dfn>consing the element onto the list</dfn>. 
 <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
 For example:
 
      <pre class="example">          (setq list (cons newelt list))
-     </pre>
+</pre>
         <p>Note that there is no conflict between the variable named <code>list</code>
 used in this example and the function named <code>list</code> described below;
 any symbol can serve both purposes. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>list</b><var> &amp;rest objects<a name="index-list-314"></a></var><br>
+&mdash; Function: <b>list</b><var> &amp;rest objects<a name="index-list-318"></a></var><br>
 <blockquote><p>This function creates a list with <var>objects</var> as its elements.  The
 resulting list is always <code>nil</code>-terminated.  If no <var>objects</var>
 are given, the empty list is returned.
 
      <pre class="example">          (list 1 2 3 4 5)
-               =&gt; (1 2 3 4 5)
+               &rArr; (1 2 3 4 5)
           (list 1 2 '(3 4 5) 'foo)
-               =&gt; (1 2 (3 4 5) foo)
+               &rArr; (1 2 (3 4 5) foo)
           (list)
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-list</b><var> length object<a name="index-make_002dlist-315"></a></var><br>
+&mdash; Function: <b>make-list</b><var> length object<a name="index-make_002dlist-319"></a></var><br>
 <blockquote><p>This function creates a list of <var>length</var> elements, in which each
 element is <var>object</var>.  Compare <code>make-list</code> with
 <code>make-string</code> (see <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>).
 
      <pre class="example">          (make-list 3 'pigs)
-               =&gt; (pigs pigs pigs)
+               &rArr; (pigs pigs pigs)
           (make-list 0 'pigs)
-               =&gt; nil
+               &rArr; nil
           (setq l (make-list 3 '(a b))
-               =&gt; ((a b) (a b) (a b))
+               &rArr; ((a b) (a b) (a b))
           (eq (car l) (cadr l))
-               =&gt; t
-     </pre>
+               &rArr; t
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>append</b><var> &amp;rest sequences<a name="index-append-316"></a></var><br>
-<blockquote><p><a name="index-copying-lists-317"></a>This function returns a list containing all the elements of
+&mdash; Function: <b>append</b><var> &amp;rest sequences<a name="index-append-320"></a></var><br>
+<blockquote><p><a name="index-copying-lists-321"></a>This function returns a list containing all the elements of
 <var>sequences</var>.  The <var>sequences</var> may be lists, vectors,
 bool-vectors, or strings, but the last one should usually be a list. 
 All arguments except the last one are copied, so none of the arguments
@@ -137,29 +137,22 @@ object.  The final argument is not copied or converted; it becomes the
 is itself a list, then its elements become in effect elements of the
 result list.  If the final element is not a list, the result is a
 dotted list since its final <span class="sc">cdr</span> is not <code>nil</code> as required
-in a true list.
-
-        <p>In Emacs 20 and before, the <code>append</code> function also allowed
-integers as (non last) arguments.  It converted them to strings of
-digits, making up the decimal print representation of the integer, and
-then used the strings instead of the original integers.  This obsolete
-usage no longer works.  The proper way to convert an integer to a
-decimal number in this way is with <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) or <code>number-to-string</code> (see <a href="String-Conversion.html#String-Conversion">String Conversion</a>). 
+in a true list. 
 </p></blockquote></div>
 
    <p>Here is an example of using <code>append</code>:
 
 <pre class="example">     (setq trees '(pine oak))
-          =&gt; (pine oak)
+          &rArr; (pine oak)
      (setq more-trees (append '(maple birch) trees))
-          =&gt; (maple birch pine oak)
+          &rArr; (maple birch pine oak)
      
      trees
-          =&gt; (pine oak)
+          &rArr; (pine oak)
      more-trees
-          =&gt; (maple birch pine oak)
+          &rArr; (maple birch pine oak)
      (eq trees (cdr (cdr more-trees)))
-          =&gt; t
+          &rArr; t
 </pre>
    <p>You can see how <code>append</code> works by looking at a box diagram.  The
 variable <code>trees</code> is set to the list <code>(pine oak)</code> and then the
@@ -181,13 +174,13 @@ original list:
 forces a copy of the previous argument:
 
 <pre class="example">     trees
-          =&gt; (pine oak)
+          &rArr; (pine oak)
      (setq wood (append trees nil))
-          =&gt; (pine oak)
+          &rArr; (pine oak)
      wood
-          =&gt; (pine oak)
+          &rArr; (pine oak)
      (eq wood trees)
-          =&gt; nil
+          &rArr; nil
 </pre>
    <p class="noindent">This once was the usual way to copy a list, before the function
 <code>copy-sequence</code> was invented.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.
@@ -195,25 +188,25 @@ forces a copy of the previous argument:
    <p>Here we show the use of vectors and strings as arguments to <code>append</code>:
 
 <pre class="example">     (append [a b] "cd" nil)
-          =&gt; (a b 99 100)
+          &rArr; (a b 99 100)
 </pre>
    <p>With the help of <code>apply</code> (see <a href="Calling-Functions.html#Calling-Functions">Calling Functions</a>), we can append
 all the lists in a list of lists:
 
 <pre class="example">     (apply 'append '((a b c) nil (x y z) nil))
-          =&gt; (a b c x y z)
+          &rArr; (a b c x y z)
 </pre>
    <p>If no <var>sequences</var> are given, <code>nil</code> is returned:
 
 <pre class="example">     (append)
-          =&gt; nil
+          &rArr; nil
 </pre>
    <p>Here are some examples where the final argument is not a list:
 
 <pre class="example">     (append '(x y) 'z)
-          =&gt; (x y . z)
+          &rArr; (x y . z)
      (append '(x y) [z])
-          =&gt; (x y . [z])
+          &rArr; (x y . [z])
 </pre>
    <p class="noindent">The second example shows that when the final argument is a sequence but
 not a list, the sequence's elements do not become elements of the
@@ -221,22 +214,22 @@ resulting list.  Instead, the sequence becomes the final <span class="sc">cdr</s
 any other non-list final argument.
 
 <div class="defun">
-&mdash; Function: <b>reverse</b><var> list<a name="index-reverse-318"></a></var><br>
+&mdash; Function: <b>reverse</b><var> list<a name="index-reverse-322"></a></var><br>
 <blockquote><p>This function creates a new list whose elements are the elements of
 <var>list</var>, but in reverse order.  The original argument <var>list</var> is
 <em>not</em> altered.
 
      <pre class="example">          (setq x '(1 2 3 4))
-               =&gt; (1 2 3 4)
+               &rArr; (1 2 3 4)
           (reverse x)
-               =&gt; (4 3 2 1)
+               &rArr; (4 3 2 1)
           x
-               =&gt; (1 2 3 4)
-     </pre>
+               &rArr; (1 2 3 4)
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>copy-tree</b><var> tree &amp;optional vecp<a name="index-copy_002dtree-319"></a></var><br>
+&mdash; Function: <b>copy-tree</b><var> tree &amp;optional vecp<a name="index-copy_002dtree-323"></a></var><br>
 <blockquote><p>This function returns a copy of the tree <code>tree</code>.  If <var>tree</var> is a
 cons cell, this makes a new cons cell with the same <span class="sc">car</span> and
 <span class="sc">cdr</span>, then recursively copies the <span class="sc">car</span> and <span class="sc">cdr</span> in the
@@ -249,7 +242,7 @@ their elements).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>number-sequence</b><var> from &amp;optional to separation<a name="index-number_002dsequence-320"></a></var><br>
+&mdash; Function: <b>number-sequence</b><var> from &amp;optional to separation<a name="index-number_002dsequence-324"></a></var><br>
 <blockquote><p>This returns a list of numbers starting with <var>from</var> and
 incrementing by <var>separation</var>, and ending at or just before
 <var>to</var>.  <var>separation</var> can be positive or negative and defaults
@@ -279,20 +272,20 @@ more negative value if <var>separation</var> is negative).
         <p>Some examples:
 
      <pre class="example">          (number-sequence 4 9)
-               =&gt; (4 5 6 7 8 9)
+               &rArr; (4 5 6 7 8 9)
           (number-sequence 9 4 -1)
-               =&gt; (9 8 7 6 5 4)
+               &rArr; (9 8 7 6 5 4)
           (number-sequence 9 4 -2)
-               =&gt; (9 7 5)
+               &rArr; (9 7 5)
           (number-sequence 8)
-               =&gt; (8)
+               &rArr; (8)
           (number-sequence 8 5)
-               =&gt; nil
+               &rArr; nil
           (number-sequence 5 8 -1)
-               =&gt; nil
+               &rArr; nil
           (number-sequence 1.5 6 2)
-               =&gt; (1.5 3.5 5.5)
-     </pre>
+               &rArr; (1.5 3.5 5.5)
+</pre>
         </blockquote></div>
 
    <div class="footnote">
@@ -306,7 +299,7 @@ by following all the <span class="sc">cdr</span>s and then replacing the termina
 <code>nil</code>.  Compare this to adding an element to the beginning of a
 list with <code>cons</code>, which neither copies nor modifies the list.</p>
 
-   <p><hr></div>
+   <hr></div>
 
    </body></html>
 

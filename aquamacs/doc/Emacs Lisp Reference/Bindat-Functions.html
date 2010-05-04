@@ -3,33 +3,33 @@
 <title>Bindat Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Byte-Packing.html#Byte-Packing" title="Byte Packing">
 <link rel="prev" href="Bindat-Spec.html#Bindat-Spec" title="Bindat Spec">
 <link rel="next" href="Bindat-Examples.html#Bindat-Examples" title="Bindat Examples">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,22 +46,22 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Bindat-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Bindat-Examples.html#Bindat-Examples">Bindat Examples</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Bindat-Spec.html#Bindat-Spec">Bindat Spec</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Packing</a>
 <hr>
 </div>
 
-<h4 class="subsection">37.18.2 Functions to Unpack and Pack Bytes</h4>
+<h4 class="subsection">37.20.2 Functions to Unpack and Pack Bytes</h4>
 
 <p>In the following documentation, <var>spec</var> refers to a data layout
 specification, <code>bindat-raw</code> to a byte array, and <var>struct</var> to an
 alist representing unpacked field data.
 
 <div class="defun">
-&mdash; Function: <b>bindat-unpack</b><var> spec bindat-raw &amp;optional bindat-idx<a name="index-bindat_002dunpack-3110"></a></var><br>
+&mdash; Function: <b>bindat-unpack</b><var> spec bindat-raw &amp;optional bindat-idx<a name="index-bindat_002dunpack-3306"></a></var><br>
 <blockquote><p>This function unpacks data from the unibyte string or byte
 array <code>bindat-raw</code>
 according to <var>spec</var>.  Normally this starts unpacking at the
@@ -73,7 +73,7 @@ one unpacked field.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>bindat-get-field</b><var> struct &amp;rest name<a name="index-bindat_002dget_002dfield-3111"></a></var><br>
+&mdash; Function: <b>bindat-get-field</b><var> struct &amp;rest name<a name="index-bindat_002dget_002dfield-3307"></a></var><br>
 <blockquote><p>This function selects a field's data from the nested alist
 <var>struct</var>.  Usually <var>struct</var> was returned by
 <code>bindat-unpack</code>.  If <var>name</var> corresponds to just one argument,
@@ -95,13 +95,13 @@ length of a string or array being unpacked may be longer than the data's
 total length as described by the specification.
 
 <div class="defun">
-&mdash; Function: <b>bindat-length</b><var> spec struct<a name="index-bindat_002dlength-3112"></a></var><br>
+&mdash; Function: <b>bindat-length</b><var> spec struct<a name="index-bindat_002dlength-3308"></a></var><br>
 <blockquote><p>This function returns the total length of the data in <var>struct</var>,
 according to <var>spec</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>bindat-pack</b><var> spec struct &amp;optional bindat-raw bindat-idx<a name="index-bindat_002dpack-3113"></a></var><br>
+&mdash; Function: <b>bindat-pack</b><var> spec struct &amp;optional bindat-raw bindat-idx<a name="index-bindat_002dpack-3309"></a></var><br>
 <blockquote><p>This function returns a byte array packed according to <var>spec</var> from
 the data in the alist <var>struct</var>.  Normally it creates and fills a
 new byte array starting at the beginning.  However, if <var>bindat-raw</var>
@@ -114,13 +114,13 @@ meets or exceeds the total length to avoid an out-of-range error.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>bindat-ip-to-string</b><var> ip<a name="index-bindat_002dip_002dto_002dstring-3114"></a></var><br>
+&mdash; Function: <b>bindat-ip-to-string</b><var> ip<a name="index-bindat_002dip_002dto_002dstring-3310"></a></var><br>
 <blockquote><p>Convert the Internet address vector <var>ip</var> to a string in the usual
 dotted notation.
 
      <pre class="example">          (bindat-ip-to-string [127 0 0 1])
-               =&gt; "127.0.0.1"
-     </pre>
+               &rArr; "127.0.0.1"
+</pre>
         </blockquote></div>
 
    </body></html>

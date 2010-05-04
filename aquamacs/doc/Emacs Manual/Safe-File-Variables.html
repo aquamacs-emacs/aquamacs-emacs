@@ -3,7 +3,7 @@
 <title>Safe File Variables - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="File-Variables.html#File-Variables" title="File Variables">
 <link rel="prev" href="Specifying-File-Variables.html#Specifying-File-Variables" title="Specifying File Variables">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Safe-File-Variables"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Specifying-File-Variables.html#Specifying-File-Variables">Specifying File Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="File-Variables.html#File-Variables">File Variables</a>
 <hr>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Variables.html#File-Variables">Fil
 
 <p>File-local variables can be dangerous; when you visit someone else's
 file, there's no telling what its local variables list could do to
-your Emacs.  Improper values of the <code>eval</code> &ldquo;variable,&rdquo; and
+your Emacs.  Improper values of the <code>eval</code> &ldquo;variable&rdquo;, and
 other variables such as <code>load-path</code>, could execute Lisp code you
 didn't intend to run.
 
@@ -69,7 +69,7 @@ effect, or <kbd>n</kbd> to ignore it.  When Emacs is run in batch mode
 (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it can't really ask you, so it assumes the
 answer <kbd>n</kbd>.
 
-   <p>Emacs normally recognizes certain variables/value pairs as safe. 
+   <p>Emacs normally recognizes certain variable/value pairs as safe. 
 For instance, it is safe to give <code>comment-column</code> or
 <code>fill-column</code> any integer value.  If a file specifies only
 known-safe variable/value pairs, Emacs does not ask for confirmation
@@ -79,7 +79,7 @@ confirmation prompt.  When Emacs encounters these variable/value pairs
 subsequently, in the same file or others, it will assume they are
 safe.
 
-   <p><a name="index-safe_002dlocal_002dvariable_002dvalues-3970"></a><a name="index-risky-variable-3971"></a>  Some variables, such as <code>load-path</code>, are considered
+   <p><a name="index-safe_002dlocal_002dvariable_002dvalues-4000"></a><a name="index-risky-variable-4001"></a>  Some variables, such as <code>load-path</code>, are considered
 particularly <dfn>risky</dfn>: there is seldom any reason to specify them
 as local variables, and changing them can be dangerous.  If a file
 contains only risky local variables, Emacs neither offers nor accepts
@@ -88,9 +88,9 @@ variables in a file are risky, and some are only potentially unsafe, you
 can enter <kbd>!</kbd> at the prompt.  It applies all the variables, but only
 marks the non-risky ones as safe for the future.  If you really want to
 record safe values for risky variables, do it directly by customizing
-`<samp><span class="samp">safe-local-variable-values</span></samp>' (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
+&lsquo;<samp><span class="samp">safe-local-variable-values</span></samp>&rsquo; (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
 
-   <p><a name="index-enable_002dlocal_002dvariables-3972"></a>  The variable <code>enable-local-variables</code> allows you to change the
+   <p><a name="index-enable_002dlocal_002dvariables-4002"></a>  The variable <code>enable-local-variables</code> allows you to change the
 way Emacs processes local variables.  Its default value is <code>t</code>,
 which specifies the behavior described above.  If it is <code>nil</code>,
 Emacs simply ignores all file local variables.  <code>:safe</code> means use
@@ -98,17 +98,16 @@ only the safe values and ignore the rest.  Any other value says to
 query you about each file that has local variables, without trying to
 determine whether the values are known to be safe.
 
-   <p><a name="index-enable_002dlocal_002deval-3973"></a>  The variable <code>enable-local-eval</code> controls whether Emacs
+   <p><a name="index-enable_002dlocal_002deval-4003"></a><a name="index-safe_002dlocal_002deval_002dforms-4004"></a>  The variable <code>enable-local-eval</code> controls whether Emacs
 processes <code>eval</code> variables.  The three possibilities for the
 variable's value are <code>t</code>, <code>nil</code>, and anything else, just as
 for <code>enable-local-variables</code>.  The default is <code>maybe</code>, which
 is neither <code>t</code> nor <code>nil</code>, so normally Emacs does ask for
 confirmation about processing <code>eval</code> variables.
 
-   <p><a name="index-safe_002dlocal_002deval_002dforms-3974"></a>  But there is an exception.  The <code>safe-local-eval-forms</code> is a
-customizable list of eval forms which are safe.  Emacs does not ask
-for confirmation when it finds these forms for the <code>eval</code>
-variable.
+   <p>As an exception, Emacs never asks for confirmation to evaluate any
+<code>eval</code> form if that form occurs within the variable
+<code>safe-local-eval-forms</code>.
 
    </body></html>
 

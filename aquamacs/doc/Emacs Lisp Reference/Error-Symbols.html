@@ -3,32 +3,32 @@
 <title>Error Symbols - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Errors.html#Errors" title="Errors">
 <link rel="prev" href="Handling-Errors.html#Handling-Errors" title="Handling Errors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Error-Symbols"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Handling-Errors.html#Handling-Errors">Handling Errors</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
 
 <h5 class="subsubsection">10.5.3.4 Error Symbols and Condition Names</h5>
 
-<p><a name="index-error-symbol-556"></a><a name="index-error-name-557"></a><a name="index-condition-name-558"></a><a name="index-user_002ddefined-error-559"></a><a name="index-error_002dconditions-560"></a>
+<p><a name="index-error-symbol-563"></a><a name="index-error-name-564"></a><a name="index-condition-name-565"></a><a name="index-user_002ddefined-error-566"></a><a name="index-error_002dconditions-567"></a>
   When you signal an error, you specify an <dfn>error symbol</dfn> to specify
 the kind of error you have in mind.  Each error has one and only one
 error symbol to categorize it.  This is the finest classification of
@@ -79,21 +79,21 @@ defined by the <code>error-conditions</code> properties of the error symbols.
 Because quitting is not considered an error, the value of the
 <code>error-conditions</code> property of <code>quit</code> is just <code>(quit)</code>.
 
-   <p><a name="index-peculiar-error-561"></a>  In addition to the <code>error-conditions</code> list, the error symbol
+   <p><a name="index-peculiar-error-568"></a>  In addition to the <code>error-conditions</code> list, the error symbol
 should have an <code>error-message</code> property whose value is a string to
 be printed when that error is signaled but not handled.  If the
 error symbol has no <code>error-message</code> property or if the
 <code>error-message</code> property exists, but is not a string, the error
-message `<samp><span class="samp">peculiar error</span></samp>' is used.  See <a href="Definition-of-signal.html#Definition-of-signal">Definition of signal</a>.
+message &lsquo;<samp><span class="samp">peculiar error</span></samp>&rsquo; is used.  See <a href="Definition-of-signal.html#Definition-of-signal">Definition of signal</a>.
 
    <p>Here is how we define a new error symbol, <code>new-error</code>:
 
 <pre class="example">     (put 'new-error
           'error-conditions
           '(error my-own-errors new-error))
-     =&gt; (error my-own-errors new-error)
+     &rArr; (error my-own-errors new-error)
      (put 'new-error 'error-message "A new error")
-     =&gt; "A new error"
+     &rArr; "A new error"
 </pre>
    <p class="noindent">This error has three condition names: <code>new-error</code>, the narrowest
 classification; <code>my-own-errors</code>, which we imagine is a wider

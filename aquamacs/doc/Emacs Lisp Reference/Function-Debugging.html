@@ -3,33 +3,33 @@
 <title>Function Debugging - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Debugger.html#Debugger" title="Debugger">
 <link rel="prev" href="Infinite-Loops.html#Infinite-Loops" title="Infinite Loops">
 <link rel="next" href="Explicit-Debug.html#Explicit-Debug" title="Explicit Debug">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Function-Debugging"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Explicit-Debug.html#Explicit-Debug">Explicit Debug</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Infinite-Loops.html#Infinite-Loops">Infinite Loops</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
 
 <h4 class="subsection">18.1.3 Entering the Debugger on a Function Call</h4>
 
-<p><a name="index-function-call-debugging-902"></a><a name="index-debugging-specific-functions-903"></a>
+<p><a name="index-function-call-debugging-933"></a><a name="index-debugging-specific-functions-934"></a>
   To investigate a problem that happens in the middle of a program, one
 useful technique is to enter the debugger whenever a certain function is
 called.  You can do this to the function in which the problem occurs,
@@ -65,7 +65,7 @@ called shortly before the problem, step quickly over the call to that
 function, and then step through its caller.
 
 <div class="defun">
-&mdash; Command: <b>debug-on-entry</b><var> function-name<a name="index-debug_002don_002dentry-904"></a></var><br>
+&mdash; Command: <b>debug-on-entry</b><var> function-name<a name="index-debug_002don_002dentry-935"></a></var><br>
 <blockquote><p>This function requests <var>function-name</var> to invoke the debugger each
 time it is called.  It works by inserting the form
 <code>(implement-debug-on-entry)</code> into the function definition as the
@@ -95,9 +95,9 @@ cancels the break-on-entry feature for that function.
      <pre class="example">          (defun fact (n)
             (if (zerop n) 1
                 (* n (fact (1- n)))))
-               =&gt; fact
+               &rArr; fact
           (debug-on-entry 'fact)
-               =&gt; fact
+               &rArr; fact
           (fact 3)
           
           ------ Buffer: *Backtrace* ------
@@ -110,14 +110,14 @@ cancels the break-on-entry feature for that function.
           ------ Buffer: *Backtrace* ------
           
           (symbol-function 'fact)
-               =&gt; (lambda (n)
+               &rArr; (lambda (n)
                     (debug (quote debug))
                     (if (zerop n) 1 (* n (fact (1- n)))))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>cancel-debug-on-entry</b><var> &amp;optional function-name<a name="index-cancel_002ddebug_002don_002dentry-905"></a></var><br>
+&mdash; Command: <b>cancel-debug-on-entry</b><var> &amp;optional function-name<a name="index-cancel_002ddebug_002don_002dentry-936"></a></var><br>
 <blockquote><p>This function undoes the effect of <code>debug-on-entry</code> on
 <var>function-name</var>.  When called interactively, it prompts for
 <var>function-name</var> in the minibuffer.  If <var>function-name</var> is

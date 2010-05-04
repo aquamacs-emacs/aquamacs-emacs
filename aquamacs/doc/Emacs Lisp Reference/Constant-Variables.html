@@ -3,33 +3,33 @@
 <title>Constant Variables - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="Global-Variables.html#Global-Variables" title="Global Variables">
 <link rel="next" href="Local-Variables.html#Local-Variables" title="Local Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Constant-Variables"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Local-Variables.html#Local-Variables">Local Variables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-Variables.html#Global-Variables">Global Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
@@ -56,27 +56,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.2 Variables that Never Change</h3>
 
-<p><a name="index-setting_002dconstant-570"></a><a name="index-keyword-symbol-571"></a><a name="index-variable-with-constant-value-572"></a><a name="index-constant-variables-573"></a><a name="index-symbol-that-evaluates-to-itself-574"></a><a name="index-symbol-with-constant-value-575"></a>
+<p><a name="index-setting_002dconstant-577"></a><a name="index-keyword-symbol-578"></a><a name="index-variable-with-constant-value-579"></a><a name="index-constant-variables-580"></a><a name="index-symbol-that-evaluates-to-itself-581"></a><a name="index-symbol-with-constant-value-582"></a>
   In Emacs Lisp, certain symbols normally evaluate to themselves.  These
 include <code>nil</code> and <code>t</code>, as well as any symbol whose name starts
-with `<samp><span class="samp">:</span></samp>' (these are called <dfn>keywords</dfn>).  These symbols cannot
+with &lsquo;<samp><span class="samp">:</span></samp>&rsquo; (these are called <dfn>keywords</dfn>).  These symbols cannot
 be rebound, nor can their values be changed.  Any attempt to set or bind
 <code>nil</code> or <code>t</code> signals a <code>setting-constant</code> error.  The
-same is true for a keyword (a symbol whose name starts with `<samp><span class="samp">:</span></samp>'),
+same is true for a keyword (a symbol whose name starts with &lsquo;<samp><span class="samp">:</span></samp>&rsquo;),
 if it is interned in the standard obarray, except that setting such a
 symbol to itself is not an error.
 
 <pre class="example">     nil == 'nil
-          =&gt; nil
+          &rArr; nil
      (setq nil 500)
      error--&gt; Attempt to set constant symbol: nil
 </pre>
    <div class="defun">
-&mdash; Function: <b>keywordp</b><var> object<a name="index-keywordp-576"></a></var><br>
+&mdash; Function: <b>keywordp</b><var> object<a name="index-keywordp-583"></a></var><br>
 <blockquote><p>function returns <code>t</code> if <var>object</var> is a symbol whose name
-starts with `<samp><span class="samp">:</span></samp>', interned in the standard obarray, and returns
+starts with &lsquo;<samp><span class="samp">:</span></samp>&rsquo;, interned in the standard obarray, and returns
 <code>nil</code> otherwise. 
 </p></blockquote></div>
+
+   <p>These constants are fundamentally different from the &ldquo;constants&rdquo;
+defined using the <code>defconst</code> special form (see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>).  A <code>defconst</code> form serves to inform human readers
+that you do not intend to change the value of a variable, but Emacs
+does not raise an error if you actually change it.
 
    </body></html>
 

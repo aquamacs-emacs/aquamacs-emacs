@@ -3,33 +3,33 @@
 <title>Killing Buffers - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffers.html#Buffers" title="Buffers">
 <link rel="prev" href="Creating-Buffers.html#Creating-Buffers" title="Creating Buffers">
 <link rel="next" href="Indirect-Buffers.html#Indirect-Buffers" title="Indirect Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Killing-Buffers"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 
 <h3 class="section">27.10 Killing Buffers</h3>
 
-<p><a name="index-killing-buffers-1951"></a><a name="index-buffers_002c-killing-1952"></a>
+<p><a name="index-killing-buffers-2019"></a><a name="index-buffers_002c-killing-2020"></a>
   <dfn>Killing a buffer</dfn> makes its name unknown to Emacs and makes the
 memory space it occupied available for other use.
 
@@ -84,10 +84,11 @@ this feature to test whether a buffer has been killed:
        (not (buffer-name buffer)))
 </pre>
    <div class="defun">
-&mdash; Command: <b>kill-buffer</b><var> buffer-or-name<a name="index-kill_002dbuffer-1953"></a></var><br>
+&mdash; Command: <b>kill-buffer</b><var> &amp;optional buffer-or-name<a name="index-kill_002dbuffer-2021"></a></var><br>
 <blockquote><p>This function kills the buffer <var>buffer-or-name</var>, freeing all its
 memory for other uses or to be returned to the operating system.  If
-<var>buffer-or-name</var> is <code>nil</code>, it kills the current buffer.
+<var>buffer-or-name</var> is <code>nil</code> or omitted, it kills the current
+buffer.
 
         <p>Any processes that have this buffer as the <code>process-buffer</code> are
 sent the <code>SIGHUP</code> signal, which normally causes them to terminate. 
@@ -100,6 +101,9 @@ It does this even if not called interactively.  To prevent the request
 for confirmation, clear the modified flag before calling
 <code>kill-buffer</code>.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
 
+        <p>This function calls <code>replace-buffer-in-windows</code> for cleaning up
+all windows currently displaying the buffer to be killed.
+
         <p>Killing a buffer that is already dead has no effect.
 
         <p>This function returns <code>t</code> if it actually killed the buffer.  It
@@ -107,19 +111,19 @@ returns <code>nil</code> if the user refuses to confirm or if
 <var>buffer-or-name</var> was already dead.
 
      <pre class="smallexample">          (kill-buffer "foo.unchanged")
-               =&gt; t
+               &rArr; t
           (kill-buffer "foo.changed")
           
           ---------- Buffer: Minibuffer ----------
           Buffer foo.changed modified; kill anyway? (yes or no) <kbd>yes</kbd>
           ---------- Buffer: Minibuffer ----------
           
-               =&gt; t
-     </pre>
+               &rArr; t
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>kill-buffer-query-functions</b><var><a name="index-kill_002dbuffer_002dquery_002dfunctions-1954"></a></var><br>
+&mdash; Variable: <b>kill-buffer-query-functions</b><var><a name="index-kill_002dbuffer_002dquery_002dfunctions-2022"></a></var><br>
 <blockquote><p>After confirming unsaved changes, <code>kill-buffer</code> calls the functions
 in the list <code>kill-buffer-query-functions</code>, in order of appearance,
 with no arguments.  The buffer being killed is the current buffer when
@@ -129,7 +133,7 @@ ask for confirmation from the user.  If any of them returns <code>nil</code>,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>kill-buffer-hook</b><var><a name="index-kill_002dbuffer_002dhook-1955"></a></var><br>
+&mdash; Variable: <b>kill-buffer-hook</b><var><a name="index-kill_002dbuffer_002dhook-2023"></a></var><br>
 <blockquote><p>This is a normal hook run by <code>kill-buffer</code> after asking all the
 questions it is going to ask, just before actually killing the buffer. 
 The buffer to be killed is current when the hook functions run. 
@@ -138,7 +142,7 @@ is not cleared by changing major modes.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-offer-save</b><var><a name="index-buffer_002doffer_002dsave-1956"></a></var><br>
+&mdash; User Option: <b>buffer-offer-save</b><var><a name="index-buffer_002doffer_002dsave-2024"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code> in a particular buffer, tells
 <code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> (if the
 second optional argument to that function is <code>t</code>) to offer to
@@ -149,7 +153,7 @@ for any reason.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-V
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-save-without-query</b><var><a name="index-buffer_002dsave_002dwithout_002dquery-1957"></a></var><br>
+&mdash; Variable: <b>buffer-save-without-query</b><var><a name="index-buffer_002dsave_002dwithout_002dquery-2025"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code> in a particular buffer, tells
 <code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> to save
 this buffer (if it's modified) without asking the user.  The variable
@@ -157,7 +161,7 @@ automatically becomes buffer-local when set for any reason.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>buffer-live-p</b><var> object<a name="index-buffer_002dlive_002dp-1958"></a></var><br>
+&mdash; Function: <b>buffer-live-p</b><var> object<a name="index-buffer_002dlive_002dp-2026"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a buffer which has
 not been killed, <code>nil</code> otherwise. 
 </p></blockquote></div>

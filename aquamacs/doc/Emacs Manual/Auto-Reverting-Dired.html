@@ -3,7 +3,7 @@
 <title>Auto Reverting Dired - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Autorevert.html#Autorevert" title="Autorevert">
 <link rel="prev" href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" title="Auto Reverting the Buffer Menu">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Auto-Reverting-Dired"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Supporting-additional-buffers.html#Supporting-additional-buffers">Supporting additional buffers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu">Auto Reverting the Buffer Menu</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Autorevert.html#Autorevert">Autorevert</a>
@@ -62,14 +62,15 @@ operating systems.  It may not work satisfactorily on some other
 systems.
 
    <p>Dired buffers only auto-revert when the file list of the buffer's main
-directory changes.  They do not auto-revert when information about a
-particular file changes or when inserted subdirectories change.  To be
-sure that <em>all</em> listed information is up to date, you have to
-manually revert using <kbd>g</kbd>, <em>even</em> if auto-reverting is
+directory changes (e.g. when a new file is added).  They do not
+auto-revert when information about a particular file changes
+(e.g. when the size changes) or when inserted subdirectories change. 
+To be sure that <em>all</em> listed information is up to date, you have
+to manually revert using <kbd>g</kbd>, <em>even</em> if auto-reverting is
 enabled in the Dired buffer.  Sometimes, you might get the impression
 that modifying or saving files listed in the main directory actually
 does cause auto-reverting.  This is because making changes to a file,
-or saving it, very often causes changes in the directory itself, for
+or saving it, very often causes changes in the directory itself; for
 instance, through backup files or auto-save files.  However, this is
 not guaranteed.
 
@@ -86,10 +87,10 @@ If you want auto-reverting to resume in the presence of marks and
 flags, mark the buffer non-modified using <kbd>M-~</kbd>.  However, adding,
 deleting or changing marks or flags will mark it modified again.
 
-   <p>Remote Dired buffers are not auto-reverted.  Neither are Dired buffers
-for which you used shell wildcards or file arguments to list only some
-of the files.  `<samp><span class="samp">*Find*</span></samp>' and `<samp><span class="samp">*Locate*</span></samp>' buffers do not
-auto-revert either.
+   <p>Remote Dired buffers are not auto-reverted (because it may be slow). 
+Neither are Dired buffers for which you used shell wildcards or file
+arguments to list only some of the files.  &lsquo;<samp><span class="samp">*Find*</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">*Locate*</span></samp>&rsquo; buffers do not auto-revert either.
 
    </body></html>
 

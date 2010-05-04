@@ -3,7 +3,7 @@
 <title>Creating Frames - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
 <link rel="prev" href="Mode-Line-Mouse.html#Mode-Line-Mouse" title="Mode Line Mouse">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Creating-Frames"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Commands.html#Frame-Commands">Frame Commands</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Mouse.html#Mode-Line-Mouse">Mode Line Mouse</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
@@ -57,8 +57,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 
 <h3 class="section">25.5 Creating Frames</h3>
 
-<p><a name="index-creating-frames-1222"></a>
-<a name="index-C_002dx-5-1223"></a>  The prefix key <kbd>C-x 5</kbd> is analogous to <kbd>C-x 4</kbd>, with
+<p><a name="index-creating-frames-1228"></a>
+<a name="index-C_002dx-5-1229"></a>  The prefix key <kbd>C-x 5</kbd> is analogous to <kbd>C-x 4</kbd>, with
 parallel subcommands.  The difference is that <kbd>C-x 5</kbd> commands
 create a new frame rather than just a new window in the selected frame
 (see <a href="Pop-Up-Window.html#Pop-Up-Window">Pop Up Window</a>).  If an existing visible or iconified
@@ -70,7 +70,7 @@ commands use the existing frame, after raising or deiconifying
 buffer to select:
 
      <dl>
-<dt><kbd>C-x 5 2</kbd><dd><a name="index-C_002dx-5-2-1224"></a><a name="index-make_002dframe_002dcommand-1225"></a>Create a new frame (<code>make-frame-command</code>). 
+<dt><kbd>C-x 5 2</kbd><dd><a name="index-C_002dx-5-2-1230"></a><a name="index-make_002dframe_002dcommand-1231"></a>Create a new frame (<code>make-frame-command</code>). 
 <br><dt><kbd>C-x 5 b </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd><dd>Select buffer <var>bufname</var> in another frame.  This runs
 <code>switch-to-buffer-other-frame</code>. 
 <br><dt><kbd>C-x 5 f </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd>Visit file <var>filename</var> and select its buffer in another frame.  This
@@ -83,29 +83,26 @@ See <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>.
 <br><dt><kbd>C-x 5 .</kbd><dd>Find a tag in the current tag table in another frame.  This runs
 <code>find-tag-other-frame</code>, the multiple-frame variant of <kbd>M-.</kbd>. 
 See <a href="Tags.html#Tags">Tags</a>. 
-<br><dt><kbd>C-x 5 r </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-C_002dx-5-r-1226"></a><a name="index-find_002dfile_002dread_002donly_002dother_002dframe-1227"></a>Visit file <var>filename</var> read-only, and select its buffer in another
+<br><dt><kbd>C-x 5 r </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-C_002dx-5-r-1232"></a><a name="index-find_002dfile_002dread_002donly_002dother_002dframe-1233"></a>Visit file <var>filename</var> read-only, and select its buffer in another
 frame.  This runs <code>find-file-read-only-other-frame</code>. 
 See <a href="Visiting.html#Visiting">Visiting</a>. 
 </dl>
 
-   <p><a name="index-default_002dframe_002dalist-1228"></a><a name="index-initial_002dframe_002dalist-1229"></a><a name="index-face-customization_002c-in-init-file-1230"></a><a name="index-color-customization_002c-in-init-file-1231"></a>  You can control the appearance of new frames you create by setting the
+   <p><a name="index-default_002dframe_002dalist-1234"></a><a name="index-initial_002dframe_002dalist-1235"></a><a name="index-face-customization_002c-in-init-file-1236"></a><a name="index-color-customization_002c-in-init-file-1237"></a>  You can control the appearance of new frames you create by setting the
 frame parameters in <code>default-frame-alist</code>.  You can use the
 variable <code>initial-frame-alist</code> to specify parameters that affect
 only the initial frame.  See <a href="../elisp/Initial-Parameters.html#Initial-Parameters">Initial Parameters</a>, for more information.
 
-   <p><a name="index-font-_0028default_0029-1232"></a>  For instance, one way to specify the principal font for all your
-Emacs frames is to modify <code>default-frame-alist</code> to specify the
-<code>font</code> parameter (see <a href="Font-X.html#Font-X">Font X</a>):
+   <p><a name="index-font-_0028default_0029-1238"></a>  Here is an example of using <code>default-frame-alist</code> to specify
+the default foreground color and font:
 
 <pre class="example">     (add-to-list 'default-frame-alist '(font . "10x20"))
-</pre>
-   <p class="noindent">Here's a similar example for specifying a foreground color:
-
-<pre class="example">     (add-to-list 'default-frame-alist '(foreground-color . "blue"))
+     (add-to-list 'default-frame-alist '(foreground-color . "blue"))
 </pre>
    <p class="noindent">By putting such customizations in your init file, you can control the
-appearance of all the frames Emacs creates, including the initial one. 
-See <a href="Init-File.html#Init-File">Init File</a>.
+appearance of all the frames Emacs creates, including the initial one
+(see <a href="Init-File.html#Init-File">Init File</a>).  See <a href="Fonts.html#Fonts">Fonts</a>, for other ways to set the default
+font.
 
    </body></html>
 

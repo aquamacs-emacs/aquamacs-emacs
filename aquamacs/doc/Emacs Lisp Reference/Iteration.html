@@ -3,33 +3,33 @@
 <title>Iteration - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Control-Structures.html#Control-Structures" title="Control Structures">
 <link rel="prev" href="Combining-Conditions.html#Combining-Conditions" title="Combining Conditions">
 <link rel="next" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Iteration"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Combining-Conditions.html#Combining-Conditions">Combining Conditions</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structures">Control Structures</a>
@@ -56,14 +56,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structu
 
 <h3 class="section">10.4 Iteration</h3>
 
-<p><a name="index-iteration-532"></a><a name="index-recursion-533"></a>
+<p><a name="index-iteration-537"></a><a name="index-recursion-538"></a>
   Iteration means executing part of a program repetitively.  For
 example, you might want to repeat some computation once for each element
 of a list, or once for each integer from 0 to <var>n</var>.  You can do this
 in Emacs Lisp with the special form <code>while</code>:
 
 <div class="defun">
-&mdash; Special Form: <b>while</b><var> condition forms<small class="dots">...</small><a name="index-while-534"></a></var><br>
+&mdash; Special Form: <b>while</b><var> condition forms<small class="dots">...</small><a name="index-while-539"></a></var><br>
 <blockquote><p><code>while</code> first evaluates <var>condition</var>.  If the result is
 non-<code>nil</code>, it evaluates <var>forms</var> in textual order.  Then it
 reevaluates <var>condition</var>, and if the result is non-<code>nil</code>, it
@@ -77,7 +77,7 @@ until an error or <code>throw</code> jumps out of it (see <a href="Nonlocal-Exit
         <p>The value of a <code>while</code> form is always <code>nil</code>.
 
      <pre class="example">          (setq num 0)
-               =&gt; 0
+               &rArr; 0
           (while (&lt; num 4)
             (princ (format "Iteration %d." num))
             (setq num (1+ num)))
@@ -85,8 +85,8 @@ until an error or <code>throw</code> jumps out of it (see <a href="Nonlocal-Exit
                -| Iteration 1.
                -| Iteration 2.
                -| Iteration 3.
-               =&gt; nil
-     </pre>
+               &rArr; nil
+</pre>
         <p>To write a &ldquo;repeat...until&rdquo; loop, which will execute something on each
 iteration and then do the end-test, put the body followed by the
 end-test in a <code>progn</code> as the first argument of <code>while</code>, as
@@ -95,7 +95,7 @@ shown here:
      <pre class="example">          (while (progn
                    (forward-line 1)
                    (not (looking-at "^$"))))
-     </pre>
+</pre>
         <p class="noindent">This moves forward one line and continues moving by lines until it
 reaches an empty line.  It is peculiar in that the <code>while</code> has no
 body, just the end test (which also does the real work of moving point). 
@@ -105,7 +105,7 @@ body, just the end test (which also does the real work of moving point).
 write two common kinds of loops.
 
 <div class="defun">
-&mdash; Macro: <b>dolist</b> (<var>var list </var>[<var>result</var>])<var> body<small class="dots">...</small><a name="index-dolist-535"></a></var><br>
+&mdash; Macro: <b>dolist</b> (<var>var list </var>[<var>result</var>])<var> body<small class="dots">...</small><a name="index-dolist-540"></a></var><br>
 <blockquote><p>This construct executes <var>body</var> once for each element of
 <var>list</var>, binding the variable <var>var</var> locally to hold the current
 element.  Then it returns the value of evaluating <var>result</var>, or
@@ -116,11 +116,11 @@ could use <code>dolist</code> to define the <code>reverse</code> function:
             (let (value)
               (dolist (elt list value)
                 (setq value (cons elt value)))))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>dotimes</b> (<var>var count </var>[<var>result</var>])<var> body<small class="dots">...</small><a name="index-dotimes-536"></a></var><br>
+&mdash; Macro: <b>dotimes</b> (<var>var count </var>[<var>result</var>])<var> body<small class="dots">...</small><a name="index-dotimes-541"></a></var><br>
 <blockquote><p>This construct executes <var>body</var> once for each integer from 0
 (inclusive) to <var>count</var> (exclusive), binding the variable <var>var</var>
 to the integer for the current iteration.  Then it returns the value
@@ -129,7 +129,7 @@ Here is an example of using <code>dotimes</code> to do something 100 times:
 
      <pre class="example">          (dotimes (i 100)
             (insert "I will not obey absurd orders\n"))
-     </pre>
+</pre>
         </blockquote></div>
 
    </body></html>

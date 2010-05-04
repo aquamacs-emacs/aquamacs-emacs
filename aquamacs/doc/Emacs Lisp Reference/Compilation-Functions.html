@@ -3,33 +3,33 @@
 <title>Compilation Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
 <link rel="prev" href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" title="Speed of Byte-Code">
 <link rel="next" href="Docs-and-Compilation.html#Docs-and-Compilation" title="Docs and Compilation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Compilation-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode">Speed of Byte-Code</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
@@ -57,17 +57,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 <!-- node-name,  next,  previous,  up -->
 <h3 class="section">16.2 The Compilation Functions</h3>
 
-<p><a name="index-compilation-functions-813"></a>
+<p><a name="index-compilation-functions-844"></a>
   You can byte-compile an individual function or macro definition with
 the <code>byte-compile</code> function.  You can compile a whole file with
 <code>byte-compile-file</code>, or several files with
 <code>byte-recompile-directory</code> or <code>batch-byte-compile</code>.
 
    <p>The byte compiler produces error messages and warnings about each file
-in a buffer called `<samp><span class="samp">*Compile-Log*</span></samp>'.  These report things in your
+in a buffer called &lsquo;<samp><span class="samp">*Compile-Log*</span></samp>&rsquo;.  These report things in your
 program that suggest a problem but are not necessarily erroneous.
 
-   <p><a name="index-macro-compilation-814"></a>  Be careful when writing macro calls in files that you may someday
+   <p><a name="index-macro-compilation-845"></a>  Be careful when writing macro calls in files that you may someday
 byte-compile.  Macro calls are expanded when they are compiled, so the
 macros must already be defined for proper compilation.  For more
 details, see <a href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>.  If a program does not work the
@@ -86,7 +86,7 @@ when someone <em>runs</em> the compiled program, write
 <code>eval-when-compile</code> around the <code>require</code> calls (see <a href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>).
 
 <div class="defun">
-&mdash; Function: <b>byte-compile</b><var> symbol<a name="index-byte_002dcompile-815"></a></var><br>
+&mdash; Function: <b>byte-compile</b><var> symbol<a name="index-byte_002dcompile-846"></a></var><br>
 <blockquote><p>This function byte-compiles the function definition of <var>symbol</var>,
 replacing the previous definition with the compiled one.  The function
 definition of <var>symbol</var> must be the actual code for the function;
@@ -104,15 +104,15 @@ way to &ldquo;compile the same definition again.&rdquo;
             "Compute factorial of INTEGER."
             (if (= 1 integer) 1
               (* integer (factorial (1- integer)))))
-          =&gt; factorial
+          &rArr; factorial
           
           (byte-compile 'factorial)
-          =&gt;
+          &rArr;
           #[(integer)
             "^H\301U\203^H^@\301\207\302^H\303^HS!\"\207"
             [integer 1 * factorial]
             4 "Compute factorial of INTEGER."]
-     </pre>
+</pre>
         <p class="noindent">The result is a byte-code function object.  The string it contains is
 the actual byte-code; each character in it is an instruction or an
 operand of an instruction.  The vector contains all the constants,
@@ -125,7 +125,7 @@ it anywhere.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>compile-defun</b><var> &amp;optional arg<a name="index-compile_002ddefun-816"></a></var><br>
+&mdash; Command: <b>compile-defun</b><var> &amp;optional arg<a name="index-compile_002ddefun-847"></a></var><br>
 <blockquote><p>This command reads the defun containing point, compiles it, and
 evaluates the result.  If you use this on a defun that is actually a
 function definition, the effect is to install a compiled version of that
@@ -137,11 +137,11 @@ in the current buffer after the form it compiled.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>byte-compile-file</b><var> filename &amp;optional load<a name="index-byte_002dcompile_002dfile-817"></a></var><br>
+&mdash; Command: <b>byte-compile-file</b><var> filename &amp;optional load<a name="index-byte_002dcompile_002dfile-848"></a></var><br>
 <blockquote><p>This function compiles a file of Lisp code named <var>filename</var> into a
 file of byte-code.  The output file's name is made by changing the
-`<samp><span class="samp">.el</span></samp>' suffix into `<samp><span class="samp">.elc</span></samp>'; if <var>filename</var> does not end in
-`<samp><span class="samp">.el</span></samp>', it adds `<samp><span class="samp">.elc</span></samp>' to the end of <var>filename</var>.
+&lsquo;<samp><span class="samp">.el</span></samp>&rsquo; suffix into &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo;; if <var>filename</var> does not end in
+&lsquo;<samp><span class="samp">.el</span></samp>&rsquo;, it adds &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; to the end of <var>filename</var>.
 
         <p>Compilation works by reading the input file one form at a time.  If it
 is a definition of a function or macro, the compiled function or macro
@@ -160,22 +160,22 @@ after compiling it.  Interactively, <var>load</var> is the prefix argument.
           -rw-r--r--  1 lewis     791 Oct  5 20:31 push.el
           
           (byte-compile-file "~/emacs/push.el")
-               =&gt; t
+               &rArr; t
           
           % ls -l push*
           -rw-r--r--  1 lewis     791 Oct  5 20:31 push.el
           -rw-rw-rw-  1 lewis     638 Oct  8 20:25 push.elc
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>byte-recompile-directory</b><var> directory &amp;optional flag force<a name="index-byte_002drecompile_002ddirectory-818"></a></var><br>
-<blockquote><p><a name="index-library-compilation-819"></a>This command recompiles every `<samp><span class="samp">.el</span></samp>' file in <var>directory</var> (or
+&mdash; Command: <b>byte-recompile-directory</b><var> directory &amp;optional flag force<a name="index-byte_002drecompile_002ddirectory-849"></a></var><br>
+<blockquote><p><a name="index-library-compilation-850"></a>This command recompiles every &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file in <var>directory</var> (or
 its subdirectories) that needs recompilation.  A file needs
-recompilation if a `<samp><span class="samp">.elc</span></samp>' file exists but is older than the
-`<samp><span class="samp">.el</span></samp>' file.
+recompilation if a &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; file exists but is older than the
+&lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file.
 
-        <p>When a `<samp><span class="samp">.el</span></samp>' file has no corresponding `<samp><span class="samp">.elc</span></samp>' file,
+        <p>When a &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file has no corresponding &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; file,
 <var>flag</var> says what to do.  If it is <code>nil</code>, this command ignores
 these files.  If <var>flag</var> is 0, it compiles them.  If it is neither
 <code>nil</code> nor 0, it asks the user whether to compile each such file,
@@ -185,13 +185,13 @@ and asks about each subdirectory as well.
 <var>directory</var> and <var>flag</var> is the prefix argument.
 
         <p>If <var>force</var> is non-<code>nil</code>, this command recompiles every
-`<samp><span class="samp">.el</span></samp>' file that has a `<samp><span class="samp">.elc</span></samp>' file.
+&lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file that has a &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; file.
 
         <p>The returned value is unpredictable. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>batch-byte-compile</b><var> &amp;optional noforce<a name="index-batch_002dbyte_002dcompile-820"></a></var><br>
+&mdash; Function: <b>batch-byte-compile</b><var> &amp;optional noforce<a name="index-batch_002dbyte_002dcompile-851"></a></var><br>
 <blockquote><p>This function runs <code>byte-compile-file</code> on files specified on the
 command line.  This function must be used only in a batch execution of
 Emacs, as it kills Emacs on completion.  An error in one file does not
@@ -200,15 +200,15 @@ generated for it, and the Emacs process will terminate with a nonzero
 status code.
 
         <p>If <var>noforce</var> is non-<code>nil</code>, this function does not recompile
-files that have an up-to-date `<samp><span class="samp">.elc</span></samp>' file.
+files that have an up-to-date &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; file.
 
      <pre class="example">          % emacs -batch -f batch-byte-compile *.el
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>byte-code</b><var> code-string data-vector max-stack<a name="index-byte_002dcode-821"></a></var><br>
-<blockquote><p><a name="index-byte_002dcode-interpreter-822"></a>This function actually interprets byte-code.  A byte-compiled function
+&mdash; Function: <b>byte-code</b><var> code-string data-vector max-stack<a name="index-byte_002dcode-852"></a></var><br>
+<blockquote><p><a name="index-byte_002dcode-interpreter-853"></a>This function actually interprets byte-code.  A byte-compiled function
 is actually defined with a body that calls <code>byte-code</code>.  Don't call
 this function yourself&mdash;only the byte compiler knows how to generate
 valid calls to this function.

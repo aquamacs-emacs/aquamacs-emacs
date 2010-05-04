@@ -3,32 +3,32 @@
 <title>Internals of Kill Ring - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
 <link rel="prev" href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" title="Low-Level Kill Ring">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Internals-of-Kill-Ring"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring">Low-Level Kill Ring</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>
 <hr>
@@ -102,13 +102,13 @@ different piece of text" "yet older text")</code>.
 immediately followed by <kbd>M-y</kbd> (<code>yank-pop</code>).
 
 <div class="defun">
-&mdash; Variable: <b>kill-ring</b><var><a name="index-kill_002dring-2462"></a></var><br>
+&mdash; Variable: <b>kill-ring</b><var><a name="index-kill_002dring-2565"></a></var><br>
 <blockquote><p>This variable holds the list of killed text sequences, most recently
 killed first. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>kill-ring-yank-pointer</b><var><a name="index-kill_002dring_002dyank_002dpointer-2463"></a></var><br>
+&mdash; Variable: <b>kill-ring-yank-pointer</b><var><a name="index-kill_002dring_002dyank_002dpointer-2566"></a></var><br>
 <blockquote><p>This variable's value indicates which element of the kill ring is at the
 &ldquo;front&rdquo; of the ring for yanking.  More precisely, the value is a tail
 of the value of <code>kill-ring</code>, and its <span class="sc">car</span> is the kill string
@@ -116,7 +116,7 @@ that <kbd>C-y</kbd> should yank.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>kill-ring-max</b><var><a name="index-kill_002dring_002dmax-2464"></a></var><br>
+&mdash; User Option: <b>kill-ring-max</b><var><a name="index-kill_002dring_002dmax-2567"></a></var><br>
 <blockquote><p>The value of this variable is the maximum length to which the kill
 ring can grow, before elements are thrown away at the end.  The default
 value for <code>kill-ring-max</code> is 60. 

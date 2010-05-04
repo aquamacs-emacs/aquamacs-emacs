@@ -3,33 +3,33 @@
 <title>Search-based Fontification - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
 <link rel="prev" href="Font-Lock-Basics.html#Font-Lock-Basics" title="Font Lock Basics">
 <link rel="next" href="Customizing-Keywords.html#Customizing-Keywords" title="Customizing Keywords">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Search-based-Fontification"></a>
 <a name="Search_002dbased-Fontification"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-Keywords.html#Customizing-Keywords">Customizing Keywords</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
@@ -63,7 +63,7 @@ search-based fontification.  You should specify the value of this
 variable with <var>keywords</var> in <code>font-lock-defaults</code>.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords</b><var><a name="index-font_002dlock_002dkeywords-1610"></a></var><br>
+&mdash; Variable: <b>font-lock-keywords</b><var><a name="index-font_002dlock_002dkeywords-1664"></a></var><br>
 <blockquote><p>This variable's value is a list of the keywords to highlight.  Be
 careful when composing regular expressions for this list; a poorly
 written pattern can dramatically slow things down! 
@@ -84,10 +84,10 @@ forms:
 <dt><var>regexp</var><dd>Highlight all matches for <var>regexp</var> using
 <code>font-lock-keyword-face</code>.  For example,
 
-     <pre class="example">          ;; <span class="roman">Highlight occurrences of the word `<samp>foo</samp>'</span>
+     <pre class="example">          ;; <span class="roman">Highlight occurrences of the word &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo;</span>
           ;; <span class="roman">using </span><code>font-lock-keyword-face</code><span class="roman">.</span>
           "\\&lt;foo\\&gt;"
-     </pre>
+</pre>
      <p>The function <code>regexp-opt</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) is useful
 for calculating optimal regular expressions to match a number of
 different keywords.
@@ -111,10 +111,10 @@ expression or a function, as described above.  The <span class="sc">cdr</span>,
 <var>subexp</var>, specifies which subexpression of <var>matcher</var> should be
 highlighted (instead of the entire text that <var>matcher</var> matched).
 
-     <pre class="example">          ;; <span class="roman">Highlight the `<samp>bar</samp>' in each occurrence of `<samp>fubar</samp>',</span>
+     <pre class="example">          ;; <span class="roman">Highlight the &lsquo;</span><samp><span class="samp">bar</span></samp><span class="roman">&rsquo; in each occurrence of &lsquo;</span><samp><span class="samp">fubar</span></samp><span class="roman">&rsquo;,</span>
           ;; <span class="roman">using </span><code>font-lock-keyword-face</code><span class="roman">.</span>
           ("fu\\(bar\\)" . 1)
-     </pre>
+</pre>
      <p>If you use <code>regexp-opt</code> to produce the regular expression
 <var>matcher</var>, you can use <code>regexp-opt-depth</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) to calculate the value for <var>subexp</var>.
 
@@ -123,14 +123,14 @@ specifies the face to use for highlighting.  In the simplest case,
 <var>facespec</var> is a Lisp variable (a symbol) whose value is a face
 name.
 
-     <pre class="example">          ;; <span class="roman">Highlight occurrences of `<samp>fubar</samp>',</span>
+     <pre class="example">          ;; <span class="roman">Highlight occurrences of &lsquo;</span><samp><span class="samp">fubar</span></samp><span class="roman">&rsquo;,</span>
           ;; <span class="roman">using the face which is the value of </span><code>fubar-face</code><span class="roman">.</span>
           ("fubar" . fubar-face)
-     </pre>
+</pre>
      <p>However, <var>facespec</var> can also evaluate to a list of this form:
 
      <pre class="example">          (face <var>face</var> <var>prop1</var> <var>val1</var> <var>prop2</var> <var>val2</var>...)
-     </pre>
+</pre>
      <p class="noindent">to specify the face <var>face</var> and various additional text properties
 to put on the text that matches.  If you do this, be sure to add the
 other text property names that you set in this way to the value of
@@ -143,8 +143,8 @@ a function that clears these properties.  See <a href="Other-Font-Lock-Variables
 which specifies how to highlight matches found by <var>matcher</var>. 
 It has the form:
 
-     <pre class="example">          (<var>subexp</var> <var>facespec</var> [[<var>override</var> [<var>laxmatch</var>]])
-     </pre>
+     <pre class="example">          (<var>subexp</var> <var>facespec</var> [<var>override</var> [<var>laxmatch</var>]])
+</pre>
      <p>The <span class="sc">car</span>, <var>subexp</var>, is an integer specifying which subexpression
 of the match to fontify (0 means the entire matching text).  The second
 subelement, <var>facespec</var>, is an expression whose value specifies the
@@ -170,7 +170,7 @@ terminates search-based fontification.
 
      <p>Here are some examples of elements of this kind, and what they do:
 
-     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of either `<samp>foo</samp>' or `<samp>bar</samp>', using</span>
+     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of either &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo; or &lsquo;</span><samp><span class="samp">bar</span></samp><span class="roman">&rsquo;, using</span>
           ;; <code>foo-bar-face</code><span class="roman">, even if they have already been highlighted.</span>
           ;; <code>foo-bar-face</code><span class="roman"> should be a variable whose value is a face.</span>
           ("foo\\|bar" 0 foo-bar-face t)
@@ -179,7 +179,7 @@ terminates search-based fontification.
           ;; <span class="roman">that the function </span><code>fubar-match</code><span class="roman"> finds,</span>
           ;; <span class="roman">using the face which is the value of </span><code>fubar-face</code><span class="roman">.</span>
           (fubar-match 1 fubar-face)
-     </pre>
+</pre>
      <br><dt><code>(</code><var>matcher</var><code> . </code><var>anchored-highlighter</var><code>)</code><dd>In this kind of element, <var>anchored-highlighter</var> specifies how to
 highlight text that follows a match found by <var>matcher</var>.  So a
 match found by <var>matcher</var> acts as the anchor for further searches
@@ -188,7 +188,7 @@ is a list of the following form:
 
      <pre class="example">          (<var>anchored-matcher</var> <var>pre-form</var> <var>post-form</var>
                                   <var>subexp-highlighters</var>...)
-     </pre>
+</pre>
      <p>Here, <var>anchored-matcher</var>, like <var>matcher</var>, is either a regular
 expression or a function.  After a match of <var>matcher</var> is found,
 point is at the end of the match.  Now, Font Lock evaluates the form
@@ -215,15 +215,15 @@ not span lines.
 
      <p>For example,
 
-     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of the word `<samp>item</samp>' following</span>
-          ;; <span class="roman">an occurrence of the word `<samp>anchor</samp>' (on the same line)</span>
+     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of the word &lsquo;</span><samp><span class="samp">item</span></samp><span class="roman">&rsquo; following</span>
+          ;; <span class="roman">an occurrence of the word &lsquo;</span><samp><span class="samp">anchor</span></samp><span class="roman">&rsquo; (on the same line)</span>
           ;; <span class="roman">in the value of </span><code>item-face</code><span class="roman">.</span>
           ("\\&lt;anchor\\&gt;" "\\&lt;item\\&gt;" nil nil (0 item-face))
-     </pre>
+</pre>
      <p>Here, <var>pre-form</var> and <var>post-form</var> are <code>nil</code>.  Therefore
-searching for `<samp><span class="samp">item</span></samp>' starts at the end of the match of
-`<samp><span class="samp">anchor</span></samp>', and searching for subsequent instances of `<samp><span class="samp">anchor</span></samp>'
-resumes from where searching for `<samp><span class="samp">item</span></samp>' concluded.
+searching for &lsquo;<samp><span class="samp">item</span></samp>&rsquo; starts at the end of the match of
+&lsquo;<samp><span class="samp">anchor</span></samp>&rsquo;, and searching for subsequent instances of &lsquo;<samp><span class="samp">anchor</span></samp>&rsquo;
+resumes from where searching for &lsquo;<samp><span class="samp">item</span></samp>&rsquo; concluded.
 
      <br><dt><code>(</code><var>matcher</var> <var>highlighters</var><code>...)</code><dd>This sort of element specifies several <var>highlighter</var> lists for a
 single <var>matcher</var>.  A <var>highlighter</var> list can be of the type
@@ -232,12 +232,12 @@ above.
 
      <p>For example,
 
-     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of the word `<samp>anchor</samp>' in the value</span>
+     <pre class="smallexample">          ;; <span class="roman">Highlight occurrences of the word &lsquo;</span><samp><span class="samp">anchor</span></samp><span class="roman">&rsquo; in the value</span>
           ;; <span class="roman">of </span><code>anchor-face</code><span class="roman">, and subsequent occurrences of the word</span>
-          ;; <span class="roman">`<samp>item</samp>' (on the same line) in the value of </span><code>item-face</code><span class="roman">.</span>
+          ;; <span class="roman">&lsquo;</span><samp><span class="samp">item</span></samp><span class="roman">&rsquo; (on the same line) in the value of </span><code>item-face</code><span class="roman">.</span>
           ("\\&lt;anchor\\&gt;" (0 anchor-face)
                           ("\\&lt;item\\&gt;" nil nil (0 item-face)))
-     </pre>
+</pre>
      <br><dt><code>(eval . </code><var>form</var><code>)</code><dd>Here <var>form</var> is an expression to be evaluated the first time
 this value of <code>font-lock-keywords</code> is used in a buffer. 
 Its value should have one of the forms described in this table. 
@@ -252,7 +252,7 @@ the value of <code>font-lock-keywords-case-fold-search</code> which says
 whether search-based fontification should be case-insensitive.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords-case-fold-search</b><var><a name="index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch-1611"></a></var><br>
+&mdash; Variable: <b>font-lock-keywords-case-fold-search</b><var><a name="index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch-1665"></a></var><br>
 <blockquote><p>Non-<code>nil</code> means that regular expression matching for the sake of
 <code>font-lock-keywords</code> should be case-insensitive. 
 </p></blockquote></div>

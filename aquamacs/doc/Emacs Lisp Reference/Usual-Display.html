@@ -3,33 +3,33 @@
 <title>Usual Display - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Blinking.html#Blinking" title="Blinking">
 <link rel="next" href="Display-Tables.html#Display-Tables" title="Display Tables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Usual-Display"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Display-Tables.html#Display-Tables">Display Tables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Blinking.html#Blinking">Blinking</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
@@ -72,8 +72,8 @@ up to a position determined by <code>tab-width</code>.
      <li>All other codes in the range 0 through 31, and code 127, display in one
 of two ways according to the value of <code>ctl-arrow</code>.  If it is
 non-<code>nil</code>, these codes map to sequences of two glyphs, where the
-first glyph is the <acronym>ASCII</acronym> code for `<samp><span class="samp">^</span></samp>'.  (A display table can
-specify a glyph to use instead of `<samp><span class="samp">^</span></samp>'.)  Otherwise, these codes map
+first glyph is the <acronym>ASCII</acronym> code for &lsquo;<samp><span class="samp">^</span></samp>&rsquo;.  (A display table can
+specify a glyph to use instead of &lsquo;<samp><span class="samp">^</span></samp>&rsquo;.)  Otherwise, these codes map
 just like the codes in the range 128 to 255.
 
      <p>On MS-DOS terminals, Emacs arranges by default for the character code
@@ -82,9 +82,9 @@ empty polygon.  This glyph is used to display non-<acronym>ASCII</acronym> chara
 that the MS-DOS terminal doesn't support.  See <a href="../emacs/MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">MS-DOS and MULE</a>.
 
      <li>Character codes 128 through 255 map to sequences of four glyphs, where
-the first glyph is the <acronym>ASCII</acronym> code for `<samp><span class="samp">\</span></samp>', and the others are
+the first glyph is the <acronym>ASCII</acronym> code for &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, and the others are
 digit characters representing the character code in octal.  (A display
-table can specify a glyph to use instead of `<samp><span class="samp">\</span></samp>'.)
+table can specify a glyph to use instead of &lsquo;<samp><span class="samp">\</span></samp>&rsquo;.)
 
      <li>Multibyte character codes above 256 are displayed as themselves, or as a
 question mark or empty box if the terminal cannot display that
@@ -109,22 +109,15 @@ mode line using the new values, call the function
 <code>force-mode-line-update</code> (see <a href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>).
 
 <div class="defun">
-&mdash; User Option: <b>ctl-arrow</b><var><a name="index-ctl_002darrow-3426"></a></var><br>
-<blockquote><p><a name="index-control-characters-in-display-3427"></a>This buffer-local variable controls how control characters are
+&mdash; User Option: <b>ctl-arrow</b><var><a name="index-ctl_002darrow-3642"></a></var><br>
+<blockquote><p><a name="index-control-characters-in-display-3643"></a>This buffer-local variable controls how control characters are
 displayed.  If it is non-<code>nil</code>, they are displayed as a caret
-followed by the character: `<samp><span class="samp">^A</span></samp>'.  If it is <code>nil</code>, they are
-displayed as a backslash followed by three octal digits: `<samp><span class="samp">\001</span></samp>'. 
-</p></blockquote></div>
-
-<!-- Following may have overfull hbox. -->
-<div class="defun">
-&mdash; Variable: <b>default-ctl-arrow</b><var><a name="index-default_002dctl_002darrow-3428"></a></var><br>
-<blockquote><p>The value of this variable is the default value for <code>ctl-arrow</code> in
-buffers that do not override it.  See <a href="Default-Value.html#Default-Value">Default Value</a>. 
+followed by the character: &lsquo;<samp><span class="samp">^A</span></samp>&rsquo;.  If it is <code>nil</code>, they are
+displayed as a backslash followed by three octal digits: &lsquo;<samp><span class="samp">\001</span></samp>&rsquo;. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>tab-width</b><var><a name="index-tab_002dwidth-3429"></a></var><br>
+&mdash; User Option: <b>tab-width</b><var><a name="index-tab_002dwidth-3644"></a></var><br>
 <blockquote><p>The value of this buffer-local variable is the spacing between tab
 stops used for displaying tab characters in Emacs buffers.  The value
 is in units of columns, and the default is 8.  Note that this feature

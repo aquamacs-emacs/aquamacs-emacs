@@ -3,32 +3,32 @@
 <title>Signaling Errors - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Errors.html#Errors" title="Errors">
 <link rel="next" href="Processing-of-Errors.html#Processing-of-Errors" title="Processing of Errors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Signaling-Errors"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Processing-of-Errors.html#Processing-of-Errors">Processing of Errors</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
 
 <h5 class="subsubsection">10.5.3.1 How to Signal an Error</h5>
 
-<p><a name="index-signaling-errors-544"></a>
+<p><a name="index-signaling-errors-549"></a>
    <dfn>Signaling</dfn> an error means beginning error processing.  Error
 processing normally aborts all or part of the running program and
 returns to a point that is set up to handle the error
@@ -78,7 +78,7 @@ Lisp is that error messages should start with a capital letter, but
 should not end with any sort of punctuation.
 
 <div class="defun">
-&mdash; Function: <b>error</b><var> format-string &amp;rest args<a name="index-error-545"></a></var><br>
+&mdash; Function: <b>error</b><var> format-string &amp;rest args<a name="index-error-550"></a></var><br>
 <blockquote><p>This function signals an error with an error message constructed by
 applying <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) to
 <var>format-string</var> and <var>args</var>.
@@ -90,21 +90,20 @@ applying <code>format</code> (see <a href="Formatting-Strings.html#Formatting-St
           
           (error "You have committed %d errors" 10)
                error--&gt; You have committed 10 errors
-     </pre>
+</pre>
         <p><code>error</code> works by calling <code>signal</code> with two arguments: the
 error symbol <code>error</code>, and a list containing the string returned by
 <code>format</code>.
 
         <p><strong>Warning:</strong> If you want to use your own string as an error message
 verbatim, don't just write <code>(error </code><var>string</var><code>)</code>.  If <var>string</var>
-contains `<samp><span class="samp">%</span></samp>', it will be interpreted as a format specifier, with
+contains &lsquo;<samp><span class="samp">%</span></samp>&rsquo;, it will be interpreted as a format specifier, with
 undesirable results.  Instead, use <code>(error "%s" </code><var>string</var><code>)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>signal</b><var> error-symbol data<a name="index-signal-546"></a></var><br>
-<blockquote><p><a name="Definition-of-signal"></a>
-This function signals an error named by <var>error-symbol</var>.  The
+&mdash; Function: <b>signal</b><var> error-symbol data<a name="index-signal-551"></a></var><br>
+<blockquote><p><a name="Definition-of-signal"></a>This function signals an error named by <var>error-symbol</var>.  The
 argument <var>data</var> is a list of additional Lisp objects relevant to
 the circumstances of the error.
 
@@ -123,7 +122,7 @@ error message is the <span class="sc">car</span> of <var>data</var> (that must b
 Subcategories of <code>file-error</code> are handled specially.
 
         <p>The number and significance of the objects in <var>data</var> depends on
-<var>error-symbol</var>.  For example, with a <code>wrong-type-arg</code> error,
+<var>error-symbol</var>.  For example, with a <code>wrong-type-argument</code> error,
 there should be two objects in the list: a predicate that describes the type
 that was expected, and the object that failed to fit that type.
 
@@ -140,10 +139,10 @@ it could sometimes return).
           
           (signal 'no-such-error '("My unknown error condition"))
                error--&gt; peculiar error: "My unknown error condition"
-     </pre>
+</pre>
         </blockquote></div>
 
-   <p><a name="index-CL-note_002d_002d_002dno-continuable-errors-547"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002dno-continuable-errors-552"></a><blockquote>
 <b>Common Lisp note:</b> Emacs Lisp has nothing like the Common Lisp
 concept of continuable errors. 
 </blockquote>

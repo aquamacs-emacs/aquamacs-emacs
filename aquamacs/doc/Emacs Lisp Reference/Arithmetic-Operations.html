@@ -3,33 +3,33 @@
 <title>Arithmetic Operations - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Numbers.html#Numbers" title="Numbers">
 <link rel="prev" href="Numeric-Conversions.html#Numeric-Conversions" title="Numeric Conversions">
 <link rel="next" href="Rounding-Operations.html#Rounding-Operations" title="Rounding Operations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Arithmetic-Operations"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Rounding-Operations.html#Rounding-Operations">Rounding Operations</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Numeric-Conversions.html#Numeric-Conversions">Numeric Conversions</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.6 Arithmetic Operations</h3>
 
-<p><a name="index-arithmetic-operations-169"></a>
+<p><a name="index-arithmetic-operations-173"></a>
   Emacs Lisp provides the traditional four arithmetic operations:
 addition, subtraction, multiplication, and division.  Remainder and modulus
 functions supplement the division functions.  The functions to
@@ -71,50 +71,50 @@ do not check for overflow.  Thus <code>(1+ 268435455)</code> may evaluate to
 &minus;268435456, depending on your hardware.
 
 <div class="defun">
-&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-170"></a></var><br>
+&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-174"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> plus 1. 
 For example,
 
      <pre class="example">          (setq foo 4)
-               =&gt; 4
+               &rArr; 4
           (1+ foo)
-               =&gt; 5
-     </pre>
+               &rArr; 5
+</pre>
         <p>This function is not analogous to the C operator <code>++</code>&mdash;it does not
 increment a variable.  It just computes a sum.  Thus, if we continue,
 
      <pre class="example">          foo
-               =&gt; 4
-     </pre>
+               &rArr; 4
+</pre>
         <p>If you want to increment the variable, you must use <code>setq</code>,
 like this:
 
      <pre class="example">          (setq foo (1+ foo))
-               =&gt; 5
-     </pre>
+               &rArr; 5
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-171"></a></var><br>
+&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-175"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> minus 1. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-172"></a></var><br>
+&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-176"></a></var><br>
 <blockquote><p>This function adds its arguments together.  When given no arguments,
 <code>+</code> returns 0.
 
      <pre class="example">          (+)
-               =&gt; 0
+               &rArr; 0
           (+ 1)
-               =&gt; 1
+               &rArr; 1
           (+ 1 2 3 4)
-               =&gt; 10
-     </pre>
+               &rArr; 10
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-173"></a></var><br>
+&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-177"></a></var><br>
 <blockquote><p>The <code>-</code> function serves two purposes: negation and subtraction. 
 When <code>-</code> has a single argument, the value is the negative of the
 argument.  When there are multiple arguments, <code>-</code> subtracts each of
@@ -122,30 +122,30 @@ the <var>more-numbers-or-markers</var> from <var>number-or-marker</var>,
 cumulatively.  If there are no arguments, the result is 0.
 
      <pre class="example">          (- 10 1 2 3 4)
-               =&gt; 0
+               &rArr; 0
           (- 10)
-               =&gt; -10
+               &rArr; -10
           (-)
-               =&gt; 0
-     </pre>
+               &rArr; 0
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-174"></a></var><br>
+&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-178"></a></var><br>
 <blockquote><p>This function multiplies its arguments together, and returns the
 product.  When given no arguments, <code>*</code> returns 1.
 
      <pre class="example">          (*)
-               =&gt; 1
+               &rArr; 1
           (* 1)
-               =&gt; 1
+               &rArr; 1
           (* 1 2 3 4)
-               =&gt; 24
-     </pre>
+               &rArr; 24
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-175"></a></var><br>
+&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-179"></a></var><br>
 <blockquote><p>This function divides <var>dividend</var> by <var>divisor</var> and returns the
 quotient.  If there are additional arguments <var>divisors</var>, then it
 divides <var>dividend</var> by each divisor in turn.  Each argument may be a
@@ -159,31 +159,31 @@ differently with negative arguments.  This is because the Lisp function
 permits machine-dependent rounding.  As a practical matter, all known
 machines round in the standard fashion.
 
-        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-176"></a>If you divide an integer by 0, an <code>arith-error</code> error is signaled. 
+        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-180"></a>If you divide an integer by 0, an <code>arith-error</code> error is signaled. 
 (See <a href="Errors.html#Errors">Errors</a>.)  Floating point division by zero returns either
 infinity or a NaN if your machine supports <acronym>IEEE</acronym> floating point;
 otherwise, it signals an <code>arith-error</code> error.
 
      <pre class="example">          (/ 6 2)
-               =&gt; 3
+               &rArr; 3
           (/ 5 2)
-               =&gt; 2
+               &rArr; 2
           (/ 5.0 2)
-               =&gt; 2.5
+               &rArr; 2.5
           (/ 5 2.0)
-               =&gt; 2.5
+               &rArr; 2.5
           (/ 5.0 2.0)
-               =&gt; 2.5
+               &rArr; 2.5
           (/ 25 3 2)
-               =&gt; 4
+               &rArr; 4
           (/ -17 6)
-               =&gt; -2   <span class="roman">(could in theory be &minus;3 on some machines)</span>
-     </pre>
+               &rArr; -2   <span class="roman">(could in theory be &minus;3 on some machines)</span>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-177"></a></var><br>
-<blockquote><p><a name="index-remainder-178"></a>This function returns the integer remainder after division of <var>dividend</var>
+&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-181"></a></var><br>
+<blockquote><p><a name="index-remainder-182"></a>This function returns the integer remainder after division of <var>dividend</var>
 by <var>divisor</var>.  The arguments must be integers or markers.
 
         <p>For negative arguments, the remainder is in principle machine-dependent
@@ -192,25 +192,25 @@ since the quotient is; but in practice, all known machines behave alike.
         <p>An <code>arith-error</code> results if <var>divisor</var> is 0.
 
      <pre class="example">          (% 9 4)
-               =&gt; 1
+               &rArr; 1
           (% -9 4)
-               =&gt; -1
+               &rArr; -1
           (% 9 -4)
-               =&gt; 1
+               &rArr; 1
           (% -9 -4)
-               =&gt; -1
-     </pre>
+               &rArr; -1
+</pre>
         <p>For any two integers <var>dividend</var> and <var>divisor</var>,
 
      <pre class="example">          (+ (% <var>dividend</var> <var>divisor</var>)
              (* (/ <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
-     </pre>
+</pre>
         <p class="noindent">always equals <var>dividend</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-179"></a></var><br>
-<blockquote><p><a name="index-modulus-180"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
+&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-183"></a></var><br>
+<blockquote><p><a name="index-modulus-184"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
 in other words, the remainder after division of <var>dividend</var>
 by <var>divisor</var>, but with the same sign as <var>divisor</var>. 
 The arguments must be numbers or markers.
@@ -223,21 +223,21 @@ quotient to compute the remainder.
         <p>An <code>arith-error</code> results if <var>divisor</var> is 0.
 
      <pre class="example">          (mod 9 4)
-               =&gt; 1
+               &rArr; 1
           (mod -9 4)
-               =&gt; 3
+               &rArr; 3
           (mod 9 -4)
-               =&gt; -3
+               &rArr; -3
           (mod -9 -4)
-               =&gt; -1
+               &rArr; -1
           (mod 5.5 2.5)
-               =&gt; .5
-     </pre>
+               &rArr; .5
+</pre>
         <p>For any two numbers <var>dividend</var> and <var>divisor</var>,
 
      <pre class="example">          (+ (mod <var>dividend</var> <var>divisor</var>)
              (* (floor <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
-     </pre>
+</pre>
         <p class="noindent">always equals <var>dividend</var>, subject to rounding error if either
 argument is floating point.  For <code>floor</code>, see <a href="Numeric-Conversions.html#Numeric-Conversions">Numeric Conversions</a>. 
 </p></blockquote></div>

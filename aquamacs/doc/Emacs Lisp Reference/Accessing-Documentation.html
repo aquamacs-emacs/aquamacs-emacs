@@ -3,33 +3,33 @@
 <title>Accessing Documentation - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Documentation.html#Documentation" title="Documentation">
 <link rel="prev" href="Documentation-Basics.html#Documentation-Basics" title="Documentation Basics">
 <link rel="next" href="Keys-in-Documentation.html#Keys-in-Documentation" title="Keys in Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Accessing-Documentation"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Documentation</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 <h3 class="section">24.2 Access to Documentation Strings</h3>
 
 <div class="defun">
-&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1655"></a></var><br>
+&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1711"></a></var><br>
 <blockquote><p>This function returns the documentation string that is recorded in
 <var>symbol</var>'s property list under property <var>property</var>.  It
 retrieves the text from a file if the value calls for that.  If the
@@ -70,16 +70,16 @@ unless <var>verbatim</var> is non-<code>nil</code>.
 
      <pre class="smallexample">          (documentation-property 'command-line-processed
              'variable-documentation)
-               =&gt; "Non-nil once command line has been processed"
+               &rArr; "Non-nil once command line has been processed"
           (symbol-plist 'command-line-processed)
-               =&gt; (variable-documentation 188902)
+               &rArr; (variable-documentation 188902)
           (documentation-property 'emacs 'group-documentation)
-               =&gt; "Customization of the One True Editor."
-     </pre>
+               &rArr; "Customization of the One True Editor."
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1656"></a></var><br>
+&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1712"></a></var><br>
 <blockquote><p>This function returns the documentation string of <var>function</var>. 
 <code>documentation</code> handles macros, named keyboard macros, and
 special forms, as well as ordinary functions.
@@ -103,15 +103,15 @@ the function definition has no documentation string.  In that case,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1657"></a></var><br>
+&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1713"></a></var><br>
 <blockquote><p>This function returns the documentation string of <var>face</var> as a
 face. 
 </p></blockquote></div>
 
 <!-- Wordy to prevent overfull hboxes.  -rjc 15mar92 -->
-<p>Here is an example of using the two functions, <code>documentation</code> and
+   <p>Here is an example of using the two functions, <code>documentation</code> and
 <code>documentation-property</code>, to display the documentation strings for
-several symbols in a `<samp><span class="samp">*Help*</span></samp>' buffer.
+several symbols in a &lsquo;<samp><span class="samp">*Help*</span></samp>&rsquo; buffer.
 
    <p><a name="describe_002dsymbols-example"></a>
 <pre class="smallexample">     (defun describe-symbols (pattern)
@@ -155,9 +155,9 @@ several symbols in a `<samp><span class="samp">*Help*</span></samp>' buffer.
                           (setq sym-list (cons sym sym-list))))))
      
          ;; <span class="roman">Display the data.</span>
-         (with-output-to-temp-buffer "*Help*"
-           (mapcar describe-func (sort sym-list 'string&lt;))
-           (print-help-return-message))))
+         (help-setup-xref (list 'describe-symbols pattern) (interactive-p))
+         (with-help-window (help-buffer)
+           (mapcar describe-func (sort sym-list 'string&lt;)))))
 </pre>
    <p>The <code>describe-symbols</code> function works like <code>apropos</code>,
 but provides more information.
@@ -166,7 +166,7 @@ but provides more information.
      
      ---------- Buffer: *Help* ----------
      goal-column     Option
-     *Semipermanent goal column for vertical motion, as set by ...
+     Semipermanent goal column for vertical motion, as set by ...
      <!-- Do not blithely break or fill these lines. -->
      <!-- That makes them incorrect. -->
      
@@ -186,14 +186,9 @@ but provides more information.
      When the `track-eol' feature is doing its job, the value is 9999.
      ---------- Buffer: *Help* ----------
 </pre>
-   <p>The asterisk `<samp><span class="samp">*</span></samp>' as the first character of a variable's doc string,
-as shown above for the <code>goal-column</code> variable, means that it is a
-user option; see the description of <code>defvar</code> in <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
-
-<div class="defun">
-&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1658"></a></var><br>
-<blockquote><p><a name="Definition-of-Snarf_002ddocumentation"></a>
-This function is used only during Emacs initialization, just before
+   <div class="defun">
+&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1714"></a></var><br>
+<blockquote><p><a name="Definition-of-Snarf_002ddocumentation"></a>This function is used only during Emacs initialization, just before
 the runnable Emacs is dumped.  It finds the file offsets of the
 documentation strings stored in the file <var>filename</var>, and records
 them in the in-core function definitions and variable property lists in
@@ -205,18 +200,15 @@ for in the directory <code>doc-directory</code>.  Usually <var>filename</var> is
 <code>"DOC-</code><var>version</var><code>"</code>. 
 </p></blockquote></div>
 
-<!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1659"></a></var><br>
+&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1715"></a></var><br>
 <blockquote><p>This variable holds the name of the directory which should contain the
 file <code>"DOC-</code><var>version</var><code>"</code> that contains documentation strings for
 built-in and preloaded functions and variables.
 
         <p>In most cases, this is the same as <code>data-directory</code>.  They may be
 different when you run Emacs from the directory where you built it,
-without actually installing it.  See <a href="Definition-of-data_002ddirectory.html#Definition-of-data_002ddirectory">Definition of data-directory</a>.
-
-        <p>In older Emacs versions, <code>exec-directory</code> was used for this. 
+without actually installing it.  See <a href="Definition-of-data_002ddirectory.html#Definition-of-data_002ddirectory">Definition of data-directory</a>. 
 </p></blockquote></div>
 
    </body></html>

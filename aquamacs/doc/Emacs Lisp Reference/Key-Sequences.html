@@ -3,32 +3,32 @@
 <title>Key Sequences - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
 <link rel="next" href="Keymap-Basics.html#Keymap-Basics" title="Keymap Basics">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Key-Sequences"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Keymap-Basics.html#Keymap-Basics">Keymap Basics</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.1 Key Sequences</h3>
 
-<p><a name="index-key-1377"></a><a name="index-keystroke-1378"></a><a name="index-key-sequence-1379"></a>
+<p><a name="index-key-1428"></a><a name="index-keystroke-1429"></a><a name="index-key-sequence-1430"></a>
   A <dfn>key sequence</dfn>, or <dfn>key</dfn> for short, is a sequence of one
 or more input events that form a unit.  Input events include
 characters, function keys, and mouse actions (see <a href="Input-Events.html#Input-Events">Input Events</a>). 
@@ -86,23 +86,23 @@ the vector <code>[?\C-x ?l]</code> represents the key sequence <kbd>C-x l</kbd>.
 representations, <a href="../emacs/Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>.
 
 <div class="defun">
-&mdash; Macro: <b>kbd</b><var> keyseq-text<a name="index-kbd-1380"></a></var><br>
+&mdash; Macro: <b>kbd</b><var> keyseq-text<a name="index-kbd-1431"></a></var><br>
 <blockquote><p>This macro converts the text <var>keyseq-text</var> (a string constant)
 into a key sequence (a string or vector constant).  The contents of
 <var>keyseq-text</var> should describe the key sequence using almost the same
 syntax used in this manual.  More precisely, it uses the same syntax
 that Edit Macro mode uses for editing keyboard macros (see <a href="../emacs/Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>); you must surround
-function key names with `<samp><span class="samp">&lt;...&gt;</span></samp>'.
+function key names with &lsquo;<samp><span class="samp">&lt;...&gt;</span></samp>&rsquo;.
 
-     <pre class="example">          (kbd "C-x") =&gt; "\C-x"
-          (kbd "C-x C-f") =&gt; "\C-x\C-f"
-          (kbd "C-x 4 C-f") =&gt; "\C-x4\C-f"
-          (kbd "X") =&gt; "X"
-          (kbd "RET") =&gt; "\^M"
-          (kbd "C-c SPC") =&gt; "\C-c "
-          (kbd "&lt;f1&gt; SPC") =&gt; [f1 32]
-          (kbd "C-M-&lt;down&gt;") =&gt; [C-M-down]
-     </pre>
+     <pre class="example">          (kbd "C-x") &rArr; "\C-x"
+          (kbd "C-x C-f") &rArr; "\C-x\C-f"
+          (kbd "C-x 4 C-f") &rArr; "\C-x4\C-f"
+          (kbd "X") &rArr; "X"
+          (kbd "RET") &rArr; "\^M"
+          (kbd "C-c SPC") &rArr; "\C-c "
+          (kbd "&lt;f1&gt; SPC") &rArr; [f1 32]
+          (kbd "C-M-&lt;down&gt;") &rArr; [C-M-down]
+</pre>
         <p>This macro is not meant for use with arguments that vary&mdash;only
 with string constants. 
 </p></blockquote></div>

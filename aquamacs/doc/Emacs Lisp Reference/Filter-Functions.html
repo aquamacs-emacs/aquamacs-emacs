@@ -3,33 +3,33 @@
 <title>Filter Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Output-from-Processes.html#Output-from-Processes" title="Output from Processes">
 <link rel="prev" href="Process-Buffers.html#Process-Buffers" title="Process Buffers">
 <link rel="next" href="Decoding-Output.html#Decoding-Output" title="Decoding Output">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Filter-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Decoding-Output.html#Decoding-Output">Decoding Output</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Process-Buffers.html#Process-Buffers">Process Buffers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-
 
 <h4 class="subsection">37.9.2 Process Filter Functions</h4>
 
-<p><a name="index-filter-function-3064"></a><a name="index-process-filter-3065"></a>
+<p><a name="index-filter-function-3249"></a><a name="index-process-filter-3250"></a>
   A process <dfn>filter function</dfn> is a function that receives the
 standard output from the associated process.  If a process has a filter,
 then <em>all</em> output from that process is passed to the filter.  The
@@ -136,16 +136,17 @@ that produces the same output twice in a row may send it as one batch of
 200 characters one time, and five batches of 40 characters the next.  If
 the filter looks for certain text strings in the subprocess output, make
 sure to handle the case where one of these strings is split across two
-or more batches of output.
+or more batches of output; one way to do this is to insert the
+received text into a temporary buffer, which can then be searched.
 
 <div class="defun">
-&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3066"></a></var><br>
+&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3251"></a></var><br>
 <blockquote><p>This function gives <var>process</var> the filter function <var>filter</var>.  If
 <var>filter</var> is <code>nil</code>, it gives the process no filter. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3067"></a></var><br>
+&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3252"></a></var><br>
 <blockquote><p>This function returns the filter function of <var>process</var>, or <code>nil</code>
 if it has none. 
 </p></blockquote></div>
@@ -154,15 +155,15 @@ if it has none.
 
 <pre class="smallexample">     (defun keep-output (process output)
         (setq kept (cons output kept)))
-          =&gt; keep-output
+          &rArr; keep-output
      (setq kept nil)
-          =&gt; nil
+          &rArr; nil
      (set-process-filter (get-process "shell") 'keep-output)
-          =&gt; keep-output
+          &rArr; keep-output
      (process-send-string "shell" "ls ~/other\n")
-          =&gt; nil
+          &rArr; nil
      kept
-          =&gt; ("lewis@slug[8] % "
+          &rArr; ("lewis@slug[8] % "
      "FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
      address.txt             backup.psf              kolstad.psf
      backup.bib~             david.mss               resume-Dec-86.mss~

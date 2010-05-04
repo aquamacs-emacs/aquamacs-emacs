@@ -3,7 +3,7 @@
 <title>Options for Comments - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Comments.html#Comments" title="Comments">
 <link rel="prev" href="Multi_002dLine-Comments.html#Multi_002dLine-Comments" title="Multi-Line Comments">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Options-for-Comments"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
 <hr>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
 
 <h4 class="subsection">30.5.3 Options Controlling Comments</h4>
 
-<p><a name="index-comment_002dcolumn-2048"></a><a name="index-C_002dx-_003b-2049"></a><a name="index-comment_002dset_002dcolumn-2050"></a>  The <dfn>comment column</dfn>, the column at which Emacs tries to place
+<p><a name="index-comment_002dcolumn-2064"></a><a name="index-C_002dx-_003b-2065"></a><a name="index-comment_002dset_002dcolumn-2066"></a>  The <dfn>comment column</dfn>, the column at which Emacs tries to place
 comments, is stored in the variable <code>comment-column</code>.  You can
 set it to a number explicitly.  Alternatively, the command <kbd>C-x ;</kbd>
 (<code>comment-set-column</code>) sets the comment column to the column
@@ -69,19 +69,19 @@ default value which you can change with <code>setq-default</code>.
 See <a href="Locals.html#Locals">Locals</a>.  Many major modes initialize this variable for the
 current buffer.
 
-   <p><a name="index-comment_002dstart_002dskip-2051"></a>  The comment commands recognize comments based on the regular
+   <p><a name="index-comment_002dstart_002dskip-2067"></a>  The comment commands recognize comments based on the regular
 expression that is the value of the variable <code>comment-start-skip</code>. 
 Make sure this regexp does not match the null string.  It may match more
 than the comment starting delimiter in the strictest sense of the word;
 for example, in C mode the value of the variable is
 <!-- This stops M-q from breaking the line inside that @code. -->
 <code>"/\\*+&nbsp;*\\|//+&nbsp;*"<!-- /@w --></code>, which matches extra stars and spaces
-after the `<samp><span class="samp">/*</span></samp>' itself, and accepts C++ style comments also. 
-(Note that `<samp><span class="samp">\\</span></samp>' is needed in Lisp syntax to include a `<samp><span class="samp">\</span></samp>' in
+after the &lsquo;<samp><span class="samp">/*</span></samp>&rsquo; itself, and accepts C++ style comments also. 
+(Note that &lsquo;<samp><span class="samp">\\</span></samp>&rsquo; is needed in Lisp syntax to include a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in
 the string, which is needed to deny the first star its special meaning
 in regexp syntax.  See <a href="Regexp-Backslash.html#Regexp-Backslash">Regexp Backslash</a>.)
 
-   <p><a name="index-comment_002dstart-2052"></a><a name="index-comment_002dend-2053"></a>  When a comment command makes a new comment, it inserts the value of
+   <p><a name="index-comment_002dstart-2068"></a><a name="index-comment_002dend-2069"></a>  When a comment command makes a new comment, it inserts the value of
 <code>comment-start</code> to begin it.  The value of <code>comment-end</code> is
 inserted after point, so that it will follow the text that you will
 insert into the comment.  When <code>comment-end</code> is non-empty, it
@@ -89,13 +89,13 @@ should start with a space.  For example, in C mode,
 <code>comment-start</code> has the value <code>"/*&nbsp;"</code><!-- /@w --> and
 <code>comment-end</code> has the value <code>"&nbsp;*/"</code><!-- /@w -->.
 
-   <p><a name="index-comment_002dpadding-2054"></a>  The variable <code>comment-padding</code> specifies how many spaces
+   <p><a name="index-comment_002dpadding-2070"></a>  The variable <code>comment-padding</code> specifies how many spaces
 <code>comment-region</code> should insert on each line between the comment
 delimiter and the line's original text.  The default is 1, to insert
 one space.  <code>nil</code> means 0.  Alternatively, <code>comment-padding</code>
 can hold the actual string to insert.
 
-   <p><a name="index-comment_002dmulti_002dline-2055"></a>  The variable <code>comment-multi-line</code> controls how <kbd>C-M-j</kbd>
+   <p><a name="index-comment_002dmulti_002dline-2071"></a>  The variable <code>comment-multi-line</code> controls how <kbd>C-M-j</kbd>
 (<code>indent-new-comment-line</code>) behaves when used inside a comment. 
 Specifically, when <code>comment-multi-line</code> is <code>nil</code>, the
 command inserts a comment terminator, begins a new line, and finally
@@ -105,7 +105,7 @@ comment across multiple lines.  In languages that allow multi-line
 comments, the choice of value for this variable is a matter of taste. 
 The default for this variable depends on the major mode.
 
-   <p><a name="index-comment_002dindent_002dfunction-2056"></a>  The variable <code>comment-indent-function</code> should contain a function
+   <p><a name="index-comment_002dindent_002dfunction-2072"></a>  The variable <code>comment-indent-function</code> should contain a function
 that will be called to compute the alignment for a newly inserted
 comment or for aligning an existing comment.  It is set differently by
 various major modes.  The function is called with no arguments, but with

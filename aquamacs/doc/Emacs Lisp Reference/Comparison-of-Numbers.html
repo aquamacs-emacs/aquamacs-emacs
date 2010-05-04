@@ -3,33 +3,33 @@
 <title>Comparison of Numbers - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Numbers.html#Numbers" title="Numbers">
 <link rel="prev" href="Predicates-on-Numbers.html#Predicates-on-Numbers" title="Predicates on Numbers">
 <link rel="next" href="Numeric-Conversions.html#Numeric-Conversions" title="Numeric Conversions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Comparison-of-Numbers"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Numeric-Conversions.html#Numeric-Conversions">Numeric Conversions</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Predicates-on-Numbers.html#Predicates-on-Numbers">Predicates on Numbers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.4 Comparison of Numbers</h3>
 
-<p><a name="index-number-comparison-148"></a><a name="index-comparing-numbers-149"></a>
+<p><a name="index-number-comparison-152"></a><a name="index-comparing-numbers-153"></a>
   To test numbers for numerical equality, you should normally use
 <code>=</code>, not <code>eq</code>.  There can be many distinct floating point
 number objects with the same numeric value.  If you use <code>eq</code> to
@@ -92,7 +92,7 @@ Here's a function to do this:
                  (max (abs x) (abs y)))
               fuzz-factor)))
 </pre>
-   <p><a name="index-CL-note_002d_002d_002dintegers-vrs-_0040code_007beq_007d-150"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002dintegers-vrs-_0040code_007beq_007d-154"></a><blockquote>
 <b>Common Lisp note:</b> Comparing numbers in Common Lisp always requires
 <code>=</code> because Common Lisp implements multi-word integers, and two
 distinct integer objects can have the same numeric value.  Emacs Lisp
@@ -101,13 +101,13 @@ limited range of integer values.
 </blockquote>
 
 <div class="defun">
-&mdash; Function: <b>=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003d-151"></a></var><br>
+&mdash; Function: <b>=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003d-155"></a></var><br>
 <blockquote><p>This function tests whether its arguments are numerically equal, and
 returns <code>t</code> if so, <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>eql</b><var> value1 value2<a name="index-eql-152"></a></var><br>
+&mdash; Function: <b>eql</b><var> value1 value2<a name="index-eql-156"></a></var><br>
 <blockquote><p>This function acts like <code>eq</code> except when both arguments are
 numbers.  It compares numbers by type and numeric value, so that
 <code>(eql 1.0 1)</code> returns <code>nil</code>, but <code>(eql 1.0 1.0)</code> and
@@ -115,66 +115,66 @@ numbers.  It compares numbers by type and numeric value, so that
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>/=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_002f_003d-153"></a></var><br>
+&mdash; Function: <b>/=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_002f_003d-157"></a></var><br>
 <blockquote><p>This function tests whether its arguments are numerically equal, and
 returns <code>t</code> if they are not, and <code>nil</code> if they are. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>&lt;</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003c-154"></a></var><br>
+&mdash; Function: <b>&lt;</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003c-158"></a></var><br>
 <blockquote><p>This function tests whether its first argument is strictly less than
 its second argument.  It returns <code>t</code> if so, <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>&lt;=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003c_003d-155"></a></var><br>
+&mdash; Function: <b>&lt;=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003c_003d-159"></a></var><br>
 <blockquote><p>This function tests whether its first argument is less than or equal
 to its second argument.  It returns <code>t</code> if so, <code>nil</code>
 otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>&gt;</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003e-156"></a></var><br>
+&mdash; Function: <b>&gt;</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003e-160"></a></var><br>
 <blockquote><p>This function tests whether its first argument is strictly greater
 than its second argument.  It returns <code>t</code> if so, <code>nil</code>
 otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>&gt;=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003e_003d-157"></a></var><br>
+&mdash; Function: <b>&gt;=</b><var> number-or-marker1 number-or-marker2<a name="index-g_t_003e_003d-161"></a></var><br>
 <blockquote><p>This function tests whether its first argument is greater than or
 equal to its second argument.  It returns <code>t</code> if so, <code>nil</code>
 otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>max</b><var> number-or-marker &amp;rest numbers-or-markers<a name="index-max-158"></a></var><br>
+&mdash; Function: <b>max</b><var> number-or-marker &amp;rest numbers-or-markers<a name="index-max-162"></a></var><br>
 <blockquote><p>This function returns the largest of its arguments. 
 If any of the arguments is floating-point, the value is returned
 as floating point, even if it was given as an integer.
 
      <pre class="example">          (max 20)
-               =&gt; 20
+               &rArr; 20
           (max 1 2.5)
-               =&gt; 2.5
+               &rArr; 2.5
           (max 1 3 2.5)
-               =&gt; 3.0
-     </pre>
+               &rArr; 3.0
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>min</b><var> number-or-marker &amp;rest numbers-or-markers<a name="index-min-159"></a></var><br>
+&mdash; Function: <b>min</b><var> number-or-marker &amp;rest numbers-or-markers<a name="index-min-163"></a></var><br>
 <blockquote><p>This function returns the smallest of its arguments. 
 If any of the arguments is floating-point, the value is returned
 as floating point, even if it was given as an integer.
 
      <pre class="example">          (min -4 1)
-               =&gt; -4
-     </pre>
+               &rArr; -4
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>abs</b><var> number<a name="index-abs-160"></a></var><br>
+&mdash; Function: <b>abs</b><var> number<a name="index-abs-164"></a></var><br>
 <blockquote><p>This function returns the absolute value of <var>number</var>. 
 </p></blockquote></div>
 

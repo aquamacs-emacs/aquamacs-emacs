@@ -3,32 +3,32 @@
 <title>Startup Summary - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
 <link rel="next" href="Init-File.html#Init-File" title="Init File">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Startup-Summary"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Init-File.html#Init-File">Init File</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
 <hr>
@@ -54,58 +54,85 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting 
 
 <h4 class="subsection">39.1.1 Summary: Sequence of Actions at Startup</h4>
 
-<p><a name="index-initialization-of-Emacs-3456"></a><a name="index-startup-of-Emacs-3457"></a><a name="index-g_t_0040file_007bstartup_002eel_007d-3458"></a>
-   The order of operations performed (in <samp><span class="file">startup.el</span></samp>) by Emacs when
-it is started up is as follows:
+<p><a name="index-initialization-of-Emacs-3673"></a><a name="index-startup-of-Emacs-3674"></a><a name="index-g_t_0040file_007bstartup_002eel_007d-3675"></a>
+  When Emacs is started up, it performs the following operations
+(which are defined in <samp><span class="file">startup.el</span></samp>):
 
      <ol type=1 start=1>
 <li>It adds subdirectories to <code>load-path</code>, by running the file named
-<samp><span class="file">subdirs.el</span></samp> in each directory in the list.  Normally this file
-adds the directory's subdirectories to the list, and these will be
-scanned in their turn.  The files <samp><span class="file">subdirs.el</span></samp> are normally
-generated automatically by Emacs installation.
+<samp><span class="file">subdirs.el</span></samp> in each directory in the list.  Normally, this file
+adds the directory's subdirectories to the list, and those are scanned
+in their turn.  The files <samp><span class="file">subdirs.el</span></samp> are normally generated
+automatically when Emacs is installed.
+
+     <p><a name="index-before_002dinit_002dtime-3676"></a><li>It sets the variable <code>before-init-time</code> to the value of
+<code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).  It also sets
+<code>after-init-time</code> to <code>nil</code>, which signals to Lisp programs
+that Emacs is being initialized.
+
+     <p><a name="index-initial_002dwindow_002dsystem_0040r_007b_002c-and-startup_007d-3677"></a><a name="index-window_002dsystem_002dinitialization_002dalist-3678"></a><li>It loads the initialization library for the window system specified by
+the variable <code>initial-window-system</code> (see <a href="Window-Systems.html#Window-Systems">initial-window-system</a>).  This library's name is
+<samp><span class="file">term/</span><var>windowsystem</var><span class="file">-win.el</span></samp>, where <var>windowsystem</var> is the
+value of <code>initial-window-system</code>.  From that library, it calls
+the appropriate initialization function.  The initialization function
+for each supported window system is specified by
+<code>window-system-initialization-alist</code>.
 
      <li>It sets the language environment and the terminal coding system,
 if requested by environment variables such as <code>LANG</code>.
 
-     <li>It loads the initialization library for the window system, if you are
-using a window system.  This library's name is
-<samp><span class="file">term/</span><var>windowsystem</var><span class="file">-win.el</span></samp>.
-
      <li>It processes the initial options.  (Some of them are handled
 even earlier than this.)
 
-     <li>It initializes the window frame and faces, if appropriate.
-
      <li>It runs the normal hook <code>before-init-hook</code>.
 
-     <li>It loads the library <samp><span class="file">site-start</span></samp> (if any), unless the option
-`<samp><span class="samp">-Q</span></samp>' (or `<samp><span class="samp">--no-site-file</span></samp>') was specified.  The library's file
-name is usually <samp><span class="file">site-start.el</span></samp>. 
-<a name="index-g_t_0040file_007bsite_002dstart_002eel_007d-3459"></a>
-<li>It loads your init file (usually <samp><span class="file">~/.emacs</span></samp>), unless the option
-`<samp><span class="samp">-q</span></samp>' (or `<samp><span class="samp">--no-init-file</span></samp>'), `<samp><span class="samp">-Q</span></samp>', or `<samp><span class="samp">--batch</span></samp>' was
-specified on the command line.  The `<samp><span class="samp">-u</span></samp>' option can specify
-another user whose home directory should be used instead of <samp><span class="file">~</span></samp>.
+     <li>It initializes the window frame and faces, if appropriate, and turns
+on the menu bar and tool bar, if the initial frame needs them.
 
-     <li>It loads the library <samp><span class="file">default</span></samp> (if any), unless
-<code>inhibit-default-init</code> is non-<code>nil</code>.  (This is not done in
-`<samp><span class="samp">-batch</span></samp>' mode, or if `<samp><span class="samp">-Q</span></samp>' or `<samp><span class="samp">-q</span></samp>' was specified on the
-command line.)  The library's file name is usually <samp><span class="file">default.el</span></samp>. 
-<a name="index-g_t_0040file_007bdefault_002eel_007d-3460"></a>
-<li>It runs the normal hook <code>after-init-hook</code>.
+     <li>It loads the library <samp><span class="file">site-start</span></samp>, if it exists.  This is not
+done if the options &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; or &lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo; were specified. 
+<a name="index-g_t_0040file_007bsite_002dstart_002eel_007d-3679"></a>
+<li>It loads your init file (see <a href="Init-File.html#Init-File">Init File</a>).  This is not done if the
+options &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; were specified.  If
+the &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; option was specified, Emacs looks for the init file in
+that user's home directory instead.
 
-     <li>It sets the major mode according to <code>initial-major-mode</code>, provided
-the buffer `<samp><span class="samp">*scratch*</span></samp>' is still current and still in Fundamental
-mode.
+     <li>It loads the library <samp><span class="file">default</span></samp>, if it exists.  This is not done
+if <code>inhibit-default-init</code> is non-<code>nil</code>, nor if the options
+&lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; were specified. 
+<a name="index-g_t_0040file_007bdefault_002eel_007d-3680"></a>
+<li>It loads your abbrevs from the file specified by
+<code>abbrev-file-name</code>, if that file exists and can be read
+(see <a href="Abbrev-Files.html#Abbrev-Files">abbrev-file-name</a>).  This is not done if the
+option &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; was specified.
 
-     <li>It loads the terminal-specific Lisp file, if any, except when in batch
-mode or using a window system.
+     <p><a name="index-after_002dinit_002dtime-3681"></a><li>It sets the variable <code>after-init-time</code> to the value of
+<code>current-time</code>.  This variable was set to <code>nil</code> earlier;
+setting it to the current time signals that the initialization phase
+is over, and, together with <code>before-init-time</code>, provides the
+measurement of how long it took.
+
+     <li>It runs the normal hook <code>after-init-hook</code>.
+
+     <li>If the buffer &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; exists and is still in Fundamental mode
+(as it should be by default), it sets its major mode according to
+<code>initial-major-mode</code>.
+
+     <li>If started on a text-only terminal, it loads the terminal-specific
+Lisp library, which is specified by the variable
+<code>term-file-prefix</code> (see <a href="Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>).  This is not done
+in <code>--batch</code> mode, nor if <code>term-file-prefix</code> is <code>nil</code>.
 
      <li>It displays the initial echo area message, unless you have suppressed
 that with <code>inhibit-startup-echo-area-message</code>.
 
      <li>It processes the action arguments from the command line.
+
+     <li>It now exits if the option <code>--batch</code> was specified.
+
+     <li>If <code>initial-buffer-choice</code> is a string, it visits the file with
+that name.  Furthermore, if the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer exists and is
+empty, it inserts <code>initial-scratch-message</code> into that buffer.
 
      <li>It runs <code>emacs-startup-hook</code> and then <code>term-setup-hook</code>.
 
@@ -115,41 +142,67 @@ specify.
 
      <li>It runs <code>window-setup-hook</code>.  See <a href="Window-Systems.html#Window-Systems">Window Systems</a>.
 
-     <li>It displays copyleft, nonwarranty, and basic use information, provided
-the value of <code>inhibit-startup-message</code> is <code>nil</code>, you didn't
-specify `<samp><span class="samp">--no-splash</span></samp>' or `<samp><span class="samp">-Q</span></samp>'.
+     <li>If the option <code>--daemon</code> was specified, it calls
+<code>server-start</code> and detaches from the controlling terminal. 
+See <a href="../emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a>.
+
+     <li>It displays the <dfn>startup screen</dfn>, which is a special buffer that
+contains information about copyleft and basic Emacs usage.  This is
+not done if <code>initial-buffer-choice</code> or
+<code>inhibit-startup-screen</code> are <code>nil</code>, nor if the
+&lsquo;<samp><span class="samp">--no-splash</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; command-line options were specified.
+
+     <li>If started by the X session manager, it calls
+<code>emacs-session-restore</code> passing it as argument the ID of the
+previous session.  See <a href="Session-Management.html#Session-Management">Session Management</a>.
         </ol>
 
 <div class="defun">
-&mdash; User Option: <b>inhibit-startup-message</b><var><a name="index-inhibit_002dstartup_002dmessage-3461"></a></var><br>
-<blockquote><p>This variable inhibits the initial startup messages (the nonwarranty,
-etc.).  If it is non-<code>nil</code>, then the messages are not printed.
+&mdash; User Option: <b>inhibit-startup-screen</b><var><a name="index-inhibit_002dstartup_002dscreen-3682"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, inhibits the startup screen.  In
+that case, Emacs typically displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer; but
+see <code>initial-buffer-choice</code>, below.
 
-        <p>This variable exists so you can set it in your personal init file, once
-you are familiar with the contents of the startup message.  Do not set
-this variable in the init file of a new user, or in a way that affects
-more than one user, because that would prevent new users from receiving
-the information they are supposed to see. 
+        <p>Do not set this variable in the init file of a new user, or in a way
+that affects more than one user, as that would prevent new users from
+receiving information about copyleft and basic Emacs usage.
+
+        <p><a name="index-inhibit_002dstartup_002dmessage-3683"></a><a name="index-inhibit_002dsplash_002dscreen-3684"></a><code>inhibit-startup-message</code> and <code>inhibit-splash-screen</code> are
+aliases for this variable. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>inhibit-startup-echo-area-message</b><var><a name="index-inhibit_002dstartup_002decho_002darea_002dmessage-3462"></a></var><br>
+&mdash; User Option: <b>initial-buffer-choice</b><var><a name="index-initial_002dbuffer_002dchoice-3685"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, determines a file or buffer for
+Emacs to display after starting up, instead of the startup screen.  If
+its value is <code>t</code>, Emacs displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer.  If
+its value is a string, that specifies the name of a file for Emacs to
+visit. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>inhibit-startup-echo-area-message</b><var><a name="index-inhibit_002dstartup_002decho_002darea_002dmessage-3686"></a></var><br>
 <blockquote><p>This variable controls the display of the startup echo area message. 
 You can suppress the startup echo area message by adding text with this
 form to your init file:
 
      <pre class="example">          (setq inhibit-startup-echo-area-message
                 "<var>your-login-name</var>")
-     </pre>
+</pre>
         <p>Emacs explicitly checks for an expression as shown above in your init
 file; your login name must appear in the expression as a Lisp string
 constant.  Other methods of setting
 <code>inhibit-startup-echo-area-message</code> to the same value do not
-inhibit the startup message.
+inhibit the startup message.  This way, you can easily inhibit the
+message for yourself if you wish, but thoughtless copying of your init
+file will not inhibit the message for someone else. 
+</p></blockquote></div>
 
-        <p>This way, you can easily inhibit the message for yourself if you wish,
-but thoughtless copying of your init file will not inhibit the message
-for someone else. 
+<div class="defun">
+&mdash; User Option: <b>initial-scratch-message</b><var><a name="index-initial_002dscratch_002dmessage-3687"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, should be a string, which is
+inserted into the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer when Emacs starts up.  If it
+is <code>nil</code>, the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer is empty. 
 </p></blockquote></div>
 
    </body></html>

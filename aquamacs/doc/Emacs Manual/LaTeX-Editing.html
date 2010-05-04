@@ -3,7 +3,7 @@
 <title>LaTeX Editing - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="TeX-Mode.html#TeX-Mode" title="TeX Mode">
 <link rel="prev" href="TeX-Editing.html#TeX-Editing" title="TeX Editing">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="LaTeX-Editing"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="TeX-Print.html#TeX-Print">TeX Print</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="TeX-Editing.html#TeX-Editing">TeX Editing</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX-Mode">TeX Mode</a>
@@ -61,28 +61,28 @@ Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX-Mode">TeX Mode</a>
 few extra features not applicable to plain TeX:
 
      <dl>
-<dt><kbd>C-c C-o</kbd><dd>Insert `<samp><span class="samp">\begin</span></samp>' and `<samp><span class="samp">\end</span></samp>' for LaTeX block and position
+<dt><kbd>C-c C-o</kbd><dd>Insert &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; for LaTeX block and position
 point on a line between them (<code>tex-latex-block</code>). 
 <br><dt><kbd>C-c C-e</kbd><dd>Close the innermost LaTeX block not yet closed
 (<code>tex-close-latex-block</code>). 
 </dl>
 
-   <p><a name="index-tex_002dlatex_002dblock-1707"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1708"></a><a name="index-latex_002dblock_002dnames-1709"></a>  In LaTeX input, `<samp><span class="samp">\begin</span></samp>' and `<samp><span class="samp">\end</span></samp>' commands are used to
-group blocks of text.  To insert a `<samp><span class="samp">\begin</span></samp>' and a matching
-`<samp><span class="samp">\end</span></samp>' (on a new line following the `<samp><span class="samp">\begin</span></samp>'), use <kbd>C-c
+   <p><a name="index-tex_002dlatex_002dblock-1725"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1726"></a><a name="index-latex_002dblock_002dnames-1727"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; commands are used to
+group blocks of text.  To insert a &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and a matching
+&lsquo;<samp><span class="samp">\end</span></samp>&rsquo; (on a new line following the &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;), use <kbd>C-c
 C-o</kbd> (<code>tex-latex-block</code>).  A blank line is inserted between the
 two, and point is left there.  You can use completion when you enter the
 block type; to specify additional block type names beyond the standard
 list, set the variable <code>latex-block-names</code>.  For example, here's
-how to add `<samp><span class="samp">theorem</span></samp>', `<samp><span class="samp">corollary</span></samp>', and `<samp><span class="samp">proof</span></samp>':
+how to add &lsquo;<samp><span class="samp">theorem</span></samp>&rsquo;, &lsquo;<samp><span class="samp">corollary</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">proof</span></samp>&rsquo;:
 
 <pre class="example">     (setq latex-block-names '("theorem" "corollary" "proof"))
 </pre>
-   <p><a name="index-tex_002dclose_002dlatex_002dblock-1710"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1711"></a>  In LaTeX input, `<samp><span class="samp">\begin</span></samp>' and `<samp><span class="samp">\end</span></samp>' commands must
+   <p><a name="index-tex_002dclose_002dlatex_002dblock-1728"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1729"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; commands must
 balance.  You can use <kbd>C-c C-e</kbd> (<code>tex-close-latex-block</code>) to
-insert automatically a matching `<samp><span class="samp">\end</span></samp>' to match the last unmatched
-`<samp><span class="samp">\begin</span></samp>'.  It indents the `<samp><span class="samp">\end</span></samp>' to match the corresponding
-`<samp><span class="samp">\begin</span></samp>'.  It inserts a newline after `<samp><span class="samp">\end</span></samp>' if point is at
+insert automatically a matching &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; to match the last unmatched
+&lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;.  It indents the &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; to match the corresponding
+&lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;.  It inserts a newline after &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; if point is at
 the beginning of a line.
 
    </body></html>

@@ -3,32 +3,32 @@
 <title>Examining Properties - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
 <link rel="next" href="Changing-Properties.html#Changing-Properties" title="Changing Properties">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Examining-Properties"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Changing-Properties.html#Changing-Properties">Changing Properties</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
 <hr>
@@ -65,7 +65,7 @@ positions in a string start from 0, whereas positions in a buffer start
 from 1.
 
 <div class="defun">
-&mdash; Function: <b>get-text-property</b><var> pos prop &amp;optional object<a name="index-get_002dtext_002dproperty-2560"></a></var><br>
+&mdash; Function: <b>get-text-property</b><var> pos prop &amp;optional object<a name="index-get_002dtext_002dproperty-2663"></a></var><br>
 <blockquote><p>This function returns the value of the <var>prop</var> property of the
 character after position <var>pos</var> in <var>object</var> (a buffer or
 string).  The argument <var>object</var> is optional and defaults to the
@@ -77,21 +77,21 @@ the <var>prop</var> property of that symbol.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-char-property</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty-2561"></a></var><br>
+&mdash; Function: <b>get-char-property</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty-2664"></a></var><br>
 <blockquote><p>This function is like <code>get-text-property</code>, except that it checks
 overlays first and then text properties.  See <a href="Overlays.html#Overlays">Overlays</a>.
 
-        <p>The argument <var>object</var> may be a string, a buffer, or a window.  If it
-is a window, then the buffer displayed in that window is used for text
-properties and overlays, but only the overlays active for that window
-are considered.  If <var>object</var> is a buffer, then all overlays in that
-buffer are considered, as well as text properties.  If <var>object</var> is a
-string, only text properties are considered, since strings never have
-overlays. 
+        <p>The argument <var>object</var> may be a string, a buffer, or a window.  If
+it is a window, then the buffer displayed in that window is used for
+text properties and overlays, but only the overlays active for that
+window are considered.  If <var>object</var> is a buffer, then overlays in
+that buffer are considered first, in order of decreasing priority,
+followed by the text properties.  If <var>object</var> is a string, only
+text properties are considered, since strings never have overlays. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-char-property-and-overlay</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty_002dand_002doverlay-2562"></a></var><br>
+&mdash; Function: <b>get-char-property-and-overlay</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty_002dand_002doverlay-2665"></a></var><br>
 <blockquote><p>This is like <code>get-char-property</code>, but gives extra information
 about the overlay that the property value comes from.
 
@@ -106,7 +106,7 @@ the <span class="sc">cdr</span> of the value are <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>char-property-alias-alist</b><var><a name="index-char_002dproperty_002dalias_002dalist-2563"></a></var><br>
+&mdash; Variable: <b>char-property-alias-alist</b><var><a name="index-char_002dproperty_002dalias_002dalist-2666"></a></var><br>
 <blockquote><p>This variable holds an alist which maps property names to a list of
 alternative property names.  If a character does not specify a direct
 value for a property, the alternative property names are consulted in
@@ -116,14 +116,14 @@ properties take precedence over this variable.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>text-properties-at</b><var> position &amp;optional object<a name="index-text_002dproperties_002dat-2564"></a></var><br>
+&mdash; Function: <b>text-properties-at</b><var> position &amp;optional object<a name="index-text_002dproperties_002dat-2667"></a></var><br>
 <blockquote><p>This function returns the entire property list of the character at
 <var>position</var> in the string or buffer <var>object</var>.  If <var>object</var> is
 <code>nil</code>, it defaults to the current buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>default-text-properties</b><var><a name="index-default_002dtext_002dproperties-2565"></a></var><br>
+&mdash; Variable: <b>default-text-properties</b><var><a name="index-default_002dtext_002dproperties-2668"></a></var><br>
 <blockquote><p>This variable holds a property list giving default values for text
 properties.  Whenever a character does not specify a value for a
 property, neither directly, through a category symbol, or through
@@ -136,8 +136,8 @@ used instead.  Here is an example:
           (set-text-properties 1 2 nil)
           ;; <span class="roman">What we get, when we ask, is the default value.</span>
           (get-text-property 1 'foo)
-               =&gt; 69
-     </pre>
+               &rArr; 69
+</pre>
         </blockquote></div>
 
    </body></html>

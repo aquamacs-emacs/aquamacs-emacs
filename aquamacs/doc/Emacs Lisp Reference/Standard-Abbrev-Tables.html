@@ -3,32 +3,33 @@
 <title>Standard Abbrev Tables - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
 <link rel="prev" href="Abbrev-Expansion.html#Abbrev-Expansion" title="Abbrev Expansion">
+<link rel="next" href="Abbrev-Properties.html#Abbrev-Properties" title="Abbrev Properties">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Standard-Abbrev-Tables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Expansion.html#Abbrev-Expansion">Abbrev Expansion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <hr>
@@ -59,7 +61,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 preloaded major modes of Emacs.
 
 <div class="defun">
-&mdash; Variable: <b>global-abbrev-table</b><var><a name="index-global_002dabbrev_002dtable-2990"></a></var><br>
+&mdash; Variable: <b>global-abbrev-table</b><var><a name="index-global_002dabbrev_002dtable-3159"></a></var><br>
 <blockquote><p>This is the abbrev table for mode-independent abbrevs.  The abbrevs
 defined in it apply to all buffers.  Each buffer may also have a local
 abbrev table, whose abbrev definitions take precedence over those in the
@@ -67,31 +69,36 @@ global table.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>local-abbrev-table</b><var><a name="index-local_002dabbrev_002dtable-2991"></a></var><br>
+&mdash; Variable: <b>local-abbrev-table</b><var><a name="index-local_002dabbrev_002dtable-3160"></a></var><br>
 <blockquote><p>The value of this buffer-local variable is the (mode-specific)
-abbreviation table of the current buffer. 
+abbreviation table of the current buffer.  It can also be a list of
+such tables. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>fundamental-mode-abbrev-table</b><var><a name="index-fundamental_002dmode_002dabbrev_002dtable-2992"></a></var><br>
+&mdash; Variable: <b>abbrev-minor-mode-table-alist</b><var><a name="index-abbrev_002dminor_002dmode_002dtable_002dalist-3161"></a></var><br>
+<blockquote><p>The value of this variable is a list of elements of the form
+<code>(</code><var>mode</var><code> . </code><var>abbrev-table</var><code>)</code> where <var>mode</var> is the name
+of a variable: if the variable is bound to a non-<code>nil</code> value,
+then the <var>abbrev-table</var> is active, otherwise it is ignored. 
+<var>abbrev-table</var> can also be a list of abbrev tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>fundamental-mode-abbrev-table</b><var><a name="index-fundamental_002dmode_002dabbrev_002dtable-3162"></a></var><br>
 <blockquote><p>This is the local abbrev table used in Fundamental mode; in other words,
 it is the local abbrev table in all buffers in Fundamental mode. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>text-mode-abbrev-table</b><var><a name="index-text_002dmode_002dabbrev_002dtable-2993"></a></var><br>
+&mdash; Variable: <b>text-mode-abbrev-table</b><var><a name="index-text_002dmode_002dabbrev_002dtable-3163"></a></var><br>
 <blockquote><p>This is the local abbrev table used in Text mode. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>lisp-mode-abbrev-table</b><var><a name="index-lisp_002dmode_002dabbrev_002dtable-2994"></a></var><br>
+&mdash; Variable: <b>lisp-mode-abbrev-table</b><var><a name="index-lisp_002dmode_002dabbrev_002dtable-3164"></a></var><br>
 <blockquote><p>This is the local abbrev table used in Lisp mode and Emacs Lisp mode. 
 </p></blockquote></div>
 
-<!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

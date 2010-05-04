@@ -3,33 +3,33 @@
 <title>Output Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Read-and-Print.html#Read-and-Print" title="Read and Print">
 <link rel="prev" href="Output-Streams.html#Output-Streams" title="Output Streams">
 <link rel="next" href="Output-Variables.html#Output-Variables" title="Output Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Output-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Output-Variables.html#Output-Variables">Output Variables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Output-Streams.html#Output-Streams">Output Streams</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
@@ -59,9 +59,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Rea
 <p>This section describes the Lisp functions for printing Lisp
 objects&mdash;converting objects into their printed representation.
 
-   <p><a name="index-g_t_0040samp_007b_0022_007d-in-printing-1019"></a><a name="index-g_t_0040samp_007b_005c_007d-in-printing-1020"></a><a name="index-quoting-characters-in-printing-1021"></a><a name="index-escape-characters-in-printing-1022"></a>  Some of the Emacs printing functions add quoting characters to the
+   <p><a name="index-g_t_0040samp_007b_0022_007d-in-printing-1050"></a><a name="index-g_t_0040samp_007b_005c_007d-in-printing-1051"></a><a name="index-quoting-characters-in-printing-1052"></a><a name="index-escape-characters-in-printing-1053"></a>  Some of the Emacs printing functions add quoting characters to the
 output when necessary so that it can be read properly.  The quoting
-characters used are `<samp><span class="samp">"</span></samp>' and `<samp><span class="samp">\</span></samp>'; they distinguish strings from
+characters used are &lsquo;<samp><span class="samp">"</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\</span></samp>&rsquo;; they distinguish strings from
 symbols, and prevent punctuation characters in strings and symbols from
 being taken as delimiters when reading.  See <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>,
 for full details.  You specify quoting or no quoting by the choice of
@@ -76,15 +76,15 @@ better to print without quoting.
    <p>Lisp objects can refer to themselves.  Printing a self-referential
 object in the normal way would require an infinite amount of text, and
 the attempt could cause infinite recursion.  Emacs detects such
-recursion and prints `<samp><span class="samp">#</span><var>level</var></samp>' instead of recursively printing
-an object already being printed.  For example, here `<samp><span class="samp">#0</span></samp>' indicates
+recursion and prints &lsquo;<samp><span class="samp">#</span><var>level</var></samp>&rsquo; instead of recursively printing
+an object already being printed.  For example, here &lsquo;<samp><span class="samp">#0</span></samp>&rsquo; indicates
 a recursive reference to the object at level 0 of the current print
 operation:
 
 <pre class="example">     (setq foo (list nil))
-          =&gt; (nil)
+          &rArr; (nil)
      (setcar foo foo)
-          =&gt; (#0)
+          &rArr; (#0)
 </pre>
    <p>In the functions below, <var>stream</var> stands for an output stream. 
 (See the previous section for a description of output streams.)  If
@@ -92,8 +92,8 @@ operation:
 <code>standard-output</code>.
 
 <div class="defun">
-&mdash; Function: <b>print</b><var> object &amp;optional stream<a name="index-print-1023"></a></var><br>
-<blockquote><p><a name="index-Lisp-printer-1024"></a>The <code>print</code> function is a convenient way of printing.  It outputs
+&mdash; Function: <b>print</b><var> object &amp;optional stream<a name="index-print-1054"></a></var><br>
+<blockquote><p><a name="index-Lisp-printer-1055"></a>The <code>print</code> function is a convenient way of printing.  It outputs
 the printed representation of <var>object</var> to <var>stream</var>, printing in
 addition one newline before <var>object</var> and another after it.  Quoting
 characters are used.  <code>print</code> returns <var>object</var>.  For example:
@@ -107,12 +107,12 @@ characters are used.  <code>print</code> returns <var>object</var>.  For example
                -| "the hat"
                -|
                -| " came back"
-               =&gt; " came back"
-     </pre>
+               &rArr; " came back"
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>prin1</b><var> object &amp;optional stream<a name="index-prin1-1025"></a></var><br>
+&mdash; Function: <b>prin1</b><var> object &amp;optional stream<a name="index-prin1-1056"></a></var><br>
 <blockquote><p>This function outputs the printed representation of <var>object</var> to
 <var>stream</var>.  It does not print newlines to separate output as
 <code>print</code> does, but it does use quoting characters just like
@@ -122,12 +122,12 @@ characters are used.  <code>print</code> returns <var>object</var>.  For example
                  (prin1 "the hat")
                  (prin1 " came back"))
                -| The\ cat\ in"the hat"" came back"
-               =&gt; " came back"
-     </pre>
+               &rArr; " came back"
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>princ</b><var> object &amp;optional stream<a name="index-princ-1026"></a></var><br>
+&mdash; Function: <b>princ</b><var> object &amp;optional stream<a name="index-princ-1057"></a></var><br>
 <blockquote><p>This function outputs the printed representation of <var>object</var> to
 <var>stream</var>.  It returns <var>object</var>.
 
@@ -140,56 +140,56 @@ spacing between calls.
             (princ 'The\ cat)
             (princ " in the \"hat\""))
                -| The cat in the "hat"
-               =&gt; " in the \"hat\""
-     </pre>
+               &rArr; " in the \"hat\""
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>terpri</b><var> &amp;optional stream<a name="index-terpri-1027"></a></var><br>
-<blockquote><p><a name="index-newline-in-print-1028"></a>This function outputs a newline to <var>stream</var>.  The name stands
+&mdash; Function: <b>terpri</b><var> &amp;optional stream<a name="index-terpri-1058"></a></var><br>
+<blockquote><p><a name="index-newline-in-print-1059"></a>This function outputs a newline to <var>stream</var>.  The name stands
 for &ldquo;terminate print.&rdquo;
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>write-char</b><var> character &amp;optional stream<a name="index-write_002dchar-1029"></a></var><br>
+&mdash; Function: <b>write-char</b><var> character &amp;optional stream<a name="index-write_002dchar-1060"></a></var><br>
 <blockquote><p>This function outputs <var>character</var> to <var>stream</var>.  It returns
 <var>character</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>prin1-to-string</b><var> object &amp;optional noescape<a name="index-prin1_002dto_002dstring-1030"></a></var><br>
-<blockquote><p><a name="index-object-to-string-1031"></a>This function returns a string containing the text that <code>prin1</code>
+&mdash; Function: <b>prin1-to-string</b><var> object &amp;optional noescape<a name="index-prin1_002dto_002dstring-1061"></a></var><br>
+<blockquote><p><a name="index-object-to-string-1062"></a>This function returns a string containing the text that <code>prin1</code>
 would have printed for the same argument.
 
      <pre class="example">          (prin1-to-string 'foo)
-               =&gt; "foo"
+               &rArr; "foo"
           (prin1-to-string (mark-marker))
-               =&gt; "#&lt;marker at 2773 in strings.texi&gt;"
-     </pre>
+               &rArr; "#&lt;marker at 2773 in strings.texi&gt;"
+</pre>
         <p>If <var>noescape</var> is non-<code>nil</code>, that inhibits use of quoting
 characters in the output.  (This argument is supported in Emacs versions
 19 and later.)
 
      <pre class="example">          (prin1-to-string "foo")
-               =&gt; "\"foo\""
+               &rArr; "\"foo\""
           (prin1-to-string "foo" t)
-               =&gt; "foo"
-     </pre>
+               &rArr; "foo"
+</pre>
         <p>See <code>format</code>, in <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>, for other ways to obtain
 the printed representation of a Lisp object as a string. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-output-to-string</b><var> body<small class="dots">...</small><a name="index-with_002doutput_002dto_002dstring-1032"></a></var><br>
+&mdash; Macro: <b>with-output-to-string</b><var> body<small class="dots">...</small><a name="index-with_002doutput_002dto_002dstring-1063"></a></var><br>
 <blockquote><p>This macro executes the <var>body</var> forms with <code>standard-output</code> set
 up to feed output into a string.  Then it returns that string.
 
-        <p>For example, if the current buffer name is `<samp><span class="samp">foo</span></samp>',
+        <p>For example, if the current buffer name is &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;,
 
      <pre class="example">          (with-output-to-string
             (princ "The buffer is ")
             (princ (buffer-name)))
-     </pre>
+</pre>
         <p class="noindent">returns <code>"The buffer is foo"</code>. 
 </p></blockquote></div>
 

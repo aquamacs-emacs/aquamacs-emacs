@@ -3,20 +3,20 @@
 <title>Header Editing - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mail-Mode.html#Mail-Mode" title="Mail Mode">
+<link rel="up" href="Mail-Commands.html#Mail-Commands" title="Mail Commands">
 <link rel="prev" href="Mail-Sending.html#Mail-Sending" title="Mail Sending">
 <link rel="next" href="Citing-Mail.html#Citing-Mail" title="Citing Mail">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,69 +47,51 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Header-Editing"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Citing-Mail.html#Citing-Mail">Citing Mail</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Sending.html#Mail-Sending">Mail Sending</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Mode.html#Mail-Mode">Mail Mode</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Commands.html#Mail-Commands">Mail Commands</a>
 <hr>
 </div>
 
 <h4 class="subsection">35.4.2 Mail Header Editing</h4>
 
-<p>Mail mode provides special commands to move to particular header
-fields and to complete addresses in headers.
+<p>Message mode provides the following special commands to move to
+particular header fields and to complete addresses in headers.
 
      <dl>
-<dt><kbd>C-c C-f C-t</kbd><dd>Move to the `<samp><span class="samp">To</span></samp>' header field, creating one if there is none
-(<code>mail-to</code>). 
-<br><dt><kbd>C-c C-f C-s</kbd><dd>Move to the `<samp><span class="samp">Subject</span></samp>' header field, creating one if there is
-none (<code>mail-subject</code>). 
-<br><dt><kbd>C-c C-f C-c</kbd><dd>Move to the `<samp><span class="samp">CC</span></samp>' header field, creating one if there is none
-(<code>mail-cc</code>). 
-<br><dt><kbd>C-c C-f C-b</kbd><dd>Move to the `<samp><span class="samp">BCC</span></samp>' header field, creating one if there is none
-(<code>mail-bcc</code>). 
-<br><dt><kbd>C-c C-f C-r</kbd><dd>Move to the `<samp><span class="samp">Reply-To</span></samp>' header field, creating one if there is none
-(<code>mail-reply-to</code>). 
-<br><dt><kbd>C-c C-f C-a</kbd><dd>Move to the `<samp><span class="samp">Mail-Reply-To</span></samp>' header field, creating one if there is none
-(<code>mail-mail-reply-to</code>). 
-<br><dt><kbd>C-c C-f C-l</kbd><dd>Move to the `<samp><span class="samp">Mail-Followup-To</span></samp>' header field, creating one if there is none
-(<code>mail-mail-followup-to</code>). 
-<br><dt><kbd>C-c C-f C-f</kbd><dd>Add a new `<samp><span class="samp">FCC</span></samp>' header field, with file-name completion
-(<code>mail-fcc</code>). 
-<!-- There is also C-c C-v, mail-sent-via, which adds one or more -->
-<!-- "Sent-via" headers, but I don't know what the point of that header is. -->
-<br><dt><kbd>M-&lt;TAB&gt;</kbd><dd>Complete a mailing address (<code>mail-complete</code>). 
+<dt><kbd>C-c C-f C-t</kbd><dd>Move to the &lsquo;<samp><span class="samp">To</span></samp>&rsquo; header (<code>message-goto-to</code>). 
+<br><dt><kbd>C-c C-f C-s</kbd><dd>Move to the &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo; header (<code>message-goto-subject</code>). 
+<br><dt><kbd>C-c C-f C-c</kbd><dd>Move to the &lsquo;<samp><span class="samp">CC</span></samp>&rsquo; header (<code>message-goto-cc</code>). 
+<br><dt><kbd>C-c C-f C-b</kbd><dd>Move to the &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo; header (<code>message-goto-bcc</code>). 
+<br><dt><kbd>C-c C-f C-r</kbd><dd>Move to the &lsquo;<samp><span class="samp">Reply-To</span></samp>&rsquo; header (<code>message-goto-reply-to</code>). 
+<br><dt><kbd>C-c C-f C-f</kbd><dd>Move to the &lsquo;<samp><span class="samp">Mail-Followup-To</span></samp>&rsquo; header field
+(<code>message-goto-followup-to</code>). 
+<br><dt><kbd>C-c C-f C-w</kbd><dd>Add a new &lsquo;<samp><span class="samp">FCC</span></samp>&rsquo; header field, with file-name completion
+(<code>message-goto-fcc</code>). 
+<br><dt><kbd>C-c C-b</kbd><dd>Move to the start of the message body (<code>message-goto-body</code>). 
+<br><dt><kbd>&lt;TAB&gt;</kbd><dd>Complete a mailing address (<code>message-tab</code>). 
 </dl>
 
-   <p><a name="index-C_002dc-C_002df-C_002dt-_0040r_007b_0028Mail-mode_0029_007d-2705"></a><a name="index-mail_002dto-2706"></a><a name="index-C_002dc-C_002df-C_002ds-_0040r_007b_0028Mail-mode_0029_007d-2707"></a><a name="index-mail_002dsubject-2708"></a><a name="index-C_002dc-C_002df-C_002dc-_0040r_007b_0028Mail-mode_0029_007d-2709"></a><a name="index-mail_002dcc-2710"></a><a name="index-C_002dc-C_002df-C_002db-_0040r_007b_0028Mail-mode_0029_007d-2711"></a><a name="index-mail_002dbcc-2712"></a><a name="index-C_002dc-C_002df-C_002dr-_0040r_007b_0028Mail-mode_0029_007d-2713"></a><a name="index-mail_002dreply_002dto-2714"></a><a name="index-C_002dc-C_002df-C_002da-_0040r_007b_0028Mail-mode_0029_007d-2715"></a><a name="index-mail_002dmail_002dreply_002dto-2716"></a><a name="index-C_002dc-C_002df-C_002dl-_0040r_007b_0028Mail-mode_0029_007d-2717"></a><a name="index-mail_002dmail_002dfollowup_002dto-2718"></a><a name="index-C_002dc-C_002df-C_002df-_0040r_007b_0028Mail-mode_0029_007d-2719"></a><a name="index-mail_002dfcc-2720"></a>  There are several commands to move point to particular header fields,
-all based on the prefix <kbd>C-c C-f</kbd> (`<samp><span class="samp">C-f</span></samp>' is for &ldquo;field&rdquo;). 
-They are listed in the table above.  If the field in question does not
-exist, these commands create one (the exception is <code>mail-fcc</code>,
-which creates a new field each time).  We provide special motion
-commands for these particular fields because they are the fields users
-most often want to edit.
+   <p><a name="index-C_002dc-C_002df-C_002dt-_0040r_007b_0028Message-mode_0029_007d-2725"></a><a name="index-message_002dgoto_002dto-2726"></a><a name="index-C_002dc-C_002df-C_002ds-_0040r_007b_0028Message-mode_0029_007d-2727"></a><a name="index-message_002dgoto_002dsubject-2728"></a><a name="index-C_002dc-C_002df-C_002dc-_0040r_007b_0028Message-mode_0029_007d-2729"></a><a name="index-message_002dgoto_002dcc-2730"></a><a name="index-C_002dc-C_002df-C_002db-_0040r_007b_0028Message-mode_0029_007d-2731"></a><a name="index-message_002dgoto_002dbcc-2732"></a><a name="index-C_002dc-C_002df-C_002dr-_0040r_007b_0028Message-mode_0029_007d-2733"></a><a name="index-goto_002dreply_002dto-2734"></a><a name="index-C_002dc-C_002df-C_002df-_0040r_007b_0028Message-mode_0029_007d-2735"></a><a name="index-goto_002dfollowup_002dto-2736"></a><a name="index-C_002dc-C_002df-C_002dw-_0040r_007b_0028Message-mode_0029_007d-2737"></a><a name="index-message_002dgoto_002dfcc-2738"></a>  The commands to move point to particular header fields are all based
+on the prefix <kbd>C-c C-f</kbd> (&lsquo;<samp><span class="samp">C-f</span></samp>&rsquo; is for &ldquo;field&rdquo;).  If the
+field in question does not exist, the command creates one (the
+exception is <code>mail-fcc</code>, which creates a new field each time).
 
-   <p><a name="index-mail_002dcomplete-2721"></a><a name="index-M_002dTAB-_0040r_007b_0028Mail-mode_0029_007d-2722"></a><!-- `mail-complete-alist' specifies the headers. -->
-  While editing a header field that contains mailing addresses, such
-as `<samp><span class="samp">To:</span></samp>', `<samp><span class="samp">CC:</span></samp>' and `<samp><span class="samp">BCC:</span></samp>', you can complete a mailing
-address by typing <kbd>M-&lt;TAB&gt;</kbd> (<code>mail-complete</code>).  It
-inserts the full name corresponding to the address, if it can
-determine the full name.  The variable <code>mail-complete-style</code>
-controls whether to insert the full name, and what style to use, as in
-<code>mail-from-style</code> (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>).  (If your window
-manager defines <kbd>M-&lt;TAB&gt;</kbd> to switch windows, you can type
-<kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd>.)
+   <p><a name="index-C_002dc-C_002db-_0040r_007b_0028Message-mode_0029_007d-2739"></a><a name="index-mail_002dtext-2740"></a>  The command <kbd>C-c C-b</kbd> (<code>message-goto-body</code>) moves point to
+just after the header separator line&mdash;that is, to the beginning of
+the body.
 
-   <p>For completion purposes, the valid mailing addresses are taken to be
-the local users' names plus your personal mail aliases (see <a href="Mail-Aliases.html#Mail-Aliases">Mail Aliases</a>).  You can specify additional sources of valid addresses;
-browse the customization group `<samp><span class="samp">mailalias</span></samp>' to see the variables for
-customizing this feature (see <a href="Customization-Groups.html#Customization-Groups">Customization Groups</a>).
-
-   <p>If you type <kbd>M-&lt;TAB&gt;</kbd> in the body of the message, or on a
-unrecognized header, <code>mail-complete</code> invokes the function specified
-by <code>mail-complete-function</code>.  By default, this is
-<code>ispell-complete-word</code>, as in Text mode.
+   <p><a name="index-message_002dtab-2741"></a><a name="index-TAB-_0040r_007b_0028Message-mode_0029_007d-2742"></a>  While editing a header field that contains addresses, such as
+&lsquo;<samp><span class="samp">To:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">CC:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">BCC:</span></samp>&rsquo;, you can complete an address by
+typing &lt;TAB&gt; (<code>message-tab</code>).  This attempts to insert the
+full name corresponding to the address based on a couple of methods,
+including EUDC, a library that recognizes a number of directory server
+protocols (see <a href="../eudc/index.html#Top">EUDC</a>).  Failing that, it attempts to expand the address as a mail
+alias (see <a href="Mail-Aliases.html#Mail-Aliases">Mail Aliases</a>).  If point is on a header field that does
+not take addresses, or if it is in the message body, then &lt;TAB&gt;
+just inserts a tab character.
 
    </body></html>
 

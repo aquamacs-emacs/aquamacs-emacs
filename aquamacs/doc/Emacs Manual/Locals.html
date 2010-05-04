@@ -3,7 +3,7 @@
 <title>Locals - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="Hooks.html#Hooks" title="Hooks">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Locals"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="File-Variables.html#File-Variables">File Variables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Hooks.html#Hooks">Hooks</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
@@ -64,18 +64,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 buffer that is current at that time. 
 </dl>
 
-   <p><a name="index-local-variables-3959"></a>  Almost any variable can be made <dfn>local</dfn> to a specific Emacs
+   <p><a name="index-local-variables-3983"></a>  Almost any variable can be made <dfn>local</dfn> to a specific Emacs
 buffer.  This means that its value in that buffer is independent of its
 value in other buffers.  A few variables are always local in every
 buffer.  Every other Emacs variable has a <dfn>global</dfn> value which is in
 effect in all buffers that have not made the variable local.
 
-   <p><a name="index-make_002dlocal_002dvariable-3960"></a>  <kbd>M-x make-local-variable</kbd> reads the name of a variable and makes
+   <p><a name="index-make_002dlocal_002dvariable-3984"></a>  <kbd>M-x make-local-variable</kbd> reads the name of a variable and makes
 it local to the current buffer.  Changing its value subsequently in
 this buffer will not affect others, and changes in its global value
 will not affect this buffer.
 
-   <p><a name="index-make_002dvariable_002dbuffer_002dlocal-3961"></a><a name="index-per_002dbuffer-variables-3962"></a>  <kbd>M-x make-variable-buffer-local</kbd> marks a variable so it will
+   <p><a name="index-make_002dvariable_002dbuffer_002dlocal-3985"></a><a name="index-per_002dbuffer-variables-3986"></a>  <kbd>M-x make-variable-buffer-local</kbd> marks a variable so it will
 become local automatically whenever it is set.  More precisely, once a
 variable has been marked in this way, the usual ways of setting the
 variable automatically do <code>make-local-variable</code> first.  We call
@@ -98,13 +98,13 @@ it local in a specific buffer like any other variable.
 local to each display instead (see <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>).  If you try to
 make one of these variables buffer-local, you'll get an error message.
 
-   <p><a name="index-kill_002dlocal_002dvariable-3963"></a>  <kbd>M-x kill-local-variable</kbd> makes a specified variable cease to be
+   <p><a name="index-kill_002dlocal_002dvariable-3987"></a>  <kbd>M-x kill-local-variable</kbd> makes a specified variable cease to be
 local to the current buffer.  The global value of the variable
 henceforth is in effect in this buffer.  Setting the major mode kills
 all the local variables of the buffer except for a few variables
 specially marked as <dfn>permanent locals</dfn>.
 
-   <p><a name="index-setq_002ddefault-3964"></a>  To set the global value of a variable, regardless of whether the
+   <p><a name="index-setq_002ddefault-3988"></a>  To set the global value of a variable, regardless of whether the
 variable has a local value in the current buffer, you can use the Lisp
 construct <code>setq-default</code>.  This construct is used just like
 <code>setq</code>, but it sets variables' global values instead of their local
@@ -117,7 +117,7 @@ Here is an example:
    <p class="noindent"><code>setq-default</code> is the only way to set the global value of a variable
 that has been marked with <code>make-variable-buffer-local</code>.
 
-   <p><a name="index-default_002dvalue-3965"></a>  Lisp programs can use <code>default-value</code> to look at a variable's
+   <p><a name="index-default_002dvalue-3989"></a>  Lisp programs can use <code>default-value</code> to look at a variable's
 default value.  This function takes a symbol as argument and returns its
 default value.  The argument is evaluated; usually you must quote it
 explicitly.  For example, here's how to obtain the default value of

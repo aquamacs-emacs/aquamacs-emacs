@@ -3,7 +3,7 @@
 <title>International Chars - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="International.html#International" title="International">
 <link rel="next" href="Enabling-Multibyte.html#Enabling-Multibyte" title="Enabling Multibyte">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="International-Chars"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Enabling-Multibyte.html#Enabling-Multibyte">Enabling Multibyte</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
 <hr>
@@ -61,17 +61,17 @@ files.  These coding systems are typically <dfn>multibyte</dfn>, meaning
 that sequences of two or more bytes are used to represent individual
 non-<acronym>ASCII</acronym> characters.
 
-   <p><a name="index-Unicode-1334"></a>  Internally, Emacs uses its own multibyte character encoding, which
+   <p><a name="index-Unicode-1350"></a>  Internally, Emacs uses its own multibyte character encoding, which
 is a superset of the <dfn>Unicode</dfn> standard.  This internal encoding
 allows characters from almost every known script to be intermixed in a
 single buffer or string.  Emacs translates between the multibyte
 character encoding and various other coding systems when reading and
 writing files, and when exchanging data with subprocesses.
 
-   <p><a name="index-C_002dh-h-1335"></a><a name="index-view_002dhello_002dfile-1336"></a><a name="index-undisplayable-characters-1337"></a><a name="index-g_t_0040samp_007b_003f_007d-in-display-1338"></a>  The command <kbd>C-h h</kbd> (<code>view-hello-file</code>) displays the file
+   <p><a name="index-C_002dh-h-1351"></a><a name="index-view_002dhello_002dfile-1352"></a><a name="index-undisplayable-characters-1353"></a><a name="index-g_t_0040samp_007b_003f_007d-in-display-1354"></a>  The command <kbd>C-h h</kbd> (<code>view-hello-file</code>) displays the file
 <samp><span class="file">etc/HELLO</span></samp>, which shows how to say &ldquo;hello&rdquo; in many languages. 
 This illustrates various scripts.  If some characters can't be
-displayed on your terminal, they appear as `<samp><span class="samp">?</span></samp>' or as hollow boxes
+displayed on your terminal, they appear as &lsquo;<samp><span class="samp">?</span></samp>&rsquo; or as hollow boxes
 (see <a href="Undisplayable-Characters.html#Undisplayable-Characters">Undisplayable Characters</a>).
 
    <p>Keyboards, even in the countries where these character sets are
@@ -83,35 +83,35 @@ various <dfn>input methods</dfn>, typically one for each script or
 language, which make it easier to type characters in the script. 
 See <a href="Input-Methods.html#Input-Methods">Input Methods</a>.
 
-   <p><a name="index-C_002dx-RET-1339"></a>  The prefix key <kbd>C-x &lt;RET&gt;</kbd> is used for commands that pertain
+   <p><a name="index-C_002dx-RET-1355"></a>  The prefix key <kbd>C-x &lt;RET&gt;</kbd> is used for commands that pertain
 to multibyte characters, coding systems, and input methods.
 
-   <p><a name="index-C_002dx-_003d-1340"></a><a name="index-what_002dcursor_002dposition-1341"></a>  The command <kbd>C-x =</kbd> (<code>what-cursor-position</code>) shows
+   <p><a name="index-C_002dx-_003d-1356"></a><a name="index-what_002dcursor_002dposition-1357"></a>  The command <kbd>C-x =</kbd> (<code>what-cursor-position</code>) shows
 information about the character at point.  In addition to the
 character position, which was described in <a href="Position-Info.html#Position-Info">Position Info</a>, this
 command displays how the character is encoded.  For instance, it
 displays the following line in the echo area for the character
-`<samp><span class="samp">c</span></samp>':
+&lsquo;<samp><span class="samp">c</span></samp>&rsquo;:
 
 <pre class="smallexample">     Char: c (99, #o143, #x63) point=28062 of 36168 (78%) column=53
 </pre>
-   <p>The four values after `<samp><span class="samp">Char:</span></samp>' describe the character that
+   <p>The four values after &lsquo;<samp><span class="samp">Char:</span></samp>&rsquo; describe the character that
 follows point, first by showing it and then by giving its character
 code in decimal, octal and hex.  For a non-<acronym>ASCII</acronym> multibyte
-character, these are followed by `<samp><span class="samp">file</span></samp>' and the character's
+character, these are followed by &lsquo;<samp><span class="samp">file</span></samp>&rsquo; and the character's
 representation, in hex, in the buffer's coding system, if that coding
 system encodes the character safely and with a single byte
 (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).  If the character's encoding is longer than
-one byte, Emacs shows `<samp><span class="samp">file ...</span></samp>'.
+one byte, Emacs shows &lsquo;<samp><span class="samp">file ...</span></samp>&rsquo;.
 
    <p>As a special case, if the character lies in the range 128 (0200
 octal) through 159 (0237 octal), it stands for a &ldquo;raw&rdquo; byte that
 does not correspond to any specific displayable character.  Such a
 &ldquo;character&rdquo; lies within the <code>eight-bit-control</code> character set,
 and is displayed as an escaped octal character code.  In this case,
-<kbd>C-x =</kbd> shows `<samp><span class="samp">part of display ...</span></samp>' instead of `<samp><span class="samp">file</span></samp>'.
+<kbd>C-x =</kbd> shows &lsquo;<samp><span class="samp">part of display ...</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">file</span></samp>&rsquo;.
 
-   <p><a name="index-character-set-of-character-at-point-1342"></a><a name="index-font-of-character-at-point-1343"></a><a name="index-text-properties-at-point-1344"></a><a name="index-face-at-point-1345"></a>  With a prefix argument (<kbd>C-u C-x =</kbd>), this command displays a
+   <p><a name="index-character-set-of-character-at-point-1358"></a><a name="index-font-of-character-at-point-1359"></a><a name="index-text-properties-at-point-1360"></a><a name="index-face-at-point-1361"></a>  With a prefix argument (<kbd>C-u C-x =</kbd>), this command displays a
 detailed description of the character in a window:
 
      <ul>

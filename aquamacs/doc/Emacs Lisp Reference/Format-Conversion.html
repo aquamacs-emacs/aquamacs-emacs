@@ -3,32 +3,32 @@
 <title>Format Conversion - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Magic-File-Names.html#Magic-File-Names" title="Magic File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Format-Conversion"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
@@ -54,159 +54,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.12 File Format Conversion</h3>
 
-<p><a name="index-file-format-conversion-1835"></a><a name="index-encoding-file-formats-1836"></a><a name="index-decoding-file-formats-1837"></a>  The variable <code>format-alist</code> defines a list of <dfn>file formats</dfn>,
-which describe textual representations used in files for the data (text,
-text-properties, and possibly other information) in an Emacs buffer. 
-Emacs performs format conversion if appropriate when reading and writing
-files.
+<p><a name="index-file-format-conversion-1896"></a><a name="index-encoding-file-formats-1897"></a><a name="index-decoding-file-formats-1898"></a><a name="index-text-properties-in-files-1899"></a><a name="index-saving-text-properties-1900"></a>  Emacs performs several steps to convert the data in a buffer (text,
+text properties, and possibly other information) to and from a
+representation suitable for storing into a file.  This section describes
+the fundamental functions that perform this <dfn>format conversion</dfn>,
+namely <code>insert-file-contents</code> for reading a file into a buffer,
+and <code>write-region</code> for writing a buffer into a file.
 
-<div class="defun">
-&mdash; Variable: <b>format-alist</b><var><a name="index-format_002dalist-1838"></a></var><br>
-<blockquote><p>This list contains one format definition for each defined file format. 
-</p></blockquote></div>
-
-   <p><a name="index-format-definition-1839"></a>Each format definition is a list of this form:
-
-<pre class="example">     (<var>name</var> <var>doc-string</var> <var>regexp</var> <var>from-fn</var> <var>to-fn</var> <var>modify</var> <var>mode-fn</var>)
-</pre>
-   <p>Here is what the elements in a format definition mean:
-
-     <dl>
-<dt><var>name</var><dd>The name of this format.
-
-     <br><dt><var>doc-string</var><dd>A documentation string for the format.
-
-     <br><dt><var>regexp</var><dd>A regular expression which is used to recognize files represented in
-this format.
-
-     <br><dt><var>from-fn</var><dd>A shell command or function to decode data in this format (to convert
-file data into the usual Emacs data representation).
-
-     <p>A shell command is represented as a string; Emacs runs the command as a
-filter to perform the conversion.
-
-     <p>If <var>from-fn</var> is a function, it is called with two arguments, <var>begin</var>
-and <var>end</var>, which specify the part of the buffer it should convert. 
-It should convert the text by editing it in place.  Since this can
-change the length of the text, <var>from-fn</var> should return the modified
-end position.
-
-     <p>One responsibility of <var>from-fn</var> is to make sure that the beginning
-of the file no longer matches <var>regexp</var>.  Otherwise it is likely to
-get called again.
-
-     <br><dt><var>to-fn</var><dd>A shell command or function to encode data in this format&mdash;that is, to
-convert the usual Emacs data representation into this format.
-
-     <p>If <var>to-fn</var> is a string, it is a shell command; Emacs runs the
-command as a filter to perform the conversion.
-
-     <p>If <var>to-fn</var> is a function, it is called with three arguments:
-<var>begin</var> and <var>end</var>, which specify the part of the buffer it
-should convert, and <var>buffer</var>, which specifies which buffer.  There
-are two ways it can do the conversion:
-
-          <ul>
-<li>By editing the buffer in place.  In this case, <var>to-fn</var> should
-return the end-position of the range of text, as modified.
-
-          <li>By returning a list of annotations.  This is a list of elements of the
-form <code>(</code><var>position</var><code> . </code><var>string</var><code>)</code>, where <var>position</var> is an
-integer specifying the relative position in the text to be written, and
-<var>string</var> is the annotation to add there.  The list must be sorted in
-order of position when <var>to-fn</var> returns it.
-
-          <p>When <code>write-region</code> actually writes the text from the buffer to the
-file, it intermixes the specified annotations at the corresponding
-positions.  All this takes place without modifying the buffer. 
+<ul class="menu">
+<li><a accesskey="1" href="Format-Conversion-Overview.html#Format-Conversion-Overview">Overview</a>:      <code>insert-file-contents</code> and <code>write-region</code>. 
+<li><a accesskey="2" href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip">Round-Trip</a>:  Using <code>format-alist</code>. 
+<li><a accesskey="3" href="Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal">Piecemeal</a>:    Specifying non-paired conversion. 
 </ul>
 
-     <br><dt><var>modify</var><dd>A flag, <code>t</code> if the encoding function modifies the buffer, and
-<code>nil</code> if it works by returning a list of annotations.
-
-     <br><dt><var>mode-fn</var><dd>A minor-mode function to call after visiting a file converted from this
-format.  The function is called with one argument, the integer 1;
-that tells a minor-mode function to enable the mode. 
-</dl>
-
-   <p>The function <code>insert-file-contents</code> automatically recognizes file
-formats when it reads the specified file.  It checks the text of the
-beginning of the file against the regular expressions of the format
-definitions, and if it finds a match, it calls the decoding function for
-that format.  Then it checks all the known formats over again. 
-It keeps checking them until none of them is applicable.
-
-   <p>Visiting a file, with <code>find-file-noselect</code> or the commands that use
-it, performs conversion likewise (because it calls
-<code>insert-file-contents</code>); it also calls the mode function for each
-format that it decodes.  It stores a list of the format names in the
-buffer-local variable <code>buffer-file-format</code>.
-
-<div class="defun">
-&mdash; Variable: <b>buffer-file-format</b><var><a name="index-buffer_002dfile_002dformat-1840"></a></var><br>
-<blockquote><p>This variable states the format of the visited file.  More precisely,
-this is a list of the file format names that were decoded in the course
-of visiting the current buffer's file.  It is always buffer-local in all
-buffers. 
-</p></blockquote></div>
-
-   <p>When <code>write-region</code> writes data into a file, it first calls the
-encoding functions for the formats listed in <code>buffer-file-format</code>,
-in the order of appearance in the list.
-
-<div class="defun">
-&mdash; Command: <b>format-write-file</b><var> file format &amp;optional confirm<a name="index-format_002dwrite_002dfile-1841"></a></var><br>
-<blockquote><p>This command writes the current buffer contents into the file
-<var>file</var> in format <var>format</var>, and makes that format the default
-for future saves of the buffer.  The argument <var>format</var> is a list
-of format names.  Except for the <var>format</var> argument, this command
-is similar to <code>write-file</code>.  In particular, <var>confirm</var> has the
-same meaning and interactive treatment as the corresponding argument
-to <code>write-file</code>.  See <a href="Definition-of-write_002dfile.html#Definition-of-write_002dfile">Definition of write-file</a>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Command: <b>format-find-file</b><var> file format<a name="index-format_002dfind_002dfile-1842"></a></var><br>
-<blockquote><p>This command finds the file <var>file</var>, converting it according to
-format <var>format</var>.  It also makes <var>format</var> the default if the
-buffer is saved later.
-
-        <p>The argument <var>format</var> is a list of format names.  If <var>format</var> is
-<code>nil</code>, no conversion takes place.  Interactively, typing just
-&lt;RET&gt; for <var>format</var> specifies <code>nil</code>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Command: <b>format-insert-file</b><var> file format &amp;optional beg end<a name="index-format_002dinsert_002dfile-1843"></a></var><br>
-<blockquote><p>This command inserts the contents of file <var>file</var>, converting it
-according to format <var>format</var>.  If <var>beg</var> and <var>end</var> are
-non-<code>nil</code>, they specify which part of the file to read, as in
-<code>insert-file-contents</code> (see <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>).
-
-        <p>The return value is like what <code>insert-file-contents</code> returns: a
-list of the absolute file name and the length of the data inserted
-(after conversion).
-
-        <p>The argument <var>format</var> is a list of format names.  If <var>format</var> is
-<code>nil</code>, no conversion takes place.  Interactively, typing just
-&lt;RET&gt; for <var>format</var> specifies <code>nil</code>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Variable: <b>buffer-auto-save-file-format</b><var><a name="index-buffer_002dauto_002dsave_002dfile_002dformat-1844"></a></var><br>
-<blockquote><p>This variable specifies the format to use for auto-saving.  Its value is
-a list of format names, just like the value of
-<code>buffer-file-format</code>; however, it is used instead of
-<code>buffer-file-format</code> for writing auto-save files.  If the value
-is <code>t</code>, the default, auto-saving uses the same format as a
-regular save in the same buffer.  This variable is always buffer-local
-in all buffers. 
-</p></blockquote></div>
-
-<!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1999, 2001, 2002, 2003, -->
-<!-- 2004, 2005, 2006, 2007  Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-</body></html>
+   </body></html>
 

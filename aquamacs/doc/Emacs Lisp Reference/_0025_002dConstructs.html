@@ -3,33 +3,33 @@
 <title>%-Constructs - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
 <link rel="prev" href="Mode-Line-Variables.html#Mode-Line-Variables" title="Mode Line Variables">
 <link rel="next" href="Properties-in-Mode.html#Properties-in-Mode" title="Properties in Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,9 +46,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="%25-Constructs"></a>
 <a name="g_t_0025_002dConstructs"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Properties-in-Mode.html#Properties-in-Mode">Properties in Mode</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
@@ -60,8 +60,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format"
 <p>Strings used as mode-line constructs can use certain
 <code>%</code>-constructs to substitute various kinds of data.  Here is a
 list of the defined <code>%</code>-constructs, and what they mean.  In any
-construct except `<samp><span class="samp">%%</span></samp>', you can add a decimal integer after the
-`<samp><span class="samp">%</span></samp>' to specify a minimum field width.  If the width is less, the
+construct except &lsquo;<samp><span class="samp">%%</span></samp>&rsquo;, you can add a decimal integer after the
+&lsquo;<samp><span class="samp">%</span></samp>&rsquo; to specify a minimum field width.  If the width is less, the
 field is padded with spaces to the right.
 
      <dl>
@@ -82,24 +82,24 @@ See <a href="Basic-Parameters.html#Basic-Parameters">Basic Parameters</a>.
      <br><dt><code>%i</code><dd>The size of the accessible part of the current buffer; basically
 <code>(- (point-max) (point-min))</code>.
 
-     <br><dt><code>%I</code><dd>Like `<samp><span class="samp">%i</span></samp>', but the size is printed in a more readable way by using
-`<samp><span class="samp">k</span></samp>' for 10^3, `<samp><span class="samp">M</span></samp>' for 10^6, `<samp><span class="samp">G</span></samp>' for 10^9, etc., to
+     <br><dt><code>%I</code><dd>Like &lsquo;<samp><span class="samp">%i</span></samp>&rsquo;, but the size is printed in a more readable way by using
+&lsquo;<samp><span class="samp">k</span></samp>&rsquo; for 10^3, &lsquo;<samp><span class="samp">M</span></samp>&rsquo; for 10^6, &lsquo;<samp><span class="samp">G</span></samp>&rsquo; for 10^9, etc., to
 abbreviate.
 
      <br><dt><code>%l</code><dd>The current line number of point, counting within the accessible portion
 of the buffer.
 
-     <br><dt><code>%n</code><dd>`<samp><span class="samp">Narrow</span></samp>' when narrowing is in effect; nothing otherwise (see
+     <br><dt><code>%n</code><dd>&lsquo;<samp><span class="samp">Narrow</span></samp>&rsquo; when narrowing is in effect; nothing otherwise (see
 <code>narrow-to-region</code> in <a href="Narrowing.html#Narrowing">Narrowing</a>).
 
      <br><dt><code>%p</code><dd>The percentage of the buffer text above the <strong>top</strong> of window, or
-`<samp><span class="samp">Top</span></samp>', `<samp><span class="samp">Bottom</span></samp>' or `<samp><span class="samp">All</span></samp>'.  Note that the default
+&lsquo;<samp><span class="samp">Top</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Bottom</span></samp>&rsquo; or &lsquo;<samp><span class="samp">All</span></samp>&rsquo;.  Note that the default
 mode-line specification truncates this to three characters.
 
      <br><dt><code>%P</code><dd>The percentage of the buffer text that is above the <strong>bottom</strong> of
 the window (which includes the text visible in the window, as well as
-the text above the top), plus `<samp><span class="samp">Top</span></samp>' if the top of the buffer is
-visible on screen; or `<samp><span class="samp">Bottom</span></samp>' or `<samp><span class="samp">All</span></samp>'.
+the text above the top), plus &lsquo;<samp><span class="samp">Top</span></samp>&rsquo; if the top of the buffer is
+visible on screen; or &lsquo;<samp><span class="samp">Bottom</span></samp>&rsquo; or &lsquo;<samp><span class="samp">All</span></samp>&rsquo;.
 
      <br><dt><code>%s</code><dd>The status of the subprocess belonging to the current buffer, obtained with
 <code>process-status</code>.  See <a href="Process-Information.html#Process-Information">Process Information</a>.
@@ -109,29 +109,29 @@ meaningful distinction only on certain operating systems (see <a href="MS_002dDO
 
      <br><dt><code>%z</code><dd>The mnemonics of keyboard, terminal, and buffer coding systems.
 
-     <br><dt><code>%Z</code><dd>Like `<samp><span class="samp">%z</span></samp>', but including the end-of-line format.
+     <br><dt><code>%Z</code><dd>Like &lsquo;<samp><span class="samp">%z</span></samp>&rsquo;, but including the end-of-line format.
 
-     <br><dt><code>%*</code><dd>`<samp><span class="samp">%</span></samp>' if the buffer is read only (see <code>buffer-read-only</code>); <br>
-`<samp><span class="samp">*</span></samp>' if the buffer is modified (see <code>buffer-modified-p</code>); <br>
-`<samp><span class="samp">-</span></samp>' otherwise.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
+     <br><dt><code>%*</code><dd>&lsquo;<samp><span class="samp">%</span></samp>&rsquo; if the buffer is read only (see <code>buffer-read-only</code>); <br>
+&lsquo;<samp><span class="samp">*</span></samp>&rsquo; if the buffer is modified (see <code>buffer-modified-p</code>); <br>
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo; otherwise.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
 
-     <br><dt><code>%+</code><dd>`<samp><span class="samp">*</span></samp>' if the buffer is modified (see <code>buffer-modified-p</code>); <br>
-`<samp><span class="samp">%</span></samp>' if the buffer is read only (see <code>buffer-read-only</code>); <br>
-`<samp><span class="samp">-</span></samp>' otherwise.  This differs from `<samp><span class="samp">%*</span></samp>' only for a modified
+     <br><dt><code>%+</code><dd>&lsquo;<samp><span class="samp">*</span></samp>&rsquo; if the buffer is modified (see <code>buffer-modified-p</code>); <br>
+&lsquo;<samp><span class="samp">%</span></samp>&rsquo; if the buffer is read only (see <code>buffer-read-only</code>); <br>
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo; otherwise.  This differs from &lsquo;<samp><span class="samp">%*</span></samp>&rsquo; only for a modified
 read-only buffer.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
 
-     <br><dt><code>%&amp;</code><dd>`<samp><span class="samp">*</span></samp>' if the buffer is modified, and `<samp><span class="samp">-</span></samp>' otherwise.
+     <br><dt><code>%&amp;</code><dd>&lsquo;<samp><span class="samp">*</span></samp>&rsquo; if the buffer is modified, and &lsquo;<samp><span class="samp">-</span></samp>&rsquo; otherwise.
 
      <br><dt><code>%[</code><dd>An indication of the depth of recursive editing levels (not counting
-minibuffer levels): one `<samp><span class="samp">[</span></samp>' for each editing level. 
+minibuffer levels): one &lsquo;<samp><span class="samp">[</span></samp>&rsquo; for each editing level. 
 See <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>.
 
-     <br><dt><code>%]</code><dd>One `<samp><span class="samp">]</span></samp>' for each recursive editing level (not counting minibuffer
+     <br><dt><code>%]</code><dd>One &lsquo;<samp><span class="samp">]</span></samp>&rsquo; for each recursive editing level (not counting minibuffer
 levels).
 
      <br><dt><code>%-</code><dd>Dashes sufficient to fill the remainder of the mode line.
 
-     <br><dt><code>%%</code><dd>The character `<samp><span class="samp">%</span></samp>'&mdash;this is how to include a literal `<samp><span class="samp">%</span></samp>' in a
+     <br><dt><code>%%</code><dd>The character &lsquo;<samp><span class="samp">%</span></samp>&rsquo;&mdash;this is how to include a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo; in a
 string in which <code>%</code>-constructs are allowed. 
 </dl>
 

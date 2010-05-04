@@ -3,33 +3,33 @@
 <title>Overlay Properties - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Overlays.html#Overlays" title="Overlays">
 <link rel="prev" href="Managing-Overlays.html#Managing-Overlays" title="Managing Overlays">
 <link rel="next" href="Finding-Overlays.html#Finding-Overlays" title="Finding Overlays">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Overlay-Properties"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Finding-Overlays.html#Finding-Overlays">Finding Overlays</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Managing-Overlays.html#Managing-Overlays">Managing Overlays</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Overlays.html#Overlays">Overlays</a>
@@ -69,10 +69,15 @@ while moving an overlay or changing its properties does not.  Unlike
 text property changes, overlay property changes are not recorded in
 the buffer's undo list.
 
+   <p>Since more than one overlay can specify a property value for the
+same character, Emacs lets you specify a priority value of each
+overlay.  You should not make assumptions about which overlay will
+prevail when there is a conflict and they have the same priority.
+
    <p>These functions read and set the properties of an overlay:
 
 <div class="defun">
-&mdash; Function: <b>overlay-get</b><var> overlay prop<a name="index-overlay_002dget-3192"></a></var><br>
+&mdash; Function: <b>overlay-get</b><var> overlay prop<a name="index-overlay_002dget-3392"></a></var><br>
 <blockquote><p>This function returns the value of property <var>prop</var> recorded in
 <var>overlay</var>, if any.  If <var>overlay</var> does not record any value for
 that property, but it does have a <code>category</code> property which is a
@@ -81,13 +86,13 @@ is <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>overlay-put</b><var> overlay prop value<a name="index-overlay_002dput-3193"></a></var><br>
+&mdash; Function: <b>overlay-put</b><var> overlay prop value<a name="index-overlay_002dput-3393"></a></var><br>
 <blockquote><p>This function sets the value of property <var>prop</var> recorded in
 <var>overlay</var> to <var>value</var>.  It returns <var>value</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>overlay-properties</b><var> overlay<a name="index-overlay_002dproperties-3194"></a></var><br>
+&mdash; Function: <b>overlay-properties</b><var> overlay<a name="index-overlay_002dproperties-3394"></a></var><br>
 <blockquote><p>This returns a copy of the property list of <var>overlay</var>. 
 </p></blockquote></div>
 
@@ -99,27 +104,30 @@ See <a href="Examining-Properties.html#Examining-Properties">Examining Propertie
 of them:
 
      <dl>
-<dt><code>priority</code><dd><a name="index-priority-_0040r_007b_0028overlay-property_0029_007d-3195"></a>This property's value (which should be a nonnegative integer number)
-determines the priority of the overlay.  The priority matters when two
-or more overlays cover the same character and both specify the same
-property; the one whose <code>priority</code> value is larger takes priority
-over the other.  For the <code>face</code> property, the higher priority
-value does not completely replace the other; instead, its face
-attributes override the face attributes of the lower priority
-<code>face</code> property.
+<dt><code>priority</code><dd><a name="index-priority-_0040r_007b_0028overlay-property_0029_007d-3395"></a>This property's value (which should be a nonnegative integer number)
+determines the priority of the overlay.  No priority, or <code>nil</code>,
+means zero.
+
+     <p>The priority matters when two or more overlays cover the same
+character and both specify the same property; the one whose
+<code>priority</code> value is larger overrides the other.  For the
+<code>face</code> property, the higher priority overlay's value does not
+completely override the other value; instead, its face attributes
+override the face attributes of the lower priority <code>face</code>
+property.
 
      <p>Currently, all overlays take priority over text properties.  Please
 avoid using negative priority values, as we have not yet decided just
 what they should mean.
 
-     <br><dt><code>window</code><dd><a name="index-window-_0040r_007b_0028overlay-property_0029_007d-3196"></a>If the <code>window</code> property is non-<code>nil</code>, then the overlay
+     <br><dt><code>window</code><dd><a name="index-window-_0040r_007b_0028overlay-property_0029_007d-3396"></a>If the <code>window</code> property is non-<code>nil</code>, then the overlay
 applies only on that window.
 
-     <br><dt><code>category</code><dd><a name="index-category-_0040r_007b_0028overlay-property_0029_007d-3197"></a>If an overlay has a <code>category</code> property, we call it the
+     <br><dt><code>category</code><dd><a name="index-category-_0040r_007b_0028overlay-property_0029_007d-3397"></a>If an overlay has a <code>category</code> property, we call it the
 <dfn>category</dfn> of the overlay.  It should be a symbol.  The properties
 of the symbol serve as defaults for the properties of the overlay.
 
-     <br><dt><code>face</code><dd><a name="index-face-_0040r_007b_0028overlay-property_0029_007d-3198"></a>This property controls the way text is displayed&mdash;for example, which
+     <br><dt><code>face</code><dd><a name="index-face-_0040r_007b_0028overlay-property_0029_007d-3398"></a>This property controls the way text is displayed&mdash;for example, which
 font and which colors.  See <a href="Faces.html#Faces">Faces</a>, for more information.
 
      <p>In the simplest case, the value is a face name.  It can also be a list;
@@ -142,19 +150,19 @@ just the foreground color or just the background color.
 <code>(:foreground </code><var>color-name</var><code>)</code>; likewise for the background. 
 </ul>
 
-     <br><dt><code>mouse-face</code><dd><a name="index-mouse_002dface-_0040r_007b_0028overlay-property_0029_007d-3199"></a>This property is used instead of <code>face</code> when the mouse is within
+     <br><dt><code>mouse-face</code><dd><a name="index-mouse_002dface-_0040r_007b_0028overlay-property_0029_007d-3399"></a>This property is used instead of <code>face</code> when the mouse is within
 the range of the overlay.
 
-     <br><dt><code>display</code><dd><a name="index-display-_0040r_007b_0028overlay-property_0029_007d-3200"></a>This property activates various features that change the
+     <br><dt><code>display</code><dd><a name="index-display-_0040r_007b_0028overlay-property_0029_007d-3400"></a>This property activates various features that change the
 way text is displayed.  For example, it can make text appear taller
 or shorter, higher or lower, wider or narrower, or replaced with an image. 
 See <a href="Display-Property.html#Display-Property">Display Property</a>.
 
-     <br><dt><code>help-echo</code><dd><a name="index-help_002decho-_0040r_007b_0028overlay-property_0029_007d-3201"></a>If an overlay has a <code>help-echo</code> property, then when you move the
+     <br><dt><code>help-echo</code><dd><a name="index-help_002decho-_0040r_007b_0028overlay-property_0029_007d-3401"></a>If an overlay has a <code>help-echo</code> property, then when you move the
 mouse onto the text in the overlay, Emacs displays a help string in the
 echo area, or in the tooltip window.  For details see <a href="Text-help_002decho.html#Text-help_002decho">Text help-echo</a>.
 
-     <br><dt><code>modification-hooks</code><dd><a name="index-modification_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3202"></a>This property's value is a list of functions to be called if any
+     <br><dt><code>modification-hooks</code><dd><a name="index-modification_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3402"></a>This property's value is a list of functions to be called if any
 character within the overlay is changed or if text is inserted strictly
 within the overlay.
 
@@ -181,19 +189,19 @@ avoid confusing the internal mechanism that calls these hooks.
      <p>Text properties also support the <code>modification-hooks</code> property,
 but the details are somewhat different (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>).
 
-     <br><dt><code>insert-in-front-hooks</code><dd><a name="index-insert_002din_002dfront_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3203"></a>This property's value is a list of functions to be called before and
+     <br><dt><code>insert-in-front-hooks</code><dd><a name="index-insert_002din_002dfront_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3403"></a>This property's value is a list of functions to be called before and
 after inserting text right at the beginning of the overlay.  The calling
 conventions are the same as for the <code>modification-hooks</code> functions.
 
-     <br><dt><code>insert-behind-hooks</code><dd><a name="index-insert_002dbehind_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3204"></a>This property's value is a list of functions to be called before and
+     <br><dt><code>insert-behind-hooks</code><dd><a name="index-insert_002dbehind_002dhooks-_0040r_007b_0028overlay-property_0029_007d-3404"></a>This property's value is a list of functions to be called before and
 after inserting text right at the end of the overlay.  The calling
 conventions are the same as for the <code>modification-hooks</code> functions.
 
-     <br><dt><code>invisible</code><dd><a name="index-invisible-_0040r_007b_0028overlay-property_0029_007d-3205"></a>The <code>invisible</code> property can make the text in the overlay
+     <br><dt><code>invisible</code><dd><a name="index-invisible-_0040r_007b_0028overlay-property_0029_007d-3405"></a>The <code>invisible</code> property can make the text in the overlay
 invisible, which means that it does not appear on the screen. 
 See <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>, for details.
 
-     <br><dt><code>intangible</code><dd><a name="index-intangible-_0040r_007b_0028overlay-property_0029_007d-3206"></a>The <code>intangible</code> property on an overlay works just like the
+     <br><dt><code>intangible</code><dd><a name="index-intangible-_0040r_007b_0028overlay-property_0029_007d-3406"></a>The <code>intangible</code> property on an overlay works just like the
 <code>intangible</code> text property.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for details.
 
      <br><dt><code>isearch-open-invisible</code><dd>This property tells incremental search how to make an invisible overlay
@@ -202,27 +210,40 @@ visible, permanently, if the final match overlaps it.  See <a href="Invisible-Te
      <br><dt><code>isearch-open-invisible-temporary</code><dd>This property tells incremental search how to make an invisible overlay
 visible, temporarily, during the search.  See <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>.
 
-     <br><dt><code>before-string</code><dd><a name="index-before_002dstring-_0040r_007b_0028overlay-property_0029_007d-3207"></a>This property's value is a string to add to the display at the beginning
+     <br><dt><code>before-string</code><dd><a name="index-before_002dstring-_0040r_007b_0028overlay-property_0029_007d-3407"></a>This property's value is a string to add to the display at the beginning
 of the overlay.  The string does not appear in the buffer in any
 sense&mdash;only on the screen.
 
-     <br><dt><code>after-string</code><dd><a name="index-after_002dstring-_0040r_007b_0028overlay-property_0029_007d-3208"></a>This property's value is a string to add to the display at the end of
+     <br><dt><code>after-string</code><dd><a name="index-after_002dstring-_0040r_007b_0028overlay-property_0029_007d-3408"></a>This property's value is a string to add to the display at the end of
 the overlay.  The string does not appear in the buffer in any
 sense&mdash;only on the screen.
 
-     <br><dt><code>evaporate</code><dd><a name="index-evaporate-_0040r_007b_0028overlay-property_0029_007d-3209"></a>If this property is non-<code>nil</code>, the overlay is deleted automatically
+     <br><dt><code>line-prefix</code><dd>This property specifies a display spec to prepend to each
+non-continuation line at display-time.  See <a href="Truncation.html#Truncation">Truncation</a>.
+
+     <dt><code>wrap-prefix</code><dd>This property specifies a display spec to prepend to each continuation
+line at display-time.  See <a href="Truncation.html#Truncation">Truncation</a>.
+
+     <br><dt><code>evaporate</code><dd><a name="index-evaporate-_0040r_007b_0028overlay-property_0029_007d-3409"></a>If this property is non-<code>nil</code>, the overlay is deleted automatically
 if it becomes empty (i.e., if its length becomes zero).  If you give
 an empty overlay a non-<code>nil</code> <code>evaporate</code> property, that deletes
 it immediately.
 
-     <br><dt><code>local-map</code><dd><a name="index-keymap-of-character-_0028and-overlays_0029-3210"></a><a name="index-local_002dmap-_0040r_007b_0028overlay-property_0029_007d-3211"></a>If this property is non-<code>nil</code>, it specifies a keymap for a portion
+     <br><dt><code>local-map</code><dd><a name="index-keymap-of-character-_0028and-overlays_0029-3410"></a><a name="index-local_002dmap-_0040r_007b_0028overlay-property_0029_007d-3411"></a>If this property is non-<code>nil</code>, it specifies a keymap for a portion
 of the text.  The property's value replaces the buffer's local map, when
 the character after point is within the overlay.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>.
 
-     <br><dt><code>keymap</code><dd><a name="index-keymap-_0040r_007b_0028overlay-property_0029_007d-3212"></a>The <code>keymap</code> property is similar to <code>local-map</code> but overrides the
+     <br><dt><code>keymap</code><dd><a name="index-keymap-_0040r_007b_0028overlay-property_0029_007d-3412"></a>The <code>keymap</code> property is similar to <code>local-map</code> but overrides the
 buffer's local map (and the map specified by the <code>local-map</code>
 property) rather than replacing it. 
 </dl>
+
+   <p>The <code>local-map</code> and <code>keymap</code> properties do not affect a
+string displayed by the <code>before-string</code>, <code>after-string</code>, or
+<code>display</code> properties.  This is only relevant for mouse clicks and
+other mouse events that fall on the string, since point is never on
+the string.  To bind special mouse events for the string, assign it a
+<code>local-map</code> or <code>keymap</code> text property.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
 
    </body></html>
 

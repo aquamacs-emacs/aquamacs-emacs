@@ -3,33 +3,33 @@
 <title>The Mark - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Markers.html#Markers" title="Markers">
 <link rel="prev" href="Moving-Markers.html#Moving-Markers" title="Moving Markers">
 <link rel="next" href="The-Region.html#The-Region" title="The Region">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="The-Mark"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="The-Region.html#The-Region">The Region</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-Markers.html#Moving-Markers">Moving Markers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
@@ -56,41 +56,43 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
 
 <h3 class="section">31.7 The Mark</h3>
 
-<p><a name="index-mark_002c-the-2374"></a><a name="index-mark-ring-2375"></a>
-  One special marker in each buffer is designated <dfn>the mark</dfn>.  It
-specifies a position to bound a range of text for commands such as
-<code>kill-region</code> and <code>indent-rigidly</code>.  Lisp programs should
-set the mark only to values that have a potential use to the user, and
-never for their own internal purposes.  For example, the
-<code>replace-regexp</code> command sets the mark to the value of point
-before doing any replacements, because this enables the user to move
-back there conveniently after the replace is finished.
+<p><a name="index-mark_002c-the-2475"></a><a name="index-mark-ring-2476"></a>
+  Each buffer has a special marker, which is designated <dfn>the
+mark</dfn>.  When a buffer is newly created, this marker exists but does
+not point anywhere; this means that the mark &ldquo;doesn't exist&rdquo; in that
+buffer yet.  Subsequent commands can set the mark.
 
-   <p>Many commands are designed to operate on the text between point and
-the mark when called interactively.  If you are writing such a
-command, don't examine the mark directly; instead, use
-<code>interactive</code> with the `<samp><span class="samp">r</span></samp>' specification.  This provides the
+   <p>The mark specifies a position to bound a range of text for many
+commands, such as <code>kill-region</code> and <code>indent-rigidly</code>.  These
+commands typically act on the text between point and the mark, which
+is called the <dfn>region</dfn>.  If you are writing a command that
+operates on the region, don't examine the mark directly; instead, use
+<code>interactive</code> with the &lsquo;<samp><span class="samp">r</span></samp>&rsquo; specification.  This provides the
 values of point and the mark as arguments to the command in an
 interactive call, but permits other Lisp programs to specify arguments
 explicitly.  See <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>.
 
-   <p>Each buffer has a marker which represents the value of the mark in
-that buffer, independent of any other buffer.  When a buffer is newly
-created, this marker exists but does not point anywhere.  That means
-the mark &ldquo;doesn't exist&rdquo; in that buffer as yet.
+   <p>Some commands set the mark as a side-effect.  Commands should do
+this only if it has a potential use to the user, and never for their
+own internal purposes.  For example, the <code>replace-regexp</code> command
+sets the mark to the value of point before doing any replacements,
+because this enables the user to move back there conveniently after
+the replace is finished.
 
    <p>Once the mark &ldquo;exists&rdquo; in a buffer, it normally never ceases to
-exist.  However, it may become <dfn>inactive</dfn>, if Transient Mark mode is
-enabled.  The variable <code>mark-active</code>, which is always buffer-local
-in all buffers, indicates whether the mark is active: non-<code>nil</code>
-means yes.  A command can request deactivation of the mark upon return
-to the editor command loop by setting <code>deactivate-mark</code> to a
-non-<code>nil</code> value (but this causes deactivation only if Transient
-Mark mode is enabled).
+exist.  However, it may become <dfn>inactive</dfn>, if Transient Mark mode
+is enabled.  The buffer-local variable <code>mark-active</code>, if
+non-<code>nil</code>, means that the mark is active.  A command can call the
+function <code>deactivate-mark</code> to deactivate the mark directly, or it
+can request deactivation of the mark upon return to the editor command
+loop by setting the variable <code>deactivate-mark</code> to a
+non-<code>nil</code> value.
 
-   <p>The main motivation for using Transient Mark mode is that this mode
-also enables highlighting of the region when the mark is active. 
-See <a href="Display.html#Display">Display</a>.
+   <p>If Transient Mode is enabled, certain editing commands that normally
+apply to text near point, apply instead to the region when the mark is
+active.  This is the main motivation for using Transient Mark mode. 
+(Another is that this enables highlighting of the region when the mark
+is active.  See <a href="Display.html#Display">Display</a>.)
 
    <p>In addition to the mark, each buffer has a <dfn>mark ring</dfn> which is a
 list of markers containing previous values of the mark.  When editing
@@ -104,31 +106,31 @@ few particular user-level commands, and is not relevant to Lisp
 programming.  So we do not describe it here.
 
 <div class="defun">
-&mdash; Function: <b>mark</b><var> &amp;optional force<a name="index-mark-2376"></a></var><br>
-<blockquote><p><a name="index-current-buffer-mark-2377"></a>This function returns the current buffer's mark position as an integer,
+&mdash; Function: <b>mark</b><var> &amp;optional force<a name="index-mark-2477"></a></var><br>
+<blockquote><p><a name="index-current-buffer-mark-2478"></a>This function returns the current buffer's mark position as an integer,
 or <code>nil</code> if no mark has ever been set in this buffer.
 
         <p>If Transient Mark mode is enabled, and <code>mark-even-if-inactive</code> is
 <code>nil</code>, <code>mark</code> signals an error if the mark is inactive. 
 However, if <var>force</var> is non-<code>nil</code>, then <code>mark</code> disregards
-inactivity of the mark, and returns the mark position anyway (or
-<code>nil</code>). 
+inactivity of the mark, and returns the mark position (or <code>nil</code>)
+anyway. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>mark-marker</b><var><a name="index-mark_002dmarker-2378"></a></var><br>
+&mdash; Function: <b>mark-marker</b><var><a name="index-mark_002dmarker-2479"></a></var><br>
 <blockquote><p>This function returns the marker that represents the current buffer's
 mark.  It is not a copy, it is the marker used internally.  Therefore,
 changing this marker's position will directly affect the buffer's
 mark.  Don't do that unless that is the effect you want.
 
      <pre class="example">          (setq m (mark-marker))
-               =&gt; #&lt;marker at 3420 in markers.texi&gt;
+               &rArr; #&lt;marker at 3420 in markers.texi&gt;
           (set-marker m 100)
-               =&gt; #&lt;marker at 100 in markers.texi&gt;
+               &rArr; #&lt;marker at 100 in markers.texi&gt;
           (mark-marker)
-               =&gt; #&lt;marker at 100 in markers.texi&gt;
-     </pre>
+               &rArr; #&lt;marker at 100 in markers.texi&gt;
+</pre>
         <p>Like any marker, this marker can be set to point at any buffer you
 like.  If you make it point at any buffer other than the one of which
 it is the mark, it will yield perfectly consistent, but rather odd,
@@ -136,7 +138,7 @@ results.  We recommend that you not do it!
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-mark</b><var> position<a name="index-set_002dmark-2379"></a></var><br>
+&mdash; Function: <b>set-mark</b><var> position<a name="index-set_002dmark-2480"></a></var><br>
 <blockquote><p>This function sets the mark to <var>position</var>, and activates the mark. 
 The old value of the mark is <em>not</em> pushed onto the mark ring.
 
@@ -157,12 +159,11 @@ example:
      <pre class="example">          (let ((beg (point)))
             (forward-line 1)
             (delete-region beg (point))).
-     </pre>
+</pre>
         </blockquote></div>
 
-<!-- for interactive use only -->
 <div class="defun">
-&mdash; Function: <b>push-mark</b><var> &amp;optional position nomsg activate<a name="index-push_002dmark-2380"></a></var><br>
+&mdash; Function: <b>push-mark</b><var> &amp;optional position nomsg activate<a name="index-push_002dmark-2481"></a></var><br>
 <blockquote><p>This function sets the current buffer's mark to <var>position</var>, and
 pushes a copy of the previous mark onto <code>mark-ring</code>.  If
 <var>position</var> is <code>nil</code>, then the value of point is used. 
@@ -171,12 +172,12 @@ pushes a copy of the previous mark onto <code>mark-ring</code>.  If
         <p>The function <code>push-mark</code> normally <em>does not</em> activate the
 mark.  To do that, specify <code>t</code> for the argument <var>activate</var>.
 
-        <p>A `<samp><span class="samp">Mark set</span></samp>' message is displayed unless <var>nomsg</var> is
+        <p>A &lsquo;<samp><span class="samp">Mark set</span></samp>&rsquo; message is displayed unless <var>nomsg</var> is
 non-<code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>pop-mark</b><var><a name="index-pop_002dmark-2381"></a></var><br>
+&mdash; Function: <b>pop-mark</b><var><a name="index-pop_002dmark-2482"></a></var><br>
 <blockquote><p>This function pops off the top element of <code>mark-ring</code> and makes
 that mark become the buffer's actual mark.  This does not move point in
 the buffer, and it does nothing if <code>mark-ring</code> is empty.  It
@@ -186,22 +187,30 @@ deactivates the mark.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>transient-mark-mode</b><var><a name="index-transient_002dmark_002dmode-2382"></a></var><br>
-<blockquote><!-- @cindex Transient Mark mode  Redundant -->
-<p>This variable if non-<code>nil</code> enables Transient Mark mode, in which
-every buffer-modifying primitive sets <code>deactivate-mark</code>.  The
-consequence of this is that commands that modify the buffer normally
-make the mark inactive.
+&mdash; User Option: <b>transient-mark-mode</b><var><a name="index-transient_002dmark_002dmode-2483"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, enables Transient Mark mode.  In
+Transient Mark mode, every buffer-modifying primitive sets
+<code>deactivate-mark</code>.  As a consequence, most commands that modify
+the buffer also deactivate the mark.
 
-        <p>Lisp programs can set <code>transient-mark-mode</code> to <code>only</code> to
-enable Transient Mark mode for the following command only.  During
-that following command, the value of <code>transient-mark-mode</code> is
-<code>identity</code>.  If it is still <code>identity</code> at the end of the
-command, it changes to <code>nil</code>. 
+        <p>When Transient Mark mode is enabled and the mark is active, many
+commands that normally apply to the text near point instead apply to
+the region.  Such commands should use the function <code>use-region-p</code>
+to test whether they should operate on the region.  See <a href="The-Region.html#The-Region">The Region</a>.
+
+        <p>Lisp programs can set <code>transient-mark-mode</code> to non-<code>nil</code>,
+non-<code>t</code> values to enable Transient Mark mode temporarily.  If the
+value is <code>lambda</code>, Transient Mark mode is automatically turned
+off after any action, such as buffer modification, that would normally
+deactivate the mark.  If the value is <code>(only&nbsp;.&nbsp;</code><var>oldval</var><code>)</code><!-- /@w -->,
+then <code>transient-mark-mode</code> is set to the value <var>oldval</var> after
+any subsequent command that moves point and is not shift-translated
+(see <a href="Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>), or after any other
+action that would normally deactivate the mark. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>mark-even-if-inactive</b><var><a name="index-mark_002deven_002dif_002dinactive-2383"></a></var><br>
+&mdash; User Option: <b>mark-even-if-inactive</b><var><a name="index-mark_002deven_002dif_002dinactive-2484"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, Lisp programs and the Emacs user can use the
 mark even when it is inactive.  This option affects the behavior of
 Transient Mark mode.  When the option is non-<code>nil</code>, deactivation of
@@ -210,7 +219,7 @@ behave as if the mark were still active.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>deactivate-mark</b><var><a name="index-deactivate_002dmark-2384"></a></var><br>
+&mdash; Variable: <b>deactivate-mark</b><var><a name="index-deactivate_002dmark-2485"></a></var><br>
 <blockquote><p>If an editor command sets this variable non-<code>nil</code>, then the editor
 command loop deactivates the mark after the command returns (if
 Transient Mark mode is enabled).  All the primitives that change the
@@ -224,24 +233,28 @@ modification.  For example:
 
      <pre class="example">          (let (deactivate-mark)
             (insert " "))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>deactivate-mark</b><var><a name="index-deactivate_002dmark-2385"></a></var><br>
-<blockquote><p>This function deactivates the mark, if Transient Mark mode is enabled. 
-Otherwise it does nothing. 
+&mdash; Function: <b>deactivate-mark</b><var> &amp;optional force<a name="index-deactivate_002dmark-2486"></a></var><br>
+<blockquote><p>If Transient Mark mode is enabled or <var>force</var> is non-<code>nil</code>,
+this function deactivates the mark and runs the normal hook
+<code>deactivate-mark-hook</code>.  Otherwise, it does nothing. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>mark-active</b><var><a name="index-mark_002dactive-2386"></a></var><br>
-<blockquote><p>The mark is active when this variable is non-<code>nil</code>.  This variable
-is always buffer-local in each buffer. 
+&mdash; Variable: <b>mark-active</b><var><a name="index-mark_002dactive-2487"></a></var><br>
+<blockquote><p>The mark is active when this variable is non-<code>nil</code>.  This
+variable is always buffer-local in each buffer.  Do <em>not</em> use the
+value of this variable to decide whether a command that normally
+operates on text near point should operate on the region instead.  Use
+the function <code>use-region-p</code> for that (see <a href="The-Region.html#The-Region">The Region</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>activate-mark-hook</b><var><a name="index-activate_002dmark_002dhook-2387"></a></var><br>
-&mdash; Variable: <b>deactivate-mark-hook</b><var><a name="index-deactivate_002dmark_002dhook-2388"></a></var><br>
+&mdash; Variable: <b>activate-mark-hook</b><var><a name="index-activate_002dmark_002dhook-2488"></a></var><br>
+&mdash; Variable: <b>deactivate-mark-hook</b><var><a name="index-deactivate_002dmark_002dhook-2489"></a></var><br>
 <blockquote><p>These normal hooks are run, respectively, when the mark becomes active
 and when it becomes inactive.  The hook <code>activate-mark-hook</code> is
 also run at the end of a command if the mark is active and it is
@@ -249,19 +262,35 @@ possible that the region may have changed.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>mark-ring</b><var><a name="index-mark_002dring-2389"></a></var><br>
+&mdash; Function: <b>handle-shift-selection</b><var><a name="index-handle_002dshift_002dselection-2490"></a></var><br>
+<blockquote><p>This function implements the &ldquo;shift-selection&rdquo; behavior of
+point-motion commands.  See <a href="../emacs/Shift-Selection.html#Shift-Selection">Shift Selection</a>.  It is called automatically by the Emacs command loop
+whenever a command with a &lsquo;<samp><span class="samp">^</span></samp>&rsquo; character in its <code>interactive</code>
+spec is invoked, before the command itself is executed
+(see <a href="Interactive-Codes.html#Interactive-Codes">^</a>).
+
+        <p>If <code>shift-select-mode</code> is non-<code>nil</code> and the current command
+was invoked via shift translation (see <a href="Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>), this function sets the mark and temporarily
+activates the region, unless the region was already temporarily
+activated in this way.  Otherwise, if the region has been activated
+temporarily, it deactivates the mark and restores the variable
+<code>transient-mark-mode</code> to its earlier value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>mark-ring</b><var><a name="index-mark_002dring-2491"></a></var><br>
 <blockquote><p>The value of this buffer-local variable is the list of saved former
 marks of the current buffer, most recent first.
 
      <pre class="example">          mark-ring
-          =&gt; (#&lt;marker at 11050 in markers.texi&gt;
+          &rArr; (#&lt;marker at 11050 in markers.texi&gt;
               #&lt;marker at 10832 in markers.texi&gt;
               ...)
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>mark-ring-max</b><var><a name="index-mark_002dring_002dmax-2390"></a></var><br>
+&mdash; User Option: <b>mark-ring-max</b><var><a name="index-mark_002dring_002dmax-2492"></a></var><br>
 <blockquote><p>The value of this variable is the maximum size of <code>mark-ring</code>.  If
 more marks than this are pushed onto the <code>mark-ring</code>,
 <code>push-mark</code> discards an old mark when it adds a new one. 

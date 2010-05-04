@@ -3,7 +3,7 @@
 <title>GUD Customization - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Debuggers.html#Debuggers" title="Debuggers">
 <link rel="prev" href="Commands-of-GUD.html#Commands-of-GUD" title="Commands of GUD">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="GUD-Customization"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands-of-GUD.html#Commands-of-GUD">Commands of GUD</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
 
 <h4 class="subsection">31.6.4 GUD Customization</h4>
 
-<p><a name="index-gdb_002dmode_002dhook-2322"></a><a name="index-dbx_002dmode_002dhook-2323"></a><a name="index-sdb_002dmode_002dhook-2324"></a><a name="index-xdb_002dmode_002dhook-2325"></a><a name="index-perldb_002dmode_002dhook-2326"></a><a name="index-pdb_002dmode_002dhook-2327"></a><a name="index-jdb_002dmode_002dhook-2328"></a>  On startup, GUD runs one of the following hooks: <code>gdb-mode-hook</code>,
+<p><a name="index-gdb_002dmode_002dhook-2344"></a><a name="index-dbx_002dmode_002dhook-2345"></a><a name="index-sdb_002dmode_002dhook-2346"></a><a name="index-xdb_002dmode_002dhook-2347"></a><a name="index-perldb_002dmode_002dhook-2348"></a><a name="index-pdb_002dmode_002dhook-2349"></a><a name="index-jdb_002dmode_002dhook-2350"></a>  On startup, GUD runs one of the following hooks: <code>gdb-mode-hook</code>,
 if you are using GDB; <code>dbx-mode-hook</code>, if you are using DBX;
 <code>sdb-mode-hook</code>, if you are using SDB; <code>xdb-mode-hook</code>, if you
 are using XDB; <code>perldb-mode-hook</code>, for Perl debugging mode;
@@ -69,7 +69,7 @@ interaction buffer.  See <a href="Hooks.html#Hooks">Hooks</a>.
 command string to the debugger, and set up a key binding for it in the
 debugger interaction buffer:
 
-   <p><a name="index-gud_002ddef-2329"></a>
+   <p><a name="index-gud_002ddef-2351"></a>
 <pre class="example">     (gud-def <var>function</var> <var>cmdstring</var> <var>binding</var> <var>docstring</var>)
 </pre>
    <p>This defines a command named <var>function</var> which sends
@@ -80,34 +80,34 @@ the command to <kbd>C-c </kbd><var>binding</var> in the GUD buffer's mode and to
 <kbd>C-x C-a </kbd><var>binding</var> generally.
 
    <p>The command string <var>cmdstring</var> may contain certain
-`<samp><span class="samp">%</span></samp>'-sequences that stand for data to be filled in at the time
+&lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences that stand for data to be filled in at the time
 <var>function</var> is called:
 
      <dl>
-<dt>`<samp><span class="samp">%f</span></samp>'<dd>The name of the current source file.  If the current buffer is the GUD
+<dt>&lsquo;<samp><span class="samp">%f</span></samp>&rsquo;<dd>The name of the current source file.  If the current buffer is the GUD
 buffer, then the &ldquo;current source file&rdquo; is the file that the program
 stopped in.
 
-     <br><dt>`<samp><span class="samp">%l</span></samp>'<dd>The number of the current source line.  If the current buffer is the GUD
+     <br><dt>&lsquo;<samp><span class="samp">%l</span></samp>&rsquo;<dd>The number of the current source line.  If the current buffer is the GUD
 buffer, then the &ldquo;current source line&rdquo; is the line that the program
 stopped in.
 
-     <br><dt>`<samp><span class="samp">%e</span></samp>'<dd>In transient-mark-mode the text in the region, if it is active. 
+     <br><dt>&lsquo;<samp><span class="samp">%e</span></samp>&rsquo;<dd>In transient-mark-mode the text in the region, if it is active. 
 Otherwise the text of the C lvalue or function-call expression at or
 adjacent to point.
 
-     <br><dt>`<samp><span class="samp">%a</span></samp>'<dd>The text of the hexadecimal address at or adjacent to point.
+     <br><dt>&lsquo;<samp><span class="samp">%a</span></samp>&rsquo;<dd>The text of the hexadecimal address at or adjacent to point.
 
-     <br><dt>`<samp><span class="samp">%p</span></samp>'<dd>The numeric argument of the called function, as a decimal number.  If
-the command is used without a numeric argument, `<samp><span class="samp">%p</span></samp>' stands for the
+     <br><dt>&lsquo;<samp><span class="samp">%p</span></samp>&rsquo;<dd>The numeric argument of the called function, as a decimal number.  If
+the command is used without a numeric argument, &lsquo;<samp><span class="samp">%p</span></samp>&rsquo; stands for the
 empty string.
 
-     <p>If you don't use `<samp><span class="samp">%p</span></samp>' in the command string, the command you define
+     <p>If you don't use &lsquo;<samp><span class="samp">%p</span></samp>&rsquo; in the command string, the command you define
 ignores any numeric argument.
 
-     <br><dt>`<samp><span class="samp">%d</span></samp>'<dd>The name of the directory of the current source file.
+     <br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>The name of the directory of the current source file.
 
-     <br><dt>`<samp><span class="samp">%c</span></samp>'<dd>Fully qualified class name derived from the expression surrounding point
+     <br><dt>&lsquo;<samp><span class="samp">%c</span></samp>&rsquo;<dd>Fully qualified class name derived from the expression surrounding point
 (jdb only). 
 </dl>
 

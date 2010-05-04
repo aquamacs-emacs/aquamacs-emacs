@@ -3,33 +3,33 @@
 <title>Defining Advice - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
 <link rel="prev" href="Simple-Advice.html#Simple-Advice" title="Simple Advice">
 <link rel="next" href="Around_002dAdvice.html#Around_002dAdvice" title="Around-Advice">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Advice"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Around_002dAdvice.html#Around_002dAdvice">Around-Advice</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Advice.html#Simple-Advice">Simple Advice</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
@@ -56,12 +56,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functi
 
 <h3 class="section">17.2 Defining Advice</h3>
 
-<p><a name="index-defining-advice-844"></a><a name="index-advice_002c-defining-845"></a>
+<p><a name="index-defining-advice-875"></a><a name="index-advice_002c-defining-876"></a>
   To define a piece of advice, use the macro <code>defadvice</code>.  A call
 to <code>defadvice</code> has the following syntax, which is based on the
 syntax of <code>defun</code> and <code>defmacro</code>, but adds more:
 
-   <p><a name="index-defadvice-846"></a>
+   <p><a name="index-defadvice-877"></a>
 <pre class="example">     (defadvice <var>function</var> (<var>class</var> <var>name</var>
                               <span class="roman">[</span><var>position</var><span class="roman">]</span> <span class="roman">[</span><var>arglist</var><span class="roman">]</span>
                               <var>flags</var>...)
@@ -77,7 +77,7 @@ special forms.
    <p>In place of the argument list in an ordinary definition, an advice
 definition calls for several different pieces of information.
 
-   <p><a name="index-class-of-advice-847"></a><a name="index-before_002dadvice-848"></a><a name="index-after_002dadvice-849"></a><a name="index-around_002dadvice-850"></a><var>class</var> specifies the <dfn>class</dfn> of the advice&mdash;one of <code>before</code>,
+   <p><a name="index-class-of-advice-878"></a><a name="index-before_002dadvice-879"></a><a name="index-after_002dadvice-880"></a><a name="index-around_002dadvice-881"></a><var>class</var> specifies the <dfn>class</dfn> of the advice&mdash;one of <code>before</code>,
 <code>after</code>, or <code>around</code>.  Before-advice runs before the function
 itself; after-advice runs after the function itself; around-advice is
 wrapped around the execution of the function itself.  After-advice and
@@ -85,7 +85,7 @@ around-advice can override the return value by setting
 <code>ad-return-value</code>.
 
 <div class="defun">
-&mdash; Variable: <b>ad-return-value</b><var><a name="index-ad_002dreturn_002dvalue-851"></a></var><br>
+&mdash; Variable: <b>ad-return-value</b><var><a name="index-ad_002dreturn_002dvalue-882"></a></var><br>
 <blockquote><p>While advice is executing, after the function's original definition has
 been executed, this variable holds its return value, which will
 ultimately be returned to the caller after finishing all the advice. 
@@ -133,7 +133,7 @@ advice always take effect the next time you activate advice for the
 function; this flag says to do so, for <var>function</var>, immediately after
 defining this piece of advice.
 
-     <p><a name="index-forward-advice-852"></a>This flag has no immediate effect if <var>function</var> itself is not defined yet (a
+     <p><a name="index-forward-advice-883"></a>This flag has no immediate effect if <var>function</var> itself is not defined yet (a
 situation known as <dfn>forward advice</dfn>), because it is impossible to
 activate an undefined function's advice.  However, defining
 <var>function</var> will automatically activate its advice.
@@ -180,12 +180,12 @@ All subroutines used by the advice need to be available when the byte
 compiler expands the macro.
 
 <div class="defun">
-&mdash; Command: <b>ad-unadvise</b><var> function<a name="index-ad_002dunadvise-853"></a></var><br>
+&mdash; Command: <b>ad-unadvise</b><var> function<a name="index-ad_002dunadvise-884"></a></var><br>
 <blockquote><p>This command deletes the advice from <var>function</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>ad-unadvise-all</b><var><a name="index-ad_002dunadvise_002dall-854"></a></var><br>
+&mdash; Command: <b>ad-unadvise-all</b><var><a name="index-ad_002dunadvise_002dall-885"></a></var><br>
 <blockquote><p>This command deletes all pieces of advice from all functions. 
 </p></blockquote></div>
 

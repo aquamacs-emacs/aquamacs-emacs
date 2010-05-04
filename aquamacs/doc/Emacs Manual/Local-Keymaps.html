@@ -3,7 +3,7 @@
 <title>Local Keymaps - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
 <link rel="prev" href="Prefix-Keymaps.html#Prefix-Keymaps" title="Prefix Keymaps">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Local-Keymaps"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Maps.html#Minibuffer-Maps">Minibuffer Maps</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Keymaps.html#Prefix-Keymaps">Prefix Keymaps</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
@@ -57,26 +57,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 
 <h4 class="subsection">57.4.3 Local Keymaps</h4>
 
-<p><a name="index-local-keymap-3990"></a>  So far we have explained the ins and outs of the global map.  Major
-modes customize Emacs by providing their own key bindings in <dfn>local
-keymaps</dfn>.  For example, C mode overrides &lt;TAB&gt; to make it indent the
-current line for C code.  Portions of text in the buffer can specify
-their own keymaps to substitute for the keymap of the buffer's major
-mode.
+<p><a name="index-local-keymap-4023"></a><a name="index-minor-mode-keymap-4024"></a>  So far, we have explained the ins and outs of the global map.  Major
+modes customize Emacs by providing their own key bindings in
+<dfn>local keymaps</dfn>.  For example, C mode overrides &lt;TAB&gt; to make
+it indent the current line for C code.  Minor modes can also have
+local keymaps; whenever a minor mode is in effect, the definitions in
+its keymap override both the major mode's local keymap and the global
+keymap.  In addition, portions of text in the buffer can specify their
+own keymaps, which override all other keymaps.
 
-   <p><a name="index-minor-mode-keymap-3991"></a>  Minor modes can also have local keymaps.  Whenever a minor mode is
-in effect, the definitions in its keymap override both the major
-mode's local keymap and the global keymap.
-
-   <p>A local keymap can locally redefine a key as a prefix key by defining
-it as a prefix keymap.  If the key is also defined globally as a prefix,
-then its local and global definitions (both keymaps) effectively
-combine: both of them are used to look up the event that follows the
-prefix key.  Thus, if the mode's local keymap defines <kbd>C-c</kbd> as
-another keymap, and that keymap defines <kbd>C-z</kbd> as a command, this
-provides a local meaning for <kbd>C-c C-z</kbd>.  This does not affect other
-sequences that start with <kbd>C-c</kbd>; if those sequences don't have their
-own local bindings, their global bindings remain in effect.
+   <p>A local keymap can redefine a key as a prefix key by defining it as
+a prefix keymap.  If the key is also defined globally as a prefix, its
+local and global definitions (both keymaps) effectively combine: both
+definitions are used to look up the event that follows the prefix key. 
+For example, if a local keymap defines <kbd>C-c</kbd> as a prefix keymap,
+and that keymap defines <kbd>C-z</kbd> as a command, this provides a local
+meaning for <kbd>C-c C-z</kbd>.  This does not affect other sequences that
+start with <kbd>C-c</kbd>; if those sequences don't have their own local
+bindings, their global bindings remain in effect.
 
    <p>Another way to think of this is that Emacs handles a multi-event key
 sequence by looking in several keymaps, one by one, for a binding of the
@@ -86,22 +84,5 @@ it checks the global keymap.  This is not precisely how key lookup
 works, but it's good enough for understanding the results in ordinary
 circumstances.
 
-   <p><a name="index-rebinding-major-mode-keys-3992"></a>  Most major modes construct their keymaps when the mode is used for
-the first time in a session.  If you wish to change one of these
-keymaps, you must use the major mode's <dfn>mode hook</dfn>
-(see <a href="Hooks.html#Hooks">Hooks</a>).
-
-   <p><a name="index-define_002dkey-3993"></a>  For example, the command <code>texinfo-mode</code> to select Texinfo mode
-runs the hook <code>texinfo-mode-hook</code>.  Here's how you can use the hook
-to add local bindings (not very useful, we admit) for <kbd>C-c n</kbd> and
-<kbd>C-c p</kbd> in Texinfo mode:
-
-<pre class="example">     (add-hook 'texinfo-mode-hook
-               '(lambda ()
-                  (define-key texinfo-mode-map "\C-cp"
-                              'backward-paragraph)
-                  (define-key texinfo-mode-map "\C-cn"
-                              'forward-paragraph)))
-</pre>
    </body></html>
 

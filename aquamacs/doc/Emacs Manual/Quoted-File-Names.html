@@ -3,7 +3,7 @@
 <title>Quoted File Names - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Remote-Files.html#Remote-Files" title="Remote Files">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Quoted-File-Names"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="File-Name-Cache.html#File-Name-Cache">File Name Cache</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Remote-Files.html#Remote-Files">Remote Files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
@@ -57,25 +57,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">22.15 Quoted File Names</h3>
 
-<p><a name="index-quoting-file-names-1024"></a><a name="index-file-names_002c-quote-special-characters-1025"></a>  You can <dfn>quote</dfn> an absolute file name to prevent special
+<p><a name="index-quoting-file-names-1029"></a><a name="index-file-names_002c-quote-special-characters-1030"></a>  You can <dfn>quote</dfn> an absolute file name to prevent special
 characters and syntax in it from having their special effects. 
-The way to do this is to add `<samp><span class="samp">/:</span></samp>' at the beginning.
+The way to do this is to add &lsquo;<samp><span class="samp">/:</span></samp>&rsquo; at the beginning.
 
    <p>For example, you can quote a local file name which appears remote, to
 prevent it from being treated as a remote file name.  Thus, if you have
 a directory named <samp><span class="file">/foo:</span></samp> and a file named <samp><span class="file">bar</span></samp> in it, you
-can refer to that file in Emacs as `<samp><span class="samp">/:/foo:/bar</span></samp>'.
+can refer to that file in Emacs as &lsquo;<samp><span class="samp">/:/foo:/bar</span></samp>&rsquo;.
 
-   <p>`<samp><span class="samp">/:</span></samp>' can also prevent `<samp><span class="samp">~</span></samp>' from being treated as a special
+   <p>&lsquo;<samp><span class="samp">/:</span></samp>&rsquo; can also prevent &lsquo;<samp><span class="samp">~</span></samp>&rsquo; from being treated as a special
 character for a user's home directory.  For example, <samp><span class="file">/:/tmp/~hack</span></samp>
 refers to a file whose name is <samp><span class="file">~hack</span></samp> in directory <samp><span class="file">/tmp</span></samp>.
 
-   <p>Quoting with `<samp><span class="samp">/:</span></samp>' is also a way to enter in the minibuffer a
-file name that contains `<samp><span class="samp">$</span></samp>'.  In order for this to work, the
-`<samp><span class="samp">/:</span></samp>' must be at the beginning of the minibuffer contents.  (You
-can also double each `<samp><span class="samp">$</span></samp>'; see <a href="File-Names-with-_0024.html#File-Names-with-_0024">File Names with $</a>.)
+   <p>Quoting with &lsquo;<samp><span class="samp">/:</span></samp>&rsquo; is also a way to enter in the minibuffer a
+file name that contains &lsquo;<samp><span class="samp">$</span></samp>&rsquo;.  In order for this to work, the
+&lsquo;<samp><span class="samp">/:</span></samp>&rsquo; must be at the beginning of the minibuffer contents.  (You
+can also double each &lsquo;<samp><span class="samp">$</span></samp>&rsquo;; see <a href="File-Names-with-_0024.html#File-Names-with-_0024">File Names with $</a>.)
 
-   <p>You can also quote wildcard characters with `<samp><span class="samp">/:</span></samp>', for visiting. 
+   <p>You can also quote wildcard characters with &lsquo;<samp><span class="samp">/:</span></samp>&rsquo;, for visiting. 
 For example, <samp><span class="file">/:/tmp/foo*bar</span></samp> visits the file
 <samp><span class="file">/tmp/foo*bar</span></samp>.
 
@@ -84,7 +84,7 @@ For example, <samp><span class="file">/:/tmp/foo*bar</span></samp> visits the fi
 only <samp><span class="file">/tmp/foo*bar</span></samp>.  However, in many cases there is no need to
 quote the wildcard characters because even unquoted they give the
 right result.  For example, if the only file name in <samp><span class="file">/tmp</span></samp> that
-starts with `<samp><span class="samp">foo</span></samp>' and ends with `<samp><span class="samp">bar</span></samp>' is <samp><span class="file">foo*bar</span></samp>,
+starts with &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and ends with &lsquo;<samp><span class="samp">bar</span></samp>&rsquo; is <samp><span class="file">foo*bar</span></samp>,
 then specifying <samp><span class="file">/tmp/foo*bar</span></samp> will visit only
 <samp><span class="file">/tmp/foo*bar</span></samp>.
 

@@ -3,32 +3,32 @@
 <title>Intro to Buffer-Local - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" title="Buffer-Local Variables">
 <link rel="next" href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" title="Creating Buffer-Local">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,9 +45,9 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Intro-to-Buffer-Local"></a>
 <a name="Intro-to-Buffer_002dLocal"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>
 <hr>
@@ -70,8 +70,7 @@ this is the global binding.
 other buffers.  The default binding is shared by all the buffers that
 don't have their own bindings for the variable.  (This includes all
 newly-created buffers.)  If you set the variable in a buffer that does
-not have a buffer-local binding for it, this sets the default binding
-(assuming there are no frame-local bindings to complicate the matter),
+not have a buffer-local binding for it, this sets the default binding,
 so the new value is visible in all the buffers that see the default
 binding.
 
@@ -88,7 +87,7 @@ use.  This affects just the current buffer; all other buffers (including
 those yet to be created) will continue to share the default value unless
 they are explicitly given their own buffer-local bindings.
 
-   <p><a name="index-automatically-buffer_002dlocal-613"></a>  A more powerful operation is to mark the variable as
+   <p><a name="index-automatically-buffer_002dlocal-621"></a>  A more powerful operation is to mark the variable as
 <dfn>automatically buffer-local</dfn> by calling
 <code>make-variable-buffer-local</code>.  You can think of this as making the
 variable local in all buffers, even those yet to be created.  More
@@ -101,11 +100,11 @@ the default binding untouched.  This means that the default value cannot
 be changed with <code>setq</code> in any buffer; the only way to change it is
 with <code>setq-default</code>.
 
-   <p><strong>Warning:</strong> When a variable has buffer-local or frame-local
+   <p><strong>Warning:</strong> When a variable has buffer-local
 bindings in one or more buffers, <code>let</code> rebinds the binding that's
 currently in effect.  For instance, if the current buffer has a
 buffer-local value, <code>let</code> temporarily rebinds that.  If no
-buffer-local or frame-local bindings are in effect, <code>let</code> rebinds
+buffer-local bindings are in effect, <code>let</code> rebinds
 the default value.  If inside the <code>let</code> you then change to a
 different current buffer in which a different binding is in effect,
 you won't see the <code>let</code> binding any more.  And if you exit the
@@ -118,20 +117,23 @@ to illustrate:
      (make-local-variable 'foo)
      (setq foo 'a)
      (let ((foo 'temp))
-       ;; foo =&gt; 'temp  ; <span class="roman">let binding in buffer `<samp>a</samp>'</span>
+       ;; foo &rArr; 'temp  ; <span class="roman">let binding in buffer &lsquo;</span><samp><span class="samp">a</span></samp><span class="roman">&rsquo;</span>
        (set-buffer "b")
-       ;; foo =&gt; 'g     ; <span class="roman">the global value since foo is not local in `<samp>b</samp>'</span>
+       ;; foo &rArr; 'g     ; <span class="roman">the global value since foo is not local in &lsquo;</span><samp><span class="samp">b</span></samp><span class="roman">&rsquo;</span>
        <var>body</var>...)
-     foo =&gt; 'g        ; <span class="roman">exiting restored the local value in buffer `<samp>a</samp>',</span>
-                      ; <span class="roman">but we don't see that in buffer `<samp>b</samp>'</span>
+     foo &rArr; 'g        ; <span class="roman">exiting restored the local value in buffer &lsquo;</span><samp><span class="samp">a</span></samp><span class="roman">&rsquo;,</span>
+                      ; <span class="roman">but we don't see that in buffer &lsquo;</span><samp><span class="samp">b</span></samp><span class="roman">&rsquo;</span>
      (set-buffer "a") ; <span class="roman">verify the local value was restored</span>
-     foo =&gt; 'a
+     foo &rArr; 'a
 </pre>
    <p>Note that references to <code>foo</code> in <var>body</var> access the
-buffer-local binding of buffer `<samp><span class="samp">b</span></samp>'.
+buffer-local binding of buffer &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.
 
    <p>When a file specifies local variable values, these become buffer-local
 values when you visit the file.  See <a href="../emacs/File-Variables.html#File-Variables">File Variables</a>.
+
+   <p>A buffer-local variable cannot be made frame-local
+(see <a href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables">Frame-Local Variables</a>) or terminal-local (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).
 
    </body></html>
 

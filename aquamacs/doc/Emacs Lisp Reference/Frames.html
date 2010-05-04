@@ -3,32 +3,32 @@
 <title>Frames - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Windows.html#Windows" title="Windows">
 <link rel="next" href="Positions.html#Positions" title="Positions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Frames"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Positions.html#Positions">Positions</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows.html#Windows">Windows</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
@@ -55,29 +55,43 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">29 Frames</h2>
 
-<p><a name="index-frame-2124"></a>
-  In Emacs editing, A <dfn>frame</dfn> is a screen object that contains one
-or more Emacs windows.  It's the kind of object that is called a
+<p><a name="index-frame-2207"></a>
+  A <dfn>frame</dfn> is a screen object that contains one or more Emacs
+windows (see <a href="Windows.html#Windows">Windows</a>).  It is the kind of object called a
 &ldquo;window&rdquo; in the terminology of graphical environments; but we can't
 call it a &ldquo;window&rdquo; here, because Emacs uses that word in a different
-way.
+way.  In Emacs Lisp, a <dfn>frame object</dfn> is a Lisp object that
+represents a frame on the screen.  See <a href="Frame-Type.html#Frame-Type">Frame Type</a>.
 
    <p>A frame initially contains a single main window and/or a minibuffer
 window; you can subdivide the main window vertically or horizontally
-into smaller windows.  In Emacs Lisp, a <dfn>frame object</dfn> is a Lisp
-object that represents a frame on the screen.
+into smaller windows.  See <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>.
 
-   <p><a name="index-terminal-frame-2125"></a>  When Emacs runs on a text-only terminal, it starts with one
-<dfn>terminal frame</dfn>.  If you create additional ones, Emacs displays
-one and only one at any given time&mdash;on the terminal screen, of course.
+   <p><a name="index-terminal-2208"></a>  A <dfn>terminal</dfn> is a display device capable of displaying one or
+more Emacs frames.  In Emacs Lisp, a <dfn>terminal object</dfn> is a Lisp
+object that represents a terminal.  See <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>.
 
-   <p><a name="index-window-frame-2126"></a>  When Emacs communicates directly with a supported window system, such
-as X, it does not have a terminal frame; instead, it starts with
-a single <dfn>window frame</dfn>, but you can create more, and Emacs can
-display several such frames at once as is usual for window systems.
+   <p><a name="index-terminal-frame-2209"></a><a name="index-window-frame-2210"></a>  There are two classes of terminals: text-only terminals and
+graphical terminals.  Text-only terminals are non-graphics-capable
+display devices, including &ldquo;terminal emulators&rdquo; such as xterm.  On
+text-only terminals, each frame occupies the entire terminal screen;
+although you can create additional frames and switch between them,
+only one frame can be shown at any given time.  We refer to frames on
+text-only terminals as <dfn>terminal frames</dfn>.  Graphical terminals, on
+the other hand, are graphics-capable windowing systems, such as the X
+Window System.  On a graphical terminal, Emacs can display multiple
+frames simultaneously.  We refer to such frames as <dfn>window
+frames</dfn>.
+
+   <p>On GNU and Unix systems, you can create additional frames on any
+available terminal, within a single Emacs session, regardless of
+whether Emacs was started on a text-only or graphical terminal.  Emacs
+can display on both graphical and text-only terminals simultaneously. 
+This comes in handy, for instance, when you connect to the same
+session from several remote locations.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
 
 <div class="defun">
-&mdash; Function: <b>framep</b><var> object<a name="index-framep-2127"></a></var><br>
+&mdash; Function: <b>framep</b><var> object<a name="index-framep-2211"></a></var><br>
 <blockquote><p>This predicate returns a non-<code>nil</code> value if <var>object</var> is a
 frame, and <code>nil</code> otherwise.  For a frame, the value indicates which
 kind of display the frame uses:
@@ -85,23 +99,40 @@ kind of display the frame uses:
           <dl>
 <dt><code>x</code><dd>The frame is displayed in an X window. 
 <br><dt><code>t</code><dd>A terminal frame on a character display. 
-<br><dt><code>mac</code><dd>The frame is displayed on a Macintosh. 
 <br><dt><code>w32</code><dd>The frame is displayed on MS-Windows 9X/NT. 
+<br><dt><code>ns</code><dd>The frame is displayed on a GNUstep or Macintosh Cocoa display. 
 <br><dt><code>pc</code><dd>The frame is displayed on an MS-DOS terminal. 
 </dl>
         </p></blockquote></div>
 
+<div class="defun">
+&mdash; Function: <b>frame-terminal</b><var> &amp;optional frame<a name="index-frame_002dterminal-2212"></a></var><br>
+<blockquote><p>This function returns the terminal object that displays <var>frame</var>. 
+If <var>frame</var> is <code>nil</code> or unspecified, it defaults to the
+selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>terminal-live-p</b><var> object<a name="index-terminal_002dlive_002dp-2213"></a></var><br>
+<blockquote><p>This predicate returns a non-<code>nil</code> value if <var>object</var> is a
+terminal that is alive (i.e. was not deleted), and <code>nil</code>
+otherwise.  For live terminals, the return value indicates what kind
+of frames are displayed on that terminal; the list of possible values
+is the same as for <code>framep</code> above. 
+</p></blockquote></div>
+
 <ul class="menu">
-<li><a accesskey="1" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>: 		Creating additional frames. 
-<li><a accesskey="2" href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>:            Creating frames on other displays. 
-<li><a accesskey="3" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>: 		Controlling frame size, position, font, etc. 
-<li><a accesskey="4" href="Frame-Titles.html#Frame-Titles">Frame Titles</a>:                 Automatic updating of frame titles. 
-<li><a accesskey="5" href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>: 		Frames last until explicitly deleted. 
-<li><a accesskey="6" href="Finding-All-Frames.html#Finding-All-Frames">Finding All Frames</a>: 		How to examine all existing frames. 
-<li><a accesskey="7" href="Frames-and-Windows.html#Frames-and-Windows">Frames and Windows</a>: 		A frame contains windows;
+<li><a accesskey="1" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>:              Creating additional frames. 
+<li><a accesskey="2" href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>:           Displaying on several different devices. 
+<li><a accesskey="3" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>:             Controlling frame size, position, font, etc. 
+<li><a accesskey="4" href="Terminal-Parameters.html#Terminal-Parameters">Terminal Parameters</a>:          Parameters common for all frames on terminal. 
+<li><a accesskey="5" href="Frame-Titles.html#Frame-Titles">Frame Titles</a>:                 Automatic updating of frame titles. 
+<li><a accesskey="6" href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>: 		Frames last until explicitly deleted. 
+<li><a accesskey="7" href="Finding-All-Frames.html#Finding-All-Frames">Finding All Frames</a>: 		How to examine all existing frames. 
+<li><a accesskey="8" href="Frames-and-Windows.html#Frames-and-Windows">Frames and Windows</a>: 		A frame contains windows;
 				  display of text always works through windows. 
-<li><a accesskey="8" href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>: 	How a frame finds the minibuffer to use. 
-<li><a accesskey="9" href="Input-Focus.html#Input-Focus">Input Focus</a>: 			Specifying the selected frame. 
+<li><a accesskey="9" href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>: 	How a frame finds the minibuffer to use. 
+<li><a href="Input-Focus.html#Input-Focus">Input Focus</a>: 			Specifying the selected frame. 
 <li><a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>: 	Frames may be visible or invisible, or icons. 
 <li><a href="Raising-and-Lowering.html#Raising-and-Lowering">Raising and Lowering</a>: 	Raising a frame makes it hide other windows;
 				  lowering it makes the others hide it. 
@@ -118,9 +149,6 @@ kind of display the frame uses:
 <li><a href="Resources.html#Resources">Resources</a>: 		        Getting resource values from the server. 
 <li><a href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>:      Determining the features of a terminal. 
 </ul>
-
-   <p>See <a href="Display.html#Display">Display</a>, for information about the related topic of
-controlling Emacs redisplay.
 
    </body></html>
 

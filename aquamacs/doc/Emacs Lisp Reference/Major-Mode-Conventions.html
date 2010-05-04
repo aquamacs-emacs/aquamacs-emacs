@@ -3,33 +3,33 @@
 <title>Major Mode Conventions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link rel="prev" href="Major-Mode-Basics.html#Major-Mode-Basics" title="Major Mode Basics">
 <link rel="next" href="Auto-Major-Mode.html#Auto-Major-Mode" title="Auto Major Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Major-Mode-Conventions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Mode-Basics.html#Major-Mode-Basics">Major Mode Basics</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Mod
 
 <h4 class="subsection">23.2.2 Major Mode Conventions</h4>
 
-<p><a name="index-major-mode-conventions-1528"></a><a name="index-conventions-for-writing-major-modes-1529"></a>
+<p><a name="index-major-mode-conventions-1584"></a><a name="index-conventions-for-writing-major-modes-1585"></a>
   The code for existing major modes follows various coding conventions,
 including conventions for local keymap and syntax table initialization,
 global names, and hooks.  Please follow these conventions when you
@@ -72,7 +72,7 @@ Emacs developers point out an area where your major mode deviates from
 the usual conventions, please make it compatible.
 
      <ul>
-<li>Define a command whose name ends in `<samp><span class="samp">-mode</span></samp>', with no arguments,
+<li>Define a command whose name ends in &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;, with no arguments,
 that switches to the new mode in the current buffer.  This command
 should set up the keymap, syntax table, and buffer-local variables in an
 existing buffer, without changing the buffer's contents.
@@ -82,8 +82,8 @@ special commands available in this mode.  <kbd>C-h m</kbd>
 (<code>describe-mode</code>) in your mode will display this string.
 
      <p>The documentation string may include the special documentation
-substrings, `<samp><span class="samp">\[</span><var>command</var><span class="samp">]</span></samp>', `<samp><span class="samp">\{</span><var>keymap</var><span class="samp">}</span></samp>', and
-`<samp><span class="samp">\&lt;</span><var>keymap</var><span class="samp">&gt;</span></samp>', which enable the documentation to adapt
+substrings, &lsquo;<samp><span class="samp">\[</span><var>command</var><span class="samp">]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\{</span><var>keymap</var><span class="samp">}</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">\&lt;</span><var>keymap</var><span class="samp">&gt;</span></samp>&rsquo;, which enable the documentation to adapt
 automatically to the user's own key bindings.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
 
      <li>The major mode command should start by calling
@@ -96,10 +96,10 @@ major mode command symbol.  This is how <code>describe-mode</code> discovers
 which documentation to print.
 
      <li>The major mode command should set the variable <code>mode-name</code> to the
-&ldquo;pretty&rdquo; name of the mode, as a string.  This string appears in the
-mode line.
+&ldquo;pretty&rdquo; name of the mode, usually a string (but see <a href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>, for other possible forms).  The name of the mode appears
+in the mode line.
 
-     <li><a name="index-functions-in-modes-1530"></a>Since all global names are in the same name space, all the global
+     <li><a name="index-functions-in-modes-1586"></a>Since all global names are in the same name space, all the global
 variables, constants, and functions that are part of the mode should
 have names that start with the major mode name (or with an abbreviation
 of it if the name is long).  See <a href="Coding-Conventions.html#Coding-Conventions">Coding Conventions</a>.
@@ -110,7 +110,7 @@ probably useful.  So the mode should set <code>indent-line-function</code>
 to a suitable function, and probably customize other variables
 for indentation.
 
-     <li><a name="index-keymaps-in-modes-1531"></a>The major mode should usually have its own keymap, which is used as the
+     <li><a name="index-keymaps-in-modes-1587"></a>The major mode should usually have its own keymap, which is used as the
 local keymap in all buffers in that mode.  The major mode command should
 call <code>use-local-map</code> to install this local map.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>, for more information.
 
@@ -146,7 +146,7 @@ rarely of any use in the minibuffer.  Major modes such as Dired or
 Rmail that do not allow self-insertion of text can reasonably redefine
 letters and other printing characters as special commands.
 
-     <li>Major modes modes for editing text should not define &lt;RET&gt; to do
+     <li>Major modes for editing text should not define &lt;RET&gt; to do
 anything other than insert a newline.  However, it is ok for
 specialized modes for text that users don't directly edit, such as
 Dired and Info modes, to redefine &lt;RET&gt; to do something entirely
@@ -158,14 +158,14 @@ each user to decide.  However, a major mode should customize other
 variables so that Auto-Fill mode will work usefully <em>if</em> the user
 decides to use it.
 
-     <li><a name="index-syntax-tables-in-modes-1532"></a>The mode may have its own syntax table or may share one with other
+     <li><a name="index-syntax-tables-in-modes-1588"></a>The mode may have its own syntax table or may share one with other
 related modes.  If it has its own syntax table, it should store this in
 a variable named <var>modename</var><code>-mode-syntax-table</code>.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
 
      <li>If the mode handles a language that has a syntax for comments, it should
 set the variables that define the comment syntax.  See <a href="../emacs/Options-for-Comments.html#Options-for-Comments">Options Controlling Comments</a>.
 
-     <li><a name="index-abbrev-tables-in-modes-1533"></a>The mode may have its own abbrev table or may share one with other
+     <li><a name="index-abbrev-tables-in-modes-1589"></a>The mode may have its own abbrev table or may share one with other
 related modes.  If it has its own abbrev table, it should store this
 in a variable named <var>modename</var><code>-mode-abbrev-table</code>.  If the
 major mode command defines any abbrevs itself, it should pass <code>t</code>
@@ -191,7 +191,7 @@ this mode.
 that they are not reinitialized if they already have a value.  (Such
 reinitialization could discard customizations made by the user.)
 
-     <li><a name="index-buffer_002dlocal-variables-in-modes-1534"></a>To make a buffer-local binding for an Emacs customization variable, use
+     <li><a name="index-buffer_002dlocal-variables-in-modes-1590"></a>To make a buffer-local binding for an Emacs customization variable, use
 <code>make-local-variable</code> in the major mode command, not
 <code>make-variable-buffer-local</code>.  The latter function would make the
 variable local to every buffer in which it is subsequently set, which
@@ -203,7 +203,7 @@ mode to have such global effects.  See <a href="Buffer_002dLocal-Variables.html#
 which is used only within that package.  Using it on a variable used by
 other packages would interfere with them.
 
-     <li><a name="index-mode-hook-1535"></a><a name="index-major-mode-hook-1536"></a>Each major mode should have a normal <dfn>mode hook</dfn> named
+     <li><a name="index-mode-hook-1591"></a><a name="index-major-mode-hook-1592"></a>Each major mode should have a normal <dfn>mode hook</dfn> named
 <var>modename</var><code>-mode-hook</code>.  The very last thing the major mode command
 should do is to call <code>run-mode-hooks</code>.  This runs the mode hook,
 and then runs the normal hook <code>after-change-major-mode-hook</code>. 
@@ -212,9 +212,9 @@ See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.
      <li>The major mode command may start by calling some other major mode
 command (called the <dfn>parent mode</dfn>) and then alter some of its
 settings.  A mode that does this is called a <dfn>derived mode</dfn>.  The
-recommended way to define one is to use <code>define-derived-mode</code>,
-but this is not required.  Such a mode should call the parent mode
-command inside a <code>delay-mode-hooks</code> form.  (Using
+recommended way to define one is to use the <code>define-derived-mode</code>
+macro, but this is not required.  Such a mode should call the parent
+mode command inside a <code>delay-mode-hooks</code> form.  (Using
 <code>define-derived-mode</code> does this automatically.)  See <a href="Derived-Modes.html#Derived-Modes">Derived Modes</a>, and <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.
 
      <li>If something special should be done if the user switches a buffer from
@@ -225,13 +225,19 @@ value for <code>change-major-mode-hook</code> (see <a href="Creating-Buffer_002d
 major mode command symbol should have a property named <code>mode-class</code>
 with value <code>special</code>, put on as follows:
 
-     <p><a name="index-mode_002dclass-_0040r_007b_0028property_0029_007d-1537"></a><a name="index-g_t_0040code_007bspecial_007d-1538"></a>
+     <p><a name="index-mode_002dclass-_0040r_007b_0028property_0029_007d-1593"></a><a name="index-g_t_0040code_007bspecial_007d-1594"></a>
      <pre class="example">          (put 'funny-mode 'mode-class 'special)
-     </pre>
+</pre>
      <p class="noindent">This tells Emacs that new buffers created while the current buffer is
-in Funny mode should not inherit Funny mode, in case
-<code>default-major-mode</code> is <code>nil</code>.  Modes such as Dired, Rmail,
+in Funny mode should not inherit Funny mode, in case the default value
+of <code>major-mode</code> is <code>nil</code>.  Modes such as Dired, Rmail,
 and Buffer List use this feature.
+
+     <p>The <code>define-derived-mode</code> macro automatically marks the derived
+mode as special if the parent mode is special.  The special mode
+<code>special-mode</code> provides a convenient parent for other special
+modes to inherit from; it sets <code>buffer-read-only</code> to <code>t</code>,
+and does nothing else.
 
      <li>If you want to make the new mode the default for files with certain
 recognizable names, add an element to <code>auto-mode-alist</code> to select
@@ -248,7 +254,7 @@ the file that contains the mode definition.
 <code>auto-mode-alist</code>, that users can include in their init files
 (see <a href="Init-File.html#Init-File">Init File</a>).
 
-     <li><a name="index-mode-loading-1539"></a>The top-level forms in the file defining the mode should be written so
+     <li><a name="index-mode-loading-1595"></a>The top-level forms in the file defining the mode should be written so
 that they may be evaluated more than once without adverse consequences. 
 Even if you never load the file more than once, someone else will. 
 </ul>

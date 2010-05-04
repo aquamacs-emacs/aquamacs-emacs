@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Swapping Text - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="Indirect-Buffers.html#Indirect-Buffers" title="Indirect Buffers">
+<link rel="next" href="Buffer-Gap.html#Buffer-Gap" title="Buffer Gap">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Swapping-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<h3 class="section">27.12 Swapping Text Between Two Buffers</h3>
+
+<p><a name="index-swap-text-between-buffers-2032"></a><a name="index-virtual-buffers-2033"></a>
+  Specialized modes sometimes need to let the user access from the
+same buffer several vastly different types of text.  For example, you
+may need to display a summary of the buffer text, in addition to
+letting the user access the text itself.
+
+   <p>This could be implemented with multiple buffers (kept in sync when
+the user edits the text), or with narrowing (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  But
+these alternatives might sometimes become tedious or prohibitively
+expensive, especially if each type of text requires expensive
+buffer-global operations in order to provide correct display and
+editing commands.
+
+   <p>Emacs provides another facility for such modes: you can quickly swap
+buffer text between two buffers with <code>buffer-swap-text</code>.  This
+function is very fast because it doesn't move any text, it only
+changes the internal data structures of the buffer object to point to
+a different chunk of text.  Using it, you can pretend that a group of
+two or more buffers are actually a single virtual buffer that holds
+the contents of all the individual buffers together.
+
+<div class="defun">
+&mdash; Function: <b>buffer-swap-text</b><var> buffer<a name="index-buffer_002dswap_002dtext-2034"></a></var><br>
+<blockquote><p>This function swaps the text of the current buffer and that of its
+argument <var>buffer</var>.  It signals an error if one of the two buffers
+is an indirect buffer (see <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>) or is a base buffer
+of an indirect buffer.
+
+        <p>All the buffer properties that are related to the buffer text are
+swapped as well: the positions of point and mark, all the markers, the
+overlays, the text properties, the undo list, the value of the
+<code>enable-multibyte-characters</code> flag (see <a href="Text-Representations.html#Text-Representations">enable-multibyte-characters</a>), etc. 
+</p></blockquote></div>
+
+   <p>If you use <code>buffer-swap-text</code> on a file-visiting buffer, you
+should set up a hook to save the buffer's original text rather than
+what it was swapped with.  <code>write-region-annotate-functions</code>
+works for this purpose.  You should probably set
+<code>buffer-saved-size</code> to &minus;2 in the buffer, so that changes
+in the text it is swapped with will not interfere with auto-saving.
+
+   </body></html>
+

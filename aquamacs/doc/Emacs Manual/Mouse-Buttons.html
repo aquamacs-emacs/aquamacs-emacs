@@ -3,7 +3,7 @@
 <title>Mouse Buttons - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
 <link rel="prev" href="Named-ASCII-Chars.html#Named-ASCII-Chars" title="Named ASCII Chars">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Mouse-Buttons"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Disabling.html#Disabling">Disabling</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Named-ASCII-Chars.html#Named-ASCII-Chars">Named ASCII Chars</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 
 <h4 class="subsection">57.4.10 Rebinding Mouse Buttons</h4>
 
-<p><a name="index-mouse-button-events-4010"></a><a name="index-rebinding-mouse-buttons-4011"></a><a name="index-click-events-4012"></a><a name="index-drag-events-4013"></a><a name="index-down-events-4014"></a><a name="index-button-down-events-4015"></a>
+<p><a name="index-mouse-button-events-4044"></a><a name="index-rebinding-mouse-buttons-4045"></a><a name="index-click-events-4046"></a><a name="index-drag-events-4047"></a><a name="index-down-events-4048"></a><a name="index-button-down-events-4049"></a>
   Emacs uses Lisp symbols to designate mouse buttons, too.  The ordinary
 mouse events in Emacs are <dfn>click</dfn> events; these happen when you
 press a button and release it without moving the mouse.  You can also
@@ -71,21 +71,21 @@ redefine the second mouse button to split the current window:
 <pre class="example">     (global-set-key [mouse-2] 'split-window-vertically)
 </pre>
    <p>The symbols for drag events are similar, but have the prefix
-`<samp><span class="samp">drag-</span></samp>' before the word `<samp><span class="samp">mouse</span></samp>'.  For example, dragging the
+&lsquo;<samp><span class="samp">drag-</span></samp>&rsquo; before the word &lsquo;<samp><span class="samp">mouse</span></samp>&rsquo;.  For example, dragging the
 first button generates a <code>drag-mouse-1</code> event.
 
    <p>You can also define bindings for events that occur when a mouse button
-is pressed down.  These events start with `<samp><span class="samp">down-</span></samp>' instead of
-`<samp><span class="samp">drag-</span></samp>'.  Such events are generated only if they have key bindings. 
+is pressed down.  These events start with &lsquo;<samp><span class="samp">down-</span></samp>&rsquo; instead of
+&lsquo;<samp><span class="samp">drag-</span></samp>&rsquo;.  Such events are generated only if they have key bindings. 
 When you get a button-down event, a corresponding click or drag event
 will always follow.
 
-   <p><a name="index-double-clicks-4016"></a><a name="index-triple-clicks-4017"></a>  If you wish, you can distinguish single, double, and triple clicks.  A
+   <p><a name="index-double-clicks-4050"></a><a name="index-triple-clicks-4051"></a>  If you wish, you can distinguish single, double, and triple clicks.  A
 double click means clicking a mouse button twice in approximately the
 same place.  The first click generates an ordinary click event.  The
 second click, if it comes soon enough, generates a double-click event
 instead.  The event type for a double-click event starts with
-`<samp><span class="samp">double-</span></samp>': for example, <code>double-mouse-3</code>.
+&lsquo;<samp><span class="samp">double-</span></samp>&rsquo;: for example, <code>double-mouse-3</code>.
 
    <p>This means that you can give a special meaning to the second click at
 the same place, but it must act on the assumption that the ordinary
@@ -103,7 +103,7 @@ particular double click specially, it executes the single-click command
 twice.
 
    <p>Emacs also supports triple-click events whose names start with
-`<samp><span class="samp">triple-</span></samp>'.  Emacs does not distinguish quadruple clicks as event
+&lsquo;<samp><span class="samp">triple-</span></samp>&rsquo;.  Emacs does not distinguish quadruple clicks as event
 types; clicks beyond the third generate additional triple-click events. 
 However, the full number of clicks is recorded in the event list, so
 if you know Emacs Lisp you can distinguish if you really want to
@@ -115,27 +115,27 @@ click, five are equivalent to two, and six are equivalent to three.
 
    <p>Emacs also records multiple presses in drag and button-down events. 
 For example, when you press a button twice, then move the mouse while
-holding the button, Emacs gets a `<samp><span class="samp">double-drag-</span></samp>' event.  And at the
+holding the button, Emacs gets a &lsquo;<samp><span class="samp">double-drag-</span></samp>&rsquo; event.  And at the
 moment when you press it down for the second time, Emacs gets a
-`<samp><span class="samp">double-down-</span></samp>' event (which is ignored, like all button-down
+&lsquo;<samp><span class="samp">double-down-</span></samp>&rsquo; event (which is ignored, like all button-down
 events, if it has no binding).
 
-   <p><a name="index-double_002dclick_002dtime-4018"></a>  The variable <code>double-click-time</code> specifies how much time can
+   <p><a name="index-double_002dclick_002dtime-4052"></a>  The variable <code>double-click-time</code> specifies how much time can
 elapse between clicks and still allow them to be grouped as a multiple
 click.  Its value is in units of milliseconds.  If the value is
 <code>nil</code>, double clicks are not detected at all.  If the value is
 <code>t</code>, then there is no time limit.  The default is 500.
 
-   <p><a name="index-double_002dclick_002dfuzz-4019"></a>  The variable <code>double-click-fuzz</code> specifies how much the mouse
+   <p><a name="index-double_002dclick_002dfuzz-4053"></a>  The variable <code>double-click-fuzz</code> specifies how much the mouse
 can move between clicks and still allow them to be grouped as a multiple
 click.  Its value is in units of pixels on windowed displays and in
 units of 1/8 of a character cell on text-mode terminals; the default is
 3.
 
    <p>The symbols for mouse events also indicate the status of the modifier
-keys, with the usual prefixes `<samp><span class="samp">C-</span></samp>', `<samp><span class="samp">M-</span></samp>', `<samp><span class="samp">H-</span></samp>',
-`<samp><span class="samp">s-</span></samp>', `<samp><span class="samp">A-</span></samp>' and `<samp><span class="samp">S-</span></samp>'.  These always precede `<samp><span class="samp">double-</span></samp>'
-or `<samp><span class="samp">triple-</span></samp>', which always precede `<samp><span class="samp">drag-</span></samp>' or `<samp><span class="samp">down-</span></samp>'.
+keys, with the usual prefixes &lsquo;<samp><span class="samp">C-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">M-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">H-</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">s-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">A-</span></samp>&rsquo; and &lsquo;<samp><span class="samp">S-</span></samp>&rsquo;.  These always precede &lsquo;<samp><span class="samp">double-</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">triple-</span></samp>&rsquo;, which always precede &lsquo;<samp><span class="samp">drag-</span></samp>&rsquo; or &lsquo;<samp><span class="samp">down-</span></samp>&rsquo;.
 
    <p>A frame includes areas that don't show text from the buffer, such as
 the mode line and the scroll bar.  You can tell whether a mouse button

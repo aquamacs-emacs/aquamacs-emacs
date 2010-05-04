@@ -3,33 +3,33 @@
 <title>Magic File Names - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="prev" href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs" title="Create/Delete Dirs">
 <link rel="next" href="Format-Conversion.html#Format-Conversion" title="Format Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Magic-File-Names"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Format-Conversion.html#Format-Conversion">Format Conversion</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.11 Making Certain File Names &ldquo;Magic&rdquo;</h3>
 
-<p><a name="index-magic-file-names-1826"></a>
+<p><a name="index-magic-file-names-1886"></a>
 <!-- Emacs 19 feature -->
   You can implement special handling for certain file names.  This is
 called making those names <dfn>magic</dfn>.  The principal use for this
@@ -67,7 +67,7 @@ expression to define the class of names (all those that match the
 regular expression), plus a handler that implements all the primitive
 Emacs file operations for file names that do match.
 
-   <p>The variable <code>file-name-handler-alist</code> holds a list of handlers,
+   <p><a name="index-file_002dname_002dhandler_002dalist-1887"></a>  The variable <code>file-name-handler-alist</code> holds a list of handlers,
 together with regular expressions that determine when to apply each
 handler.  Each element has this form:
 
@@ -114,13 +114,12 @@ first, before handlers for jobs such as remote file access.
 
 <p class="noindent"><code>access-file</code>, <code>add-name-to-file</code>,
 <code>byte-compiler-base-file-name</code>,<br>
-<code>copy-file</code>, <code>delete-directory</code>,
-<code>delete-file</code>,
+<code>copy-directory</code>, <code>copy-file</code>,
+<code>delete-directory</code>, <code>delete-file</code>,
 <code>diff-latest-backup-file</code>,
 <code>directory-file-name</code>,
 <code>directory-files</code>,
 <code>directory-files-and-attributes</code>,
-<code>dired-call-process</code>,
 <code>dired-compress-file</code>, <code>dired-uncache</code>,<br>
 <code>expand-file-name</code>,
 <code>file-accessible-directory-p</code>,
@@ -138,7 +137,7 @@ first, before handlers for jobs such as remote file access.
 <code>file-readable-p</code>, <code>file-regular-p</code>, <code>file-symlink-p</code>,
 <code>file-truename</code>, <code>file-writable-p</code>,
 <code>find-backup-file-name</code>,
-<code>find-file-noselect</code>,<br>
+<!-- Not sure why it was here:   @code{find-file-noselect},@* -->
 <code>get-file-buffer</code>,
 <code>insert-directory</code>,
 <code>insert-file-contents</code>,<br>
@@ -147,8 +146,10 @@ first, before handlers for jobs such as remote file access.
 <code>make-directory</code>,
 <code>make-directory-internal</code>,
 <code>make-symbolic-link</code>,<br>
+<code>process-file</code>,
 <code>rename-file</code>, <code>set-file-modes</code>, <code>set-file-times</code>,
 <code>set-visited-file-modtime</code>, <code>shell-command</code>,
+<code>start-file-process</code>,
 <code>substitute-in-file-name</code>,<br>
 <code>unhandled-file-name-directory</code>,
 <code>vc-registered</code>,
@@ -191,16 +192,16 @@ shown above; the details are crucial for proper behavior in the case of
 multiple handlers, and for operations that have two file names that may
 each have handlers.
 
-   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-1827"></a>  Handlers that don't really do anything special for actual access to the
+   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-1888"></a>  Handlers that don't really do anything special for actual access to the
 file&mdash;such as the ones that implement completion of host names for
 remote file names&mdash;should have a non-<code>nil</code> <code>safe-magic</code>
 property.  For instance, Emacs normally &ldquo;protects&rdquo; directory names
 it finds in <code>PATH</code> from becoming magic, if they look like magic
-file names, by prefixing them with `<samp><span class="samp">/:</span></samp>'.  But if the handler that
+file names, by prefixing them with &lsquo;<samp><span class="samp">/:</span></samp>&rsquo;.  But if the handler that
 would be used for them has a non-<code>nil</code> <code>safe-magic</code>
-property, the `<samp><span class="samp">/:</span></samp>' is not added.
+property, the &lsquo;<samp><span class="samp">/:</span></samp>&rsquo; is not added.
 
-   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-1828"></a>  A file name handler can have an <code>operations</code> property to
+   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-1889"></a>  A file name handler can have an <code>operations</code> property to
 declare which operations it handles in a nontrivial way.  If this
 property has a non-<code>nil</code> value, it should be a list of
 operations; then only those operations will call the handler.  This
@@ -217,18 +218,18 @@ handle <code>file-exists-p</code>, then it need not handle <code>load</code>
 nontrivially.
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-1829"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-1890"></a></var><br>
 <blockquote><p>This variable holds a list of handlers whose use is presently inhibited
 for a certain operation. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-1830"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-1891"></a></var><br>
 <blockquote><p>The operation for which certain handlers are presently inhibited. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-1831"></a></var><br>
+&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-1892"></a></var><br>
 <blockquote><p>This function returns the handler function for file name <var>file</var>,
 or <code>nil</code> if there is none.  The argument <var>operation</var> should
 be the operation to be performed on the file&mdash;the value you will pass
@@ -239,7 +240,7 @@ function returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-1832"></a></var><br>
+&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-1893"></a></var><br>
 <blockquote><p>This function copies file <var>filename</var> to an ordinary non-magic file
 on the local machine, if it isn't on the local machine already.  Magic
 file names should handle the <code>file-local-copy</code> operation if they
@@ -254,7 +255,7 @@ of the local copy file.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-remote-p</b><var> filename<a name="index-file_002dremote_002dp-1833"></a></var><br>
+&mdash; Function: <b>file-remote-p</b><var> filename &amp;optional identification connected<a name="index-file_002dremote_002dp-1894"></a></var><br>
 <blockquote><p>This function tests whether <var>filename</var> is a remote file.  If
 <var>filename</var> is local (not remote), the return value is <code>nil</code>. 
 If <var>filename</var> is indeed remote, the return value is a string that
@@ -263,22 +264,36 @@ identifies the remote system.
         <p>This identifier string can include a host name and a user name, as
 well as characters designating the method used to access the remote
 system.  For example, the remote identifier string for the filename
-<code>/ssh:user@host:/some/file</code> is <code>/ssh:user@host:</code>.
+<code>/sudo::/some/file</code> is <code>/sudo:root@localhost:</code>.
 
         <p>If <code>file-remote-p</code> returns the same identifier for two different
 filenames, that means they are stored on the same file system and can
 be accessed locally with respect to each other.  This means, for
 example, that it is possible to start a remote process accessing both
 files at the same time.  Implementors of file handlers need to ensure
-this principle is valid. 
+this principle is valid.
+
+        <p><var>identification</var> specifies which part of the identifier shall be
+returned as string.  <var>identification</var> can be the symbol
+<code>method</code>, <code>user</code> or <code>host</code>; any other value is handled
+like <code>nil</code> and means to return the complete identifier string. 
+In the example above, the remote <code>user</code> identifier string would
+be <code>root</code>.
+
+        <p>If <var>connected</var> is non-<code>nil</code>, this function returns <code>nil</code>
+even if <var>filename</var> is remote, if Emacs has no network connection
+to its host.  This is useful when you want to avoid the delay of
+making connections when they don't exist. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-1834"></a></var><br>
+&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-1895"></a></var><br>
 <blockquote><p>This function returns the name of a directory that is not magic.  It
 uses the directory part of <var>filename</var> if that is not magic.  For a
 magic file name, it invokes the file name handler, which therefore
-decides what value to return.
+decides what value to return.  If <var>filename</var> is not accessible
+from a local process, then the file name handler should indicate it by
+returning <code>nil</code>.
 
         <p>This is useful for running a subprocess; every subprocess must have a
 non-magic directory to serve as its current directory, and this function

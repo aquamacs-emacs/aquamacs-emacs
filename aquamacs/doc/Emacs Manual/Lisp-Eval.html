@@ -3,7 +3,7 @@
 <title>Lisp Eval - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Building.html#Building" title="Building">
 <link rel="prev" href="Lisp-Libraries.html#Lisp-Libraries" title="Lisp Libraries">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Lisp-Eval"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
@@ -57,8 +57,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 
 <h3 class="section">31.9 Evaluating Emacs Lisp Expressions</h3>
 
-<p><a name="index-Emacs_002dLisp-mode-2368"></a><a name="index-mode_002c-Emacs_002dLisp-2369"></a>
-<a name="index-emacs_002dlisp_002dmode-2370"></a>  Lisp programs intended to be run in Emacs should be edited in
+<p><a name="index-Emacs_002dLisp-mode-2390"></a><a name="index-mode_002c-Emacs_002dLisp-2391"></a>
+<a name="index-emacs_002dlisp_002dmode-2392"></a>  Lisp programs intended to be run in Emacs should be edited in
 Emacs-Lisp mode; this happens automatically for file names ending in
 <samp><span class="file">.el</span></samp>.  By contrast, Lisp mode itself is used for editing Lisp
 programs intended for other Lisp systems.  To switch to Emacs-Lisp mode
@@ -83,14 +83,14 @@ the echo area (<code>eval-defun</code>).
 <br><dt><kbd>M-x eval-buffer</kbd><dd>Evaluate all the Lisp expressions in the buffer. 
 </dl>
 
-   <p><a name="index-M_002d_003a-2371"></a><a name="index-eval_002dexpression-2372"></a>  <kbd>M-:</kbd> (<code>eval-expression</code>) is the most basic command for evaluating
+   <p><a name="index-M_002d_003a-2393"></a><a name="index-eval_002dexpression-2394"></a>  <kbd>M-:</kbd> (<code>eval-expression</code>) is the most basic command for evaluating
 a Lisp expression interactively.  It reads the expression using the
 minibuffer, so you can execute any expression on a buffer regardless of
 what the buffer contains.  When the expression is evaluated, the current
 buffer is once again the buffer that was current when <kbd>M-:</kbd> was
 typed.
 
-   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Emacs_002dLisp-mode_0029_007d-2373"></a><a name="index-eval_002ddefun-2374"></a>  In Emacs-Lisp mode, the key <kbd>C-M-x</kbd> is bound to the command
+   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Emacs_002dLisp-mode_0029_007d-2395"></a><a name="index-eval_002ddefun-2396"></a>  In Emacs-Lisp mode, the key <kbd>C-M-x</kbd> is bound to the command
 <code>eval-defun</code>, which parses the defun containing or following point
 as a Lisp expression and evaluates it.  The value is printed in the echo
 area.  This command is convenient for installing in the Lisp environment
@@ -105,7 +105,7 @@ This special feature is convenient for debugging Lisp programs.
 Typing <kbd>C-M-x</kbd> on a <code>defface</code> expression reinitializes
 the face according to the <code>defface</code> specification.
 
-   <p><a name="index-C_002dx-C_002de-2375"></a><a name="index-eval_002dlast_002dsexp-2376"></a>  The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the Lisp
+   <p><a name="index-C_002dx-C_002de-2397"></a><a name="index-eval_002dlast_002dsexp-2398"></a>  The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the Lisp
 expression preceding point in the buffer, and displays the value in the
 echo area.  It is available in all major modes, not just Emacs-Lisp
 mode.  It does not treat <code>defvar</code> specially.
@@ -120,7 +120,7 @@ displaying it in the echo area.  The argument's value does not matter.
 <kbd>C-M-x</kbd> with a numeric argument instruments the function
 definition for Edebug (see <a href="../elisp/Instrumenting.html#Instrumenting">Instrumenting for Edebug</a>).
 
-   <p><a name="index-eval_002dregion-2377"></a><a name="index-eval_002dbuffer-2378"></a>  The most general command for evaluating Lisp expressions from a buffer
+   <p><a name="index-eval_002dregion-2399"></a><a name="index-eval_002dbuffer-2400"></a>  The most general command for evaluating Lisp expressions from a buffer
 is <code>eval-region</code>.  <kbd>M-x eval-region</kbd> parses the text of the
 region as one or more Lisp expressions, evaluating them one by one. 
 <kbd>M-x eval-buffer</kbd> is similar but evaluates the entire
@@ -129,7 +129,7 @@ Lisp code that you are ready to test.  Later, as you find bugs and
 change individual functions, use <kbd>C-M-x</kbd> on each function that you
 change.  This keeps the Lisp world in step with the source file.
 
-   <p><a name="index-eval_002dexpression_002dprint_002dlevel-2379"></a><a name="index-eval_002dexpression_002dprint_002dlength-2380"></a><a name="index-eval_002dexpression_002ddebug_002don_002derror-2381"></a>  The two customizable variables <code>eval-expression-print-level</code> and
+   <p><a name="index-eval_002dexpression_002dprint_002dlevel-2401"></a><a name="index-eval_002dexpression_002dprint_002dlength-2402"></a><a name="index-eval_002dexpression_002ddebug_002don_002derror-2403"></a>  The two customizable variables <code>eval-expression-print-level</code> and
 <code>eval-expression-print-length</code> control the maximum depth and length
 of lists to print in the result of the evaluation commands before
 abbreviating them.  <code>eval-expression-debug-on-error</code> controls

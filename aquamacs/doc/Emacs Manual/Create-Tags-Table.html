@@ -3,7 +3,7 @@
 <title>Create Tags Table - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Tags.html#Tags" title="Tags">
 <link rel="prev" href="Tag-Syntax.html#Tag-Syntax" title="Tag Syntax">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Create-Tags-Table"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Etags-Regexps.html#Etags-Regexps">Etags Regexps</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Tag-Syntax.html#Tag-Syntax">Tag Syntax</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
 
 <h4 class="subsection">32.3.2 Creating Tags Tables</h4>
 
-<p><a name="index-g_t_0040code_007betags_007d-program-2524"></a>
+<p><a name="index-g_t_0040code_007betags_007d-program-2550"></a>
   The <code>etags</code> program is used to create a tags table file.  It knows
 the syntax of several languages, as described in
 <a href="Tag-Syntax.html#Tag-Syntax">Tag Syntax</a>. 
@@ -68,18 +68,18 @@ Here is how to run <code>etags</code>:
    <p class="noindent">The <code>etags</code> program reads the specified files, and writes a tags
 table named <samp><span class="file">TAGS</span></samp> in the current working directory.  You can
 optionally specify a different file name for the tags table by using the
-`<samp><span class="samp">--output=</span><var>file</var></samp>' option; specifying <samp><span class="file">-</span></samp> as a file name
+&lsquo;<samp><span class="samp">--output=</span><var>file</var></samp>&rsquo; option; specifying <samp><span class="file">-</span></samp> as a file name
 prints the tags table to standard output.
 
    <p>If the specified files don't exist, <code>etags</code> looks for
 compressed versions of them and uncompresses them to read them.  Under
 MS-DOS, <code>etags</code> also looks for file names like <samp><span class="file">mycode.cgz</span></samp>
-if it is given `<samp><span class="samp">mycode.c</span></samp>' on the command line and <samp><span class="file">mycode.c</span></samp>
+if it is given &lsquo;<samp><span class="samp">mycode.c</span></samp>&rsquo; on the command line and <samp><span class="file">mycode.c</span></samp>
 does not exist.
 
    <p><code>etags</code> recognizes the language used in an input file based on
 its file name and contents.  You can specify the language with the
-`<samp><span class="samp">--language=</span><var>name</var></samp>' option, described below.
+&lsquo;<samp><span class="samp">--language=</span><var>name</var></samp>&rsquo; option, described below.
 
    <p>If the tags table data become outdated due to changes in the files
 described in the table, the way to update the tags table is the same
@@ -98,7 +98,7 @@ to have listed, or when you move tag definitions from one file to
 another, or when changes become substantial.
 
    <p>One tags table can virtually include another.  Specify the included
-tags file name with the `<samp><span class="samp">--include=</span><var>file</var></samp>' option when
+tags file name with the &lsquo;<samp><span class="samp">--include=</span><var>file</var></samp>&rsquo; option when
 creating the file that is to include it.  The latter file then acts as
 if it covered all the source files specified in the included file, as
 well as the files it directly contains.
@@ -121,7 +121,7 @@ generally render the file names invalid.
 the tags file will contain absolute file names.  This way, the tags file
 will still refer to the same files even if you move it, as long as the
 source files remain in the same place.  Absolute file names start with
-`<samp><span class="samp">/</span></samp>', or with `<samp><var>device</var><span class="samp">:/</span></samp>' on MS-DOS and MS-Windows.
+&lsquo;<samp><span class="samp">/</span></samp>&rsquo;, or with &lsquo;<samp><var>device</var><span class="samp">:/</span></samp>&rsquo; on MS-DOS and MS-Windows.
 
    <p>When you want to make a tags table from a great number of files, you
 may have problems listing them on the command line, because some systems
@@ -131,25 +131,25 @@ by typing a dash in place of the file names, like this:
 
 <pre class="smallexample">     find . -name "*.[chCH]" -print | etags -
 </pre>
-   <p>Use the option `<samp><span class="samp">--language=</span><var>name</var></samp>' to specify the language
+   <p>Use the option &lsquo;<samp><span class="samp">--language=</span><var>name</var></samp>&rsquo; to specify the language
 explicitly.  You can intermix these options with file names; each one
 applies to the file names that follow it.  Specify
-`<samp><span class="samp">--language=auto</span></samp>' to tell <code>etags</code> to resume guessing the
+&lsquo;<samp><span class="samp">--language=auto</span></samp>&rsquo; to tell <code>etags</code> to resume guessing the
 language from the file names and file contents.  Specify
-`<samp><span class="samp">--language=none</span></samp>' to turn off language-specific processing
+&lsquo;<samp><span class="samp">--language=none</span></samp>&rsquo; to turn off language-specific processing
 entirely; then <code>etags</code> recognizes tags by regexp matching alone
 (see <a href="Etags-Regexps.html#Etags-Regexps">Etags Regexps</a>).
 
-   <p>The option `<samp><span class="samp">--parse-stdin=</span><var>file</var></samp>' is mostly useful when
+   <p>The option &lsquo;<samp><span class="samp">--parse-stdin=</span><var>file</var></samp>&rsquo; is mostly useful when
 calling <code>etags</code> from programs.  It can be used (only once) in
 place of a file name on the command line.  <code>Etags</code> will read from
 standard input and mark the produced tags as belonging to the file
 <var>file</var>.
 
-   <p>`<samp><span class="samp">etags --help</span></samp>' outputs the list of the languages <code>etags</code>
+   <p>&lsquo;<samp><span class="samp">etags --help</span></samp>&rsquo; outputs the list of the languages <code>etags</code>
 knows, and the file name rules for guessing the language.  It also prints
 a list of all the available <code>etags</code> options, together with a short
-explanation.  If followed by one or more `<samp><span class="samp">--language=</span><var>lang</var></samp>'
+explanation.  If followed by one or more &lsquo;<samp><span class="samp">--language=</span><var>lang</var></samp>&rsquo;
 options, it outputs detailed information about how tags are generated for
 <var>lang</var>.
 

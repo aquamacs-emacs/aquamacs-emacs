@@ -3,7 +3,7 @@
 <title>File Names - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Files.html#Files" title="Files">
 <link rel="next" href="Visiting.html#Visiting" title="Visiting">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="File-Names"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Visiting.html#Visiting">Visiting</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
@@ -55,7 +55,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">22.1 File Names</h3>
 
-<p><a name="index-file-names-801"></a>
+<p><a name="index-file-names-805"></a>
   Many Emacs commands that operate on a file require you to specify
 the file name, using the minibuffer (see <a href="Minibuffer.html#Minibuffer">Minibuffer</a>).  You can use
 <dfn>completion</dfn> to specify long file names (see <a href="Completion.html#Completion">Completion</a>). 
@@ -68,7 +68,7 @@ used if you type just &lt;RET&gt; to enter an empty argument.  Normally,
 the default file name is the name of the file visited in the current
 buffer.
 
-   <p><a name="index-default_002ddirectory-802"></a><a name="index-insert_002ddefault_002ddirectory-803"></a>  Each buffer has a <dfn>default directory</dfn> which is normally the same
+   <p><a name="index-default_002ddirectory-806"></a><a name="index-insert_002ddefault_002ddirectory-807"></a>  Each buffer has a <dfn>default directory</dfn> which is normally the same
 as the directory of the file visited in that buffer.  For example, if
 the default file name is <samp><span class="file">/u/rms/gnu/gnu.tasks</span></samp>, the default
 directory is normally <samp><span class="file">/u/rms/gnu/</span></samp>.  The default directory is
@@ -84,18 +84,18 @@ in the default directory.  If you specify a directory in a relative
 fashion, with a name that does not start with a slash, it is
 interpreted with respect to the default directory.  For example,
 suppose the default directory is <samp><span class="file">/u/rms/gnu/</span></samp>.  Entering just
-`<samp><span class="samp">foo</span></samp>' in the minibuffer, with a directory omitted, specifies the
-file <samp><span class="file">/u/rms/gnu/foo</span></samp>; entering `<samp><span class="samp">../.login</span></samp>' specifies
-<samp><span class="file">/u/rms/.login</span></samp>; and entering `<samp><span class="samp">new/foo</span></samp>' specifies
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; in the minibuffer, with a directory omitted, specifies the
+file <samp><span class="file">/u/rms/gnu/foo</span></samp>; entering &lsquo;<samp><span class="samp">../.login</span></samp>&rsquo; specifies
+<samp><span class="file">/u/rms/.login</span></samp>; and entering &lsquo;<samp><span class="samp">new/foo</span></samp>&rsquo; specifies
 <samp><span class="file">/u/rms/gnu/new/foo</span></samp>.
 
    <p>When typing a file name into the minibuffer, you can make use of a
 couple of shortcuts: a double slash is interpreted as &ldquo;ignore
-everything before the second slash in the pair,&rdquo; and `<samp><span class="samp">~/</span></samp>' is
+everything before the second slash in the pair,&rdquo; and &lsquo;<samp><span class="samp">~/</span></samp>&rsquo; is
 interpreted as your home directory.  See <a href="Minibuffer-File.html#Minibuffer-File">Minibuffer File</a>, for more
 information about these shortcuts.
 
-   <p><a name="index-cd-804"></a><a name="index-pwd-805"></a>  The command <kbd>M-x pwd</kbd> displays the default directory, and the
+   <p><a name="index-cd-808"></a><a name="index-pwd-809"></a>  The command <kbd>M-x pwd</kbd> displays the default directory, and the
 command <kbd>M-x cd</kbd> sets it to a value read using the minibuffer.  A
 buffer's default directory changes only when the <code>cd</code> command is
 used.  A file-visiting buffer's default directory is initialized to
@@ -103,27 +103,27 @@ the directory of the file it visits.  If you create a buffer with
 <kbd>C-x b</kbd>, its default directory is copied from that of the buffer
 that was current at the time (see <a href="Select-Buffer.html#Select-Buffer">Select Buffer</a>).
 
-   <p><a name="index-environment-variables-in-file-names-806"></a><a name="index-expansion-of-environment-variables-807"></a><a name="index-g_t_0040code_007b_0024_007d-in-file-names-808"></a>  <a name="File-Names-with-_0024"></a>The character `<samp><span class="samp">$</span></samp>' is used to
+   <p><a name="index-environment-variables-in-file-names-810"></a><a name="index-expansion-of-environment-variables-811"></a><a name="index-g_t_0040code_007b_0024_007d-in-file-names-812"></a>  <a name="File-Names-with-_0024"></a>The character &lsquo;<samp><span class="samp">$</span></samp>&rsquo; is used to
 substitute an environment variable into a file name.  The name of the
 environment variable consists of all the alphanumeric characters after
-the `<samp><span class="samp">$</span></samp>'; alternatively, it can be enclosed in braces after the
-`<samp><span class="samp">$</span></samp>'.  For example, if you have used the shell command
+the &lsquo;<samp><span class="samp">$</span></samp>&rsquo;; alternatively, it can be enclosed in braces after the
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo;.  For example, if you have used the shell command
 <samp><span class="command">export FOO=rms/hacks</span></samp> to set up an environment variable named
 <samp><span class="env">FOO</span></samp>, then both <samp><span class="file">/u/$FOO/test.c</span></samp> and
 <samp><span class="file">/u/${FOO}/test.c</span></samp> are abbreviations for
 <samp><span class="file">/u/rms/hacks/test.c</span></samp>.  If the environment variable is not
-defined, no substitution occurs, so that the character `<samp><span class="samp">$</span></samp>' stands
+defined, no substitution occurs, so that the character &lsquo;<samp><span class="samp">$</span></samp>&rsquo; stands
 for itself.
 
    <p>Note that environment variables affect Emacs only if they are
 applied before Emacs is started.
 
-   <p>To access a file with `<samp><span class="samp">$</span></samp>' in its name, if the `<samp><span class="samp">$</span></samp>' causes
-expansion, type `<samp><span class="samp">$$</span></samp>'.  This pair is converted to a single
-`<samp><span class="samp">$</span></samp>' at the same time that variable substitution is performed for
-a single `<samp><span class="samp">$</span></samp>'.  Alternatively, quote the whole file name with
-`<samp><span class="samp">/:</span></samp>' (see <a href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>).  File names which begin with a
-literal `<samp><span class="samp">~</span></samp>' should also be quoted with `<samp><span class="samp">/:</span></samp>'.
+   <p>To access a file with &lsquo;<samp><span class="samp">$</span></samp>&rsquo; in its name, if the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; causes
+expansion, type &lsquo;<samp><span class="samp">$$</span></samp>&rsquo;.  This pair is converted to a single
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo; at the same time that variable substitution is performed for
+a single &lsquo;<samp><span class="samp">$</span></samp>&rsquo;.  Alternatively, quote the whole file name with
+&lsquo;<samp><span class="samp">/:</span></samp>&rsquo; (see <a href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>).  File names which begin with a
+literal &lsquo;<samp><span class="samp">~</span></samp>&rsquo; should also be quoted with &lsquo;<samp><span class="samp">/:</span></samp>&rsquo;.
 
    <p>You can include non-<acronym>ASCII</acronym> characters in file names if you set the
 variable <code>file-name-coding-system</code> to a non-<code>nil</code> value. 

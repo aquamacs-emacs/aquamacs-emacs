@@ -3,33 +3,33 @@
 <title>Local Variables - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
 <link rel="prev" href="Constant-Variables.html#Constant-Variables" title="Constant Variables">
 <link rel="next" href="Void-Variables.html#Void-Variables" title="Void Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Local-Variables"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Void-Variables.html#Void-Variables">Void Variables</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Constant-Variables.html#Constant-Variables">Constant Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.3 Local Variables</h3>
 
-<p><a name="index-binding-local-variables-577"></a><a name="index-local-variables-578"></a><a name="index-local-binding-579"></a><a name="index-global-binding-580"></a>
+<p><a name="index-binding-local-variables-584"></a><a name="index-local-variables-585"></a><a name="index-local-binding-586"></a><a name="index-global-binding-587"></a>
   Global variables have values that last until explicitly superseded
 with new values.  Sometimes it is useful to create variable values that
 exist temporarily&mdash;only until a certain part of the program finishes. 
@@ -68,11 +68,11 @@ new local values that last until the function exits.  The <code>let</code>
 special form explicitly establishes new local values for specified
 variables; these last until exit from the <code>let</code> form.
 
-   <p><a name="index-shadowing-of-variables-581"></a>  Establishing a local value saves away the previous value (or lack of
-one) of the variable.  When the life span of the local value is over,
-the previous value is restored.  In the mean time, we say that the
-previous value is <dfn>shadowed</dfn> and <dfn>not visible</dfn>.  Both global and
-local values may be shadowed (see <a href="Scope.html#Scope">Scope</a>).
+   <p><a name="index-shadowing-of-variables-588"></a>  Establishing a local value saves away the variable's previous value
+(or lack of one).  We say that the previous value is <dfn>shadowed</dfn>
+and <dfn>not visible</dfn>.  Both global and local values may be shadowed
+(see <a href="Scope.html#Scope">Scope</a>).  After the life span of the local value is over, the
+previous value (or lack of one) is restored.
 
    <p>If you set a variable (such as with <code>setq</code>) while it is local,
 this replaces the local value; it does not alter the global value, or
@@ -80,17 +80,17 @@ previous local values, that are shadowed.  To model this behavior, we
 speak of a <dfn>local binding</dfn> of the variable as well as a local value.
 
    <p>The local binding is a conceptual place that holds a local value. 
-Entry to a function, or a special form such as <code>let</code>, creates the
-local binding; exit from the function or from the <code>let</code> removes the
-local binding.  As long as the local binding lasts, the variable's value
-is stored within it.  Use of <code>setq</code> or <code>set</code> while there is a
+Entering a function, or a special form such as <code>let</code>, creates the
+local binding; exiting the function or the <code>let</code> removes the
+local binding.  While the local binding lasts, the variable's value is
+stored within it.  Using <code>setq</code> or <code>set</code> while there is a
 local binding stores a different value into the local binding; it does
 not create a new binding.
 
    <p>We also speak of the <dfn>global binding</dfn>, which is where
 (conceptually) the global value is kept.
 
-   <p><a name="index-current-binding-582"></a>  A variable can have more than one local binding at a time (for
+   <p><a name="index-current-binding-589"></a>  A variable can have more than one local binding at a time (for
 example, if there are nested <code>let</code> forms that bind it).  In such a
 case, the most recently created local binding that still exists is the
 <dfn>current binding</dfn> of the variable.  (This rule is called
@@ -104,7 +104,7 @@ the value of its current binding.
 local bindings.
 
 <div class="defun">
-&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-583"></a></var><br>
+&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-590"></a></var><br>
 <blockquote><p>This special form binds variables according to <var>bindings</var> and then
 evaluates all of the <var>forms</var> in textual order.  The <code>let</code>-form
 returns the value of the last form in <var>forms</var>.
@@ -121,16 +121,16 @@ Here is an example of this: <code>z</code> is bound to the old value of
 <code>y</code>, which is 2, not the new value of <code>y</code>, which is 1.
 
      <pre class="example">          (setq y 2)
-               =&gt; 2
+               &rArr; 2
           (let ((y 1)
                 (z y))
             (list y z))
-               =&gt; (1 2)
-     </pre>
+               &rArr; (1 2)
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-584"></a></var><br>
+&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-591"></a></var><br>
 <blockquote><p>This special form is like <code>let</code>, but it binds each variable right
 after computing its local value, before computing the local value for
 the next variable.  Therefore, an expression in <var>bindings</var> can
@@ -139,12 +139,12 @@ form.  Compare the following example with the example above for
 <code>let</code>.
 
      <pre class="example">          (setq y 2)
-               =&gt; 2
+               &rArr; 2
           (let* ((y 1)
                  (z y))    ; <span class="roman">Use the just-established value of </span><code>y</code><span class="roman">.</span>
             (list y z))
-               =&gt; (1 1)
-     </pre>
+               &rArr; (1 1)
+</pre>
         </blockquote></div>
 
    <p>Here is a complete list of the other facilities that create local
@@ -158,18 +158,16 @@ bindings:
      <li><code>condition-case</code> (see <a href="Errors.html#Errors">Errors</a>). 
 </ul>
 
-   <p>Variables can also have buffer-local bindings (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>) and frame-local bindings (see <a href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables">Frame-Local Variables</a>); a
-few variables have terminal-local bindings (see <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>). 
-These kinds of bindings work somewhat like ordinary local bindings, but
-they are localized depending on &ldquo;where&rdquo; you are in Emacs, rather than
-localized in time.
+   <p>Variables can also have buffer-local bindings (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>); a few variables have terminal-local bindings
+(see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  These kinds of bindings work somewhat
+like ordinary local bindings, but they are localized depending on
+&ldquo;where&rdquo; you are in Emacs, rather than localized in time.
 
 <div class="defun">
-&mdash; Variable: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-585"></a></var><br>
-<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a>
-<a name="index-variable-limit-error-586"></a><a name="index-evaluation-error-587"></a><a name="index-infinite-recursion-588"></a>This variable defines the limit on the total number of local variable
-bindings and <code>unwind-protect</code> cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up from Nonlocal Exits</a>) that are allowed before signaling an
-error (with data <code>"Variable binding depth exceeds
+&mdash; User Option: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-592"></a></var><br>
+<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error-593"></a><a name="index-evaluation-error-594"></a><a name="index-infinite-recursion-595"></a>This variable defines the limit on the total number of local variable
+bindings and <code>unwind-protect</code> cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up from Nonlocal Exits</a>) that are allowed before Emacs
+signals an error (with data <code>"Variable binding depth exceeds
 max-specpdl-size"</code>).
 
         <p>This limit, with the associated error when it is exceeded, is one way

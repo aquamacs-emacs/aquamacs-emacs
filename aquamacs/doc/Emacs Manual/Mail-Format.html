@@ -3,7 +3,7 @@
 <title>Mail Format - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
 <link rel="next" href="Mail-Headers.html#Mail-Headers" title="Mail Headers">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Mail-Format"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Headers.html#Mail-Headers">Mail Headers</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>
 <hr>
@@ -55,32 +55,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending
 
 <h3 class="section">35.1 The Format of the Mail Buffer</h3>
 
-<p>In addition to the <dfn>text</dfn> or <dfn>body</dfn>, a message has <dfn>header
-fields</dfn> which say who sent it, when, to whom, why, and so on.  Some
-header fields, such as `<samp><span class="samp">Date</span></samp>' and `<samp><span class="samp">Message-Id</span></samp>', are created
-automatically when you send the message.  Others, such as the recipient
-names, must be specified by you in order to send the message properly.
+<p>An email message must contain certain pieces of information, called
+<dfn>headers</dfn>, which specify the message's sender, recipient(s), and
+so on.
 
-   <p>In the mail buffer, you can insert and edit header fields using
-ordinary editing commands.  Mail mode provides commands to help you
-edit some header fields, and some are automatically preinitialized in
-the buffer, when appropriate.
+   <p>At the top of the mail buffer is a set of <dfn>header fields</dfn>, where
+you can enter this information.  You can insert and edit header fields
+using ordinary editing commands.  See <a href="Header-Editing.html#Header-Editing">Header Editing</a>, for commands
+specific to editing header fields.
 
-   <p><a name="index-mail_002dheader_002dseparator-2671"></a>  The line in the buffer that says
+   <p>Some header fields are automatically pre-initialized in the buffer,
+when appropriate; other headers, such as &lsquo;<samp><span class="samp">Date</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Message-Id</span></samp>&rsquo;, are normally omitted from the mail buffer and
+created automatically when the message is sent.
 
-<pre class="example">     --text follows this line--
+   <p><a name="index-mail_002dheader_002dseparator-2700"></a>  The line in the buffer that says
+
+<pre class="smallexample">     --text follows this line--
 </pre>
-   <p class="noindent">is a special delimiter that separates the headers you have specified from
-the text.  Whatever follows this line is the text of the message; the
-headers precede it.  The delimiter line itself does not appear in the
-message actually sent.  The text used for the delimiter line is controlled
-by the variable <code>mail-header-separator</code>.
+   <p class="noindent">separates the header fields from the <dfn>body</dfn> (or <dfn>text</dfn>) of the
+message.  Everything above this line is treated as part of the
+headers; everything below it is treated as the body.  The delimiter
+line itself does not appear in the message actually sent.  The text
+used for the delimiter line is controlled by the variable
+<code>mail-header-separator</code>.
 
    <p>Here is an example of what the headers and text in the mail buffer
 might look like.
 
-<pre class="example">     To: gnu@gnu.org
-     CC: lungfish@spam.org, byob@spam.org
+<pre class="example">     To: gnu@example.org
+     CC: lungfish@example.com, byob@example.net
      Subject: The Emacs Manual
      --text follows this line--
      Please ignore this message.

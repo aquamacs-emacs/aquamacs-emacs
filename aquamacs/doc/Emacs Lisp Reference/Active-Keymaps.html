@@ -3,33 +3,33 @@
 <title>Active Keymaps - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
 <link rel="prev" href="Prefix-Keys.html#Prefix-Keys" title="Prefix Keys">
 <link rel="next" href="Searching-Keymaps.html#Searching-Keymaps" title="Searching Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Active-Keymaps"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Searching-Keymaps.html#Searching-Keymaps">Searching Keymaps</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.7 Active Keymaps</h3>
 
-<p><a name="index-active-keymap-1426"></a><a name="index-global-keymap-1427"></a><a name="index-local-keymap-1428"></a>
+<p><a name="index-active-keymap-1481"></a><a name="index-global-keymap-1482"></a><a name="index-local-keymap-1483"></a>
   Emacs normally contains many keymaps; at any given time, just a few
 of them are <dfn>active</dfn>, meaning that they participate in the
 interpretation of user input.  All the active keymaps are used
@@ -73,7 +73,9 @@ by a symbolic prefix), the active keymaps are determined based on the
 position in that event.  If the event happened on a string embedded
 with a <code>display</code>, <code>before-string</code>, or <code>after-string</code>
 property (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>), the non-<code>nil</code> map
-properties of the string override those of the buffer.
+properties of the string override those of the buffer (if the
+underlying buffer text contains map properties in its text properties
+or overlays, they are ignored).
 
    <p>The <dfn>global keymap</dfn> holds the bindings of keys that are defined
 regardless of the current buffer, such as <kbd>C-f</kbd>.  The variable
@@ -103,7 +105,7 @@ Another way to do this is with <code>overriding-terminal-local-map</code>;
 it operates on a per-terminal basis.  These variables are documented
 below.
 
-   <p><a name="index-major-mode-keymap-1429"></a>  Since every buffer that uses the same major mode normally uses the
+   <p><a name="index-major-mode-keymap-1484"></a>  Since every buffer that uses the same major mode normally uses the
 same local keymap, you can think of the keymap as local to the mode.  A
 change to the local keymap of a buffer (using <code>local-set-key</code>, for
 example) is seen also in the other buffers that share that keymap.
@@ -123,16 +125,19 @@ events within <code>read-key-sequence</code>.  See <a href="Translation-Keymaps.
    <p>See <a href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>, for a list of standard keymaps.
 
 <div class="defun">
-&mdash; Function: <b>current-active-maps</b><var> &amp;optional olp<a name="index-current_002dactive_002dmaps-1430"></a></var><br>
+&mdash; Function: <b>current-active-maps</b><var> &amp;optional olp position<a name="index-current_002dactive_002dmaps-1485"></a></var><br>
 <blockquote><p>This returns the list of active keymaps that would be used by the
 command loop in the current circumstances to look up a key sequence. 
 Normally it ignores <code>overriding-local-map</code> and
-<code>overriding-terminal-local-map</code>, but if <var>olp</var> is
-non-<code>nil</code> then it pays attention to them. 
+<code>overriding-terminal-local-map</code>, but if <var>olp</var> is non-<code>nil</code>
+then it pays attention to them.  <var>position</var> can optionally be either
+an event position as returned by <code>event-start</code> or a buffer
+position, and may change the keymaps as described for
+<code>key-binding</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>key-binding</b><var> key &amp;optional accept-defaults no-remap position<a name="index-key_002dbinding-1431"></a></var><br>
+&mdash; Function: <b>key-binding</b><var> key &amp;optional accept-defaults no-remap position<a name="index-key_002dbinding-1486"></a></var><br>
 <blockquote><p>This function returns the binding for <var>key</var> according to the
 current active keymaps.  The result is <code>nil</code> if <var>key</var> is
 undefined in the keymaps.
@@ -157,8 +162,8 @@ Then the maps consulted are determined based on <var>position</var>.
         <p>An error is signaled if <var>key</var> is not a string or a vector.
 
      <pre class="example">          (key-binding "\C-x\C-f")
-              =&gt; find-file
-     </pre>
+              &rArr; find-file
+</pre>
         </blockquote></div>
 
    </body></html>

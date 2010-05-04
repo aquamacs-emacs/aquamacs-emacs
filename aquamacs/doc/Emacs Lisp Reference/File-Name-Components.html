@@ -3,32 +3,32 @@
 <title>File Name Components - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="File-Names.html#File-Names" title="File Names">
 <link rel="next" href="Relative-File-Names.html#Relative-File-Names" title="Relative File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="File-Name-Components"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Relative-File-Names.html#Relative-File-Names">Relative File Names</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names<
 
 <h4 class="subsection">25.8.1 File Name Components</h4>
 
-<p><a name="index-directory-part-_0028of-file-name_0029-1779"></a><a name="index-nondirectory-part-_0028of-file-name_0029-1780"></a><a name="index-version-number-_0028in-file-name_0029-1781"></a>
+<p><a name="index-directory-part-_0028of-file-name_0029-1838"></a><a name="index-nondirectory-part-_0028of-file-name_0029-1839"></a><a name="index-version-number-_0028in-file-name_0029-1840"></a>
   The operating system groups files into directories.  To specify a
 file, you must specify the directory and the file's name within that
 directory.  Therefore, Emacs considers a file name as having two main
@@ -64,54 +64,43 @@ Concatenating these two parts reproduces the original file name.
 
    <p>On most systems, the directory part is everything up to and including
 the last slash (backslash is also allowed in input on MS-DOS or
-MS-Windows); the nondirectory part is the rest.  The rules in VMS syntax
-are complicated.
+MS-Windows); the nondirectory part is the rest.
 
    <p>For some purposes, the nondirectory part is further subdivided into
 the name proper and the <dfn>version number</dfn>.  On most systems, only
-backup files have version numbers in their names.  On VMS, every file
-has a version number, but most of the time the file name actually used
-in Emacs omits the version number, so that version numbers in Emacs are
-found mostly in directory lists.
+backup files have version numbers in their names.
 
 <div class="defun">
-&mdash; Function: <b>file-name-directory</b><var> filename<a name="index-file_002dname_002ddirectory-1782"></a></var><br>
+&mdash; Function: <b>file-name-directory</b><var> filename<a name="index-file_002dname_002ddirectory-1841"></a></var><br>
 <blockquote><p>This function returns the directory part of <var>filename</var>, as a
 directory name (see <a href="Directory-Names.html#Directory-Names">Directory Names</a>), or <code>nil</code> if
 <var>filename</var> does not include a directory part.
 
         <p>On GNU and Unix systems, a string returned by this function always
-ends in a slash.  On MS-DOS it can also end in a colon.  On VMS, it
-returns a string ending in one of the three characters `<samp><span class="samp">:</span></samp>',
-`<samp><span class="samp">]</span></samp>', or `<samp><span class="samp">&gt;</span></samp>'.
+ends in a slash.  On MS-DOS it can also end in a colon.
 
      <pre class="example">          (file-name-directory "lewis/foo")  ; <span class="roman">Unix example</span>
-               =&gt; "lewis/"
+               &rArr; "lewis/"
           (file-name-directory "foo")        ; <span class="roman">Unix example</span>
-               =&gt; nil
-          (file-name-directory "[X]FOO.TMP") ; <span class="roman">VMS example</span>
-               =&gt; "[X]"
-     </pre>
+               &rArr; nil
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-nondirectory</b><var> filename<a name="index-file_002dname_002dnondirectory-1783"></a></var><br>
+&mdash; Function: <b>file-name-nondirectory</b><var> filename<a name="index-file_002dname_002dnondirectory-1842"></a></var><br>
 <blockquote><p>This function returns the nondirectory part of <var>filename</var>.
 
      <pre class="example">          (file-name-nondirectory "lewis/foo")
-               =&gt; "foo"
+               &rArr; "foo"
           (file-name-nondirectory "foo")
-               =&gt; "foo"
+               &rArr; "foo"
           (file-name-nondirectory "lewis/")
-               =&gt; ""
-          ;; <span class="roman">The following example is accurate only on VMS.</span>
-          (file-name-nondirectory "[X]FOO.TMP")
-               =&gt; "FOO.TMP"
-     </pre>
+               &rArr; ""
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-sans-versions</b><var> filename &amp;optional keep-backup-version<a name="index-file_002dname_002dsans_002dversions-1784"></a></var><br>
+&mdash; Function: <b>file-name-sans-versions</b><var> filename &amp;optional keep-backup-version<a name="index-file_002dname_002dsans_002dversions-1843"></a></var><br>
 <blockquote><p>This function returns <var>filename</var> with any file version numbers,
 backup version numbers, or trailing tildes discarded.
 
@@ -120,31 +109,28 @@ numbers understood as such by the file system are discarded from the
 return value, but backup version numbers are kept.
 
      <pre class="example">          (file-name-sans-versions "~rms/foo.~1~")
-               =&gt; "~rms/foo"
+               &rArr; "~rms/foo"
           (file-name-sans-versions "~rms/foo~")
-               =&gt; "~rms/foo"
+               &rArr; "~rms/foo"
           (file-name-sans-versions "~rms/foo")
-               =&gt; "~rms/foo"
-          ;; <span class="roman">The following example applies to VMS only.</span>
-          (file-name-sans-versions "foo;23")
-               =&gt; "foo"
-     </pre>
+               &rArr; "~rms/foo"
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-extension</b><var> filename &amp;optional period<a name="index-file_002dname_002dextension-1785"></a></var><br>
+&mdash; Function: <b>file-name-extension</b><var> filename &amp;optional period<a name="index-file_002dname_002dextension-1844"></a></var><br>
 <blockquote><p>This function returns <var>filename</var>'s final &ldquo;extension,&rdquo; if any,
 after applying <code>file-name-sans-versions</code> to remove any
 version/backup part.  The extension, in a file name, is the part that
-starts with the last `<samp><span class="samp">.</span></samp>' in the last name component (minus
-any version/backup part).
+follows the last &lsquo;<samp><span class="samp">.</span></samp>&rsquo; in the last name component (minus any
+version/backup part).
 
         <p>This function returns <code>nil</code> for extensionless file names such as
 <samp><span class="file">foo</span></samp>.  It returns <code>""</code> for null extensions, as in
 <samp><span class="file">foo.</span></samp>.  If the last component of a file name begins with a
-`<samp><span class="samp">.</span></samp>', that `<samp><span class="samp">.</span></samp>'  doesn't count as the beginning of an
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo;, that &lsquo;<samp><span class="samp">.</span></samp>&rsquo;  doesn't count as the beginning of an
 extension.  Thus, <samp><span class="file">.emacs</span></samp>'s &ldquo;extension&rdquo; is <code>nil</code>, not
-`<samp><span class="samp">.emacs</span></samp>'.
+&lsquo;<samp><span class="samp">.emacs</span></samp>&rsquo;.
 
         <p>If <var>period</var> is non-<code>nil</code>, then the returned value includes
 the period that delimits the extension, and if <var>filename</var> has no
@@ -152,25 +138,25 @@ extension, the value is <code>""</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-sans-extension</b><var> filename<a name="index-file_002dname_002dsans_002dextension-1786"></a></var><br>
+&mdash; Function: <b>file-name-sans-extension</b><var> filename<a name="index-file_002dname_002dsans_002dextension-1845"></a></var><br>
 <blockquote><p>This function returns <var>filename</var> minus its extension, if any.  The
 version/backup part, if present, is only removed if the file has an
 extension.  For example,
 
      <pre class="example">          (file-name-sans-extension "foo.lose.c")
-               =&gt; "foo.lose"
+               &rArr; "foo.lose"
           (file-name-sans-extension "big.hack/foo")
-               =&gt; "big.hack/foo"
+               &rArr; "big.hack/foo"
           (file-name-sans-extension "/my/home/.emacs")
-               =&gt; "/my/home/.emacs"
+               &rArr; "/my/home/.emacs"
           (file-name-sans-extension "/my/home/.emacs.el")
-               =&gt; "/my/home/.emacs"
+               &rArr; "/my/home/.emacs"
           (file-name-sans-extension "~/foo.el.~3~")
-               =&gt; "~/foo"
+               &rArr; "~/foo"
           (file-name-sans-extension "~/foo.~3~")
-               =&gt; "~/foo.~3~"
-     </pre>
-        <p>Note that the `<samp><span class="samp">.~3~</span></samp>' in the two last examples is the backup part,
+               &rArr; "~/foo.~3~"
+</pre>
+        <p>Note that the &lsquo;<samp><span class="samp">.~3~</span></samp>&rsquo; in the two last examples is the backup part,
 not an extension. 
 </p></blockquote></div>
 

@@ -3,20 +3,20 @@
 <title>Frame Commands - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
 <link rel="prev" href="Creating-Frames.html#Creating-Frames" title="Creating Frames">
-<link rel="next" href="Speedbar.html#Speedbar" title="Speedbar">
+<link rel="next" href="Fonts.html#Fonts" title="Fonts">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,9 +47,9 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Frame-Commands"></a>
-Next:&nbsp;<a rel="next" accesskey="n" href="Speedbar.html#Speedbar">Speedbar</a>,
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fonts.html#Fonts">Fonts</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
@@ -60,30 +60,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <p>The following commands let you create, delete and operate on frames:
 
      <dl>
-<dt><kbd>C-z</kbd><dd><a name="index-C_002dz-_0040r_007b_0028X-windows_0029_007d-1233"></a><a name="index-iconify_002dor_002ddeiconify_002dframe-1234"></a>Iconify (&ldquo;minimize&rdquo;) the selected Emacs frame
-(<code>iconify-or-deiconify-frame</code>).  See <a href="Exiting.html#Exiting">Exiting</a>.
+<dt><kbd>C-z</kbd><dd><a name="index-C_002dz-_0040r_007b_0028X-windows_0029_007d-1239"></a><a name="index-suspend_002dframe-1240"></a>Minimize (or &ldquo;iconify) the selected Emacs frame
+(<code>suspend-frame</code>).  See <a href="Exiting.html#Exiting">Exiting</a>.
 
-     <br><dt><kbd>C-x 5 0</kbd><dd><a name="index-C_002dx-5-0-1235"></a><a name="index-delete_002dframe-1236"></a>Delete the selected frame (<code>delete-frame</code>).  This is not allowed
+     <br><dt><kbd>C-x 5 0</kbd><dd><a name="index-C_002dx-5-0-1241"></a><a name="index-delete_002dframe-1242"></a>Delete the selected frame (<code>delete-frame</code>).  This is not allowed
 if there is only one frame.
 
-     <br><dt><kbd>C-x 5 o</kbd><dd><a name="index-C_002dx-5-o-1237"></a><a name="index-other_002dframe-1238"></a>Select another frame, raise it, and warp the mouse to it.  If you
+     <br><dt><kbd>C-x 5 o</kbd><dd><a name="index-C_002dx-5-o-1243"></a><a name="index-other_002dframe-1244"></a>Select another frame, raise it, and warp the mouse to it.  If you
 repeat this command, it cycles through all the frames on your
 terminal.
 
-     <br><dt><kbd>C-x 5 1</kbd><dd><a name="index-C_002dx-5-1-1239"></a><a name="index-delete_002dother_002dframes-1240"></a>Delete all frames except the selected one. 
+     <br><dt><kbd>C-x 5 1</kbd><dd><a name="index-C_002dx-5-1-1245"></a><a name="index-delete_002dother_002dframes-1246"></a>Delete all frames except the selected one. 
 </dl>
 
-   <p><a name="index-focus_002dfollows_002dmouse-1241"></a>  To make the command <kbd>C-x 5 o</kbd> work properly, you should tell
-Emacs how the system (or the window manager) handles focus-switching
-between windows.  There are two possibilities: either simply moving
-the mouse onto a window selects it (gives it focus), or you have to
-click on it to do so.  On X, this focus policy also affects whether
-the focus is given to a frame that Emacs raises.  Unfortunately there
-is no way Emacs can find out automatically which way the system
-handles this, so you have to explicitly say, by setting the variable
-<code>focus-follows-mouse</code>.  If just moving the mouse onto a window
-selects it, that variable should be <code>t</code>; if a click is necessary,
-the variable should be <code>nil</code>.  The default is <code>t</code>.
+   <p>The <kbd>C-x 5 0</kbd> (<code>delete-frame</code>) command will never delete
+the last frame, to prevent you from losing the ability to interact
+with the Emacs process.  Note that when Emacs is run as a daemon
+(see <a href="Emacs-Server.html#Emacs-Server">Emacs Server</a>), there is always a &ldquo;virtual frame&rdquo; that
+remains after all the ordinary, interactive frames are deleted.  In
+this case, <kbd>C-x 5 0</kbd> can delete the last interactive frame; you
+can use <samp><span class="command">emacsclient</span></samp> to reconnect to the Emacs session.
+
+   <p><a name="index-focus_002dfollows_002dmouse-1247"></a>  On X, you may have to tell Emacs how the system (or the window
+manager) handles focus-switching between windows, in order for the
+command <kbd>C-x 5 o</kbd> (<code>other-frame</code>) to work properly. 
+Unfortunately, there is no way for Emacs to detect this automatically,
+so you should set the variable <code>focus-follows-mouse</code>.  If simply
+moving the mouse onto a window selects it and gives it focus, the
+variable should be <code>t</code>; if you have to click on the window to
+select it, the variable should be <code>nil</code>.  The default is
+<code>t</code>.
 
    <p>The window manager that is part of MS-Windows always gives focus to
 a frame that raises, so this variable has no effect in the native

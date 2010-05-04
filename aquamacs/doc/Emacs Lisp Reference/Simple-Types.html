@@ -3,32 +3,32 @@
 <title>Simple Types - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Customization-Types.html#Customization-Types" title="Customization Types">
 <link rel="next" href="Composite-Types.html#Composite-Types" title="Composite Types">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Simple-Types"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Composite-Types.html#Composite-Types">Composite Types</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-Types">Customization Types</a>
 <hr>
@@ -71,8 +71,8 @@ represented textually in the customization buffer.
 textually in the customization buffer.
 
      <br><dt><code>string</code><dd>The value must be a string, and the customization buffer shows just the
-contents, with no delimiting `<samp><span class="samp">"</span></samp>' characters and no quoting with
-`<samp><span class="samp">\</span></samp>'.
+contents, with no delimiting &lsquo;<samp><span class="samp">"</span></samp>&rsquo; characters and no quoting with
+&lsquo;<samp><span class="samp">\</span></samp>&rsquo;.
 
      <br><dt><code>regexp</code><dd>Like <code>string</code> except that the string must be a valid regular
 expression.
@@ -104,7 +104,7 @@ edit both the key and the value of each pair.
      <p>You can specify the key and value types like this:
 
      <pre class="smallexample">          (alist :key-type <var>key-type</var> :value-type <var>value-type</var>)
-     </pre>
+</pre>
      <p class="noindent">where <var>key-type</var> and <var>value-type</var> are customization type
 specifications.  The default key type is <code>sexp</code>, and the default
 value type is <code>sexp</code>.
@@ -122,7 +122,7 @@ specifications for reasonable keys in the alist.  Ordinarily, they are
 simply atoms, which stand for themselves as.  For example:
 
      <pre class="smallexample">          :options '("foo" "bar" "baz")
-     </pre>
+</pre>
      <p class="noindent">specifies that there are three &ldquo;known&rdquo; keys, namely <code>"foo"</code>,
 <code>"bar"</code> and <code>"baz"</code>, which will always be shown first.
 
@@ -133,7 +133,7 @@ the list.  The first element will specify the key, like before, while
 the second element will specify the value type.  For example:
 
      <pre class="smallexample">          :options '("foo" ("bar" integer) "baz")
-     </pre>
+</pre>
      <p>Finally, you may want to change how the key is presented.  By default,
 the key is simply shown as a <code>const</code>, since the user cannot change
 the special keys specified with the <code>:options</code> keyword.  However,
@@ -144,18 +144,18 @@ symbol for the key.
 
      <pre class="smallexample">          :options '("foo" ((function-item some-function) integer)
                      "baz")
-     </pre>
+</pre>
      <p>Many alists use lists with two elements, instead of cons cells.  For
 example,
 
      <pre class="smallexample">          (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
             "Each element is a list of the form (KEY VALUE).")
-     </pre>
+</pre>
      <p class="noindent">instead of
 
      <pre class="smallexample">          (defcustom cons-alist '(("foo" . 1) ("bar" . 2) ("baz" . 3))
             "Each element is a cons-cell (KEY . VALUE).")
-     </pre>
+</pre>
      <p>Because of the way lists are implemented on top of cons cells, you can
 treat <code>list-alist</code> in the example above as a cons cell alist, where
 the value type is a list with a single element containing the real
@@ -164,7 +164,7 @@ value.
      <pre class="smallexample">          (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
             "Each element is a list of the form (KEY VALUE)."
             :type '(alist :value-type (group integer)))
-     </pre>
+</pre>
      <p>The <code>group</code> widget is used here instead of <code>list</code> only because
 the formatting is better suited for the purpose.
 
@@ -185,13 +185,13 @@ key, using variations of this trick:
           In an element (KEY . VALUE), KEY is the person's name,
           and the VALUE is a list of that person's pets."
             :type '(alist :value-type (repeat string)))
-     </pre>
+</pre>
      <br><dt><code>plist</code><dd>The <code>plist</code> custom type is similar to the <code>alist</code> (see above),
 except that the information is stored as a property list, i.e. a list of
 this form:
 
      <pre class="smallexample">          (<var>key</var> <var>value</var> <var>key</var> <var>value</var> <var>key</var> <var>value</var> ...)
-     </pre>
+</pre>
      <p>The default <code>:key-type</code> for <code>plist</code> is <code>symbol</code>,
 rather than <code>sexp</code>.
 

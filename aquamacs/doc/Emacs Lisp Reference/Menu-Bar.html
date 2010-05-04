@@ -3,33 +3,33 @@
 <title>Menu Bar - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Menu-Keymaps.html#Menu-Keymaps" title="Menu Keymaps">
 <link rel="prev" href="Menu-Example.html#Menu-Example" title="Menu Example">
 <link rel="next" href="Tool-Bar.html#Tool-Bar" title="Tool Bar">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Menu-Bar"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Tool-Bar.html#Tool-Bar">Tool Bar</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Menu-Example.html#Menu-Example">Menu Example</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>
@@ -56,11 +56,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Menu-Keymaps.html#Menu-Keymaps">Menu Ke
 
 <h4 class="subsection">22.17.5 The Menu Bar</h4>
 
-<p><a name="index-menu-bar-1502"></a>
+<p><a name="index-menu-bar-1558"></a>
   Most window systems allow each frame to have a <dfn>menu bar</dfn>&mdash;a
-permanently displayed menu stretching horizontally across the top of the
-frame.  The items of the menu bar are the subcommands of the fake
-&ldquo;function key&rdquo; <code>menu-bar</code>, as defined in the active keymaps.
+permanently displayed menu stretching horizontally across the top of
+the frame.  (In order for a frame to display a menu bar, its
+<code>menu-bar-lines</code> parameter must be greater than zero. 
+See <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>.)
+
+   <p>The items of the menu bar are the subcommands of the fake &ldquo;function
+key&rdquo; <code>menu-bar</code>, as defined in the active keymaps.
 
    <p>To add an item to the menu bar, invent a fake &ldquo;function key&rdquo; of your
 own (let's call it <var>key</var>), and make a binding for the key sequence
@@ -77,12 +81,6 @@ subcommands, and the minor mode subcommands.
 determining the menu bar contents.  That is, the menu bar is computed
 from the keymaps that would be active if <code>overriding-local-map</code>
 were <code>nil</code>.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>.
-
-   <p>In order for a frame to display a menu bar, its <code>menu-bar-lines</code>
-parameter must be greater than zero.  Emacs uses just one line for the
-menu bar itself; if you specify more than one line, the other lines
-serve to separate the menu bar from the windows in the frame.  We
-recommend 1 or 2 as the value of <code>menu-bar-lines</code>.  See <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>.
 
    <p>Here's an example of setting up a menu bar item:
 
@@ -104,34 +102,48 @@ recommend 1 or 2 as the value of <code>menu-bar-lines</code>.  See <a href="Layo
 </pre>
    <p>A local keymap can cancel a menu bar item made by the global keymap by
 rebinding the same fake function key with <code>undefined</code> as the
-binding.  For example, this is how Dired suppresses the `<samp><span class="samp">Edit</span></samp>' menu
+binding.  For example, this is how Dired suppresses the &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; menu
 bar item:
 
 <pre class="example">     (define-key dired-mode-map [menu-bar edit] 'undefined)
 </pre>
-   <p class="noindent"><code>edit</code> is the fake function key used by the global map for the
-`<samp><span class="samp">Edit</span></samp>' menu bar item.  The main reason to suppress a global
+   <p class="noindent">Here, <code>edit</code> is the fake function key used by the global map for
+the &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; menu bar item.  The main reason to suppress a global
 menu bar item is to regain space for mode-specific items.
 
 <div class="defun">
-&mdash; Variable: <b>menu-bar-final-items</b><var><a name="index-menu_002dbar_002dfinal_002ditems-1503"></a></var><br>
+&mdash; Variable: <b>menu-bar-final-items</b><var><a name="index-menu_002dbar_002dfinal_002ditems-1559"></a></var><br>
 <blockquote><p>Normally the menu bar shows global items followed by items defined by the
 local maps.
 
         <p>This variable holds a list of fake function keys for items to display at
 the end of the menu bar rather than in normal sequence.  The default
-value is <code>(help-menu)</code>; thus, the `<samp><span class="samp">Help</span></samp>' menu item normally appears
+value is <code>(help-menu)</code>; thus, the &lsquo;<samp><span class="samp">Help</span></samp>&rsquo; menu item normally appears
 at the end of the menu bar, following local menu items. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>menu-bar-update-hook</b><var><a name="index-menu_002dbar_002dupdate_002dhook-1504"></a></var><br>
+&mdash; Variable: <b>menu-bar-update-hook</b><var><a name="index-menu_002dbar_002dupdate_002dhook-1560"></a></var><br>
 <blockquote><p>This normal hook is run by redisplay to update the menu bar contents,
 before redisplaying the menu bar.  You can use it to update submenus
 whose contents should vary.  Since this hook is run frequently, we
 advise you to ensure that the functions it calls do not take much time
 in the usual case. 
 </p></blockquote></div>
+
+   <p>Next to every menu bar item, Emacs displays a key binding that runs
+the same command (if such a key binding exists).  This serves as a
+convenient hint for users who do not know the key binding.  If a
+command has multiple bindings, Emacs normally displays the first one
+it finds.  You can specify one particular key binding by assigning an
+<code>:advertised-binding</code> symbol property to the command.  For
+instance, the following tells Emacs to show <kbd>C-/</kbd> for the
+<code>undo</code> menu item:
+
+<pre class="smallexample">     (put 'undo :advertised-binding [?\C-/])
+</pre>
+   <p class="noindent">If the <code>:advertised-binding</code> property specifies a key binding
+that the command does not actually have, it is ignored.
 
    </body></html>
 

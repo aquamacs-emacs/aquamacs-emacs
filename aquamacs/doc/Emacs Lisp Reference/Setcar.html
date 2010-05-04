@@ -3,32 +3,32 @@
 <title>Setcar - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
 <link rel="next" href="Setcdr.html#Setcdr" title="Setcdr">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Setcar"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Setcdr.html#Setcdr">Setcdr</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>
 <hr>
@@ -59,19 +59,19 @@ used on a list, <code>setcar</code> replaces one element of a list with a
 different element.
 
 <div class="defun">
-&mdash; Function: <b>setcar</b><var> cons object<a name="index-setcar-328"></a></var><br>
+&mdash; Function: <b>setcar</b><var> cons object<a name="index-setcar-332"></a></var><br>
 <blockquote><p>This function stores <var>object</var> as the new <span class="sc">car</span> of <var>cons</var>,
 replacing its previous <span class="sc">car</span>.  In other words, it changes the
 <span class="sc">car</span> slot of <var>cons</var> to refer to <var>object</var>.  It returns the
 value <var>object</var>.  For example:
 
      <pre class="example">          (setq x '(1 2))
-               =&gt; (1 2)
+               &rArr; (1 2)
           (setcar x 4)
-               =&gt; 4
+               &rArr; 4
           x
-               =&gt; (4 2)
-     </pre>
+               &rArr; (4 2)
+</pre>
         </blockquote></div>
 
    <p>When a cons cell is part of the shared structure of several lists,
@@ -80,25 +80,25 @@ these lists.  Here is an example:
 
 <pre class="example">     ;; <span class="roman">Create two lists that are partly shared.</span>
      (setq x1 '(a b c))
-          =&gt; (a b c)
+          &rArr; (a b c)
      (setq x2 (cons 'z (cdr x1)))
-          =&gt; (z b c)
+          &rArr; (z b c)
      
      ;; <span class="roman">Replace the car of a shared link.</span>
      (setcar (cdr x1) 'foo)
-          =&gt; foo
+          &rArr; foo
      x1                           ; <span class="roman">Both lists are changed.</span>
-          =&gt; (a foo c)
+          &rArr; (a foo c)
      x2
-          =&gt; (z foo c)
+          &rArr; (z foo c)
      
      ;; <span class="roman">Replace the car of a link that is not shared.</span>
      (setcar x1 'baz)
-          =&gt; baz
+          &rArr; baz
      x1                           ; <span class="roman">Only one list is changed.</span>
-          =&gt; (baz foo c)
+          &rArr; (baz foo c)
      x2
-          =&gt; (z foo c)
+          &rArr; (z foo c)
 </pre>
    <p>Here is a graphical depiction of the shared structure of the two lists
 in the variables <code>x1</code> and <code>x2</code>, showing why replacing <code>b</code>

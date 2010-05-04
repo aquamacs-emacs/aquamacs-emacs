@@ -3,32 +3,32 @@
 <title>Syntax of Regexps - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Regular-Expressions.html#Regular-Expressions" title="Regular Expressions">
 <link rel="next" href="Regexp-Example.html#Regexp-Example" title="Regexp Example">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Syntax-of-Regexps"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Regexp-Example.html#Regexp-Example">Regexp Example</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>
 <hr>
@@ -57,29 +57,29 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Regular-Expressions.html#Regular-Expres
 <p>Regular expressions have a syntax in which a few characters are
 special constructs and the rest are <dfn>ordinary</dfn>.  An ordinary
 character is a simple regular expression that matches that character
-and nothing else.  The special characters are `<samp><span class="samp">.</span></samp>', `<samp><span class="samp">*</span></samp>',
-`<samp><span class="samp">+</span></samp>', `<samp><span class="samp">?</span></samp>', `<samp><span class="samp">[</span></samp>', `<samp><span class="samp">^</span></samp>', `<samp><span class="samp">$</span></samp>', and `<samp><span class="samp">\</span></samp>'; no new
+and nothing else.  The special characters are &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[</span></samp>&rsquo;, &lsquo;<samp><span class="samp">^</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">\</span></samp>&rsquo;; no new
 special characters will be defined in the future.  The character
-`<samp><span class="samp">]</span></samp>' is special if it ends a character alternative (see later). 
-The character `<samp><span class="samp">-</span></samp>' is special inside a character alternative.  A
-`<samp><span class="samp">[:</span></samp>' and balancing `<samp><span class="samp">:]</span></samp>' enclose a character class inside a
+&lsquo;<samp><span class="samp">]</span></samp>&rsquo; is special if it ends a character alternative (see later). 
+The character &lsquo;<samp><span class="samp">-</span></samp>&rsquo; is special inside a character alternative.  A
+&lsquo;<samp><span class="samp">[:</span></samp>&rsquo; and balancing &lsquo;<samp><span class="samp">:]</span></samp>&rsquo; enclose a character class inside a
 character alternative.  Any other character appearing in a regular
-expression is ordinary, unless a `<samp><span class="samp">\</span></samp>' precedes it.
+expression is ordinary, unless a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; precedes it.
 
-   <p>For example, `<samp><span class="samp">f</span></samp>' is not a special character, so it is ordinary, and
-therefore `<samp><span class="samp">f</span></samp>' is a regular expression that matches the string
-`<samp><span class="samp">f</span></samp>' and no other string.  (It does <em>not</em> match the string
-`<samp><span class="samp">fg</span></samp>', but it does match a <em>part</em> of that string.)  Likewise,
-`<samp><span class="samp">o</span></samp>' is a regular expression that matches only `<samp><span class="samp">o</span></samp>'.
+   <p>For example, &lsquo;<samp><span class="samp">f</span></samp>&rsquo; is not a special character, so it is ordinary, and
+therefore &lsquo;<samp><span class="samp">f</span></samp>&rsquo; is a regular expression that matches the string
+&lsquo;<samp><span class="samp">f</span></samp>&rsquo; and no other string.  (It does <em>not</em> match the string
+&lsquo;<samp><span class="samp">fg</span></samp>&rsquo;, but it does match a <em>part</em> of that string.)  Likewise,
+&lsquo;<samp><span class="samp">o</span></samp>&rsquo; is a regular expression that matches only &lsquo;<samp><span class="samp">o</span></samp>&rsquo;.
 
    <p>Any two regular expressions <var>a</var> and <var>b</var> can be concatenated.  The
 result is a regular expression that matches a string if <var>a</var> matches
 some amount of the beginning of that string and <var>b</var> matches the rest of
 the string.
 
-   <p>As a simple example, we can concatenate the regular expressions `<samp><span class="samp">f</span></samp>'
-and `<samp><span class="samp">o</span></samp>' to get the regular expression `<samp><span class="samp">fo</span></samp>', which matches only
-the string `<samp><span class="samp">fo</span></samp>'.  Still trivial.  To do something more powerful, you
+   <p>As a simple example, we can concatenate the regular expressions &lsquo;<samp><span class="samp">f</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">o</span></samp>&rsquo; to get the regular expression &lsquo;<samp><span class="samp">fo</span></samp>&rsquo;, which matches only
+the string &lsquo;<samp><span class="samp">fo</span></samp>&rsquo;.  Still trivial.  To do something more powerful, you
 need to use one of the special regular expression constructs.
 
 <ul class="menu">

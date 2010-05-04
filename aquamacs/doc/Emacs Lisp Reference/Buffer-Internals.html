@@ -3,32 +3,32 @@
 <title>Buffer Internals - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Object-Internals.html#Object-Internals" title="Object Internals">
 <link rel="next" href="Window-Internals.html#Window-Internals" title="Window Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Buffer-Internals"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Window-Internals.html#Window-Internals">Window Internals</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals">Object Internals</a>
 <hr>
@@ -54,55 +54,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 
 <h4 class="appendixsubsec">E.6.1 Buffer Internals</h4>
 
-<p><a name="index-internals_002c-of-buffer-3655"></a><a name="index-buffer-internals-3656"></a>
-  Buffers contain fields not directly accessible by the Lisp programmer. 
-We describe them here, naming them by the names used in the C code. 
-Many are accessible indirectly in Lisp programs via Lisp primitives.
-
-   <p>Two structures are used to represent buffers in C.  The
+<p><a name="index-internals_002c-of-buffer-3896"></a><a name="index-buffer-internals-3897"></a>
+  Two structures are used to represent buffers in C.  The
 <code>buffer_text</code> structure contains fields describing the text of a
 buffer; the <code>buffer</code> structure holds other fields.  In the case
 of indirect buffers, two or more <code>buffer</code> structures reference
 the same <code>buffer_text</code> structure.
 
-   <p>Here is a list of the <code>struct buffer_text</code> fields:
+   <p>Here are some of the fields in <code>struct buffer_text</code>:
 
      <dl>
-<dt><code>beg</code><dd>This field contains the actual address of the buffer contents.
+<dt><code>beg</code><dd>The address of the buffer contents.
 
-     <br><dt><code>gpt</code><dd>This holds the character position of the gap in the buffer. 
-See <a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>.
+     <br><dt><code>gpt</code><dt><code>gpt_byte</code><dd>The character and byte positions of the buffer gap.  See <a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>.
 
-     <br><dt><code>z</code><dd>This field contains the character position of the end of the buffer
-text.
+     <br><dt><code>z</code><dt><code>z_byte</code><dd>The character and byte positions of the end of the buffer text.
 
-     <br><dt><code>gpt_byte</code><dd>Contains the byte position of the gap.
+     <br><dt><code>gap_size</code><dd>The size of buffer's gap.  See <a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>.
 
-     <br><dt><code>z_byte</code><dd>Holds the byte position of the end of the buffer text.
+     <br><dt><code>modiff</code><dt><code>save_modiff</code><dt><code>chars_modiff</code><dt><code>overlay_modiff</code><dd>These fields count the number of buffer-modification events performed
+in this buffer.  <code>modiff</code> is incremented after each
+buffer-modification event, and is never otherwise changed;
+<code>save_modiff</code> contains the value of <code>modiff</code> the last time
+the buffer was visited or saved; <code>chars_modiff</code> counts only
+modifications to the characters in the buffer, ignoring all other
+kinds of changes; and <code>overlay_modiff</code> counts only modifications
+to the overlays.
 
-     <br><dt><code>gap_size</code><dd>Contains the size of buffer's gap.  See <a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>.
+     <br><dt><code>beg_unchanged</code><dt><code>end_unchanged</code><dd>The number of characters at the start and end of the text that are
+known to be unchanged since the last complete redisplay.
 
-     <br><dt><code>modiff</code><dd>This field counts buffer-modification events for this buffer.  It is
-incremented for each such event, and never otherwise changed.
-
-     <br><dt><code>save_modiff</code><dd>Contains the previous value of <code>modiff</code>, as of the last time a
-buffer was visited or saved in a file.
-
-     <br><dt><code>overlay_modiff</code><dd>Counts modifications to overlays analogous to <code>modiff</code>.
-
-     <br><dt><code>beg_unchanged</code><dd>Holds the number of characters at the start of the text that are known
-to be unchanged since the last redisplay that finished.
-
-     <br><dt><code>end_unchanged</code><dd>Holds the number of characters at the end of the text that are known to
-be unchanged since the last redisplay that finished.
-
-     <br><dt><code>unchanged_modified</code><dd>Contains the value of <code>modiff</code> at the time of the last redisplay
-that finished.  If this value matches <code>modiff</code>,
-<code>beg_unchanged</code> and <code>end_unchanged</code> contain no useful
-information.
-
-     <br><dt><code>overlay_unchanged_modified</code><dd>Contains the value of <code>overlay_modiff</code> at the time of the last
-redisplay that finished.  If this value matches <code>overlay_modiff</code>,
+     <br><dt><code>unchanged_modified</code><dt><code>overlay_unchanged_modified</code><dd>The values of <code>modiff</code> and <code>overlay_modiff</code>, respectively,
+after the last compelete redisplay.  If their current values match
+<code>modiff</code> or <code>overlay_modiff</code>, that means
 <code>beg_unchanged</code> and <code>end_unchanged</code> contain no useful
 information.
 
@@ -110,212 +94,123 @@ information.
 marker, and successive elements in its marker <code>chain</code> are the other
 markers referring to this buffer text.
 
-     <br><dt><code>intervals</code><dd>Contains the interval tree which records the text properties of this
-buffer. 
+     <br><dt><code>intervals</code><dd>The interval tree which records the text properties of this buffer. 
 </dl>
 
-   <p>The fields of <code>struct buffer</code> are:
+   <p>Some of the fields of <code>struct buffer</code> are:
 
      <dl>
-<dt><code>next</code><dd>Points to the next buffer, in the chain of all buffers including killed
-buffers.  This chain is used only for garbage collection, in order to
-collect killed buffers properly.  Note that vectors, and most kinds of
-objects allocated as vectors, are all on one chain, but buffers are on a
-separate chain of their own.
+<dt><code>next</code><dd>Points to the next buffer, in the chain of all buffers (including
+killed buffers).  This chain is used only for garbage collection, in
+order to collect killed buffers properly.  Note that vectors, and most
+kinds of objects allocated as vectors, are all on one chain, but
+buffers are on a separate chain of their own.
 
-     <br><dt><code>own_text</code><dd>This is a <code>struct buffer_text</code> structure.  In an ordinary buffer,
-it holds the buffer contents.  In indirect buffers, this field is not
-used.
+     <br><dt><code>own_text</code><dd>A <code>struct buffer_text</code> structure that ordinarily holds the buffer
+contents.  In indirect buffers, this field is not used.
 
-     <br><dt><code>text</code><dd>This points to the <code>buffer_text</code> structure that is used for this
-buffer.  In an ordinary buffer, this is the <code>own_text</code> field above. 
-In an indirect buffer, this is the <code>own_text</code> field of the base
-buffer.
+     <br><dt><code>text</code><dd>A pointer to the <code>buffer_text</code> structure for this buffer.  In an
+ordinary buffer, this is the <code>own_text</code> field above.  In an
+indirect buffer, this is the <code>own_text</code> field of the base buffer.
 
-     <br><dt><code>pt</code><dd>Contains the character position of point in a buffer.
+     <br><dt><code>pt</code><dt><code>pt_byte</code><dd>The character and byte positions of point in a buffer.
 
-     <br><dt><code>pt_byte</code><dd>Contains the byte position of point in a buffer.
+     <br><dt><code>begv</code><dt><code>begv_byte</code><dd>The character and byte positions of the beginning of the accessible
+range of text in the buffer.
 
-     <br><dt><code>begv</code><dd>This field contains the character position of the beginning of the
-accessible range of text in the buffer.
-
-     <br><dt><code>begv_byte</code><dd>This field contains the byte position of the beginning of the
-accessible range of text in the buffer.
-
-     <br><dt><code>zv</code><dd>This field contains the character position of the end of the
-accessible range of text in the buffer.
-
-     <br><dt><code>zv_byte</code><dd>This field contains the byte position of the end of the
-accessible range of text in the buffer.
+     <br><dt><code>zv</code><dt><code>zv_byte</code><dd>The character and byte positions of the end of the accessible range of
+text in the buffer.
 
      <br><dt><code>base_buffer</code><dd>In an indirect buffer, this points to the base buffer.  In an ordinary
 buffer, it is null.
 
-     <br><dt><code>local_var_flags</code><dd>This field contains flags indicating that certain variables are local in
-this buffer.  Such variables are declared in the C code using
-<code>DEFVAR_PER_BUFFER</code>, and their buffer-local bindings are stored in
-fields in the buffer structure itself.  (Some of these fields are
+     <br><dt><code>local_flags</code><dd>This field contains flags indicating that certain variables are local
+in this buffer.  Such variables are declared in the C code using
+<code>DEFVAR_PER_BUFFER</code>, and their buffer-local bindings are stored
+in fields in the buffer structure itself.  (Some of these fields are
 described in this table.)
 
-     <br><dt><code>modtime</code><dd>This field contains the modification time of the visited file.  It is
-set when the file is written or read.  Before writing the buffer into a
-file, this field is compared to the modification time of the file to see
-if the file has changed on disk.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
+     <br><dt><code>modtime</code><dd>The modification time of the visited file.  It is set when the file is
+written or read.  Before writing the buffer into a file, this field is
+compared to the modification time of the file to see if the file has
+changed on disk.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
 
-     <br><dt><code>auto_save_modified</code><dd>This field contains the time when the buffer was last auto-saved.
+     <br><dt><code>auto_save_modified</code><dd>The time when the buffer was last auto-saved.
 
-     <br><dt><code>auto_save_failure_time</code><dd>The time at which we detected a failure to auto-save, or -1 if we didn't
-have a failure.
+     <br><dt><code>last_window_start</code><dd>The <code>window-start</code> position in the buffer as of the last time the
+buffer was displayed in a window.
 
-     <br><dt><code>last_window_start</code><dd>This field contains the <code>window-start</code> position in the buffer as of
-the last time the buffer was displayed in a window.
+     <br><dt><code>clip_changed</code><dd>This flag indicates that narrowing has changed in the buffer. 
+See <a href="Narrowing.html#Narrowing">Narrowing</a>.
 
-     <br><dt><code>clip_changed</code><dd>This flag is set when narrowing changes in a buffer.
+     <br><dt><code>prevent_redisplay_optimizations_p</code><dd>This flag indicates that redisplay optimizations should not be used to
+display this buffer.
 
-     <br><dt><code>prevent_redisplay_optimizations_p</code><dd>this flag indicates that redisplay optimizations should not be used
-to display this buffer.
+     <br><dt><code>overlay_center</code><dd>This field holds the current overlay center position.  See <a href="Managing-Overlays.html#Managing-Overlays">Managing Overlays</a>.
 
-     <br><dt><code>undo_list</code><dd>This field points to the buffer's undo list.  See <a href="Undo.html#Undo">Undo</a>.
+     <br><dt><code>overlays_before</code><dt><code>overlays_after</code><dd>These fields hold, respectively, a list of overlays that end at or
+before the current overlay center, and a list of overlays that end
+after the current overlay center.  See <a href="Managing-Overlays.html#Managing-Overlays">Managing Overlays</a>. 
+<code>overlays_before</code> is sorted in order of decreasing end position,
+and <code>overlays_after</code> is sorted in order of increasing beginning
+position.
 
-     <br><dt><code>name</code><dd>The buffer name is a string that names the buffer.  It is guaranteed to
-be unique.  See <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>.
+     <br><dt><code>name</code><dd>A Lisp string that names the buffer.  It is guaranteed to be unique. 
+See <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>.
 
-     <br><dt><code>filename</code><dd>The name of the file visited in this buffer, or <code>nil</code>.
+     <br><dt><code>save_length</code><dd>The length of the file this buffer is visiting, when last read or
+saved.  This and other fields concerned with saving are not kept in
+the <code>buffer_text</code> structure because indirect buffers are never
+saved.
 
-     <br><dt><code>directory</code><dd>The directory for expanding relative file names.
+     <br><dt><code>directory</code><dd>The directory for expanding relative file names.  This is the value of
+the buffer-local variable <code>default-directory</code> (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).
 
-     <br><dt><code>save_length</code><dd>Length of the file this buffer is visiting, when last read or saved. 
-This and other fields concerned with saving are not kept in the
-<code>buffer_text</code> structure because indirect buffers are never saved.
+     <br><dt><code>filename</code><dd>The name of the file visited in this buffer, or <code>nil</code>.  This is
+the value of the buffer-local variable <code>buffer-file-name</code>
+(see <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>).
 
-     <br><dt><code>auto_save_file_name</code><dd>File name used for auto-saving this buffer.  This is not in the
-<code>buffer_text</code> because it's not used in indirect buffers at all.
+     <br><dt><code>undo_list</code><dt><code>backed_up</code><dt><code>auto_save_file_name</code><dt><code>read_only</code><dt><code>file_format</code><dt><code>file_truename</code><dt><code>invisibility_spec</code><dt><code>display_count</code><dt><code>display_time</code><dd>These fields store the values of Lisp variables that are automatically
+buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>), whose corresponding
+variable names have the additional prefix <code>buffer-</code> and have
+underscores replaced with dashes.  For instance, <code>undo_list</code>
+stores the value of <code>buffer-undo-list</code>.  See <a href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Standard Buffer-Local Variables</a>.
 
-     <br><dt><code>read_only</code><dd>Non-<code>nil</code> means this buffer is read-only.
+     <br><dt><code>mark</code><dd>The mark for the buffer.  The mark is a marker, hence it is also
+included on the list <code>markers</code>.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
 
-     <br><dt><code>mark</code><dd>This field contains the mark for the buffer.  The mark is a marker,
-hence it is also included on the list <code>markers</code>.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
-
-     <br><dt><code>local_var_alist</code><dd>This field contains the association list describing the buffer-local
-variable bindings of this buffer, not including the built-in
-buffer-local bindings that have special slots in the buffer object. 
-(Those slots are omitted from this table.)  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
+     <br><dt><code>local_var_alist</code><dd>The association list describing the buffer-local variable bindings of
+this buffer, not including the built-in buffer-local bindings that
+have special slots in the buffer object.  (Those slots are omitted
+from this table.)  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
 
      <br><dt><code>major_mode</code><dd>Symbol naming the major mode of this buffer, e.g., <code>lisp-mode</code>.
 
-     <br><dt><code>mode_name</code><dd>Pretty name of major mode, e.g., <code>"Lisp"</code>.
+     <br><dt><code>mode_name</code><dd>Pretty name of the major mode, e.g., <code>"Lisp"</code>.
 
-     <br><dt><code>mode_line_format</code><dd>Mode line element that controls the format of the mode line.  If this
-is <code>nil</code>, no mode line will be displayed.
+     <br><dt><code>keymap</code><dt><code>abbrev_table</code><dt><code>syntax_table</code><dt><code>category_table</code><dt><code>display_table</code><dd>These fields store the buffer's local keymap (see <a href="Keymaps.html#Keymaps">Keymaps</a>), abbrev
+table (see <a href="Abbrev-Tables.html#Abbrev-Tables">Abbrev Tables</a>), syntax table (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>),
+category table (see <a href="Categories.html#Categories">Categories</a>), and display table (see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
 
-     <br><dt><code>header_line_format</code><dd>This field is analogous to <code>mode_line_format</code> for the mode
-line displayed at the top of windows.
-
-     <br><dt><code>keymap</code><dd>This field holds the buffer's local keymap.  See <a href="Keymaps.html#Keymaps">Keymaps</a>.
-
-     <br><dt><code>abbrev_table</code><dd>This buffer's local abbrevs.
-
-     <br><dt><code>syntax_table</code><dd>This field contains the syntax table for the buffer.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
-
-     <br><dt><code>category_table</code><dd>This field contains the category table for the buffer.
-
-     <br><dt><code>case_fold_search</code><dd>The value of <code>case-fold-search</code> in this buffer.
-
-     <br><dt><code>tab_width</code><dd>The value of <code>tab-width</code> in this buffer.
-
-     <br><dt><code>fill_column</code><dd>The value of <code>fill-column</code> in this buffer.
-
-     <br><dt><code>left_margin</code><dd>The value of <code>left-margin</code> in this buffer.
-
-     <br><dt><code>auto_fill_function</code><dd>The value of <code>auto-fill-function</code> in this buffer.
-
-     <br><dt><code>downcase_table</code><dd>This field contains the conversion table for converting text to lower case. 
+     <br><dt><code>downcase_table</code><dt><code>upcase_table</code><dt><code>case_canon_table</code><dd>These fields store the conversion tables for converting text to lower
+case, upper case, and for canonicalizing text for case-fold search. 
 See <a href="Case-Tables.html#Case-Tables">Case Tables</a>.
-
-     <br><dt><code>upcase_table</code><dd>This field contains the conversion table for converting text to upper case. 
-See <a href="Case-Tables.html#Case-Tables">Case Tables</a>.
-
-     <br><dt><code>case_canon_table</code><dd>This field contains the conversion table for canonicalizing text for
-case-folding search.  See <a href="Case-Tables.html#Case-Tables">Case Tables</a>.
-
-     <br><dt><code>case_eqv_table</code><dd>This field contains the equivalence table for case-folding search. 
-See <a href="Case-Tables.html#Case-Tables">Case Tables</a>.
-
-     <br><dt><code>truncate_lines</code><dd>The value of <code>truncate-lines</code> in this buffer.
-
-     <br><dt><code>ctl_arrow</code><dd>The value of <code>ctl-arrow</code> in this buffer.
-
-     <br><dt><code>selective_display</code><dd>The value of <code>selective-display</code> in this buffer.
-
-     <br><dt><code>selective_display_ellipsis</code><dd>The value of <code>selective-display-ellipsis</code> in this buffer.
 
      <br><dt><code>minor_modes</code><dd>An alist of the minor modes of this buffer.
 
-     <br><dt><code>overwrite_mode</code><dd>The value of <code>overwrite_mode</code> in this buffer.
-
-     <br><dt><code>abbrev_mode</code><dd>The value of <code>abbrev-mode</code> in this buffer.
-
-     <br><dt><code>display_table</code><dd>This field contains the buffer's display table, or <code>nil</code> if it doesn't
-have one.  See <a href="Display-Tables.html#Display-Tables">Display Tables</a>.
-
-     <br><dt><code>save_modified</code><dd>This field contains the time when the buffer was last saved, as an integer. 
-See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
-
-     <br><dt><code>mark_active</code><dd>This field is non-<code>nil</code> if the buffer's mark is active.
-
-     <br><dt><code>overlays_before</code><dd>This field holds a list of the overlays in this buffer that end at or
-before the current overlay center position.  They are sorted in order of
-decreasing end position.
-
-     <br><dt><code>overlays_after</code><dd>This field holds a list of the overlays in this buffer that end after
-the current overlay center position.  They are sorted in order of
-increasing beginning position.
-
-     <br><dt><code>overlay_center</code><dd>This field holds the current overlay center position.  See <a href="Overlays.html#Overlays">Overlays</a>.
-
-     <br><dt><code>enable_multibyte_characters</code><dd>This field holds the buffer's local value of
-<code>enable-multibyte-characters</code>&mdash;either <code>t</code> or <code>nil</code>.
-
-     <br><dt><code>buffer_file_coding_system</code><dd>The value of <code>buffer-file-coding-system</code> in this buffer.
-
-     <br><dt><code>file_format</code><dd>The value of <code>buffer-file-format</code> in this buffer.
-
-     <br><dt><code>auto_save_file_format</code><dd>The value of <code>buffer-auto-save-file-format</code> in this buffer.
-
-     <br><dt><code>pt_marker</code><dd>In an indirect buffer, or a buffer that is the base of an indirect
-buffer, this holds a marker that records point for this buffer when the
-buffer is not current.
-
-     <br><dt><code>begv_marker</code><dd>In an indirect buffer, or a buffer that is the base of an indirect
-buffer, this holds a marker that records <code>begv</code> for this buffer
+     <br><dt><code>pt_marker</code><dt><code>begv_marker</code><dt><code>zv_marker</code><dd>These fields are only used in an indirect buffer, or in a buffer that
+is the base of an indirect buffer.  Each holds a marker that records
+<code>pt</code>, <code>begv</code>, and <code>zv</code> respectively, for this buffer
 when the buffer is not current.
 
-     <br><dt><code>zv_marker</code><dd>In an indirect buffer, or a buffer that is the base of an indirect
-buffer, this holds a marker that records <code>zv</code> for this buffer when
-the buffer is not current.
-
-     <br><dt><code>file_truename</code><dd>The truename of the visited file, or <code>nil</code>.
-
-     <br><dt><code>invisibility_spec</code><dd>The value of <code>buffer-invisibility-spec</code> in this buffer.
+     <br><dt><code>mode_line_format</code><dt><code>header_line_format</code><dt><code>case_fold_search</code><dt><code>tab_width</code><dt><code>fill_column</code><dt><code>left_margin</code><dt><code>auto_fill_function</code><dt><code>truncate_lines</code><dt><code>word_wrap</code><dt><code>ctl_arrow</code><dt><code>selective_display</code><dt><code>selective_display_ellipses</code><dt><code>overwrite_mode</code><dt><code>abbrev_mode</code><dt><code>display_table</code><dt><code>mark_active</code><dt><code>enable_multibyte_characters</code><dt><code>buffer_file_coding_system</code><dt><code>auto_save_file_format</code><dt><code>cache_long_line_scans</code><dt><code>point_before_scroll</code><dt><code>left_fringe_width</code><dt><code>right_fringe_width</code><dt><code>fringes_outside_margins</code><dt><code>scroll_bar_width</code><dt><code>indicate_empty_lines</code><dt><code>indicate_buffer_boundaries</code><dt><code>fringe_indicator_alist</code><dt><code>fringe_cursor_alist</code><dt><code>scroll_up_aggressively</code><dt><code>scroll_down_aggressively</code><dt><code>cursor_type</code><dt><code>cursor_in_non_selected_windows</code><dd>These fields store the values of Lisp variables that are automatically
+buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>), whose corresponding
+variable names have underscores replaced with dashes.  For instance,
+<code>mode_line_format</code> stores the value of <code>mode-line-format</code>. 
+See <a href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Standard Buffer-Local Variables</a>.
 
      <br><dt><code>last_selected_window</code><dd>This is the last window that was selected with this buffer in it, or <code>nil</code>
-if that window no longer displays this buffer.
-
-     <br><dt><code>display_count</code><dd>This field is incremented each time the buffer is displayed in a window.
-
-     <br><dt><code>left_margin_width</code><dd>The value of <code>left-margin-width</code> in this buffer.
-
-     <br><dt><code>right_margin_width</code><dd>The value of <code>right-margin-width</code> in this buffer.
-
-     <br><dt><code>indicate_empty_lines</code><dd>Non-<code>nil</code> means indicate empty lines (lines with no text) with a
-small bitmap in the fringe, when using a window system that can do it.
-
-     <br><dt><code>display_time</code><dd>This holds a time stamp that is updated each time this buffer is
-displayed in a window.
-
-     <br><dt><code>scroll_up_aggressively</code><dd>The value of <code>scroll-up-aggressively</code> in this buffer.
-
-     <br><dt><code>scroll_down_aggressively</code><dd>The value of <code>scroll-down-aggressively</code> in this buffer. 
+if that window no longer displays this buffer. 
 </dl>
 
    </body></html>

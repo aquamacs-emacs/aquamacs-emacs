@@ -3,32 +3,32 @@
 <title>Catch and Throw - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
 <link rel="next" href="Examples-of-Catch.html#Examples-of-Catch" title="Examples of Catch">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Catch-and-Throw"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Examples-of-Catch.html#Examples-of-Catch">Examples of Catch</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
 <hr>
@@ -104,7 +104,7 @@ before exit from it, it has access to that <code>catch</code>.  This is why
 <code>throw</code> can be used in commands such as <code>exit-recursive-edit</code>
 that throw back to the editor command loop (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>).
 
-   <p><a name="index-CL-note_002d_002d_002donly-_0040code_007bthrow_007d-in-Emacs-538"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002donly-_0040code_007bthrow_007d-in-Emacs-543"></a><blockquote>
 <b>Common Lisp note:</b> Most other versions of Lisp, including Common Lisp,
 have several ways of transferring control nonsequentially: <code>return</code>,
 <code>return-from</code>, and <code>go</code>, for example.  Emacs Lisp has only
@@ -112,8 +112,8 @@ have several ways of transferring control nonsequentially: <code>return</code>,
 </blockquote>
 
 <div class="defun">
-&mdash; Special Form: <b>catch</b><var> tag body<small class="dots">...</small><a name="index-catch-539"></a></var><br>
-<blockquote><p><a name="index-tag-on-run-time-stack-540"></a><code>catch</code> establishes a return point for the <code>throw</code> function. 
+&mdash; Special Form: <b>catch</b><var> tag body<small class="dots">...</small><a name="index-catch-544"></a></var><br>
+<blockquote><p><a name="index-tag-on-run-time-stack-545"></a><code>catch</code> establishes a return point for the <code>throw</code> function. 
 The return point is distinguished from other such return points by
 <var>tag</var>, which may be any Lisp object except <code>nil</code>.  The argument
 <var>tag</var> is evaluated normally before the return point is established.
@@ -130,7 +130,7 @@ second argument of <code>throw</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>throw</b><var> tag value<a name="index-throw-541"></a></var><br>
+&mdash; Function: <b>throw</b><var> tag value<a name="index-throw-546"></a></var><br>
 <blockquote><p>The purpose of <code>throw</code> is to return from a return point previously
 established with <code>catch</code>.  The argument <var>tag</var> is used to choose
 among the various existing return points; it must be <code>eq</code> to the value
@@ -140,7 +140,7 @@ the innermost one is used.
         <p>The argument <var>value</var> is used as the value to return from that
 <code>catch</code>.
 
-        <p><a name="index-no_002dcatch-542"></a>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
+        <p><a name="index-no_002dcatch-547"></a>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
 error is signaled with data <code>(</code><var>tag</var> <var>value</var><code>)</code>. 
 </p></blockquote></div>
 

@@ -3,32 +3,32 @@
 <title>Default Value - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" title="Buffer-Local Variables">
 <link rel="prev" href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" title="Creating Buffer-Local">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Default-Value"></a>
+<p>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffer_002dLocal-Variables.html#Buffer_
 
 <h4 class="subsection">11.10.3 The Default Value of a Buffer-Local Variable</h4>
 
-<p><a name="index-default-value-624"></a>
+<p><a name="index-default-value-632"></a>
   The global value of a variable with buffer-local bindings is also
 called the <dfn>default</dfn> value, because it is the value that is in
 effect whenever neither the current buffer nor the selected frame has
@@ -69,12 +69,12 @@ you are in a C or Lisp mode buffer that has a buffer-local value for
 this variable.
 
 <!-- Emacs 19 feature -->
-<p>The special forms <code>defvar</code> and <code>defconst</code> also set the
+   <p>The special forms <code>defvar</code> and <code>defconst</code> also set the
 default value (if they set the variable at all), rather than any
-buffer-local or frame-local value.
+buffer-local value.
 
 <div class="defun">
-&mdash; Function: <b>default-value</b><var> symbol<a name="index-default_002dvalue-625"></a></var><br>
+&mdash; Function: <b>default-value</b><var> symbol<a name="index-default_002dvalue-633"></a></var><br>
 <blockquote><p>This function returns <var>symbol</var>'s default value.  This is the value
 that is seen in buffers and frames that do not have their own values for
 this variable.  If <var>symbol</var> is not buffer-local, this is equivalent
@@ -83,7 +83,7 @@ to <code>symbol-value</code> (see <a href="Accessing-Variables.html#Accessing-Va
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>default-boundp</b><var> symbol<a name="index-default_002dboundp-626"></a></var><br>
+&mdash; Function: <b>default-boundp</b><var> symbol<a name="index-default_002dboundp-634"></a></var><br>
 <blockquote><p>The function <code>default-boundp</code> tells you whether <var>symbol</var>'s
 default value is nonvoid.  If <code>(default-boundp 'foo)</code> returns
 <code>nil</code>, then <code>(default-value 'foo)</code> would get an error.
@@ -93,7 +93,7 @@ default value is nonvoid.  If <code>(default-boundp 'foo)</code> returns
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>setq-default</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq_002ddefault-627"></a></var><br>
+&mdash; Special Form: <b>setq-default</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq_002ddefault-635"></a></var><br>
 <blockquote><p>This special form gives each <var>symbol</var> a new default value, which is
 the result of evaluating the corresponding <var>form</var>.  It does not
 evaluate <var>symbol</var>, but does evaluate <var>form</var>.  The value of the
@@ -106,46 +106,46 @@ buffer, then this changes the value that other buffers will see (as long
 as they don't have a buffer-local value), but not the value that the
 current buffer sees.
 
-     <pre class="example">          ;; <span class="roman">In buffer `<samp>foo</samp>':</span>
+     <pre class="example">          ;; <span class="roman">In buffer &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo;:</span>
           (make-local-variable 'buffer-local)
-               =&gt; buffer-local
+               &rArr; buffer-local
           (setq buffer-local 'value-in-foo)
-               =&gt; value-in-foo
+               &rArr; value-in-foo
           (setq-default buffer-local 'new-default)
-               =&gt; new-default
+               &rArr; new-default
           buffer-local
-               =&gt; value-in-foo
+               &rArr; value-in-foo
           (default-value 'buffer-local)
-               =&gt; new-default
+               &rArr; new-default
           
-          ;; <span class="roman">In (the new) buffer `<samp>bar</samp>':</span>
+          ;; <span class="roman">In (the new) buffer &lsquo;</span><samp><span class="samp">bar</span></samp><span class="roman">&rsquo;:</span>
           buffer-local
-               =&gt; new-default
+               &rArr; new-default
           (default-value 'buffer-local)
-               =&gt; new-default
+               &rArr; new-default
           (setq buffer-local 'another-default)
-               =&gt; another-default
+               &rArr; another-default
           (default-value 'buffer-local)
-               =&gt; another-default
+               &rArr; another-default
           
-          ;; <span class="roman">Back in buffer `<samp>foo</samp>':</span>
+          ;; <span class="roman">Back in buffer &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo;:</span>
           buffer-local
-               =&gt; value-in-foo
+               &rArr; value-in-foo
           (default-value 'buffer-local)
-               =&gt; another-default
-     </pre>
+               &rArr; another-default
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-default</b><var> symbol value<a name="index-set_002ddefault-628"></a></var><br>
+&mdash; Function: <b>set-default</b><var> symbol value<a name="index-set_002ddefault-636"></a></var><br>
 <blockquote><p>This function is like <code>setq-default</code>, except that <var>symbol</var> is
 an ordinary evaluated argument.
 
      <pre class="example">          (set-default (car '(a b c)) 23)
-               =&gt; 23
+               &rArr; 23
           (default-value 'a)
-               =&gt; 23
-     </pre>
+               &rArr; 23
+</pre>
         </blockquote></div>
 
    </body></html>

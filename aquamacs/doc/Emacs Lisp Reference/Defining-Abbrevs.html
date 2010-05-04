@@ -3,33 +3,33 @@
 <title>Defining Abbrevs - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
 <link rel="prev" href="Abbrev-Tables.html#Abbrev-Tables" title="Abbrev Tables">
 <link rel="next" href="Abbrev-Files.html#Abbrev-Files" title="Abbrev Files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Abbrevs"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Abbrev-Files.html#Abbrev-Files">Abbrev Files</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Tables.html#Abbrev-Tables">Abbrev Tables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
@@ -58,35 +58,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <h3 class="section">36.3 Defining Abbrevs</h3>
 
 <p><code>define-abbrev</code> is the low-level basic function for defining an
-abbrev in a specified abbrev table.  When major modes predefine standard
-abbrevs, they should call <code>define-abbrev</code> and specify <code>t</code> for
-<var>system-flag</var>.  Be aware that any saved non-&ldquo;system&rdquo; abbrevs are
-restored at startup, i.e. before some major modes are loaded.  Major modes
-should therefore not assume that when they are first loaded their abbrev
-tables are empty.
+abbrev in an abbrev table.
+
+   <p>When a major mode defines a system abbrev, it should call
+<code>define-abbrev</code> and specify a <code>t</code> for the <code>:system</code>
+property.  Be aware that any saved non-&ldquo;system&rdquo; abbrevs are restored
+at startup, i.e. before some major modes are loaded.  Therefore, major
+modes should not assume that their abbrev tables are empty when they
+are first loaded.
 
 <div class="defun">
-&mdash; Function: <b>define-abbrev</b><var> table name expansion &amp;optional hook count system-flag<a name="index-define_002dabbrev-2971"></a></var><br>
-<blockquote><p>This function defines an abbrev named <var>name</var>, in <var>table</var>, to
-expand to <var>expansion</var> and call <var>hook</var>.  The return value is
-<var>name</var>.
+&mdash; Function: <b>define-abbrev</b><var> abbrev-table name expansion &amp;optional hook &amp;rest props<a name="index-define_002dabbrev-3139"></a></var><br>
+<blockquote><p>This function defines an abbrev named <var>name</var>, in
+<var>abbrev-table</var>, to expand to <var>expansion</var> and call <var>hook</var>,
+with properties <var>props</var> (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).  The return
+value is <var>name</var>.  The <code>:system</code> property in <var>props</var> is
+treated specially here: if it has the value <code>force</code>, then it will
+overwrite an existing definition even for a non-&ldquo;system&rdquo; abbrev of
+the same name.
 
-        <p>The value of <var>count</var>, if specified, initializes the abbrev's
-usage-count.  If <var>count</var> is not specified or <code>nil</code>, the use
-count is initialized to zero.
-
-        <p>The argument <var>name</var> should be a string.  The argument
-<var>expansion</var> is normally the desired expansion (a string), or
-<code>nil</code> to undefine the abbrev.  If it is anything but a string or
-<code>nil</code>, then the abbreviation &ldquo;expands&rdquo; solely by running
-<var>hook</var>.
+        <p><var>name</var> should be a string.  The argument <var>expansion</var> is
+normally the desired expansion (a string), or <code>nil</code> to undefine
+the abbrev.  If it is anything but a string or <code>nil</code>, then the
+abbreviation &ldquo;expands&rdquo; solely by running <var>hook</var>.
 
         <p>The argument <var>hook</var> is a function or <code>nil</code>.  If <var>hook</var> is
 non-<code>nil</code>, then it is called with no arguments after the abbrev is
 replaced with <var>expansion</var>; point is located at the end of
 <var>expansion</var> when <var>hook</var> is called.
 
-        <p><a name="index-g_t_0040code_007bno_002dself_002dinsert_007d-property-2972"></a>If <var>hook</var> is a non-<code>nil</code> symbol whose <code>no-self-insert</code>
+        <p><a name="index-g_t_0040code_007bno_002dself_002dinsert_007d-property-3140"></a>If <var>hook</var> is a non-<code>nil</code> symbol whose <code>no-self-insert</code>
 property is non-<code>nil</code>, <var>hook</var> can explicitly control whether
 to insert the self-inserting input character that triggered the
 expansion.  If <var>hook</var> returns non-<code>nil</code> in this case, that
@@ -94,21 +95,14 @@ inhibits insertion of the character.  By contrast, if <var>hook</var>
 returns <code>nil</code>, <code>expand-abbrev</code> also returns <code>nil</code>, as
 if expansion had not really occurred.
 
-        <p>If <var>system-flag</var> is non-<code>nil</code>, that marks the abbrev as a
-&ldquo;system&rdquo; abbrev with the <code>system-type</code> property.  Unless
-<var>system-flag</var> has the value <code>force</code>, a &ldquo;system&rdquo; abbrev will
-not overwrite an existing definition for a non-&ldquo;system&rdquo; abbrev of the
-same name.
-
-        <p>Normally the function <code>define-abbrev</code> sets the variable
+        <p>Normally, <code>define-abbrev</code> sets the variable
 <code>abbrevs-changed</code> to <code>t</code>, if it actually changes the abbrev. 
 (This is so that some commands will offer to save the abbrevs.)  It
-does not do this for a &ldquo;system&rdquo; abbrev, since those won't be saved
-anyway. 
+does not do this for a system abbrev, since those aren't saved anyway. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>only-global-abbrevs</b><var><a name="index-only_002dglobal_002dabbrevs-2973"></a></var><br>
+&mdash; User Option: <b>only-global-abbrevs</b><var><a name="index-only_002dglobal_002dabbrevs-3141"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it means that the user plans to use
 global abbrevs only.  This tells the commands that define mode-specific
 abbrevs to define global ones instead.  This variable does not alter the

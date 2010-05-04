@@ -3,7 +3,7 @@
 <title>Rebinding - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
 <link rel="prev" href="Minibuffer-Maps.html#Minibuffer-Maps" title="Minibuffer Maps">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Rebinding"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-Maps.html#Minibuffer-Maps">Minibuffer Maps</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
@@ -57,14 +57,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 
 <h4 class="subsection">57.4.5 Changing Key Bindings Interactively</h4>
 
-<p><a name="index-key-rebinding_002c-this-session-4001"></a><a name="index-redefining-keys_002c-this-session-4002"></a>
+<p><a name="index-key-rebinding_002c-this-session-4032"></a><a name="index-redefining-keys_002c-this-session-4033"></a><a name="index-binding-keys-4034"></a>
   The way to redefine an Emacs key is to change its entry in a keymap. 
-You can change the global keymap, in which case the change is effective in
-all major modes (except those that have their own overriding local
-definitions for the same key).  Or you can change the current buffer's
-local map, which affects all buffers using the same major mode.
+You can change the global keymap, in which case the change is
+effective in all major modes (except those that have their own
+overriding local bindings for the same key).  Or you can change a
+local keymap, which affects all buffers using the same major mode.
 
-   <p><a name="index-global_002dset_002dkey-4003"></a><a name="index-local_002dset_002dkey-4004"></a><a name="index-global_002dunset_002dkey-4005"></a><a name="index-local_002dunset_002dkey-4006"></a>
+   <p>In this section, we describe how to rebind keys for the present
+Emacs session.  See <a href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>, for a description of how to
+make key rebindings affect future Emacs sessions.
+
+   <p><a name="index-global_002dset_002dkey-4035"></a><a name="index-local_002dset_002dkey-4036"></a><a name="index-global_002dunset_002dkey-4037"></a><a name="index-local_002dunset_002dkey-4038"></a>
      <dl>
 <dt><kbd>M-x global-set-key &lt;RET&gt; </kbd><var>key</var> <var>cmd</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>key</var> globally to run <var>cmd</var>. 
 <br><dt><kbd>M-x local-set-key &lt;RET&gt; </kbd><var>key</var> <var>cmd</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>key</var> locally (in the major mode now in effect) to run
@@ -73,18 +77,15 @@ local map, which affects all buffers using the same major mode.
 <br><dt><kbd>M-x local-unset-key &lt;RET&gt; </kbd><var>key</var><dd>Make <var>key</var> undefined locally (in the major mode now in effect). 
 </dl>
 
-   <p>For example, suppose you like to execute commands in a subshell within
-an Emacs buffer, instead of suspending Emacs and executing commands in
-your login shell.  Normally, <kbd>C-z</kbd> is bound to the function
-<code>suspend-emacs</code> (when not using the X Window System), but you can
-change <kbd>C-z</kbd> to invoke an interactive subshell within Emacs, by
-binding it to <code>shell</code> as follows:
+   <p>For example, the following binds <kbd>C-z</kbd> to the <code>shell</code>
+command (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>), replacing the normal global
+definition of <kbd>C-z</kbd>:
 
 <pre class="example">     M-x global-set-key &lt;RET&gt; C-z shell &lt;RET&gt;
 </pre>
-   <p class="noindent"><code>global-set-key</code> reads the command name after the key.   After you
-press the key, a message like this appears so that you can confirm that
-you are binding the key you want:
+   <p class="noindent">The <code>global-set-key</code> command reads the command name after the
+key.  After you press the key, a message like this appears so that you
+can confirm that you are binding the key you want:
 
 <pre class="example">     Set key C-z to command:
 </pre>

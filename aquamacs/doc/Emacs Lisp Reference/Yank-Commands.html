@@ -3,33 +3,33 @@
 <title>Yank Commands - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
 <link rel="prev" href="Yanking.html#Yanking" title="Yanking">
 <link rel="next" href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" title="Low-Level Kill Ring">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Yank-Commands"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring">Low-Level Kill Ring</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Yanking.html#Yanking">Yanking</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>
@@ -64,15 +64,15 @@ Both <code>yank</code> and <code>yank-pop</code> honor the
 property (see <a href="Yanking.html#Yanking">Yanking</a>).
 
 <div class="defun">
-&mdash; Command: <b>yank</b><var> &amp;optional arg<a name="index-yank-2453"></a></var><br>
-<blockquote><p><a name="index-inserting-killed-text-2454"></a>This command inserts before point the text at the front of the
-kill ring.  It positions the mark at the beginning of that text, and
-point at the end.
+&mdash; Command: <b>yank</b><var> &amp;optional arg<a name="index-yank-2556"></a></var><br>
+<blockquote><p><a name="index-inserting-killed-text-2557"></a>This command inserts before point the text at the front of the kill
+ring.  It sets the mark at the beginning of that text, using
+<code>push-mark</code> (see <a href="The-Mark.html#The-Mark">The Mark</a>), and puts point at the end.
 
         <p>If <var>arg</var> is a non-<code>nil</code> list (which occurs interactively when
 the user types <kbd>C-u</kbd> with no digits), then <code>yank</code> inserts the
 text as described above, but puts point before the yanked text and
-puts the mark after it.
+sets the mark after it.
 
         <p>If <var>arg</var> is a number, then <code>yank</code> inserts the <var>arg</var>th
 most recently killed text&mdash;the <var>arg</var>th element of the kill ring
@@ -88,7 +88,7 @@ one, it rotates the kill ring to place the yanked string at the front.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>yank-pop</b><var> &amp;optional arg<a name="index-yank_002dpop-2455"></a></var><br>
+&mdash; Command: <b>yank-pop</b><var> &amp;optional arg<a name="index-yank_002dpop-2558"></a></var><br>
 <blockquote><p>This command replaces the just-yanked entry from the kill ring with a
 different entry from the kill ring.
 
@@ -113,7 +113,7 @@ oldest.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>yank-undo-function</b><var><a name="index-yank_002dundo_002dfunction-2456"></a></var><br>
+&mdash; Variable: <b>yank-undo-function</b><var><a name="index-yank_002dundo_002dfunction-2559"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, the function <code>yank-pop</code> uses
 its value instead of <code>delete-region</code> to delete the text
 inserted by the previous <code>yank</code> or

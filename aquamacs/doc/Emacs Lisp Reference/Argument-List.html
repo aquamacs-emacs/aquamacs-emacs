@@ -3,33 +3,33 @@
 <title>Argument List - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
 <link rel="prev" href="Simple-Lambda.html#Simple-Lambda" title="Simple Lambda">
 <link rel="next" href="Function-Documentation.html#Function-Documentation" title="Function Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Argument-List"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Function-Documentation.html#Function-Documentation">Function Documentation</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Lambda.html#Simple-Lambda">Simple Lambda</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressi
 
 <h4 class="subsection">12.2.3 Other Features of Argument Lists</h4>
 
-<p><a name="index-wrong_002dnumber_002dof_002darguments-661"></a><a name="index-argument-binding-662"></a><a name="index-binding-arguments-663"></a><a name="index-argument-lists_002c-features-664"></a>
+<p><a name="index-wrong_002dnumber_002dof_002darguments-678"></a><a name="index-argument-binding-679"></a><a name="index-binding-arguments-680"></a><a name="index-argument-lists_002c-features-681"></a>
   Our simple sample function, <code>(lambda (a b c) (+ a b c))</code>,
 specifies three argument variables, so it must be called with three
 arguments: if you try to call it with only two arguments or four
@@ -70,7 +70,7 @@ string if you omit it.  It is also convenient for certain functions to
 accept an indefinite number of arguments, as the functions <code>list</code>
 and <code>+</code> do.
 
-   <p><a name="index-optional-arguments-665"></a><a name="index-rest-arguments-666"></a><a name="index-g_t_0026optional-667"></a><a name="index-g_t_0026rest-668"></a>  To specify optional arguments that may be omitted when a function
+   <p><a name="index-optional-arguments-682"></a><a name="index-rest-arguments-683"></a><a name="index-g_t_0026optional-684"></a><a name="index-g_t_0026rest-685"></a>  To specify optional arguments that may be omitted when a function
 is called, simply include the keyword <code>&amp;optional</code> before the optional
 arguments.  To specify a list of zero or more extra arguments, include the
 keyword <code>&amp;rest</code> before one final argument.
@@ -98,7 +98,7 @@ consider <code>nil</code> an abbreviation for some other meaningful value.
 This is what <code>substring</code> does; <code>nil</code> as the third argument to
 <code>substring</code> means to use the length of the string supplied.
 
-   <p><a name="index-CL-note_002d_002d_002ddefault-optional-arg-669"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002ddefault-optional-arg-686"></a><blockquote>
 <b>Common Lisp note:</b> Common Lisp allows the function to specify what
 default value to use when an optional argument is omitted; Emacs Lisp
 always uses <code>nil</code>.  Emacs Lisp does not support &ldquo;supplied-p&rdquo;
@@ -130,15 +130,15 @@ after a <code>&amp;rest</code> argument.
 
 <pre class="smallexample">     ((lambda (n) (1+ n))                ; <span class="roman">One required:</span>
       1)                                 ; <span class="roman">requires exactly one argument.</span>
-          =&gt; 2
+          &rArr; 2
      ((lambda (n &amp;optional n1)           ; <span class="roman">One required and one optional:</span>
               (if n1 (+ n n1) (1+ n)))   ; <span class="roman">1 or 2 arguments.</span>
       1 2)
-          =&gt; 3
+          &rArr; 3
      ((lambda (n &amp;rest ns)               ; <span class="roman">One required and one rest:</span>
               (+ n (apply '+ ns)))       ; <span class="roman">1 or more arguments.</span>
       1 2 3 4 5)
-          =&gt; 15
+          &rArr; 15
 </pre>
    </body></html>
 

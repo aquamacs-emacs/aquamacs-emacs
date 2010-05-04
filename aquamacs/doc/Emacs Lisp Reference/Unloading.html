@@ -3,33 +3,33 @@
 <title>Unloading - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Loading.html#Loading" title="Loading">
 <link rel="prev" href="Where-Defined.html#Where-Defined" title="Where Defined">
 <link rel="next" href="Hooks-for-Loading.html#Hooks-for-Loading" title="Hooks for Loading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Unloading"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for Loading</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Where-Defined.html#Where-Defined">Where Defined</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
@@ -56,14 +56,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.9 Unloading</h3>
 
-<p><a name="index-unloading-packages-800"></a>
+<p><a name="index-unloading-packages-831"></a>
 <!-- Emacs 19 feature -->
   You can discard the functions and variables loaded by a library to
 reclaim memory for other Lisp objects.  To do this, use the function
 <code>unload-feature</code>:
 
 <div class="defun">
-&mdash; Command: <b>unload-feature</b><var> feature &amp;optional force<a name="index-unload_002dfeature-801"></a></var><br>
+&mdash; Command: <b>unload-feature</b><var> feature &amp;optional force<a name="index-unload_002dfeature-832"></a></var><br>
 <blockquote><p>This command unloads the library that provided feature <var>feature</var>. 
 It undefines all functions, macros, and variables defined in that
 library with <code>defun</code>, <code>defalias</code>, <code>defsubst</code>,
@@ -71,22 +71,26 @@ library with <code>defun</code>, <code>defalias</code>, <code>defsubst</code>,
 It then restores any autoloads formerly associated with those symbols. 
 (Loading saves these in the <code>autoload</code> property of the symbol.)
 
-        <p><a name="index-unload_002dfeature_002dspecial_002dhooks-802"></a>Before restoring the previous definitions, <code>unload-feature</code> runs
+        <p>Before restoring the previous definitions, <code>unload-feature</code> runs
 <code>remove-hook</code> to remove functions in the library from certain
-hooks.  These hooks include variables whose names end in `<samp><span class="samp">hook</span></samp>'
-or `<samp><span class="samp">-hooks</span></samp>', plus those listed in
-<code>unload-feature-special-hooks</code>.  This is to prevent Emacs from
-ceasing to function because important hooks refer to functions that
-are no longer defined.
+hooks.  These hooks include variables whose names end in &lsquo;<samp><span class="samp">hook</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo;, plus those listed in
+<code>unload-feature-special-hooks</code>, as well as
+<code>auto-mode-alist</code>.  This is to prevent Emacs from ceasing to
+function because important hooks refer to functions that are no longer
+defined.
 
-        <p><a name="index-g_t_0040var_007bfeature_007d_002dunload_002dhook-803"></a>If these measures are not sufficient to prevent malfunction, a library
-can define an explicit unload hook.  If <var>feature</var><code>-unload-hook</code>
-is defined, it is run as a normal hook before restoring the previous
-definitions, <em>instead of</em> the usual hook-removing actions.  The
-unload hook ought to undo all the global state changes made by the
-library that might cease to work once the library is unloaded. 
-<code>unload-feature</code> can cause problems with libraries that fail to do
-this, so it should be used with caution.
+        <p>Standard unloading activities also undoes ELP profiling of functions
+in that library, unprovides any features provided by the library, and
+cancels timers held in variables defined by the library.
+
+        <p><a name="index-g_t_0040var_007bfeature_007d_002dunload_002dfunction-833"></a>If these measures are not sufficient to prevent malfunction, a library
+can define an explicit unloader named <var>feature</var><code>-unload-function</code>. 
+If that symbol is defined as a function, <code>unload-feature</code> calls
+it with no arguments before doing anything else.  It can do whatever
+is appropriate to unload the library.  If it returns <code>nil</code>,
+<code>unload-feature</code> proceeds to take the normal unload actions. 
+Otherwise it considers the job to be done.
 
         <p>Ordinarily, <code>unload-feature</code> refuses to unload a library on which
 other loaded libraries depend.  (A library <var>a</var> depends on library
@@ -99,7 +103,7 @@ ignored and you can unload any library.
 based on the variable <code>load-history</code>.
 
 <div class="defun">
-&mdash; Variable: <b>unload-feature-special-hooks</b><var><a name="index-unload_002dfeature_002dspecial_002dhooks-804"></a></var><br>
+&mdash; Variable: <b>unload-feature-special-hooks</b><var><a name="index-unload_002dfeature_002dspecial_002dhooks-834"></a></var><br>
 <blockquote><p>This variable holds a list of hooks to be scanned before unloading a
 library, to remove functions defined in the library. 
 </p></blockquote></div>

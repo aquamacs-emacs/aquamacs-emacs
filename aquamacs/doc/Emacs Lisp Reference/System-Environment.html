@@ -3,33 +3,33 @@
 <title>System Environment - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
 <link rel="prev" href="Getting-Out.html#Getting-Out" title="Getting Out">
 <link rel="next" href="User-Identification.html#User-Identification" title="User Identification">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="System-Environment"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="User-Identification.html#User-Identification">User Identification</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-Out.html#Getting-Out">Getting Out</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
@@ -56,66 +56,60 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.3 Operating System Environment</h3>
 
-<p><a name="index-operating-system-environment-3495"></a>
+<p><a name="index-operating-system-environment-3730"></a>
   Emacs provides access to variables in the operating system environment
 through various functions.  These variables include the name of the
 system, the user's <acronym>UID</acronym>, and so on.
 
 <div class="defun">
-&mdash; Variable: <b>system-configuration</b><var><a name="index-system_002dconfiguration-3496"></a></var><br>
+&mdash; Variable: <b>system-configuration</b><var><a name="index-system_002dconfiguration-3731"></a></var><br>
 <blockquote><p>This variable holds the standard GNU configuration name for the
 hardware/software configuration of your system, as a string.  The
 convenient way to test parts of this string is with
 <code>string-match</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-system-type-and-name-3497"></a>
+   <p><a name="index-system-type-and-name-3732"></a>
 
 <div class="defun">
-&mdash; Variable: <b>system-type</b><var><a name="index-system_002dtype-3498"></a></var><br>
+&mdash; Variable: <b>system-type</b><var><a name="index-system_002dtype-3733"></a></var><br>
 <blockquote><p>The value of this variable is a symbol indicating the type of operating
 system Emacs is operating on.  Here is a table of the possible values:
 
           <dl>
-<dt><code>alpha-vms</code><dd>VMS on the Alpha.
+<dt><code>aix</code><dd>IBM's AIX.
 
-          <br><dt><code>aix-v3</code><dd>AIX.
+          <br><dt><code>berkeley-unix</code><dd>Berkeley BSD and its variants.
 
-          <br><dt><code>berkeley-unix</code><dd>Berkeley BSD.
+          <br><dt><code>cygwin</code><dd>Cygwin, a Posix layer on top of MS-Windows.
 
-          <br><dt><code>cygwin</code><dd>Cygwin.
+          <br><dt><code>darwin</code><dd>Darwin (Mac OS X).
 
-          <br><dt><code>dgux</code><dd>Data General DGUX operating system.
-
-          <br><dt><code>gnu</code><dd>the GNU system (using the GNU kernel, which consists of the HURD and Mach).
+          <br><dt><code>gnu</code><dd>The GNU system (using the GNU kernel, which consists of the HURD and Mach).
 
           <br><dt><code>gnu/linux</code><dd>A GNU/Linux system&mdash;that is, a variant GNU system, using the Linux
 kernel.  (These systems are the ones people often call &ldquo;Linux,&rdquo; but
 actually Linux is just the kernel, not the whole system.)
 
+          <br><dt><code>gnu/kfreebsd</code><dd>A GNU (glibc-based) system with a FreeBSD kernel.
+
           <br><dt><code>hpux</code><dd>Hewlett-Packard HPUX operating system.
 
           <br><dt><code>irix</code><dd>Silicon Graphics Irix system.
+
+          <br><dt><code>lynxos 3.0.1</code><dd>LynxOS-3.0.1.
 
           <br><dt><code>ms-dos</code><dd>Microsoft MS-DOS &ldquo;operating system.&rdquo;  Emacs compiled with DJGPP for
 MS-DOS binds <code>system-type</code> to <code>ms-dos</code> even when you run it on
 MS-Windows.
 
-          <br><dt><code>next-mach</code><dd>NeXT Mach-based system.
+          <br><dt><code>usg-unix-v</code><dd>AT&amp;T Unix System V.
 
-          <br><dt><code>rtu</code><dd>Masscomp RTU, UCB universe.
+          <br><dt><code>windows-nt</code><dd>Microsoft Windows NT and later.  The same executable supports Windows
+9X, but the value of <code>system-type</code> is <code>windows-nt</code> in either
+case.
 
-          <br><dt><code>unisoft-unix</code><dd>UniSoft UniPlus.
-
-          <br><dt><code>usg-unix-v</code><dd>AT&amp;T System V.
-
-          <br><dt><code>vax-vms</code><dd>VAX VMS.
-
-          <br><dt><code>windows-nt</code><dd>Microsoft windows NT.  The same executable supports Windows 9X, but the
-value of <code>system-type</code> is <code>windows-nt</code> in either case.
-
-          <br><dt><code>xenix</code><dd>SCO Xenix 386. 
-</dl>
+        </dl>
 
         <p>We do not wish to add new symbols to make finer distinctions unless it
 is absolutely necessary!  In fact, we hope to eliminate some of these
@@ -125,11 +119,11 @@ systems.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>system-name</b><var><a name="index-system_002dname-3499"></a></var><br>
+&mdash; Function: <b>system-name</b><var><a name="index-system_002dname-3734"></a></var><br>
 <blockquote><p>This function returns the name of the machine you are running on.
      <pre class="example">          (system-name)
-               =&gt; "www.gnu.org"
-     </pre>
+               &rArr; "www.gnu.org"
+</pre>
         </blockquote></div>
 
    <p>The symbol <code>system-name</code> is a variable as well as a function.  In
@@ -140,7 +134,7 @@ system.  The variable is also useful for constructing frame titles
 (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
 
 <div class="defun">
-&mdash; Variable: <b>mail-host-address</b><var><a name="index-mail_002dhost_002daddress-3500"></a></var><br>
+&mdash; User Option: <b>mail-host-address</b><var><a name="index-mail_002dhost_002daddress-3735"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it is used instead of
 <code>system-name</code> for purposes of generating email addresses.  For
 example, it is used when constructing the default value of
@@ -150,15 +144,15 @@ Emacs was dumped.  See <a href="Building-Emacs.html#Building-Emacs">Building Ema
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>getenv</b><var> var<a name="index-getenv-3501"></a></var><br>
-<blockquote><p><a name="index-environment-variable-access-3502"></a>This function returns the value of the environment variable <var>var</var>,
+&mdash; Command: <b>getenv</b><var> var &amp;optional frame<a name="index-getenv-3736"></a></var><br>
+<blockquote><p><a name="index-environment-variable-access-3737"></a>This function returns the value of the environment variable <var>var</var>,
 as a string.  <var>var</var> should be a string.  If <var>var</var> is undefined
 in the environment, <code>getenv</code> returns <code>nil</code>.  If returns
-`<samp><span class="samp">""</span></samp>' if <var>var</var> is set but null.  Within Emacs, the environment
+&lsquo;<samp><span class="samp">""</span></samp>&rsquo; if <var>var</var> is set but null.  Within Emacs, the environment
 variable values are kept in the Lisp variable <code>process-environment</code>.
 
      <pre class="example">          (getenv "USER")
-               =&gt; "lewis"
+               &rArr; "lewis"
           
           lewis@slug[10] % printenv
           PATH=.:/user/lewis/bin:/usr/bin:/usr/local/bin
@@ -166,12 +160,12 @@ variable values are kept in the Lisp variable <code>process-environment</code>.
           TERM=ibmapa16
           SHELL=/bin/csh
           HOME=/user/lewis
-     </pre>
+</pre>
         </blockquote></div>
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Command: <b>setenv</b><var> variable &amp;optional value<a name="index-setenv-3503"></a></var><br>
+&mdash; Command: <b>setenv</b><var> variable &amp;optional value<a name="index-setenv-3738"></a></var><br>
 <blockquote><p>This command sets the value of the environment variable named
 <var>variable</var> to <var>value</var>.  <var>variable</var> should be a string. 
 Internally, Emacs Lisp can handle any string.  However, normally
@@ -190,26 +184,33 @@ if it removed <var>variable</var> from the environment.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>process-environment</b><var><a name="index-process_002denvironment-3504"></a></var><br>
+&mdash; Variable: <b>process-environment</b><var><a name="index-process_002denvironment-3739"></a></var><br>
 <blockquote><p>This variable is a list of strings, each describing one environment
 variable.  The functions <code>getenv</code> and <code>setenv</code> work by means
 of this variable.
 
      <pre class="smallexample">          process-environment
-          =&gt; ("l=/usr/stanford/lib/gnuemacs/lisp"
+          &rArr; ("l=/usr/stanford/lib/gnuemacs/lisp"
               "PATH=.:/user/lewis/bin:/usr/class:/nfsusr/local/bin"
               "USER=lewis"
               "TERM=ibmapa16"
               "SHELL=/bin/csh"
               "HOME=/user/lewis")
-     </pre>
+</pre>
         <p>If <code>process-environment</code> contains &ldquo;duplicate&rdquo; elements that
 specify the same environment variable, the first of these elements
 specifies the variable, and the other &ldquo;duplicates&rdquo; are ignored. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>path-separator</b><var><a name="index-path_002dseparator-3505"></a></var><br>
+&mdash; Variable: <b>initial-environment</b><var><a name="index-initial_002denvironment-3740"></a></var><br>
+<blockquote><p>This variable holds the list of environment variables Emacs inherited
+from its parent process.  It is computed during startup, see
+<a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>path-separator</b><var><a name="index-path_002dseparator-3741"></a></var><br>
 <blockquote><p>This variable holds a string which says which character separates
 directories in a search path (as found in an environment variable).  Its
 value is <code>":"</code> for Unix and GNU systems, and <code>";"</code> for MS-DOS
@@ -217,7 +218,7 @@ and MS-Windows.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>parse-colon-path</b><var> path<a name="index-parse_002dcolon_002dpath-3506"></a></var><br>
+&mdash; Function: <b>parse-colon-path</b><var> path<a name="index-parse_002dcolon_002dpath-3742"></a></var><br>
 <blockquote><p>This function takes a search path string such as would be the value of
 the <code>PATH</code> environment variable, and splits it at the separators,
 returning a list of directory names.  <code>nil</code> in this list stands for
@@ -225,24 +226,24 @@ returning a list of directory names.  <code>nil</code> in this list stands for
 &ldquo;colon,&rdquo; it actually uses the value of <code>path-separator</code>.
 
      <pre class="example">          (parse-colon-path ":/foo:/bar")
-               =&gt; (nil "/foo/" "/bar/")
-     </pre>
+               &rArr; (nil "/foo/" "/bar/")
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>invocation-name</b><var><a name="index-invocation_002dname-3507"></a></var><br>
+&mdash; Variable: <b>invocation-name</b><var><a name="index-invocation_002dname-3743"></a></var><br>
 <blockquote><p>This variable holds the program name under which Emacs was invoked.  The
 value is a string, and does not include a directory name. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>invocation-directory</b><var><a name="index-invocation_002ddirectory-3508"></a></var><br>
+&mdash; Variable: <b>invocation-directory</b><var><a name="index-invocation_002ddirectory-3744"></a></var><br>
 <blockquote><p>This variable holds the directory from which the Emacs executable was
 invoked, or perhaps <code>nil</code> if that directory cannot be determined. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>installation-directory</b><var><a name="index-installation_002ddirectory-3509"></a></var><br>
+&mdash; Variable: <b>installation-directory</b><var><a name="index-installation_002ddirectory-3745"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this is a directory within which to look for the
 <samp><span class="file">lib-src</span></samp> and <samp><span class="file">etc</span></samp> subdirectories.  This is non-<code>nil</code>
 when Emacs can't find those directories in their standard installed
@@ -251,7 +252,7 @@ containing the Emacs executable.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>load-average</b><var> &amp;optional use-float<a name="index-load_002daverage-3510"></a></var><br>
+&mdash; Function: <b>load-average</b><var> &amp;optional use-float<a name="index-load_002daverage-3746"></a></var><br>
 <blockquote><p>This function returns the current 1-minute, 5-minute, and 15-minute load
 averages, in a list.
 
@@ -270,41 +271,27 @@ averages are not, this function returns a shortened list containing
 the available averages.
 
      <pre class="example">          (load-average)
-               =&gt; (169 48 36)
+               &rArr; (169 48 36)
           (load-average t)
-               =&gt; (1.69 0.48 0.36)
+               &rArr; (1.69 0.48 0.36)
           
           lewis@rocky[5] % uptime
            11:55am  up 1 day, 19:37,  3 users,
            load average: 1.69, 0.48, 0.36
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>emacs-pid</b><var><a name="index-emacs_002dpid-3511"></a></var><br>
+&mdash; Function: <b>emacs-pid</b><var><a name="index-emacs_002dpid-3747"></a></var><br>
 <blockquote><p>This function returns the process <acronym>ID</acronym> of the Emacs process,
 as an integer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>tty-erase-char</b><var><a name="index-tty_002derase_002dchar-3512"></a></var><br>
+&mdash; Variable: <b>tty-erase-char</b><var><a name="index-tty_002derase_002dchar-3748"></a></var><br>
 <blockquote><p>This variable holds the erase character that was selected
 in the system's terminal driver, before Emacs was started. 
 The value is <code>nil</code> if Emacs is running under a window system. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>setprv</b><var> privilege-name &amp;optional setp getprv<a name="index-setprv-3513"></a></var><br>
-<blockquote><p>This function sets or resets a VMS privilege.  (It does not exist on
-other systems.)  The first argument is the privilege name, as a string. 
-The second argument, <var>setp</var>, is <code>t</code> or <code>nil</code>, indicating
-whether the privilege is to be turned on or off.  Its default is
-<code>nil</code>.  The function returns <code>t</code> if successful, <code>nil</code>
-otherwise.
-
-        <p>If the third argument, <var>getprv</var>, is non-<code>nil</code>, <code>setprv</code>
-does not change the privilege, but returns <code>t</code> or <code>nil</code>
-indicating whether the privilege is currently enabled. 
 </p></blockquote></div>
 
    </body></html>

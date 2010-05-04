@@ -3,32 +3,32 @@
 <title>Visiting Functions - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Visiting-Files.html#Visiting-Files" title="Visiting Files">
 <link rel="next" href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" title="Subroutines of Visiting">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Visiting-Functions"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Subroutines-of-Visiting.html#Subroutines-of-Visiting">Subroutines of Visiting</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Visiting-Files.html#Visiting-Files">Visiting Files</a>
 <hr>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Visiting-Files.html#Visiting-Files">Vis
 
 <p>This section describes the functions normally used to visit files. 
 For historical reasons, these functions have names starting with
-`<samp><span class="samp">find-</span></samp>' rather than `<samp><span class="samp">visit-</span></samp>'.  See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>, for
+&lsquo;<samp><span class="samp">find-</span></samp>&rsquo; rather than &lsquo;<samp><span class="samp">visit-</span></samp>&rsquo;.  See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>, for
 functions and variables that access the visited file name of a buffer or
 that find an existing buffer by its visited file name.
 
@@ -66,7 +66,7 @@ temporary buffer.  Visiting the file is not necessary and takes longer.
 See <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>.
 
 <div class="defun">
-&mdash; Command: <b>find-file</b><var> filename &amp;optional wildcards<a name="index-find_002dfile-1690"></a></var><br>
+&mdash; Command: <b>find-file</b><var> filename &amp;optional wildcards<a name="index-find_002dfile-1748"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>,
 using an existing buffer if there is one, and otherwise creating a
 new buffer and reading the file into it.  It also returns that buffer.
@@ -75,7 +75,7 @@ new buffer and reading the file into it.  It also returns that buffer.
 function is basically equivalent to:
 
      <pre class="smallexample">          (switch-to-buffer (find-file-noselect filename nil nil wildcards))
-     </pre>
+</pre>
         <p class="noindent">(See <code>switch-to-buffer</code> in <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>.)
 
         <p>If <var>wildcards</var> is non-<code>nil</code>, which is always true in an
@@ -87,7 +87,7 @@ interactive call, then <code>find-file</code> expands wildcard characters in
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-file-noselect</b><var> filename &amp;optional nowarn rawfile wildcards<a name="index-find_002dfile_002dnoselect-1691"></a></var><br>
+&mdash; Function: <b>find-file-noselect</b><var> filename &amp;optional nowarn rawfile wildcards<a name="index-find_002dfile_002dnoselect-1749"></a></var><br>
 <blockquote><p>This function is the guts of all the file-visiting functions.  It
 returns a buffer visiting the file <var>filename</var>.  You may make the
 buffer current or display it in a window if you wish, but this
@@ -98,7 +98,7 @@ creates a new buffer and reads the file into it.  When
 <code>find-file-noselect</code> uses an existing buffer, it first verifies
 that the file has not changed since it was last visited or saved in
 that buffer.  If the file has changed, this function asks the user
-whether to reread the changed file.  If the user says `<samp><span class="samp">yes</span></samp>', any
+whether to reread the changed file.  If the user says &lsquo;<samp><span class="samp">yes</span></samp>&rsquo;, any
 edits previously made in the buffer are lost.
 
         <p>Reading the file involves decoding the file's contents (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), including end-of-line conversion, and format conversion
@@ -109,7 +109,7 @@ then <code>find-file-noselect</code> expands wildcard characters in
         <p>This function displays warning or advisory messages in various peculiar
 cases, unless the optional argument <var>nowarn</var> is non-<code>nil</code>.  For
 example, if it needs to create a buffer, and there is no file named
-<var>filename</var>, it displays the message `<samp><span class="samp">(New file)</span></samp>' in the echo
+<var>filename</var>, it displays the message &lsquo;<samp><span class="samp">(New file)</span></samp>&rsquo; in the echo
 area, and leaves the buffer empty.
 
         <p>The <code>find-file-noselect</code> function normally calls
@@ -130,12 +130,12 @@ used and expanded, it returns a list of buffers that are visiting the
 various files.
 
      <pre class="example">          (find-file-noselect "/etc/fstab")
-               =&gt; #&lt;buffer fstab&gt;
-     </pre>
+               &rArr; #&lt;buffer fstab&gt;
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>find-file-other-window</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dother_002dwindow-1692"></a></var><br>
+&mdash; Command: <b>find-file-other-window</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dother_002dwindow-1750"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>, but
 does so in a window other than the selected window.  It may use another
 existing window or split a window; see <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>.
@@ -145,7 +145,7 @@ existing window or split a window; see <a href="Displaying-Buffers.html#Displayi
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>find-file-read-only</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dread_002donly-1693"></a></var><br>
+&mdash; Command: <b>find-file-read-only</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dread_002donly-1751"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>, like
 <code>find-file</code>, but it marks the buffer as read-only.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>, for related functions and variables.
 
@@ -154,7 +154,7 @@ existing window or split a window; see <a href="Displaying-Buffers.html#Displayi
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>view-file</b><var> filename<a name="index-view_002dfile-1694"></a></var><br>
+&mdash; Command: <b>view-file</b><var> filename<a name="index-view_002dfile-1752"></a></var><br>
 <blockquote><p>This command visits <var>filename</var> using View mode, returning to the
 previous buffer when you exit View mode.  View mode is a minor mode that
 provides commands to skim rapidly through the file, but does not let you
@@ -166,7 +166,7 @@ modify the text.  Entering View mode runs the normal hook
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>find-file-wildcards</b><var><a name="index-find_002dfile_002dwildcards-1695"></a></var><br>
+&mdash; User Option: <b>find-file-wildcards</b><var><a name="index-find_002dfile_002dwildcards-1753"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, then the various <code>find-file</code>
 commands check for wildcard characters and visit all the files that
 match them (when invoked interactively or when their <var>wildcards</var>
@@ -176,7 +176,7 @@ and never treat wildcard characters specially.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>find-file-hook</b><var><a name="index-find_002dfile_002dhook-1696"></a></var><br>
+&mdash; User Option: <b>find-file-hook</b><var><a name="index-find_002dfile_002dhook-1754"></a></var><br>
 <blockquote><p>The value of this variable is a list of functions to be called after a
 file is visited.  The file's local-variables specification (if any) will
 have been processed before the hooks are run.  The buffer visiting the
@@ -186,7 +186,7 @@ file is current when the hook functions are run.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>find-file-not-found-functions</b><var><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1697"></a></var><br>
+&mdash; Variable: <b>find-file-not-found-functions</b><var><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1755"></a></var><br>
 <blockquote><p>The value of this variable is a list of functions to be called when
 <code>find-file</code> or <code>find-file-noselect</code> is passed a nonexistent
 file name.  <code>find-file-noselect</code> calls these functions as soon as

@@ -3,33 +3,33 @@
 <title>Changing Properties - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
 <link rel="prev" href="Examining-Properties.html#Examining-Properties" title="Examining Properties">
 <link rel="next" href="Property-Search.html#Property-Search" title="Property Search">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Changing-Properties"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Property-Search.html#Property-Search">Property Search</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Examining-Properties.html#Examining-Properties">Examining Properties</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
@@ -70,14 +70,14 @@ Positions in a string start from 0, whereas positions in a buffer
 start from 1.
 
 <div class="defun">
-&mdash; Function: <b>put-text-property</b><var> start end prop value &amp;optional object<a name="index-put_002dtext_002dproperty-2566"></a></var><br>
+&mdash; Function: <b>put-text-property</b><var> start end prop value &amp;optional object<a name="index-put_002dtext_002dproperty-2669"></a></var><br>
 <blockquote><p>This function sets the <var>prop</var> property to <var>value</var> for the text
 between <var>start</var> and <var>end</var> in the string or buffer <var>object</var>. 
 If <var>object</var> is <code>nil</code>, it defaults to the current buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>add-text-properties</b><var> start end props &amp;optional object<a name="index-add_002dtext_002dproperties-2567"></a></var><br>
+&mdash; Function: <b>add-text-properties</b><var> start end props &amp;optional object<a name="index-add_002dtext_002dproperties-2670"></a></var><br>
 <blockquote><p>This function adds or overrides text properties for the text between
 <var>start</var> and <var>end</var> in the string or buffer <var>object</var>.  If
 <var>object</var> is <code>nil</code>, it defaults to the current buffer.
@@ -96,11 +96,11 @@ properties of a range of text:
 
      <pre class="example">          (add-text-properties <var>start</var> <var>end</var>
                                '(comment t face highlight))
-     </pre>
+</pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove-text-properties</b><var> start end props &amp;optional object<a name="index-remove_002dtext_002dproperties-2568"></a></var><br>
+&mdash; Function: <b>remove-text-properties</b><var> start end props &amp;optional object<a name="index-remove_002dtext_002dproperties-2671"></a></var><br>
 <blockquote><p>This function deletes specified text properties from the text between
 <var>start</var> and <var>end</var> in the string or buffer <var>object</var>.  If
 <var>object</var> is <code>nil</code>, it defaults to the current buffer.
@@ -112,7 +112,7 @@ But only the names matter&mdash;the values that accompany them are ignored.
 For example, here's how to remove the <code>face</code> property.
 
      <pre class="example">          (remove-text-properties <var>start</var> <var>end</var> '(face nil))
-     </pre>
+</pre>
         <p>The return value is <code>t</code> if the function actually changed some
 property's value; <code>nil</code> otherwise (if <var>props</var> is <code>nil</code> or
 if no character in the specified text had any of those properties).
@@ -123,14 +123,14 @@ list.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove-list-of-text-properties</b><var> start end list-of-properties &amp;optional object<a name="index-remove_002dlist_002dof_002dtext_002dproperties-2569"></a></var><br>
+&mdash; Function: <b>remove-list-of-text-properties</b><var> start end list-of-properties &amp;optional object<a name="index-remove_002dlist_002dof_002dtext_002dproperties-2672"></a></var><br>
 <blockquote><p>Like <code>remove-text-properties</code> except that
 <var>list-of-properties</var> is a list of property names only, not an
 alternating list of property names and values. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-text-properties</b><var> start end props &amp;optional object<a name="index-set_002dtext_002dproperties-2570"></a></var><br>
+&mdash; Function: <b>set-text-properties</b><var> start end props &amp;optional object<a name="index-set_002dtext_002dproperties-2673"></a></var><br>
 <blockquote><p>This function completely replaces the text property list for the text
 between <var>start</var> and <var>end</var> in the string or buffer <var>object</var>. 
 If <var>object</var> is <code>nil</code>, it defaults to the current buffer.
@@ -145,7 +145,7 @@ specified range have identical properties.
 from the specified range of text.  Here's an example:
 
      <pre class="example">          (set-text-properties <var>start</var> <var>end</var> nil)
-     </pre>
+</pre>
         <p>Do not rely on the return value of this function. 
 </p></blockquote></div>
 
@@ -153,7 +153,7 @@ from the specified range of text.  Here's an example:
 is with <code>propertize</code>:
 
 <div class="defun">
-&mdash; Function: <b>propertize</b><var> string &amp;rest properties<a name="index-propertize-2571"></a></var><br>
+&mdash; Function: <b>propertize</b><var> string &amp;rest properties<a name="index-propertize-2674"></a></var><br>
 <blockquote><p>This function returns a copy of <var>string</var> which has the text
 properties <var>properties</var>.  These properties apply to all the
 characters in the string that is returned.  Here is an example that
@@ -162,8 +162,8 @@ property:
 
      <pre class="smallexample">          (propertize "foo" 'face 'italic
                       'mouse-face 'bold-italic)
-               =&gt; #("foo" 0 3 (mouse-face bold-italic face italic))
-     </pre>
+               &rArr; #("foo" 0 3 (mouse-face bold-italic face italic))
+</pre>
         <p>To put different properties on various parts of a string, you can
 construct each part with <code>propertize</code> and then combine them with
 <code>concat</code>:
@@ -174,11 +174,11 @@ construct each part with <code>propertize</code> and then combine them with
            " and "
            (propertize "bar" 'face 'italic
                        'mouse-face 'bold-italic))
-               =&gt; #("foo and bar"
+               &rArr; #("foo and bar"
                            0 3 (face italic mouse-face bold-italic)
                            3 8 nil
                            8 11 (face italic mouse-face bold-italic))
-     </pre>
+</pre>
         </blockquote></div>
 
    <p>See also the function <code>buffer-substring-no-properties</code>

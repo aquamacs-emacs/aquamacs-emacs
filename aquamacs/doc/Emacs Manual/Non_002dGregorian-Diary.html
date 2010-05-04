@@ -3,20 +3,20 @@
 <title>Non-Gregorian Diary - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
 <link rel="prev" href="Diary-Customizing.html#Diary-Customizing" title="Diary Customizing">
-<link rel="next" href="Fancy-Diary-Display.html#Fancy-Diary-Display" title="Fancy Diary Display">
+<link rel="next" href="Diary-Display.html#Diary-Display" title="Diary Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,10 +47,10 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Non-Gregorian-Diary"></a>
 <a name="Non_002dGregorian-Diary"></a>
-Next:&nbsp;<a rel="next" accesskey="n" href="Fancy-Diary-Display.html#Fancy-Diary-Display">Fancy Diary Display</a>,
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Diary-Display.html#Diary-Display">Diary Display</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary-Customizing.html#Diary-Customizing">Diary Customizing</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
 <hr>
@@ -65,7 +65,7 @@ most people don't use them, you must explicitly enable their use.  If
 you want the diary to recognize Hebrew-date diary entries, for example,
 you must do this:
 
-   <p><a name="index-diary_002dnongregorian_002dlisting_002dhook-3416"></a><a name="index-diary_002dnongregorian_002dmarking_002dhook-3417"></a><a name="index-diary_002dhebrew_002dlist_002dentries-3418"></a><a name="index-diary_002dhebrew_002dmark_002dentries-3419"></a><a name="index-diary_002dislamic_002dlist_002dentries-3420"></a><a name="index-diary_002dislamic_002dmark_002dentries-3421"></a><a name="index-diary_002dbahai_002dlist_002dentries-3422"></a><a name="index-diary_002dbahai_002dmark_002dentries-3423"></a>
+   <p><a name="index-diary_002dnongregorian_002dlisting_002dhook-3438"></a><a name="index-diary_002dnongregorian_002dmarking_002dhook-3439"></a><a name="index-diary_002dhebrew_002dlist_002dentries-3440"></a><a name="index-diary_002dhebrew_002dmark_002dentries-3441"></a><a name="index-diary_002dislamic_002dlist_002dentries-3442"></a><a name="index-diary_002dislamic_002dmark_002dentries-3443"></a><a name="index-diary_002dbahai_002dlist_002dentries-3444"></a><a name="index-diary_002dbahai_002dmark_002dentries-3445"></a>
 <pre class="smallexample">     (add-hook 'diary-nongregorian-listing-hook 'diary-hebrew-list-entries)
      (add-hook 'diary-nongregorian-marking-hook 'diary-hebrew-mark-entries)
 </pre>
@@ -73,14 +73,15 @@ you must do this:
 <code>diary-islamic-list-entries</code> and <code>diary-islamic-mark-entries</code>, or
 <code>diary-bahai-list-entries</code> and <code>diary-bahai-mark-entries</code>.
 
-   <p><a name="index-diary_002dbahai_002dentry_002dsymbol-3424"></a><a name="index-diary_002dhebrew_002dentry_002dsymbol-3425"></a><a name="index-diary_002dislamic_002dentry_002dsymbol-3426"></a>  These diary entries have the same formats as Gregorian-date diary
-entries; except that <code>diary-bahai-entry-symbol</code> (default `<samp><span class="samp">B</span></samp>')
+   <p><a name="index-diary_002dbahai_002dentry_002dsymbol-3446"></a><a name="index-diary_002dhebrew_002dentry_002dsymbol-3447"></a><a name="index-diary_002dislamic_002dentry_002dsymbol-3448"></a>  These diary entries have the same formats as Gregorian-date diary
+entries; except that <code>diary-bahai-entry-symbol</code> (default &lsquo;<samp><span class="samp">B</span></samp>&rsquo;)
 must precede a Baha'i date, <code>diary-hebrew-entry-symbol</code> (default
-`<samp><span class="samp">H</span></samp>') a Hebrew date, and <code>diary-islamic-entry-symbol</code> (default
-`<samp><span class="samp">I</span></samp>') an Islamic date.  Moreover, non-Gregorian month names may not
+&lsquo;<samp><span class="samp">H</span></samp>&rsquo;) a Hebrew date, and <code>diary-islamic-entry-symbol</code> (default
+&lsquo;<samp><span class="samp">I</span></samp>&rsquo;) an Islamic date.  Moreover, non-Gregorian month names may not
 be abbreviated (because the first three letters are often not unique). 
-For example, a diary entry for the Hebrew date Heshvan 25 could look
-like this:
+(Note also that you must use &ldquo;Adar I&rdquo; if you want Adar of a common
+Hebrew year.)  For example, a diary entry for the Hebrew date Heshvan 25
+could look like this:
 
 <pre class="smallexample">     HHeshvan 25 Happy Hebrew birthday!
 </pre>
@@ -92,7 +93,7 @@ Dhu al-Qada 25:
 </pre>
    <p>As with Gregorian-date diary entries, non-Gregorian entries are
 nonmarking if preceded by <code>diary-nonmarking-symbol</code> (default
-`<samp><span class="samp">&amp;</span></samp>').
+&lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;).
 
    <p>Here is a table of commands used in the calendar to create diary
 entries that match the selected date and other dates that are similar in
@@ -110,13 +111,13 @@ the Baha'i, Hebrew, or Islamic calendars:
 <br><dt><kbd>i B y</kbd><dd><code>diary-bahai-insert-yearly-entry</code>
 </dl>
 
-   <p><a name="index-diary_002dhebrew_002dinsert_002dentry-3427"></a><a name="index-diary_002dhebrew_002dinsert_002dmonthly_002dentry-3428"></a><a name="index-diary_002dhebrew_002dinsert_002dyearly_002dentry-3429"></a><a name="index-diary_002dislamic_002dinsert_002dentry-3430"></a><a name="index-diary_002dislamic_002dinsert_002dmonthly_002dentry-3431"></a><a name="index-diary_002dislamic_002dinsert_002dyearly_002dentry-3432"></a><a name="index-diary_002dbahai_002dinsert_002dentry-3433"></a><a name="index-diary_002dbahai_002dinsert_002dmonthly_002dentry-3434"></a><a name="index-diary_002dbahai_002dinsert_002dyearly_002dentry-3435"></a>  These commands work much like the corresponding commands for ordinary
+   <p><a name="index-diary_002dhebrew_002dinsert_002dentry-3449"></a><a name="index-diary_002dhebrew_002dinsert_002dmonthly_002dentry-3450"></a><a name="index-diary_002dhebrew_002dinsert_002dyearly_002dentry-3451"></a><a name="index-diary_002dislamic_002dinsert_002dentry-3452"></a><a name="index-diary_002dislamic_002dinsert_002dmonthly_002dentry-3453"></a><a name="index-diary_002dislamic_002dinsert_002dyearly_002dentry-3454"></a><a name="index-diary_002dbahai_002dinsert_002dentry-3455"></a><a name="index-diary_002dbahai_002dinsert_002dmonthly_002dentry-3456"></a><a name="index-diary_002dbahai_002dinsert_002dyearly_002dentry-3457"></a>  These commands work much like the corresponding commands for ordinary
 diary entries: they apply to the date that point is on in the calendar
 window, and what they do is insert just the date portion of a diary
 entry at the end of your diary file.  You must then insert the rest of
 the diary entry.  The basic commands add an entry for the specific
-non-Gregorian date, the `<samp><span class="samp">monthly</span></samp>' commands for the given
-non-Gregorian day-within-month in every month, and the `<samp><span class="samp">yearly</span></samp>'
+non-Gregorian date, the &lsquo;<samp><span class="samp">monthly</span></samp>&rsquo; commands for the given
+non-Gregorian day-within-month in every month, and the &lsquo;<samp><span class="samp">yearly</span></samp>&rsquo;
 commands for the given non-Gregorian day and month in every year.
 
    </body></html>

@@ -3,33 +3,33 @@
 <title>Autoload - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Loading.html#Loading" title="Loading">
 <link rel="prev" href="Loading-Non_002dASCII.html#Loading-Non_002dASCII" title="Loading Non-ASCII">
 <link rel="next" href="Repeated-Loading.html#Repeated-Loading" title="Repeated Loading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Autoload"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Repeated-Loading.html#Repeated-Loading">Repeated Loading</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.5 Autoload</h3>
 
-<p><a name="index-autoload-779"></a>
+<p><a name="index-autoload-808"></a>
   The <dfn>autoload</dfn> facility allows you to make a function or macro
 known in Lisp, but put off loading the file that defines it.  The first
 call to the function automatically reads the proper file to install the
@@ -74,7 +74,7 @@ nothing on their own, but they serve as a guide for the command
 and arranges to execute them when Emacs is built.
 
 <div class="defun">
-&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-780"></a></var><br>
+&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-809"></a></var><br>
 <blockquote><p>This function defines the function (or macro) named <var>function</var> so as
 to load automatically from <var>filename</var>.  The string <var>filename</var>
 specifies the file to load to get the real definition of <var>function</var>.
@@ -113,18 +113,18 @@ happen when a Lisp program gets the keymap from the value of a variable
 and calls <code>define-key</code>; not even if the variable name is the same
 symbol <var>function</var>.
 
-        <p><a name="index-function-cell-in-autoload-781"></a>If <var>function</var> already has a non-void function definition that is not
+        <p><a name="index-function-cell-in-autoload-810"></a>If <var>function</var> already has a non-void function definition that is not
 an autoload object, <code>autoload</code> does nothing and returns <code>nil</code>. 
 If the function cell of <var>function</var> is void, or is already an autoload
 object, then it is defined as an autoload object like this:
 
      <pre class="example">          (autoload <var>filename</var> <var>docstring</var> <var>interactive</var> <var>type</var>)
-     </pre>
+</pre>
         <p>For example,
 
      <pre class="example">          (symbol-function 'run-prolog)
-               =&gt; (autoload "prolog" 169681 t nil)
-     </pre>
+               &rArr; (autoload "prolog" 169681 t nil)
+</pre>
         <p class="noindent">In this case, <code>"prolog"</code> is the name of the file to load, 169681
 refers to the documentation string in the
 <samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp> file (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>),
@@ -132,7 +132,7 @@ refers to the documentation string in the
 not a macro or a keymap. 
 </p></blockquote></div>
 
-   <p><a name="index-autoload-errors-782"></a>  The autoloaded file usually contains other definitions and may require
+   <p><a name="index-autoload-errors-811"></a>  The autoloaded file usually contains other definitions and may require
 or provide one or more features.  If the file is not completely loaded
 (due to an error in the evaluation of its contents), any function
 definitions or <code>provide</code> calls that occurred during the load are
@@ -146,12 +146,14 @@ subroutines not loaded successfully because they come later in the file.
 macro, then an error is signaled with data <code>"Autoloading failed to
 define function </code><var>function-name</var><code>"</code>.
 
-   <p><a name="index-update_002dfile_002dautoloads-783"></a><a name="index-update_002ddirectory_002dautoloads-784"></a><a name="index-magic-autoload-comment-785"></a><a name="index-autoload-cookie-786"></a><a name="autoload-cookie"></a>
-  A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
-consists of `<samp><span class="samp">;;;###autoload</span></samp>', on a line by itself,
+   <p><a name="index-update_002dfile_002dautoloads-812"></a><a name="index-update_002ddirectory_002dautoloads-813"></a><a name="index-magic-autoload-comment-814"></a><a name="index-autoload-cookie-815"></a><a name="autoload-cookie"></a>A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
+consists of &lsquo;<samp><span class="samp">;;;###autoload</span></samp>&rsquo;, on a line by itself,
 just before the real definition of the function in its
 autoloadable source file.  The command <kbd>M-x update-file-autoloads</kbd>
 writes a corresponding <code>autoload</code> call into <samp><span class="file">loaddefs.el</span></samp>. 
+(The string that serves as the autoload cookie and the name of the
+file generated by <code>update-file-autoloads</code> can be changed from the
+above defaults, see below.) 
 Building Emacs loads <samp><span class="file">loaddefs.el</span></samp> and thus calls <code>autoload</code>. 
 <kbd>M-x update-directory-autoloads</kbd> is even more powerful; it updates
 autoloads for all files in the current directory.
@@ -190,11 +192,11 @@ autoloading with a magic comment:
      
      \(fn)" t nil)
 </pre>
-   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-787"></a>The backslash and newline immediately following the double-quote are a
+   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-816"></a>The backslash and newline immediately following the double-quote are a
 convention used only in the preloaded uncompiled Lisp files such as
 <samp><span class="file">loaddefs.el</span></samp>; they tell <code>make-docfile</code> to put the
 documentation string in the <samp><span class="file">etc/DOC</span></samp> file.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>. 
-See also the commentary in <samp><span class="file">lib-src/make-docfile.c</span></samp>.  `<samp><span class="samp">(fn)</span></samp>'
+See also the commentary in <samp><span class="file">lib-src/make-docfile.c</span></samp>.  &lsquo;<samp><span class="samp">(fn)</span></samp>&rsquo;
 in the usage part of the documentation string is replaced with the
 function's name when the various help functions (see <a href="Help-Functions.html#Help-Functions">Help Functions</a>) display it.
 
@@ -208,5 +210,27 @@ ordinary magic autoload comment would copy the whole definition into
      (mydefunmacro foo
        ...)
 </pre>
+   <p>You can use a non-default string as the autoload cookie and have the
+corresponding autoload calls written into a file whose name is
+different from the default <samp><span class="file">loaddefs.el</span></samp>.  Emacs provides two
+variables to control this:
+
+<div class="defun">
+&mdash; Variable: <b>generate-autoload-cookie</b><var><a name="index-generate_002dautoload_002dcookie-817"></a></var><br>
+<blockquote><p>The value of this variable should be a string whose syntax is a Lisp
+comment.  <kbd>M-x update-file-autoloads</kbd> copies the Lisp form that
+follows the cookie into the autoload file it generates.  The default
+value of this variable is <code>";;;###autoload"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>generated-autoload-file</b><var><a name="index-generated_002dautoload_002dfile-818"></a></var><br>
+<blockquote><p>The value of this variable names an Emacs Lisp file where the autoload
+calls should go.  The default value is <samp><span class="file">loaddefs.el</span></samp>, but you can
+override that, e.g., in the &ldquo;Local Variables&rdquo; section of a
+<samp><span class="file">.el</span></samp> file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).  The autoload file is
+assumed to contain a trailer starting with a formfeed character. 
+</p></blockquote></div>
+
    </body></html>
 

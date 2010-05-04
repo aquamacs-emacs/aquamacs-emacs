@@ -3,32 +3,32 @@
 <title>Strings of Events - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
-<link rel="prev" href="Accessing-Events.html#Accessing-Events" title="Accessing Events">
+<link rel="prev" href="Accessing-Scroll.html#Accessing-Scroll" title="Accessing Scroll">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,16 +45,16 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Strings-of-Events"></a>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Events.html#Accessing-Events">Accessing Events</a>,
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Scroll.html#Accessing-Scroll">Accessing Scroll</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
 <hr>
 </div>
 
-<h4 class="subsection">21.6.14 Putting Keyboard Events in Strings</h4>
+<h4 class="subsection">21.7.15 Putting Keyboard Events in Strings</h4>
 
-<p><a name="index-keyboard-events-in-strings-1277"></a><a name="index-strings-with-keyboard-events-1278"></a>
+<p><a name="index-keyboard-events-in-strings-1325"></a><a name="index-strings-with-keyboard-events-1326"></a>
   In most of the places where strings are used, we conceptualize the
 string as containing text characters&mdash;the same kind of characters found
 in buffers or files.  Occasionally Lisp programs use strings that
@@ -89,7 +89,7 @@ allowed only in special cases.
    <p>The earliest GNU Emacs versions represented meta characters as codes
 in the range of 128 to 255.  At that time, the basic character codes
 ranged from 0 to 127, so all keyboard character codes did fit in a
-string.  Many Lisp programs used `<samp><span class="samp">\M-</span></samp>' in string constants to stand
+string.  Many Lisp programs used &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in string constants to stand
 for meta characters, especially in arguments to <code>define-key</code> and
 similar functions, and key sequences and sequences of events were always
 represented as strings.
@@ -101,7 +101,7 @@ character is
 2**27
 and such numbers cannot be included in a string.
 
-   <p>To support programs with `<samp><span class="samp">\M-</span></samp>' in string constants, there are
+   <p>To support programs with &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in string constants, there are
 special rules for including certain meta characters in a string. 
 Here are the rules for interpreting a string as a sequence of input
 characters:
@@ -132,7 +132,7 @@ keyboard events in the range of 128 to 255.
 keyboard input characters follow these rules: they construct vectors
 instead of strings, when the events won't fit in a string.
 
-   <p>When you use the read syntax `<samp><span class="samp">\M-</span></samp>' in a string, it produces a
+   <p>When you use the read syntax &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in a string, it produces a
 code in the range of 128 to 255&mdash;the same code that you get if you
 modify the corresponding keyboard event to put it in the string.  Thus,
 meta events in strings work consistently regardless of how they get into

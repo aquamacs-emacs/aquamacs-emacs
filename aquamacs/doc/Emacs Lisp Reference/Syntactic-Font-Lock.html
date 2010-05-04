@@ -3,33 +3,33 @@
 <title>Syntactic Font Lock - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
 <link rel="prev" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" title="Faces for Font Lock">
 <link rel="next" href="Setting-Syntax-Properties.html#Setting-Syntax-Properties" title="Setting Syntax Properties">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Syntactic-Font-Lock"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Setting-Syntax-Properties.html#Setting-Syntax-Properties">Setting Syntax Properties</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
@@ -56,7 +56,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Fon
 
 <h4 class="subsection">23.6.8 Syntactic Font Lock</h4>
 
-<p><a name="index-syntactic-font-lock-1635"></a>
+<p><a name="index-syntactic-font-lock-1691"></a>
 Syntactic fontification uses the syntax table to find comments and
 string constants (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>).  It highlights them using
 <code>font-lock-comment-face</code> and <code>font-lock-string-face</code>
@@ -66,7 +66,7 @@ variables that affect syntactic fontification; you should set them by
 means of <code>font-lock-defaults</code> (see <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>).
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords-only</b><var><a name="index-font_002dlock_002dkeywords_002donly-1636"></a></var><br>
+&mdash; Variable: <b>font-lock-keywords-only</b><var><a name="index-font_002dlock_002dkeywords_002donly-1692"></a></var><br>
 <blockquote><p>Non-<code>nil</code> means Font Lock should not do syntactic fontification;
 it should only fontify based on <code>font-lock-keywords</code>.  The normal
 way for a mode to set this variable to <code>t</code> is with
@@ -74,7 +74,7 @@ way for a mode to set this variable to <code>t</code> is with
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-syntax-table</b><var><a name="index-font_002dlock_002dsyntax_002dtable-1637"></a></var><br>
+&mdash; Variable: <b>font-lock-syntax-table</b><var><a name="index-font_002dlock_002dsyntax_002dtable-1693"></a></var><br>
 <blockquote><p>This variable holds the syntax table to use for fontification of
 comments and strings.  Specify it using <var>syntax-alist</var> in
 <code>font-lock-defaults</code>.  If this is <code>nil</code>, fontification uses
@@ -82,7 +82,7 @@ the buffer's syntax table.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-beginning-of-syntax-function</b><var><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-1638"></a></var><br>
+&mdash; Variable: <b>font-lock-beginning-of-syntax-function</b><var><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-1694"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it should be a function to move
 point back to a position that is syntactically at &ldquo;top level&rdquo; and
 outside of strings or comments.  Font Lock uses this when necessary
@@ -104,7 +104,7 @@ string, or sexp.  This variable is semi-obsolete; we recommend setting
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-syntactic-face-function</b><var><a name="index-font_002dlock_002dsyntactic_002dface_002dfunction-1639"></a></var><br>
+&mdash; Variable: <b>font-lock-syntactic-face-function</b><var><a name="index-font_002dlock_002dsyntactic_002dface_002dfunction-1695"></a></var><br>
 <blockquote><p>A function to determine which face to use for a given syntactic
 element (a string or a comment).  The function is called with one
 argument, the parse state at point returned by

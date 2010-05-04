@@ -3,7 +3,7 @@
 <title>Dired Updating - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Dired.html#Dired" title="Dired">
 <link rel="prev" href="Hiding-Subdirectories.html#Hiding-Subdirectories" title="Hiding Subdirectories">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Dired-Updating"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Dired-and-Find.html#Dired-and-Find">Dired and Find</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Hiding-Subdirectories.html#Hiding-Subdirectories">Hiding Subdirectories</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
@@ -57,7 +57,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
 
 <h3 class="section">37.15 Updating the Dired Buffer</h3>
 
-<p><a name="index-updating-Dired-buffer-3121"></a><a name="index-refreshing-displayed-files-3122"></a>
+<p><a name="index-updating-Dired-buffer-3143"></a><a name="index-refreshing-displayed-files-3144"></a>
   This section describes commands to update the Dired buffer to reflect
 outside (non-Dired) changes in the directories and files, and to delete
 part of the Dired buffer.
@@ -78,12 +78,12 @@ files for <kbd>l</kbd> in the same way as for file operations.
 <code>dired-listing-switches</code>. 
 </dl>
 
-   <p><a name="index-g-_0040r_007b_0028Dired_0029_007d-3123"></a><a name="index-revert_002dbuffer-_0040r_007b_0028Dired_0029_007d-3124"></a>  Type <kbd>g</kbd> (<code>revert-buffer</code>) to update the contents of the
+   <p><a name="index-g-_0040r_007b_0028Dired_0029_007d-3145"></a><a name="index-revert_002dbuffer-_0040r_007b_0028Dired_0029_007d-3146"></a>  Type <kbd>g</kbd> (<code>revert-buffer</code>) to update the contents of the
 Dired buffer, based on changes in the files and directories listed. 
 This preserves all marks except for those on files that have vanished. 
 Hidden subdirectories are updated but remain hidden.
 
-   <p><a name="index-l-_0040r_007b_0028Dired_0029_007d-3125"></a><a name="index-dired_002ddo_002dredisplay-3126"></a>  To update only some of the files, type <kbd>l</kbd>
+   <p><a name="index-l-_0040r_007b_0028Dired_0029_007d-3147"></a><a name="index-dired_002ddo_002dredisplay-3148"></a>  To update only some of the files, type <kbd>l</kbd>
 (<code>dired-do-redisplay</code>).  Like the Dired file-operating commands,
 this command operates on the next <var>n</var> files (or previous
 &minus;<var>n</var> files), or on the marked files if any, or on the
@@ -93,7 +93,15 @@ then updating their lines in the buffer to indicate that status.
    <p>If you use <kbd>l</kbd> on a subdirectory header line, it updates the
 contents of the corresponding subdirectory.
 
-   <p><a name="index-k-_0040r_007b_0028Dired_0029_007d-3127"></a><a name="index-dired_002ddo_002dkill_002dlines-3128"></a>  To delete the specified <em>file lines</em> from the buffer&mdash;not
+   <p><a name="index-dired_002dauto_002drevert_002dbuffer-3149"></a>  If you use <kbd>C-x d</kbd> or some other Dired command to visit a
+directory that is already being shown in a Dired buffer, Dired
+switches to that buffer but does not update it.  If the buffer is not
+up-to-date, Dired displays a warning telling you to type &lt;g&gt; to
+update it.  You can also tell Emacs to revert each Dired buffer
+automatically when you revisit it, by setting the variable
+<code>dired-auto-revert-buffer</code> to a non-<code>nil</code> value.
+
+   <p><a name="index-k-_0040r_007b_0028Dired_0029_007d-3150"></a><a name="index-dired_002ddo_002dkill_002dlines-3151"></a>  To delete the specified <em>file lines</em> from the buffer&mdash;not
 delete the files&mdash;type <kbd>k</kbd> (<code>dired-do-kill-lines</code>).  Like
 the file-operating commands, this command operates on the next <var>n</var>
 files, or on the marked files if any; but it does not operate on the
@@ -109,7 +117,7 @@ also deletes the subdirectory from the Dired buffer.
 killed in this way, but not subdirectories&mdash;you must use <kbd>i</kbd> to
 reinsert a subdirectory.
 
-   <p><a name="index-Dired-sorting-3129"></a><a name="index-sorting-Dired-buffer-3130"></a><a name="index-s-_0040r_007b_0028Dired_0029_007d-3131"></a><a name="index-dired_002dsort_002dtoggle_002dor_002dedit-3132"></a>  The files in a Dired buffers are normally listed in alphabetical order
+   <p><a name="index-Dired-sorting-3152"></a><a name="index-sorting-Dired-buffer-3153"></a><a name="index-s-_0040r_007b_0028Dired_0029_007d-3154"></a><a name="index-dired_002dsort_002dtoggle_002dor_002dedit-3155"></a>  The files in a Dired buffers are normally listed in alphabetical order
 by file names.  Alternatively Dired can sort them by date/time.  The
 Dired command <kbd>s</kbd> (<code>dired-sort-toggle-or-edit</code>) switches
 between these two sorting modes.  The mode line in a Dired buffer

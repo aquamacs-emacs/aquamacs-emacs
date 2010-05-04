@@ -3,7 +3,7 @@
 <title>Init Syntax - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Init-File.html#Init-File" title="Init File">
 <link rel="next" href="Init-Examples.html#Init-Examples" title="Init Examples">
@@ -11,11 +11,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +46,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Init-Syntax"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Init-Examples.html#Init-Examples">Init Examples</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init-File">Init File</a>
 <hr>
@@ -79,28 +79,28 @@ of the time.  They can be:
      <dl>
 <dt>Numbers:<dd>Numbers are written in decimal, with an optional initial minus sign.
 
-     <br><dt>Strings:<dd><a name="index-Lisp-string-syntax-4034"></a><a name="index-string-syntax-4035"></a>Lisp string syntax is the same as C string syntax with a few extra
+     <br><dt>Strings:<dd><a name="index-Lisp-string-syntax-4068"></a><a name="index-string-syntax-4069"></a>Lisp string syntax is the same as C string syntax with a few extra
 features.  Use a double-quote character to begin and end a string constant.
 
      <p>In a string, you can include newlines and special characters literally. 
-But often it is cleaner to use backslash sequences for them: `<samp><span class="samp">\n</span></samp>'
-for newline, `<samp><span class="samp">\b</span></samp>' for backspace, `<samp><span class="samp">\r</span></samp>' for carriage return,
-`<samp><span class="samp">\t</span></samp>' for tab, `<samp><span class="samp">\f</span></samp>' for formfeed (control-L), `<samp><span class="samp">\e</span></samp>' for
-escape, `<samp><span class="samp">\\</span></samp>' for a backslash, `<samp><span class="samp">\"</span></samp>' for a double-quote, or
-`<samp><span class="samp">\</span><var>ooo</var></samp>' for the character whose octal code is <var>ooo</var>. 
+But often it is cleaner to use backslash sequences for them: &lsquo;<samp><span class="samp">\n</span></samp>&rsquo;
+for newline, &lsquo;<samp><span class="samp">\b</span></samp>&rsquo; for backspace, &lsquo;<samp><span class="samp">\r</span></samp>&rsquo; for carriage return,
+&lsquo;<samp><span class="samp">\t</span></samp>&rsquo; for tab, &lsquo;<samp><span class="samp">\f</span></samp>&rsquo; for formfeed (control-L), &lsquo;<samp><span class="samp">\e</span></samp>&rsquo; for
+escape, &lsquo;<samp><span class="samp">\\</span></samp>&rsquo; for a backslash, &lsquo;<samp><span class="samp">\"</span></samp>&rsquo; for a double-quote, or
+&lsquo;<samp><span class="samp">\</span><var>ooo</var></samp>&rsquo; for the character whose octal code is <var>ooo</var>. 
 Backslash and double-quote are the only characters for which backslash
 sequences are mandatory.
 
-     <p>`<samp><span class="samp">\C-</span></samp>' can be used as a prefix for a control character, as in
-`<samp><span class="samp">\C-s</span></samp>' for <acronym>ASCII</acronym> control-S, and `<samp><span class="samp">\M-</span></samp>' can be used as a prefix for
-a Meta character, as in `<samp><span class="samp">\M-a</span></samp>' for <kbd>Meta-A</kbd> or `<samp><span class="samp">\M-\C-a</span></samp>' for
+     <p>&lsquo;<samp><span class="samp">\C-</span></samp>&rsquo; can be used as a prefix for a control character, as in
+&lsquo;<samp><span class="samp">\C-s</span></samp>&rsquo; for <acronym>ASCII</acronym> control-S, and &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; can be used as a prefix for
+a Meta character, as in &lsquo;<samp><span class="samp">\M-a</span></samp>&rsquo; for <kbd>Meta-A</kbd> or &lsquo;<samp><span class="samp">\M-\C-a</span></samp>&rsquo; for
 <kbd>Control-Meta-A</kbd>.
 
      <p>See <a href="Init-Non_002dASCII.html#Init-Non_002dASCII">Init Non-ASCII</a>, for information about including
 non-<acronym>ASCII</acronym> in your init file.
 
-     <br><dt>Characters:<dd>Lisp character constant syntax consists of a `<samp><span class="samp">?</span></samp>' followed by
-either a character or an escape sequence starting with `<samp><span class="samp">\</span></samp>'. 
+     <br><dt>Characters:<dd>Lisp character constant syntax consists of a &lsquo;<samp><span class="samp">?</span></samp>&rsquo; followed by
+either a character or an escape sequence starting with &lsquo;<samp><span class="samp">\</span></samp>&rsquo;. 
 Examples: <code>?x</code>, <code>?\n</code>, <code>?\"</code>, <code>?\)</code>.  Note that
 strings and characters are not interchangeable in Lisp; some contexts
 require one and some contexts require the other.

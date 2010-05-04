@@ -3,7 +3,7 @@
 <title>Diary Customizing - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
 <link rel="prev" href="Time-Display-Format.html#Time-Display-Format" title="Time Display Format">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Diary-Customizing"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Non_002dGregorian-Diary.html#Non_002dGregorian-Diary">Non-Gregorian Diary</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Time-Display-Format.html#Time-Display-Format">Time Display Format</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
@@ -57,13 +57,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#
 
 <h4 class="subsection">38.15.5 Customizing the Diary</h4>
 
-<p><a name="index-diary_002dshow_002dholidays_002dflag-3411"></a>  Ordinarily, the mode line of the diary window indicates any holidays
-that fall on the date of the diary entries.  The process of checking for
-holidays can be slow, depending on the defined holidays.  In that case,
-setting <code>diary-show-holidays-flag</code> to <code>nil</code> will speed up the
-diary display.
+<p><a name="index-diary_002dshow_002dholidays_002dflag-3435"></a>  Ordinarily, the diary window indicates any holidays that fall on the
+date of the diary entries, either in the mode line or the buffer itself. 
+The process of checking for holidays can be slow, depending on the
+defined holidays.  In that case, setting <code>diary-show-holidays-flag</code>
+to <code>nil</code> will speed up the diary display.
 
-   <p><a name="index-diary_002dnumber_002dof_002dentries-3412"></a>  The variable <code>diary-number-of-entries</code> controls the number of
+   <p><a name="index-diary_002dnumber_002dof_002dentries-3436"></a>  The variable <code>diary-number-of-entries</code> controls the number of
 days of diary entries to be displayed at one time.  It affects the
 initial display when <code>calendar-view-diary-initially-flag</code> is
 <code>t</code>, as well as the command <kbd>M-x diary</kbd>.  For example, a value
@@ -75,17 +75,7 @@ current date's and the next day's diary entries appear Monday through
 Thursday, Friday through Monday's entries appear on Friday, while on
 Saturday only that day's entries appear.
 
-   <p><a name="index-diary_002dprint_002dentries_002dhook-3413"></a><a name="index-diary_002dprint_002dentries-3414"></a>  The variable <code>diary-print-entries-hook</code> is a normal hook run
-after preparation of a temporary buffer containing just the diary
-entries currently visible in the diary buffer.  (The other, irrelevant
-diary entries are really absent from the temporary buffer; in the diary
-buffer, they are merely hidden.)  The default value of this hook does
-the printing with the command <code>lpr-buffer</code>.  If you want to use a
-different command to do the printing, just change the value of this
-hook.  Other uses might include, for example, rearranging the lines into
-order by day and time.
-
-   <p><a name="index-diary_002ddate_002dforms-3415"></a>  You can customize the form of dates in your diary file by setting the
+   <p><a name="index-diary_002ddate_002dforms-3437"></a>  You can customize the form of dates in your diary file by setting the
 variable <code>diary-date-forms</code>.  This variable is a list of patterns
 for recognizing a date.  Each date pattern is a list whose elements may
 be regular expressions (see <a href="../elisp/Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>) or the symbols <code>month</code>, <code>day</code>,
@@ -95,7 +85,7 @@ In order for the date pattern, as a whole, to match, all of its elements
 must match consecutively.
 
    <p>A regular expression in a date pattern matches in its usual fashion,
-using the standard syntax table altered so that `<samp><span class="samp">*</span></samp>' is a word
+using the standard syntax table altered so that &lsquo;<samp><span class="samp">*</span></samp>&rsquo; is a word
 constituent.
 
    <p>The symbols <code>month</code>, <code>day</code>, <code>year</code>, <code>monthname</code>,
@@ -104,8 +94,8 @@ month name, and day name of the date being considered.  The symbols that
 match numbers allow leading zeros; those that match names allow
 capitalization and abbreviation (as specified by
 <code>calendar-month-abbrev-array</code> and
-<code>calendar-day-abbrev-array</code>).  All the symbols can match `<samp><span class="samp">*</span></samp>';
-since `<samp><span class="samp">*</span></samp>' in a diary entry means &ldquo;any day&rdquo;, &ldquo;any month&rdquo;, and so
+<code>calendar-day-abbrev-array</code>).  All the symbols can match &lsquo;<samp><span class="samp">*</span></samp>&rsquo;;
+since &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in a diary entry means &ldquo;any day&rdquo;, &ldquo;any month&rdquo;, and so
 on, it should match regardless of the date being considered.
 
    <p>The default value of <code>diary-date-forms</code> in the American style is

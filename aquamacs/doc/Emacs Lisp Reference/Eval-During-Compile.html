@@ -3,33 +3,33 @@
 <title>Eval During Compile - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
 <link rel="prev" href="Dynamic-Loading.html#Dynamic-Loading" title="Dynamic Loading">
 <link rel="next" href="Compiler-Errors.html#Compiler-Errors" title="Compiler Errors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -46,8 +46,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Eval-During-Compile"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Dynamic-Loading.html#Dynamic-Loading">Dynamic Loading</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>
@@ -60,7 +60,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 compilation of a program.
 
 <div class="defun">
-&mdash; Special Form: <b>eval-and-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dand_002dcompile-831"></a></var><br>
+&mdash; Special Form: <b>eval-and-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dand_002dcompile-862"></a></var><br>
 <blockquote><p>This form marks <var>body</var> to be evaluated both when you compile the
 containing code and when you run it (whether compiled or not).
 
@@ -88,26 +88,26 @@ warnings about &ldquo;not known to be defined&rdquo; suppressed).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>eval-when-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dwhen_002dcompile-832"></a></var><br>
+&mdash; Special Form: <b>eval-when-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dwhen_002dcompile-863"></a></var><br>
 <blockquote><p>This form marks <var>body</var> to be evaluated at compile time but not when
 the compiled program is loaded.  The result of evaluation by the
 compiler becomes a constant which appears in the compiled program.  If
 you load the source file, rather than compiling it, <var>body</var> is
 evaluated normally.
 
-        <p><a name="index-compile_002dtime-constant-833"></a>If you have a constant that needs some calculation to produce,
+        <p><a name="index-compile_002dtime-constant-864"></a>If you have a constant that needs some calculation to produce,
 <code>eval-when-compile</code> can do that at compile-time.  For example,
 
      <pre class="lisp">          (defvar my-regexp
             (eval-when-compile (regexp-opt '("aaa" "aba" "abb"))))
-     </pre>
-        <p><a name="index-macros_002c-at-compile-time-834"></a>If you're using another package, but only need macros from it (the
+</pre>
+        <p><a name="index-macros_002c-at-compile-time-865"></a>If you're using another package, but only need macros from it (the
 byte compiler will expand those), then <code>eval-when-compile</code> can be
 used to load it for compiling, but not executing.  For example,
 
      <pre class="lisp">          (eval-when-compile
             (require 'my-macro-package))  ;; only macros needed from this
-     </pre>
+</pre>
         <p>The same sort of thing goes for macros and <code>defsubst</code> functions
 defined locally and only for use within the file.  They are needed for
 compiling the file, but in most cases they are not needed for
@@ -117,13 +117,13 @@ execution of the compiled file.  For example,
             (unless (fboundp 'some-new-thing)
               (defmacro 'some-new-thing ()
                 (compatibility code))))
-     </pre>
+</pre>
         <p class="noindent">This is often good for code that's only a fallback for compatibility
 with other versions of Emacs.
 
         <p><strong>Common Lisp Note:</strong> At top level, <code>eval-when-compile</code> is analogous to the Common
 Lisp idiom <code>(eval-when (compile eval) ...)</code>.  Elsewhere, the
-Common Lisp `<samp><span class="samp">#.</span></samp>' reader macro (but not when interpreting) is closer
+Common Lisp &lsquo;<samp><span class="samp">#.</span></samp>&rsquo; reader macro (but not when interpreting) is closer
 to what <code>eval-when-compile</code> does. 
 </p></blockquote></div>
 

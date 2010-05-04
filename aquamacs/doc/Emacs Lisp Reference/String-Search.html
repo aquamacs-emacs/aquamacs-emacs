@@ -3,32 +3,32 @@
 <title>String Search - GNU Emacs Lisp Reference Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.8">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Searching-and-Matching.html#Searching-and-Matching" title="Searching and Matching">
 <link rel="next" href="Searching-and-Case.html#Searching-and-Case" title="Searching and Case">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 2.9 of the GNU Emacs Lisp Reference Manual,
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 22.1.
+corresponding to Emacs version 23.1.96.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007  Free Software
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
      License,'' with the Front-Cover texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
 
-     (a) The FSF's Back-Cover Text is: ``You have freedom to copy and
-     modify this GNU Manual, like GNU software.  Copies published by
-     the Free Software Foundation raise funds for GNU development.''
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
    -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -45,8 +45,8 @@ Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="String-Search"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Searching-and-Case.html#Searching-and-Case">Searching and Case</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>
 <hr>
@@ -54,7 +54,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-a
 
 <h3 class="section">34.1 Searching for Strings</h3>
 
-<p><a name="index-string-search-2792"></a>
+<p><a name="index-string-search-2947"></a>
   These are the primitive functions for searching through the text in a
 buffer.  They are meant for use in programs, but you may call them
 interactively.  If you do so, they prompt for the search string; the
@@ -66,7 +66,7 @@ buffer is multibyte; they convert the search string to unibyte if the
 buffer is unibyte.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
 
 <div class="defun">
-&mdash; Command: <b>search-forward</b><var> string &amp;optional limit noerror repeat<a name="index-search_002dforward-2793"></a></var><br>
+&mdash; Command: <b>search-forward</b><var> string &amp;optional limit noerror repeat<a name="index-search_002dforward-2948"></a></var><br>
 <blockquote><p>This function searches forward from point for an exact match for
 <var>string</var>.  If successful, it sets point to the end of the occurrence
 found, and returns the new value of point.  If no match is found, the
@@ -75,25 +75,25 @@ value and side effects depend on <var>noerror</var> (see below).
 
         <p>In the following example, point is initially at the beginning of the
 line.  Then <code>(search-forward "fox")</code> moves point after the last
-letter of `<samp><span class="samp">fox</span></samp>':
+letter of &lsquo;<samp><span class="samp">fox</span></samp>&rsquo;:
 
      <pre class="example">          ---------- Buffer: foo ----------
           -!-The quick brown fox jumped over the lazy dog.
           ---------- Buffer: foo ----------
           
           (search-forward "fox")
-               =&gt; 20
+               &rArr; 20
           
           ---------- Buffer: foo ----------
           The quick brown fox-!- jumped over the lazy dog.
           ---------- Buffer: foo ----------
-     </pre>
+</pre>
         <p>The argument <var>limit</var> specifies the upper bound to the search.  (It
 must be a position in the current buffer.)  No match extending after
 that position is accepted.  If <var>limit</var> is omitted or <code>nil</code>, it
 defaults to the end of the accessible portion of the buffer.
 
-        <p><a name="index-search_002dfailed-2794"></a>What happens when the search fails depends on the value of
+        <p><a name="index-search_002dfailed-2949"></a>What happens when the search fails depends on the value of
 <var>noerror</var>.  If <var>noerror</var> is <code>nil</code>, a <code>search-failed</code>
 error is signaled.  If <var>noerror</var> is <code>t</code>, <code>search-forward</code>
 returns <code>nil</code> and does nothing.  If <var>noerror</var> is neither
@@ -115,29 +115,27 @@ the search fails, with results depending on the value of
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>search-backward</b><var> string &amp;optional limit noerror repeat<a name="index-search_002dbackward-2795"></a></var><br>
+&mdash; Command: <b>search-backward</b><var> string &amp;optional limit noerror repeat<a name="index-search_002dbackward-2950"></a></var><br>
 <blockquote><p>This function searches backward from point for <var>string</var>.  It is
 just like <code>search-forward</code> except that it searches backwards and
 leaves point at the beginning of the match. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>word-search-forward</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dforward-2796"></a></var><br>
-<blockquote><!-- @cindex word search   Redundant -->
-<p>This function searches forward from point for a &ldquo;word&rdquo; match for
+&mdash; Command: <b>word-search-forward</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dforward-2951"></a></var><br>
+<blockquote><p>This function searches forward from point for a &ldquo;word&rdquo; match for
 <var>string</var>.  If it finds a match, it sets point to the end of the
-match found, and returns the new value of point. 
-<!-- Emacs 19 feature -->
+match found, and returns the new value of point.
 
         <p>Word matching regards <var>string</var> as a sequence of words, disregarding
 punctuation that separates them.  It searches the buffer for the same
 sequence of words.  Each word must be distinct in the buffer (searching
-for the word `<samp><span class="samp">ball</span></samp>' does not match the word `<samp><span class="samp">balls</span></samp>'), but the
-details of punctuation and spacing are ignored (searching for `<samp><span class="samp">ball
-boy</span></samp>' does match `<samp><span class="samp">ball.  Boy!</span></samp>').
+for the word &lsquo;<samp><span class="samp">ball</span></samp>&rsquo; does not match the word &lsquo;<samp><span class="samp">balls</span></samp>&rsquo;), but the
+details of punctuation and spacing are ignored (searching for &lsquo;<samp><span class="samp">ball
+boy</span></samp>&rsquo; does match &lsquo;<samp><span class="samp">ball.  Boy!</span></samp>&rsquo;).
 
         <p>In this example, point is initially at the beginning of the buffer; the
-search leaves it between the `<samp><span class="samp">y</span></samp>' and the `<samp><span class="samp">!</span></samp>'.
+search leaves it between the &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">!</span></samp>&rsquo;.
 
      <pre class="example">          ---------- Buffer: foo ----------
           -!-He said "Please!  Find
@@ -145,13 +143,13 @@ search leaves it between the `<samp><span class="samp">y</span></samp>' and the 
           ---------- Buffer: foo ----------
           
           (word-search-forward "Please find the ball, boy.")
-               =&gt; 35
+               &rArr; 35
           
           ---------- Buffer: foo ----------
           He said "Please!  Find
           the ball boy-!-!"
           ---------- Buffer: foo ----------
-     </pre>
+</pre>
         <p>If <var>limit</var> is non-<code>nil</code>, it must be a position in the current
 buffer; it specifies the upper bound to the search.  The match found
 must not extend after that position.
@@ -167,11 +165,26 @@ times.  Point is positioned at the end of the last match.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>word-search-backward</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dbackward-2797"></a></var><br>
+&mdash; Command: <b>word-search-forward-lax</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dforward_002dlax-2952"></a></var><br>
+<blockquote><p>This command is identical to <code>word-search-forward</code>, except that
+the end of <code>string</code> need not match a word boundary unless it ends
+in whitespace.  For instance, searching for &lsquo;<samp><span class="samp">ball boy</span></samp>&rsquo; matches
+&lsquo;<samp><span class="samp">ball boyee</span></samp>&rsquo;, but does not match &lsquo;<samp><span class="samp">aball boy</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>word-search-backward</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dbackward-2953"></a></var><br>
 <blockquote><p>This function searches backward from point for a word match to
 <var>string</var>.  This function is just like <code>word-search-forward</code>
 except that it searches backward and normally leaves point at the
 beginning of the match. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>word-search-backward-lax</b><var> string &amp;optional limit noerror repeat<a name="index-word_002dsearch_002dbackward_002dlax-2954"></a></var><br>
+<blockquote><p>This command is identical to <code>word-search-backward</code>, except that
+the end of <code>string</code> need not match a word boundary unless it ends
+in whitespace. 
 </p></blockquote></div>
 
    </body></html>

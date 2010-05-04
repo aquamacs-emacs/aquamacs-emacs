@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Completion Styles - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Reading-File-Names.html#Reading-File-Names" title="Reading File Names">
+<link rel="next" href="Programmed-Completion.html#Programmed-Completion" title="Programmed Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Completion-Styles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">20.6.6 Completion Styles</h4>
+
+<p><a name="index-completion-styles-1155"></a>
+  A <dfn>completion style</dfn> is a set of rules for generating
+completions.  The user option <code>completion-styles</code> stores a list
+of completion styles, which are represented by symbols.
+
+<div class="defun">
+&mdash; User Option: <b>completion-styles</b><var><a name="index-completion_002dstyles-1156"></a></var><br>
+<blockquote><p>This is a list of completion style symbols to use for performing
+completion.  Each completion style in this list must be defined in
+<code>completion-styles-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>completion-styles-alist</b><var><a name="index-completion_002dstyles_002dalist-1157"></a></var><br>
+<blockquote><p>This variable stores a list of available completion styles.  Each
+element in the list must have the form &lsquo;<samp><span class="samp">(</span><var>name</var>
+<var>try-completion</var> <var>all-completions</var><span class="samp">)</span></samp>&rsquo;.  Here, <var>name</var> is the
+name of the completion style (a symbol), which may be used in
+<code>completion-styles-alist</code> to refer to this style.
+
+        <p><var>try-completion</var> is the function that does the completion, and
+<var>all-completions</var> is the function that lists the completions. 
+These functions should accept four arguments: <var>string</var>,
+<var>collection</var>, <var>predicate</var>, and <var>point</var>.  The <var>string</var>,
+<var>collection</var>, and <var>predicate</var> arguments have the same meanings
+as in <code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>), and the
+<var>point</var> argument is the position of point within <var>string</var>. 
+Each function should return a non-<code>nil</code> value if it performed its
+job, and <code>nil</code> if it did not (e.g., if there is no way to
+complete <var>string</var> according to the completion style).
+
+        <p>When the user calls a completion command, such as
+<code>minibuffer-complete</code> (see <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>), Emacs looks
+for the first style listed in <code>completion-styles</code> and calls its
+<var>try-completion</var> function.  If this function returns <code>nil</code>,
+Emacs moves to the next completion style listed in
+<code>completion-styles</code> and calls its <var>try-completion</var> function,
+and so on until one of the <var>try-completion</var> functions successfully
+performs completion and returns a non-<code>nil</code> value.  A similar
+procedure is used for listing completions, via the
+<var>all-completions</var> functions. 
+</p></blockquote></div>
+
+   <p>By default, <code>completion-styles-alist</code> contains five pre-defined
+completion styles: <code>basic</code>, a basic completion style;
+<code>partial-completion</code>, which does partial completion (completing
+each word in the input separately); <code>emacs22</code>, which performs
+completion according to the rules used in Emacs 22; <code>emacs21</code>,
+which performs completion according to the rules used in Emacs 21; and
+<code>initials</code>, which completes acronyms and initialisms.
+
+   </body></html>
+

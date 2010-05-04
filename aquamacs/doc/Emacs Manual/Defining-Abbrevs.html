@@ -3,7 +3,7 @@
 <title>Defining Abbrevs - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.9">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
 <link rel="prev" href="Abbrev-Concepts.html#Abbrev-Concepts" title="Abbrev Concepts">
@@ -12,11 +12,11 @@
 <!--
 This is the Sixteenth edition of the `GNU Emacs Manual',
 
-updated for Emacs version 23.0.94.
+updated for Emacs version 23.1.96.
 
 Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-Free Software Foundation, Inc.
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,8 +47,8 @@ Free Software Foundation, Inc.
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<p>
 <a name="Defining-Abbrevs"></a>
+<p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Expanding-Abbrevs.html#Expanding-Abbrevs">Expanding Abbrevs</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Concepts.html#Abbrev-Concepts">Abbrev Concepts</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
@@ -70,25 +70,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <br><dt><kbd>M-x kill-all-abbrevs</kbd><dd>Discard all abbrev definitions, leaving a blank slate. 
 </dl>
 
-   <p><a name="index-C_002dx-a-g-2570"></a><a name="index-add_002dglobal_002dabbrev-2571"></a>  The usual way to define an abbrev is to enter the text you want the
+   <p><a name="index-C_002dx-a-g-2599"></a><a name="index-add_002dglobal_002dabbrev-2600"></a>  The usual way to define an abbrev is to enter the text you want the
 abbrev to expand to, position point after it, and type <kbd>C-x a g</kbd>
 (<code>add-global-abbrev</code>).  This reads the abbrev itself using the
 minibuffer, and then defines it as an abbrev for one or more words before
 point.  Use a numeric argument to say how many words before point should be
-taken as the expansion.  For example, to define the abbrev `<samp><span class="samp">foo</span></samp>' as
-mentioned above, insert the text `<samp><span class="samp">find outer otter</span></samp>' and then type
+taken as the expansion.  For example, to define the abbrev &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; as
+mentioned above, insert the text &lsquo;<samp><span class="samp">find outer otter</span></samp>&rsquo; and then type
 <kbd>C-u 3 C-x a g f o o &lt;RET&gt;</kbd>.
 
    <p>An argument of zero to <kbd>C-x a g</kbd> means to use the contents of the
 region as the expansion of the abbrev being defined.
 
-   <p><a name="index-C_002dx-a-l-2572"></a><a name="index-add_002dmode_002dabbrev-2573"></a>  The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>) is similar, but
+   <p><a name="index-C_002dx-a-l-2601"></a><a name="index-add_002dmode_002dabbrev-2602"></a>  The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>) is similar, but
 defines a mode-specific abbrev.  Mode-specific abbrevs are active only in a
 particular major mode.  <kbd>C-x a l</kbd> defines an abbrev for the major mode
 in effect at the time <kbd>C-x a l</kbd> is typed.  The arguments work the same
 as for <kbd>C-x a g</kbd>.
 
-   <p><a name="index-C_002dx-a-i-g-2574"></a><a name="index-inverse_002dadd_002dglobal_002dabbrev-2575"></a><a name="index-C_002dx-a-i-l-2576"></a><a name="index-inverse_002dadd_002dmode_002dabbrev-2577"></a>  If the abbrev text itself is already in the buffer, you can use the
+   <p><a name="index-C_002dx-a-i-g-2603"></a><a name="index-inverse_002dadd_002dglobal_002dabbrev-2604"></a><a name="index-C_002dx-a-i-l-2605"></a><a name="index-inverse_002dadd_002dmode_002dabbrev-2606"></a>  If the abbrev text itself is already in the buffer, you can use the
 commands <kbd>C-x a i g</kbd> (<code>inverse-add-global-abbrev</code>) and
 <kbd>C-x a i l</kbd> (<code>inverse-add-mode-abbrev</code>) to define it as an
 abbrev by specify the expansion in the minibuffer.  These commands are
@@ -96,7 +96,7 @@ called &ldquo;inverse&rdquo; because they invert the meaning of the two text
 strings they use (one from the buffer and one read with the
 minibuffer).
 
-   <p><a name="index-define_002dmode_002dabbrev-2578"></a><a name="index-define_002dglobal_002dabbrev-2579"></a>  You can define an abbrev without inserting either the abbrev or its
+   <p><a name="index-define_002dmode_002dabbrev-2607"></a><a name="index-define_002dglobal_002dabbrev-2608"></a>  You can define an abbrev without inserting either the abbrev or its
 expansion in the buffer using the command <code>define-global-abbrev</code>. 
 It reads two arguments&mdash;the abbrev, and its expansion.  The command
 <code>define-mode-abbrev</code> does likewise for a mode-specific abbrev.
@@ -105,7 +105,7 @@ It reads two arguments&mdash;the abbrev, and its expansion.  The command
 When the abbrev has a prior definition, the abbrev definition commands
 ask for confirmation before replacing it.
 
-   <p><a name="index-kill_002dall_002dabbrevs-2580"></a>  To remove an abbrev definition, give a negative argument to the
+   <p><a name="index-kill_002dall_002dabbrevs-2609"></a>  To remove an abbrev definition, give a negative argument to the
 abbrev definition command: <kbd>C-u - C-x a g</kbd> or <kbd>C-u - C-x a l</kbd>. 
 The former removes a global definition, while the latter removes a
 mode-specific definition.  <kbd>M-x kill-all-abbrevs</kbd> removes all
