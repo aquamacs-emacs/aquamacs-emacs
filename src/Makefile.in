@@ -70,12 +70,26 @@ OTHER_FILES = @OTHER_FILES@
 
 CRT_DIR=@CRT_DIR@
 
+## Machine-specific CFLAGS.
+C_SWITCH_MACHINE=@C_SWITCH_MACHINE@
+## System-specific CFLAGS.
+C_SWITCH_SYSTEM=@C_SWITCH_SYSTEM@
+## This holds any special options for linking temacs only (ie, not
+## used by configure).
+LD_SWITCH_SYSTEM_TEMACS=@LD_SWITCH_SYSTEM_TEMACS@
+## Next two must come before LD_SWITCH_SYSTEM.
+## If needed, a -R option that says where to find X windows at run time.
+LD_SWITCH_X_SITE_AUX=@LD_SWITCH_X_SITE_AUX@
+## As above, but using -rpath instead.
+LD_SWITCH_X_SITE_AUX_RPATH=@LD_SWITCH_X_SITE_AUX_RPATH@
+
 LIBTIFF=@LIBTIFF@
 LIBJPEG=@LIBJPEG@
 LIBPNG=@LIBPNG@
 LIBGIF=@LIBGIF@
 LIBXPM=@LIBXPM@
 XFT_LIBS=@XFT_LIBS@
+LIBX_EXTRA=$(LIBTIFF) $(LIBJPEG) $(LIBPNG) $(LIBGIF) $(LIBXPM) -lX11 $(XFT_LIBS)
 
 DBUS_CFLAGS = @DBUS_CFLAGS@
 DBUS_LIBS = @DBUS_LIBS@
@@ -91,6 +105,10 @@ LIBXMU=@LIBXMU@
 LIBXSM=@LIBXSM@
 
 LIBXTR6=@LIBXTR6@
+
+## $(LIBXMU) -lXt $(LIBXTR6) -lXext if USE_X_TOOLKIT, else $(LIBXSM).
+## Only used if HAVE_X_WINDOWS.
+LIBXT_OTHER=@LIBXT_OTHER@
 
 XMENU_OBJ=@XMENU_OBJ@
 XOBJ=@XOBJ@
@@ -167,14 +185,8 @@ DEPFLAGS = -MMD -MF deps/$*.d
 #undef register
 
 /* Some machines do not find the standard C libraries in the usual place.  */
-#ifndef ORDINARY_LINK
-#ifndef LIB_STANDARD
-#define LIB_STANDARD -lc
-#endif
-#else
 #ifndef LIB_STANDARD
 #define LIB_STANDARD
-#endif
 #endif
 
 /* Under GNUstep, putting libc on the link line causes problems. */
@@ -196,17 +208,6 @@ DEPFLAGS = -MMD -MF deps/$*.d
 #define LD_SWITCH_SYSTEM
 #endif /* (defined (BSD_SYSTEM) && !defined (COFF)) */
 #endif /* LD_SWITCH_SYSTEM */
-
-/* This holds special options for linking temacs
-   that should be used for linking anything else.  */
-#ifndef LD_SWITCH_SYSTEM_TEMACS
-#define LD_SWITCH_SYSTEM_TEMACS
-#endif
-
-/* Some m/MACHINE.h files define this to request special switches in ld.  */
-#ifndef LD_SWITCH_MACHINE
-#define LD_SWITCH_MACHINE
-#endif
 
 /* These macros are for switches specifically related to X Windows.  */
 #ifndef LD_SWITCH_X_SITE
@@ -238,7 +239,7 @@ shared=no
 
 /* C_SWITCH_X_SITE must come before C_SWITCH_X_SYSTEM
    since it may have -I options that should override those two.  */
-ALL_CFLAGS=-Demacs -DHAVE_CONFIG_H $(MYCPPFLAGS) -I. -I${srcdir} @c_switch_machine@ @c_switch_system@ @C_SWITCH_X_SITE@ @C_SWITCH_X_SYSTEM@ ${CFLAGS_SOUND} ${RSVG_CFLAGS} ${DBUS_CFLAGS} ${GCONF_CFLAGS} ${CFLAGS} @FREETYPE_CFLAGS@ @FONTCONFIG_CFLAGS@ @LIBOTF_CFLAGS@ @M17N_FLT_CFLAGS@ ${DEPFLAGS}
+ALL_CFLAGS=-Demacs -DHAVE_CONFIG_H $(MYCPPFLAGS) -I. -I${srcdir} ${C_SWITCH_MACHINE} ${C_SWITCH_SYSTEM} @C_SWITCH_X_SITE@ @C_SWITCH_X_SYSTEM@ ${CFLAGS_SOUND} ${RSVG_CFLAGS} ${DBUS_CFLAGS} ${GCONF_CFLAGS} ${CFLAGS} @FREETYPE_CFLAGS@ @FONTCONFIG_CFLAGS@ @LIBOTF_CFLAGS@ @M17N_FLT_CFLAGS@ ${DEPFLAGS}
 ALL_OBJC_CFLAGS=$(ALL_CFLAGS) @GNU_OBJC_CFLAGS@
 
 .SUFFIXES: .m
@@ -254,7 +255,6 @@ ALL_OBJC_CFLAGS=$(ALL_CFLAGS) @GNU_OBJC_CFLAGS@
 	$(CC) -c $(CPPFLAGS) $(ALL_OBJC_CFLAGS) $<
 
 #ifdef HAVE_X_WINDOWS
-
 /* This test needs to say in cpp for the time being, since s/ms-w32.h and
    s/msdos.h define HAVE_MENUS, possibly overriding configure.  */
 #ifdef HAVE_MENUS
@@ -265,18 +265,9 @@ OLDXMENU=
 LIBXMENU=
 #endif /* not HAVE_MENUS */
 
-#ifdef USE_X_TOOLKIT
-LIBXT=$(TOOLKIT_LIBW) $(LIBXMU) -lXt $(LIBXTR6) -lXext
-#else /* not USE_X_TOOLKIT */
-LIBXT=$(TOOLKIT_LIBW) $(LIBXSM)
-#endif /* not USE_X_TOOLKIT */
-
-#ifdef HAVE_X11
-X11_LDFLAGS = LD_SWITCH_X_SITE
-LIBX= $(LIBXMENU) $(X11_LDFLAGS) $(LIBXT) $(LIBTIFF) $(LIBJPEG) $(LIBPNG) $(LIBGIF) $(LIBXPM) -lX11 $(XFT_LIBS)
-#else /* not HAVE_X11 */
-LIBX= $(LIBXMENU) LD_SWITCH_X_SITE
-#endif /* not HAVE_X11 */
+LIBXT=$(TOOLKIT_LIBW) $(LIBXT_OTHER)
+LIBX_BASE=$(LIBXMENU) LD_SWITCH_X_SITE
+LIBX_OTHER=@LIBX_OTHER@
 #endif /* not HAVE_X_WINDOWS */
 
 #ifndef ORDINARY_LINK
@@ -337,7 +328,7 @@ LD=ld
 /* Flags to pass to LD only for temacs.  */
 /* Do not split this line with a backslash.  That can cause trouble with
    some cpps.  */
-TEMACS_LDFLAGS = LD_SWITCH_SYSTEM LD_SWITCH_SYSTEM_TEMACS LD_SWITCH_MACHINE
+TEMACS_LDFLAGS = LD_SWITCH_SYSTEM $(LD_SWITCH_SYSTEM_TEMACS)
 
 /* A macro which other sections of Makefile can redefine to munge the
    flags before they are passed to LD.  This is helpful if you have
@@ -411,7 +402,9 @@ termcapobj = terminfo.o
 termcapobj = tparam.o
 #endif /* ! defined (TERMINFO) */
 
-
+gmallocobj =
+rallocobj =
+vmlimitobj =
 #ifndef SYSTEM_MALLOC
 #ifndef DOUG_LEA_MALLOC
 gmallocobj = gmalloc.o
@@ -420,12 +413,18 @@ gmallocobj = gmalloc.o
 #ifdef REL_ALLOC
 rallocobj = ralloc.o
 #endif
+
+vmlimitobj = vm-limit.o
 #endif /* !SYSTEM_MALLOC */
 
+## Empty on Cygwin, lastfile.o elsewhere.
+PRE_ALLOC_OBJ=@PRE_ALLOC_OBJ@
+## lastfile.o vm-limit.o on Cygwin, $vmlimitobj elsewhere.
+POST_ALLOC_OBJ=@POST_ALLOC_OBJ@
+
 /* List of object files that make-docfile should not be told about.  */
-/* OTHER_OBJ = $(gmallocobj) $(rallocobj), with trailing/leading
-   lastfile.o on Cygwin/other.  */
-otherobj= $(termcapobj) @OTHER_OBJ@ vm-limit.o $(WIDGET_OBJ) $(LIBOBJS)
+otherobj= $(termcapobj) $(PRE_ALLOC_OBJ) $(gmallocobj) $(rallocobj) \
+  $(POST_ALLOC_OBJ) $(WIDGET_OBJ) $(LIBOBJS)
 
 #ifdef HAVE_MOUSE
 #define MOUSE_SUPPORT ${lispsource}mouse.elc \
@@ -706,8 +705,8 @@ SOME_MACHINE_LISP = ../lisp/mouse.elc \
    duplicated symbols.  If the standard libraries were compiled
    with GCC, we might need gnulib again after them.  */
 
-LIBES = $(LOADLIBES) $(LIBS) $(LIBX) $(LIBSOUND) $(RSVG_LIBS) $(DBUS_LIBS) \
-   @LIBGPM@ @LIBRESOLV@ LIBS_SYSTEM LIBS_TERMCAP \
+LIBES = $(LOADLIBES) $(LIBS) $(LIBX_BASE) $(LIBX_OTHER) $(LIBSOUND) \
+   $(RSVG_LIBS) $(DBUS_LIBS) @LIBGPM@ @LIBRESOLV@ LIBS_SYSTEM LIBS_TERMCAP \
    $(GETLOADAVG_LIBS) ${GCONF_LIBS} ${LIBSELINUX_LIBS} \
    @FREETYPE_LIBS@ @FONTCONFIG_LIBS@ @LIBOTF_LIBS@ @M17N_FLT_LIBS@ \
    $(GNULIB_VAR) @LIB_MATH@ LIB_STANDARD $(GNULIB_VAR)
@@ -763,8 +762,8 @@ temacs${EXEEXT}: $(LOCALCPP) $(STARTFILES) stamp-oldxmenu ${obj} ${otherobj} pre
     ${LIBES}
 #endif
 
-/* We do not use ALL_LDFLAGS because LD_SWITCH_SYSTEM and LD_SWITCH_MACHINE
-   often contain options that have to do with using Emacs''s crt0,
+/* We do not use ALL_LDFLAGS because LD_SWITCH_SYSTEM
+   often contains options that have to do with using Emacs''s crt0,
    which are only good with temacs.  */
 prefix-args${EXEEXT}: prefix-args.o $(config_h)
 	$(CC) $(LDFLAGS) prefix-args.o -o prefix-args
@@ -996,7 +995,7 @@ window.o: window.c indent.h commands.h frame.h window.h buffer.h termchar.h \
    keymap.h blockinput.h atimer.h systime.h $(INTERVALS_H) \
    xterm.h w32term.h nsterm.h nsgui.h lisp.h $(config_h)
 xdisp.o: xdisp.c macros.h commands.h process.h indent.h buffer.h dispextern.h \
-   coding.h termchar.h frame.h window.h disptab.h termhooks.h character.h     \
+   coding.h termchar.h frame.h window.h disptab.h termhooks.h character.h \
    charset.h lisp.h $(config_h) keyboard.h $(INTERVALS_H) region-cache.h \
    xterm.h w32term.h nsterm.h nsgui.h msdos.h composite.h fontset.h ccl.h \
    blockinput.h atimer.h systime.h keymap.h font.h
