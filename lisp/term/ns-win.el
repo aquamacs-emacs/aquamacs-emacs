@@ -961,12 +961,14 @@ unless the current buffer is a scratch buffer."
   "Switches the tool bar on and off in frame FRAME.
  If FRAME is nil, the change applies to the selected frame."
   (interactive)
+  (when (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
+      (tool-bar-setup (or frame (selected-frame)))
+      (redisplay t))
   (modify-frame-parameters
-   frame (list (cons 'tool-bar-lines
-		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-				   0 1)) ))
-  (if (not tool-bar-mode) (tool-bar-mode t)))
-
+   (or frame (selected-frame))
+   (list (cons 'tool-bar-lines
+	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+		   0 1)) )))
 
 
 ;;;; Dialog-related functions.

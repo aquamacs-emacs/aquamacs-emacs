@@ -1249,10 +1249,6 @@ update_frame_tool_bar (FRAME_PTR f)
   //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
   //   - FRAME_NS_TITLEBAR_HEIGHT (f);
 
-
-  if (![toolbar isVisible])
-      [toolbar setVisible: YES];
-
   if ([toolbar changed])
     {
       /* inform app that toolbar has changed */
@@ -1274,6 +1270,9 @@ update_frame_tool_bar (FRAME_PTR f)
       [toolbar setConfigurationFromDictionary: newDict];
       [newDict release];
     }
+
+  if (![toolbar isVisible])
+      [toolbar setVisible: YES];
 
 }
 
