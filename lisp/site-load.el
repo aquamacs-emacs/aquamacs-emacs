@@ -21,8 +21,8 @@
 (load "image") ;; path issue should be alright now
 (load "image-file")
 (load "button")
-(load "view")
-(load "help-mode")
+; (load "view")  ; can't do it in Emacs 24
+;(load "help-mode")
 (load "help-fns")
 
 (load "emacs-lisp/debug")
