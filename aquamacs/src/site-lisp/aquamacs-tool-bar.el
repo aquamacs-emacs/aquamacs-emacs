@@ -125,31 +125,35 @@
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
 
-  (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame '("new" . "New"))
+  (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame "new" nil :label "New")
 
-  (tool-bar-add-item-from-menu 'mac-key-open-file '("open" . "Open"))
+  (tool-bar-add-item-from-menu 'mac-key-open-file "open" nil :label "Open")
 
-  (tool-bar-add-item '("history" . "Recent") (lambda ()
-			      (interactive)
-			      (popup-menu (easy-menu-filter-return
-					   (recentf-make-menu-items)
-					   "Open Recent")))
+  (tool-bar-add-item "history" (lambda ()
+				 (interactive)
+				 (popup-menu (easy-menu-filter-return
+					      (recentf-make-menu-items)
+					      "Open Recent")))
 		     'recent-files
+		     :label "Recent"
 		     :visible '(and (boundp 'recentf-mode) recentf-mode)
 		     :help "Pop up the Recent Files menu")
 
-  (tool-bar-add-item '("circle_stop" . "Close") 'kill-this-buffer  'kill-current-buffer
+  (tool-bar-add-item "circle_stop" 'kill-this-buffer  'kill-current-buffer
+		     :label "Close"
 		     :visible '(or (not (boundp 'one-buffer-one-frame-mode))
 				   (not one-buffer-one-frame-mode)))
  
-  (tool-bar-add-item-from-menu 'revert-buffer '("update" . "Revert") nil)
+  (tool-bar-add-item-from-menu 'revert-buffer "update" nil :label "Revert")
   
-  (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-file
-			       :visible '(and buffer-file-name
-					     (not (eq 'special
-						      (get major-mode
-							   'mode-class)))))
-  (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'save-file-as
+  (tool-bar-add-item "save" 'mac-key-save-file 'save-file
+		     :label "Save"
+		     :visible '(and buffer-file-name
+				    (not (eq 'special
+					     (get major-mode
+						  'mode-class)))))
+  (tool-bar-add-item "saveas" 'mac-key-save-file-as 'save-file-as
+		     :label "Save"
 		     :visible '(and (not buffer-file-name)
 				    (not (eq 'special
 					     (get major-mode
@@ -157,48 +161,56 @@
   ;; Save and Save As are both called "Save" in order to keep the width the same:
   ;; these icons just get swap as soon as there is a buffer-file-name.
 
-  (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
+  (tool-bar-add-item-from-menu 'aquamacs-print "print" nil :label "Print")
 
-  (tool-bar-add-item '("space2" . "--") nil 'space-1 :enable nil )
+  (tool-bar-add-item "space2" nil 'space-1 :label "--" :enable nil )
 
-  (tool-bar-add-item-from-menu 'aquamacs-undo '("undo" . "Undo") nil
+  (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
+			       :label "Undo"
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
 
-  (tool-bar-add-item-from-menu 'aquamacs-redo '("redo" . "Redo") nil
+  (tool-bar-add-item-from-menu 'aquamacs-redo "redo" nil
+			       :label "Redo"
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
   
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
-			       '("cut" . "Cut") nil
+			       "cut" nil
+			       :label "Cut"
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
-			       '("copy" . "Copy"))
+			       "copy" nil
+			       :label "Cut")
   (let ((cua-mode nil))
       (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
-			       '("paste" . "Paste") nil
+			       "paste" nil
+			       :label "Paste"
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class)))))
-  (tool-bar-add-item-from-menu 'isearch-forward '("search" . "Search"))
+  (tool-bar-add-item-from-menu 'isearch-forward "search" nil :label "Search")
 ;; nonincremental-search-forward
-  (tool-bar-add-item-from-menu 'ispell-buffer '("spellcheck" . "Spelling"))
+  (tool-bar-add-item-from-menu 'ispell-buffer "spellcheck" nil :label "Spelling")
 
   ;; There's no icon appropriate for News and we need a command rather
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
-  (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil)
+  (tool-bar-add-item "space2" nil 'space-2 :label "--" :enable nil)
   
-  (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
+  (tool-bar-add-item-from-menu 'make-frame-command "new_window" nil
+			       :label "Duplicate")
 
-  (tool-bar-add-item '("preferences" . "Preferences") 'customize 'customize
+  (tool-bar-add-item "preferences" 'customize 'customize
+		     :label "Preferences"
 		     :help "Edit preferences (customize)")
 
-  (tool-bar-add-item '("help" . "Help") (lambda ()
+  (tool-bar-add-item "help" (lambda ()
 			      (interactive)
 			      (popup-menu menu-bar-help-menu))
 		     'help
+		     :label "Help"
 		     :help "Pop up the Help menu")
 
   ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
