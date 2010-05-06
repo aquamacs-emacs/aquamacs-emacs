@@ -6806,7 +6806,7 @@ the point is when the command is called.")
   "Evaluate to t if buffer BUF is not an internal buffer."
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
-(defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete)   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
 	;; (move-point (memq (point) (list beg end))) 
@@ -6819,7 +6819,7 @@ the point is when the command is called.")
 	  (smart-spacing-char-is-word-boundary to (1+ to))))
 	;; the following is destructive (side-effect).  
 	;; do after checking for word boundaries.
-	(string (filter-buffer-substring beg end delete noprops)))
+	(string (filter-buffer-substring beg end delete)))
    (when use-smart-string
      (put-text-property 0 (length string)
 			'yank-handler 
