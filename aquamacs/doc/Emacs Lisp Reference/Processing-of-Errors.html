@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Processing of Errors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Errors.html#Errors" title="Errors">
+<link rel="prev" href="Signaling-Errors.html#Signaling-Errors" title="Signaling Errors">
+<link rel="next" href="Handling-Errors.html#Handling-Errors" title="Handling Errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Processing-of-Errors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Handling-Errors.html#Handling-Errors">Handling Errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.5.3.2 How Emacs Processes Errors</h5>
+
+<p>When an error is signaled, <code>signal</code> searches for an active
+<dfn>handler</dfn> for the error.  A handler is a sequence of Lisp
+expressions designated to be executed if an error happens in part of the
+Lisp program.  If the error has an applicable handler, the handler is
+executed, and control resumes following the handler.  The handler
+executes in the environment of the <code>condition-case</code> that
+established it; all functions called within that <code>condition-case</code>
+have already been exited, and the handler cannot return to them.
+
+   <p>If there is no applicable handler for the error, it terminates the
+current command and returns control to the editor command loop.  (The
+command loop has an implicit handler for all kinds of errors.)  The
+command loop's handler uses the error symbol and associated data to
+print an error message.  You can use the variable
+<code>command-error-function</code> to control how this is done:
+
+<div class="defun">
+&mdash; Variable: <b>command-error-function</b><var><a name="index-command_002derror_002dfunction-553"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, specifies a function to use to
+handle errors that return control to the Emacs command loop.  The
+function should take three arguments: <var>data</var>, a list of the same
+form that <code>condition-case</code> would bind to its variable;
+<var>context</var>, a string describing the situation in which the error
+occurred, or (more often) <code>nil</code>; and <var>caller</var>, the Lisp
+function which called the primitive that signaled the error. 
+</p></blockquote></div>
+
+   <p><a name="index-g_t_0040code_007bdebug_002don_002derror_007d-use-554"></a>An error that has no explicit handler may call the Lisp debugger.  The
+debugger is enabled if the variable <code>debug-on-error</code> (see <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>) is non-<code>nil</code>.  Unlike error handlers, the debugger runs
+in the environment of the error, so that you can examine values of
+variables precisely as they were at the time of the error.
+
+   </body></html>
+

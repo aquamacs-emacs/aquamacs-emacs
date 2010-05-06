@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Directory Local Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="File-Local-Variables.html#File-Local-Variables" title="File Local Variables">
+<link rel="next" href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables" title="Frame-Local Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Directory-Local-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables">Frame-Local Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.12 Directory Local Variables</h3>
+
+<p><a name="index-directory-local-variables-650"></a>
+  A directory can specify local variable values common to all files in
+that directory; Emacs uses these to create buffer-local bindings for
+those variables in buffers visiting any file in that directory.  This
+is useful when the files in the directory belong to some <dfn>project</dfn>
+and therefore share the same local variables.
+
+   <p>There are two different methods for specifying directory local
+variables: by putting them in a special file, or by defining a
+<dfn>project class</dfn> for that directory.
+
+<div class="defun">
+&mdash; Constant: <b>dir-locals-file</b><var><a name="index-dir_002dlocals_002dfile-651"></a></var><br>
+<blockquote><p>This constant is the name of the file where Emacs expects to find the
+directory-local variables.  The name of the file is
+<samp><span class="file">.dir-locals.el</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  A file by that name in a directory causes Emacs to apply its
+settings to any file in that directory or any of its subdirectories. 
+If some of the subdirectories have their own <samp><span class="file">.dir-locals.el</span></samp>
+files, Emacs uses the settings from the deepest file it finds starting
+from the file's directory and moving up the directory tree.  The file
+specifies local variables as a specially formatted list; see
+<a href="../emacs/Directory-Variables.html#Directory-Variables">Per-directory Local Variables</a>, for more details. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>hack-dir-local-variables</b><var><a name="index-hack_002ddir_002dlocal_002dvariables-652"></a></var><br>
+<blockquote><p>This function reads the <code>.dir-locals.el</code> file and stores the
+directory-local variables in <code>file-local-variables-alist</code> that is
+local to the buffer visiting any file in the directory, without
+applying them.  It also stores the directory-local settings in
+<code>dir-locals-class-alist</code>, where it defines a special class for
+the directory in which <samp><span class="file">.dir-locals.el</span></samp> file was found.  This
+function works by calling <code>dir-locals-set-class-variables</code> and
+<code>dir-locals-set-directory-class</code>, described below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dir-locals-set-class-variables</b><var> class variables<a name="index-dir_002dlocals_002dset_002dclass_002dvariables-653"></a></var><br>
+<blockquote><p>This function defines a set of variable settings for the named
+<var>class</var>, which is a symbol.  You can later assign the class to one
+or more directories, and Emacs will apply those variable settings to
+all files in those directories.  The list in <var>variables</var> can be of
+one of the two forms: <code>(</code><var>major-mode</var><code> . </code><var>alist</var><code>)</code> or
+<code>(</code><var>directory</var><code> . </code><var>list</var><code>)</code>.  With the first form, if the
+file's buffer turns on a mode that is derived from <var>major-mode</var>,
+then the all the variables in the associated <var>alist</var> are applied;
+<var>alist</var> should be of the form <code>(</code><var>name</var><code> . </code><var>value</var><code>)</code>. 
+A special value <code>nil</code> for <var>major-mode</var> means the settings are
+applicable to any mode.
+
+        <p>With the second form of <var>variables</var>, if <var>directory</var> is the
+initial substring of the file's directory, then <var>list</var> is applied
+recursively by following the above rules; <var>list</var> should be of one
+of the two forms accepted by this function in <var>variables</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dir-locals-set-directory-class</b><var> directory class<a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-654"></a></var><br>
+<blockquote><p>This function assigns <var>class</var> to all the files in <code>directory</code>
+and its subdirectories.  Thereafter, all the variable settings
+specified for <var>class</var> will be applied to any visited file in
+<var>directory</var> and its children.  <var>class</var> must have been already
+defined by <code>dir-locals-set-class-variables</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>dir-locals-class-alist</b><var><a name="index-dir_002dlocals_002dclass_002dalist-655"></a></var><br>
+<blockquote><p>This alist holds the class symbols and the associated variable
+settings.  It is updated by <code>dir-locals-set-class-variables</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>dir-locals-directory-cache</b><var><a name="index-dir_002dlocals_002ddirectory_002dcache-656"></a></var><br>
+<blockquote><p>This alist holds directory names, their assigned class names, and
+modification times of the associated directory local variables file. 
+It is updated by <code>dir-locals-set-directory-class</code>. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+The MS-DOS version of Emacs uses <samp><span class="file">_dir-locals.el</span></samp> instead, due to
+limitations of the DOS filesystems. 
+</p>
+
+   <hr></div>
+
+   </body></html>
+

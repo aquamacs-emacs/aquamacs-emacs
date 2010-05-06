@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Save Keyboard Macro - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link rel="prev" href="Keyboard-Macro-Query.html#Keyboard-Macro-Query" title="Keyboard Macro Query">
+<link rel="next" href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro" title="Edit Keyboard Macro">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Save-Keyboard-Macro"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Keyboard-Macro-Query.html#Keyboard-Macro-Query">Keyboard Macro Query</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
+<hr>
+</div>
+
+<h3 class="section">21.5 Naming and Saving Keyboard Macros</h3>
+
+     <dl>
+<dt><kbd>C-x C-k n</kbd><dd>Give a command name (for the duration of the Emacs session) to the most
+recently defined keyboard macro (<code>kmacro-name-last-macro</code>). 
+<br><dt><kbd>C-x C-k b</kbd><dd>Bind the most recently defined keyboard macro to a key sequence (for
+the duration of the session) (<code>kmacro-bind-to-key</code>). 
+<br><dt><kbd>M-x insert-kbd-macro</kbd><dd>Insert in the buffer a keyboard macro's definition, as Lisp code. 
+</dl>
+
+   <p><a name="index-saving-keyboard-macros-788"></a><a name="index-kmacro_002dname_002dlast_002dmacro-789"></a><a name="index-C_002dx-C_002dk-n-790"></a>  If you wish to save a keyboard macro for later use, you can give it
+a name using <kbd>C-x C-k n</kbd> (<code>kmacro-name-last-macro</code>). 
+This reads a name as an argument using the minibuffer and defines that
+name to execute the last keyboard macro, in its current form.  (If you
+later add to the definition of this macro, that does not alter the
+name's definition as a macro.)  The macro name is a Lisp symbol, and
+defining it in this way makes it a valid command name for calling with
+<kbd>M-x</kbd> or for binding a key to with <code>global-set-key</code>
+(see <a href="Keymaps.html#Keymaps">Keymaps</a>).  If you specify a name that has a prior definition
+other than a keyboard macro, an error message is shown and nothing is
+changed.
+
+   <p><a name="index-binding-keyboard-macros-791"></a><a name="index-kmacro_002dbind_002dto_002dkey-792"></a><a name="index-C_002dx-C_002dk-b-793"></a>  You can also bind the last keyboard macro (in its current form) to a
+key, using <kbd>C-x C-k b</kbd> (<code>kmacro-bind-to-key</code>) followed by the
+key sequence you want to bind.  You can bind to any key sequence in
+the global keymap, but since most key sequences already have other
+bindings, you should select the key sequence carefully.  If you try to
+bind to a key sequence with an existing binding (in any keymap), this
+command asks you for confirmation before replacing the existing binding.
+
+   <p>To avoid problems caused by overriding existing bindings, the key
+sequences <kbd>C-x C-k 0</kbd> through <kbd>C-x C-k 9</kbd> and <kbd>C-x C-k A</kbd>
+through <kbd>C-x C-k Z</kbd> are reserved for your own keyboard macro
+bindings.  In fact, to bind to one of these key sequences, you only
+need to type the digit or letter rather than the whole key sequences. 
+For example,
+
+<pre class="example">     C-x C-k b 4
+</pre>
+   <p class="noindent">will bind the last keyboard macro to the key sequence <kbd>C-x C-k 4</kbd>.
+
+   <p><a name="index-insert_002dkbd_002dmacro-794"></a>  Once a macro has a command name, you can save its definition in a file. 
+Then it can be used in another editing session.  First, visit the file
+you want to save the definition in.  Then use this command:
+
+<pre class="example">     M-x insert-kbd-macro &lt;RET&gt; <var>macroname</var> &lt;RET&gt;
+</pre>
+   <p class="noindent">This inserts some Lisp code that, when executed later, will define the
+same macro with the same definition it has now.  (You need not
+understand Lisp code to do this, because <code>insert-kbd-macro</code> writes
+the Lisp code for you.)  Then save the file.  You can load the file
+later with <code>load-file</code> (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>).  If the file you
+save in is your init file <samp><span class="file">~/.emacs</span></samp> (see <a href="Init-File.html#Init-File">Init File</a>) then the
+macro will be defined each time you run Emacs.
+
+   <p>If you give <code>insert-kbd-macro</code> a numeric argument, it makes
+additional Lisp code to record the keys (if any) that you have bound
+to <var>macroname</var>, so that the macro will be reassigned the same keys
+when you load the file.
+
+   </body></html>
+

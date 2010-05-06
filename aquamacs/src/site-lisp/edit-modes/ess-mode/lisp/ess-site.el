@@ -137,13 +137,13 @@ The extension, in a file name, is the part that follows the last `.'."
 ;; load code to figure out what version/strain of Emacs we are running
 ;; must come *AFTER* load-path is set !
 
-;;; The following require sets the following ess-local-custom-available to
-;;; true if custom is provided at this point.  If we think it will be,
-;;; then we can use the following (uncommented out) to make sure that
-;;; it will be.	 (AJR).
-(require 'ess-emcs)
-;; This will override what Emacs thinks it can detect.
-;;(setq ess-local-custom-available t); if custom is available, uncomment
+;;; The following require sets ess-local-custom-available to
+;;; true if custom is provided at this point.
+(require 'ess-compat)
+;;; If it is not provided, but we think it will be available when necessary,
+;;; then we can use the following line (uncommented) to make sure that
+;;; it will be used.  If you have to ask, then you don't need this.
+;;(setq ess-local-custom-available t)
 
 ;; SJE Thu 13 May 2004
 ;; Maybe ess-etc-directory should not be defcustom, since its value
@@ -197,15 +197,14 @@ for ESS, such as icons.")
 ;;; Files ending in .St are considered to be S transcript files
 ;;;
 ;;; NB: in standard Emacs, files ending in .s are assembler files.  If you
-;;; want to use assembler, you can comment the appropriate line below.	Of
-;;; course, different users will want different modes.	If a user wants to
-;;; restore default the default modes for assembly file extensions, the
-;;; following can go into ~/.emacs:
+;;; want to use assembler.  If a user wants to
+;;; restore the default modes for assembly file extensions, the
+;;; following can go into ~/.emacs or ~/.xemacs/init.el
 ;;;
 ;;;  (add-hook 'ess-mode-hook 'ess-restore-asm-extns)
 ;;;  (add-hook 'inferior-ess-mode-hook 'ess-restore-asm-extns)
 
-(autoload 'Rd-mode "essddr" "Major mode for editing R documentation." t)
+(autoload 'Rd-mode "ess-rd" "Major mode for editing R documentation." t)
 
 ;; This is thanks to  Ed L Cashin <ecashin@uga.edu>, 03 Mar 2004 :
 (defun ess-restore-asm-extns ()
@@ -282,6 +281,12 @@ between .s or .S files and assembly mode.
 ;;(setq-default inferior-S+5-program-name "Splus5")
 ;;(setq-default inferior-S+6-program-name "Splus7") ; unix systems
 ;;(setq-default inferior-S+6-program-name "Splus8") ; unix systems
+;;
+;; If you wish to call other versions of R on a Unix system, ESS
+;; should auto-detect other versions of R, according to matches to the
+;; variable `ess-r-versions' as described in its docstring.  Consider
+;; changing that variable rather than changing inferior-R-program-name
+;; if your version of R is not already auto-detected.
 ;;(setq-default inferior-R-program-name "R")	    ; unix systems
 ;;(setq-default inferior-R-program-name "Rterm")    ; MS Windows, see below for path as well
 ;;(setq-default inferior-R-program-name "C:\\Program Files\\R\\R-2.5.0\\bin\\Rterm.exe")
@@ -292,16 +297,6 @@ between .s or .S files and assembly mode.
 ;;(setq-default inferior-OMG-program-name "/home/rossini/src/anoncvs/Omegahat/org/omegahat/bin/omegahat")
 (setq-default inferior-OMG-program-name "omegahat")
 
-;;; ESS on the Windows NT/95/98 assumes you have installed gnuclient
-;;; with your NTemacs.
-;;; http://www.cs.washington.edu/homes/voelker/ntemacs/contrib/gnuserv.zip
-;;; Should you choose not to use gnuclient, you will need to uncomment
-;;; the notepad definitions below.
-;;;
-;;; Send Print from S+4 GUI Commands window print icon to emacs.
-;;; StatSci's S+4 default print destination for the commands window is
-;;(setq-default inferior-S+4-print-command "notepad/p")
-;;;
 ;;; The line below is the ESS default and sends the commands window
 ;;; to emacs, giving the user the opportunity to
 ;;; (1) edit the output into a clean ess-transcript file before printing, or
@@ -322,9 +317,9 @@ between .s or .S files and assembly mode.
 ;;; S+6 in an emacs buffer, using the same technology as ESS uses for
 ;;; Unix S-Plus.  Interactive graphics with javagraph are available
 ;;; in this mode beginning with S-Plus 6.1.
-;;; See essd-sp4.el or essd-sp6w.el
+;;; See ess-sp4-d.el or ess-sp6w-d.el
 
-;;; -----> configuration now via custom, see ./ess-cust.el and look for
+;;; -----> configuration now via custom, see ./ess-custom.el and look for
 ;;;        inferior-Sqpe+... e.g. inferior-Sqpe+6-program-name
 
 ;;; These ddeclient values will be buffer-local on MS-Windows 9x/NT
@@ -363,47 +358,47 @@ sending `inferior-ess-language-start' to S-Plus.")
 (if (< max-specpdl-size 700)	 ;;; ESS won't load at the default of 600
     (setq max-specpdl-size 700))
 
-(ess-message "[ess-site:] Before requiring dialect 'essd-** ....")
-(ess-message "[ess-site:] require 'essd-r ...")
-(require 'essd-r)    ;; R
-;; (ess-message "[ess-site:] require 'essd-s4 ...")
-;; (require 'essd-s4) ; has become VERY RARE ..
+(ess-message "[ess-site:] Before requiring dialect 'ess-*-d ....")
+(ess-message "[ess-site:] require 'ess-r-d ...")
+(require 'ess-r-d)    ;; R
+;; (ess-message "[ess-site:] require 'ess-s4-d ...")
+;; (require 'ess-s4-d) ; has become VERY RARE ..
 
-;;(ess-message "[ess-site:] require 'essd-s3 ...")
-;;(require 'essd-s3)  ; THIS IS RARE.  You probably do not have this.
+;;(ess-message "[ess-site:] require 'ess-s3-d ...")
+;;(require 'ess-s3-d)  ; THIS IS RARE.  You probably do not have this.
 
 ;; "sp" refers to S-PLUS (MathSoft/StatSci/Insightful/TIBCO):
-(ess-message "[ess-site:] require 'essd-sp3 ...")
-(require 'essd-sp3)
+(ess-message "[ess-site:] require 'ess-sp3-d ...")
+(require 'ess-sp3-d)
 
 (if ess-microsoft-p
     (progn
-      (ess-message "[ess-site:] require 'essd-sp4 ...")
-      (require 'essd-sp4)
-      (ess-message "[ess-site:] require 'essd-sp6w ...")
-      (require 'essd-sp6w))
+      (ess-message "[ess-site:] require 'ess-sp4-d ...")
+      (require 'ess-sp4-d)
+      (ess-message "[ess-site:] require 'ess-sp6w-d ...")
+      (require 'ess-sp6w-d))
   ;; else: decent OS
-  (ess-message "[ess-site:] require 'essd-sp5 ...")
-  (require 'essd-sp5)
-  (ess-message "[ess-site:] require 'essd-sp6 ...")
-  (require 'essd-sp6))
+  (ess-message "[ess-site:] require 'ess-sp5-d ...")
+  (require 'ess-sp5-d)
+  (ess-message "[ess-site:] require 'ess-sp6-d ...")
+  (require 'ess-sp6-d))
 
-(ess-message "[ess-site:] require 'essd-sta ...")
-(require 'essd-sta)  ;; for Stata.
-(ess-message "[ess-site:] require 'essd-xls ...")
-(require 'essd-xls)  ;; XLispStat
-(ess-message "[ess-site:] require 'essd-vst ...")
-(require 'essd-vst)  ;; ViSta
-(ess-message "[ess-site:] require 'essd-arc ...")
-(require 'essd-arc)  ;; Arc
-(ess-message "[ess-site:] require 'essd-sas ...")
-(require 'essd-sas)
+(ess-message "[ess-site:] require 'ess-sta-d ...")
+(require 'ess-sta-d)  ;; for Stata.
+(ess-message "[ess-site:] require 'ess-xls-d ...")
+(require 'ess-xls-d)  ;; XLispStat
+(ess-message "[ess-site:] require 'ess-vst-d ...")
+(require 'ess-vst-d)  ;; ViSta
+(ess-message "[ess-site:] require 'ess-arc-d ...")
+(require 'ess-arc-d)  ;; Arc
+(ess-message "[ess-site:] require 'ess-sas-d ...")
+(require 'ess-sas-d)
 (ess-message "[ess-site:] require 'essd-els ...")
 (require 'essd-els)  ;; S-elsewhere, on another machine by telnet
-(ess-message "[ess-site:] require 'essd-omg ...")
-(require 'essd-omg)  ;; for omegahat
-(ess-message "[ess-site:] require 'essl-bugs ...")
-(require 'essl-bugs)  ;; for batch BUGS
+;; (ess-message "[ess-site:] require 'essd-omg ...")
+;; (require 'essd-omg)  ;; for omegahat
+(ess-message "[ess-site:] require 'ess-bugs-l ...")
+(require 'ess-bugs-l)  ;; for batch BUGS
 
 (ess-write-to-dribble-buffer
    (format "[ess-site.el]: ess-customize-alist=%s \n"
@@ -415,7 +410,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 
 ;; ALWAYS:
 (ess-message "[ess-site:] require 'ess   *ITSELF* ...")
-(require 'ess); -> loads ess-cust.el and more
+(require 'ess); -> loads ess-custom.el and more
 
 (ess-write-to-dribble-buffer
    (format "[ess-site.el _2_]: ess-customize-alist=%s \n"
@@ -424,13 +419,12 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;; (1.8) Speedbar and mouse
 
 (require 'ess-menu)
-(require 'ess-mous)
+(require 'ess-mouse)
 
 ;; (1.9) Toolbar support
 
-;; To remove toolbar support under ESS, either comment-out
-;; (require 'ess-toolbar) below, or add "(setq ess-use-toolbar nil)"
-;; to your .emacs before (require 'ess-site).
+;; To remove toolbar support under ESS, add "(setq ess-use-toolbar nil)"
+;; to your ~/.emacs or ~/.xemacs/init.el before (require 'ess-site)
 (require 'ess-toolbar)
 
 ;;; 2. Site Specific setup
@@ -456,8 +450,10 @@ sending `inferior-ess-language-start' to S-Plus.")
 (autoload 'ess-rdired "ess-rdired"
   "View *R* objects in a dired-like buffer." t)
 
-(autoload 'ess-roxygen-fn "ess-roxygen"
-  "Insert roxygen tags for function definitions." t)
+(autoload 'ess-roxy-mode "ess-roxy"
+  "Insert and edit Roxygen tags for function definitions." t)
+(add-hook 'ess-mode-hook 'ess-roxy-mode)
+
 
 ;;; On a PC, the default is S+6.
 ;; Elsewhere (unix and linux) the default is S+6
@@ -539,16 +535,16 @@ sending `inferior-ess-language-start' to S-Plus.")
 
 ;; Check to see that inferior-R-program-name points to a working version
 ;; of R; if not, try to find the newest version:
-(require 'essd-r)
-(ess-check-R-program-name) ;; -> (ess-find-newest-R) if needed, in ./essd-r.el
+(require 'ess-r-d)
+(ess-check-R-program-name) ;; -> (ess-find-newest-R) if needed, in ./ess-r-d.el
 
-;;; 3. Customization (and commented out examples) for your site
+;;; 3. Customization (and examples) for your site
 ;;;; ===============================================
 
 
 ;;; (3.01) SOME PEOPLE (who will remain nameless) worry that novices
 ;;; won't like fancy buffer names for their first (and only :-)
-;;; process.  To number all processes, uncomment the next line.
+;;; process.  To number all processes:
 ;;(setq ess-plain-first-buffername nil)
 
 ;;; (3.02) Some people have requested using the program name as part
@@ -575,7 +571,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;;; often unnecessarily large. The framepop package makes such
 ;;; windows appear in a separate, shrink-wrapped frame. This will
 ;;; also affect other "temporary" windows such as those produced by
-;;; C-h k, etc.	 To enable, uncomment both lines of code below).
+;;; C-h k, etc.	 To enable:
 ;;;
 ;;; Works only with Emacs at this time.
 ;; (cond (window-system
@@ -604,7 +600,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;;; (3.4) ess-ask-for-ess-directory
 ;;; If t, will ask for the directory to use.  If nil, assumes the
 ;;; default (usually, the users home directory...).
-;;now rather in ./ess-cust.el : (setq ess-ask-for-ess-directory t)
+;;now rather in ./ess-custom.el : (setq ess-ask-for-ess-directory t)
 
 ;;; (3.5) ess-directory default	 (correlated with above)
 ;;; The default location for running the subprocess is configurable.
@@ -638,16 +634,17 @@ sending `inferior-ess-language-start' to S-Plus.")
     (add-hook 'ess-post-run-hook
 	      '(lambda()
 		 (if (string= ess-dialect "R")
-		     (ess-eval-linewise "options(chmhelp = FALSE)"
+		     (ess-eval-linewise "options(chmhelp = FALSE, help_type = \"text\")"
 					nil nil nil 'wait)))))
 
 
 ;;; 3.6 Example of formatting changes
 
-;;; Formatting and indentation patterns are defined in ess-cust.el, please
-;;; see ess-cust.el for exact definitions of these variable settings.
-;;; To change them, uncomment one or both of the following lines:
-;;; (eg, follow changes suggested by Terry Therneau)
+;;; Formatting and indentation patterns are defined in ess-custom.el, please
+;;; see ess-custom.el for exact definitions of these variable settings.
+;;; To change them (eg, follow changes suggested by Terry Therneau),
+;;; you need one or both of the following lines:
+;;;
 ;;(setq ess-fancy-comments nil)
 ;;(setq ess-default-style 'CLB)
 
@@ -664,7 +661,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;;;   1b. Optional: TAB is bound to tab-to-tab-stop and inserts up to 4
 ;;;	  columns at a time.  C-TAB moves backwards and deletes characters
 ;;;	  up to 4 columns at a time.
-;;;	  Uncomment the following line for the optional behavior.
+;;;	  The following line is for the optional behavior.
 ;;;(setq ess-sas-edit-keys-toggle t)   ;; optional TAB and C-TAB in sas-mode
 ;;;   Use the function call (ess-sas-edit-keys-toggle)
 ;;;   to change the setting after the first SAS-mode buffer has been created.
@@ -672,17 +669,17 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;;;
 ;;;   2. Managing submitted SAS jobs with function keys.
 ;;;   2a. Default: To define the function keys in ESS[SAS] mode only,
-;;;   uncomment at most one of the following two lines.
+;;;   you will need, at most, one of the following two lines.
 ;;;(setq ess-sas-local-unix-keys t)  ;; F2-F12 bound in ESS[SAS] mode
 ;;;(setq ess-sas-local-pc-keys t)    ;; F2-F12 bound in ESS[SAS] mode
 ;;;
 ;;;   2b. Options: To define the function keys in all modes,
-;;;   uncomment at most one of the following two lines.
+;;;   you will need, at most, one of the following two lines.
 ;;;(setq ess-sas-global-unix-keys t) ;; F2-F12 bound in all modes
 ;;;(setq ess-sas-global-pc-keys t)   ;; F2-F12 bound in all modes
 ;;;
 ;;;   3. If it is more convenient to have "*Async Shell Command*"
-;;;	 in same-window-buffer-names, then uncomment the following line
+;;;	 in same-window-buffer-names, then:
 ;;;(ess-same-window-async)
 ;;;
 ;;;(defvar sas-program "sas" "*Name of program which runs sas.")

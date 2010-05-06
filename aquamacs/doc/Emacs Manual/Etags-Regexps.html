@@ -1,0 +1,184 @@
+<html lang="en">
+<head>
+<title>Etags Regexps - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tags.html#Tags" title="Tags">
+<link rel="prev" href="Create-Tags-Table.html#Create-Tags-Table" title="Create Tags Table">
+<link rel="next" href="Select-Tags-Table.html#Select-Tags-Table" title="Select Tags Table">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Etags-Regexps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Select-Tags-Table.html#Select-Tags-Table">Select Tags Table</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Create-Tags-Table.html#Create-Tags-Table">Create Tags Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.3.3 Etags Regexps</h4>
+
+<p>The &lsquo;<samp><span class="samp">--regex</span></samp>&rsquo; option provides a general way of recognizing tags
+based on regexp matching.  You can freely intermix this option with
+file names, and each one applies to the source files that follow it. 
+If you specify multiple &lsquo;<samp><span class="samp">--regex</span></samp>&rsquo; options, all of them are used
+in parallel.  The syntax is:
+
+<pre class="smallexample">     --regex=[<var>{language}</var>]/<var>tagregexp</var>/[<var>nameregexp</var>/]<var>modifiers</var>
+</pre>
+   <p>The essential part of the option value is <var>tagregexp</var>, the
+regexp for matching tags.  It is always used anchored, that is, it
+only matches at the beginning of a line.  If you want to allow
+indented tags, use a regexp that matches initial whitespace; start it
+with &lsquo;<samp><span class="samp">[ \t]*</span></samp>&rsquo;.
+
+   <p>In these regular expressions, &lsquo;<samp><span class="samp">\</span></samp>&rsquo; quotes the next character, and
+all the GCC character escape sequences are supported (&lsquo;<samp><span class="samp">\a</span></samp>&rsquo; for
+bell, &lsquo;<samp><span class="samp">\b</span></samp>&rsquo; for back space, &lsquo;<samp><span class="samp">\d</span></samp>&rsquo; for delete, &lsquo;<samp><span class="samp">\e</span></samp>&rsquo; for
+escape, &lsquo;<samp><span class="samp">\f</span></samp>&rsquo; for formfeed, &lsquo;<samp><span class="samp">\n</span></samp>&rsquo; for newline, &lsquo;<samp><span class="samp">\r</span></samp>&rsquo; for
+carriage return, &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; for tab, and &lsquo;<samp><span class="samp">\v</span></samp>&rsquo; for vertical tab).
+
+   <p>Ideally, <var>tagregexp</var> should not match more characters than are
+needed to recognize what you want to tag.  If the syntax requires you
+to write <var>tagregexp</var> so it matches more characters beyond the tag
+itself, you should add a <var>nameregexp</var>, to pick out just the tag. 
+This will enable Emacs to find tags more accurately and to do
+completion on tag names more reliably.  You can find some examples
+below.
+
+   <p>The <var>modifiers</var> are a sequence of zero or more characters that
+modify the way <code>etags</code> does the matching.  A regexp with no
+modifiers is applied sequentially to each line of the input file, in a
+case-sensitive way.  The modifiers and their meanings are:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">i</span></samp>&rsquo;<dd>Ignore case when matching this regexp. 
+<br><dt>&lsquo;<samp><span class="samp">m</span></samp>&rsquo;<dd>Match this regular expression against the whole file, so that
+multi-line matches are possible. 
+<br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>Match this regular expression against the whole file, and allow
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo; in <var>tagregexp</var> to match newlines. 
+</dl>
+
+   <p>The &lsquo;<samp><span class="samp">-R</span></samp>&rsquo; option cancels all the regexps defined by preceding
+&lsquo;<samp><span class="samp">--regex</span></samp>&rsquo; options.  It too applies to the file names following
+it.  Here's an example:
+
+<pre class="smallexample">     etags --regex=/<var>reg1</var>/i voo.doo --regex=/<var>reg2</var>/m \
+         bar.ber -R --lang=lisp los.er
+</pre>
+   <p class="noindent">Here <code>etags</code> chooses the parsing language for <samp><span class="file">voo.doo</span></samp> and
+<samp><span class="file">bar.ber</span></samp> according to their contents.  <code>etags</code> also uses
+<var>reg1</var> to recognize additional tags in <samp><span class="file">voo.doo</span></samp>, and both
+<var>reg1</var> and <var>reg2</var> to recognize additional tags in
+<samp><span class="file">bar.ber</span></samp>.  <var>reg1</var> is checked against each line of
+<samp><span class="file">voo.doo</span></samp> and <samp><span class="file">bar.ber</span></samp>, in a case-insensitive way, while
+<var>reg2</var> is checked against the whole <samp><span class="file">bar.ber</span></samp> file,
+permitting multi-line matches, in a case-sensitive way.  <code>etags</code>
+uses only the Lisp tags rules, with no user-specified regexp matching,
+to recognize tags in <samp><span class="file">los.er</span></samp>.
+
+   <p>You can restrict a &lsquo;<samp><span class="samp">--regex</span></samp>&rsquo; option to match only files of a
+given language by using the optional prefix <var>{language}</var>. 
+(&lsquo;<samp><span class="samp">etags --help</span></samp>&rsquo; prints the list of languages recognized by
+<code>etags</code>.)  This is particularly useful when storing many
+predefined regular expressions for <code>etags</code> in a file.  The
+following example tags the <code>DEFVAR</code> macros in the Emacs source
+files, for the C language only:
+
+<pre class="smallexample">     --regex='{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/'
+</pre>
+   <p class="noindent">When you have complex regular expressions, you can store the list of
+them in a file.  The following option syntax instructs <code>etags</code> to
+read two files of regular expressions.  The regular expressions
+contained in the second file are matched without regard to case.
+
+<pre class="smallexample">     --regex=@<var>case-sensitive-file</var> --ignore-case-regex=@<var>ignore-case-file</var>
+</pre>
+   <p class="noindent">A regex file for <code>etags</code> contains one regular expression per
+line.  Empty lines, and lines beginning with space or tab are ignored. 
+When the first character in a line is &lsquo;<samp><span class="samp">@</span></samp>&rsquo;, <code>etags</code> assumes
+that the rest of the line is the name of another file of regular
+expressions; thus, one such file can include another file.  All the
+other lines are taken to be regular expressions.  If the first
+non-whitespace text on the line is &lsquo;<samp><span class="samp">--</span></samp>&rsquo;, that line is a comment.
+
+   <p>For example, we can create a file called &lsquo;<samp><span class="samp">emacs.tags</span></samp>&rsquo; with the
+following contents:
+
+<pre class="smallexample">             -- This is for GNU Emacs C source files
+     {c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/\1/
+</pre>
+   <p class="noindent">and then use it like this:
+
+<pre class="smallexample">     etags --regex=@emacs.tags *.[ch] */*.[ch]
+</pre>
+   <p>Here are some more examples.  The regexps are quoted to protect them
+from shell interpretation.
+
+     <ul>
+<li>Tag Octave files:
+
+     <pre class="smallexample">          etags --language=none \
+                --regex='/[ \t]*function.*=[ \t]*\([^ \t]*\)[ \t]*(/\1/' \
+                --regex='/###key \(.*\)/\1/' \
+                --regex='/[ \t]*global[ \t].*/' \
+                *.m
+</pre>
+     <p class="noindent">Note that tags are not generated for scripts, so that you have to add
+a line by yourself of the form &lsquo;<samp><span class="samp">###key </span><var>scriptname</var></samp>&rsquo; if you
+want to jump to it.
+
+     <li>Tag Tcl files:
+
+     <pre class="smallexample">          etags --language=none --regex='/proc[ \t]+\([^ \t]+\)/\1/' *.tcl
+</pre>
+     <li>Tag VHDL files:
+
+     <pre class="smallexample">          etags --language=none \
+            --regex='/[ \t]*\(ARCHITECTURE\|CONFIGURATION\) +[^ ]* +OF/' \
+            --regex='/[ \t]*\(ATTRIBUTE\|ENTITY\|FUNCTION\|PACKAGE\
+            \( BODY\)?\|PROCEDURE\|PROCESS\|TYPE\)[ \t]+\([^ \t(]+\)/\3/'
+</pre>
+     </ul>
+
+   </body></html>
+

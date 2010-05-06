@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Format Conversion Piecemeal - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Format-Conversion.html#Format-Conversion" title="Format Conversion">
+<link rel="prev" href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip" title="Format Conversion Round-Trip">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Format-Conversion-Piecemeal"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip">Format Conversion Round-Trip</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Format-Conversion.html#Format-Conversion">Format Conversion</a>
+<hr>
+</div>
+
+<h4 class="subsection">25.12.3 Piecemeal Specification</h4>
+
+<p>In contrast to the round-trip specification described in the previous
+subsection (see <a href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip">Format Conversion Round-Trip</a>), you can use the variables
+<code>after-insert-file-functions</code> and <code>write-region-annotate-functions</code>
+to separately control the respective reading and writing conversions.
+
+   <p>Conversion starts with one representation and produces another
+representation.  When there is only one conversion to do, there is no
+conflict about what to start with.  However, when there are multiple
+conversions involved, conflict may arise when two conversions need to
+start with the same data.
+
+   <p>This situation is best understood in the context of converting text
+properties during <code>write-region</code>.  For example, the character at
+position 42 in a buffer is &lsquo;<samp><span class="samp">X</span></samp>&rsquo; with a text property <code>foo</code>.  If
+the conversion for <code>foo</code> is done by inserting into the buffer, say,
+&lsquo;<samp><span class="samp">FOO:</span></samp>&rsquo;, then that changes the character at position 42 from
+&lsquo;<samp><span class="samp">X</span></samp>&rsquo; to &lsquo;<samp><span class="samp">F</span></samp>&rsquo;.  The next conversion will start with the wrong
+data straight away.
+
+   <p>To avoid conflict, cooperative conversions do not modify the buffer,
+but instead specify <dfn>annotations</dfn>, a list of elements of the form
+<code>(</code><var>position</var><code> . </code><var>string</var><code>)</code>, sorted in order of increasing
+<var>position</var>.
+
+   <p>If there is more than one conversion, <code>write-region</code> merges their
+annotations destructively into one sorted list.  Later, when the text
+from the buffer is actually written to the file, it intermixes the
+specified annotations at the corresponding positions.  All this takes
+place without modifying the buffer.
+
+<!-- ??? What about ``overriding'' conversions like those allowed -->
+<!-- ??? for `write-region-annotate-functions', below?  -ttn -->
+   <p>In contrast, when reading, the annotations intermixed with the text
+are handled immediately.  <code>insert-file-contents</code> sets point to
+the beginning of some text to be converted, then calls the conversion
+functions with the length of that text.  These functions should always
+return with point at the beginning of the inserted text.  This
+approach makes sense for reading because annotations removed by the
+first converter can't be mistakenly processed by a later converter. 
+Each conversion function should scan for the annotations it
+recognizes, remove the annotation, modify the buffer text (to set a
+text property, for example), and return the updated length of the
+text, as it stands after those changes.  The value returned by one
+function becomes the argument to the next function.
+
+<div class="defun">
+&mdash; Variable: <b>write-region-annotate-functions</b><var><a name="index-write_002dregion_002dannotate_002dfunctions-1908"></a></var><br>
+<blockquote><p>A list of functions for <code>write-region</code> to call.  Each function in
+the list is called with two arguments: the start and end of the region
+to be written.  These functions should not alter the contents of the
+buffer.  Instead, they should return annotations.
+
+        <p>As a special case, a function may return with a different buffer
+current.  Emacs takes this to mean that the current buffer contains
+altered text to be output.  It therefore changes the <var>start</var> and
+<var>end</var> arguments of the <code>write-region</code> call, giving them the
+values of <code>point-min</code> and <code>point-max</code> in the new buffer,
+respectively.  It also discards all previous annotations, because they
+should have been dealt with by this function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>write-region-post-annotation-function</b><var><a name="index-write_002dregion_002dpost_002dannotation_002dfunction-1909"></a></var><br>
+<blockquote><p>The value of this variable, if non-<code>nil</code>, should be a function. 
+This function is called, with no arguments, after <code>write-region</code>
+has completed.
+
+        <p>If any function in <code>write-region-annotate-functions</code> returns with
+a different buffer current, Emacs calls
+<code>write-region-post-annotation-function</code> more than once.  Emacs
+calls it with the last buffer that was current, and again with the
+buffer before that, and so on back to the original buffer.
+
+        <p>Thus, a function in <code>write-region-annotate-functions</code> can create
+a buffer, give this variable the local value of <code>kill-buffer</code> in
+that buffer, set up the buffer with altered text, and make the buffer
+current.  The buffer will be killed after <code>write-region</code> is done. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>after-insert-file-functions</b><var><a name="index-after_002dinsert_002dfile_002dfunctions-1910"></a></var><br>
+<blockquote><p>Each function in this list is called by <code>insert-file-contents</code>
+with one argument, the number of characters inserted, and with point
+at the beginning of the inserted text.  Each function should leave
+point unchanged, and return the new character count describing the
+inserted text as modified by the function. 
+<!-- ??? The docstring mentions a handler from `file-name-handler-alist' -->
+<!-- "intercepting" `insert-file-contents'.  Hmmm.  -ttn -->
+</p></blockquote></div>
+
+   <p>We invite users to write Lisp programs to store and retrieve text
+properties in files, using these hooks, and thus to experiment with
+various data formats and find good ones.  Eventually we hope users
+will produce good, general extensions we can install in Emacs.
+
+   <p>We suggest not trying to handle arbitrary Lisp objects as text property
+names or values&mdash;because a program that general is probably difficult
+to write, and slow.  Instead, choose a set of possible data types that
+are reasonably flexible, and not too hard to encode.
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1999, 2001, 2002, 2003, -->
+<!-- 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

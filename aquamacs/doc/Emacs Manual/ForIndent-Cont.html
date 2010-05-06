@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>ForIndent Cont - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fortran-Indent.html#Fortran-Indent" title="Fortran Indent">
+<link rel="prev" href="ForIndent-Commands.html#ForIndent-Commands" title="ForIndent Commands">
+<link rel="next" href="ForIndent-Num.html#ForIndent-Num" title="ForIndent Num">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="ForIndent-Cont"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ForIndent-Num.html#ForIndent-Num">ForIndent Num</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ForIndent-Commands.html#ForIndent-Commands">ForIndent Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran-Indent.html#Fortran-Indent">Fortran Indent</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">30.14.2.2 Continuation Lines</h5>
+
+<p><a name="index-Fortran-continuation-lines-2219"></a>
+<a name="index-fortran_002dcontinuation_002dstring-2220"></a>  Most Fortran 77 compilers allow two ways of writing continuation lines. 
+If the first non-space character on a line is in column 5, then that
+line is a continuation of the previous line.  We call this <dfn>fixed
+form</dfn>.  (In GNU Emacs we always count columns from 0; but note that
+the Fortran standard counts from 1.)  The variable
+<code>fortran-continuation-string</code> specifies what character to put in
+column 5.  A line that starts with a tab character followed by any digit
+except &lsquo;<samp><span class="samp">0</span></samp>&rsquo; is also a continuation line.  We call this style of
+continuation <dfn>tab format</dfn>.  (Fortran 90 introduced &ldquo;free form,&rdquo;
+with another style of continuation lines).
+
+   <p><a name="index-indent_002dtabs_002dmode-_0040r_007b_0028Fortran-mode_0029_007d-2221"></a><a name="index-fortran_002danalyze_002ddepth-2222"></a><a name="index-fortran_002dtab_002dmode_002ddefault-2223"></a>  Fortran mode can use either style of continuation line.  When you
+enter Fortran mode, it tries to deduce the proper continuation style
+automatically from the buffer contents.  It does this by scanning up to
+<code>fortran-analyze-depth</code> (default 100) lines from the start of the
+buffer.  The first line that begins with either a tab character or six
+spaces determines the choice.  If the scan fails (for example, if the
+buffer is new and therefore empty), the value of
+<code>fortran-tab-mode-default</code> (<code>nil</code> for fixed form, and
+non-<code>nil</code> for tab format) is used.  &lsquo;<samp><span class="samp">/t</span></samp>&rsquo;
+(<code>fortran-tab-mode-string</code>) in the mode line indicates tab format
+is selected.  Fortran mode sets the value of <code>indent-tabs-mode</code>
+accordingly.
+
+   <p>If the text on a line starts with the Fortran continuation marker
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo;, or if it begins with any non-whitespace character in column
+5, Fortran mode treats it as a continuation line.  When you indent a
+continuation line with &lt;TAB&gt;, it converts the line to the current
+continuation style.  When you split a Fortran statement with
+<kbd>C-M-j</kbd>, the continuation marker on the newline is created according
+to the continuation style.
+
+   <p>The setting of continuation style affects several other aspects of
+editing in Fortran mode.  In fixed form mode, the minimum column
+number for the body of a statement is 6.  Lines inside of Fortran
+blocks that are indented to larger column numbers always use only the
+space character for whitespace.  In tab format mode, the minimum
+column number for the statement body is 8, and the whitespace before
+column 8 must always consist of one tab character.
+
+   </body></html>
+

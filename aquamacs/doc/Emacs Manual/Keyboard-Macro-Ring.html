@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Keyboard Macro Ring - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link rel="prev" href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" title="Basic Keyboard Macro">
+<link rel="next" href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" title="Keyboard Macro Counter">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Keyboard-Macro-Ring"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter">Keyboard Macro Counter</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro">Basic Keyboard Macro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
+<hr>
+</div>
+
+<h3 class="section">21.2 The Keyboard Macro Ring</h3>
+
+<p>All defined keyboard macros are recorded in the <dfn>keyboard macro
+ring</dfn>.  There is only one keyboard macro ring, shared by all buffers.
+
+     <dl>
+<dt><kbd>C-x C-k C-k</kbd><dd>Execute the keyboard macro at the head of the ring (<code>kmacro-end-or-call-macro-repeat</code>). 
+<br><dt><kbd>C-x C-k C-n</kbd><dd>Rotate the keyboard macro ring to the next macro (defined earlier)
+(<code>kmacro-cycle-ring-next</code>). 
+<br><dt><kbd>C-x C-k C-p</kbd><dd>Rotate the keyboard macro ring to the previous macro (defined later)
+(<code>kmacro-cycle-ring-previous</code>). 
+</dl>
+
+   <p>All commands which operate on the keyboard macro ring use the
+same <kbd>C-x C-k</kbd> prefix.  Most of these commands can be executed and
+repeated immediately after each other without repeating the <kbd>C-x
+C-k</kbd> prefix.  For example,
+
+<pre class="example">     C-x C-k C-p C-p C-k C-k C-k C-n C-n C-k C-p C-k C-d
+</pre>
+   <p class="noindent">will rotate the keyboard macro ring to the &ldquo;second previous&rdquo; macro,
+execute the resulting head macro three times, rotate back to the
+original head macro, execute that once, rotate to the &ldquo;previous&rdquo;
+macro, execute that, and finally delete it from the macro ring.
+
+   <p><a name="index-kmacro_002dend_002dor_002dcall_002dmacro_002drepeat-771"></a><a name="index-C_002dx-C_002dk-C_002dk-772"></a>  The command <kbd>C-x C-k C-k</kbd> (<code>kmacro-end-or-call-macro-repeat</code>)
+executes the keyboard macro at the head of the macro ring.  You can
+repeat the macro immediately by typing another <kbd>C-k</kbd>, or you can
+rotate the macro ring immediately by typing <kbd>C-n</kbd> or <kbd>C-p</kbd>.
+
+   <p>When a keyboard macro is being defined, <kbd>C-x C-k C-k</kbd> behaves
+like &lt;F4&gt; except that, immediately afterward, you can use most key
+bindings of this section without the <kbd>C-x C-k</kbd> prefix.  For
+instance, another <kbd>C-k</kbd> will re-execute the macro.
+
+   <p><a name="index-kmacro_002dcycle_002dring_002dnext-773"></a><a name="index-C_002dx-C_002dk-C_002dn-774"></a><a name="index-kmacro_002dcycle_002dring_002dprevious-775"></a><a name="index-C_002dx-C_002dk-C_002dp-776"></a>  The commands <kbd>C-x C-k C-n</kbd> (<code>kmacro-cycle-ring-next</code>) and
+<kbd>C-x C-k C-p</kbd> (<code>kmacro-cycle-ring-previous</code>) rotate the
+macro ring, bringing the next or previous keyboard macro to the head
+of the macro ring.  The definition of the new head macro is displayed
+in the echo area.  You can continue to rotate the macro ring
+immediately by repeating just <kbd>C-n</kbd> and <kbd>C-p</kbd> until the
+desired macro is at the head of the ring.  To execute the new macro
+ring head immediately, just type <kbd>C-k</kbd>.
+
+   <p>Note that Emacs treats the head of the macro ring as the &ldquo;last
+defined keyboard macro.&rdquo;  For instance, &lt;F4&gt; will execute that
+macro, and <kbd>C-x C-k n</kbd> will give it a name.
+
+   <p><a name="index-kmacro_002dring_002dmax-777"></a>  The maximum number of macros stored in the keyboard macro ring is
+determined by the customizable variable <code>kmacro-ring-max</code>.
+
+   </body></html>
+

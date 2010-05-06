@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+<title>Abbrev Expansion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
+<link rel="prev" href="Abbrev-Files.html#Abbrev-Files" title="Abbrev Files">
+<link rel="next" href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables" title="Standard Abbrev Tables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Abbrev-Expansion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Files.html#Abbrev-Files">Abbrev Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">36.5 Looking Up and Expanding Abbreviations</h3>
+
+<p>Abbrevs are usually expanded by certain interactive commands,
+including <code>self-insert-command</code>.  This section describes the
+subroutines used in writing such commands, as well as the variables they
+use for communication.
+
+<div class="defun">
+&mdash; Function: <b>abbrev-symbol</b><var> abbrev &amp;optional table<a name="index-abbrev_002dsymbol-3147"></a></var><br>
+<blockquote><p>This function returns the symbol representing the abbrev named
+<var>abbrev</var>.  The value returned is <code>nil</code> if that abbrev is not
+defined.  The optional second argument <var>table</var> is the abbrev table
+in which to look it up.  If <var>table</var> is <code>nil</code>, this function
+tries first the current buffer's local abbrev table, and second the
+global abbrev table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>abbrev-expansion</b><var> abbrev &amp;optional table<a name="index-abbrev_002dexpansion-3148"></a></var><br>
+<blockquote><p>This function returns the string that <var>abbrev</var> would expand into (as
+defined by the abbrev tables used for the current buffer).  If
+<var>abbrev</var> is not a valid abbrev, the function returns <code>nil</code>. 
+The optional argument <var>table</var> specifies the abbrev table to use,
+as in <code>abbrev-symbol</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>expand-abbrev</b><var><a name="index-expand_002dabbrev-3149"></a></var><br>
+<blockquote><p>This command expands the abbrev before point, if any.  If point does not
+follow an abbrev, this command does nothing.  The command returns the
+abbrev symbol if it did expansion, <code>nil</code> otherwise.
+
+        <p>If the abbrev symbol has a hook function which is a symbol whose
+<code>no-self-insert</code> property is non-<code>nil</code>, and if the hook
+function returns <code>nil</code> as its value, then <code>expand-abbrev</code>
+returns <code>nil</code> even though expansion did occur. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>abbrev-insert</b><var> abbrev &amp;optional name start end<a name="index-abbrev_002dinsert-3150"></a></var><br>
+<blockquote><p>This function inserts the abbrev expansion of <code>abbrev</code>, replacing
+the text between <code>start</code> and <code>end</code>.  If <code>start</code> is
+omitted, it defaults to point.  <code>name</code>, if non-<code>nil</code>, should
+be the name by which this abbrev was found (a string); it is used to
+figure out whether to adjust the capitalization of the expansion.  The
+function returns <code>abbrev</code> if the abbrev was successfully
+inserted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>abbrev-prefix-mark</b><var> &amp;optional arg<a name="index-abbrev_002dprefix_002dmark-3151"></a></var><br>
+<blockquote><p>This command marks the current location of point as the beginning of
+an abbrev.  The next call to <code>expand-abbrev</code> will use the text
+from here to point (where it is then) as the abbrev to expand, rather
+than using the previous word as usual.
+
+        <p>First, this command expands any abbrev before point, unless <var>arg</var>
+is non-<code>nil</code>.  (Interactively, <var>arg</var> is the prefix argument.) 
+Then it inserts a hyphen before point, to indicate the start of the
+next abbrev to be expanded.  The actual expansion removes the hyphen. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>abbrev-all-caps</b><var><a name="index-abbrev_002dall_002dcaps-3152"></a></var><br>
+<blockquote><p>When this is set non-<code>nil</code>, an abbrev entered entirely in upper
+case is expanded using all upper case.  Otherwise, an abbrev entered
+entirely in upper case is expanded by capitalizing each word of the
+expansion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>abbrev-start-location</b><var><a name="index-abbrev_002dstart_002dlocation-3153"></a></var><br>
+<blockquote><p>The value of this variable is a buffer position (an integer or a marker)
+for <code>expand-abbrev</code> to use as the start of the next abbrev to be
+expanded.  The value can also be <code>nil</code>, which means to use the
+word before point instead.  <code>abbrev-start-location</code> is set to
+<code>nil</code> each time <code>expand-abbrev</code> is called.  This variable is
+also set by <code>abbrev-prefix-mark</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>abbrev-start-location-buffer</b><var><a name="index-abbrev_002dstart_002dlocation_002dbuffer-3154"></a></var><br>
+<blockquote><p>The value of this variable is the buffer for which
+<code>abbrev-start-location</code> has been set.  Trying to expand an abbrev
+in any other buffer clears <code>abbrev-start-location</code>.  This variable
+is set by <code>abbrev-prefix-mark</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>last-abbrev</b><var><a name="index-last_002dabbrev-3155"></a></var><br>
+<blockquote><p>This is the <code>abbrev-symbol</code> of the most recent abbrev expanded.  This
+information is left by <code>expand-abbrev</code> for the sake of the
+<code>unexpand-abbrev</code> command (see <a href="../emacs/Expanding-Abbrevs.html#Expanding-Abbrevs">Expanding Abbrevs</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>last-abbrev-location</b><var><a name="index-last_002dabbrev_002dlocation-3156"></a></var><br>
+<blockquote><p>This is the location of the most recent abbrev expanded.  This contains
+information left by <code>expand-abbrev</code> for the sake of the
+<code>unexpand-abbrev</code> command. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>last-abbrev-text</b><var><a name="index-last_002dabbrev_002dtext-3157"></a></var><br>
+<blockquote><p>This is the exact expansion text of the most recent abbrev expanded,
+after case conversion (if any).  Its value is <code>nil</code> if the abbrev
+has already been unexpanded.  This contains information left by
+<code>expand-abbrev</code> for the sake of the <code>unexpand-abbrev</code> command. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>abbrev-expand-functions</b><var><a name="index-abbrev_002dexpand_002dfunctions-3158"></a></var><br>
+<blockquote><p>This is a special hook run <em>around</em> the <code>expand-abbrev</code>
+function.  Each function on this hook is called with a single
+argument: a function that performs the normal abbrev expansion.  The
+hook function can hence do anything it wants before and after
+performing the expansion.  It can also choose not to call its
+argument, thus overriding the default behavior; or it may even call it
+several times.  The function should return the abbrev symbol if
+expansion took place. 
+</p></blockquote></div>
+
+   <p>The following sample code shows a simple use of
+<code>abbrev-expand-functions</code>.  It assumes that <code>foo-mode</code> is a
+mode for editing certain files in which lines that start with &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
+are comments.  You want to use Text mode abbrevs for those lines.  The
+regular local abbrev table, <code>foo-mode-abbrev-table</code> is
+appropriate for all other lines.  Then you can put the following code
+in your <samp><span class="file">.emacs</span></samp> file.  See <a href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>, for the
+definitions of <code>local-abbrev-table</code> and <code>text-mode-abbrev-table</code>.
+
+<pre class="smallexample">     (defun foo-mode-abbrev-expand-function (expand)
+       (if (not (save-excursion (forward-line 0) (eq (char-after) ?#)))
+           ;; Performs normal expansion.
+           (funcall expand)
+         ;; We're inside a comment: use the text-mode abbrevs.
+         (let ((local-abbrev-table text-mode-abbrev-table))
+           (funcall expand))))
+     
+     (add-hook 'foo-mode-hook
+     	  #'(lambda ()
+     	      (add-hook 'abbrev-expand-functions
+     			'foo-mode-abbrev-expand-function
+     			nil t)))
+</pre>
+   </body></html>
+

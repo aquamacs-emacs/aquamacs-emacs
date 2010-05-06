@@ -59,10 +59,25 @@
   "Default face for Org-Mode in `aquamacs-autoface-mode'"
   :group 'Aquamacs)
 
+;; do not inherit from autoface-default here, in case auto-face-mode is
+;; switched off.
 (defface echo-area
  '((((type ns))
-    :inherit autoface-default :height 120 :weight normal :width normal
+    ;; height same as for global default font (Monaco)
+    :weight normal :width normal
     :slant normal :underline nil :strike-through nil :stipple nil
     :family "Lucida Grande"))
  "Face for Echo area (minibuffer and messages)."
+ :group 'basic-faces
  :group 'Aquamacs)
+
+(defface minibuffer
+ '((t :inherit echo-area))
+ "Face for Echo area (minibuffer and messages)."
+ :group 'basic-faces
+ :group 'Aquamacs)
+
+;; this should inherit from echo-area
+; override face defined in faces.el
+(set-face-attribute 'minibuffer-prompt nil 
+		    :inherit 'minibuffer)

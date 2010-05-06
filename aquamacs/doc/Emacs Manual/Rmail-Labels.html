@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Rmail Labels - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rmail.html#Rmail" title="Rmail">
+<link rel="prev" href="Rmail-Output.html#Rmail-Output" title="Rmail Output">
+<link rel="next" href="Rmail-Attributes.html#Rmail-Attributes" title="Rmail Attributes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rmail-Labels"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Output.html#Rmail-Output">Rmail Output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr>
+</div>
+
+<h3 class="section">36.8 Labels</h3>
+
+<p><a name="index-label-_0028Rmail_0029-2845"></a><a name="index-attribute-_0028Rmail_0029-2846"></a>
+  Each message can have various <dfn>labels</dfn> assigned to it as a means
+of classification.  Each label has a name; different names are different
+labels.  Any given label is either present or absent on a particular
+message.  A few label names have standard meanings and are given to
+messages automatically by Rmail when appropriate; these special labels
+are called <dfn>attributes</dfn>. 
+(See <a href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>.) 
+All other labels are assigned only by users.
+
+     <dl>
+<dt><kbd>a </kbd><var>label</var><kbd> &lt;RET&gt;</kbd><dd>Assign the label <var>label</var> to the current message (<code>rmail-add-label</code>). 
+<br><dt><kbd>k </kbd><var>label</var><kbd> &lt;RET&gt;</kbd><dd>Remove the label <var>label</var> from the current message (<code>rmail-kill-label</code>). 
+<br><dt><kbd>C-M-n </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dd>Move to the next message that has one of the labels <var>labels</var>
+(<code>rmail-next-labeled-message</code>). 
+<br><dt><kbd>C-M-p </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dd>Move to the previous message that has one of the labels <var>labels</var>
+(<code>rmail-previous-labeled-message</code>). 
+<br><dt><kbd>l </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dt><kbd>C-M-l </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dd>Make a summary of all messages containing any of the labels <var>labels</var>
+(<code>rmail-summary-by-labels</code>). 
+</dl>
+
+   <p><a name="index-a-_0040r_007b_0028Rmail_0029_007d-2847"></a><a name="index-k-_0040r_007b_0028Rmail_0029_007d-2848"></a><a name="index-rmail_002dadd_002dlabel-2849"></a><a name="index-rmail_002dkill_002dlabel-2850"></a>  The <kbd>a</kbd> (<code>rmail-add-label</code>) and <kbd>k</kbd>
+(<code>rmail-kill-label</code>) commands allow you to assign or remove any
+label on the current message.  If the <var>label</var> argument is empty, it
+means to assign or remove the same label most recently assigned or
+removed.
+
+   <p>Once you have given messages labels to classify them as you wish, there
+are three ways to use the labels: in moving, in summaries, and in sorting.
+
+   <p><a name="index-C_002dM_002dn-_0040r_007b_0028Rmail_0029_007d-2851"></a><a name="index-C_002dM_002dp-_0040r_007b_0028Rmail_0029_007d-2852"></a><a name="index-rmail_002dnext_002dlabeled_002dmessage-2853"></a><a name="index-rmail_002dprevious_002dlabeled_002dmessage-2854"></a>  The command <kbd>C-M-n </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd>
+(<code>rmail-next-labeled-message</code>) moves to the next message that has
+one of the labels <var>labels</var>.  The argument <var>labels</var> specifies one
+or more label names, separated by commas.  <kbd>C-M-p</kbd>
+(<code>rmail-previous-labeled-message</code>) is similar, but moves backwards
+to previous messages.  A numeric argument to either command serves as a
+repeat count.
+
+   <p>The command <kbd>C-M-l </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd>
+(<code>rmail-summary-by-labels</code>) displays a summary containing only the
+messages that have at least one of a specified set of labels.  The
+argument <var>labels</var> is one or more label names, separated by commas. 
+See <a href="Rmail-Summary.html#Rmail-Summary">Rmail Summary</a>, for information on summaries.
+
+   <p>If the <var>labels</var> argument to <kbd>C-M-n</kbd>, <kbd>C-M-p</kbd> or
+<kbd>C-M-l</kbd> is empty, it means to use the last set of labels specified
+for any of these commands.
+
+   <p>See <a href="Rmail-Sorting.html#Rmail-Sorting">Rmail Sorting</a>, for information on sorting messages with labels.
+
+   </body></html>
+

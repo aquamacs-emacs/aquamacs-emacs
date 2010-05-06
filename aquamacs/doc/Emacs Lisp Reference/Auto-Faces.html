@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Auto Faces - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Faces.html#Faces" title="Faces">
+<link rel="prev" href="Face-Functions.html#Face-Functions" title="Face Functions">
+<link rel="next" href="Font-Selection.html#Font-Selection" title="Font Selection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Auto-Faces"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Font-Selection.html#Font-Selection">Font Selection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Face-Functions.html#Face-Functions">Face Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.12.7 Automatic Face Assignment</h4>
+
+<p><a name="index-automatic-face-assignment-3470"></a><a name="index-faces_002c-automatic-choice-3471"></a>
+  This hook is used for automatically assigning faces to text in the
+buffer.  It is part of the implementation of Jit-Lock mode, used by
+Font-Lock.
+
+<div class="defun">
+&mdash; Variable: <b>fontification-functions</b><var><a name="index-fontification_002dfunctions-3472"></a></var><br>
+<blockquote><p>This variable holds a list of functions that are called by Emacs
+redisplay as needed, just before doing redisplay.  They are called even
+when Font Lock Mode isn't enabled.  When Font Lock Mode is enabled, this
+variable usually holds just one function, <code>jit-lock-function</code>.
+
+        <p>The functions are called in the order listed, with one argument, a
+buffer position <var>pos</var>.  Collectively they should attempt to assign
+faces to the text in the current buffer starting at <var>pos</var>.
+
+        <p>The functions should record the faces they assign by setting the
+<code>face</code> property.  They should also add a non-<code>nil</code>
+<code>fontified</code> property to all the text they have assigned faces to. 
+That property tells redisplay that faces have been assigned to that text
+already.
+
+        <p>It is probably a good idea for the functions to do nothing if the
+character after <var>pos</var> already has a non-<code>nil</code> <code>fontified</code>
+property, but this is not required.  If one function overrides the
+assignments made by a previous one, the properties after the last
+function finishes are the ones that really matter.
+
+        <p>For efficiency, we recommend writing these functions so that they
+usually assign faces to around 400 to 600 characters at each call. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -26,7 +26,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007, 2008, 2009: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2008, 2009, 2010: David Reitter
 
 
 (require 'aquamacs-tools)
@@ -264,10 +264,15 @@ Separate paths from file names with --."
 		       'default  
 		       aquamacs-default-styles))))))
     (when (< aquamacs-customization-version-id 162)
-      (aquamacs-import-frame-parameters-to-auto-faces)) 
-    ;; Print warnings / compatibility options
-    
-
+      (aquamacs-import-frame-parameters-to-auto-faces))
+    (when (< aquamacs-customization-version-id 208)
+      (setq aquamacs-tool-bar-user-customization
+	    (mapcar (lambda (x)
+		      (cons (logand ?\x3FFFFFF (car x)) (cdr x)))
+		    aquamacs-tool-bar-user-customization))
+      (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
+      (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
+  
 ;; Emacs 23 transition
 
 ;; add to default-frame-alist:  (internal-border-width . 0)
@@ -383,7 +388,7 @@ un-Mac-like way when you select text and copy&paste it.")))
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize 	
-      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2009 Free Software Foundation, Inc. (C) 2009 D. Reitter. No Warranty.") 
+      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2010 Free Software Foundation, Inc. (C) 2010 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
@@ -604,7 +609,8 @@ No errors are signaled."
 	    (setq buffer-file-coding-system 'utf-8)
 	    (add-hook 'before-save-hook 
 		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
-		      nil 'local))
+		      nil 'local)
+	    (funcall initial-major-mode)) ; ensure mode hooks are run
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
@@ -753,10 +759,18 @@ yes-or-no prompts - y or n will do."
   (defun aquamacs-setup-echo-areas (&optional frame)
     (mapc (lambda (bname)
 	    (with-current-buffer (get-buffer-create bname)
-	      (setq face-remapping-alist '((default . echo-area)))))
+	        (set (make-local-variable 'face-remapping-alist)
+		     (cons '(default . echo-area)
+			   (default-value 'face-remapping-alist)))))
 	  '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
+  (defun aquamacs-set-minibuffer-face ()
+    (set (make-local-variable 'face-remapping-alist)
+	 (cons '(default . minibuffer)
+	       face-remapping-alist)))
+
   (add-hook 'after-make-frame-functions 'aquamacs-setup-echo-areas)
   (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
+  (add-hook 'minibuffer-setup-hook 'aquamacs-set-minibuffer-face)
   (aquamacs-setup-echo-areas)
 
   ;; tabbar needs to be defined before osxkeys
@@ -896,7 +910,7 @@ yes-or-no prompts - y or n will do."
 (require 'saveplace)
 ;;  (require 'longlines) 
 (aquamacs-set-defaults 
-   `((line-move-visual t)
+   `((line-move-visual arrow-keys-only)
      (text-mode-hook (smart-spacing-mode auto-detect-wrap)) 
      (save-place t)
      (save-place-limit 500) ;; speed on quit
@@ -941,7 +955,9 @@ yes-or-no prompts - y or n will do."
 
      (enable-recursive-minibuffers t)
  
-     (longlines-wrap-follows-window-size t)
+     ;; menu strings
+     (buffer-menu-modified-string "\u25CF")
+     (buffer-menu-read-only-string "(read-only)")
 
      ;; do not allow user to mess with minibuffer prompt
 
@@ -1390,6 +1406,7 @@ listed here."
 	      display-time-mode 
 	      display-battery-mode
 	      one-buffer-one-frame-mode 
+	      visual-line-mode ; set by line wrapping menu functions
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
 	      aquamacs-tool-bar-user-customization
@@ -1425,8 +1442,8 @@ listed here."
      ;; Nonetheless, not saving it would like be confuse
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-     text-mode-hook
-
+     text-mode-hook 
+     word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
      blink-cursor-mode
      aquamacs-customization-version-id
      mac-print-monochrome-mode

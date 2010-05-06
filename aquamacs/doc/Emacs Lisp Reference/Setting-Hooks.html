@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Setting Hooks - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hooks.html#Hooks" title="Hooks">
+<link rel="prev" href="Running-Hooks.html#Running-Hooks" title="Running Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Setting-Hooks"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Running-Hooks.html#Running-Hooks">Running Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hooks.html#Hooks">Hooks</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.1.2 Setting Hooks</h4>
+
+<p>Here's an example that uses a mode hook to turn on Auto Fill mode when
+in Lisp Interaction mode:
+
+<pre class="example">     (add-hook 'lisp-interaction-mode-hook 'turn-on-auto-fill)
+</pre>
+   <div class="defun">
+&mdash; Function: <b>add-hook</b><var> hook function &amp;optional append local<a name="index-add_002dhook-1580"></a></var><br>
+<blockquote><p>This function is the handy way to add function <var>function</var> to hook
+variable <var>hook</var>.  You can use it for abnormal hooks as well as for
+normal hooks.  <var>function</var> can be any Lisp function that can accept
+the proper number of arguments for <var>hook</var>.  For example,
+
+     <pre class="example">          (add-hook 'text-mode-hook 'my-text-hook-function)
+</pre>
+        <p class="noindent">adds <code>my-text-hook-function</code> to the hook called <code>text-mode-hook</code>.
+
+        <p>If <var>function</var> is already present in <var>hook</var> (comparing using
+<code>equal</code>), then <code>add-hook</code> does not add it a second time.
+
+        <p>If <var>function</var> has a non-<code>nil</code> property
+<code>permanent-local-hook</code>, then <code>kill-all-local-variables</code> (or
+changing major modes) won't delete it from the hook variable's local
+value.
+
+        <p>It is best to design your hook functions so that the order in which
+they are executed does not matter.  Any dependence on the order is
+asking for trouble.  However, the order is predictable: normally,
+<var>function</var> goes at the front of the hook list, so it will be
+executed first (barring another <code>add-hook</code> call).  If the
+optional argument <var>append</var> is non-<code>nil</code>, the new hook
+function goes at the end of the hook list and will be executed last.
+
+        <p><code>add-hook</code> can handle the cases where <var>hook</var> is void or its
+value is a single function; it sets or changes the value to a list of
+functions.
+
+        <p>If <var>local</var> is non-<code>nil</code>, that says to add <var>function</var> to
+the buffer-local hook list instead of to the global hook list.  If
+needed, this makes the hook buffer-local and adds <code>t</code> to the
+buffer-local value.  The latter acts as a flag to run the hook
+functions in the default value as well as in the local value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>remove-hook</b><var> hook function &amp;optional local<a name="index-remove_002dhook-1581"></a></var><br>
+<blockquote><p>This function removes <var>function</var> from the hook variable
+<var>hook</var>.  It compares <var>function</var> with elements of <var>hook</var>
+using <code>equal</code>, so it works for both symbols and lambda
+expressions.
+
+        <p>If <var>local</var> is non-<code>nil</code>, that says to remove <var>function</var>
+from the buffer-local hook list instead of from the global hook list. 
+</p></blockquote></div>
+
+   </body></html>
+

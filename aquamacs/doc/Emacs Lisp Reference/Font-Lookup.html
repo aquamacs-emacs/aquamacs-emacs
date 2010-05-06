@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Font Lookup - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Faces.html#Faces" title="Faces">
+<link rel="prev" href="Font-Selection.html#Font-Selection" title="Font Selection">
+<link rel="next" href="Fontsets.html#Fontsets" title="Fontsets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Font-Lookup"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fontsets.html#Fontsets">Fontsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Selection.html#Font-Selection">Font Selection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.12.9 Looking Up Fonts</h4>
+
+<div class="defun">
+&mdash; Function: <b>x-list-fonts</b><var> name &amp;optional reference-face frame maximum width<a name="index-x_002dlist_002dfonts-3478"></a></var><br>
+<blockquote><p>This function returns a list of available font names that match
+<var>name</var>.  <var>name</var> should be a string containing a font name in
+either the Fontconfig, GTK, or XLFD format (see <a href="../emacs/Font-X.html#Font-X">Font Specification Options</a>).  Within an XLFD
+string, wildcard characters may be used: the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; character
+matches any substring, and the &lsquo;<samp><span class="samp">?</span></samp>&rsquo; character matches any single
+character.  Case is ignored when matching font names.
+
+        <p>If the optional arguments <var>reference-face</var> and <var>frame</var> are
+specified, the returned list includes only fonts that are the same
+size as <var>reference-face</var> (a face name) currently is on the frame
+<var>frame</var>.
+
+        <p>The optional argument <var>maximum</var> sets a limit on how many fonts to
+return.  If it is non-<code>nil</code>, then the return value is truncated
+after the first <var>maximum</var> matching fonts.  Specifying a small
+value for <var>maximum</var> can make this function much faster, in cases
+where many fonts match the pattern.
+
+        <p>The optional argument <var>width</var> specifies a desired font width.  If
+it is non-<code>nil</code>, the function only returns those fonts whose
+characters are (on average) <var>width</var> times as wide as
+<var>reference-face</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-family-fonts</b><var> &amp;optional family frame<a name="index-x_002dfamily_002dfonts-3479"></a></var><br>
+<blockquote><p>This function returns a list describing the available fonts for family
+<var>family</var> on <var>frame</var>.  If <var>family</var> is omitted or <code>nil</code>,
+this list applies to all families, and therefore, it contains all
+available fonts.  Otherwise, <var>family</var> must be a string; it may
+contain the wildcards &lsquo;<samp><span class="samp">?</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.
+
+        <p>The list describes the display that <var>frame</var> is on; if <var>frame</var> is
+omitted or <code>nil</code>, it applies to the selected frame's display
+(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
+
+        <p>Each element in the list is a vector of the following form:
+
+     <pre class="example">          [<var>family</var> <var>width</var> <var>point-size</var> <var>weight</var> <var>slant</var>
+           <var>fixed-p</var> <var>full</var> <var>registry-and-encoding</var>]
+</pre>
+        <p>The first five elements correspond to face attributes; if you
+specify these attributes for a face, it will use this font.
+
+        <p>The last three elements give additional information about the font. 
+<var>fixed-p</var> is non-<code>nil</code> if the font is fixed-pitch. 
+<var>full</var> is the full name of the font, and
+<var>registry-and-encoding</var> is a string giving the registry and
+encoding of the font. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>font-list-limit</b><var><a name="index-font_002dlist_002dlimit-3480"></a></var><br>
+<blockquote><p>This variable specifies maximum number of fonts to consider in font
+matching.  The function <code>x-family-fonts</code> will not return more than
+that many fonts, and font selection will consider only that many fonts
+when searching a matching font for face attributes.  The default is
+currently 100. 
+</p></blockquote></div>
+
+   </body></html>
+

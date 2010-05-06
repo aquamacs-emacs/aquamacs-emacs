@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Expansion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Simple-Macro.html#Simple-Macro" title="Simple Macro">
+<link rel="next" href="Compiling-Macros.html#Compiling-Macros" title="Compiling Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Expansion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Macro.html#Simple-Macro">Simple Macro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h3 class="section">13.2 Expansion of a Macro Call</h3>
+
+<p><a name="index-expansion-of-macros-734"></a><a name="index-macro-call-735"></a>
+  A macro call looks just like a function call in that it is a list which
+starts with the name of the macro.  The rest of the elements of the list
+are the arguments of the macro.
+
+   <p>Evaluation of the macro call begins like evaluation of a function call
+except for one crucial difference: the macro arguments are the actual
+expressions appearing in the macro call.  They are not evaluated before
+they are given to the macro definition.  By contrast, the arguments of a
+function are results of evaluating the elements of the function call
+list.
+
+   <p>Having obtained the arguments, Lisp invokes the macro definition just
+as a function is invoked.  The argument variables of the macro are bound
+to the argument values from the macro call, or to a list of them in the
+case of a <code>&amp;rest</code> argument.  And the macro body executes and
+returns its value just as a function body does.
+
+   <p>The second crucial difference between macros and functions is that the
+value returned by the macro body is not the value of the macro call. 
+Instead, it is an alternate expression for computing that value, also
+known as the <dfn>expansion</dfn> of the macro.  The Lisp interpreter
+proceeds to evaluate the expansion as soon as it comes back from the
+macro.
+
+   <p>Since the expansion is evaluated in the normal manner, it may contain
+calls to other macros.  It may even be a call to the same macro, though
+this is unusual.
+
+   <p>You can see the expansion of a given macro call by calling
+<code>macroexpand</code>.
+
+<div class="defun">
+&mdash; Function: <b>macroexpand</b><var> form &amp;optional environment<a name="index-macroexpand-736"></a></var><br>
+<blockquote><p><a name="index-macro-expansion-737"></a>This function expands <var>form</var>, if it is a macro call.  If the result
+is another macro call, it is expanded in turn, until something which is
+not a macro call results.  That is the value returned by
+<code>macroexpand</code>.  If <var>form</var> is not a macro call to begin with, it
+is returned as given.
+
+        <p>Note that <code>macroexpand</code> does not look at the subexpressions of
+<var>form</var> (although some macro definitions may do so).  Even if they
+are macro calls themselves, <code>macroexpand</code> does not expand them.
+
+        <p>The function <code>macroexpand</code> does not expand calls to inline functions. 
+Normally there is no need for that, since a call to an inline function is
+no harder to understand than a call to an ordinary function.
+
+        <p>If <var>environment</var> is provided, it specifies an alist of macro
+definitions that shadow the currently defined macros.  Byte compilation
+uses this feature.
+
+     <pre class="smallexample">          (defmacro inc (var)
+              (list 'setq var (list '1+ var)))
+               &rArr; inc
+          
+          (macroexpand '(inc r))
+               &rArr; (setq r (1+ r))
+          
+          (defmacro inc2 (var1 var2)
+              (list 'progn (list 'inc var1) (list 'inc var2)))
+               &rArr; inc2
+          
+          (macroexpand '(inc2 r s))
+               &rArr; (progn (inc r) (inc s))  ; <code>inc</code><span class="roman"> not expanded here.</span>
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>macroexpand-all</b><var> form &amp;optional environment<a name="index-macroexpand_002dall-738"></a></var><br>
+<blockquote><p><code>macroexpand-all</code> expands macros like <code>macroexpand</code>, but
+will look for and expand all macros in <var>form</var>, not just at the
+top-level.  If no macros are expanded, the return value is <code>eq</code>
+to <var>form</var>.
+
+        <p>Repeating the example used for <code>macroexpand</code> above with
+<code>macroexpand-all</code>, we see that <code>macroexpand-all</code> <em>does</em>
+expand the embedded calls to <code>inc</code>:
+
+     <pre class="smallexample">          (macroexpand-all '(inc2 r s))
+               &rArr; (progn (setq r (1+ r)) (setq s (1+ s)))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

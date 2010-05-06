@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Foldout - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Outline-Mode.html#Outline-Mode" title="Outline Mode">
+<link rel="prev" href="Outline-Views.html#Outline-Views" title="Outline Views">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Foldout"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Outline-Views.html#Outline-Views">Outline Views</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.8.5 Folding Editing</h4>
+
+<p><a name="index-folding-editing-1695"></a>  The Foldout package extends Outline mode and Outline minor mode with
+&ldquo;folding&rdquo; commands.  The idea of folding is that you zoom in on a
+nested portion of the outline, while hiding its relatives at higher
+levels.
+
+   <p>Consider an Outline mode buffer with all the text and subheadings under
+level-1 headings hidden.  To look at what is hidden under one of these
+headings, you could use <kbd>C-c C-e</kbd> (<kbd>M-x show-entry</kbd>) to expose
+the body, or <kbd>C-c C-i</kbd> to expose the child (level-2) headings.
+
+   <p><a name="index-C_002dc-C_002dz-1696"></a><a name="index-foldout_002dzoom_002dsubtree-1697"></a>  With Foldout, you use <kbd>C-c C-z</kbd> (<kbd>M-x foldout-zoom-subtree</kbd>). 
+This exposes the body and child subheadings, and narrows the buffer so
+that only the level-1<!-- /@w --> heading, the body and the level-2 headings are
+visible.  Now to look under one of the level-2 headings, position the
+cursor on it and use <kbd>C-c C-z</kbd> again.  This exposes the level-2 body
+and its level-3 child subheadings and narrows the buffer again.  Zooming
+in on successive subheadings can be done as much as you like.  A string
+in the mode line shows how deep you've gone.
+
+   <p>When zooming in on a heading, to see only the child subheadings specify
+a numeric argument: <kbd>C-u C-c C-z</kbd>.  The number of levels of children
+can be specified too (compare <kbd>M-x show-children</kbd>), e.g. <kbd>M-2
+C-c C-z</kbd> exposes two levels of child subheadings.  Alternatively, the
+body can be specified with a negative argument: <kbd>M-- C-c C-z</kbd>.  The
+whole subtree can be expanded, similarly to <kbd>C-c C-s</kbd> (<kbd>M-x
+show-subtree</kbd>), by specifying a zero argument: <kbd>M-0 C-c C-z</kbd>.
+
+   <p>While you're zoomed in, you can still use Outline mode's exposure and
+hiding functions without disturbing Foldout.  Also, since the buffer is
+narrowed, &ldquo;global&rdquo; editing actions will only affect text under the
+zoomed-in heading.  This is useful for restricting changes to a
+particular chapter or section of your document.
+
+   <p><a name="index-C_002dc-C_002dx-1698"></a><a name="index-foldout_002dexit_002dfold-1699"></a>  To unzoom (exit) a fold, use <kbd>C-c C-x</kbd> (<kbd>M-x foldout-exit-fold</kbd>). 
+This hides all the text and subheadings under the top-level heading and
+returns you to the previous view of the buffer.  Specifying a numeric
+argument exits that many levels of folds.  Specifying a zero argument
+exits all folds.
+
+   <p>To cancel the narrowing of a fold without hiding the text and
+subheadings, specify a negative argument.  For example, <kbd>M--2 C-c
+C-x</kbd> exits two folds and leaves the text and subheadings exposed.
+
+   <p>Foldout mode also provides mouse commands for entering and exiting
+folds, and for showing and hiding text:
+
+     <dl>
+<dt><kbd>C-M-Mouse-1</kbd> zooms in on the heading clicked on<dd>
+          <ul>
+<li>single click: expose body. 
+<li>double click: expose subheadings. 
+<li>triple click: expose body and subheadings. 
+<li>quad click: expose entire subtree. 
+</ul>
+     <br><dt><kbd>C-M-Mouse-2</kbd> exposes text under the heading clicked on<dd>
+          <ul>
+<li>single click: expose body. 
+<li>double click: expose subheadings. 
+<li>triple click: expose body and subheadings. 
+<li>quad click: expose entire subtree. 
+</ul>
+     <br><dt><kbd>C-M-Mouse-3</kbd> hides text under the heading clicked on or exits fold<dd>
+          <ul>
+<li>single click: hide subtree. 
+<li>double click: exit fold and hide text. 
+<li>triple click: exit fold without hiding text. 
+<li>quad click: exit all folds and hide text. 
+</ul>
+     </dl>
+
+   <p><a name="index-foldout_002dmouse_002dmodifiers-1700"></a>  You can specify different modifier keys (instead of
+<kbd>Control-Meta-</kbd>) by setting <code>foldout-mouse-modifiers</code>; but if
+you have already loaded the <samp><span class="file">foldout.el</span></samp> library, you must reload
+it in order for this to take effect.
+
+   <p>To use the Foldout package, you can type <kbd>M-x load-library
+&lt;RET&gt; foldout &lt;RET&gt;</kbd>; or you can arrange for to do that
+automatically by putting this in your <samp><span class="file">.emacs</span></samp> file:
+
+<pre class="example">     (eval-after-load "outline" '(require 'foldout))
+</pre>
+   </body></html>
+

@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Signals to Processes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Input-to-Processes.html#Input-to-Processes" title="Input to Processes">
+<link rel="next" href="Output-from-Processes.html#Output-from-Processes" title="Output from Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Signals-to-Processes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-to-Processes.html#Input-to-Processes">Input to Processes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.8 Sending Signals to Processes</h3>
+
+<p><a name="index-process-signals-3232"></a><a name="index-sending-signals-3233"></a><a name="index-signals-3234"></a>
+  <dfn>Sending a signal</dfn> to a subprocess is a way of interrupting its
+activities.  There are several different signals, each with its own
+meaning.  The set of signals and their names is defined by the operating
+system.  For example, the signal <code>SIGINT</code> means that the user has
+typed <kbd>C-c</kbd>, or that some analogous thing has happened.
+
+   <p>Each signal has a standard effect on the subprocess.  Most signals
+kill the subprocess, but some stop or resume execution instead.  Most
+signals can optionally be handled by programs; if the program handles
+the signal, then we can say nothing in general about its effects.
+
+   <p>You can send signals explicitly by calling the functions in this
+section.  Emacs also sends signals automatically at certain times:
+killing a buffer sends a <code>SIGHUP</code> signal to all its associated
+processes; killing Emacs sends a <code>SIGHUP</code> signal to all remaining
+processes.  (<code>SIGHUP</code> is a signal that usually indicates that the
+user hung up the phone.)
+
+   <p>Each of the signal-sending functions takes two optional arguments:
+<var>process</var> and <var>current-group</var>.
+
+   <p>The argument <var>process</var> must be either a process, a process
+name, a buffer, a buffer name, or <code>nil</code>.  A buffer or buffer name
+stands for a process through <code>get-buffer-process</code>.  <code>nil</code>
+stands for the process associated with the current buffer.  An error
+is signaled if <var>process</var> does not identify a process.
+
+   <p>The argument <var>current-group</var> is a flag that makes a difference
+when you are running a job-control shell as an Emacs subprocess.  If it
+is non-<code>nil</code>, then the signal is sent to the current process-group
+of the terminal that Emacs uses to communicate with the subprocess.  If
+the process is a job-control shell, this means the shell's current
+subjob.  If it is <code>nil</code>, the signal is sent to the process group of
+the immediate subprocess of Emacs.  If the subprocess is a job-control
+shell, this is the shell itself.
+
+   <p>The flag <var>current-group</var> has no effect when a pipe is used to
+communicate with the subprocess, because the operating system does not
+support the distinction in the case of pipes.  For the same reason,
+job-control shells won't work when a pipe is used.  See
+<code>process-connection-type</code> in <a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>.
+
+<div class="defun">
+&mdash; Function: <b>interrupt-process</b><var> &amp;optional process current-group<a name="index-interrupt_002dprocess-3235"></a></var><br>
+<blockquote><p>This function interrupts the process <var>process</var> by sending the
+signal <code>SIGINT</code>.  Outside of Emacs, typing the &ldquo;interrupt
+character&rdquo; (normally <kbd>C-c</kbd> on some systems, and <code>DEL</code> on
+others) sends this signal.  When the argument <var>current-group</var> is
+non-<code>nil</code>, you can think of this function as &ldquo;typing <kbd>C-c</kbd>&rdquo;
+on the terminal by which Emacs talks to the subprocess. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>kill-process</b><var> &amp;optional process current-group<a name="index-kill_002dprocess-3236"></a></var><br>
+<blockquote><p>This function kills the process <var>process</var> by sending the
+signal <code>SIGKILL</code>.  This signal kills the subprocess immediately,
+and cannot be handled by the subprocess. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>quit-process</b><var> &amp;optional process current-group<a name="index-quit_002dprocess-3237"></a></var><br>
+<blockquote><p>This function sends the signal <code>SIGQUIT</code> to the process
+<var>process</var>.  This signal is the one sent by the &ldquo;quit
+character&rdquo; (usually <kbd>C-b</kbd> or <kbd>C-\</kbd>) when you are not inside
+Emacs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>stop-process</b><var> &amp;optional process current-group<a name="index-stop_002dprocess-3238"></a></var><br>
+<blockquote><p>This function stops the process <var>process</var> by sending the
+signal <code>SIGTSTP</code>.  Use <code>continue-process</code> to resume its
+execution.
+
+        <p>Outside of Emacs, on systems with job control, the &ldquo;stop character&rdquo;
+(usually <kbd>C-z</kbd>) normally sends this signal.  When
+<var>current-group</var> is non-<code>nil</code>, you can think of this function as
+&ldquo;typing <kbd>C-z</kbd>&rdquo; on the terminal Emacs uses to communicate with the
+subprocess. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>continue-process</b><var> &amp;optional process current-group<a name="index-continue_002dprocess-3239"></a></var><br>
+<blockquote><p>This function resumes execution of the process <var>process</var> by sending
+it the signal <code>SIGCONT</code>.  This presumes that <var>process</var> was
+stopped previously. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>signal-process</b><var> process signal<a name="index-signal_002dprocess-3240"></a></var><br>
+<blockquote><p>This function sends a signal to process <var>process</var>.  The argument
+<var>signal</var> specifies which signal to send; it should be an integer.
+
+        <p>The <var>process</var> argument can be a system process <acronym>ID</acronym>; that
+allows you to send signals to processes that are not children of
+Emacs.  See <a href="System-Processes.html#System-Processes">System Processes</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,267 @@
+<html lang="en">
+<head>
+<title>Creating Strings - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
+<link rel="prev" href="Predicates-for-Strings.html#Predicates-for-Strings" title="Predicates for Strings">
+<link rel="next" href="Modifying-Strings.html#Modifying-Strings" title="Modifying Strings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Creating-Strings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modifying-Strings.html#Modifying-Strings">Modifying Strings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Predicates-for-Strings.html#Predicates-for-Strings">Predicates for Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Creating Strings</h3>
+
+<p>The following functions create strings, either from scratch, or by
+putting strings together, or by taking them apart.
+
+<div class="defun">
+&mdash; Function: <b>make-string</b><var> count character<a name="index-make_002dstring-223"></a></var><br>
+<blockquote><p>This function returns a string made up of <var>count</var> repetitions of
+<var>character</var>.  If <var>count</var> is negative, an error is signaled.
+
+     <pre class="example">          (make-string 5 ?x)
+               &rArr; "xxxxx"
+          (make-string 0 ?x)
+               &rArr; ""
+</pre>
+        <p>Other functions to compare with this one include <code>char-to-string</code>
+(see <a href="String-Conversion.html#String-Conversion">String Conversion</a>), <code>make-vector</code> (see <a href="Vectors.html#Vectors">Vectors</a>), and
+<code>make-list</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string</b><var> &amp;rest characters<a name="index-string-224"></a></var><br>
+<blockquote><p>This returns a string containing the characters <var>characters</var>.
+
+     <pre class="example">          (string ?a ?b ?c)
+               &rArr; "abc"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>substring</b><var> string start &amp;optional end<a name="index-substring-225"></a></var><br>
+<blockquote><p>This function returns a new string which consists of those characters
+from <var>string</var> in the range from (and including) the character at the
+index <var>start</var> up to (but excluding) the character at the index
+<var>end</var>.  The first character is at index zero.
+
+     <pre class="example">          (substring "abcdefg" 0 3)
+               &rArr; "abc"
+</pre>
+        <p class="noindent">In the above example, the index for &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is 0, the index for
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; is 1, and the index for &lsquo;<samp><span class="samp">c</span></samp>&rsquo; is 2.  The index 3&mdash;which
+is the fourth character in the string&mdash;marks the character position
+up to which the substring is copied.  Thus, &lsquo;<samp><span class="samp">abc</span></samp>&rsquo; is copied from
+the string <code>"abcdefg"</code>.
+
+        <p>A negative number counts from the end of the string, so that &minus;1
+signifies the index of the last character of the string.  For example:
+
+     <pre class="example">          (substring "abcdefg" -3 -1)
+               &rArr; "ef"
+</pre>
+        <p class="noindent">In this example, the index for &lsquo;<samp><span class="samp">e</span></samp>&rsquo; is &minus;3, the index for
+&lsquo;<samp><span class="samp">f</span></samp>&rsquo; is &minus;2, and the index for &lsquo;<samp><span class="samp">g</span></samp>&rsquo; is &minus;1. 
+Therefore, &lsquo;<samp><span class="samp">e</span></samp>&rsquo; and &lsquo;<samp><span class="samp">f</span></samp>&rsquo; are included, and &lsquo;<samp><span class="samp">g</span></samp>&rsquo; is excluded.
+
+        <p>When <code>nil</code> is used for <var>end</var>, it stands for the length of the
+string.  Thus,
+
+     <pre class="example">          (substring "abcdefg" -3 nil)
+               &rArr; "efg"
+</pre>
+        <p>Omitting the argument <var>end</var> is equivalent to specifying <code>nil</code>. 
+It follows that <code>(substring </code><var>string</var><code> 0)</code> returns a copy of all
+of <var>string</var>.
+
+     <pre class="example">          (substring "abcdefg" 0)
+               &rArr; "abcdefg"
+</pre>
+        <p class="noindent">But we recommend <code>copy-sequence</code> for this purpose (see <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>).
+
+        <p>If the characters copied from <var>string</var> have text properties, the
+properties are copied into the new string also.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
+
+        <p><code>substring</code> also accepts a vector for the first argument. 
+For example:
+
+     <pre class="example">          (substring [a b (c) "d"] 1 3)
+               &rArr; [b (c)]
+</pre>
+        <p>A <code>wrong-type-argument</code> error is signaled if <var>start</var> is not
+an integer or if <var>end</var> is neither an integer nor <code>nil</code>.  An
+<code>args-out-of-range</code> error is signaled if <var>start</var> indicates a
+character following <var>end</var>, or if either integer is out of range
+for <var>string</var>.
+
+        <p>Contrast this function with <code>buffer-substring</code> (see <a href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>), which returns a string containing a portion of the text in
+the current buffer.  The beginning of a string is at index 0, but the
+beginning of a buffer is at index 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>substring-no-properties</b><var> string &amp;optional start end<a name="index-substring_002dno_002dproperties-226"></a></var><br>
+<blockquote><p>This works like <code>substring</code> but discards all text properties from
+the value.  Also, <var>start</var> may be omitted or <code>nil</code>, which is
+equivalent to 0.  Thus, <code>(substring-no-properties&nbsp;</code><var>string</var><code>)</code><!-- /@w --> returns a copy of <var>string</var>, with all text
+properties removed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>concat</b><var> &amp;rest sequences<a name="index-concat-227"></a></var><br>
+<blockquote><p><a name="index-copying-strings-228"></a><a name="index-concatenating-strings-229"></a>This function returns a new string consisting of the characters in the
+arguments passed to it (along with their text properties, if any).  The
+arguments may be strings, lists of numbers, or vectors of numbers; they
+are not themselves changed.  If <code>concat</code> receives no arguments, it
+returns an empty string.
+
+     <pre class="example">          (concat "abc" "-def")
+               &rArr; "abc-def"
+          (concat "abc" (list 120 121) [122])
+               &rArr; "abcxyz"
+          ;; <code>nil</code><span class="roman"> is an empty sequence.</span>
+          (concat "abc" nil "-def")
+               &rArr; "abc-def"
+          (concat "The " "quick brown " "fox.")
+               &rArr; "The quick brown fox."
+          (concat)
+               &rArr; ""
+</pre>
+        <p class="noindent">This function always constructs a new string that is not <code>eq</code> to
+any existing string, except when the result is the empty string (to
+save space, Emacs makes only one empty multibyte string).
+
+        <p>For information about other concatenation functions, see the
+description of <code>mapconcat</code> in <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>,
+<code>vconcat</code> in <a href="Vector-Functions.html#Vector-Functions">Vector Functions</a>, and <code>append</code> in <a href="Building-Lists.html#Building-Lists">Building Lists</a>.  For concatenating individual command-line arguments into a
+string to be used as a shell command, see <a href="Shell-Arguments.html#Shell-Arguments">combine-and-quote-strings</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>split-string</b><var> string &amp;optional separators omit-nulls<a name="index-split_002dstring-230"></a></var><br>
+<blockquote><p>This function splits <var>string</var> into substrings based on the regular
+expression <var>separators</var> (see <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>).  Each match
+for <var>separators</var> defines a splitting point; the substrings between
+splitting points are made into a list, which is returned.
+
+        <p>If <var>omit-nulls</var> is <code>nil</code> (or omitted), the result contains
+null strings whenever there are two consecutive matches for
+<var>separators</var>, or a match is adjacent to the beginning or end of
+<var>string</var>.  If <var>omit-nulls</var> is <code>t</code>, these null strings are
+omitted from the result.
+
+        <p>If <var>separators</var> is <code>nil</code> (or omitted), the default is the
+value of <code>split-string-default-separators</code>.
+
+        <p>As a special case, when <var>separators</var> is <code>nil</code> (or omitted),
+null strings are always omitted from the result.  Thus:
+
+     <pre class="example">          (split-string "  two words ")
+               &rArr; ("two" "words")
+</pre>
+        <p>The result is not <code>("" "two" "words" "")</code>, which would rarely be
+useful.  If you need such a result, use an explicit value for
+<var>separators</var>:
+
+     <pre class="example">          (split-string "  two words "
+                        split-string-default-separators)
+               &rArr; ("" "two" "words" "")
+</pre>
+        <p>More examples:
+
+     <pre class="example">          (split-string "Soup is good food" "o")
+               &rArr; ("S" "up is g" "" "d f" "" "d")
+          (split-string "Soup is good food" "o" t)
+               &rArr; ("S" "up is g" "d f" "d")
+          (split-string "Soup is good food" "o+")
+               &rArr; ("S" "up is g" "d f" "d")
+</pre>
+        <p>Empty matches do count, except that <code>split-string</code> will not look
+for a final empty match when it already reached the end of the string
+using a non-empty match or when <var>string</var> is empty:
+
+     <pre class="example">          (split-string "aooob" "o*")
+               &rArr; ("" "a" "" "b" "")
+          (split-string "ooaboo" "o*")
+               &rArr; ("" "" "a" "b" "")
+          (split-string "" "")
+               &rArr; ("")
+</pre>
+        <p>However, when <var>separators</var> can match the empty string,
+<var>omit-nulls</var> is usually <code>t</code>, so that the subtleties in the
+three previous examples are rarely relevant:
+
+     <pre class="example">          (split-string "Soup is good food" "o*" t)
+               &rArr; ("S" "u" "p" " " "i" "s" " " "g" "d" " " "f" "d")
+          (split-string "Nice doggy!" "" t)
+               &rArr; ("N" "i" "c" "e" " " "d" "o" "g" "g" "y" "!")
+          (split-string "" "" t)
+               &rArr; nil
+</pre>
+        <p>Somewhat odd, but predictable, behavior can occur for certain
+&ldquo;non-greedy&rdquo; values of <var>separators</var> that can prefer empty
+matches over non-empty matches.  Again, such values rarely occur in
+practice:
+
+     <pre class="example">          (split-string "ooo" "o*" t)
+               &rArr; nil
+          (split-string "ooo" "\\|o+" t)
+               &rArr; ("o" "o" "o")
+</pre>
+        <p>If you need to split a string that is a shell command, where
+individual arguments could be quoted, see <a href="Shell-Arguments.html#Shell-Arguments">split-string-and-unquote</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>split-string-default-separators</b><var><a name="index-split_002dstring_002ddefault_002dseparators-231"></a></var><br>
+<blockquote><p>The default value of <var>separators</var> for <code>split-string</code>.  Its
+usual value is <code>"[&nbsp;\f\t\n\r\v]+"</code><!-- /@w -->. 
+</p></blockquote></div>
+
+   </body></html>
+

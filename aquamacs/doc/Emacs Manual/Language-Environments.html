@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Language Environments - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="Enabling-Multibyte.html#Enabling-Multibyte" title="Enabling Multibyte">
+<link rel="next" href="Input-Methods.html#Input-Methods" title="Input Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Language-Environments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Input-Methods.html#Input-Methods">Input Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Enabling-Multibyte.html#Enabling-Multibyte">Enabling Multibyte</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.3 Language Environments</h3>
+
+<p><a name="index-language-environments-1368"></a>
+  All supported character sets are supported in Emacs buffers whenever
+multibyte characters are enabled; there is no need to select a
+particular language in order to display its characters in an Emacs
+buffer.  However, it is important to select a <dfn>language
+environment</dfn> in order to set various defaults.  Roughly speaking, the
+language environment represents a choice of preferred script rather
+than a choice of language.
+
+   <p>The language environment controls which coding systems to recognize
+when reading text (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).  This applies to files,
+incoming mail, and any other text you read into Emacs.  It may also
+specify the default coding system to use when you create a file.  Each
+language environment also specifies a default input method.
+
+   <p><a name="index-set_002dlanguage_002denvironment-1369"></a><a name="index-current_002dlanguage_002denvironment-1370"></a>  To select a language environment, customize the variable
+<code>current-language-environment</code> or use the command <kbd>M-x
+set-language-environment</kbd>.  It makes no difference which buffer is
+current when you use this command, because the effects apply globally
+to the Emacs session.  The supported language environments include:
+
+   <p><a name="index-Euro-sign-1371"></a><a name="index-UTF_002d8-1372"></a><blockquote>
+ASCII, Belarusian, Bengali, Brazilian Portuguese, Bulgarian,
+Chinese-BIG5, Chinese-CNS, Chinese-EUC-TW, Chinese-GB, Chinese-GBK,
+Chinese-GB18030, Croatian, Cyrillic-ALT, Cyrillic-ISO, Cyrillic-KOI8,
+Czech, Devanagari, Dutch, English, Esperanto, Ethiopic, French,
+Georgian, German, Greek, Gujarati, Hebrew, IPA, Italian, Japanese,
+Kannada, Khmer, Korean, Lao, Latin-1, Latin-2, Latin-3, Latin-4,
+Latin-5, Latin-6, Latin-7, Latin-8 (Celtic), Latin-9 (updated Latin-1
+with the Euro sign), Latvian, Lithuanian, Malayalam, Oriya, Polish,
+Punjabi, Romanian, Russian, Sinhala, Slovak, Slovenian, Spanish,
+Swedish, TaiViet, Tajik, Tamil, Telugu, Thai, Tibetan, Turkish, UTF-8
+(for a setup which prefers Unicode characters and files encoded in
+UTF-8), Ukrainian, Vietnamese, Welsh, and Windows-1255 (for a setup
+which prefers Cyrillic characters and files encoded in Windows-1255). 
+</blockquote>
+
+   <p><a name="index-fonts-for-various-scripts-1373"></a><a name="index-Intlfonts-package_002c-installation-1374"></a>  To display the script(s) used by your language environment on a
+graphical display, you need to have a suitable font.  If some of the
+characters appear as empty boxes, you should install the GNU Intlfonts
+package, which includes fonts for most supported scripts.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+See <a href="Fontsets.html#Fontsets">Fontsets</a>, for more details about setting up your fonts.
+
+   <p><a name="index-set_002dlocale_002denvironment-1375"></a><a name="index-locale_002dlanguage_002dnames-1376"></a><a name="index-locale_002dcharset_002dlanguage_002dnames-1377"></a><a name="index-locales-1378"></a>  Some operating systems let you specify the character-set locale you
+are using by setting the locale environment variables <samp><span class="env">LC_ALL</span></samp>,
+<samp><span class="env">LC_CTYPE</span></samp>, or <samp><span class="env">LANG</span></samp>.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>  During startup, Emacs looks up your character-set locale's
+name in the system locale alias table, matches its canonical name
+against entries in the value of the variables
+<code>locale-charset-language-names</code> and <code>locale-language-names</code>,
+and selects the corresponding language environment if a match is found. 
+(The former variable overrides the latter.)  It also adjusts the display
+table and terminal coding system, the locale coding system, the
+preferred coding system as needed for the locale, and&mdash;last but not
+least&mdash;the way Emacs decodes non-<acronym>ASCII</acronym> characters sent by your keyboard.
+
+   <p>If you modify the <samp><span class="env">LC_ALL</span></samp>, <samp><span class="env">LC_CTYPE</span></samp>, or <samp><span class="env">LANG</span></samp>
+environment variables while running Emacs, you may want to invoke the
+<code>set-locale-environment</code> function afterwards to readjust the
+language environment from the new locale.
+
+   <p><a name="index-locale_002dpreferred_002dcoding_002dsystems-1379"></a>  The <code>set-locale-environment</code> function normally uses the preferred
+coding system established by the language environment to decode system
+messages.  But if your locale matches an entry in the variable
+<code>locale-preferred-coding-systems</code>, Emacs uses the corresponding
+coding system instead.  For example, if the locale &lsquo;<samp><span class="samp">ja_JP.PCK</span></samp>&rsquo;
+matches <code>japanese-shift-jis</code> in
+<code>locale-preferred-coding-systems</code>, Emacs uses that encoding even
+though it might normally use <code>japanese-iso-8bit</code>.
+
+   <p>You can override the language environment chosen at startup with
+explicit use of the command <code>set-language-environment</code>, or with
+customization of <code>current-language-environment</code> in your init
+file.
+
+   <p><a name="index-C_002dh-L-1380"></a><a name="index-describe_002dlanguage_002denvironment-1381"></a>  To display information about the effects of a certain language
+environment <var>lang-env</var>, use the command <kbd>C-h L </kbd><var>lang-env</var><kbd>
+&lt;RET&gt;</kbd> (<code>describe-language-environment</code>).  This tells you
+which languages this language environment is useful for, and lists the
+character sets, coding systems, and input methods that go with it.  It
+also shows some sample text to illustrate scripts used in this
+language environment.  If you give an empty input for <var>lang-env</var>,
+this command describes the chosen language environment. 
+<a name="Describe-Language-Environment"></a><a name="index-set_002dlanguage_002denvironment_002dhook-1382"></a>  You can customize any language environment with the normal hook
+<code>set-language-environment-hook</code>.  The command
+<code>set-language-environment</code> runs that hook after setting up the new
+language environment.  The hook functions can test for a specific
+language environment by checking the variable
+<code>current-language-environment</code>.  This hook is where you should
+put non-default settings for specific language environment, such as
+coding systems for keyboard input and terminal output, the default
+input method, etc.
+
+   <p><a name="index-exit_002dlanguage_002denvironment_002dhook-1383"></a>  Before it starts to set up the new language environment,
+<code>set-language-environment</code> first runs the hook
+<code>exit-language-environment-hook</code>.  This hook is useful for undoing
+customizations that were made with <code>set-language-environment-hook</code>. 
+For instance, if you set up a special key binding in a specific language
+environment using <code>set-language-environment-hook</code>, you should set
+up <code>exit-language-environment-hook</code> to restore the normal binding
+for that key.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If
+you run Emacs on X, you need to inform the X server about the location
+of the newly installed fonts with the following commands:
+
+<pre class="example">      xset fp+ /usr/local/share/emacs/fonts
+      xset fp rehash
+</pre>
+   <p></p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> If more than one of these is
+set, the first one that is nonempty specifies your locale for this
+purpose.</p>
+
+   <hr></div>
+
+   </body></html>
+

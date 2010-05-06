@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Repeat Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="prev" href="Button_002dDown-Events.html#Button_002dDown-Events" title="Button-Down Events">
+<link rel="next" href="Motion-Events.html#Motion-Events" title="Motion Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Repeat-Events"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Motion-Events.html#Motion-Events">Motion Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Button_002dDown-Events.html#Button_002dDown-Events">Button-Down Events</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.7.7 Repeat Events</h4>
+
+<p><a name="index-repeat-events-1276"></a><a name="index-double_002dclick-events-1277"></a><a name="index-triple_002dclick-events-1278"></a><a name="index-mouse-events_002c-repeated-1279"></a>
+If you press the same mouse button more than once in quick succession
+without moving the mouse, Emacs generates special <dfn>repeat</dfn> mouse
+events for the second and subsequent presses.
+
+   <p>The most common repeat events are <dfn>double-click</dfn> events.  Emacs
+generates a double-click event when you click a button twice; the event
+happens when you release the button (as is normal for all click
+events).
+
+   <p>The event type of a double-click event contains the prefix
+&lsquo;<samp><span class="samp">double-</span></samp>&rsquo;.  Thus, a double click on the second mouse button with
+&lt;meta&gt; held down comes to the Lisp program as
+<code>M-double-mouse-2</code>.  If a double-click event has no binding, the
+binding of the corresponding ordinary click event is used to execute
+it.  Thus, you need not pay attention to the double click feature
+unless you really want to.
+
+   <p>When the user performs a double click, Emacs generates first an ordinary
+click event, and then a double-click event.  Therefore, you must design
+the command binding of the double click event to assume that the
+single-click command has already run.  It must produce the desired
+results of a double click, starting from the results of a single click.
+
+   <p>This is convenient, if the meaning of a double click somehow &ldquo;builds
+on&rdquo; the meaning of a single click&mdash;which is recommended user interface
+design practice for double clicks.
+
+   <p>If you click a button, then press it down again and start moving the
+mouse with the button held down, then you get a <dfn>double-drag</dfn> event
+when you ultimately release the button.  Its event type contains
+&lsquo;<samp><span class="samp">double-drag</span></samp>&rsquo; instead of just &lsquo;<samp><span class="samp">drag</span></samp>&rsquo;.  If a double-drag event
+has no binding, Emacs looks for an alternate binding as if the event
+were an ordinary drag.
+
+   <p>Before the double-click or double-drag event, Emacs generates a
+<dfn>double-down</dfn> event when the user presses the button down for the
+second time.  Its event type contains &lsquo;<samp><span class="samp">double-down</span></samp>&rsquo; instead of just
+&lsquo;<samp><span class="samp">down</span></samp>&rsquo;.  If a double-down event has no binding, Emacs looks for an
+alternate binding as if the event were an ordinary button-down event. 
+If it finds no binding that way either, the double-down event is
+ignored.
+
+   <p>To summarize, when you click a button and then press it again right
+away, Emacs generates a down event and a click event for the first
+click, a double-down event when you press the button again, and finally
+either a double-click or a double-drag event.
+
+   <p>If you click a button twice and then press it again, all in quick
+succession, Emacs generates a <dfn>triple-down</dfn> event, followed by
+either a <dfn>triple-click</dfn> or a <dfn>triple-drag</dfn>.  The event types of
+these events contain &lsquo;<samp><span class="samp">triple</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">double</span></samp>&rsquo;.  If any
+triple event has no binding, Emacs uses the binding that it would use
+for the corresponding double event.
+
+   <p>If you click a button three or more times and then press it again, the
+events for the presses beyond the third are all triple events.  Emacs
+does not have separate event types for quadruple, quintuple, etc. 
+events.  However, you can look at the event list to find out precisely
+how many times the button was pressed.
+
+<div class="defun">
+&mdash; Function: <b>event-click-count</b><var> event<a name="index-event_002dclick_002dcount-1280"></a></var><br>
+<blockquote><p>This function returns the number of consecutive button presses that led
+up to <var>event</var>.  If <var>event</var> is a double-down, double-click or
+double-drag event, the value is 2.  If <var>event</var> is a triple event,
+the value is 3 or greater.  If <var>event</var> is an ordinary mouse event
+(not a repeat event), the value is 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>double-click-fuzz</b><var><a name="index-double_002dclick_002dfuzz-1281"></a></var><br>
+<blockquote><p>To generate repeat events, successive mouse button presses must be at
+approximately the same screen position.  The value of
+<code>double-click-fuzz</code> specifies the maximum number of pixels the
+mouse may be moved (horizontally or vertically) between two successive
+clicks to make a double-click.
+
+        <p>This variable is also the threshold for motion of the mouse to count
+as a drag. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>double-click-time</b><var><a name="index-double_002dclick_002dtime-1282"></a></var><br>
+<blockquote><p>To generate repeat events, the number of milliseconds between
+successive button presses must be less than the value of
+<code>double-click-time</code>.  Setting <code>double-click-time</code> to
+<code>nil</code> disables multi-click detection entirely.  Setting it to
+<code>t</code> removes the time limit; Emacs then detects multi-clicks by
+position only. 
+</p></blockquote></div>
+
+   </body></html>
+

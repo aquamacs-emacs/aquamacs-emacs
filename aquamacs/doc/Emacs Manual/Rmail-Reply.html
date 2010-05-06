@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>Rmail Reply - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rmail.html#Rmail" title="Rmail">
+<link rel="prev" href="Rmail-Attributes.html#Rmail-Attributes" title="Rmail Attributes">
+<link rel="next" href="Rmail-Summary.html#Rmail-Summary" title="Rmail Summary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rmail-Reply"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Summary.html#Rmail-Summary">Rmail Summary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr>
+</div>
+
+<h3 class="section">36.10 Sending Replies</h3>
+
+<p>Rmail has several commands to send outgoing mail.  See <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>, for information on using Message mode, including certain
+features meant to work with Rmail.  What this section documents are
+the special commands of Rmail for entering the mail buffer.  Note that
+the usual keys for sending mail&mdash;<kbd>C-x m</kbd>, <kbd>C-x 4 m</kbd>, and
+<kbd>C-x 5 m</kbd>&mdash;also work normally in Rmail mode.
+
+     <dl>
+<dt><kbd>m</kbd><dd>Send a message (<code>rmail-mail</code>). 
+<br><dt><kbd>c</kbd><dd>Continue editing the already started outgoing message (<code>rmail-continue</code>). 
+<br><dt><kbd>r</kbd><dd>Send a reply to the current Rmail message (<code>rmail-reply</code>). 
+<br><dt><kbd>f</kbd><dd>Forward the current message to other users (<code>rmail-forward</code>). 
+<br><dt><kbd>C-u f</kbd><dd>Resend the current message to other users (<code>rmail-resend</code>). 
+<br><dt><kbd>M-m</kbd><dd>Try sending a bounced message a second time (<code>rmail-retry-failure</code>). 
+</dl>
+
+   <p><a name="index-r-_0040r_007b_0028Rmail_0029_007d-2855"></a><a name="index-rmail_002dreply-2856"></a><a name="index-reply-to-a-message-2857"></a>  The most common reason to send a message while in Rmail is to reply
+to the message you are reading.  To do this, type <kbd>r</kbd>
+(<code>rmail-reply</code>).  This displays the &lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer in
+another window, much like <kbd>C-x 4 m</kbd>, but preinitializes the
+&lsquo;<samp><span class="samp">Subject</span></samp>&rsquo;, &lsquo;<samp><span class="samp">To</span></samp>&rsquo;, &lsquo;<samp><span class="samp">CC</span></samp>&rsquo;, &lsquo;<samp><span class="samp">In-reply-to</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">References</span></samp>&rsquo; header fields based on the message you are replying
+to.  The &lsquo;<samp><span class="samp">To</span></samp>&rsquo; field starts out as the address of the person who
+sent the message you received, and the &lsquo;<samp><span class="samp">CC</span></samp>&rsquo; field starts out with
+all the other recipients of that message.
+
+   <p><a name="index-rmail_002ddont_002dreply_002dto_002dnames-2858"></a>  You can exclude certain recipients from being included automatically
+in replies, using the variable <code>rmail-dont-reply-to-names</code>.  Its
+value should be a regular expression; any recipients that match are
+excluded from the &lsquo;<samp><span class="samp">CC</span></samp>&rsquo; field.  They are also excluded from the
+&lsquo;<samp><span class="samp">To</span></samp>&rsquo; field, unless this would leave the field empty.  If this
+variable is nil, then the first time you compose a reply it is
+initialized to a default value that matches your own address, and any
+name starting with &lsquo;<samp><span class="samp">info-</span></samp>&rsquo;.  (Those names are excluded because
+there is a convention of using them for large mailing lists to broadcast
+announcements.)
+
+   <p>To omit the &lsquo;<samp><span class="samp">CC</span></samp>&rsquo; field completely for a particular reply, enter
+the reply command with a numeric argument: <kbd>C-u r</kbd> or <kbd>1 r</kbd>. 
+This means to reply only to the sender of the original message.
+
+   <p>Once the &lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer has been initialized, editing and
+sending the mail goes as usual (see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>).  You can edit
+the presupplied header fields if they are not what you want.  You can
+also use commands such as <kbd>C-c C-y</kbd>, which yanks in the message
+that you are replying to (see <a href="Mail-Commands.html#Mail-Commands">Mail Commands</a>).  You can also switch
+to the Rmail buffer, select a different message there, switch back,
+and yank the new current message.
+
+   <p><a name="index-M_002dm-_0040r_007b_0028Rmail_0029_007d-2859"></a><a name="index-rmail_002dretry_002dfailure-2860"></a><a name="index-retrying-a-failed-message-2861"></a><a name="index-rmail_002dretry_002dignored_002dheaders-2862"></a>  Sometimes a message does not reach its destination.  Mailers usually
+send the failed message back to you, enclosed in a <dfn>failure
+message</dfn>.  The Rmail command <kbd>M-m</kbd> (<code>rmail-retry-failure</code>)
+prepares to send the same message a second time: it sets up a
+&lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer with the same text and header fields as before.  If
+you type <kbd>C-c C-c</kbd> right away, you send the message again exactly
+the same as the first time.  Alternatively, you can edit the text or
+headers and then send it.  The variable
+<code>rmail-retry-ignored-headers</code>, in the same format as
+<code>rmail-ignored-headers</code> (see <a href="Rmail-Display.html#Rmail-Display">Rmail Display</a>), controls which
+headers are stripped from the failed message when retrying it.
+
+   <p><a name="index-f-_0040r_007b_0028Rmail_0029_007d-2863"></a><a name="index-rmail_002dforward-2864"></a><a name="index-forwarding-a-message-2865"></a>  Another frequent reason to send mail in Rmail is to <dfn>forward</dfn> the
+current message to other users.  <kbd>f</kbd> (<code>rmail-forward</code>) makes
+this easy by preinitializing the &lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer with the current
+message as the text, and a subject designating a forwarded message.  All
+you have to do is fill in the recipients and send.  When you forward a
+message, recipients get a message which is &ldquo;from&rdquo; you, and which has
+the original message in its contents.
+
+   <p><a name="index-unforward_002drmail_002dmessage-2866"></a>  Forwarding a message encloses it between two delimiter lines.  It also
+modifies every line that starts with a dash, by inserting &lsquo;<samp><span class="samp">-&nbsp;</span></samp>&rsquo;<!-- /@w -->
+at the start of the line.  When you receive a forwarded message, if it
+contains something besides ordinary text&mdash;for example, program source
+code&mdash;you might find it useful to undo that transformation.  You can do
+this by selecting the forwarded message and typing <kbd>M-x
+unforward-rmail-message</kbd>.  This command extracts the original forwarded
+message, deleting the inserted &lsquo;<samp><span class="samp">-&nbsp;</span></samp>&rsquo;<!-- /@w --> strings, and inserts it
+into the Rmail file as a separate message immediately following the
+current one.
+
+   <p><a name="index-rmail_002dresend-2867"></a>  <dfn>Resending</dfn> is an alternative similar to forwarding; the
+difference is that resending sends a message that is &ldquo;from&rdquo; the
+original sender, just as it reached you&mdash;with a few added header fields
+(&lsquo;<samp><span class="samp">Resent-From</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Resent-To</span></samp>&rsquo;) to indicate that it came via
+you.  To resend a message in Rmail, use <kbd>C-u f</kbd>.  (<kbd>f</kbd> runs
+<code>rmail-forward</code>, which invokes <code>rmail-resend</code> if you provide a
+numeric argument.)
+
+   <p><a name="index-m-_0040r_007b_0028Rmail_0029_007d-2868"></a><a name="index-rmail_002dmail-2869"></a>  Use the <kbd>m</kbd> (<code>rmail-mail</code>) command to start editing an
+outgoing message that is not a reply.  It leaves the header fields empty. 
+Its only difference from <kbd>C-x 4 m</kbd> is that it makes the Rmail buffer
+accessible for <kbd>C-c C-y</kbd>, just as <kbd>r</kbd> does.  Thus, <kbd>m</kbd> can be
+used to reply to or forward a message; it can do anything <kbd>r</kbd> or <kbd>f</kbd>
+can do.
+
+   <p><a name="index-c-_0040r_007b_0028Rmail_0029_007d-2870"></a><a name="index-rmail_002dcontinue-2871"></a>  The <kbd>c</kbd> (<code>rmail-continue</code>) command resumes editing the
+&lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer, to finish editing an outgoing message you were
+already composing, or to alter a message you have sent.
+
+   <p><a name="index-rmail_002dmail_002dnew_002dframe-2872"></a>  If you set the variable <code>rmail-mail-new-frame</code> to a
+non-<code>nil</code> value, then all the Rmail commands to start sending a
+message create a new frame to edit it in.  This frame is deleted when
+you send the message, or when you use the &lsquo;<samp><span class="samp">Cancel</span></samp>&rsquo; item in the
+&lsquo;<samp><span class="samp">Mail</span></samp>&rsquo; menu.
+
+   <p>All the Rmail commands to send a message use the mail-composition
+method that you have chosen (see <a href="Mail-Methods.html#Mail-Methods">Mail Methods</a>).
+
+   </body></html>
+

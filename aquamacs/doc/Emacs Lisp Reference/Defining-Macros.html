@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Defining Macros - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Compiling-Macros.html#Compiling-Macros" title="Compiling Macros">
+<link rel="next" href="Backquote.html#Backquote" title="Backquote">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Defining-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Backquote.html#Backquote">Backquote</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h3 class="section">13.4 Defining Macros</h3>
+
+<p>A Lisp macro is a list whose <span class="sc">car</span> is <code>macro</code>.  Its <span class="sc">cdr</span> should
+be a function; expansion of the macro works by applying the function
+(with <code>apply</code>) to the list of unevaluated argument-expressions
+from the macro call.
+
+   <p>It is possible to use an anonymous Lisp macro just like an anonymous
+function, but this is never done, because it does not make sense to pass
+an anonymous macro to functionals such as <code>mapcar</code>.  In practice,
+all Lisp macros have names, and they are usually defined with the
+special form <code>defmacro</code>.
+
+<div class="defun">
+&mdash; Special Form: <b>defmacro</b><var> name argument-list body-forms<small class="dots">...</small><a name="index-defmacro-740"></a></var><br>
+<blockquote><p><code>defmacro</code> defines the symbol <var>name</var> as a macro that looks
+like this:
+
+     <pre class="example">          (macro lambda <var>argument-list</var> . <var>body-forms</var>)
+</pre>
+        <p>(Note that the <span class="sc">cdr</span> of this list is a function&mdash;a lambda expression.) 
+This macro object is stored in the function cell of <var>name</var>.  The
+value returned by evaluating the <code>defmacro</code> form is <var>name</var>, but
+usually we ignore this value.
+
+        <p>The shape and meaning of <var>argument-list</var> is the same as in a
+function, and the keywords <code>&amp;rest</code> and <code>&amp;optional</code> may be used
+(see <a href="Argument-List.html#Argument-List">Argument List</a>).  Macros may have a documentation string, but
+any <code>interactive</code> declaration is ignored since macros cannot be
+called interactively. 
+</p></blockquote></div>
+
+   <p>The body of the macro definition can include a <code>declare</code> form,
+which can specify how &lt;TAB&gt; should indent macro calls, and how to
+step through them for Edebug.
+
+<div class="defun">
+&mdash; Macro: <b>declare</b><var> specs<small class="dots">...</small><a name="index-declare-741"></a></var><br>
+<blockquote><p><a name="Definition-of-declare"></a>A <code>declare</code> form is used in a macro definition to specify various
+additional information about it.  Two kinds of specification are
+currently supported:
+
+          <dl>
+<dt><code>(debug </code><var>edebug-form-spec</var><code>)</code><dd>Specify how to step through macro calls for Edebug. 
+See <a href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>.
+
+          <br><dt><code>(indent </code><var>indent-spec</var><code>)</code><dd>Specify how to indent calls to this macro.  See <a href="Indenting-Macros.html#Indenting-Macros">Indenting Macros</a>,
+for more details. 
+</dl>
+
+        <p>A <code>declare</code> form only has its special effect in the body of a
+<code>defmacro</code> form if it immediately follows the documentation
+string, if present, or the argument list otherwise.  (Strictly
+speaking, <em>several</em> <code>declare</code> forms can follow the
+documentation string or argument list, but since a <code>declare</code> form
+can have several <var>specs</var>, they can always be combined into a
+single form.)  When used at other places in a <code>defmacro</code> form, or
+outside a <code>defmacro</code> form, <code>declare</code> just returns <code>nil</code>
+without evaluating any <var>specs</var>. 
+</p></blockquote></div>
+
+   <p>No macro absolutely needs a <code>declare</code> form, because that form
+has no effect on how the macro expands, on what the macro means in the
+program.  It only affects secondary features: indentation and Edebug.
+
+   </body></html>
+

@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Accumulating Text - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Yanking.html#Yanking" title="Yanking">
+<link rel="next" href="Rectangles.html#Rectangles" title="Rectangles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Accumulating-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rectangles.html#Rectangles">Rectangles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Yanking.html#Yanking">Yanking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">14 Accumulating Text</h2>
+
+<p><a name="index-append_002dto_002dbuffer-374"></a><a name="index-prepend_002dto_002dbuffer-375"></a><a name="index-copy_002dto_002dbuffer-376"></a><a name="index-append_002dto_002dfile-377"></a>
+<a name="index-accumulating-scattered-text-378"></a>  Usually we copy or move text by killing it and yanking it, but there
+are other convenient methods for copying one block of text in many
+places, or for copying many scattered blocks of text into one place. 
+Here we describe the commands to accumulate scattered pieces of text
+into a buffer or into a file.
+
+     <dl>
+<dt><kbd>M-x append-to-buffer</kbd><dd>Append region to the contents of a specified buffer. 
+<br><dt><kbd>M-x prepend-to-buffer</kbd><dd>Prepend region to the contents of a specified buffer. 
+<br><dt><kbd>M-x copy-to-buffer</kbd><dd>Copy region into a specified buffer, deleting that buffer's old contents. 
+<br><dt><kbd>M-x insert-buffer</kbd><dd>Insert the contents of a specified buffer into current buffer at point. 
+<br><dt><kbd>M-x append-to-file</kbd><dd>Append region to the contents of a specified file, at the end. 
+</dl>
+
+   <p>To accumulate text into a buffer, use <kbd>M-x append-to-buffer</kbd>. 
+This reads a buffer name, then inserts a copy of the region into the
+buffer specified.  If you specify a nonexistent buffer,
+<code>append-to-buffer</code> creates the buffer.  The text is inserted
+wherever point is in that buffer.  If you have been using the buffer for
+editing, the copied text goes into the middle of the text of the buffer,
+starting from wherever point happens to be at that moment.
+
+   <p>Point in that buffer is left at the end of the copied text, so
+successive uses of <code>append-to-buffer</code> accumulate the text in the
+specified buffer in the same order as they were copied.  Strictly
+speaking, <code>append-to-buffer</code> does not always append to the text
+already in the buffer&mdash;it appends only if point in that buffer is at the end. 
+However, if <code>append-to-buffer</code> is the only command you use to alter
+a buffer, then point is always at the end.
+
+   <p><kbd>M-x prepend-to-buffer</kbd> is just like <code>append-to-buffer</code>
+except that point in the other buffer is left before the copied text, so
+successive prependings add text in reverse order.  <kbd>M-x
+copy-to-buffer</kbd> is similar, except that any existing text in the other
+buffer is deleted, so the buffer is left containing just the text newly
+copied into it.
+
+   <p>The command <kbd>M-x insert-buffer</kbd> can be used to retrieve the
+accumulated text from another buffer.  This prompts for the name of a
+buffer, and inserts a copy of all the text in that buffer into the
+current buffer at point, leaving point at the beginning of the
+inserted text.  It also adds the position of the end of the inserted
+text to the mark ring, without activating the mark.  See <a href="Buffers.html#Buffers">Buffers</a>,
+for background information on buffers.
+
+   <p>Instead of accumulating text in a buffer, you can append text
+directly into a file with <kbd>M-x append-to-file</kbd>.  This prompts for
+a filename, and adds the text of the region to the end of the
+specified file.  The file is changed immediately on disk.
+
+   <p>You should use <code>append-to-file</code> only with files that are
+<em>not</em> being visited in Emacs.  Using it on a file that you are
+editing in Emacs would change the file behind Emacs's back, which
+can lead to losing some of your editing.
+
+   <p>Another way to move text around is to store it in a register. 
+See <a href="Registers.html#Registers">Registers</a>.
+
+   </body></html>
+

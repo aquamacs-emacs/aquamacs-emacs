@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>String Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
+<link rel="next" href="Predicates-for-Strings.html#Predicates-for-Strings" title="Predicates for Strings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="String-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Predicates-for-Strings.html#Predicates-for-Strings">Predicates for Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 String and Character Basics</h3>
+
+<p>Characters are represented in Emacs Lisp as integers;
+whether an integer is a character or not is determined only by how it is
+used.  Thus, strings really contain integers.  See <a href="Character-Codes.html#Character-Codes">Character Codes</a>,
+for details about character representation in Emacs.
+
+   <p>The length of a string (like any array) is fixed, and cannot be
+altered once the string exists.  Strings in Lisp are <em>not</em>
+terminated by a distinguished character code.  (By contrast, strings in
+C are terminated by a character with <acronym>ASCII</acronym> code 0.)
+
+   <p>Since strings are arrays, and therefore sequences as well, you can
+operate on them with the general array and sequence functions. 
+(See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.)  For example, you can access or
+change individual characters in a string using the functions <code>aref</code>
+and <code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).
+
+   <p>There are two text representations for non-<acronym>ASCII</acronym> characters in
+Emacs strings (and in buffers): unibyte and multibyte (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).  For most Lisp programming, you don't need to be
+concerned with these two representations.
+
+   <p>Sometimes key sequences are represented as unibyte strings.  When a
+unibyte string is a key sequence, string elements in the range 128 to
+255 represent meta characters (which are large integers) rather than
+character codes in the range 128 to 255.  Strings cannot hold
+characters that have the hyper, super or alt modifiers; they can hold
+<acronym>ASCII</acronym> control characters, but no other control characters. 
+They do not distinguish case in <acronym>ASCII</acronym> control characters. 
+If you want to store such characters in a sequence, such as a key
+sequence, you must use a vector instead of a string.  See <a href="Character-Type.html#Character-Type">Character Type</a>, for more information about keyboard input characters.
+
+   <p>Strings are useful for holding regular expressions.  You can also
+match regular expressions against strings with <code>string-match</code>
+(see <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>).  The functions <code>match-string</code>
+(see <a href="Simple-Match-Data.html#Simple-Match-Data">Simple Match Data</a>) and <code>replace-match</code> (see <a href="Replacing-Match.html#Replacing-Match">Replacing Match</a>) are useful for decomposing and modifying strings after
+matching regular expressions against them.
+
+   <p>Like a buffer, a string can contain text properties for the characters
+in it, as well as the characters themselves.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>. 
+All the Lisp primitives that copy text from strings to buffers or other
+strings also copy the properties of the characters being copied.
+
+   <p>See <a href="Text.html#Text">Text</a>, for information about functions that display strings or
+copy them into buffers.  See <a href="Character-Type.html#Character-Type">Character Type</a>, and <a href="String-Type.html#String-Type">String Type</a>,
+for information about the syntax of characters and strings. 
+See <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>, for functions to convert between text
+representations and to encode and decode character codes.
+
+   </body></html>
+

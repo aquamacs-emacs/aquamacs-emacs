@@ -718,13 +718,13 @@ made current."
 (defun update-ess-process-name-list ()
   "Remove names with no process."
   (let (defunct)
-    (mapcar
+    (mapc
      '(lambda (conselt)
 	(let ((proc (get-process (car conselt))))
 	  (if (and proc (eq (process-status proc) 'run)) nil
 	    (setq defunct (cons conselt defunct)))))
      ess-process-name-list)
-    (mapcar
+    (mapc
      '(lambda (pointer)
 	(setq ess-process-name-list (delq pointer ess-process-name-list)))
      defunct))
@@ -826,10 +826,15 @@ Assumes that buffer has not already been in found in current frame."
 inferior-ess-ddeclient, and nil if the ess-process is running as an
 ordinary inferior process.  Alway nil on Unix machines."
   (interactive)
-  (if ess-microsoft-p
-      (not (equal (ess-get-process-variable
-		   ess-local-process-name 'inferior-ess-ddeclient)
-		  (default-value 'inferior-ess-ddeclient)))))
+  (if ess-microsoft-p 
+      (progn
+	;; Debug: C-c C-l fails (to start R or give good message) in Windows
+	(ess-write-to-dribble-buffer
+	 (format "*ddeclient-p: ess-loc-proc-name is '%s'" ess-local-process-name))
+	(ess-force-buffer-current "Process to load into: ")
+	(not (equal (ess-get-process-variable
+		     ess-local-process-name 'inferior-ess-ddeclient)
+		    (default-value 'inferior-ess-ddeclient))))))
 
 (defun ess-prompt-wait (proc &optional start-of-output sleep)
   "Wait for a prompt to appear at BOL of current buffer.
@@ -1035,7 +1040,7 @@ default 100 ms and be passed to \\[accept-process-output]."
     ;; else: "normal", non-DDE behavior:
 
     ;; Use this to evaluate some code, but don't wait for output.
-    (let* ((deactivate-mark nil)
+    (let* ((deactivate-mark); keep local {do *not* deactivate wrongly}
 	   (cbuffer (current-buffer))
 	   (sprocess (get-ess-process ess-current-process-name))
 	   (sbuffer (process-buffer sprocess))
@@ -1144,7 +1149,7 @@ this does not apply when using the S-plus GUI, see `ess-eval-region-ddeclient'."
 	  (let ((sprocess (get-ess-process ess-current-process-name)))
 	    (process-send-region sprocess start end)
 	    (process-send-string sprocess "\n"))))))
-  
+
   (message "Finished evaluation")
   (if ess-eval-deactivate-mark
       (deactivate-mark))
@@ -1342,7 +1347,7 @@ the next paragraph.  Arg has same meaning as for `ess-eval-region'."
 		 (expand-file-name
 		  (read-file-name "Load S file: " nil nil t)))))
   (ess-make-buffer-current)
-  (if (ess-ddeclient-p);; << FIXME: rather  ess-microsoft-p
+  (if ess-microsoft-p
       (setq filename (ess-replace-in-string filename "[\\]" "/")))
   (let ((source-buffer (get-file-buffer filename)))
     (if (ess-check-source filename)
@@ -1994,16 +1999,16 @@ before you quit.  It is run automatically by \\[ess-quit]."
 	      (format
 	       "Delete all buffers associated with process %s? " the-procname))))
 	(save-excursion
-	  (mapcar '(lambda (buf)
-		     (set-buffer buf)
-		     ;; Consider buffers for which
-		     ;; ess-local-process-name is the same as
-		     ;; the-procname
-		     (if (and (not (get-buffer-process buf))
-			      ess-local-process-name
-			      (equal ess-local-process-name the-procname))
-			 (kill-buffer buf)))
-		  (buffer-list))))
+	  (mapc '(lambda (buf)
+		   (set-buffer buf)
+		   ;; Consider buffers for which
+		   ;; ess-local-process-name is the same as
+		   ;; the-procname
+		   (if (and (not (get-buffer-process buf))
+			    ess-local-process-name
+			    (equal ess-local-process-name the-procname))
+		       (kill-buffer buf)))
+		(buffer-list))))
     (ess-switch-to-ESS nil)))
 
 (defun ess-kill-buffer-function nil

@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Positions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Frames.html#Frames" title="Frames">
+<link rel="next" href="Markers.html#Markers" title="Markers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Positions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Markers.html#Markers">Markers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Frames.html#Frames">Frames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">30 Positions</h2>
+
+<p><a name="index-position-_0028in-buffer_0029-2388"></a>
+  A <dfn>position</dfn> is the index of a character in the text of a buffer. 
+More precisely, a position identifies the place between two characters
+(or before the first character, or after the last character), so we can
+speak of the character before or after a given position.  However, we
+often speak of the character &ldquo;at&rdquo; a position, meaning the character
+after that position.
+
+   <p>Positions are usually represented as integers starting from 1, but
+can also be represented as <dfn>markers</dfn>&mdash;special objects that
+relocate automatically when text is inserted or deleted so they stay
+with the surrounding characters.  Functions that expect an argument to
+be a position (an integer), but accept a marker as a substitute,
+normally ignore which buffer the marker points into; they convert the
+marker to an integer, and use that integer, exactly as if you had
+passed the integer as the argument, even if the marker points to the
+&ldquo;wrong&rdquo; buffer.  A marker that points nowhere cannot convert to an
+integer; using it instead of an integer causes an error. 
+See <a href="Markers.html#Markers">Markers</a>.
+
+   <p>See also the &ldquo;field&rdquo; feature (see <a href="Fields.html#Fields">Fields</a>), which provides
+functions that are used by many cursor-motion commands.
+
+<ul class="menu">
+<li><a accesskey="1" href="Point.html#Point">Point</a>:          The special position where editing takes place. 
+<li><a accesskey="2" href="Motion.html#Motion">Motion</a>:         Changing point. 
+<li><a accesskey="3" href="Excursions.html#Excursions">Excursions</a>:     Temporary motion and buffer changes. 
+<li><a accesskey="4" href="Narrowing.html#Narrowing">Narrowing</a>:      Restricting editing to a portion of the buffer. 
+</ul>
+
+   </body></html>
+

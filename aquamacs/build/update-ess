@@ -2,10 +2,10 @@
 # run from within build directory
 
 
-FILE=ess-5.3.6
+FILE=ess-5.8
 DEST=../src/site-lisp/edit-modes/ess-mode
 INFODEST=../src/site-lisp/edit-modes/info
-EMACS="/Applications/Aquamacs Emacs.app/Contents/MacOS/Aquamacs Emacs -nw -Q"
+EMACS="../../nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -nw -Q"
 
 P=`pwd`
 curl -o /tmp/$FILE.tgz http://ess.r-project.org/downloads/ess/$FILE.tgz
@@ -26,6 +26,7 @@ cd $P
 mkdir $DEST 2>/dev/null
 mkdir $DEST/lisp 2>/dev/null
 mkdir $INFODEST 2>/dev/null
+rm -rf $DEST/lisp/*
 mv /tmp/ess/share/emacs/site-lisp/*  $DEST/lisp/
 mv /tmp/ess/info/ess.info  $INFODEST/ 
 

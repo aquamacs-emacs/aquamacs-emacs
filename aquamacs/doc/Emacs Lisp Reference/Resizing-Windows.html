@@ -1,0 +1,249 @@
+<html lang="en">
+<head>
+<title>Resizing Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Size-of-Window.html#Size-of-Window" title="Size of Window">
+<link rel="next" href="Coordinates-and-Windows.html#Coordinates-and-Windows" title="Coordinates and Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Resizing-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Coordinates-and-Windows.html#Coordinates-and-Windows">Coordinates and Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Size-of-Window.html#Size-of-Window">Size of Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.16 Changing the Size of a Window</h3>
+
+<p><a name="index-window-resizing-2168"></a><a name="index-resize-window-2169"></a><a name="index-changing-window-size-2170"></a><a name="index-window-size_002c-changing-2171"></a>
+   The window size functions fall into two classes: high-level commands
+that change the size of windows and low-level functions that access
+window size.  Emacs does not permit overlapping windows or gaps between
+windows, so resizing a window always affects at least one other window.
+
+<div class="defun">
+&mdash; Command: <b>enlarge-window</b><var> size &amp;optional horizontal<a name="index-enlarge_002dwindow-2172"></a></var><br>
+<blockquote><p>This function makes the selected window <var>size</var> lines taller by
+stealing lines from windows above or below.  In a first round, it takes
+lines from one window at a time until that window is
+<code>window-min-height</code> lines tall, then takes from another.  If, at
+the end of the first round, the selected window is still not tall
+enough, <code>enlarge-window</code> starts a second round, where it deletes
+windows above or below the selected one.
+
+        <p>If <var>horizontal</var> is non-<code>nil</code>, this function makes the window
+<var>size</var> columns wider, stealing columns instead of lines.  If a
+window from which columns are stolen shrinks below
+<code>window-min-width</code> columns, that window disappears.
+
+        <p>If the requested size would exceed that of the window's frame, then the
+function makes the window occupy the entire height (or width) of the
+frame.
+
+        <p>If there are various other windows from which lines or columns can be
+stolen, and some of them specify fixed size (using
+<code>window-size-fixed</code>, see below), they are left untouched while
+other windows are &ldquo;robbed.&rdquo;  If it would be necessary to alter the
+size of a fixed-size window, <code>enlarge-window</code> gets an error
+instead.
+
+        <p>If <var>size</var> is negative, this function shrinks the selected window by
+&minus;<var>size</var> lines or columns.  If that makes the window smaller
+than the minimum size (<code>window-min-height</code> and
+<code>window-min-width</code>), then <code>enlarge-window</code> deletes the window.
+
+        <p><code>enlarge-window</code> returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>enlarge-window-horizontally</b><var> columns<a name="index-enlarge_002dwindow_002dhorizontally-2173"></a></var><br>
+<blockquote><p>This function makes the selected window <var>columns</var> wider. 
+It could be defined as follows:
+
+     <pre class="example">          (defun enlarge-window-horizontally (columns)
+            (interactive "p")
+            (enlarge-window columns t))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>shrink-window</b><var> size &amp;optional horizontal<a name="index-shrink_002dwindow-2174"></a></var><br>
+<blockquote><p>This function is like <code>enlarge-window</code> but negates the argument
+<var>size</var>, making the selected window smaller by giving lines (or
+columns) to the other windows.  If the window shrinks below
+<code>window-min-height</code> or <code>window-min-width</code>, then it disappears.
+
+        <p>If <var>size</var> is negative, the window is enlarged by &minus;<var>size</var>
+lines or columns. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>shrink-window-horizontally</b><var> columns<a name="index-shrink_002dwindow_002dhorizontally-2175"></a></var><br>
+<blockquote><p>This function makes the selected window <var>columns</var> narrower. 
+It could be defined as follows:
+
+     <pre class="example">          (defun shrink-window-horizontally (columns)
+            (interactive "p")
+            (shrink-window columns t))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>adjust-window-trailing-edge</b><var> window delta horizontal<a name="index-adjust_002dwindow_002dtrailing_002dedge-2176"></a></var><br>
+<blockquote><p>This function makes the selected window <var>delta</var> lines taller or
+<var>delta</var> columns wider, by moving the bottom or right edge.  This
+function does not delete other windows; if it cannot make the
+requested size adjustment, it signals an error.  On success, this
+function returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>fit-window-to-buffer</b><var> &amp;optional window max-height min-height<a name="index-fit_002dwindow_002dto_002dbuffer-2177"></a></var><br>
+<blockquote><p>This command makes <var>window</var> the right height to display its
+contents exactly.  The default for <var>window</var> is the selected window.
+
+        <p>The optional argument <var>max-height</var> specifies the maximum height the
+window is allowed to be; <code>nil</code> means use the maximum permissible
+height of a window on <var>window</var>'s frame.  The optional argument
+<var>min-height</var> specifies the minimum height for the window; <code>nil</code>
+means use <code>window-min-height</code>.  All these height values include the
+mode line and/or header line.
+
+        <p>This function can delete windows when their height shrinks below
+<var>min-height</var>.  It returns non-<code>nil</code> if it orderly resized
+<var>window</var>, and <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>shrink-window-if-larger-than-buffer</b><var> &amp;optional window<a name="index-shrink_002dwindow_002dif_002dlarger_002dthan_002dbuffer-2178"></a></var><br>
+<blockquote><p>This command shrinks <var>window</var> vertically to be as small as possible
+while still showing the full contents of its buffer&mdash;but not less than
+<code>window-min-height</code> lines.  The default for <var>window</var> is
+the selected window.
+
+        <p>However, this command does nothing if the window is already too small to
+display the whole text of the buffer, or if part of the contents are
+currently scrolled off screen, or if the window is not the full width of
+its frame, or if the window is the only window in its frame.
+
+        <p>This command returns non-<code>nil</code> if it actually shrank the window
+and <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+   <p><a name="index-fixed_002dsize-window-2179"></a>
+
+<div class="defun">
+&mdash; Variable: <b>window-size-fixed</b><var><a name="index-window_002dsize_002dfixed-2180"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, in a given buffer, then the size of
+any window displaying that buffer remains fixed unless you either
+explicitly change it or Emacs has no other choice.
+
+        <p>If the value is <code>height</code>, then only the window's height is fixed;
+if the value is <code>width</code>, then only the window's width is fixed. 
+Any other non-<code>nil</code> value fixes both the width and the height.
+
+        <p>This variable automatically becomes buffer-local when set.
+
+        <p>Explicit size-change functions such as <code>enlarge-window</code>
+get an error if they would have to change a window size which is fixed. 
+Therefore, when you want to change the size of such a window,
+you should bind <code>window-size-fixed</code> to <code>nil</code>, like this:
+
+     <pre class="example">          (let ((window-size-fixed nil))
+             (enlarge-window 10))
+</pre>
+        <p>Deleting an adjacent window or changing the frame size may change the
+size of a fixed-size window, if there is no other alternative. 
+</p></blockquote></div>
+
+   <p><a name="index-minimum-window-size-2181"></a>  The following two variables constrain the window-structure-changing
+functions to a minimum height and width.
+
+<div class="defun">
+&mdash; User Option: <b>window-min-height</b><var><a name="index-window_002dmin_002dheight-2182"></a></var><br>
+<blockquote><p>The value of this variable specifies how short a window may become
+before it is automatically deleted.  Making a window smaller than
+<code>window-min-height</code> automatically deletes it, and no window may be
+created shorter than this.  The value is measured in line units.  When
+the window wants a mode line and/or a header line, they are counted as
+one line each.  The default value is <code>4</code>.  A value less than
+<code>1</code> is ignored. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>window-min-width</b><var><a name="index-window_002dmin_002dwidth-2183"></a></var><br>
+<blockquote><p>The value of this variable specifies how narrow a window may become
+before it is automatically deleted.  Making a window smaller than
+<code>window-min-width</code> automatically deletes it, and no window may be
+created narrower than this.  The value is measured in characters and
+includes any fringes or the scroll bar.  The default value is <code>10</code>. 
+A value less than <code>2</code> is ignored. 
+</p></blockquote></div>
+
+   <p><a name="index-balancing-window-sizes-2184"></a>Emacs provides two functions to balance windows, that is, to even out
+the sizes of windows on the same frame.  The minibuffer window and
+fixed-size windows are not resized by these functions.
+
+<div class="defun">
+&mdash; Command: <b>balance-windows</b><var> &amp;optional window-or-frame<a name="index-balance_002dwindows-2185"></a></var><br>
+<blockquote><p>This function balances windows in a way that gives more space to
+full-width and/or full-height windows.  If <var>window-or-frame</var>
+specifies a frame, it balances all windows on that frame.  If
+<var>window-or-frame</var> specifies a window, it balances this window and
+its &ldquo;siblings&rdquo; only.  Think of a sibling as the other (original or
+new) window with respect to the present one, involved in the process of
+splitting; see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>.  Since a sibling may have been
+split again, a window can have more than one sibling. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>balance-windows-area</b><var><a name="index-balance_002dwindows_002darea-2186"></a></var><br>
+<blockquote><p>This function attempts to give all windows on the selected frame
+approximately the same share of the screen area.  This means that
+full-width or full-height windows are not given more space than other
+windows. 
+</p></blockquote></div>
+
+   </body></html>
+

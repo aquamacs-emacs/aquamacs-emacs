@@ -37,11 +37,15 @@
   \advance\count@\@ne\ifnum\count@<5
   \afterassignment\pr@nextbb\dimen@=\fi}
 \ifnum\pr@graphicstype=\z@
-  \ifcase \ifx\pdfoutput\@undefined \@ne\fi
-    \ifx\pdfoutput\relax \@ne\fi
-    \ifnum\pdfoutput>\z@ \tw@\fi \@ne \or
-    \ExecuteOptions{dvips}\relax \or
-    \ExecuteOptions{pdftex}\relax\fi\fi
+  \ifcase
+    \ifx\XeTeXversion\@undefined
+      \ifx\pdfoutput\@undefined \@ne\fi
+      \ifx\pdfoutput\relax \@ne\fi
+      \ifnum\pdfoutput>\z@ \tw@\fi \@ne
+    \else \thr@@\fi
+  \or \ExecuteOptions{dvips}\relax
+  \or \ExecuteOptions{pdftex}\relax
+  \or \ExecuteOptions{xetex}\relax\fi\fi
 \global\let\pr@bbadjust\@empty
 \pr@addto@front\pr@ship@end{\begingroup
   \let\next\@gobble
@@ -81,6 +85,28 @@
     \advance\dimen@\pr@bb@iii
     \global\pdfpagewidth\dimen@
     \global\pdfhorigin-\pr@bb@i}}
+\or
+  \g@addto@macro\pr@ship@end{\dimen@\ht\pr@box
+    \ifdim\dimen@<\z@ \dimen@\z@\fi
+    \advance\dimen@\pr@bb@iv
+    \dimen@ii=\dimen@
+    \voffset=-1in
+    \advance\voffset\dimen@
+    \advance\voffset-\ht\pr@box
+    \dimen@\dp\pr@box
+    \ifdim\dimen@<\z@ \dimen@\z@\fi
+    \advance\dimen@-\pr@bb@ii
+    \advance\dimen@\dimen@ii
+    \global\pdfpageheight\dimen@
+    \global\paperheight\dimen@
+    \dimen@\wd\pr@box
+    \ifdim\dimen@<\z@ \dimen@=\z@\fi
+    \advance\dimen@-\pr@bb@i
+    \advance\dimen@\pr@bb@iii
+    \global\pdfpagewidth\dimen@
+    \hoffset=-1in
+    \advance\hoffset-\pr@bb@i
+    \let\pr@offset@override\@empty}
 \fi
 \ifnum\pr@graphicstype=\@ne
 \preview@delay{\AtBeginDvi{%

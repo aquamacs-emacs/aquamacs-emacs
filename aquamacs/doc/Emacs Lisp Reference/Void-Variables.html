@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Void Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Local-Variables.html#Local-Variables" title="Local Variables">
+<link rel="next" href="Defining-Variables.html#Defining-Variables" title="Defining Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Void-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Variables.html#Defining-Variables">Defining Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Local-Variables.html#Local-Variables">Local Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.4 When a Variable is &ldquo;Void&rdquo;</h3>
+
+<p><a name="index-void_002dvariable-596"></a><a name="index-void-variable-597"></a>
+  If you have never given a symbol any value as a global variable, we
+say that that symbol's global value is <dfn>void</dfn>.  In other words, the
+symbol's value cell does not have any Lisp object in it.  If you try to
+evaluate the symbol, you get a <code>void-variable</code> error rather than
+a value.
+
+   <p>Note that a value of <code>nil</code> is not the same as void.  The symbol
+<code>nil</code> is a Lisp object and can be the value of a variable just as any
+other object can be; but it is <em>a value</em>.  A void variable does not
+have any value.
+
+   <p>After you have given a variable a value, you can make it void once more
+using <code>makunbound</code>.
+
+<div class="defun">
+&mdash; Function: <b>makunbound</b><var> symbol<a name="index-makunbound-598"></a></var><br>
+<blockquote><p>This function makes the current variable binding of <var>symbol</var> void. 
+Subsequent attempts to use this symbol's value as a variable will signal
+the error <code>void-variable</code>, unless and until you set it again.
+
+        <p><code>makunbound</code> returns <var>symbol</var>.
+
+     <pre class="example">          (makunbound 'x)      ; <span class="roman">Make the global value of </span><code>x</code><span class="roman"> void.</span>
+               &rArr; x
+          x
+          error--&gt; Symbol's value as variable is void: x
+</pre>
+        <p>If <var>symbol</var> is locally bound, <code>makunbound</code> affects the most
+local existing binding.  This is the only way a symbol can have a void
+local binding, since all the constructs that create local bindings
+create them with values.  In this case, the voidness lasts at most as
+long as the binding does; when the binding is removed due to exit from
+the construct that made it, the previous local or global binding is
+reexposed as usual, and the variable is no longer void unless the newly
+reexposed binding was void all along.
+
+     <pre class="smallexample">          (setq x 1)               ; <span class="roman">Put a value in the global binding.</span>
+               &rArr; 1
+          (let ((x 2))             ; <span class="roman">Locally bind it.</span>
+            (makunbound 'x)        ; <span class="roman">Void the local binding.</span>
+            x)
+          error--&gt; Symbol's value as variable is void: x
+          x                        ; <span class="roman">The global binding is unchanged.</span>
+               &rArr; 1
+          
+          (let ((x 2))             ; <span class="roman">Locally bind it.</span>
+            (let ((x 3))           ; <span class="roman">And again.</span>
+              (makunbound 'x)      ; <span class="roman">Void the innermost-local binding.</span>
+              x))                  ; <span class="roman">And refer: it's void.</span>
+          error--&gt; Symbol's value as variable is void: x
+          
+          (let ((x 2))
+            (let ((x 3))
+              (makunbound 'x))     ; <span class="roman">Void inner binding, then remove it.</span>
+            x)                     ; <span class="roman">Now outer </span><code>let</code><span class="roman"> binding is visible.</span>
+               &rArr; 2
+</pre>
+        </blockquote></div>
+
+   <p>A variable that has been made void with <code>makunbound</code> is
+indistinguishable from one that has never received a value and has
+always been void.
+
+   <p>You can use the function <code>boundp</code> to test whether a variable is
+currently void.
+
+<div class="defun">
+&mdash; Function: <b>boundp</b><var> variable<a name="index-boundp-599"></a></var><br>
+<blockquote><p><code>boundp</code> returns <code>t</code> if <var>variable</var> (a symbol) is not void;
+more precisely, if its current binding is not void.  It returns
+<code>nil</code> otherwise.
+
+     <pre class="smallexample">          (boundp 'abracadabra)          ; <span class="roman">Starts out void.</span>
+               &rArr; nil
+          (let ((abracadabra 5))         ; <span class="roman">Locally bind it.</span>
+            (boundp 'abracadabra))
+               &rArr; t
+          (boundp 'abracadabra)          ; <span class="roman">Still globally void.</span>
+               &rArr; nil
+          (setq abracadabra 5)           ; <span class="roman">Make it globally nonvoid.</span>
+               &rArr; 5
+          (boundp 'abracadabra)
+               &rArr; t
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

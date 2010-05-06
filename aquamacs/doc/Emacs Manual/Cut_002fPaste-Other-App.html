@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Cut/Paste Other App - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Cut-and-Paste.html#Cut-and-Paste" title="Cut and Paste">
+<link rel="prev" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse" title="Word and Line Mouse">
+<link rel="next" href="Secondary-Selection.html#Secondary-Selection" title="Secondary Selection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Cut%2fPaste-Other-App"></a>
+<a name="Cut_002fPaste-Other-App"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Secondary-Selection.html#Secondary-Selection">Secondary Selection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse">Word and Line Mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>
+<hr>
+</div>
+
+<h4 class="subsection">25.1.3 Cut and Paste with Other Window Applications</h4>
+
+<p><a name="index-X-cutting-and-pasting-1186"></a><a name="index-X-selection-1187"></a><a name="index-primary-selection-1188"></a><a name="index-selection_002c-primary-1189"></a>  When running Emacs under the X window system, you can easily
+transfer text between Emacs and other X applications using the
+<dfn>primary selection</dfn> (also called the <dfn>X selection</dfn>).  This is
+<em>not</em> the same thing as the <dfn>clipboard</dfn>, which is a separate
+facility used on desktop environments such as Gnome, and on operating
+systems such as Microsoft Windows (see <a href="Clipboard.html#Clipboard">Clipboard</a>).
+
+   <p>Under X, whenever you select some text in Emacs by dragging or
+clicking the mouse (see <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>), it is also saved in the
+primary selection.  You can then <dfn>paste</dfn> that text into any other
+X application, usually by clicking <kbd>Mouse-2</kbd> in that application. 
+Unlike the Emacs kill ring (see <a href="Kill-Ring.html#Kill-Ring">Kill Ring</a>), the primary selection
+has no &ldquo;memory&rdquo;: each time you save something in the primary
+selection, either in Emacs or in another X application, the previous
+contents of the primary selection are lost.
+
+   <p>Whenever you kill some text using a command such as <kbd>C-w</kbd>
+(<code>kill-region</code>), or copy it into the kill ring using a command
+such as <kbd>M-w</kbd> (<code>kill-ring-save</code>), that text is also saved in
+the primary selection.  See <a href="Killing.html#Killing">Killing</a>.
+
+   <p><a name="index-select_002dactive_002dregions-1190"></a>  If you set the region using the keyboard&mdash;for instance, by typing
+<kbd>C-&lt;SPC&gt;</kbd> and moving point away from the mark&mdash;the text in
+the region is not normally saved to the primary selection.  However,
+if you change the variable <code>select-active-regions</code> to <code>t</code>,
+the region is saved to the primary selection whenever you activate the
+mark.  Each change to the region also updates the primary selection.
+
+   <p><a name="index-yank_002dpop_002dchange_002dselection-1191"></a>  If you change <code>yank-pop-change-selection</code> to <code>t</code>, rotating
+the kill ring with <kbd>M-y</kbd> (<code>yank-pop</code>) also saves the new yank
+to the primary selection (see <a href="Yanking.html#Yanking">Yanking</a>).
+
+   <p><a name="index-save_002dinterprogram_002dpaste_002dbefore_002dkill-1192"></a>  If you change <code>save-interprogram-paste-before-kill</code> to
+<code>t</code>, each kill command first saves the existing selection onto
+the kill ring.  This prevents you from losing the existing selection,
+at the risk of large memory consumption if other applications generate
+large selections.
+
+   <p><a name="index-cut-buffer-1193"></a><a name="index-x_002dcut_002dbuffer_002dmax-1194"></a>  Whenever Emacs saves some text to the primary selection, it may also
+save it to the <dfn>cut buffer</dfn>.  The cut buffer is an obsolete
+predecessor to the primary selection; most modern applications do not
+use it.  Saving text to the cut buffer is slow and inefficient, so
+Emacs only does it if the text is shorter than the value of
+<code>x-cut-buffer-max</code> (20000 characters by default).
+
+   <p>You can yank the primary selection into Emacs using the usual yank
+commands, such as <kbd>C-y</kbd> (<code>yank</code>) and <kbd>Mouse-2</kbd>
+(<code>mouse-yank-at-click</code>).  These commands actually check the
+primary selection before referring to the kill ring; if no primary
+selection is available, the kill ring contents are used.  To prevent
+yank commands from accessing the primary selection, set the variable
+<code>x-select-enable-primary</code> to <code>nil</code>.
+
+   <p>The standard coding system for the primary selection is
+<code>compound-text-with-extensions</code>.  You may find that the pasted
+text is not what you expected.  In such a case, you can specify
+another coding system for the selection by typing <kbd>C-x &lt;RET&gt;
+x</kbd> or <kbd>C-x &lt;RET&gt; X</kbd>.  Alternatively, you can request a
+different data type by modifying the variable
+<code>x-select-request-type</code>.  See <a href="Communication-Coding.html#Communication-Coding">Communication Coding</a>.
+
+   </body></html>
+

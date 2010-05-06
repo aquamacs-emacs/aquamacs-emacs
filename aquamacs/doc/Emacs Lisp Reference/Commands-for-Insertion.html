@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Commands for Insertion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Insertion.html#Insertion" title="Insertion">
+<link rel="next" href="Deletion.html#Deletion" title="Deletion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Commands-for-Insertion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deletion.html#Deletion">Deletion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Insertion.html#Insertion">Insertion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.5 User-Level Insertion Commands</h3>
+
+<p>This section describes higher-level commands for inserting text,
+commands intended primarily for the user but useful also in Lisp
+programs.
+
+<div class="defun">
+&mdash; Command: <b>insert-buffer</b><var> from-buffer-or-name<a name="index-insert_002dbuffer-2526"></a></var><br>
+<blockquote><p>This command inserts the entire accessible contents of
+<var>from-buffer-or-name</var> (which must exist) into the current buffer
+after point.  It leaves the mark after the inserted text.  The value
+is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>self-insert-command</b><var> count<a name="index-self_002dinsert_002dcommand-2527"></a></var><br>
+<blockquote><p><a name="index-character-insertion-2528"></a><a name="index-self_002dinsertion-2529"></a>This command inserts the last character typed; it does so <var>count</var>
+times, before point, and returns <code>nil</code>.  Most printing characters
+are bound to this command.  In routine use, <code>self-insert-command</code>
+is the most frequently called function in Emacs, but programs rarely use
+it except to install it on a keymap.
+
+        <p>In an interactive call, <var>count</var> is the numeric prefix argument.
+
+        <p>Self-insertion translates the input character through
+<code>translation-table-for-input</code>.  See <a href="Translation-of-Characters.html#Translation-of-Characters">Translation of Characters</a>.
+
+        <p>This command calls <code>auto-fill-function</code> whenever that is
+non-<code>nil</code> and the character inserted is in the table
+<code>auto-fill-chars</code> (see <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>).
+
+     <!-- Cross refs reworded to prevent overfull hbox.  -rjc 15mar92 -->
+        <p>This command performs abbrev expansion if Abbrev mode is enabled and
+the inserted character does not have word-constituent
+syntax. (See <a href="Abbrevs.html#Abbrevs">Abbrevs</a>, and <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>.)  It is also
+responsible for calling <code>blink-paren-function</code> when the inserted
+character has close parenthesis syntax (see <a href="Blinking.html#Blinking">Blinking</a>).
+
+        <p>Do not try substituting your own definition of
+<code>self-insert-command</code> for the standard one.  The editor command
+loop handles this function specially. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>newline</b><var> &amp;optional number-of-newlines<a name="index-newline-2530"></a></var><br>
+<blockquote><p>This command inserts newlines into the current buffer before point. 
+If <var>number-of-newlines</var> is supplied, that many newline characters
+are inserted.
+
+        <p><a name="index-newline-and-Auto-Fill-mode-2531"></a>This function calls <code>auto-fill-function</code> if the current column
+number is greater than the value of <code>fill-column</code> and
+<var>number-of-newlines</var> is <code>nil</code>.  Typically what
+<code>auto-fill-function</code> does is insert a newline; thus, the overall
+result in this case is to insert two newlines at different places: one
+at point, and another earlier in the line.  <code>newline</code> does not
+auto-fill if <var>number-of-newlines</var> is non-<code>nil</code>.
+
+        <p>This command indents to the left margin if that is not zero. 
+See <a href="Margins.html#Margins">Margins</a>.
+
+        <p>The value returned is <code>nil</code>.  In an interactive call, <var>count</var>
+is the numeric prefix argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>overwrite-mode</b><var><a name="index-overwrite_002dmode-2532"></a></var><br>
+<blockquote><p>This variable controls whether overwrite mode is in effect.  The value
+should be <code>overwrite-mode-textual</code>, <code>overwrite-mode-binary</code>,
+or <code>nil</code>.  <code>overwrite-mode-textual</code> specifies textual
+overwrite mode (treats newlines and tabs specially), and
+<code>overwrite-mode-binary</code> specifies binary overwrite mode (treats
+newlines and tabs like any other characters). 
+</p></blockquote></div>
+
+   </body></html>
+

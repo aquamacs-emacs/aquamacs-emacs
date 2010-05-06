@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>Syntax Table Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
+<link rel="prev" href="Syntax-Descriptors.html#Syntax-Descriptors" title="Syntax Descriptors">
+<link rel="next" href="Syntax-Properties.html#Syntax-Properties" title="Syntax Properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Syntax-Table-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
+<hr>
+</div>
+
+<h3 class="section">35.3 Syntax Table Functions</h3>
+
+<p>In this section we describe functions for creating, accessing and
+altering syntax tables.
+
+<div class="defun">
+&mdash; Function: <b>make-syntax-table</b><var> &amp;optional table<a name="index-make_002dsyntax_002dtable-3073"></a></var><br>
+<blockquote><p>This function creates a new syntax table, with all values initialized
+to <code>nil</code>.  If <var>table</var> is non-<code>nil</code>, it becomes the
+parent of the new syntax table, otherwise the standard syntax table is
+the parent.  Like all char-tables, a syntax table inherits from its
+parent.  Thus the original syntax of all characters in the returned
+syntax table is determined by the parent.  See <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>.
+
+        <p>Most major mode syntax tables are created in this way. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-syntax-table</b><var> &amp;optional table<a name="index-copy_002dsyntax_002dtable-3074"></a></var><br>
+<blockquote><p>This function constructs a copy of <var>table</var> and returns it.  If
+<var>table</var> is not supplied (or is <code>nil</code>), it returns a copy of the
+standard syntax table.  Otherwise, an error is signaled if <var>table</var> is
+not a syntax table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>modify-syntax-entry</b><var> char syntax-descriptor &amp;optional table<a name="index-modify_002dsyntax_002dentry-3075"></a></var><br>
+<blockquote><p>This function sets the syntax entry for <var>char</var> according to
+<var>syntax-descriptor</var>.  <var>char</var> can be a character, or a cons
+cell of the form <code>(</code><var>min</var><code> . </code><var>max</var><code>)</code>; in the latter case,
+the function sets the syntax entries for all characters in the range
+between <var>min</var> and <var>max</var>, inclusive.
+
+        <p>The syntax is changed only for <var>table</var>, which defaults to the
+current buffer's syntax table, and not in any other syntax table.  The
+argument <var>syntax-descriptor</var> specifies the desired syntax; this is
+a string beginning with a class designator character, and optionally
+containing a matching character and flags as well.  See <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>.
+
+        <p>This function always returns <code>nil</code>.  The old syntax information in
+the table for this character is discarded.
+
+        <p>An error is signaled if the first character of the syntax descriptor is not
+one of the seventeen syntax class designator characters.  An error is also
+signaled if <var>char</var> is not a character.
+
+     <pre class="example">     <br><span class="roman">Examples:</span><br>
+          
+          ;; <span class="roman">Put the space character in class whitespace.</span>
+          (modify-syntax-entry ?\s " ")
+               &rArr; nil
+          
+          ;; <span class="roman">Make &lsquo;</span><samp><span class="samp">$</span></samp><span class="roman">&rsquo; an open parenthesis character,</span>
+          ;;   <span class="roman">with &lsquo;</span><samp><span class="samp">^</span></samp><span class="roman">&rsquo; as its matching close.</span>
+          (modify-syntax-entry ?$ "(^")
+               &rArr; nil
+          
+          ;; <span class="roman">Make &lsquo;</span><samp><span class="samp">^</span></samp><span class="roman">&rsquo; a close parenthesis character,</span>
+          ;;   <span class="roman">with &lsquo;</span><samp><span class="samp">$</span></samp><span class="roman">&rsquo; as its matching open.</span>
+          (modify-syntax-entry ?^ ")$")
+               &rArr; nil
+          
+          ;; <span class="roman">Make &lsquo;</span><samp><span class="samp">/</span></samp><span class="roman">&rsquo; a punctuation character,</span>
+          ;;   <span class="roman">the first character of a start-comment sequence,</span>
+          ;;   <span class="roman">and the second character of an end-comment sequence.</span>
+          ;;   <span class="roman">This is used in C mode.</span>
+          (modify-syntax-entry ?/ ". 14")
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-syntax</b><var> character<a name="index-char_002dsyntax-3076"></a></var><br>
+<blockquote><p>This function returns the syntax class of <var>character</var>, represented
+by its mnemonic designator character.  This returns <em>only</em> the
+class, not any matching parenthesis or flags.
+
+        <p>An error is signaled if <var>char</var> is not a character.
+
+        <p>The following examples apply to C mode.  The first example shows that
+the syntax class of space is whitespace (represented by a space).  The
+second example shows that the syntax of &lsquo;<samp><span class="samp">/</span></samp>&rsquo; is punctuation.  This
+does not show the fact that it is also part of comment-start and -end
+sequences.  The third example shows that open parenthesis is in the class
+of open parentheses.  This does not show the fact that it has a matching
+character, &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.
+
+     <pre class="example">          (string (char-syntax ?\s))
+               &rArr; " "
+          
+          (string (char-syntax ?/))
+               &rArr; "."
+          
+          (string (char-syntax ?\())
+               &rArr; "("
+</pre>
+        <p>We use <code>string</code> to make it easier to see the character returned by
+<code>char-syntax</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-syntax-table</b><var> table<a name="index-set_002dsyntax_002dtable-3077"></a></var><br>
+<blockquote><p>This function makes <var>table</var> the syntax table for the current buffer. 
+It returns <var>table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>syntax-table</b><var><a name="index-syntax_002dtable-3078"></a></var><br>
+<blockquote><p>This function returns the current syntax table, which is the table for
+the current buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-syntax-table</b><var> table body<small class="dots">...</small><a name="index-with_002dsyntax_002dtable-3079"></a></var><br>
+<blockquote><p>This macro executes <var>body</var> using <var>table</var> as the current syntax
+table.  It returns the value of the last form in <var>body</var>, after
+restoring the old current syntax table.
+
+        <p>Since each buffer has its own current syntax table, we should make that
+more precise: <code>with-syntax-table</code> temporarily alters the current
+syntax table of whichever buffer is current at the time the macro
+execution starts.  Other buffers are not affected. 
+</p></blockquote></div>
+
+   </body></html>
+

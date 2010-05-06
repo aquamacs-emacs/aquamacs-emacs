@@ -7,4 +7,3 @@
 (autoload 'TeX-load-hack
   (expand-file-name "tex-site.el" (file-name-directory load-file-name)))
 (TeX-load-hack)
-

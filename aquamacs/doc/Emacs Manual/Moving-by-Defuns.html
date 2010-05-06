@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Moving by Defuns - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defuns.html#Defuns" title="Defuns">
+<link rel="prev" href="Left-Margin-Paren.html#Left-Margin-Paren" title="Left Margin Paren">
+<link rel="next" href="Imenu.html#Imenu" title="Imenu">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Moving-by-Defuns"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Imenu.html#Imenu">Imenu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defuns.html#Defuns">Defuns</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.2.2 Moving by Defuns</h4>
+
+<p><a name="index-defuns-1965"></a>
+  These commands move point or set up the region based on top-level
+major definitions, also called <dfn>defuns</dfn>.
+
+     <dl>
+<dt><kbd>C-M-a</kbd><dd>Move to beginning of current or preceding defun
+(<code>beginning-of-defun</code>). 
+<br><dt><kbd>C-M-e</kbd><dd>Move to end of current or following defun (<code>end-of-defun</code>). 
+<br><dt><kbd>C-M-h</kbd><dd>Put region around whole current or following defun (<code>mark-defun</code>). 
+</dl>
+
+   <p><a name="index-move-to-beginning-or-end-of-function-1966"></a><a name="index-function_002c-move-to-beginning-or-end-1967"></a><a name="index-C_002dM_002da-1968"></a><a name="index-C_002dM_002de-1969"></a><a name="index-C_002dM_002dh-1970"></a><a name="index-beginning_002dof_002ddefun-1971"></a><a name="index-end_002dof_002ddefun-1972"></a><a name="index-mark_002ddefun-1973"></a>  The commands to move to the beginning and end of the current defun
+are <kbd>C-M-a</kbd> (<code>beginning-of-defun</code>) and <kbd>C-M-e</kbd>
+(<code>end-of-defun</code>).  If you repeat one of these commands, or use a
+positive numeric argument, each repetition moves to the next defun in
+the direction of motion.
+
+   <p><kbd>C-M-a</kbd> with a negative argument &minus;<var>n</var> moves forward
+<var>n</var> times to the next beginning of a defun.  This is not exactly
+the same place that <kbd>C-M-e</kbd> with argument <var>n</var> would move to;
+the end of this defun is not usually exactly the same place as the
+beginning of the following defun.  (Whitespace, comments, and perhaps
+declarations can separate them.)  Likewise, <kbd>C-M-e</kbd> with a
+negative argument moves back to an end of a defun, which is not quite
+the same as <kbd>C-M-a</kbd> with a positive argument.
+
+   <p><a name="index-C_002dM_002dh-_0040r_007b_0028C-mode_0029_007d-1974"></a><a name="index-c_002dmark_002dfunction-1975"></a>  To operate on the current defun, use <kbd>C-M-h</kbd>
+(<code>mark-defun</code>), which sets the mark at the end of the current
+defun and puts point at its beginning.  See <a href="Marking-Objects.html#Marking-Objects">Marking Objects</a>.  This
+is the easiest way to get ready to kill the defun in order to move it
+to a different place in the file.  If you use the command while point
+is between defuns, it uses the following defun.  If you use the
+command while the mark is already active, it sets the mark but does
+not move point; furthermore, each successive use of <kbd>C-M-h</kbd>
+extends the end of the region to include one more defun.
+
+   <p>In C mode, <kbd>C-M-h</kbd> runs the function <code>c-mark-function</code>,
+which is almost the same as <code>mark-defun</code>; the difference is that
+it backs up over the argument declarations, function name and returned
+data type so that the entire C function is inside the region.  This is
+an example of how major modes adjust the standard key bindings so that
+they do their standard jobs in a way better fitting a particular
+language.  Other major modes may replace any or all of these key
+bindings for that purpose.
+
+   </body></html>
+

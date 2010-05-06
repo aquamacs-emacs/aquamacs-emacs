@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>Margins - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Filling.html#Filling" title="Filling">
+<link rel="next" href="Adaptive-Fill.html#Adaptive-Fill" title="Adaptive Fill">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Margins"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filling.html#Filling">Filling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.12 Margins for Filling</h3>
+
+<div class="defun">
+&mdash; User Option: <b>fill-prefix</b><var><a name="index-fill_002dprefix-2595"></a></var><br>
+<blockquote><p>This buffer-local variable, if non-<code>nil</code>, specifies a string of
+text that appears at the beginning of normal text lines and should be
+disregarded when filling them.  Any line that fails to start with the
+fill prefix is considered the start of a paragraph; so is any line
+that starts with the fill prefix followed by additional whitespace. 
+Lines that start with the fill prefix but no additional whitespace are
+ordinary text lines that can be filled together.  The resulting filled
+lines also start with the fill prefix.
+
+        <p>The fill prefix follows the left margin whitespace, if any. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>fill-column</b><var><a name="index-fill_002dcolumn-2596"></a></var><br>
+<blockquote><p>This buffer-local variable specifies the maximum width of filled lines. 
+Its value should be an integer, which is a number of columns.  All the
+filling, justification, and centering commands are affected by this
+variable, including Auto Fill mode (see <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>).
+
+        <p>As a practical matter, if you are writing text for other people to
+read, you should set <code>fill-column</code> to no more than 70.  Otherwise
+the line will be too long for people to read comfortably, and this can
+make the text seem clumsy.
+
+        <p>The default value for <code>fill-column</code> is 70. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>set-left-margin</b><var> from to margin<a name="index-set_002dleft_002dmargin-2597"></a></var><br>
+<blockquote><p>This sets the <code>left-margin</code> property on the text from <var>from</var> to
+<var>to</var> to the value <var>margin</var>.  If Auto Fill mode is enabled, this
+command also refills the region to fit the new margin. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>set-right-margin</b><var> from to margin<a name="index-set_002dright_002dmargin-2598"></a></var><br>
+<blockquote><p>This sets the <code>right-margin</code> property on the text from <var>from</var>
+to <var>to</var> to the value <var>margin</var>.  If Auto Fill mode is enabled,
+this command also refills the region to fit the new margin. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-left-margin</b><var><a name="index-current_002dleft_002dmargin-2599"></a></var><br>
+<blockquote><p>This function returns the proper left margin value to use for filling
+the text around point.  The value is the sum of the <code>left-margin</code>
+property of the character at the start of the current line (or zero if
+none), and the value of the variable <code>left-margin</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-fill-column</b><var><a name="index-current_002dfill_002dcolumn-2600"></a></var><br>
+<blockquote><p>This function returns the proper fill column value to use for filling
+the text around point.  The value is the value of the <code>fill-column</code>
+variable, minus the value of the <code>right-margin</code> property of the
+character after point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>move-to-left-margin</b><var> &amp;optional n force<a name="index-move_002dto_002dleft_002dmargin-2601"></a></var><br>
+<blockquote><p>This function moves point to the left margin of the current line.  The
+column moved to is determined by calling the function
+<code>current-left-margin</code>.  If the argument <var>n</var> is non-<code>nil</code>,
+<code>move-to-left-margin</code> moves forward <var>n</var>&minus;1 lines first.
+
+        <p>If <var>force</var> is non-<code>nil</code>, that says to fix the line's
+indentation if that doesn't match the left margin value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-to-left-margin</b><var> &amp;optional from to<a name="index-delete_002dto_002dleft_002dmargin-2602"></a></var><br>
+<blockquote><p>This function removes left margin indentation from the text between
+<var>from</var> and <var>to</var>.  The amount of indentation to delete is
+determined by calling <code>current-left-margin</code>.  In no case does this
+function delete non-whitespace.  If <var>from</var> and <var>to</var> are omitted,
+they default to the whole buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>indent-to-left-margin</b><var><a name="index-indent_002dto_002dleft_002dmargin-2603"></a></var><br>
+<blockquote><p>This function adjusts the indentation at the beginning of the current
+line to the value specified by the variable <code>left-margin</code>.  (That
+may involve either inserting or deleting whitespace.)  This function
+is value of <code>indent-line-function</code> in Paragraph-Indent Text mode. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>left-margin</b><var><a name="index-left_002dmargin-2604"></a></var><br>
+<blockquote><p>This variable specifies the base left margin column.  In Fundamental
+mode, <kbd>C-j</kbd> indents to this column.  This variable automatically
+becomes buffer-local when set in any fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>fill-nobreak-predicate</b><var><a name="index-fill_002dnobreak_002dpredicate-2605"></a></var><br>
+<blockquote><p>This variable gives major modes a way to specify not to break a line
+at certain places.  Its value should be a list of functions.  Whenever
+filling considers breaking the line at a certain place in the buffer,
+it calls each of these functions with no arguments and with point
+located at that place.  If any of the functions returns
+non-<code>nil</code>, then the line won't be broken there. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,7 +1,6 @@
 #!/bin/sh
 
 P=`pwd`
-indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
 
 echo "Give path to manual, e.g. ./convert-emacs-manual ~/Projects/emacs/man/manual"
 echo "If no path given, manual is downloaded from GNU."
@@ -35,15 +34,19 @@ perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\
  
 
 $P/convert-emacs-manual-pages /tmp/emanual/*.html
-$P/convert-emacs-manual-title /tmp/emanual/index.html 
+version=`$P/convert-emacs-manual-title /tmp/emanual/index.html`
 sed 's|<body>|<body><a name="index"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
 mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
-rm -r "$P"/../EmacsManual
-mv /tmp/emanual $P/../EmacsManual
+echo $version >/tmp/emanual/VERSION
 
-indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
+rm -r "$P"/../"Emacs Manual"
+mv /tmp/emanual $P/../"Emacs Manual"
 
-"${indexer}" $P/../EmacsManual -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
-cd $P/..
-tar czf EmacsManual.tgz EmacsManual
+hiutil -C -g -s en -a -f $P/../"Emacs Manual/Emacs Manual.helpindex" $P/../"Emacs Manual"
+
+# pre 10.6
+# indexer=/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer
+
+# "${indexer}" $P/../"Emacs Manual" -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
+# cd $P/..

@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Reading from Files - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Files.html#Files" title="Files">
+<link rel="prev" href="Saving-Buffers.html#Saving-Buffers" title="Saving Buffers">
+<link rel="next" href="Writing-to-Files.html#Writing-to-Files" title="Writing to Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Reading-from-Files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">25.3 Reading from Files</h3>
+
+<p><a name="index-reading-from-files-1770"></a>
+  You can copy a file from the disk and insert it into a buffer
+using the <code>insert-file-contents</code> function.  Don't use the user-level
+command <code>insert-file</code> in a Lisp program, as that sets the mark.
+
+<div class="defun">
+&mdash; Function: <b>insert-file-contents</b><var> filename &amp;optional visit beg end replace<a name="index-insert_002dfile_002dcontents-1771"></a></var><br>
+<blockquote><p>This function inserts the contents of file <var>filename</var> into the
+current buffer after point.  It returns a list of the absolute file name
+and the length of the data inserted.  An error is signaled if
+<var>filename</var> is not the name of a file that can be read.
+
+        <p>The function <code>insert-file-contents</code> checks the file contents
+against the defined file formats, and converts the file contents if
+appropriate and also calls the functions in
+the list <code>after-insert-file-functions</code>.  See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>. 
+Normally, one of the functions in the
+<code>after-insert-file-functions</code> list determines the coding system
+(see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>) used for decoding the file's contents,
+including end-of-line conversion.  However, if the file contains null
+bytes, it is by default visited without any code conversions; see
+<a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">inhibit-null-byte-detection</a>, for how to
+control this behavior.
+
+        <p>If <var>visit</var> is non-<code>nil</code>, this function additionally marks the
+buffer as unmodified and sets up various fields in the buffer so that it
+is visiting the file <var>filename</var>: these include the buffer's visited
+file name and its last save file modtime.  This feature is used by
+<code>find-file-noselect</code> and you probably should not use it yourself.
+
+        <p>If <var>beg</var> and <var>end</var> are non-<code>nil</code>, they should be integers
+specifying the portion of the file to insert.  In this case, <var>visit</var>
+must be <code>nil</code>.  For example,
+
+     <pre class="example">          (insert-file-contents filename nil 0 500)
+</pre>
+        <p class="noindent">inserts the first 500 characters of a file.
+
+        <p>If the argument <var>replace</var> is non-<code>nil</code>, it means to replace the
+contents of the buffer (actually, just the accessible portion) with the
+contents of the file.  This is better than simply deleting the buffer
+contents and inserting the whole file, because (1) it preserves some
+marker positions and (2) it puts less data in the undo list.
+
+        <p>It is possible to read a special file (such as a FIFO or an I/O device)
+with <code>insert-file-contents</code>, as long as <var>replace</var> and
+<var>visit</var> are <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>insert-file-contents-literally</b><var> filename &amp;optional visit beg end replace<a name="index-insert_002dfile_002dcontents_002dliterally-1772"></a></var><br>
+<blockquote><p>This function works like <code>insert-file-contents</code> except that it does
+not do format decoding (see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>), does not do
+character code conversion (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), does not run
+<code>find-file-hook</code>, does not perform automatic uncompression, and so
+on. 
+</p></blockquote></div>
+
+   <p>If you want to pass a file name to another process so that another
+program can read the file, use the function <code>file-local-copy</code>; see
+<a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>.
+
+   </body></html>
+

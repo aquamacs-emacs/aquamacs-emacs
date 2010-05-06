@@ -1,20 +1,24 @@
-This is preview-latex.info, produced by makeinfo version 4.11 from
+This is preview-latex.info, produced by makeinfo version 4.13 from
 preview-latex.texi.
 
 This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 11.85 from 2008-02-10).
+(version 11.86 from 2010-02-21).
 
    Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with no Invariant Sections, no Front-Cover Texts and
      no Back-Cover Texts.  A copy of the license is included in the
      section entitled "GNU Free Documentation License."
 
-INFO-DIR-SECTION EmacsINFO-DIR-SECTION TeX
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* preview-latex: (preview-latex).       Preview LaTeX fragments in Emacs
+END-INFO-DIR-ENTRY
+INFO-DIR-SECTION TeX
 START-INFO-DIR-ENTRY
 * preview-latex: (preview-latex).       Preview LaTeX fragments in Emacs
 END-INFO-DIR-ENTRY
@@ -797,7 +801,7 @@ File: preview-latex.info,  Node: The LaTeX style file,  Next: The Emacs interfac
 The main purpose of this package is the extraction of certain
 environments (most notably displayed formulas) from LaTeX sources as
 graphics.  This works with DVI files postprocessed by either Dvips and
-Ghostscript or dvipng, but it also works when you are using PDFTeXfor
+Ghostscript or dvipng, but it also works when you are using PDFTeX for
 generating PDF files (usually also postprocessed by Ghostscript).
 
    Current uses of the package include the preview-latex package for
@@ -904,6 +908,10 @@ redefines several things that other packages may also provide.
 
 `pdftex'
      If this option is set, PDFTeX is assumed as the output driver.
+     This mainly affects the `tightpage' option.
+
+`xetex'
+     If this option is set, XeTeX is assumed as the output driver.
      This mainly affects the `tightpage' option.
 
 `displaymath'
@@ -1687,6 +1695,8 @@ Appendix B Frequently Asked Questions
 * Requirements::
 * Installation Trouble::
 * Customization::
+* Troubleshooting::
+* Other formats::
 
 
 File: preview-latex.info,  Node: Introduction to FAQ,  Next: Requirements,  Prev: Frequently Asked Questions,  Up: Frequently Asked Questions
@@ -1828,7 +1838,7 @@ a package system that gets used here.  Please make sure that you read
 and follow the installation instructions for XEmacs.
 
 
-File: preview-latex.info,  Node: Customization,  Prev: Installation Trouble,  Up: Frequently Asked Questions
+File: preview-latex.info,  Node: Customization,  Next: Troubleshooting,  Prev: Installation Trouble,  Up: Frequently Asked Questions
 
 B.4 Customization
 =================
@@ -1912,6 +1922,9 @@ facilities of `preview.sty' to tell it how to resolve this, whether you
 want no previews, previews of whole slides or previews of inner
 material.
 
+
+File: preview-latex.info,  Node: Troubleshooting,  Next: Other formats,  Prev: Customization,  Up: Frequently Asked Questions
+
 B.5 Troubleshooting
 ===================
 
@@ -1945,6 +1958,29 @@ errors were present, and errors will always be present when
 preview-latex is operating.  There might be also real errors, so in
 case of doubt, look for them explicitly in either run buffer or the
 resulting `.log' file.
+
+B.5.2 Why do my DVI and PDF output files vanish?
+------------------------------------------------
+
+In order to produce the preview images preview-latex runs LaTeX on the
+master or region file.  The resulting DVI or PDF file can happen to
+have the same name as the output file of a regular LaTeX run.  So the
+regular output file gets overwritten and is subsequently deleted by
+preview-latex.
+
+B.5.3 My output file suddenly only contains preview images?!
+------------------------------------------------------------
+
+As mentioned in the previews FAQ entry, preview-latex might use the
+file name of the original output file for the creation of preview
+images.  If the original output file is being displayed with a viewer
+when this happens, you might see strange effects depending on the
+viewer, e.g. a message about the file being corrupted or the display of
+all the preview images instead of your typeset document.  (Also *Note
+Customization::.)
+
+
+File: preview-latex.info,  Node: Other formats,  Prev: Troubleshooting,  Up: Frequently Asked Questions
 
 B.6 preview-latex when not using LaTeX
 ======================================
@@ -1994,14 +2030,14 @@ Appendix C Copying this Manual
 The copyright notice for this manual is:
 
    This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 11.85 from 2008-02-10).
+(version 11.86 from 2010-02-21).
 
    Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.2 or any later version published by the Free Software
+     Version 1.3 or any later version published by the Free Software
      Foundation; with no Invariant Sections, no Front-Cover Texts and
      no Back-Cover Texts.  A copy of the license is included in the
      section entitled "GNU Free Documentation License."
@@ -2018,10 +2054,10 @@ File: preview-latex.info,  Node: GNU Free Documentation License,  Up: Copying th
 C.1 GNU Free Documentation License
 ==================================
 
-                      Version 1.2, November 2002
+                     Version 1.3, 3 November 2008
 
-     Copyright (C) 2000,2001,2002 Free Software Foundation, Inc.
-     51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
+     Copyright (C) 2000, 2001, 2002, 2007, 2008 Free Software
+     Foundation, Inc.  `http://fsf.org/'
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -2122,6 +2158,9 @@ C.1 GNU Free Documentation License
      works in formats which do not have any title page as such, "Title
      Page" means the text near the most prominent appearance of the
      work's title, preceding the beginning of the body of the text.
+
+     The "publisher" means any person or entity that distributes copies
+     of the Document to the public.
 
      A section "Entitled XYZ" means a named subunit of the Document
      whose title either is precisely XYZ or contains XYZ in parentheses
@@ -2388,12 +2427,29 @@ C.1 GNU Free Documentation License
   9. TERMINATION
 
      You may not copy, modify, sublicense, or distribute the Document
-     except as expressly provided for under this License.  Any other
-     attempt to copy, modify, sublicense or distribute the Document is
-     void, and will automatically terminate your rights under this
-     License.  However, parties who have received copies, or rights,
-     from you under this License will not have their licenses
-     terminated so long as such parties remain in full compliance.
+     except as expressly provided under this License.  Any attempt
+     otherwise to copy, modify, sublicense, or distribute it is void,
+     and will automatically terminate your rights under this License.
+
+     However, if you cease all violation of this License, then your
+     license from a particular copyright holder is reinstated (a)
+     provisionally, unless and until the copyright holder explicitly
+     and finally terminates your license, and (b) permanently, if the
+     copyright holder fails to notify you of the violation by some
+     reasonable means prior to 60 days after the cessation.
+
+     Moreover, your license from a particular copyright holder is
+     reinstated permanently if the copyright holder notifies you of the
+     violation by some reasonable means, this is the first time you have
+     received notice of violation of this License (for any work) from
+     that copyright holder, and you cure the violation prior to 30 days
+     after your receipt of the notice.
+
+     Termination of your rights under this section does not terminate
+     the licenses of parties who have received copies or rights from
+     you under this License.  If your rights have been terminated and
+     not permanently reinstated, receipt of a copy of some or all of
+     the same material does not give you any rights to use it.
 
  10. FUTURE REVISIONS OF THIS LICENSE
 
@@ -2411,7 +2467,41 @@ C.1 GNU Free Documentation License
      published (not as a draft) by the Free Software Foundation.  If
      the Document does not specify a version number of this License,
      you may choose any version ever published (not as a draft) by the
-     Free Software Foundation.
+     Free Software Foundation.  If the Document specifies that a proxy
+     can decide which future versions of this License can be used, that
+     proxy's public statement of acceptance of a version permanently
+     authorizes you to choose that version for the Document.
+
+ 11. RELICENSING
+
+     "Massive Multiauthor Collaboration Site" (or "MMC Site") means any
+     World Wide Web server that publishes copyrightable works and also
+     provides prominent facilities for anybody to edit those works.  A
+     public wiki that anybody can edit is an example of such a server.
+     A "Massive Multiauthor Collaboration" (or "MMC") contained in the
+     site means any set of copyrightable works thus published on the MMC
+     site.
+
+     "CC-BY-SA" means the Creative Commons Attribution-Share Alike 3.0
+     license published by Creative Commons Corporation, a not-for-profit
+     corporation with a principal place of business in San Francisco,
+     California, as well as future copyleft versions of that license
+     published by that same organization.
+
+     "Incorporate" means to publish or republish a Document, in whole or
+     in part, as part of another Document.
+
+     An MMC is "eligible for relicensing" if it is licensed under this
+     License, and if all works that were first published under this
+     License somewhere other than this MMC, and subsequently
+     incorporated in whole or in part into the MMC, (1) had no cover
+     texts or invariant sections, and (2) were thus incorporated prior
+     to November 1, 2008.
+
+     The operator of an MMC Site may republish an MMC contained in the
+     site under CC-BY-SA on the same site at any time before August 1,
+     2009, provided the MMC is eligible for relicensing.
+
 
 ADDENDUM: How to use this License for your documents
 ====================================================
@@ -2422,7 +2512,7 @@ notices just after the title page:
 
        Copyright (C)  YEAR  YOUR NAME.
        Permission is granted to copy, distribute and/or modify this document
-       under the terms of the GNU Free Documentation License, Version 1.2
+       under the terms of the GNU Free Documentation License, Version 1.3
        or any later version published by the Free Software Foundation;
        with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
        Texts.  A copy of the license is included in the section entitled ``GNU
@@ -2568,41 +2658,43 @@ Index
 
 
 Tag Table:
-Node: Top828
-Node: Copying2100
-Node: Introduction2561
-Node: What use is it?3234
-Node: Activating preview-latex4626
-Node: Getting started5441
-Node: Basic modes of operation7528
-Node: More documentation8732
-Node: Availability9620
-Node: Contacts10225
-Node: Installation11497
-Node: Keys and lisp11710
-Node: Simple customization18378
-Node: Known problems24139
-Node: Problems with Ghostscript24960
-Node: Font problems with Dvips27153
-Node: Emacs problems28356
-Node: Too small bounding boxes30093
-Node: x-symbol interoperation31477
-Node: Middle-clicks paste instead of toggling32859
-Node: For advanced users33675
-Node: The LaTeX style file34134
-Node: Package options36694
-Node: Provided commands47504
-Node: The Emacs interface54859
-Node: The preview images64039
-Node: Misplaced previews67511
-Node: ToDo70954
-Node: Frequently Asked Questions75739
-Node: Introduction to FAQ76024
-Node: Requirements76363
-Node: Installation Trouble79327
-Node: Customization81889
-Node: Copying this Manual88065
-Node: GNU Free Documentation License88990
-Node: Index111395
+Node: Top942
+Node: Copying2214
+Node: Introduction2675
+Node: What use is it?3348
+Node: Activating preview-latex4740
+Node: Getting started5555
+Node: Basic modes of operation7642
+Node: More documentation8846
+Node: Availability9734
+Node: Contacts10339
+Node: Installation11611
+Node: Keys and lisp11824
+Node: Simple customization18492
+Node: Known problems24253
+Node: Problems with Ghostscript25074
+Node: Font problems with Dvips27267
+Node: Emacs problems28470
+Node: Too small bounding boxes30207
+Node: x-symbol interoperation31591
+Node: Middle-clicks paste instead of toggling32973
+Node: For advanced users33789
+Node: The LaTeX style file34248
+Node: Package options36809
+Node: Provided commands47744
+Node: The Emacs interface55099
+Node: The preview images64279
+Node: Misplaced previews67751
+Node: ToDo71194
+Node: Frequently Asked Questions75979
+Node: Introduction to FAQ76302
+Node: Requirements76641
+Node: Installation Trouble79605
+Node: Customization82167
+Node: Troubleshooting85715
+Node: Other formats88232
+Node: Copying this Manual89549
+Node: GNU Free Documentation License90474
+Node: Index115615
 
 End Tag Table

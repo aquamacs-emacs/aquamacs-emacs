@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Completion Options - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Strict-Completion.html#Strict-Completion" title="Strict Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Completion-Options"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Strict-Completion.html#Strict-Completion">Strict Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.3.4 Completion Options</h4>
+
+<p><a name="index-completion_002dauto_002dhelp-176"></a>  If <code>completion-auto-help</code> is set to <code>nil</code>, the completion
+commands never display the completion list buffer; you must type
+<kbd>?</kbd>  to display the list.  If the value is <code>lazy</code>, Emacs only
+shows the completion list buffer on the second attempt to complete. 
+In other words, if there is nothing to complete, the first &lt;TAB&gt;
+echoes &lsquo;<samp><span class="samp">Next char not unique</span></samp>&rsquo;; the second &lt;TAB&gt; does the
+completion list buffer.
+
+   <p><a name="index-completion_002dignored_002dextensions-177"></a><a name="index-ignored-file-names_002c-in-completion-178"></a>  When completing file names, certain file names are usually ignored. 
+The variable <code>completion-ignored-extensions</code> contains a list of
+strings; a file name ending in any of those strings is ignored as a
+completion candidate.  The standard value of this variable has several
+elements including <code>".o"</code>, <code>".elc"</code>, and <code>"~"</code>.  For
+example, if a directory contains &lsquo;<samp><span class="samp">foo.c</span></samp>&rsquo; and &lsquo;<samp><span class="samp">foo.elc</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; completes to &lsquo;<samp><span class="samp">foo.c</span></samp>&rsquo;.  However, if <em>all</em> possible
+completions end in &ldquo;ignored&rdquo; strings, they are not ignored: in the
+previous example, &lsquo;<samp><span class="samp">foo.e</span></samp>&rsquo; completes to &lsquo;<samp><span class="samp">foo.elc</span></samp>&rsquo;. 
+Displaying a list of possible completions disregards
+<code>completion-ignored-extensions</code>; it shows them all.
+
+   <p>If an element of <code>completion-ignored-extensions</code> ends in a
+slash (<samp><span class="file">/</span></samp>), it's a subdirectory name; that directory and its
+contents are ignored.  Elements of
+<code>completion-ignored-extensions</code> that do not end in a slash are
+ordinary file names.
+
+   <p><a name="index-case_002dsensitivity-and-completion-179"></a><a name="index-read_002dfile_002dname_002dcompletion_002dignore_002dcase-180"></a><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase-181"></a>  When completing file names, Emacs ignores case differences if the
+variable <code>read-file-name-completion-ignore-case</code> is
+non-<code>nil</code>.  The default value is <code>nil</code> on systems that have
+case-sensitive file-names, such as GNU/Linux; it is non-<code>nil</code> on
+systems that have case-insensitive file-names, such as Microsoft
+Windows.  When completing buffer names, Emacs ignores case differences
+if <code>read-buffer-completion-ignore-case</code> is non-<code>nil</code> (the
+default value is <code>nil</code>).
+
+   <p><a name="index-completion_002dstyles-182"></a>  You can customize the matching rules for completion alternatives
+using the variable <code>completion-styles</code>.  Its value should be a
+list of symbols, each representing a <dfn>completion style</dfn>; valid
+style symbols are <code>basic</code>, <code>partial-completion</code>,
+<code>emacs22</code>, <code>emacs21</code>, and <code>initials</code>.  When completing,
+Emacs attempts to use the first completion style in the list; if this
+does not return any completion alternatives, it tries the next
+completion style in the list, and so on.  The completion rules
+described in <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a> correspond to the default value
+of <code>completion-styles</code>, which is <code>(basic partial-completion
+emacs22)</code>.
+
+   <p><a name="index-Icomplete-mode-183"></a><a name="index-icomplete_002dmode-184"></a>  Icomplete mode presents a constantly-updated display that tells you
+what completions are available for the text you've entered so far.  The
+command to enable or disable this minor mode is <kbd>M-x
+icomplete-mode</kbd>.
+
+   </body></html>
+

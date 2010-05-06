@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Adaptive Fill - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Margins.html#Margins" title="Margins">
+<link rel="next" href="Auto-Filling.html#Auto-Filling" title="Auto Filling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Adaptive-Fill"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Filling.html#Auto-Filling">Auto Filling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Margins.html#Margins">Margins</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.13 Adaptive Fill Mode</h3>
+
+<!-- @cindex Adaptive Fill mode  "adaptive-fill-mode" is adjacent. -->
+<p>When <dfn>Adaptive Fill Mode</dfn> is enabled, Emacs determines the fill
+prefix automatically from the text in each paragraph being filled
+rather than using a predetermined value.  During filling, this fill
+prefix gets inserted at the start of the second and subsequent lines
+of the paragraph as described in <a href="Filling.html#Filling">Filling</a>, and in <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>.
+
+<div class="defun">
+&mdash; User Option: <b>adaptive-fill-mode</b><var><a name="index-adaptive_002dfill_002dmode-2606"></a></var><br>
+<blockquote><p>Adaptive Fill mode is enabled when this variable is non-<code>nil</code>. 
+It is <code>t</code> by default. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>fill-context-prefix</b><var> from to<a name="index-fill_002dcontext_002dprefix-2607"></a></var><br>
+<blockquote><p>This function implements the heart of Adaptive Fill mode; it chooses a
+fill prefix based on the text between <var>from</var> and <var>to</var>,
+typically the start and end of a paragraph.  It does this by looking
+at the first two lines of the paragraph, based on the variables
+described below. 
+<!-- The optional argument first-line-regexp is not documented -->
+<!-- because it exists for internal purposes and might be eliminated -->
+<!-- in the future. -->
+
+        <p>Usually, this function returns the fill prefix, a string.  However,
+before doing this, the function makes a final check (not specially
+mentioned in the following) that a line starting with this prefix
+wouldn't look like the start of a paragraph.  Should this happen, the
+function signals the anomaly by returning <code>nil</code> instead.
+
+        <p>In detail, <code>fill-context-prefix</code> does this:
+
+          <ol type=1 start=1>
+<li>It takes a candidate for the fill prefix from the first line&mdash;it
+tries first the function in <code>adaptive-fill-function</code> (if any),
+then the regular expression <code>adaptive-fill-regexp</code> (see below). 
+The first non-<code>nil</code> result of these, or the empty string if
+they're both <code>nil</code>, becomes the first line's candidate. 
+<li>If the paragraph has as yet only one line, the function tests the
+validity of the prefix candidate just found.  The function then
+returns the candidate if it's valid, or a string of spaces otherwise. 
+(see the description of <code>adaptive-fill-first-line-regexp</code> below). 
+<li>When the paragraph already has two lines, the function next looks for
+a prefix candidate on the second line, in just the same way it did for
+the first line.  If it doesn't find one, it returns <code>nil</code>. 
+<li>The function now compares the two candidate prefixes heuristically: if
+the non-whitespace characters in the line 2 candidate occur in the
+same order in the line 1 candidate, the function returns the line 2
+candidate.  Otherwise, it returns the largest initial substring which
+is common to both candidates (which might be the empty string).
+             </ol>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>adaptive-fill-regexp</b><var><a name="index-adaptive_002dfill_002dregexp-2608"></a></var><br>
+<blockquote><p>Adaptive Fill mode matches this regular expression against the text
+starting after the left margin whitespace (if any) on a line; the
+characters it matches are that line's candidate for the fill prefix.
+
+        <p>The default value matches whitespace with certain punctuation
+characters intermingled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>adaptive-fill-first-line-regexp</b><var><a name="index-adaptive_002dfill_002dfirst_002dline_002dregexp-2609"></a></var><br>
+<blockquote><p>Used only in one-line paragraphs, this regular expression acts as an
+additional check of the validity of the one available candidate fill
+prefix: the candidate must match this regular expression, or match
+<code>comment-start-skip</code>.  If it doesn't, <code>fill-context-prefix</code>
+replaces the candidate with a string of spaces &ldquo;of the same width&rdquo;
+as it.
+
+        <p>The default value of this variable is <code>"\\`[&nbsp;\t]*\\'"</code><!-- /@w -->, which
+matches only a string of whitespace.  The effect of this default is to
+force the fill prefixes found in one-line paragraphs always to be pure
+whitespace. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>adaptive-fill-function</b><var><a name="index-adaptive_002dfill_002dfunction-2610"></a></var><br>
+<blockquote><p>You can specify more complex ways of choosing a fill prefix
+automatically by setting this variable to a function.  The function is
+called with point after the left margin (if any) of a line, and it
+must preserve point.  It should return either &ldquo;that line's&rdquo; fill
+prefix or <code>nil</code>, meaning it has failed to determine a prefix. 
+</p></blockquote></div>
+
+   </body></html>
+

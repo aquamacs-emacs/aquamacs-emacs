@@ -1958,6 +1958,9 @@ and selects that window."
 	   window))
 	(switch-to-buffer buf)))))
 
+(defvar buffer-menu-modified-string "*")
+(defvar buffer-menu-read-only-string "%")
+
 (defun mouse-buffer-menu-alist (buffers)
   (let (tail
 	(maxlen 0)
@@ -1981,11 +1984,14 @@ and selects that window."
 		  (cons
 		   (cons
 		    (format
-		     (format "%%-%ds  %%s%%s  %%s" maxlen)
+		     (if window-system
+			 "%s %s%s%s  %s"  ; variable-width menu font!
+		       (format "%%-%ds %%s%%s%%s  %%s" maxlen))
 		     (buffer-name elt)
-		     (if (buffer-modified-p elt) "*" " ")
+		     (if (buffer-modified-p elt) buffer-menu-modified-string "")
 		     (with-current-buffer elt
-		       (if buffer-read-only "%" " "))
+		       (if buffer-read-only buffer-menu-read-only-string " "))
+		     ""
 		     (or (buffer-file-name elt)
 			 (with-current-buffer elt
 			   (if list-buffers-directory
@@ -1995,8 +2001,8 @@ and selects that window."
 		    elt)
 		   head))))
       (setq tail (cdr tail)))
-    ;; Compensate for the reversal that the above loop does.
-    (nreverse head)))
+    ;; Should be sorted to keep list stable
+    head))
 
 (defun mouse-buffer-menu-split (title alist)
   ;; If we have lots of buffers, divide them into groups of 20

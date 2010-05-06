@@ -1,6 +1,6 @@
 ;;; beamer.el --- AUCTeX style for the latex-beamer class
 
-;; Copyright (C) 2003, 2004, 2005 Free Software Foundation
+;; Copyright (C) 2003, 2004, 2005,2008 Free Software Foundation
 
 ;; Author: Thomas Baumann <thomas.baumann@ch.tum.de>
 ;; Created: 2003-12-20
@@ -29,9 +29,33 @@
 
 ;;; Code:
 
+(defun LaTeX-beamer-after-insert-env (env start end)
+  "Do beamer-specific stuff after the insertion of an environment."
+  ;; Add `fragile' as an optional argument to the frame environment if
+  ;; a verbatim environment is inserted.
+  (when (and (TeX-member env (LaTeX-verbatim-environments) 'string-equal)
+	     (save-excursion
+	       (goto-char start)
+	       (string-equal (LaTeX-current-environment) "frame")))
+    (save-excursion
+      (when (re-search-backward "\\\\begin[ \t]*{frame}" nil t)
+	(let ((end-of-begin (match-end 0)))
+	  (goto-char end-of-begin)
+	  (while (forward-comment 1))
+	  (if (eq (char-after) (string-to-char LaTeX-optop))
+	      (progn
+		(forward-char)
+		(insert "fragile")
+		(unless (looking-at (concat "[ \t]*" LaTeX-optcl))
+		  (insert ",")))
+	    (goto-char end-of-begin)
+	    (insert "[fragile]")))))))
+
 (TeX-add-style-hook
  "beamer"
  (lambda ()
+   (add-hook 'LaTeX-after-insert-env-hooks 'LaTeX-beamer-after-insert-env nil t)
+
    (unless LaTeX-beamer-section-labels-flag
      (make-local-variable 'LaTeX-section-hook)
      (setq LaTeX-section-hook
@@ -101,7 +125,7 @@
     "columnsonlytextwidth"
     '("exampleblock" 1)
     '("frame"  (lambda (env &rest ignore)
-		 (let ((title (read-input "(Optional) Title: ")))
+		 (let ((title (read-string "(Optional) Title: ")))
 		   (LaTeX-insert-environment env)
 		   (unless (zerop (length title))
 		     (save-excursion
@@ -116,32 +140,45 @@
     '("onlyenv" (lambda (env &rest ignore)
 		  (LaTeX-insert-environment
 		   env
-		   (let ((overlay (read-input "(Optional) Overlay: ")))
+		   (let ((overlay (read-string "(Optional) Overlay: ")))
 		     (unless (zerop (length overlay))
 		       (format "<%s>" overlay))))))
     '("overlayarea" "Area width" "Area height")
     '("overprint"  (lambda (env &rest ignore)
 		     (LaTeX-insert-environment
 		      env
-		      (let ((width (read-input "(Optional) Area width: ")))
+		      (let ((width (read-string "(Optional) Area width: ")))
 			(unless (zerop (length width))
-			  (format "[%s]" width)))))))
+			  (format "[%s]" width))))))
+    "semiverbatim")
+
+   (make-local-variable 'LaTeX-indent-environment-list)
+   (add-to-list 'LaTeX-indent-environment-list
+		'("semiverbatim" current-indentation))
+   (make-local-variable 'LaTeX-verbatim-regexp)
+   (setq LaTeX-verbatim-regexp (concat LaTeX-verbatim-regexp "\\|semiverbatim"))
+   (add-to-list 'LaTeX-verbatim-environments-local "semiverbatim")
 
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("frametitle" "<[{")) 'slide-title))))
+     (font-latex-add-keywords '(("frametitle" "<[{")) 'slide-title)
+     ;; For syntactic fontification, e.g. verbatim constructs.
+     (font-latex-set-syntactic-keywords)
+     ;; Tell font-lock about the update.
+     (setq font-lock-set-defaults nil)
+     (font-lock-set-defaults))))
 
 (defun TeX-arg-beamer-overlay-spec (optional &optional prompt)
   "Prompt for overlay specification." 
-  (let ((overlay (read-input "(Optional) Overlay: ")))
+  (let ((overlay (read-string "(Optional) Overlay: ")))
     (unless (zerop (length overlay))
       (insert "<" overlay ">"))
     (indent-according-to-mode)))
 
 (defun TeX-arg-beamer-frametitle (optional &optional prompt)
   "Prompt for the frametitle."
-  (let ((title (read-input "Title: ")))
+  (let ((title (read-string "Title: ")))
     (if (not (zerop (length title)))
         (insert TeX-grop TeX-esc "frametitle" TeX-grop 
 		title TeX-grcl TeX-grcl)
@@ -165,8 +202,8 @@ unconditionally."
   
 (defun TeX-arg-beamer-note (optional &optional prompt)
   "Prompt for overlay specification and optional argument."
-  (let ((overlay (read-input "(Optional) Overlay: "))
-        (options (read-input "(Optional) Options: ")))
+  (let ((overlay (read-string "(Optional) Overlay: "))
+        (options (read-string "(Optional) Options: ")))
     (unless (zerop (length overlay))
       (insert "<" overlay ">"))
     (unless (zerop (length options))

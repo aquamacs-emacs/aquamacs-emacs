@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+<title>Minibuffer History - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="prev" href="Object-from-Minibuffer.html#Object-from-Minibuffer" title="Object from Minibuffer">
+<link rel="next" href="Initial-Input.html#Initial-Input" title="Initial Input">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Minibuffer-History"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Initial-Input.html#Initial-Input">Initial Input</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Object-from-Minibuffer.html#Object-from-Minibuffer">Object from Minibuffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.4 Minibuffer History</h3>
+
+<p><a name="index-minibuffer-history-1098"></a><a name="index-history-list-1099"></a>
+  A <dfn>minibuffer history list</dfn> records previous minibuffer inputs so
+the user can reuse them conveniently.  A history list is actually a
+symbol, not a list; it is a variable whose value is a list of strings
+(previous inputs), most recent first.
+
+   <p>There are many separate history lists, used for different kinds of
+inputs.  It's the Lisp programmer's job to specify the right history
+list for each use of the minibuffer.
+
+   <p>You specify the history list with the optional <var>hist</var> argument
+to either <code>read-from-minibuffer</code> or <code>completing-read</code>.  Here
+are the possible values for it:
+
+     <dl>
+<dt><var>variable</var><dd>Use <var>variable</var> (a symbol) as the history list.
+
+     <br><dt>(<var>variable</var> . <var>startpos</var>)<dd>Use <var>variable</var> (a symbol) as the history list, and assume that the
+initial history position is <var>startpos</var> (a nonnegative integer).
+
+     <p>Specifying 0 for <var>startpos</var> is equivalent to just specifying the
+symbol <var>variable</var>.  <code>previous-history-element</code> will display
+the most recent element of the history list in the minibuffer.  If you
+specify a positive <var>startpos</var>, the minibuffer history functions
+behave as if <code>(elt </code><var>variable</var><code> (1- </code><var>STARTPOS</var><code>))</code> were the
+history element currently shown in the minibuffer.
+
+     <p>For consistency, you should also specify that element of the history
+as the initial minibuffer contents, using the <var>initial</var> argument
+to the minibuffer input function (see <a href="Initial-Input.html#Initial-Input">Initial Input</a>). 
+</dl>
+
+   <p>If you don't specify <var>hist</var>, then the default history list
+<code>minibuffer-history</code> is used.  For other standard history lists,
+see below.  You can also create your own history list variable; just
+initialize it to <code>nil</code> before the first use.
+
+   <p>Both <code>read-from-minibuffer</code> and <code>completing-read</code> add new
+elements to the history list automatically, and provide commands to
+allow the user to reuse items on the list.  The only thing your program
+needs to do to use a history list is to initialize it and to pass its
+name to the input functions when you wish.  But it is safe to modify the
+list by hand when the minibuffer input functions are not using it.
+
+   <p>Emacs functions that add a new element to a history list can also
+delete old elements if the list gets too long.  The variable
+<code>history-length</code> specifies the maximum length for most history
+lists.  To specify a different maximum length for a particular history
+list, put the length in the <code>history-length</code> property of the
+history list symbol.  The variable <code>history-delete-duplicates</code>
+specifies whether to delete duplicates in history.
+
+<div class="defun">
+&mdash; Function: <b>add-to-history</b><var> history-var newelt &amp;optional maxelt keep-all<a name="index-add_002dto_002dhistory-1100"></a></var><br>
+<blockquote><p>This function adds a new element <var>newelt</var>, if it isn't the empty
+string, to the history list stored in the variable <var>history-var</var>,
+and returns the updated history list.  It limits the list length to
+the value of <var>maxelt</var> (if non-<code>nil</code>) or <code>history-length</code>
+(described below).  The possible values of <var>maxelt</var> have the same
+meaning as the values of <code>history-length</code>.
+
+        <p>Normally, <code>add-to-history</code> removes duplicate members from the
+history list if <code>history-delete-duplicates</code> is non-<code>nil</code>. 
+However, if <var>keep-all</var> is non-<code>nil</code>, that says not to remove
+duplicates, and to add <var>newelt</var> to the list even if it is empty. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>history-add-new-input</b><var><a name="index-history_002dadd_002dnew_002dinput-1101"></a></var><br>
+<blockquote><p>If the value of this variable is <code>nil</code>, standard functions that
+read from the minibuffer don't add new elements to the history list. 
+This lets Lisp programs explicitly manage input history by using
+<code>add-to-history</code>.  By default, <code>history-add-new-input</code> is
+set to a non-<code>nil</code> value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>history-length</b><var><a name="index-history_002dlength-1102"></a></var><br>
+<blockquote><p>The value of this variable specifies the maximum length for all
+history lists that don't specify their own maximum lengths.  If the
+value is <code>t</code>, that means there no maximum (don't delete old
+elements).  The value of <code>history-length</code> property of the history
+list variable's symbol, if set, overrides this variable for that
+particular history list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>history-delete-duplicates</b><var><a name="index-history_002ddelete_002dduplicates-1103"></a></var><br>
+<blockquote><p>If the value of this variable is <code>t</code>, that means when adding a
+new history element, all previous identical elements are deleted. 
+</p></blockquote></div>
+
+   <p>Here are some of the standard minibuffer history list variables:
+
+<div class="defun">
+&mdash; Variable: <b>minibuffer-history</b><var><a name="index-minibuffer_002dhistory-1104"></a></var><br>
+<blockquote><p>The default history list for minibuffer history input. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>query-replace-history</b><var><a name="index-query_002dreplace_002dhistory-1105"></a></var><br>
+<blockquote><p>A history list for arguments to <code>query-replace</code> (and similar
+arguments to other commands). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>file-name-history</b><var><a name="index-file_002dname_002dhistory-1106"></a></var><br>
+<blockquote><p>A history list for file-name arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-name-history</b><var><a name="index-buffer_002dname_002dhistory-1107"></a></var><br>
+<blockquote><p>A history list for buffer-name arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>regexp-history</b><var><a name="index-regexp_002dhistory-1108"></a></var><br>
+<blockquote><p>A history list for regular expression arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>extended-command-history</b><var><a name="index-extended_002dcommand_002dhistory-1109"></a></var><br>
+<blockquote><p>A history list for arguments that are names of extended commands. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>shell-command-history</b><var><a name="index-shell_002dcommand_002dhistory-1110"></a></var><br>
+<blockquote><p>A history list for arguments that are shell commands. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>read-expression-history</b><var><a name="index-read_002dexpression_002dhistory-1111"></a></var><br>
+<blockquote><p>A history list for arguments that are Lisp expressions to evaluate. 
+</p></blockquote></div>
+
+   </body></html>
+

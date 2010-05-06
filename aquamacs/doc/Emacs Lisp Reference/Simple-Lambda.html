@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Simple Lambda - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
+<link rel="prev" href="Lambda-Components.html#Lambda-Components" title="Lambda Components">
+<link rel="next" href="Argument-List.html#Argument-List" title="Argument List">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Simple-Lambda"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Argument-List.html#Argument-List">Argument List</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lambda-Components.html#Lambda-Components">Lambda Components</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.2.2 A Simple Lambda-Expression Example</h4>
+
+<p>Consider for example the following function:
+
+<pre class="example">     (lambda (a b c) (+ a b c))
+</pre>
+   <p class="noindent">We can call this function by writing it as the <span class="sc">car</span> of an
+expression, like this:
+
+<pre class="example">     ((lambda (a b c) (+ a b c))
+      1 2 3)
+</pre>
+   <p class="noindent">This call evaluates the body of the lambda expression  with the variable
+<code>a</code> bound to 1, <code>b</code> bound to 2, and <code>c</code> bound to 3. 
+Evaluation of the body adds these three numbers, producing the result 6;
+therefore, this call to the function returns the value 6.
+
+   <p>Note that the arguments can be the results of other function calls, as in
+this example:
+
+<pre class="example">     ((lambda (a b c) (+ a b c))
+      1 (* 2 3) (- 5 4))
+</pre>
+   <p class="noindent">This evaluates the arguments <code>1</code>, <code>(* 2 3)</code>, and <code>(- 5
+4)</code> from left to right.  Then it applies the lambda expression to the
+argument values 1, 6 and 1 to produce the value 8.
+
+   <p>It is not often useful to write a lambda expression as the <span class="sc">car</span> of
+a form in this way.  You can get the same result, of making local
+variables and giving them values, using the special form <code>let</code>
+(see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  And <code>let</code> is clearer and easier to use. 
+In practice, lambda expressions are either stored as the function
+definitions of symbols, to produce named functions, or passed as
+arguments to other functions (see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>).
+
+   <p>However, calls to explicit lambda expressions were very useful in the
+old days of Lisp, before the special form <code>let</code> was invented.  At
+that time, they were the only way to bind and initialize local
+variables.
+
+   </body></html>
+

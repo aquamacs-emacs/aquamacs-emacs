@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+<title>Invisible Text - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Warnings.html#Warnings" title="Warnings">
+<link rel="next" href="Selective-Display.html#Selective-Display" title="Selective Display">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Invisible-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selective-Display.html#Selective-Display">Selective Display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Warnings.html#Warnings">Warnings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">38.6 Invisible Text</h3>
+
+<p><a name="index-invisible-text-3367"></a>You can make characters <dfn>invisible</dfn>, so that they do not appear on
+the screen, with the <code>invisible</code> property.  This can be either a
+text property (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) or a property of an overlay
+(see <a href="Overlays.html#Overlays">Overlays</a>).  Cursor motion also partly ignores these
+characters; if the command loop finds point within them, it moves
+point to the other side of them.
+
+   <p>In the simplest case, any non-<code>nil</code> <code>invisible</code> property makes
+a character invisible.  This is the default case&mdash;if you don't alter
+the default value of <code>buffer-invisibility-spec</code>, this is how the
+<code>invisible</code> property works.  You should normally use <code>t</code>
+as the value of the <code>invisible</code> property if you don't plan
+to set <code>buffer-invisibility-spec</code> yourself.
+
+   <p>More generally, you can use the variable <code>buffer-invisibility-spec</code>
+to control which values of the <code>invisible</code> property make text
+invisible.  This permits you to classify the text into different subsets
+in advance, by giving them different <code>invisible</code> values, and
+subsequently make various subsets visible or invisible by changing the
+value of <code>buffer-invisibility-spec</code>.
+
+   <p>Controlling visibility with <code>buffer-invisibility-spec</code> is
+especially useful in a program to display the list of entries in a
+database.  It permits the implementation of convenient filtering
+commands to view just a part of the entries in the database.  Setting
+this variable is very fast, much faster than scanning all the text in
+the buffer looking for properties to change.
+
+<div class="defun">
+&mdash; Variable: <b>buffer-invisibility-spec</b><var><a name="index-buffer_002dinvisibility_002dspec-3368"></a></var><br>
+<blockquote><p>This variable specifies which kinds of <code>invisible</code> properties
+actually make a character invisible.  Setting this variable makes it
+buffer-local.
+
+          <dl>
+<dt><code>t</code><dd>A character is invisible if its <code>invisible</code> property is
+non-<code>nil</code>.  This is the default.
+
+          <br><dt>a list<dd>Each element of the list specifies a criterion for invisibility; if a
+character's <code>invisible</code> property fits any one of these criteria,
+the character is invisible.  The list can have two kinds of elements:
+
+               <dl>
+<dt><var>atom</var><dd>A character is invisible if its <code>invisible</code> property value
+is <var>atom</var> or if it is a list with <var>atom</var> as a member.
+
+               <br><dt><code>(</code><var>atom</var><code> . t)</code><dd>A character is invisible if its <code>invisible</code> property value is
+<var>atom</var> or if it is a list with <var>atom</var> as a member.  Moreover,
+a sequence of such characters displays as an ellipsis. 
+</dl>
+          </dl>
+        </p></blockquote></div>
+
+   <p>Two functions are specifically provided for adding elements to
+<code>buffer-invisibility-spec</code> and removing elements from it.
+
+<div class="defun">
+&mdash; Function: <b>add-to-invisibility-spec</b><var> element<a name="index-add_002dto_002dinvisibility_002dspec-3369"></a></var><br>
+<blockquote><p>This function adds the element <var>element</var> to
+<code>buffer-invisibility-spec</code>.  If <code>buffer-invisibility-spec</code>
+was <code>t</code>, it changes to a list, <code>(t)</code>, so that text whose
+<code>invisible</code> property is <code>t</code> remains invisible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>remove-from-invisibility-spec</b><var> element<a name="index-remove_002dfrom_002dinvisibility_002dspec-3370"></a></var><br>
+<blockquote><p>This removes the element <var>element</var> from
+<code>buffer-invisibility-spec</code>.  This does nothing if <var>element</var>
+is not in the list. 
+</p></blockquote></div>
+
+   <p>A convention for use of <code>buffer-invisibility-spec</code> is that a
+major mode should use the mode's own name as an element of
+<code>buffer-invisibility-spec</code> and as the value of the
+<code>invisible</code> property:
+
+<pre class="example">     ;; <span class="roman">If you want to display an ellipsis:</span>
+     (add-to-invisibility-spec '(my-symbol . t))
+     ;; <span class="roman">If you don't want ellipsis:</span>
+     (add-to-invisibility-spec 'my-symbol)
+     
+     (overlay-put (make-overlay beginning end)
+                  'invisible 'my-symbol)
+     
+     ;; <span class="roman">When done with the overlays:</span>
+     (remove-from-invisibility-spec '(my-symbol . t))
+     ;; <span class="roman">Or respectively:</span>
+     (remove-from-invisibility-spec 'my-symbol)
+</pre>
+   <p>You can check for invisibility using the following function:
+
+<div class="defun">
+&mdash; Function: <b>invisible-p</b><var> pos-or-prop<a name="index-invisible_002dp-3371"></a></var><br>
+<blockquote><p>If <var>pos-or-prop</var> is a marker or number, this function returns a
+non-<code>nil</code> value if the text at that position is invisible.
+
+        <p>If <var>pos-or-prop</var> is any other kind of Lisp object, that is taken
+to mean a possible value of the <code>invisible</code> text or overlay
+property.  In that case, this function returns a non-<code>nil</code> value
+if that value would cause text to become invisible, based on the
+current value of <code>buffer-invisibility-spec</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-line_002dmove_002dignore_002dinvisible-3372"></a>  Ordinarily, functions that operate on text or move point do not care
+whether the text is invisible.  The user-level line motion commands
+ignore invisible newlines if <code>line-move-ignore-invisible</code> is
+non-<code>nil</code> (the default), but only because they are explicitly
+programmed to do so.
+
+   <p>However, if a command ends with point inside or immediately before
+invisible text, the main editing loop moves point further forward or
+further backward (in the same direction that the command already moved
+it) until that condition is no longer true.  Thus, if the command
+moved point back into an invisible range, Emacs moves point back to
+the beginning of that range, and then back one more character.  If the
+command moved point forward into an invisible range, Emacs moves point
+forward up to the first visible character that follows the invisible
+text.
+
+   <p>Incremental search can make invisible overlays visible temporarily
+and/or permanently when a match includes invisible text.  To enable
+this, the overlay should have a non-<code>nil</code>
+<code>isearch-open-invisible</code> property.  The property value should be a
+function to be called with the overlay as an argument.  This function
+should make the overlay visible permanently; it is used when the match
+overlaps the overlay on exit from the search.
+
+   <p>During the search, such overlays are made temporarily visible by
+temporarily modifying their invisible and intangible properties.  If you
+want this to be done differently for a certain overlay, give it an
+<code>isearch-open-invisible-temporary</code> property which is a function. 
+The function is called with two arguments: the first is the overlay, and
+the second is <code>nil</code> to make the overlay visible, or <code>t</code> to
+make it invisible again.
+
+   </body></html>
+

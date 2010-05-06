@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Keys - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="User-Input.html#User-Input" title="User Input">
+<link rel="next" href="Commands.html#Commands" title="Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Keys"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Commands.html#Commands">Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="User-Input.html#User-Input">User Input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">3 Keys</h2>
+
+<p>Some Emacs commands are invoked by just one input event; for
+example, <kbd>C-f</kbd> moves forward one character in the buffer.  But
+Emacs also has commands that take two or more input events to invoke,
+such as <kbd>C-x C-f</kbd> and <kbd>C-x 4 C-f</kbd>.
+
+   <p><a name="index-key-36"></a><a name="index-key-sequence-37"></a><a name="index-complete-key-38"></a><a name="index-prefix-key-39"></a>  A <dfn>key sequence</dfn>, or <dfn>key</dfn> for short, is a sequence of one
+or more input events that is meaningful as a unit.  If a key sequence
+invokes a command, we call it a <dfn>complete key</dfn>; for example,
+<kbd>C-f</kbd>, <kbd>C-x C-f</kbd> and <kbd>C-x 4 C-f</kbd> are all complete keys. 
+If a key sequence isn't long enough to invoke a command, we call it a
+<dfn>prefix key</dfn>; from the preceding example, we see that <kbd>C-x</kbd>
+and <kbd>C-x 4</kbd> are prefix keys.  Every key is either a complete key
+or a prefix key.
+
+   <p>A prefix key combines with the following input event to make a
+longer key sequence, which may itself be complete or a prefix.  For
+example, <kbd>C-x</kbd> is a prefix key, so <kbd>C-x</kbd> and the next input
+event combine to make a two-event key sequence.  This two-event key
+sequence could itself be a prefix key (such as <kbd>C-x 4</kbd>), or a
+complete key (such as <kbd>C-x C-f</kbd>).  There is no limit to the length
+of a key sequence, but in practice people rarely use sequences longer
+than three or four input events.
+
+   <p>You can't add input events onto a complete key.  For example, the
+two-event sequence <kbd>C-f C-k</kbd> is not a key, because the <kbd>C-f</kbd>
+is a complete key in itself, so <kbd>C-f C-k</kbd> cannot have an
+independent meaning as a command.  <kbd>C-f C-k</kbd> is two key sequences,
+not one.
+
+   <p>By default, the prefix keys in Emacs are <kbd>C-c</kbd>, <kbd>C-h</kbd>,
+<kbd>C-x</kbd>, <kbd>C-x &lt;RET&gt;</kbd>, <kbd>C-x @</kbd>, <kbd>C-x a</kbd>, <kbd>C-x
+n</kbd>, <kbd>C-x r</kbd>, <kbd>C-x v</kbd>, <kbd>C-x 4</kbd>, <kbd>C-x 5</kbd>, <kbd>C-x 6</kbd>,
+&lt;ESC&gt;, <kbd>M-g</kbd>, and <kbd>M-o</kbd>.  (&lt;F1&gt; and &lt;F2&gt; are
+aliases for <kbd>C-h</kbd> and <kbd>C-x 6</kbd>.)  This list is not cast in
+stone; if you customize Emacs, you can make new prefix keys.  You
+could even eliminate some of the standard ones, though this is not
+recommended for most users; for example, if you remove the prefix
+definition of <kbd>C-x 4</kbd>, then <kbd>C-x 4 </kbd><var>anything</var> would
+become an invalid key sequence.  See <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>.
+
+   <p>Typing the help character (<kbd>C-h</kbd> or &lt;F1&gt;) after a prefix key
+displays a list of the commands starting with that prefix.  The sole
+exception to this rule is &lt;ESC&gt;: <kbd>&lt;ESC&gt;C-h</kbd> is equivalent
+to <kbd>C-M-h</kbd>, which does something else entirely.  You can, however,
+use &lt;F1&gt; to displays a list of the commands starting with
+&lt;ESC&gt;.
+
+   </body></html>
+

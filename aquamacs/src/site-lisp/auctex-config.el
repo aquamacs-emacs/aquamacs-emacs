@@ -136,6 +136,9 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 (add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
 
+(aquamacs-set-defaults `((LaTeX-mode-hook ,LaTeX-mode-hook)
+			 (TeX-mode-hook ,TeX-mode-hook)))
+
 ;; Allow open buffers in latex-mode to be processed identically to new
 ;; buffers processed according to text-mode-hook (specifically for
 ;; Flyspell)
@@ -152,15 +155,142 @@ Only checks once - subsequent calls will not result in any action."
 ;; 	    (setq count (1+ count))))
 ;;       count)))
 
-(defvar aquamacs-tex-pdf-viewer "Skim"
-  "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
-Aquamacs defines an AUCTeX command called `Jump to PDF', 
-which calls this viewer.")
 
+(defun aquamacs-latex-crossref (ev)
+  "Cross-reference in LaTeX.
+Jump to definition of reference clicked on, or, if
+no reference is found, execute the LaTeX View command."
+  (interactive "e")
+  (save-excursion 
+    (mouse-set-point ev)
+  (condition-case nil
+      (let ((aquamacs-ring-bell-on-error-flag nil))
+	(reftex-view-crossref current-prefix-arg))
+    (error 
+	   (TeX-command  "View" 'TeX-master-file))
+     nil )))
+
+
+
+ 
+(defun aquamacs-skim-running-p ()
+  (ignore-errors
+    (> (string-to-number 
+	(with-temp-buffer
+	  (shell-command "ps ax | grep --count -e '[Ss]kim.app'" t)
+	  (buffer-string))) 
+       0)))
+
+(defvar aquamacs-skim-timer nil)
+
+(defvar aquamacs-skim-show-info-message t)
+
+(defun aquamacs-check-for-skim ()
+"Show help message if Skim.app is running."
+  (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
+       (file-readable-p (expand-file-name 
+			 (TeX-master-file (TeX-output-extension)) 
+			 (and buffer-file-name 
+			      (file-name-directory buffer-file-name))))
+     ;; check for running 
+     (aquamacs-skim-running-p)
+     (cancel-timer aquamacs-skim-timer)
+     aquamacs-skim-show-info-message
+     (message 
+      (substitute-command-keys 
+       (format 
+	"Skim detected. Use \\[aquamacs-latex-crossref]%s to jump to the PDF and back."
+	(if (eq 'control mac-emulate-three-button-mouse) 
+	    " (Shift-Apple-Click)" ""))))))
+  
+
+;; (defun turn-on-TeX-source-correlate-mode ()
+;;   "Turn on `TeX-source-correlate-mode'.
+;; Note: this is a global minor mode."
+;;   (interactive)
+;;   (TeX-source-correlate-mode t))
+
+;; (defun turn-off-TeX-source-correlate-mode ()
+;;   "Turn off `TeX-source-correlate-mode'.
+;; Note: this is a global minor mode."
+;;   (interactive)
+;;   (TeX-source-correlate-mode nil))
+
+(defun aquamacs-latex-viewer-support ()
+  "Support for Skim as LaTeX viewer if present."
+  (add-to-list 'TeX-command-list
+	     '("Jump to PDF" 
+	       "%V" TeX-run-discard-or-function nil t :help "Run Viewer") 'append)
+  
+  (and (boundp 'reftex-mode-map) reftex-mode-map
+       (define-key reftex-mode-map [(shift mouse-2)] nil))
+
+  (and (boundp 'LaTeX-mode-map) LaTeX-mode-map
+       (define-key LaTeX-mode-map [(shift mouse-2)] 
+	 'aquamacs-latex-crossref))
+  (unless aquamacs-skim-timer ;; just once per session
+    (setq aquamacs-skim-timer 
+	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
+  (TeX-source-correlate-mode 1) ;; FIXME: this is a global mode.  Should start in auctex.el?
+  ;; This may start a latex process to determine whether to use synctex.
+  (unless server-process
+    (server-force-delete)
+    ;; start server to make emacsclient work
+    (server-start)))
+
+(require 'server)
+
+(aquamacs-set-defaults
+ '((TeX-view-program-list
+    (("Preview" "open -a Preview.app %o")
+     ;;       ("Skim"  "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")
+     ;;       ("Skim"   "%(Ad)/Contents/MacOS/bin/displayline -b %n %o %b")
+     ("Skim" ("(aquamacs-call-viewer %n \"%b\")"))))
+   (TeX-view-predicate-list 
+    ((output-pdf-skim-running 
+      (and (string-match "pdf" (TeX-output-extension))
+	   (aquamacs-skim-running-p)))))
+   (TeX-view-program-selection
+    ((output-dvi "open")
+     (output-pdf-skim-running "Skim") ; prefer Skim if running
+     (output-pdf "open")
+     (output-html "open")))
+
+   ;; (LaTeX-command "latex --file-line-error -synctex=1")
+   ;; Directories containing the sites TeX macro files and style files
+   ;; AucTeX defines its own (TeX-macro-global), which serves the same function
+   ;; (TeX-macro-global ,(aquamacs-latex-find-style-file-paths))
+
+;; for TeX-command-list
+;; ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
+;;      TeX-run-TeX nil (latex-mode context-mode))
+
+; no XDVI on the Mac
+; we just use 'open'
+; This TeXniscope support requires the option to be specified
+; it's unclear whether this should stay that way
+   ;; (TeX-output-view-style
+   ;;  (("^dvi$" "^xdvi$" "open-x11 %(o?)xdvi %dS %d")  ; %(o?) is 'o' if Omega mode
+   ;;   ("^dvi$" "^TeXniscope$" "open -a TeXniscope.app %o")
+   ;;   ("^pdf$" "." "open %o")
+   ;;   ("^html?$" "." "open %o"))
+   ;;  )
+   ))
+
+
+; (setq aquamacs-tex-pdf-viewer "Skim")
+(defvar aquamacs-tex-pdf-viewer "Skim"
+  "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.")
+(defvar aquamacs-skim-show-reading-bar t
+  "Show Skim's `reading bar' when syncronizing LaTeX/PDF files.
+This will increase visibility.
+Set to t to unconditionally show it.  Set to nil to never show it.
+Otherwise, leave it to Skim.")
 
 (defun aquamacs-call-viewer (line source)
   "Display current output file as PDF at LINE (as in file SOURCE).
-Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
+Calls `aquamacs-tex-pdf-viewer' to display the PDF file using the
+Skim AppleScript protocol."
   (let ((full-file-name 
 	 (expand-file-name
 	  ;; as in TeX-view
@@ -180,117 +310,15 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file."
  tell application \"%s\" 
      activate 
      open theSink 
-     tell front document to go to TeX line %d from theSource 
+     tell front document to go to TeX line %d from theSource%s
   end tell
-" full-file-name full-source-name aquamacs-tex-pdf-viewer line))))
-
-
-(defun aquamacs-latex-crossref (ev)
-  "Cross-reference in LaTeX"
-  (interactive "e")
-  (save-excursion 
-    (mouse-set-point ev)
-  (condition-case nil
-      (let ((aquamacs-ring-bell-on-error-flag nil))
-	(reftex-view-crossref current-prefix-arg))
-    (error 
-	   (TeX-command  "Jump to PDF" 'TeX-master-file))
-     nil )))
-
-
-
- 
-(defun aquamacs-skim-running-p ()
-(ignore-errors
-  (> (string-to-number 
-      (with-temp-buffer
-	(shell-command "ps ax | grep --count -e '[Ss]kim.app'" t)
-	(buffer-string))) 
-     0)))
-
-(defvar aquamacs-skim-timer nil)
-
-(defvar aquamacs-skim-show-info-message t)
-
-(defcustom aquamacs-always-use-skim nil
-  "If t, Aquamacs always uses Skim as viewer in AUCTeX.
-If nil Aquamacs uses Skim if and only if it has been running."
-  :group 'Aquamacs
-  :version "22.1"
-  :type 'boolean)
-
-(defun aquamacs-check-for-skim ()
-"Show help message if Skim.app is running."
-  (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
-       (file-readable-p (expand-file-name 
-			 (TeX-master-file (TeX-output-extension)) 
-			 (and buffer-file-name 
-			      (file-name-directory buffer-file-name))))
-     ;; check for running 
-     (or aquamacs-always-use-skim (aquamacs-skim-running-p))
-     (if (not (equal TeX-command-Show "View"))
-	 t ;; customized by user
-       (set-default 'TeX-command-Show "Jump to PDF"))
-     ;; (if (not (equal (cdr-safe 
-     ;; 		      (cdr-safe 
-     ;; 		       (assq-string-equal "^pdf$" TeX-output-view-style)))
-     ;; 		     '("open %o")))
-     ;; 	      ;; has not been changed by us or the user
-     ;; 	 t
-     ;;   ;; this variable should not be automatically saved by "Save Options"
-     ;;   ;; (unless user customizes it explicitly)
-     ;;   (setq TeX-output-view-style 
-     ;; 	     (cons '("^pdf$" "." "open -a Skim.app %o")
-     ;; 		   TeX-output-view-style)))
-     (cancel-timer aquamacs-skim-timer)
-     aquamacs-skim-show-info-message
-     (message 
-      (substitute-command-keys 
-       (format 
-	"Skim detected. Use \\[aquamacs-latex-crossref]%s to jump to the PDF and back."
-	(if (eq 'control mac-emulate-three-button-mouse) 
-	    " (Shift-Apple-Click)" ""))))))
-  
-(defun aquamacs-check-emacsclient-version ()
-  (let ((emacsclient-min-version "23.0")
-	emacsclient-version)
-    (with-temp-buffer
-      (call-process "emacsclient" nil t nil "-v")
-      (goto-char (point-min))
-      (setq emacsclient-version
-	    (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
-		 (match-string 1))))
-    (if (version< emacsclient-version emacsclient-min-version)
-	(message "Warning - emacsclient version (%s) too low; must be >= %s for Skim support.
-Use Tools --> Install Command Line Tools to update."
-		 emacsclient-version emacsclient-min-version))))
-
-(defun aquamacs-latex-viewer-support ()
-  "Support for Skim as LaTeX viewer if present."
-  (add-to-list 'TeX-command-list
-	     '("Jump to PDF" 
-	       "(aquamacs-call-viewer %n \"%b\")"
-	       TeX-run-function nil t 
-	       :help "Jump here in Skim") 'append)
-  
-  (and (boundp 'reftex-mode-map) reftex-mode-map
-       (define-key reftex-mode-map [(shift mouse-2)] nil))
-
-  (and (boundp 'LaTeX-mode-map) LaTeX-mode-map
-       (define-key LaTeX-mode-map [(shift mouse-2)] 
-	 'aquamacs-latex-crossref))
-  (unless aquamacs-skim-timer ;; just once per session
-    (setq aquamacs-skim-timer 
-	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
-  ;; warn if emacsclient version is too low to work with Aquamacs"
-  ;; use idle timer to ensure that message can be seen in echo area
-  (run-with-idle-timer 1 nil 'aquamacs-check-emacsclient-version)
-  (unless server-process
-    (server-force-delete)
-    ;; start server to make emacsclient work
-    (server-start)))
-
-(require 'server)
+" full-file-name full-source-name aquamacs-tex-pdf-viewer line
+;; do not say "showing reading bar false" so users can override in future
+(cond ((eq t aquamacs-skim-show-reading-bar)
+       " showing reading bar true")
+      ((eq nil aquamacs-skim-show-reading-bar)
+       " showing reading bar false")
+      (t ""))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
@@ -306,96 +334,6 @@ Use Tools --> Install Command Line Tools to update."
        (TeX-bar-LaTeX-buttons
 	(open-file save-buffer write-file [separator nil] cut copy paste undo
 		   [separator nil]   latex next-error view bibtex)))))
-
-
- 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Customize LaTeX parameters
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;; the following seem not to be AUCTeX variables ... 
-;; obsolete?
-;; ;; PDF previewer
-;; (setq pdf-previewer-program	"open")
-
-;; ;; PS previewer
-;; (setq ps-previewer-program  "open")
-			     
-;; ;; DVI previewer
-;; (setq dvi-previewer-program "open-x11 xdvi")
- 
-;; The LaTeX commands
-;; this is NOT ONLY THE MENU, but also forms commands that 
-; AUCTeX relies on. We can't just change the strings here and
-; expect that things work - in particular, the default values
-; that are set (when reading the command in the input buffer)
-; are hard-coded. 
-
-;; modify the default command list
-
-;; This is duplicated from AUCTeX, unfortunately
-
-(aquamacs-set-defaults
- `((LaTeX-command "latex --file-line-error -synctex=1")
-   ;; Directories containing the sites TeX macro files and style files
-   ;; AucTeX defines its own (TeX-macro-global), which serves the same function
-   ;; (TeX-macro-global ,(aquamacs-latex-find-style-file-paths))
-
-;; for TeX-command-list
-;; ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
-;;      TeX-run-TeX nil (latex-mode context-mode))
-
-; no XDVI on the Mac
-; we just use 'open'
-; This TeXniscope support requires the option to be specified
-; it's unclear whether this should stay that way
-   (TeX-output-view-style
-    (("^dvi$" "^xdvi$" "open-x11 %(o?)xdvi %dS %d")  ; %(o?) is 'o' if Omega mode
-     ("^dvi$" "^TeXniscope$" "open -a TeXniscope.app %o")
-     ("^pdf$" "." "open %o")
-     ("^html?$" "." "open %o"))
-    )))
-
-
-
- 
-
-
-
-;(setq TeX-command-list
-   
- ;;  (list 
-;;     (list "-" "" nil nil nil)
-;;     (list "Compile LaTeX to PDF (pdfLaTeX)" "pdflatex '\\nonstopmode\\input{%t}'" 'TeX-run-LaTeX nil t)
-
-;;       (list "View PDF" "open %s.pdf"  'TeX-run-command nil t)
-      
-;;      (list "Compile & View" "pdflatex '\\nonstopmode\\input{%t}';open %s.pdf" 'TeX-run-LaTeX nil t)
-;;     (list "-" "" nil nil nil)
-;;        (list "Compile with LaTeX" "%l '\\nonstopmode\\input{%t}'" 'TeX-run-LaTeX nil t)  
-   
-;;       (list "Convert DVI->Postscript..." "dvips %d -o %f " 'TeX-run-command t t )
-;;        (list "Convert DVI->PDF..." "dvipdf %d %s.pdf" 'TeX-run-command t t) 
-   
-;;        (list "View DVI" "open-x11 xdvi %s.dvi..." 'TeX-run-command t t)
-;;        (list "View DVI with TeXniscope" "open -a TeXniscope.app %s.dvi..." 'TeX-run-command t t)
-;;        (list "View" "open %s.ps" 'TeX-run-command nil t)
-;;        ; this comment cannot be called "view PS" 
-;;        ; because some defaults in Tex-buf assume it's called "View"
-;;      (list "-" "" nil nil nil)
-;;       (list "Compile Bibliography (BibTeX)" "bibtex %s" 'TeX-run-BibTeX nil t)
-;;       (list "Index" "makeindex %s" 'TeX-run-command nil t)
-;;       (list "Check Syntax" "lacheck %s" 'TeX-run-compile nil t)
-;;       (list "Spellcheck" "<ignored>" 'TeX-run-ispell-on-document nil t)
-;;      (list "-" "" nil nil nil)
-;;       (list "Convert to HTML" "htlatex %t;open %s.html" 'TeX-run-command t t) 
-;;       (list "Makeinfo" "makeinfo %t" 'TeX-run-compile nil t)
-;;       (list "Makeinfo HTML" "makeinfo --html %t" 'TeX-run-compile nil t)
-       
-;;       )
-;; ) 
-
 
 
  

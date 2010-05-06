@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Terminal Coding - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="File-Name-Coding.html#File-Name-Coding" title="File Name Coding">
+<link rel="next" href="Fontsets.html#Fontsets" title="Fontsets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Terminal-Coding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fontsets.html#Fontsets">Fontsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Name-Coding.html#File-Name-Coding">File Name Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.13 Coding Systems for Terminal I/O</h3>
+
+     <dl>
+<dt><kbd>C-x &lt;RET&gt; k </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> for keyboard input.
+
+     <br><dt><kbd>C-x &lt;RET&gt; t </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> for terminal output. 
+</dl>
+
+   <p><a name="index-C_002dx-RET-t-1447"></a><a name="index-set_002dterminal_002dcoding_002dsystem-1448"></a>  The command <kbd>C-x &lt;RET&gt; t</kbd> (<code>set-terminal-coding-system</code>)
+specifies the coding system for terminal output.  If you specify a
+character code for terminal output, all characters output to the
+terminal are translated into that coding system.
+
+   <p>This feature is useful for certain character-only terminals built to
+support specific languages or character sets&mdash;for example, European
+terminals that support one of the ISO Latin character sets.  You need to
+specify the terminal coding system when using multibyte text, so that
+Emacs knows which characters the terminal can actually handle.
+
+   <p>By default, output to the terminal is not translated at all, unless
+Emacs can deduce the proper coding system from your terminal type or
+your locale specification (see <a href="Language-Environments.html#Language-Environments">Language Environments</a>).
+
+   <p><a name="index-C_002dx-RET-k-1449"></a><a name="index-set_002dkeyboard_002dcoding_002dsystem-1450"></a><a name="index-keyboard_002dcoding_002dsystem-1451"></a>  The command <kbd>C-x &lt;RET&gt; k</kbd> (<code>set-keyboard-coding-system</code>)
+or the variable <code>keyboard-coding-system</code> specifies the coding
+system for keyboard input.  Character-code translation of keyboard
+input is useful for terminals with keys that send non-<acronym>ASCII</acronym>
+graphic characters&mdash;for example, some terminals designed for ISO
+Latin-1 or subsets of it.
+
+   <p>By default, keyboard input is translated based on your system locale
+setting.  If your terminal does not really support the encoding
+implied by your locale (for example, if you find it inserts a
+non-<acronym>ASCII</acronym> character if you type <kbd>M-i</kbd>), you will need to set
+<code>keyboard-coding-system</code> to <code>nil</code> to turn off encoding. 
+You can do this by putting
+
+<pre class="lisp">     (set-keyboard-coding-system nil)
+</pre>
+   <p class="noindent">in your init file.
+
+   <p>There is a similarity between using a coding system translation for
+keyboard input, and using an input method: both define sequences of
+keyboard input that translate into single characters.  However, input
+methods are designed to be convenient for interactive use by humans, and
+the sequences that are translated are typically sequences of <acronym>ASCII</acronym>
+printing characters.  Coding systems typically translate sequences of
+non-graphic characters.
+
+   </body></html>
+

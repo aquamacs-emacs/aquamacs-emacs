@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>File Name Coding - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="Communication-Coding.html#Communication-Coding" title="Communication Coding">
+<link rel="next" href="Terminal-Coding.html#Terminal-Coding" title="Terminal Coding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="File-Name-Coding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-Coding.html#Terminal-Coding">Terminal Coding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Communication-Coding.html#Communication-Coding">Communication Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.12 Coding Systems for File Names</h3>
+
+     <dl>
+<dt><kbd>C-x &lt;RET&gt; F </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> for encoding and decoding file
+<em>names</em>. 
+</dl>
+
+   <p><a name="index-file_002dname_002dcoding_002dsystem-1442"></a><a name="index-file-names-with-non_002d_0040acronym_007bASCII_007d-characters-1443"></a>  The variable <code>file-name-coding-system</code> specifies a coding
+system to use for encoding file names.  It has no effect on reading
+and writing the <em>contents</em> of files.
+
+   <p><a name="index-set_002dfile_002dname_002dcoding_002dsystem-1444"></a><a name="index-C_002dx-_0040key_007bRET_007d-F-1445"></a>  If you set the variable to a coding system name (as a Lisp symbol or
+a string), Emacs encodes file names using that coding system for all
+file operations.  This makes it possible to use non-<acronym>ASCII</acronym>
+characters in file names&mdash;or, at least, those non-<acronym>ASCII</acronym>
+characters which the specified coding system can encode.  Use <kbd>C-x
+&lt;RET&gt; F</kbd> (<code>set-file-name-coding-system</code>) to specify this
+interactively.
+
+   <p>If <code>file-name-coding-system</code> is <code>nil</code>, Emacs uses a
+default coding system determined by the selected language environment. 
+In the default language environment, non-<acronym>ASCII</acronym> characters in
+file names are not encoded specially; they appear in the file system
+using the internal Emacs representation.
+
+   <p><strong>Warning:</strong> if you change <code>file-name-coding-system</code> (or the
+language environment) in the middle of an Emacs session, problems can
+result if you have already visited files whose names were encoded using
+the earlier coding system and cannot be encoded (or are encoded
+differently) under the new coding system.  If you try to save one of
+these buffers under the visited file name, saving may use the wrong file
+name, or it may get an error.  If such a problem happens, use <kbd>C-x
+C-w</kbd> to specify a new file name for that buffer.
+
+   <p><a name="index-recode_002dfile_002dname-1446"></a>  If a mistake occurs when encoding a file name, use the command
+<kbd>M-x recode-file-name</kbd> to change the file name's coding
+system.  This prompts for an existing file name, its old coding
+system, and the coding system to which you wish to convert.
+
+   </body></html>
+

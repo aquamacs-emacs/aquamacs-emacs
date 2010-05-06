@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Window System Selections - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Pointer-Shape.html#Pointer-Shape" title="Pointer Shape">
+<link rel="next" href="Drag-and-Drop.html#Drag-and-Drop" title="Drag and Drop">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-System-Selections"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.19 Window System Selections</h3>
+
+<p><a name="index-selection-_0028for-window-systems_0029-2329"></a>
+The X server records a set of <dfn>selections</dfn> which permit transfer of
+data between application programs.  The various selections are
+distinguished by <dfn>selection types</dfn>, represented in Emacs by
+symbols.  X clients including Emacs can read or set the selection for
+any given type.
+
+<div class="defun">
+&mdash; Command: <b>x-set-selection</b><var> type data<a name="index-x_002dset_002dselection-2330"></a></var><br>
+<blockquote><p>This function sets a &ldquo;selection&rdquo; in the X server.  It takes two
+arguments: a selection type <var>type</var>, and the value to assign to it,
+<var>data</var>.  If <var>data</var> is <code>nil</code>, it means to clear out the
+selection.  Otherwise, <var>data</var> may be a string, a symbol, an integer
+(or a cons of two integers or list of two integers), an overlay, or a
+cons of two markers pointing to the same buffer.  An overlay or a pair
+of markers stands for text in the overlay or between the markers.
+
+        <p>The argument <var>data</var> may also be a vector of valid non-vector
+selection values.
+
+        <p>Each possible <var>type</var> has its own selection value, which changes
+independently.  The usual values of <var>type</var> are <code>PRIMARY</code>,
+<code>SECONDARY</code> and <code>CLIPBOARD</code>; these are symbols with upper-case
+names, in accord with X Window System conventions.  If <var>type</var> is
+<code>nil</code>, that stands for <code>PRIMARY</code>.
+
+        <p>This function returns <var>data</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-get-selection</b><var> &amp;optional type data-type<a name="index-x_002dget_002dselection-2331"></a></var><br>
+<blockquote><p>This function accesses selections set up by Emacs or by other X
+clients.  It takes two optional arguments, <var>type</var> and
+<var>data-type</var>.  The default for <var>type</var>, the selection type, is
+<code>PRIMARY</code>.
+
+        <p>The <var>data-type</var> argument specifies the form of data conversion to
+use, to convert the raw data obtained from another X client into Lisp
+data.  Meaningful values include <code>TEXT</code>, <code>STRING</code>,
+<code>UTF8_STRING</code>, <code>TARGETS</code>, <code>LENGTH</code>, <code>DELETE</code>,
+<code>FILE_NAME</code>, <code>CHARACTER_POSITION</code>, <code>NAME</code>,
+<code>LINE_NUMBER</code>, <code>COLUMN_NUMBER</code>, <code>OWNER_OS</code>,
+<code>HOST_NAME</code>, <code>USER</code>, <code>CLASS</code>, <code>ATOM</code>, and
+<code>INTEGER</code>.  (These are symbols with upper-case names in accord
+with X conventions.)  The default for <var>data-type</var> is
+<code>STRING</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-cut-buffer-2332"></a>The X server also has a set of eight numbered <dfn>cut buffers</dfn> which can
+store text or other data being moved between applications.  Cut buffers
+are considered obsolete, but Emacs supports them for the sake of X
+clients that still use them.  Cut buffers are numbered from 0 to 7.
+
+<div class="defun">
+&mdash; Function: <b>x-get-cut-buffer</b><var> &amp;optional n<a name="index-x_002dget_002dcut_002dbuffer-2333"></a></var><br>
+<blockquote><p>This function returns the contents of cut buffer number <var>n</var>. 
+If omitted <var>n</var> defaults to 0. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-set-cut-buffer</b><var> string &amp;optional push<a name="index-x_002dset_002dcut_002dbuffer-2334"></a></var><br>
+<blockquote><p><a name="Definition-of-x_002dset_002dcut_002dbuffer"></a>This function stores <var>string</var> into the first cut buffer (cut buffer
+0).  If <var>push</var> is <code>nil</code>, only the first cut buffer is changed. 
+If <var>push</var> is non-<code>nil</code>, that says to move the values down
+through the series of cut buffers, much like the way successive kills in
+Emacs move down the kill ring.  In other words, the previous value of
+the first cut buffer moves into the second cut buffer, and the second to
+the third, and so on through all eight cut buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>selection-coding-system</b><var><a name="index-selection_002dcoding_002dsystem-2335"></a></var><br>
+<blockquote><p>This variable specifies the coding system to use when reading and
+writing selections or the clipboard.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.  The default is <code>compound-text-with-extensions</code>, which
+converts to the text representation that X11 normally uses. 
+</p></blockquote></div>
+
+   <p><a name="index-clipboard-support-_0028for-MS_002dWindows_0029-2336"></a>When Emacs runs on MS-Windows, it does not implement X selections in
+general, but it does support the clipboard.  <code>x-get-selection</code>
+and <code>x-set-selection</code> on MS-Windows support the text data type
+only; if the clipboard holds other types of data, Emacs treats the
+clipboard as empty.
+
+<div class="defun">
+&mdash; User Option: <b>x-select-enable-clipboard</b><var><a name="index-x_002dselect_002denable_002dclipboard-2337"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, the Emacs yank functions consult the
+clipboard before the primary selection, and the kill functions store in
+the clipboard as well as the primary selection.  Otherwise they do not
+access the clipboard at all.  The default is <code>nil</code> on most systems,
+but <code>t</code> on MS-Windows. 
+</p></blockquote></div>
+
+   </body></html>
+

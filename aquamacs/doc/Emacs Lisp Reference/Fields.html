@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Fields - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
+<link rel="prev" href="Clickable-Text.html#Clickable-Text" title="Clickable Text">
+<link rel="next" href="Not-Intervals.html#Not-Intervals" title="Not Intervals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Fields"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Not-Intervals.html#Not-Intervals">Not Intervals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clickable-Text.html#Clickable-Text">Clickable Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.19.9 Defining and Using Fields</h4>
+
+<p><a name="index-fields-2729"></a>
+  A field is a range of consecutive characters in the buffer that are
+identified by having the same value (comparing with <code>eq</code>) of the
+<code>field</code> property (either a text-property or an overlay property). 
+This section describes special functions that are available for
+operating on fields.
+
+   <p>You specify a field with a buffer position, <var>pos</var>.  We think of
+each field as containing a range of buffer positions, so the position
+you specify stands for the field containing that position.
+
+   <p>When the characters before and after <var>pos</var> are part of the same
+field, there is no doubt which field contains <var>pos</var>: the one those
+characters both belong to.  When <var>pos</var> is at a boundary between
+fields, which field it belongs to depends on the stickiness of the
+<code>field</code> properties of the two surrounding characters (see <a href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>).  The field whose property would be inherited by text
+inserted at <var>pos</var> is the field that contains <var>pos</var>.
+
+   <p>There is an anomalous case where newly inserted text at <var>pos</var>
+would not inherit the <code>field</code> property from either side.  This
+happens if the previous character's <code>field</code> property is not
+rear-sticky, and the following character's <code>field</code> property is not
+front-sticky.  In this case, <var>pos</var> belongs to neither the preceding
+field nor the following field; the field functions treat it as belonging
+to an empty field whose beginning and end are both at <var>pos</var>.
+
+   <p>In all of these functions, if <var>pos</var> is omitted or <code>nil</code>, the
+value of point is used by default.  If narrowing is in effect, then
+<var>pos</var> should fall within the accessible portion.  See <a href="Narrowing.html#Narrowing">Narrowing</a>.
+
+<div class="defun">
+&mdash; Function: <b>field-beginning</b><var> &amp;optional pos escape-from-edge limit<a name="index-field_002dbeginning-2730"></a></var><br>
+<blockquote><p>This function returns the beginning of the field specified by <var>pos</var>.
+
+        <p>If <var>pos</var> is at the beginning of its field, and
+<var>escape-from-edge</var> is non-<code>nil</code>, then the return value is
+always the beginning of the preceding field that <em>ends</em> at <var>pos</var>,
+regardless of the stickiness of the <code>field</code> properties around
+<var>pos</var>.
+
+        <p>If <var>limit</var> is non-<code>nil</code>, it is a buffer position; if the
+beginning of the field is before <var>limit</var>, then <var>limit</var> will be
+returned instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>field-end</b><var> &amp;optional pos escape-from-edge limit<a name="index-field_002dend-2731"></a></var><br>
+<blockquote><p>This function returns the end of the field specified by <var>pos</var>.
+
+        <p>If <var>pos</var> is at the end of its field, and <var>escape-from-edge</var> is
+non-<code>nil</code>, then the return value is always the end of the following
+field that <em>begins</em> at <var>pos</var>, regardless of the stickiness of
+the <code>field</code> properties around <var>pos</var>.
+
+        <p>If <var>limit</var> is non-<code>nil</code>, it is a buffer position; if the end
+of the field is after <var>limit</var>, then <var>limit</var> will be returned
+instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>field-string</b><var> &amp;optional pos<a name="index-field_002dstring-2732"></a></var><br>
+<blockquote><p>This function returns the contents of the field specified by <var>pos</var>,
+as a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>field-string-no-properties</b><var> &amp;optional pos<a name="index-field_002dstring_002dno_002dproperties-2733"></a></var><br>
+<blockquote><p>This function returns the contents of the field specified by <var>pos</var>,
+as a string, discarding text properties. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-field</b><var> &amp;optional pos<a name="index-delete_002dfield-2734"></a></var><br>
+<blockquote><p>This function deletes the text of the field specified by <var>pos</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>constrain-to-field</b><var> new-pos old-pos &amp;optional escape-from-edge only-in-line inhibit-capture-property<a name="index-constrain_002dto_002dfield-2735"></a></var><br>
+<blockquote><p>This function &ldquo;constrains&rdquo; <var>new-pos</var> to the field that
+<var>old-pos</var> belongs to&mdash;in other words, it returns the position
+closest to <var>new-pos</var> that is in the same field as <var>old-pos</var>.
+
+        <p>If <var>new-pos</var> is <code>nil</code>, then <code>constrain-to-field</code> uses
+the value of point instead, and moves point to the resulting position
+as well as returning it.
+
+        <p>If <var>old-pos</var> is at the boundary of two fields, then the acceptable
+final positions depend on the argument <var>escape-from-edge</var>.  If
+<var>escape-from-edge</var> is <code>nil</code>, then <var>new-pos</var> must be in
+the field whose <code>field</code> property equals what new characters
+inserted at <var>old-pos</var> would inherit.  (This depends on the
+stickiness of the <code>field</code> property for the characters before and
+after <var>old-pos</var>.)  If <var>escape-from-edge</var> is non-<code>nil</code>,
+<var>new-pos</var> can be anywhere in the two adjacent fields. 
+Additionally, if two fields are separated by another field with the
+special value <code>boundary</code>, then any point within this special
+field is also considered to be &ldquo;on the boundary.&rdquo;
+
+        <p>Commands like <kbd>C-a</kbd> with no argumemt, that normally move backward
+to a specific kind of location and stay there once there, probably
+should specify <code>nil</code> for <var>escape-from-edge</var>.  Other motion
+commands that check fields should probably pass <code>t</code>.
+
+        <p>If the optional argument <var>only-in-line</var> is non-<code>nil</code>, and
+constraining <var>new-pos</var> in the usual way would move it to a different
+line, <var>new-pos</var> is returned unconstrained.  This used in commands
+that move by line, such as <code>next-line</code> and
+<code>beginning-of-line</code>, so that they respect field boundaries only in
+the case where they can still move to the right line.
+
+        <p>If the optional argument <var>inhibit-capture-property</var> is
+non-<code>nil</code>, and <var>old-pos</var> has a non-<code>nil</code> property of that
+name, then any field boundaries are ignored.
+
+        <p>You can cause <code>constrain-to-field</code> to ignore all field boundaries
+(and so never constrain anything) by binding the variable
+<code>inhibit-field-text-motion</code> to a non-<code>nil</code> value. 
+</p></blockquote></div>
+
+   </body></html>
+

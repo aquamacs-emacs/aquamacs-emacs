@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>A Sample Function Description - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Format-of-Descriptions.html#Format-of-Descriptions" title="Format of Descriptions">
+<link rel="next" href="A-Sample-Variable-Description.html#A-Sample-Variable-Description" title="A Sample Variable Description">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="A-Sample-Function-Description"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="A-Sample-Variable-Description.html#A-Sample-Variable-Description">A Sample Variable Description</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Format-of-Descriptions.html#Format-of-Descriptions">Format of Descriptions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">1.3.7.1 A Sample Function Description</h5>
+
+<p><a name="index-function-descriptions-23"></a><a name="index-command-descriptions-24"></a><a name="index-macro-descriptions-25"></a><a name="index-special-form-descriptions-26"></a>
+  In a function description, the name of the function being described
+appears first.  It is followed on the same line by a list of argument
+names.  These names are also used in the body of the description, to
+stand for the values of the arguments.
+
+   <p>The appearance of the keyword <code>&amp;optional</code> in the argument list
+indicates that the subsequent arguments may be omitted (omitted
+arguments default to <code>nil</code>).  Do not write <code>&amp;optional</code> when
+you call the function.
+
+   <p>The keyword <code>&amp;rest</code> (which must be followed by a single
+argument name) indicates that any number of arguments can follow.  The
+single argument name following <code>&amp;rest</code> will receive, as its
+value, a list of all the remaining arguments passed to the function. 
+Do not write <code>&amp;rest</code> when you call the function.
+
+   <p>Here is a description of an imaginary function <code>foo</code>:
+
+<div class="defun">
+&mdash; Function: <b>foo</b><var> integer1 &amp;optional integer2 &amp;rest integers<a name="index-foo-27"></a></var><br>
+<blockquote><p>The function <code>foo</code> subtracts <var>integer1</var> from <var>integer2</var>,
+then adds all the rest of the arguments to the result.  If <var>integer2</var>
+is not supplied, then the number 19 is used by default.
+
+     <pre class="example">          (foo 1 5 3 9)
+               &rArr; 16
+          (foo 5)
+               &rArr; 14
+</pre>
+        <p>More generally,
+
+     <pre class="example">          (foo <var>w</var> <var>x</var> <var>y</var>...)
+          ==
+          (+ (- <var>x</var> <var>w</var>) <var>y</var>...)
+</pre>
+        </blockquote></div>
+
+   <p>Any argument whose name contains the name of a type (e.g.,
+<var>integer</var>, <var>integer1</var> or <var>buffer</var>) is expected to be of that
+type.  A plural of a type (such as <var>buffers</var>) often means a list of
+objects of that type.  Arguments named <var>object</var> may be of any type. 
+(See <a href="Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>, for a list of Emacs object types.)  Arguments
+with other sorts of names (e.g., <var>new-file</var>) are discussed
+specifically in the description of the function.  In some sections,
+features common to the arguments of several functions are described at
+the beginning.
+
+   <p>See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>, for a more complete description of optional
+and rest arguments.
+
+   <p>Command, macro, and special form descriptions have the same format,
+but the word `Function' is replaced by `Command', `Macro', or `Special
+Form', respectively.  Commands are simply functions that may be called
+interactively; macros process their arguments differently from functions
+(the arguments are not evaluated), but are presented the same way.
+
+   <p>Special form descriptions use a more complex notation to specify
+optional and repeated arguments because they can break the argument
+list down into separate arguments in more complicated ways. 
+&lsquo;<samp><span class="samp">[</span><var>optional-arg</var><span class="samp">]</span></samp>&rsquo; means that <var>optional-arg</var> is
+optional and &lsquo;<samp><var>repeated-args</var><span class="samp">...</span></samp>&rsquo; stands for zero or more
+arguments.  Parentheses are used when several arguments are grouped into
+additional levels of list structure.  Here is an example:
+
+<div class="defun">
+&mdash; Special Form: <b>count-loop</b> (<var>var </var>[<var>from to </var>[<var>inc</var>]])<var> body<small class="dots">...</small><a name="index-count_002dloop-28"></a></var><br>
+<blockquote><p>This imaginary special form implements a loop that executes the
+<var>body</var> forms and then increments the variable <var>var</var> on each
+iteration.  On the first iteration, the variable has the value
+<var>from</var>; on subsequent iterations, it is incremented by one (or by
+<var>inc</var> if that is given).  The loop exits before executing <var>body</var>
+if <var>var</var> equals <var>to</var>.  Here is an example:
+
+     <pre class="example">          (count-loop (i 0 10)
+            (prin1 i) (princ " ")
+            (prin1 (aref vector i))
+            (terpri))
+</pre>
+        <p>If <var>from</var> and <var>to</var> are omitted, <var>var</var> is bound to
+<code>nil</code> before the loop begins, and the loop exits if <var>var</var> is
+non-<code>nil</code> at the beginning of an iteration.  Here is an example:
+
+     <pre class="example">          (count-loop (done)
+            (if (pending)
+                (fixit)
+              (setq done t)))
+</pre>
+        <p>In this special form, the arguments <var>from</var> and <var>to</var> are
+optional, but must both be present or both absent.  If they are present,
+<var>inc</var> may optionally be specified as well.  These arguments are
+grouped with the argument <var>var</var> into a list, to distinguish them
+from <var>body</var>, which includes all remaining elements of the form. 
+</p></blockquote></div>
+
+   </body></html>
+

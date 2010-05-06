@@ -1,0 +1,380 @@
+<html lang="en">
+<head>
+<title>Choosing Window - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Displaying-Buffers.html#Displaying-Buffers" title="Displaying Buffers">
+<link rel="next" href="Dedicated-Windows.html#Dedicated-Windows" title="Dedicated Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Choosing-Window"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.8 Choosing a Window for Display</h3>
+
+<p>This section describes the basic facility that chooses a window to
+display a buffer in&mdash;<code>display-buffer</code>.  Higher-level functions and
+commands, like <code>switch-to-buffer</code> and <code>pop-to-buffer</code>, use this
+subroutine.  Here we describe how to use <code>display-buffer</code> and how
+to customize it.
+
+<div class="defun">
+&mdash; Command: <b>display-buffer</b><var> buffer-or-name &amp;optional not-this-window frame<a name="index-display_002dbuffer-2091"></a></var><br>
+<blockquote><p>This command makes <var>buffer-or-name</var> appear in some window, but it
+does not select that window and does not make the buffer specified by
+<var>buffer-or-name</var> current.  The identity of the selected window is
+unaltered by this function.  The argument <var>buffer-or-name</var> must be a
+buffer or the name of an existing buffer.
+
+        <p><var>not-this-window</var> non-<code>nil</code> means to display the specified
+buffer in a window other than the selected one, even if it is already
+displayed in the selected window.  This can cause the buffer to appear
+in two windows at once.  Otherwise, if <var>buffer-or-name</var> is already
+being displayed in any window, that is good enough, so this function
+does nothing.
+
+        <p><code>display-buffer</code> returns the window chosen to display
+<var>buffer-or-name</var>.
+
+        <p>If the optional argument <var>frame</var> is non-<code>nil</code>, it specifies
+which frames to check when deciding whether the buffer is already
+displayed.  If the buffer is already displayed in some window on one of
+these frames, <code>display-buffer</code> simply returns that window.  Here
+are the possible values of <var>frame</var>:
+
+          <ul>
+<li><code>nil</code> means consider windows on the selected frame. 
+(Actually, the last non-minibuffer frame.) 
+<li><code>t</code> means consider windows on all frames. 
+<li><code>visible</code> means consider windows on all visible frames. 
+<li>0 means consider windows on all visible or iconified frames. 
+<li>A frame means consider windows on that frame only. 
+</ul>
+
+        <p>Precisely how <code>display-buffer</code> finds or creates a window depends on
+the variables described below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>display-buffer-reuse-frames</b><var><a name="index-display_002dbuffer_002dreuse_002dframes-2092"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, <code>display-buffer</code> searches
+visible and iconified frames for a window displaying
+<var>buffer-or-name</var>.  If there is such a window, <code>display-buffer</code>
+makes that window's frame visible and raises it if necessary, and
+returns the window.  If there is no such window or
+<code>display-buffer-reuse-frames</code> is <code>nil</code>, the behavior of
+<code>display-buffer</code> is determined by the variables described next. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>pop-up-windows</b><var><a name="index-pop_002dup_002dwindows-2093"></a></var><br>
+<blockquote><p>This variable specifies whether <code>display-buffer</code> is allowed to
+split (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>) an existing window.  If this variable
+is non-<code>nil</code>, <code>display-buffer</code> tries to split the largest or
+least recently used window on the selected frame.  (If the selected
+frame is a minibuffer-only frame, <code>display-buffer</code> tries to split a
+window on another frame instead.)  If this variable is <code>nil</code> or the
+variable <code>pop-up-frames</code> (see below) is non-<code>nil</code>,
+<code>display-buffer</code> does not split any window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>split-window-preferred-function</b><var><a name="index-split_002dwindow_002dpreferred_002dfunction-2094"></a></var><br>
+<blockquote><p>This variable must specify a function with one argument, which is a
+window.  The <code>display-buffer</code> routines will call this function with
+one or more candidate windows when they look for a window to split.  The
+function is expected to split that window and return the new window.  If
+the function returns <code>nil</code>, this means that the argument window
+cannot (or shall not) be split.
+
+        <p>The default value of <code>split-window-preferred-function</code> is the
+function <code>split-window-sensibly</code> described below.  If you
+customize this option, bear in mind that the <code>display-buffer</code>
+routines may call your function up to two times when trying to split a
+window.  The argument of the first call is the largest window on the
+chosen frame (as returned by <code>get-largest-window</code>).  If that call
+fails to return a live window, your function is called a second time
+with the least recently used window on that frame (as returned by
+<code>get-lru-window</code>).
+
+        <p>The function specified by this option may try to split any other window
+instead of the argument window.  Note that the window selected at the
+time <code>display-buffer</code> was invoked is still selected when your
+function is called.  Hence, you can split the selected window (instead
+of the largest or least recently used one) by simply ignoring the window
+argument in the body of your function.  You can even choose to not split
+any window as long as the return value of your function specifies a live
+window or <code>nil</code>, but you are not encouraged to do so
+unconditionally.  If you want <code>display-buffer</code> to never split any
+windows, set <code>pop-up-windows</code> to <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>split-window-sensibly</b><var> window<a name="index-split_002dwindow_002dsensibly-2095"></a></var><br>
+<blockquote><p>This function takes a window as argument and tries to split that window
+in a suitable way.  The two variables described next are useful for
+tuning the behavior of this function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>split-height-threshold</b><var><a name="index-split_002dheight_002dthreshold-2096"></a></var><br>
+<blockquote><p>This variable specifies whether <code>split-window-sensibly</code> may split
+windows vertically.  If it is an integer, <code>split-window-sensibly</code>
+tries to vertically split a window only if it has at least this many
+lines.  If the window has less lines, splitting fails, or the value of
+this variable is <code>nil</code>, <code>split-window-sensibly</code> will try to
+split the window horizontally, subject to restrictions of
+<code>split-width-threshold</code> (see below).  If splitting horizontally
+fails too and the window is the only window on its frame,
+<code>split-window-sensibly</code> will try to split the window vertically
+disregarding the value of <code>split-height-threshold</code>.  If this fails
+as well, <code>split-window-sensibly</code> returns <code>nil</code>.
+
+        <p><code>split-window-sensibly</code> does not split vertically a window whose
+height is fixed (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>).  Also, it vertically splits
+a window only if the space taken up by that window can accommodate two
+windows one above the other that are both at least
+<code>window-min-height</code> lines tall.  Moreover, if the window that shall
+be split has a mode line, <code>split-window-sensibly</code> does not split
+the window unless the new window can accomodate a mode line too. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>split-width-threshold</b><var><a name="index-split_002dwidth_002dthreshold-2097"></a></var><br>
+<blockquote><p>This variable specifies whether <code>split-window-sensibly</code> may split
+windows horizontally.  If it is an integer, <code>split-window-sensibly</code>
+tries to horizontally split a window only if it has at least this many
+columns.  If it is <code>nil</code>, <code>split-window-sensibly</code> will not
+split the window horizontally.  (It still might split the window
+vertically, though, see above.)
+
+        <p><code>split-window-sensibly</code> does not split horizontally a window if
+that window's width is fixed (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>).  Also, it
+horizontally splits a window only if the space that window takes up can
+accommodate two windows side by side that are both at least
+<code>window-min-width</code> columns wide. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>even-window-heights</b><var><a name="index-even_002dwindow_002dheights-2098"></a></var><br>
+<blockquote><p>This variable specifies whether <code>display-buffer</code> should even out
+window heights if the buffer gets displayed in an existing window, above
+or beneath another window.  If <code>even-window-heights</code> is
+non-<code>nil</code>, the default, window heights will be evened out.  If
+either of the involved window has fixed height (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>) or <code>even-window-heights</code> is <code>nil</code>, the original
+window heights will be left alone. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; User Option: <b>pop-up-frames</b><var><a name="index-pop_002dup_002dframes-2099"></a></var><br>
+<blockquote><p>This variable specifies whether <code>display-buffer</code> should make new
+frames.  If it is non-<code>nil</code>, <code>display-buffer</code> looks for a
+window already displaying <var>buffer-or-name</var> on any visible or
+iconified frame.  If it finds such a window, it makes that window's
+frame visible and raises it if necessary, and returns the window. 
+Otherwise it makes a new frame, unless the variable's value is
+<code>graphic-only</code> and the selected frame is not on a graphic display. 
+See <a href="Frames.html#Frames">Frames</a>, for more information.
+
+        <p>Note that the value of <code>pop-up-windows</code> does not matter if
+<code>pop-up-frames</code> is non-<code>nil</code>.  If <code>pop-up-frames</code> is
+<code>nil</code>, then <code>display-buffer</code> either splits a window or reuses
+one. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; User Option: <b>pop-up-frame-function</b><var><a name="index-pop_002dup_002dframe_002dfunction-2100"></a></var><br>
+<blockquote><p>This variable specifies how to make a new frame if <code>pop-up-frames</code>
+is non-<code>nil</code>.
+
+        <p>The value of this variable must be a function of no arguments.  When
+<code>display-buffer</code> makes a new frame, it does so by calling that
+function, which should return a frame.  The default value of this
+variable is a function that creates a frame using the parameters
+specified by <code>pop-up-frame-alist</code> described next. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>pop-up-frame-alist</b><var><a name="index-pop_002dup_002dframe_002dalist-2101"></a></var><br>
+<blockquote><p>This variable holds an alist specifying frame parameters used by the
+default value of <code>pop-up-frame-function</code> for making new frames. 
+See <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>, for more information about frame parameters. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>special-display-buffer-names</b><var><a name="index-special_002ddisplay_002dbuffer_002dnames-2102"></a></var><br>
+<blockquote><p>A list of buffer names identifying buffers that should be displayed
+specially.  If the name of <var>buffer-or-name</var> is in this list,
+<code>display-buffer</code> handles the buffer specially.  By default, special
+display means to give the buffer a dedicated frame.
+
+        <p>If an element is a list, instead of a string, then the <span class="sc">car</span> of that
+list is the buffer name, and the rest of that list says how to create
+the frame.  There are two possibilities for the rest of that list (its
+<span class="sc">cdr</span>): It can be an alist, specifying frame parameters, or it can
+contain a function and arguments to give to it.  (The function's first
+argument is always the buffer to be displayed; the arguments from the
+list come after that.)
+
+        <p>For example:
+
+     <pre class="example">          (("myfile" (minibuffer) (menu-bar-lines . 0)))
+</pre>
+        <p class="noindent">specifies to display a buffer named &lsquo;<samp><span class="samp">myfile</span></samp>&rsquo; in a dedicated frame
+with specified <code>minibuffer</code> and <code>menu-bar-lines</code> parameters.
+
+        <p>The list of frame parameters can also use the phony frame parameters
+<code>same-frame</code> and <code>same-window</code>.  If the specified frame
+parameters include <code>(same-window . </code><var>value</var><code>)</code> and <var>value</var>
+is non-<code>nil</code>, that means to display the buffer in the current
+selected window.  Otherwise, if they include <code>(same-frame . 
+</code><var>value</var><code>)</code> and <var>value</var> is non-<code>nil</code>, that means to display
+the buffer in a new window in the currently selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>special-display-regexps</b><var><a name="index-special_002ddisplay_002dregexps-2103"></a></var><br>
+<blockquote><p>A list of regular expressions specifying buffers that should be
+displayed specially.  If the buffer's name matches any of the regular
+expressions in this list, <code>display-buffer</code> handles the buffer
+specially.  By default, special display means to give the buffer a
+dedicated frame.
+
+        <p>If an element is a list, instead of a string, then the <span class="sc">car</span> of the
+list is the regular expression, and the rest of the list says how to
+create the frame.  See <code>special-display-buffer-names</code> above. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>special-display-p</b><var> buffer-name<a name="index-special_002ddisplay_002dp-2104"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if displaying a buffer
+named <var>buffer-name</var> with <code>display-buffer</code> would
+create a special frame.  The value is <code>t</code> if it would
+use the default frame parameters, or else the specified list
+of frame parameters. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>special-display-function</b><var><a name="index-special_002ddisplay_002dfunction-2105"></a></var><br>
+<blockquote><p>This variable holds the function to call to display a buffer specially. 
+It receives the buffer as an argument, and should return the window in
+which it is displayed.  The default value of this variable is
+<code>special-display-popup-frame</code>, see below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>special-display-popup-frame</b><var> buffer &amp;optional args<a name="index-special_002ddisplay_002dpopup_002dframe-2106"></a></var><br>
+<blockquote><p>This function tries to make <var>buffer</var> visible in a frame of its own. 
+If <var>buffer</var> is already displayed in some window, it makes that
+window's frame visible and raises it.  Otherwise, it creates a frame
+that is dedicated to <var>buffer</var>.  The return value is the window used
+to display <var>buffer</var>.
+
+        <p>If <var>args</var> is an alist, it specifies frame parameters for the new
+frame.  If <var>args</var> is a list whose <span class="sc">car</span> is a symbol, then
+<code>(car </code><var>args</var><code>)</code> is called as a function to actually create and
+set up the frame; it is called with <var>buffer</var> as first argument, and
+<code>(cdr </code><var>args</var><code>)</code> as additional arguments.
+
+        <p>This function always uses an existing window displaying <var>buffer</var>,
+whether or not it is in a frame of its own; but if you set up the above
+variables in your init file, before <var>buffer</var> was created, then
+presumably the window was previously made by this function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>special-display-frame-alist</b><var><a name="index-special_002ddisplay_002dframe_002dalist-2107"></a></var><br>
+<blockquote><p><a name="Definition-of-special_002ddisplay_002dframe_002dalist"></a>This variable holds frame parameters for
+<code>special-display-popup-frame</code> to use when it creates a frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>same-window-buffer-names</b><var><a name="index-same_002dwindow_002dbuffer_002dnames-2108"></a></var><br>
+<blockquote><p>A list of buffer names for buffers that should be displayed in the
+selected window.  If the buffer's name is in this list,
+<code>display-buffer</code> handles the buffer by switching to it in the
+selected window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>same-window-regexps</b><var><a name="index-same_002dwindow_002dregexps-2109"></a></var><br>
+<blockquote><p>A list of regular expressions that specify buffers that should be
+displayed in the selected window.  If the buffer's name matches any of
+the regular expressions in this list, <code>display-buffer</code> handles the
+buffer by switching to it in the selected window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>same-window-p</b><var> buffer-name<a name="index-same_002dwindow_002dp-2110"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if displaying a buffer
+named <var>buffer-name</var> with <code>display-buffer</code> would
+put it in the selected window. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; User Option: <b>display-buffer-function</b><var><a name="index-display_002dbuffer_002dfunction-2111"></a></var><br>
+<blockquote><p>This variable is the most flexible way to customize the behavior of
+<code>display-buffer</code>.  If it is non-<code>nil</code>, it should be a function
+that <code>display-buffer</code> calls to do the work.  The function should
+accept two arguments, the first two arguments that <code>display-buffer</code>
+received.  It should choose or create a window, display the specified
+buffer in it, and then return the window.
+
+        <p>This variable takes precedence over all the other options described
+above. 
+</p></blockquote></div>
+
+   <p>If all options described above fail to produce a suitable window,
+<code>display-buffer</code> tries to reuse an existing window.  As a last
+resort, it will try to display <var>buffer-or-name</var> on a separate frame. 
+In that case, the value of <code>pop-up-frames</code> is disregarded.
+
+   </body></html>
+

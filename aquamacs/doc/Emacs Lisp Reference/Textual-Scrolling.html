@@ -1,0 +1,270 @@
+<html lang="en">
+<head>
+<title>Textual Scrolling - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Window-Start-and-End.html#Window-Start-and-End" title="Window Start and End">
+<link rel="next" href="Vertical-Scrolling.html#Vertical-Scrolling" title="Vertical Scrolling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Textual-Scrolling"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vertical-Scrolling.html#Vertical-Scrolling">Vertical Scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.12 Textual Scrolling</h3>
+
+<p><a name="index-textual-scrolling-2131"></a><a name="index-scrolling-textually-2132"></a>
+  <dfn>Textual scrolling</dfn> means moving the text up or down through a
+window.  It works by changing the value of the window's display-start
+location.  It may also change the value of <code>window-point</code> to keep
+point on the screen.
+
+   <p>Textual scrolling was formerly called &ldquo;vertical scrolling,&rdquo; but we
+changed its name to distinguish it from the new vertical fractional
+scrolling feature (see <a href="Vertical-Scrolling.html#Vertical-Scrolling">Vertical Scrolling</a>).
+
+   <p>In the commands <code>scroll-up</code> and <code>scroll-down</code>, the directions
+&ldquo;up&rdquo; and &ldquo;down&rdquo; refer to the motion of the text in the buffer at which
+you are looking through the window.  Imagine that the text is
+written on a long roll of paper and that the scrolling commands move the
+paper up and down.  Thus, if you are looking at text in the middle of a
+buffer and repeatedly call <code>scroll-down</code>, you will eventually see
+the beginning of the buffer.
+
+   <p>Some people have urged that the opposite convention be used: they
+imagine that the window moves over text that remains in place.  Then
+&ldquo;down&rdquo; commands would take you to the end of the buffer.  This view is
+more consistent with the actual relationship between windows and the
+text in the buffer, but it is less like what the user sees.  The
+position of a window on the terminal does not move, and short scrolling
+commands clearly move the text up or down on the screen.  We have chosen
+names that fit the user's point of view.
+
+   <p>The textual scrolling functions (aside from
+<code>scroll-other-window</code>) have unpredictable results if the current
+buffer is different from the buffer that is displayed in the selected
+window.  See <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
+
+   <p>If the window contains a row which is taller than the height of the
+window (for example in the presence of a large image), the scroll
+functions will adjust the window's vertical scroll position to scroll
+the partially visible row.  To disable this feature, Lisp code may bind
+the variable <code>auto-window-vscroll</code> to <code>nil</code> (see <a href="Vertical-Scrolling.html#Vertical-Scrolling">Vertical Scrolling</a>).
+
+<div class="defun">
+&mdash; Command: <b>scroll-up</b><var> &amp;optional count<a name="index-scroll_002dup-2133"></a></var><br>
+<blockquote><p>This function scrolls the text in the selected window upward
+<var>count</var> lines.  If <var>count</var> is negative, scrolling is actually
+downward.
+
+        <p>If <var>count</var> is <code>nil</code> (or omitted), then the length of scroll
+is <code>next-screen-context-lines</code> lines less than the usable height of
+the window (not counting its mode line).
+
+        <p><code>scroll-up</code> returns <code>nil</code>, unless it gets an error
+because it can't scroll any further. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>scroll-down</b><var> &amp;optional count<a name="index-scroll_002ddown-2134"></a></var><br>
+<blockquote><p>This function scrolls the text in the selected window downward
+<var>count</var> lines.  If <var>count</var> is negative, scrolling is actually
+upward.
+
+        <p>If <var>count</var> is omitted or <code>nil</code>, then the length of the scroll
+is <code>next-screen-context-lines</code> lines less than the usable height of
+the window (not counting its mode line).
+
+        <p><code>scroll-down</code> returns <code>nil</code>, unless it gets an error because
+it can't scroll any further. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>scroll-other-window</b><var> &amp;optional count<a name="index-scroll_002dother_002dwindow-2135"></a></var><br>
+<blockquote><p>This function scrolls the text in another window upward <var>count</var>
+lines.  Negative values of <var>count</var>, or <code>nil</code>, are handled
+as in <code>scroll-up</code>.
+
+        <p>You can specify which buffer to scroll by setting the variable
+<code>other-window-scroll-buffer</code> to a buffer.  If that buffer isn't
+already displayed, <code>scroll-other-window</code> displays it in some
+window.
+
+        <p>When the selected window is the minibuffer, the next window is normally
+the one at the top left corner.  You can specify a different window to
+scroll, when the minibuffer is selected, by setting the variable
+<code>minibuffer-scroll-window</code>.  This variable has no effect when any
+other window is selected.  When it is non-<code>nil</code> and the
+minibuffer is selected, it takes precedence over
+<code>other-window-scroll-buffer</code>.  See <a href="Definition-of-minibuffer_002dscroll_002dwindow.html#Definition-of-minibuffer_002dscroll_002dwindow">Definition of minibuffer-scroll-window</a>.
+
+        <p>When the minibuffer is active, it is the next window if the selected
+window is the one at the bottom right corner.  In this case,
+<code>scroll-other-window</code> attempts to scroll the minibuffer.  If the
+minibuffer contains just one line, it has nowhere to scroll to, so the
+line reappears after the echo area momentarily displays the message
+&lsquo;<samp><span class="samp">Beginning of buffer</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Variable: <b>other-window-scroll-buffer</b><var><a name="index-other_002dwindow_002dscroll_002dbuffer-2136"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it tells <code>scroll-other-window</code>
+which buffer's window to scroll. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-margin</b><var><a name="index-scroll_002dmargin-2137"></a></var><br>
+<blockquote><p>This option specifies the size of the scroll margin&mdash;a minimum number
+of lines between point and the top or bottom of a window.  Whenever
+point gets within this many lines of the top or bottom of the window,
+redisplay scrolls the text automatically (if possible) to move point
+out of the margin, closer to the center of the window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-conservatively</b><var><a name="index-scroll_002dconservatively-2138"></a></var><br>
+<blockquote><p>This variable controls how scrolling is done automatically when point
+moves off the screen (or into the scroll margin).  If the value is a
+positive integer <var>n</var>, then redisplay scrolls the text up to
+<var>n</var> lines in either direction, if that will bring point back into
+proper view.  This behavior is called <dfn>conservative scrolling</dfn>. 
+Otherwise, scrolling happens in the usual way, under the control of
+other variables such as <code>scroll-up-aggressively</code> and
+<code>scroll-down-aggressively</code>.
+
+        <p>The default value is zero, which means that conservative scrolling
+never happens. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-down-aggressively</b><var><a name="index-scroll_002ddown_002daggressively-2139"></a></var><br>
+<blockquote><p>The value of this variable should be either <code>nil</code> or a fraction
+<var>f</var> between 0 and 1.  If it is a fraction, that specifies where on
+the screen to put point when scrolling down.  More precisely, when a
+window scrolls down because point is above the window start, the new
+start position is chosen to put point <var>f</var> part of the window
+height from the top.  The larger <var>f</var>, the more aggressive the
+scrolling.
+
+        <p>A value of <code>nil</code> is equivalent to .5, since its effect is to center
+point.  This variable automatically becomes buffer-local when set in any
+fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-up-aggressively</b><var><a name="index-scroll_002dup_002daggressively-2140"></a></var><br>
+<blockquote><p>Likewise, for scrolling up.  The value, <var>f</var>, specifies how far
+point should be placed from the bottom of the window; thus, as with
+<code>scroll-up-aggressively</code>, a larger value scrolls more aggressively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-step</b><var><a name="index-scroll_002dstep-2141"></a></var><br>
+<blockquote><p>This variable is an older variant of <code>scroll-conservatively</code>.  The
+difference is that it if its value is <var>n</var>, that permits scrolling
+only by precisely <var>n</var> lines, not a smaller number.  This feature
+does not work with <code>scroll-margin</code>.  The default value is zero. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>scroll-preserve-screen-position</b><var><a name="index-scroll_002dpreserve_002dscreen_002dposition-2142"></a></var><br>
+<blockquote><p>If this option is <code>t</code>, scrolling which would move the current
+point position out of the window chooses the new position of point
+so that the vertical position of the cursor is unchanged, if possible.
+
+        <p>If it is non-<code>nil</code> and not <code>t</code>, then the scrolling functions
+always preserve the vertical position of point, if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>next-screen-context-lines</b><var><a name="index-next_002dscreen_002dcontext_002dlines-2143"></a></var><br>
+<blockquote><p>The value of this variable is the number of lines of continuity to
+retain when scrolling by full screens.  For example, <code>scroll-up</code>
+with an argument of <code>nil</code> scrolls so that this many lines at the
+bottom of the window appear instead at the top.  The default value is
+<code>2</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>recenter</b><var> &amp;optional count<a name="index-recenter-2144"></a></var><br>
+<blockquote><p><a name="index-centering-point-2145"></a>This function scrolls the text in the selected window so that point is
+displayed at a specified vertical position within the window.  It does
+not &ldquo;move point&rdquo; with respect to the text.
+
+        <p>If <var>count</var> is a nonnegative number, that puts the line containing
+point <var>count</var> lines down from the top of the window.  If
+<var>count</var> is a negative number, then it counts upward from the
+bottom of the window, so that &minus;1 stands for the last usable
+line in the window.  If <var>count</var> is a non-<code>nil</code> list, then it
+stands for the line in the middle of the window.
+
+        <p>If <var>count</var> is <code>nil</code>, <code>recenter</code> puts the line containing
+point in the middle of the window, then clears and redisplays the entire
+selected frame.
+
+        <p>When <code>recenter</code> is called interactively, <var>count</var> is the raw
+prefix argument.  Thus, typing <kbd>C-u</kbd> as the prefix sets the
+<var>count</var> to a non-<code>nil</code> list, while typing <kbd>C-u 4</kbd> sets
+<var>count</var> to 4, which positions the current line four lines from the
+top.
+
+        <p>With an argument of zero, <code>recenter</code> positions the current line at
+the top of the window.  This action is so handy that some people make a
+separate key binding to do this.  For example,
+
+     <pre class="example">          (defun line-to-top-of-window ()
+            "Scroll current line to top of window.
+          Replaces three keystroke sequence C-u 0 C-l."
+            (interactive)
+            (recenter 0))
+          
+          (global-set-key [kp-multiply] 'line-to-top-of-window)
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

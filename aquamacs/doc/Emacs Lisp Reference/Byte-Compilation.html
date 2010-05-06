@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Byte Compilation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Loading.html#Loading" title="Loading">
+<link rel="next" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Byte-Compilation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading.html#Loading">Loading</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">16 Byte Compilation</h2>
+
+<p><a name="index-byte-compilation-840"></a><a name="index-byte_002dcode-841"></a><a name="index-compilation-_0028Emacs-Lisp_0029-842"></a>
+  Emacs Lisp has a <dfn>compiler</dfn> that translates functions written
+in Lisp into a special representation called <dfn>byte-code</dfn> that can be
+executed more efficiently.  The compiler replaces Lisp function
+definitions with byte-code.  When a byte-code function is called, its
+definition is evaluated by the <dfn>byte-code interpreter</dfn>.
+
+   <p>Because the byte-compiled code is evaluated by the byte-code
+interpreter, instead of being executed directly by the machine's
+hardware (as true compiled code is), byte-code is completely
+transportable from machine to machine without recompilation.  It is not,
+however, as fast as true compiled code.
+
+   <p>Compiling a Lisp file with the Emacs byte compiler always reads the
+file as multibyte text, even if Emacs was started with &lsquo;<samp><span class="samp">--unibyte</span></samp>&rsquo;,
+unless the file specifies otherwise.  This is so that compilation gives
+results compatible with running the same file without compilation. 
+See <a href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>.
+
+   <p>In general, any version of Emacs can run byte-compiled code produced
+by recent earlier versions of Emacs, but the reverse is not true.
+
+   <p><a name="index-no_002dbyte_002dcompile-843"></a>  If you do not want a Lisp file to be compiled, ever, put a file-local
+variable binding for <code>no-byte-compile</code> into it, like this:
+
+<pre class="example">     ;; -*-no-byte-compile: t; -*-
+</pre>
+   <p>See <a href="Compilation-Errors.html#Compilation-Errors">Compilation Errors</a>, for how to investigate errors occurring in
+byte compilation.
+
+<ul class="menu">
+<li><a accesskey="1" href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode">Speed of Byte-Code</a>:           An example of speedup from byte compilation. 
+<li><a accesskey="2" href="Compilation-Functions.html#Compilation-Functions">Compilation Functions</a>:        Byte compilation functions. 
+<li><a accesskey="3" href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>:         Dynamic loading of documentation strings. 
+<li><a accesskey="4" href="Dynamic-Loading.html#Dynamic-Loading">Dynamic Loading</a>:              Dynamic loading of individual functions. 
+<li><a accesskey="5" href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>:   	Code to be evaluated when you compile. 
+<li><a accesskey="6" href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>:              Handling compiler error messages. 
+<li><a accesskey="7" href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>: 		The data type used for byte-compiled functions. 
+<li><a accesskey="8" href="Disassembly.html#Disassembly">Disassembly</a>:                  Disassembling byte-code; how to read byte-code. 
+</ul>
+
+   </body></html>
+

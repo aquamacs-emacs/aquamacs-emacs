@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Programming Tips - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tips.html#Tips" title="Tips">
+<link rel="prev" href="Key-Binding-Conventions.html#Key-Binding-Conventions" title="Key Binding Conventions">
+<link rel="next" href="Compilation-Tips.html#Compilation-Tips" title="Compilation Tips">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Programming-Tips"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Compilation-Tips.html#Compilation-Tips">Compilation Tips</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Binding-Conventions.html#Key-Binding-Conventions">Key Binding Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
+<hr>
+</div>
+
+<h3 class="section">D.3 Emacs Programming Tips</h3>
+
+<p><a name="index-programming-conventions-3829"></a>
+  Following these conventions will make your program fit better
+into Emacs when it runs.
+
+     <ul>
+<li>Don't use <code>next-line</code> or <code>previous-line</code> in programs; nearly
+always, <code>forward-line</code> is more convenient as well as more
+predictable and robust.  See <a href="Text-Lines.html#Text-Lines">Text Lines</a>.
+
+     <li>Don't call functions that set the mark, unless setting the mark is one
+of the intended features of your program.  The mark is a user-level
+feature, so it is incorrect to change the mark except to supply a value
+for the user's benefit.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
+
+     <p>In particular, don't use any of these functions:
+
+          <ul>
+<li><code>beginning-of-buffer</code>, <code>end-of-buffer</code>
+<li><code>replace-string</code>, <code>replace-regexp</code>
+<li><code>insert-file</code>, <code>insert-buffer</code>
+</ul>
+
+     <p>If you just want to move point, or replace a certain string, or insert
+a file or buffer's contents, without any of the other features
+intended for interactive users, you can replace these functions with
+one or two lines of simple Lisp code.
+
+     <li>Use lists rather than vectors, except when there is a particular reason
+to use a vector.  Lisp has more facilities for manipulating lists than
+for vectors, and working with lists is usually more convenient.
+
+     <p>Vectors are advantageous for tables that are substantial in size and are
+accessed in random order (not searched front to back), provided there is
+no need to insert or delete elements (only lists allow that).
+
+     <li>The recommended way to show a message in the echo area is with
+the <code>message</code> function, not <code>princ</code>.  See <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>.
+
+     <li>When you encounter an error condition, call the function <code>error</code>
+(or <code>signal</code>).  The function <code>error</code> does not return. 
+See <a href="Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>.
+
+     <p>Don't use <code>message</code>, <code>throw</code>, <code>sleep-for</code>, or
+<code>beep</code> to report errors.
+
+     <li>An error message should start with a capital letter but should not end
+with a period.
+
+     <li>A question asked in the minibuffer with <code>y-or-n-p</code> or
+<code>yes-or-no-p</code> should start with a capital letter and end with
+&lsquo;<samp><span class="samp">? </span></samp>&rsquo;.
+
+     <li>When you mention a default value in a minibuffer prompt,
+put it and the word &lsquo;<samp><span class="samp">default</span></samp>&rsquo; inside parentheses. 
+It should look like this:
+
+     <pre class="example">          Enter the answer (default 42):
+</pre>
+     <li>In <code>interactive</code>, if you use a Lisp expression to produce a list
+of arguments, don't try to provide the &ldquo;correct&rdquo; default values for
+region or position arguments.  Instead, provide <code>nil</code> for those
+arguments if they were not specified, and have the function body
+compute the default value when the argument is <code>nil</code>.  For
+instance, write this:
+
+     <pre class="example">          (defun foo (pos)
+            (interactive
+             (list (if <var>specified</var> <var>specified-pos</var>)))
+            (unless pos (setq pos <var>default-pos</var>))
+            ...)
+</pre>
+     <p class="noindent">rather than this:
+
+     <pre class="example">          (defun foo (pos)
+            (interactive
+             (list (if <var>specified</var> <var>specified-pos</var>
+                       <var>default-pos</var>)))
+            ...)
+</pre>
+     <p class="noindent">This is so that repetition of the command will recompute
+these defaults based on the current circumstances.
+
+     <p>You do not need to take such precautions when you use interactive
+specs &lsquo;<samp><span class="samp">d</span></samp>&rsquo;, &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">r</span></samp>&rsquo;, because they make special
+arrangements to recompute the argument values on repetition of the
+command.
+
+     <li>Many commands that take a long time to execute display a message that
+says something like &lsquo;<samp><span class="samp">Operating...</span></samp>&rsquo; when they start, and change it
+to &lsquo;<samp><span class="samp">Operating...done</span></samp>&rsquo; when they finish.  Please keep the style of
+these messages uniform: <em>no</em> space around the ellipsis, and
+<em>no</em> period after &lsquo;<samp><span class="samp">done</span></samp>&rsquo;.  See <a href="Progress.html#Progress">Progress</a>, for an easy way
+to generate such messages.
+
+     <li>Try to avoid using recursive edits.  Instead, do what the Rmail <kbd>e</kbd>
+command does: use a new local keymap that contains one command defined
+to switch back to the old local keymap.  Or do what the
+<code>edit-options</code> command does: switch to another buffer and let the
+user switch back at will.  See <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>. 
+</ul>
+
+   </body></html>
+

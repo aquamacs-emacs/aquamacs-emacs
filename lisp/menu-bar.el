@@ -666,7 +666,8 @@ by \"Save Options\" in Custom buffers.")
     (dolist (elt '(global-show-newlines-mode line-number-mode
 		   column-number-mode size-indication-mode
 		   cua-mode show-paren-mode transient-mark-mode
-		   display-time-mode display-battery-mode))
+		   display-time-mode display-battery-mode
+		   visual-line-mode))
       (and (customize-mark-to-save elt)
 	   (setq need-save t)))
     ;; These are set with `customize-set-variable'.
@@ -683,7 +684,8 @@ by \"Save Options\" in Custom buffers.")
 		   ;; Nonetheless, not saving it would like be confuse
 		   ;; more often.
 		   ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-		   text-mode-hook))
+		   text-mode-hook
+		   word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode))
       (and (get elt 'customized-value)
 	   (customize-mark-to-save elt)
 	   (setq need-save t)))
@@ -745,8 +747,18 @@ mail status in mode line"))
 
 (define-key menu-bar-showhide-menu [datetime-separator]
   '("--"))
+
+(defun customize-tool-bar ()
+  "Show tool bar customization.
+Only available in Aquamacs."
+  (interactive)
+  (tool-bar-mode 1)  ; must be visible
+  (sit-for 0)
+  (ns-tool-bar-customize))
+
 (define-key menu-bar-showhide-menu [ns-tool-bar]
-  `(menu-item ,(purecopy "Toolbar...") ns-tool-bar-customize
+  `(menu-item ,(purecopy "Toolbar...") 
+	      customize-tool-bar
 	      :help ,(purecopy "Display the Toolbar customization panel")
 	      :visible ,(fboundp 'ns-tool-bar-customize)))
 
@@ -1015,66 +1027,142 @@ mail status in mode line"))
 	    "Case-Insensitive Search %s"
 	    "Ignore letter-case in search commands"))
 
-(defun menu-bar-text-mode-auto-fill ()
-  (interactive)
-  (toggle-text-mode-auto-fill)
-  ;; This is somewhat questionable, as `text-mode-hook'
-  ;; might have changed outside customize.
-  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-  (customize-mark-as-set 'text-mode-hook))
-
-(define-key menu-bar-options-menu [auto-fill-mode]
-  `(menu-item ,(purecopy "Auto Fill in Text Modes")
-              menu-bar-text-mode-auto-fill
-	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
-              :button (:toggle . (if (listp text-mode-hook)
-				     (member 'turn-on-auto-fill text-mode-hook)
-				   (eq 'turn-on-auto-fill text-mode-hook)))))
-
-
 (defvar menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
+;(setq menu-bar-line-wrapping-menu (make-sparse-keymap "Line Wrapping"))
+
+(defun set-global-mode-here-and-default (global-mode &optional enable)
+  "Sets global minor mode GLOBAL-MODE in this buffer, and as default
+for future buffers."
+  (let ((sgmh-this-buffer (current-buffer))
+	(saved (symbol-function 'buffer-list)))
+    (unwind-protect
+	(progn
+	  (fset 'buffer-list (lambda (&optional frame) (list sgmh-this-buffer)))
+	  (funcall global-mode enable))
+      (fset 'buffer-list saved))))
+
+;; (defvar line-wrapping--saved-state nil)
+
+;; (defvar line-wrapping--state nil "Line wrapping mode in effect.
+;; One of `truncate', `wrap', `word-wrap' and `fill'.")
+;; (make-variable-buffer-local 'line-wrapping--state)
+
+; could add something to minor-mode-alist as a lighter for the
+; mode-line
+(setq minor-mode-alist (cons (list 'truncate-lines " Trunc")
+			   minor-mode-alist))
+
+(defun menu-bar-set-wrapping-default ()
+  "Set current buffer's line wrapping style as default."
+  (interactive)
+
+  (let ((variables '(word-wrap truncate-lines line-move-visual
+			       visual-line-mode auto-fill-function
+			       fringe-indicator-alist)))
+
+    (let ((vlf (member (cons 'continuation visual-line-fringe-indicators)
+		       fringe-indicator-alist)))
+      
+      (unless (eq (if vlf t nil)
+		  (if (member (cons 'continuation visual-line-fringe-indicators)
+			      (default-value 'fringe-indicator-alist)) t nil))
+	(if vlf
+	    (set-default 'fringe-indicator-alist
+			 (cons (cons 'continuation visual-line-fringe-indicators)
+			       (default-value 'fringe-indicator-alist)))
+	  (set-default 'fringe-indicator-alist
+		       (remove (cons 'continuation visual-line-fringe-indicators)
+			       (default-value 'fringe-indicator-alist))))))
+
+    ;; create local bindings in all buffers
+    ;; in order to just set the default for future buffers
+    ;; WE DON'T NEED THIS IF USERS CALL THIS FUNCTION EXPLICITLY
+    ;; (dolist (buf (buffer-list))
+    ;;   (when (buffer-live-p buf)
+    ;; 	(with-current-buffer buf
+    ;; 	  (unless (eq major-mode 'fundamental-mode)
+    ;; 	    (dolist (v variables)
+    ;; 	      ;; create local binding
+    ;; 	      (set v (symbol-value v)))))))
+    
+    ;; set default values and remove local bindings in current buffer
+    (dolist (v variables)
+      (set-default v (symbol-value v))
+      (kill-local-variable v))
+
+    (customize-mark-as-set 'word-wrap)
+    (customize-mark-as-set 'truncate-lines)
+    (customize-mark-as-set 'fringe-indicator-alist)
+    (customize-mark-as-set 'auto-fill-function)
+
+    (message "Line wrapping set as default for other buffers.")))
+
+
+;; We just offer the auto-wrap option in Aquamacs
+;; (define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
+;;   `(menu-item ,(purecopy "Hard Word Wrap as Default in Text Modes")
+;;               menu-bar-text-mode-auto-fill
+;; 	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
+;;               :button (:toggle . (if (listp text-mode-hook)
+;; 				     (member 'turn-on-auto-fill text-mode-hook)
+;; 				   (eq 'turn-on-auto-fill text-mode-hook)))))
+(defun menu-bar-local-wrapping-p ()
+  (or (local-variable-p 'word-wrap)
+      (local-variable-p 'truncate-lines)
+      (local-variable-p 'auto-fill-function)))
+
+(define-key menu-bar-line-wrapping-menu [wrapping-set-default]
+  `(menu-item (if (menu-bar-local-wrapping-p)
+		  "Adopt as Default"
+		"Adopted as Default")
+              menu-bar-set-wrapping-default
+	      :help  ,(purecopy "Set current wrapping style as default for other buffers.")
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-local-wrapping-p))
+              :button (:toggle . (not (menu-bar-local-wrapping-p)))))
+
+(define-key menu-bar-line-wrapping-menu [default-separator]
+  '("--"))
+
+(define-key menu-bar-line-wrapping-menu [auto-fill-mode]
+  `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
+              set-auto-fill
+	      :help  ,(purecopy "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers.")
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+              :button (:radio . auto-fill-function)))
 
 (define-key menu-bar-line-wrapping-menu [word-wrap]
-  `(menu-item ,(purecopy "Word Wrap (Visual Line mode)")
-	      (lambda ()
-		(interactive)
-		(unless visual-line-mode
-		  (visual-line-mode 1))
-		(message ,(purecopy "Visual-Line mode enabled")))
-	      :help ,(purecopy "Wrap long lines at word boundaries")
+  `(menu-item ,(purecopy "Word Wrap")
+	      set-word-wrap
+	      :help ,(purecopy "Wrap long lines at word boundaries in this buffer and in new buffers.")
 	      :button (:radio . (and (null truncate-lines)
 				     (not (truncated-partial-width-window-p))
 				     word-wrap))
-	      :visible (menu-bar-menu-frame-live-and-visible-p)))
+	      :enable (menu-bar-menu-frame-live-and-visible-p)))
 
-(define-key menu-bar-line-wrapping-menu [truncate]
-  `(menu-item ,(purecopy "Truncate Long Lines")
-	      (lambda ()
-		(interactive)
-		(if visual-line-mode (visual-line-mode 0))
-		(setq word-wrap nil)
-		(toggle-truncate-lines 1))
-	      :help ,(purecopy "Truncate long lines at window edge")
-	      :button (:radio . (or truncate-lines
-				    (truncated-partial-width-window-p)))
+
+(define-key menu-bar-line-wrapping-menu [window-wrap]
+  `(menu-item ,(purecopy "Wrap")
+	      set-line-wrap
+	      :help ,(purecopy "Wrap long lines at window edge in this buffer and in new buffers.")
+	      :button (:radio . (and (null truncate-lines)
+				     (not (truncated-partial-width-window-p))
+				     (not word-wrap)
+				     (null auto-fill-function)))
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
-(define-key menu-bar-line-wrapping-menu [window-wrap]
-  `(menu-item ,(purecopy "Wrap at Window Edge")
-	      (lambda () (interactive)
-		(if visual-line-mode (visual-line-mode 0))
-		(setq word-wrap nil)
-		(if truncate-lines (toggle-truncate-lines -1)))
-	      :help ,(purecopy "Wrap long lines at window edge")
-	      :button (:radio . (and (null truncate-lines)
-				     (not (truncated-partial-width-window-p))
-				     (not word-wrap)))
+(define-key menu-bar-line-wrapping-menu [truncate]
+  `(menu-item ,(purecopy "Truncate")
+	      set-truncate-lines
+	      :help ,(purecopy "Truncate long lines at window edge in this buffer and in new buffers.")
+	      :button (:radio . (or (truncated-partial-width-window-p)
+				    truncate-lines)) ; truncate takes precedence over word-wrap
 	      :visible (menu-bar-menu-frame-live-and-visible-p)
 	      :enable (not (truncated-partial-width-window-p))))
 
 (define-key menu-bar-options-menu [line-wrapping]
-  `(menu-item ,(purecopy "Line Wrapping in this Buffer") ,menu-bar-line-wrapping-menu))
+  `(menu-item ,(purecopy "Line Wrapping") ,menu-bar-line-wrapping-menu))
 
 
 (define-key menu-bar-options-menu [highlight-separator]
@@ -1650,6 +1738,12 @@ Buffers menu is regenerated."
   (raise-frame frame)
   (select-frame frame))
 
+
+;; FIXME: move these in common place 
+;; (shared with mouse.el)
+(defvar buffer-menu-modified-string "*")
+(defvar buffer-menu-read-only-string "%")
+
 (defun menu-bar-update-buffers-1 (elt)
   (let* ((buf (car elt))
 	 (file
@@ -1664,24 +1758,27 @@ Buffers menu is regenerated."
     (when (and file (> (length file) 20))
       (setq file (concat "..." (substring file -17))))
     (cons (if buffers-menu-show-status
-	      (let ((mod (if (buffer-modified-p buf) "*" ""))
-		    (ro (if (buffer-local-value 'buffer-read-only buf) "%" "")))
+	      (let ((mod (if (buffer-modified-p buf) buffer-menu-modified-string ""))  ; on NS this indicates modification. To Do: show on the left
+		    ;; (icon (if (buffer-modified-p buf) "\u2666 " ""))
+		    (ro (if (buffer-local-value 'buffer-read-only buf) buffer-menu-read-only-string ""))
+		    )
 		(if file
-		    (format "%s  %s%s  --  %s" (cdr elt) mod ro file)
+		    (format "%s  %s%s    \t%s" (cdr elt) mod ro file)
 		  (format "%s  %s%s" (cdr elt) mod ro)))
 	    (if file
-		(format "%s  --  %s"  (cdr elt) file)
+		(format "%s    \t%s"  (cdr elt) file)
 	      (cdr elt)))
 	  buf)))
 
 ;; Used to cache the menu entries for commands in the Buffers menu
 (defvar menu-bar-buffers-menu-command-entries nil)
 
-(defun menu-bar-update-buffers (&optional force)
+(defun menu-bar-update-buffers (&optional force) 
   ;; If user discards the Buffers item, play along.
   (and (lookup-key (current-global-map) [menu-bar buffer])
        (or force (frame-or-buffer-changed-p))
-       (let ((buffers (buffer-list))
+       ;; buffers list in menu should be stable (rather than reflecting Emacs buffer ordering)
+       (let ((buffers (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
 	     (frames (frame-list))
 	     buffers-menu)
 	 ;; If requested, list only the N most recently selected buffers.
@@ -1718,11 +1815,15 @@ Buffers menu is regenerated."
                    (dolist (pair alist)
                      (setq i (1- i))
                      (aset buffers-vec i
-			   (nconc (list (car pair)
-					(cons nil nil))
-				  `(lambda ()
-                                     (interactive)
-                                     (menu-bar-select-buffer ,(cdr pair))))))
+			   (cons 'menu-item
+				 (nconc (list
+					 (car pair)
+					 `(lambda ()
+					    (interactive)
+					    (menu-bar-select-buffer ,(cdr pair))))
+					(if (eq (window-buffer) (cdr pair)) ;  menu-updating-frame is incorrect
+					    (list :button '(:toggle . t)))
+					))))
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.

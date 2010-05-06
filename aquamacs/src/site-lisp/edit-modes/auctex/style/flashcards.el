@@ -36,7 +36,7 @@
    (TeX-add-symbols
     '("cardfrontstyle" ["Format"] "Style")
     '("cardfrontfoot" "Footer text")
-    '("cardbackstyle" "Style")
+    '("cardbackstyle" ["Format"] "Style")
     '("cardfrontheadstyle" ["Format"] "Style")
     '("cardfrontfootstyle" ["Format"] "Style")
     "cardmargin"
@@ -48,11 +48,11 @@
     "cardwidth")
    (LaTeX-add-environments '("flashcard" ["Header"] "Front side"))
    ;; Fontification
-   (when (and (featurep 'font-latex)
+   (when (and (fboundp 'font-latex-add-keywords)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("cardfrontstyle" "[{")
 				("cardfrontfoot" "{")
-				("cardbackstyle" "{")
+				("cardbackstyle" "[{")
 				("cardfrontheadstyle" "[{")
 				("cardfrontfootstyle" "[{"))
 			      'variable))))

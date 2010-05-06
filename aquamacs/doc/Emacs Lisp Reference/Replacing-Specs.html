@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Replacing Specs - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Property.html#Display-Property" title="Display Property">
+<link rel="next" href="Specified-Space.html#Specified-Space" title="Specified Space">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Replacing-Specs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Specified-Space.html#Specified-Space">Specified Space</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property">Display Property</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.1 Display Specs That Replace The Text</h4>
+
+<p>Some kinds of <code>display</code> specifications specify something to
+display instead of the text that has the property.  These are called
+<dfn>replacing</dfn> display specifications.  Emacs does not allow the user
+to interactively move point into the middle of buffer text that is
+replaced in this way.
+
+   <p>If a list of display specifications includes more than one replacing
+display specification, the first overrides the rest.  Replacing
+display specifications make most other display specifications
+irrelevant, since those don't apply to the replacement.
+
+   <p>For replacing display specifications, &ldquo;the text that has the
+property&rdquo; means all the consecutive characters that have the same
+Lisp object as their <code>display</code> property; these characters are
+replaced as a single unit.  By contrast, characters that have similar
+but distinct Lisp objects as their <code>display</code> properties are
+handled separately.  Here's a function that illustrates this point:
+
+<pre class="smallexample">     (defun foo ()
+       (goto-char (point-min))
+       (dotimes (i 5)
+         (let ((string (concat "A")))
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 1)
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 1))))
+</pre>
+   <p class="noindent">It gives each of the first ten characters in the buffer string
+<code>"A"</code> as the <code>display</code> property, but they don't all get the
+same string.  The first two characters get the same string, so they
+together are replaced with one &lsquo;<samp><span class="samp">A</span></samp>&rsquo;.  The next two characters get
+a second string, so they together are replaced with one &lsquo;<samp><span class="samp">A</span></samp>&rsquo;. 
+Likewise for each following pair of characters.  Thus, the ten
+characters appear as five A's.  This function would have the same
+results:
+
+<pre class="smallexample">     (defun foo ()
+       (goto-char (point-min))
+       (dotimes (i 5)
+         (let ((string (concat "A")))
+           (put-text-property (point) (+ 2 (point)) 'display string)
+           (put-text-property (point) (1+ (point)) 'display string)
+           (forward-char 2))))
+</pre>
+   <p class="noindent">This illustrates that what matters is the property value for
+each character.  If two consecutive characters have the same
+object as the <code>display</code> property value, it's irrelevant
+whether they got this property from a single call to
+<code>put-text-property</code> or from two different calls.
+
+   </body></html>
+

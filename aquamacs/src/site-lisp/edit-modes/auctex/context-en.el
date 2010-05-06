@@ -81,7 +81,7 @@
     "blank" "block" "bodyfont" "bodyfontenvironment" "bottom"
     "bottomtexts" "buffer" "capitals" "caption" "captions" "color"
     "colors" "columns" "combinations" "combinedlist" "descriptions"
-    "enumerations" "externalfigure" "fillinlines" "fillinrules" "float"
+    "enumerations" "externalfigures" "fillinlines" "fillinrules" "float"
     "floats" "footer" "footertexts" "footnodedefinition" "footnotes"
     "framed" "framedtexts" "head" "header" "headertexts" "headnumber"
     "heads" "headtext" "hyphenmark" "indentations" "indenting" "inmargin"
@@ -95,18 +95,27 @@
     "tolerance" "top" "toptexts" "type" "typing" "underbar" "whitespace")
   "List of the names of ConTeXt en interface  macro's that setup things.")
 
+;; referencing in ConTeXt
+(defvar ConTeXt-referencing-list-en
+  '("in" "at" "about" "pagereference" "textreference" "reference")
+  "List of ConTeXt en macro's that are used for referencing."
+)
+
 ;; lists some place macro's as well, should perhaps be under separate menu
 (defvar ConTeXt-other-macro-list-en
-  '("adaptlayout" "at" "combinepages" "copypages"
+  '("abbreviation" "adaptlayout" "at" "combinepages" "copypages"
     "externalfigure" "framed" "from" "input" "insertpages" "filterpages"
     "getbuffer" "goto"
+    "hideblocks" "keepblocks"
     "leftaligned" "midaligned"
     "obeyspaces"
-    "page" "placeexternalfigure" "placefigure" "placelogos" "placetable"
-    "protect"
+    "page"
+    "placecontent" "placeexternalfigure" "placefigure" "placelogos" "placetable"
+    "processblocks" "protect"
     "raggedcenter" "rightaligned" "rotate"
-    "scale" "showexternalfigures" "slicepages"
-    "useexternalfigure" "unprotect" "url" "usemodule")
+    "scale" "selectblocks" "showexternalfigures" "slicepages"
+    "useexternalfigure" "unprotect" "url" "useblocks" "usemodule" "useURL"
+    "version")
   "List of ConTeXt en interface macro's that are not an environment nor a setup.")
 
 (defun ConTeXt-define-command-en (what)
@@ -164,7 +173,7 @@
 
 (defun ConTeXt-en-mode-initialization ()
   "ConTeXt english interface specific initialization."
-  (mapcar 'ConTeXt-add-environments (reverse ConTeXt-environment-list-en))
+  (mapc 'ConTeXt-add-environments (reverse ConTeXt-environment-list-en))
 
   (TeX-add-symbols
    '("but" ConTeXt-arg-define-ref (TeX-arg-literal " "))

@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Rmail Summary Edit - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rmail-Summary.html#Rmail-Summary" title="Rmail Summary">
+<link rel="prev" href="Rmail-Make-Summary.html#Rmail-Make-Summary" title="Rmail Make Summary">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rmail-Summary-Edit"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Make-Summary.html#Rmail-Make-Summary">Rmail Make Summary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail-Summary.html#Rmail-Summary">Rmail Summary</a>
+<hr>
+</div>
+
+<h4 class="subsection">36.11.2 Editing in Summaries</h4>
+
+<p>You can use the Rmail summary buffer to do almost anything you can do
+in the Rmail buffer itself.  In fact, once you have a summary buffer,
+there's no need to switch back to the Rmail buffer.
+
+   <p>You can select and display various messages in the Rmail buffer, from
+the summary buffer, just by moving point in the summary buffer to
+different lines.  It doesn't matter what Emacs command you use to move
+point; whichever line point is on at the end of the command, that
+message is selected in the Rmail buffer.
+
+   <p>Almost all Rmail commands work in the summary buffer as well as in the
+Rmail buffer.  Thus, <kbd>d</kbd> in the summary buffer deletes the current
+message, <kbd>u</kbd> undeletes, and <kbd>x</kbd> expunges.  (However, in the
+summary buffer, a numeric argument to <kbd>d</kbd>, <kbd>C-d</kbd> and <kbd>u</kbd>
+serves as a repeat count.  A negative argument reverses the meaning of
+<kbd>d</kbd> and <kbd>C-d</kbd>.  Also, if there are no more undeleted messages in
+the relevant direction, the delete commands go to the first or last
+message, rather than staying on the current message.)  <kbd>o</kbd> and
+<kbd>C-o</kbd> output the current message to a FILE; <kbd>r</kbd> starts a reply
+to it; etc.  You can scroll the current message while remaining in the
+summary buffer using &lt;SPC&gt; and &lt;DEL&gt;. 
+<!-- rmail-summary-scroll-between-messages not mentioned. -->
+
+   <p><a name="index-rmail_002dsummary_002dundelete_002dmany-2889"></a><kbd>M-u</kbd> (<code>rmail-summary-undelete-many</code>) undeletes all deleted
+messages in the summary.  A prefix argument means to undelete that many
+of the previous deleted messages.
+
+   <p>The Rmail commands to move between messages also work in the summary
+buffer, but with a twist: they move through the set of messages included
+in the summary.  They also ensure the Rmail buffer appears on the screen
+(unlike cursor motion commands, which update the contents of the Rmail
+buffer but don't display it in a window unless it already appears). 
+Here is a list of these commands:
+
+     <dl>
+<dt><kbd>n</kbd><dd>Move to next line, skipping lines saying `deleted', and select its
+message (<code>rmail-summary-next-msg</code>). 
+<br><dt><kbd>p</kbd><dd>Move to previous line, skipping lines saying `deleted', and select
+its message (<code>rmail-summary-previous-msg</code>). 
+<br><dt><kbd>M-n</kbd><dd>Move to next line and select its message (<code>rmail-summary-next-all</code>). 
+<br><dt><kbd>M-p</kbd><dd>Move to previous line and select its message
+(<code>rmail-summary-previous-all</code>). 
+<br><dt><kbd>&gt;</kbd><dd>Move to the last line, and select its message
+(<code>rmail-summary-last-message</code>). 
+<br><dt><kbd>&lt;</kbd><dd>Move to the first line, and select its message
+(<code>rmail-summary-first-message</code>). 
+<br><dt><kbd>j</kbd><dt><kbd>&lt;RET&gt;</kbd><dd>Select the message on the current line (ensuring that the Rmail buffer
+appears on the screen; <code>rmail-summary-goto-msg</code>).  With argument
+<var>n</var>, select message number <var>n</var> and move to its line in the
+summary buffer; this signals an error if the message is not listed in
+the summary buffer. 
+<br><dt><kbd>M-s </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search through messages for <var>pattern</var> starting with the current
+message; select the message found, and move point in the summary buffer
+to that message's line (<code>rmail-summary-search</code>).  A prefix argument
+acts as a repeat count; a negative argument means search backward
+(equivalent to <code>rmail-summary-search-backward</code>.) 
+<br><dt><kbd>C-M-n </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dd>Move to the next message with at least one of the specified labels
+(<code>rmail-summary-next-labeled-message</code>).  <var>labels</var> is a
+comma-separated list of labels.  A prefix argument acts as a repeat
+count. 
+<br><dt><kbd>C-M-p </kbd><var>labels</var><kbd> &lt;RET&gt;</kbd><dd>Move to the previous message with at least one of the specified labels
+(<code>rmail-summary-previous-labeled-message</code>). 
+<br><dt><kbd>C-c C-n &lt;RET&gt;</kbd><dd>Move to the next message with the same subject as the current message
+(<code>rmail-summary-next-same-subject</code>).  A prefix argument acts as a
+repeat count. 
+<br><dt><kbd>C-c C-p &lt;RET&gt;</kbd><dd>Move to the previous message with the same subject as the current message
+(<code>rmail-summary-previous-same-subject</code>). 
+</dl>
+
+   <p><a name="index-rmail_002dredisplay_002dsummary-2890"></a>  Deletion, undeletion, and getting new mail, and even selection of a
+different message all update the summary buffer when you do them in the
+Rmail buffer.  If the variable <code>rmail-redisplay-summary</code> is
+non-<code>nil</code>, these actions also bring the summary buffer back onto
+the screen.
+
+   <p><a name="index-Q-_0040r_007b_0028Rmail-summary_0029_007d-2891"></a><a name="index-rmail_002dsummary_002dwipe-2892"></a><a name="index-q-_0040r_007b_0028Rmail-summary_0029_007d-2893"></a><a name="index-rmail_002dsummary_002dquit-2894"></a><a name="index-b-_0040r_007b_0028Rmail-summary_0029_007d-2895"></a><a name="index-rmail_002dsummary_002dbury-2896"></a>  When you are finished using the summary, type <kbd>Q</kbd>
+(<code>rmail-summary-wipe</code>) to delete the summary buffer's window.  You
+can also exit Rmail while in the summary: <kbd>q</kbd>
+(<code>rmail-summary-quit</code>) deletes the summary window, then exits from
+Rmail by saving the Rmail file and switching to another buffer. 
+Alternatively, <kbd>b</kbd> (<code>rmail-summary-bury</code>) simply buries the
+Rmail summary and buffer.
+
+   </body></html>
+

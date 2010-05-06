@@ -294,25 +294,34 @@ effect, marks the misspelled word (if found) with face flyspell-incorrect."
 	misspell-location
 	misspell-end
 	done)
+    ;; update dictionary if needed
     (unless (string= ispell-current-dictionary
 		     (ns-spellchecker-current-language))
       (ispell-change-dictionary (ns-spellchecker-current-language)))
+    ;; loop through until we find a misspelling or end of string
     (while (not done)
       (setq misspell-location
 	    (ns-spellchecker-check-spelling (buffer-substring pos end)
-					    (current-buffer))
-	    misspell-end (+ pos (car misspell-location) (cdr misspell-location)))
-      (if (= (car misspell-location) -1)
-	  (setq done t)
-	(save-excursion
-	  (goto-char misspell-end)
-	  (if (flyspell-word)
-	      (setq misspell-location nil)
-	    (setq done t))))
+					    (current-buffer)))
+      (if misspell-location
+	  (save-excursion
+	    (setq misspell-end
+		  (+ pos (car misspell-location) (cdr misspell-location)))
+	    (goto-char misspell-end)
+	    (if (flyspell-word) ;; returns t if not misspelled
+		;; ignore misspelling if flyspell-word says it's OK,
+		;;  but continue checking
+		(setq misspell-location nil)
+	      ;; if flyspell-word concurs, we've found a misspelling & are done
+	      (setq done t)
+	      ))
+	;; no misspellings in string; finish.
+	(setq done t))
       (unless done
-	  (setq pos misspell-end)))
-    (if (= (car misspell-location) -1)
-	nil
+	;; check remainder of string
+	(setq pos misspell-end)))
+    ;; if a misspelling has been found, report is location (otherwise nil)
+    (when misspell-location
       (cons (+ pos (car misspell-location)) misspell-end))
     ))
   
@@ -346,9 +355,8 @@ the current highlighted word (if any)."
       ;;   is ignored or learned in the spelling panel
       (let ((word (word-at-point)))
 	(if (and word
-		 (eq (car (ns-spellchecker-check-spelling word (current-buffer)))
-		     -1))
-	  (flyspell-unhighlight-at (point))))
+		 (not (ns-spellchecker-check-spelling word (current-buffer))))
+	    (flyspell-unhighlight-at (point))))
       ;; If midway through a word, start at search at next word;
       ;;   but don't skip an entire word
       (if (backward-word)
@@ -521,9 +529,9 @@ on current value of `ispell-program-name'."
 	(setq spellcheck-text (buffer-substring spellcheck-position end)) 
 	;; find (position . length) of first misspelled word in extracted text
 	(setq ns-spellcheck-output 
-	      ;; returns (-1 . 0) if no misspellings found
+	      ;; returns nil if no misspellings found
 	      (ns-spellchecker-check-spelling spellcheck-text (current-buffer)))
-	(if (>= (car ns-spellcheck-output) 0)
+	(if ns-spellcheck-output
 	    ;; found misspelled word
 	    (progn
 	      (setq misspelled-location

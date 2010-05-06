@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Defining Abbrevs - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
+<link rel="prev" href="Abbrev-Concepts.html#Abbrev-Concepts" title="Abbrev Concepts">
+<link rel="next" href="Expanding-Abbrevs.html#Expanding-Abbrevs" title="Expanding Abbrevs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Defining-Abbrevs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Expanding-Abbrevs.html#Expanding-Abbrevs">Expanding Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Concepts.html#Abbrev-Concepts">Abbrev Concepts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr>
+</div>
+
+<h3 class="section">33.2 Defining Abbrevs</h3>
+
+     <dl>
+<dt><kbd>C-x a g</kbd><dd>Define an abbrev, using one or more words before point as its expansion
+(<code>add-global-abbrev</code>). 
+<br><dt><kbd>C-x a l</kbd><dd>Similar, but define an abbrev specific to the current major mode
+(<code>add-mode-abbrev</code>). 
+<br><dt><kbd>C-x a i g</kbd><dd>Define a word in the buffer as an abbrev (<code>inverse-add-global-abbrev</code>). 
+<br><dt><kbd>C-x a i l</kbd><dd>Define a word in the buffer as a mode-specific abbrev
+(<code>inverse-add-mode-abbrev</code>). 
+<br><dt><kbd>M-x define-global-abbrev &lt;RET&gt; </kbd><var>abbrev</var><kbd> &lt;RET&gt; </kbd><var>exp</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>abbrev</var> as an abbrev expanding into <var>exp</var>. 
+<br><dt><kbd>M-x define-mode-abbrev &lt;RET&gt; </kbd><var>abbrev</var><kbd> &lt;RET&gt; </kbd><var>exp</var><kbd> &lt;RET&gt;</kbd><dd>Define <var>abbrev</var> as a mode-specific abbrev expanding into <var>exp</var>. 
+<br><dt><kbd>M-x kill-all-abbrevs</kbd><dd>Discard all abbrev definitions, leaving a blank slate. 
+</dl>
+
+   <p><a name="index-C_002dx-a-g-2599"></a><a name="index-add_002dglobal_002dabbrev-2600"></a>  The usual way to define an abbrev is to enter the text you want the
+abbrev to expand to, position point after it, and type <kbd>C-x a g</kbd>
+(<code>add-global-abbrev</code>).  This reads the abbrev itself using the
+minibuffer, and then defines it as an abbrev for one or more words before
+point.  Use a numeric argument to say how many words before point should be
+taken as the expansion.  For example, to define the abbrev &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; as
+mentioned above, insert the text &lsquo;<samp><span class="samp">find outer otter</span></samp>&rsquo; and then type
+<kbd>C-u 3 C-x a g f o o &lt;RET&gt;</kbd>.
+
+   <p>An argument of zero to <kbd>C-x a g</kbd> means to use the contents of the
+region as the expansion of the abbrev being defined.
+
+   <p><a name="index-C_002dx-a-l-2601"></a><a name="index-add_002dmode_002dabbrev-2602"></a>  The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>) is similar, but
+defines a mode-specific abbrev.  Mode-specific abbrevs are active only in a
+particular major mode.  <kbd>C-x a l</kbd> defines an abbrev for the major mode
+in effect at the time <kbd>C-x a l</kbd> is typed.  The arguments work the same
+as for <kbd>C-x a g</kbd>.
+
+   <p><a name="index-C_002dx-a-i-g-2603"></a><a name="index-inverse_002dadd_002dglobal_002dabbrev-2604"></a><a name="index-C_002dx-a-i-l-2605"></a><a name="index-inverse_002dadd_002dmode_002dabbrev-2606"></a>  If the abbrev text itself is already in the buffer, you can use the
+commands <kbd>C-x a i g</kbd> (<code>inverse-add-global-abbrev</code>) and
+<kbd>C-x a i l</kbd> (<code>inverse-add-mode-abbrev</code>) to define it as an
+abbrev by specify the expansion in the minibuffer.  These commands are
+called &ldquo;inverse&rdquo; because they invert the meaning of the two text
+strings they use (one from the buffer and one read with the
+minibuffer).
+
+   <p><a name="index-define_002dmode_002dabbrev-2607"></a><a name="index-define_002dglobal_002dabbrev-2608"></a>  You can define an abbrev without inserting either the abbrev or its
+expansion in the buffer using the command <code>define-global-abbrev</code>. 
+It reads two arguments&mdash;the abbrev, and its expansion.  The command
+<code>define-mode-abbrev</code> does likewise for a mode-specific abbrev.
+
+   <p>To change the definition of an abbrev, just define a new definition. 
+When the abbrev has a prior definition, the abbrev definition commands
+ask for confirmation before replacing it.
+
+   <p><a name="index-kill_002dall_002dabbrevs-2609"></a>  To remove an abbrev definition, give a negative argument to the
+abbrev definition command: <kbd>C-u - C-x a g</kbd> or <kbd>C-u - C-x a l</kbd>. 
+The former removes a global definition, while the latter removes a
+mode-specific definition.  <kbd>M-x kill-all-abbrevs</kbd> removes all
+abbrev definitions, both global and local.
+
+   </body></html>
+

@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>Precalculated Fontification - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link rel="prev" href="Levels-of-Font-Lock.html#Levels-of-Font-Lock" title="Levels of Font Lock">
+<link rel="next" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" title="Faces for Font Lock">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Precalculated-Fontification"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Font Lock</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.6.6 Precalculated Fontification</h4>
+
+<p>Some major modes such as <code>list-buffers</code> and <code>occur</code>
+construct the buffer text programmatically.  The easiest way for them
+to support Font Lock mode is to specify the faces of text when they
+insert the text in the buffer.
+
+   <p>The way to do this is to specify the faces in the text with the
+special text property <code>font-lock-face</code> (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>).  When Font Lock mode is enabled, this property controls
+the display, just like the <code>face</code> property.  When Font Lock mode
+is disabled, <code>font-lock-face</code> has no effect on the display.
+
+   <p>It is ok for a mode to use <code>font-lock-face</code> for some text and
+also use the normal Font Lock machinery.  But if the mode does not use
+the normal Font Lock machinery, it should not set the variable
+<code>font-lock-defaults</code>.
+
+   </body></html>
+

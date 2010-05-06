@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Regexp Example - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Regular-Expressions.html#Regular-Expressions" title="Regular Expressions">
+<link rel="prev" href="Syntax-of-Regexps.html#Syntax-of-Regexps" title="Syntax of Regexps">
+<link rel="next" href="Regexp-Functions.html#Regexp-Functions" title="Regexp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Regexp-Example"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-of-Regexps.html#Syntax-of-Regexps">Syntax of Regexps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">34.3.2 Complex Regexp Example</h4>
+
+<p>Here is a complicated regexp which was formerly used by Emacs to
+recognize the end of a sentence together with any whitespace that
+follows.  (Nowadays Emacs uses a similar but more complex default
+regexp constructed by the function <code>sentence-end</code>. 
+See <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>.)
+
+   <p>First, we show the regexp as a string in Lisp syntax to distinguish
+spaces from tab characters.  The string constant begins and ends with a
+double-quote.  &lsquo;<samp><span class="samp">\"</span></samp>&rsquo; stands for a double-quote as part of the
+string, &lsquo;<samp><span class="samp">\\</span></samp>&rsquo; for a backslash as part of the string, &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; for a
+tab and &lsquo;<samp><span class="samp">\n</span></samp>&rsquo; for a newline.
+
+<pre class="example">     "[.?!][]\"')}]*\\($\\| $\\|\t\\|  \\)[ \t\n]*"
+</pre>
+   <p class="noindent">In contrast, if you evaluate this string, you will see the following:
+
+<pre class="example">     "[.?!][]\"')}]*\\($\\| $\\|\t\\|  \\)[ \t\n]*"
+          &rArr; "[.?!][]\"')}]*\\($\\| $\\|  \\|  \\)[
+     ]*"
+</pre>
+   <p class="noindent">In this output, tab and newline appear as themselves.
+
+   <p>This regular expression contains four parts in succession and can be
+deciphered as follows:
+
+     <dl>
+<dt><code>[.?!]</code><dd>The first part of the pattern is a character alternative that matches
+any one of three characters: period, question mark, and exclamation
+mark.  The match must begin with one of these three characters.  (This
+is one point where the new default regexp used by Emacs differs from
+the old.  The new value also allows some non-<acronym>ASCII</acronym>
+characters that end a sentence without any following whitespace.)
+
+     <br><dt><code>[]\"')}]*</code><dd>The second part of the pattern matches any closing braces and quotation
+marks, zero or more of them, that may follow the period, question mark
+or exclamation mark.  The <code>\"</code> is Lisp syntax for a double-quote in
+a string.  The &lsquo;<samp><span class="samp">*</span></samp>&rsquo; at the end indicates that the immediately
+preceding regular expression (a character alternative, in this case) may be
+repeated zero or more times.
+
+     <br><dt><code>\\($\\| $\\|\t\\|  \\)</code><dd>The third part of the pattern matches the whitespace that follows the
+end of a sentence: the end of a line (optionally with a space), or a
+tab, or two spaces.  The double backslashes mark the parentheses and
+vertical bars as regular expression syntax; the parentheses delimit a
+group and the vertical bars separate alternatives.  The dollar sign is
+used to match the end of a line.
+
+     <br><dt><code>[ \t\n]*</code><dd>Finally, the last part of the pattern matches any additional whitespace
+beyond the minimum needed to end a sentence. 
+</dl>
+
+   </body></html>
+

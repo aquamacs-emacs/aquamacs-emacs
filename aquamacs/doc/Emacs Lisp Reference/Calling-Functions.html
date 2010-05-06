@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>Calling Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Defining-Functions.html#Defining-Functions" title="Defining Functions">
+<link rel="next" href="Mapping-Functions.html#Mapping-Functions" title="Mapping Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Calling-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Functions.html#Defining-Functions">Defining Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.5 Calling Functions</h3>
+
+<p><a name="index-function-invocation-695"></a><a name="index-calling-a-function-696"></a>
+  Defining functions is only half the battle.  Functions don't do
+anything until you <dfn>call</dfn> them, i.e., tell them to run.  Calling a
+function is also known as <dfn>invocation</dfn>.
+
+   <p>The most common way of invoking a function is by evaluating a list. 
+For example, evaluating the list <code>(concat "a" "b")</code> calls the
+function <code>concat</code> with arguments <code>"a"</code> and <code>"b"</code>. 
+See <a href="Evaluation.html#Evaluation">Evaluation</a>, for a description of evaluation.
+
+   <p>When you write a list as an expression in your program, you specify
+which function to call, and how many arguments to give it, in the text
+of the program.  Usually that's just what you want.  Occasionally you
+need to compute at run time which function to call.  To do that, use
+the function <code>funcall</code>.  When you also need to determine at run
+time how many arguments to pass, use <code>apply</code>.
+
+<div class="defun">
+&mdash; Function: <b>funcall</b><var> function &amp;rest arguments<a name="index-funcall-697"></a></var><br>
+<blockquote><p><code>funcall</code> calls <var>function</var> with <var>arguments</var>, and returns
+whatever <var>function</var> returns.
+
+        <p>Since <code>funcall</code> is a function, all of its arguments, including
+<var>function</var>, are evaluated before <code>funcall</code> is called.  This
+means that you can use any expression to obtain the function to be
+called.  It also means that <code>funcall</code> does not see the
+expressions you write for the <var>arguments</var>, only their values. 
+These values are <em>not</em> evaluated a second time in the act of
+calling <var>function</var>; the operation of <code>funcall</code> is like the
+normal procedure for calling a function, once its arguments have
+already been evaluated.
+
+        <p>The argument <var>function</var> must be either a Lisp function or a
+primitive function.  Special forms and macros are not allowed, because
+they make sense only when given the &ldquo;unevaluated&rdquo; argument
+expressions.  <code>funcall</code> cannot provide these because, as we saw
+above, it never knows them in the first place.
+
+     <pre class="example">          (setq f 'list)
+               &rArr; list
+          (funcall f 'x 'y 'z)
+               &rArr; (x y z)
+          (funcall f 'x 'y '(z))
+               &rArr; (x y (z))
+          (funcall 'and t nil)
+          error--&gt; Invalid function: #&lt;subr and&gt;
+</pre>
+        <p>Compare these examples with the examples of <code>apply</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>apply</b><var> function &amp;rest arguments<a name="index-apply-698"></a></var><br>
+<blockquote><p><code>apply</code> calls <var>function</var> with <var>arguments</var>, just like
+<code>funcall</code> but with one difference: the last of <var>arguments</var> is a
+list of objects, which are passed to <var>function</var> as separate
+arguments, rather than a single list.  We say that <code>apply</code>
+<dfn>spreads</dfn> this list so that each individual element becomes an
+argument.
+
+        <p><code>apply</code> returns the result of calling <var>function</var>.  As with
+<code>funcall</code>, <var>function</var> must either be a Lisp function or a
+primitive function; special forms and macros do not make sense in
+<code>apply</code>.
+
+     <pre class="example">          (setq f 'list)
+               &rArr; list
+          (apply f 'x 'y 'z)
+          error--&gt; Wrong type argument: listp, z
+          (apply '+ 1 2 '(3 4))
+               &rArr; 10
+          (apply '+ '(1 2 3 4))
+               &rArr; 10
+          
+          (apply 'append '((a b c) nil (x y z) nil))
+               &rArr; (a b c x y z)
+</pre>
+        <p>For an interesting example of using <code>apply</code>, see <a href="Definition-of-mapcar.html#Definition-of-mapcar">Definition of mapcar</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-partial-application-of-functions-699"></a><a name="index-currying-700"></a>  Sometimes it is useful to fix some of the function's arguments at
+certain values, and leave the rest of arguments for when the function
+is actually called.  The act of fixing some of the function's
+arguments is called <dfn>partial application</dfn> of the function<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
+The result is a new function that accepts the rest of
+arguments and calls the original function with all the arguments
+combined.
+
+   <p>Here's how to do partial application in Emacs Lisp:
+
+<div class="defun">
+&mdash; Function: <b>apply-partially</b><var> func &amp;rest args<a name="index-apply_002dpartially-701"></a></var><br>
+<blockquote><p>This function returns a new function which, when called, will call
+<var>func</var> with the list of arguments composed from <var>args</var> and
+additional arguments specified at the time of the call.  If <var>func</var>
+accepts <var>n</var> arguments, then a call to <code>apply-partially</code> with
+<var>m</var><code>&nbsp;&lt;&nbsp;</code><var>n</var><!-- /@w --> arguments will produce a new function of
+<var>n</var><code>&nbsp;-&nbsp;</code><var>m</var><!-- /@w --> arguments.
+
+        <p>Here's how we could define the built-in function <code>1+</code>, if it
+didn't exist, using <code>apply-partially</code> and <code>+</code>, another
+built-in function:
+
+     <pre class="example">          (defalias '1+ (apply-partially '+ 1)
+            "Increment argument by one.")
+          (1+ 10)
+               &rArr; 11
+</pre>
+        </blockquote></div>
+
+   <p><a name="index-functionals-702"></a>  It is common for Lisp functions to accept functions as arguments or
+find them in data structures (especially in hook variables and property
+lists) and call them using <code>funcall</code> or <code>apply</code>.  Functions
+that accept function arguments are often called <dfn>functionals</dfn>.
+
+   <p>Sometimes, when you call a functional, it is useful to supply a no-op
+function as the argument.  Here are two different kinds of no-op
+function:
+
+<div class="defun">
+&mdash; Function: <b>identity</b><var> arg<a name="index-identity-703"></a></var><br>
+<blockquote><p>This function returns <var>arg</var> and has no side effects. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ignore</b><var> &amp;rest args<a name="index-ignore-704"></a></var><br>
+<blockquote><p>This function ignores any arguments and returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+This is related to, but different from <dfn>currying</dfn>, which
+transforms a function that takes multiple arguments in such a way that
+it can be called as a chain of functions, each one with a single
+argument.</p>
+
+   <hr></div>
+
+   </body></html>
+

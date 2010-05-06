@@ -1,0 +1,254 @@
+<html lang="en">
+<head>
+<title>Visiting - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Files.html#Files" title="Files">
+<link rel="prev" href="File-Names.html#File-Names" title="File Names">
+<link rel="next" href="Saving.html#Saving" title="Saving">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Visiting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Saving.html#Saving">Saving</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Names.html#File-Names">File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr>
+</div>
+
+<h3 class="section">22.2 Visiting Files</h3>
+
+<p><a name="index-visiting-files-813"></a><a name="index-open-file-814"></a>
+     <dl>
+<dt><kbd>C-x C-f</kbd><dd>Visit a file (<code>find-file</code>). 
+<br><dt><kbd>C-x C-r</kbd><dd>Visit a file for viewing, without allowing changes to it
+(<code>find-file-read-only</code>). 
+<br><dt><kbd>C-x C-v</kbd><dd>Visit a different file instead of the one visited last
+(<code>find-alternate-file</code>). 
+<br><dt><kbd>C-x 4 f</kbd><dd>Visit a file, in another window (<code>find-file-other-window</code>).  Don't
+alter what is displayed in the selected window. 
+<br><dt><kbd>C-x 5 f</kbd><dd>Visit a file, in a new frame (<code>find-file-other-frame</code>).  Don't
+alter what is displayed in the selected frame. 
+<br><dt><kbd>M-x find-file-literally</kbd><dd>Visit a file with no conversion of the contents. 
+</dl>
+
+   <p><a name="index-files_002c-visiting-and-saving-815"></a><a name="index-saving-files-816"></a>  <dfn>Visiting</dfn> a file means reading its contents into an Emacs
+buffer so you can edit them.  Emacs makes a new buffer for each file
+that you visit.
+
+   <p>Emacs normally constructs the buffer name from the file name,
+omitting the directory name.  For example, a file named
+<samp><span class="file">/usr/rms/emacs.tex</span></samp> is visited in a buffer named
+&lsquo;<samp><span class="samp">emacs.tex</span></samp>&rsquo;.  If there is already a buffer with that name, Emacs
+constructs a unique name; the normal method is to append &lsquo;<samp><span class="samp">&lt;2&gt;</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">&lt;3&gt;</span></samp>&rsquo;, and so on, but you can select other methods. 
+See <a href="Uniquify.html#Uniquify">Uniquify</a>.
+
+   <p>Each window's mode line shows the name of the buffer that is being
+displayed in that window, so you can always tell what buffer you are
+editing.  see <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+
+   <p>The changes you make with editing commands are made in the Emacs
+buffer.  They do not take effect in the file that you visited, or any
+permanent place, until you <dfn>save</dfn> the buffer (see <a href="Saving.html#Saving">Saving</a>).
+
+   <p><a name="index-modified-_0028buffer_0029-817"></a>  If a buffer contains changes that have not been saved, we say the
+buffer is <dfn>modified</dfn>.  This implies that some changes will be lost
+if the buffer is not saved.  The mode line displays two stars near the
+left margin to indicate that the buffer is modified.
+
+   <p><a name="index-C_002dx-C_002df-818"></a><a name="index-find_002dfile-819"></a>  To visit a file, type <kbd>C-x C-f</kbd> (<code>find-file</code>) and use the
+minibuffer to enter the name of the desired file.  The usual
+defaulting and completion behavior is available in this minibuffer
+(see <a href="Minibuffer-File.html#Minibuffer-File">Minibuffer File</a>).  Note, also, that completion ignores
+certain file names (see <a href="Completion-Options.html#Completion-Options">Completion Options</a>).  While in the
+minibuffer, you can abort <kbd>C-x C-f</kbd> by typing <kbd>C-g</kbd>.
+
+   <p>Your can tell that <kbd>C-x C-f</kbd> has completed successfully by the
+appearance of new text on the screen and a new buffer name in the mode
+line.  If the specified file does not exist and you could not create
+it, or exists but you can't read it, an error message is displayed in
+the echo area.
+
+   <p>If you visit a file that is already in Emacs, <kbd>C-x C-f</kbd> does not make
+another copy.  It selects the existing buffer containing that file. 
+However, before doing so, it checks whether the file itself has changed
+since you visited or saved it last.  If the file has changed, Emacs offers
+to reread it.
+
+   <p><a name="index-large_002dfile_002dwarning_002dthreshold-820"></a><a name="index-maximum-buffer-size-exceeded_002c-error-message-821"></a>  If you try to visit a file larger than
+<code>large-file-warning-threshold</code> (the default is 10000000, which is
+about 10 megabytes), Emacs asks you for confirmation first.  You can
+answer <kbd>y</kbd> to proceed with visiting the file.  Note, however, that
+Emacs cannot visit files that are larger than the maximum Emacs buffer
+size, which is around 512 megabytes on 32-bit machines
+(see <a href="Buffers.html#Buffers">Buffers</a>).  If you try, Emacs will display an error message
+saying that the maximum buffer size has been exceeded.
+
+   <p><a name="index-wildcard-characters-in-file-names-822"></a><a name="index-find_002dfile_002dwildcards-823"></a>  If the file name you specify contains shell-style wildcard
+characters, Emacs visits all the files that match it.  (On
+case-insensitive filesystems, Emacs matches the wildcards disregarding
+the letter case.)  Wildcards include &lsquo;<samp><span class="samp">?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">[...]</span></samp>&rsquo; sequences.  To enter the wild card &lsquo;<samp><span class="samp">?</span></samp>&rsquo; in a file
+name in the minibuffer, you need to type <kbd>C-q ?</kbd>.  See <a href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>, for information on how to visit a file whose name
+actually contains wildcard characters.  You can disable the wildcard
+feature by customizing <code>find-file-wildcards</code>.
+
+   <p><a name="index-file-selection-dialog-824"></a>  On graphical displays, there are two additional methods for visiting
+files.  Firstly, when Emacs is built with a suitable GUI toolkit,
+commands invoked with the mouse (by clicking on the menu bar or tool
+bar) use the toolkit's standard &ldquo;File Selection&rdquo; dialog instead of
+prompting for the file name in the minibuffer.  On GNU/Linux and Unix
+platforms, Emacs does this when built with GTK, LessTif, and Motif
+toolkits; on MS-Windows and Mac, the GUI version does that by default. 
+For information on how to customize this, see <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>.
+
+   <p>Secondly, Emacs supports &ldquo;drag and drop&rdquo;: dropping a file into an
+ordinary Emacs window visits the file using that window.  As an
+exception, dropping a file into a window displaying a Dired buffer
+moves or copies the file into the displayed directory.  For details,
+see <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>, and <a href="Misc-Dired-Features.html#Misc-Dired-Features">Misc Dired Features</a>.
+
+   <p><a name="index-creating-files-825"></a>  What if you want to create a new file?  Just visit it.  Emacs
+displays &lsquo;<samp><span class="samp">(New file)</span></samp>&rsquo; in the echo area, but in other respects
+behaves as if you had visited an existing empty file.  If you make
+changes and save them, the file is created.
+
+   <p><a name="index-minibuffer-confirmation-826"></a><a name="index-confirming-in-the-minibuffer-827"></a><a name="index-confirm_002dnonexistent_002dfile_002dor_002dbuffer-828"></a>  When &lt;TAB&gt; completion results in a nonexistent file name and you
+type &lt;RET&gt; immediately to visit it, Emacs asks for confirmation;
+this is because it's possible that you expected completion to go
+further and give you an existing file's name.  The string
+&lsquo;<samp><span class="samp">[Confirm]</span></samp>&rsquo; appears for a short time after the file name to
+indicate the need to confirm in this way.  Type &lt;RET&gt; to confirm
+and visit the nonexistent file.  The variable
+<code>confirm-nonexistent-file-or-buffer</code> controls whether Emacs asks
+for confirmation before visiting a new file.  The default value,
+<code>after-completion</code>, gives the behavior we have just described. 
+If the value is <code>nil</code>, Emacs never asks for confirmation; for any
+other non-<code>nil</code> value, Emacs always asks for confirmation.  This
+variable also affects the <code>switch-to-buffer</code> command
+(see <a href="Select-Buffer.html#Select-Buffer">Select Buffer</a>).  See <a href="Completion.html#Completion">Completion</a>, for more information
+about completion.
+
+   <p><a name="index-C_002dx-C_002dv-829"></a><a name="index-find_002dalternate_002dfile-830"></a>  If you visit a nonexistent file unintentionally (because you typed
+the wrong file name), type <kbd>C-x C-v</kbd> (<code>find-alternate-file</code>)
+to visit the file you really wanted.  <kbd>C-x C-v</kbd> is similar to
+<kbd>C-x C-f</kbd>, but it kills the current buffer (after first offering
+to save it if it is modified).  When <kbd>C-x C-v</kbd> reads the file name
+to visit, it inserts the entire default file name in the buffer, with
+point just after the directory part; this is convenient if you made a
+slight error in typing the name.
+
+   <p><a name="index-find_002dfile_002drun_002ddired-831"></a>  If you &ldquo;visit&rdquo; a file that is actually a directory, Emacs invokes
+Dired, the Emacs directory browser; this lets you &ldquo;edit&rdquo; the
+contents of the directory.  See <a href="Dired.html#Dired">Dired</a>.  You can disable this
+behavior by setting the variable <code>find-file-run-dired</code> to
+<code>nil</code>; in that case, it is an error to try to visit a directory.
+
+   <p>Files which are actually collections of other files, or <dfn>file
+archives</dfn>, are visited in special modes which invoke a Dired-like
+environment to allow operations on archive members.  See <a href="File-Archives.html#File-Archives">File Archives</a>, for more about these features.
+
+   <p>If you visit a file that the operating system won't let you modify,
+or that is marked read-only, Emacs makes the buffer read-only too, so
+that you won't go ahead and make changes that you'll have trouble
+saving afterward.  You can make the buffer writable with <kbd>C-x C-q</kbd>
+(<code>toggle-read-only</code>).  See <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.
+
+   <p><a name="index-C_002dx-C_002dr-832"></a><a name="index-find_002dfile_002dread_002donly-833"></a>  If you want to visit a file as read-only in order to protect
+yourself from entering changes accidentally, visit it with the command
+<kbd>C-x C-r</kbd> (<code>find-file-read-only</code>) instead of <kbd>C-x C-f</kbd>.
+
+   <p><a name="index-C_002dx-4-f-834"></a><a name="index-find_002dfile_002dother_002dwindow-835"></a>  <kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is like <kbd>C-x C-f</kbd>
+except that the buffer containing the specified file is selected in another
+window.  The window that was selected before <kbd>C-x 4 f</kbd> continues to
+show the same buffer it was already showing.  If this command is used when
+only one window is being displayed, that window is split in two, with one
+window showing the same buffer as before, and the other one showing the
+newly requested file.  See <a href="Windows.html#Windows">Windows</a>.
+
+   <p><a name="index-C_002dx-5-f-836"></a><a name="index-find_002dfile_002dother_002dframe-837"></a>  <kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is similar, but opens a
+new frame, or makes visible any existing frame showing the file you
+seek.  This feature is available only when you are using a window
+system.  See <a href="Frames.html#Frames">Frames</a>.
+
+   <p>Emacs recognizes from the contents of a file which end-of-line
+convention it uses to separate lines&mdash;newline (used on GNU/Linux and
+on Unix), carriage-return linefeed (used on Microsoft systems), or
+just carriage-return (used on the Macintosh)&mdash;and automatically
+converts the contents to the normal Emacs convention, which is that
+the newline character separates lines.  This is a part of the general
+feature of coding system conversion (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), and
+makes it possible to edit files imported from different operating
+systems with equal convenience.  If you change the text and save the
+file, Emacs performs the inverse conversion, changing newlines back
+into carriage-return linefeed or just carriage-return if appropriate.
+
+   <p><a name="index-find_002dfile_002dliterally-838"></a>  If you wish to edit a file as a sequence of <acronym>ASCII</acronym>
+characters with no special encoding or conversion, use the <kbd>M-x
+find-file-literally</kbd> command.  This visits a file, like <kbd>C-x C-f</kbd>,
+but does not do format conversion (see <a href="Formatted-Text.html#Formatted-Text">Formatted Text</a>), character
+code conversion (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), or automatic uncompression
+(see <a href="Compressed-Files.html#Compressed-Files">Compressed Files</a>), and does not add a final newline because
+of <code>require-final-newline</code> (see <a href="Customize-Save.html#Customize-Save">Customize Save</a>).  If you have
+already visited the same file in the usual (non-literal) manner, this
+command asks you whether to visit it literally instead.
+
+   <p><a name="index-find_002dfile_002dhook-839"></a><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-840"></a>  Two special hook variables allow extensions to modify the operation of
+visiting files.  Visiting a file that does not exist runs the functions
+in the list <code>find-file-not-found-functions</code>; this variable holds a list
+of functions, and the functions are called one by one (with no
+arguments) until one of them returns non-<code>nil</code>.  This is not a
+normal hook, and the name ends in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo; rather than &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;
+to indicate that fact.
+
+   <p>Successful visiting of any file, whether existing or not, calls the
+functions in the list <code>find-file-hook</code>, with no arguments. 
+This variable is a normal hook.  In the case of a nonexistent file, the
+<code>find-file-not-found-functions</code> are run first.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   <p>There are several ways to specify automatically the major mode for
+editing the file (see <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>), and to specify local
+variables defined for that file (see <a href="File-Variables.html#File-Variables">File Variables</a>).
+
+   </body></html>
+

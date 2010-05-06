@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+<title>Translation Keymaps - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Remapping-Commands.html#Remapping-Commands" title="Remapping Commands">
+<link rel="next" href="Key-Binding-Commands.html#Key-Binding-Commands" title="Key Binding Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Translation-Keymaps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Key-Binding-Commands.html#Key-Binding-Commands">Key Binding Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.14 Keymaps for Translating Sequences of Events</h3>
+
+<p><a name="index-keymaps-for-translating-events-1534"></a>
+  This section describes keymaps that are used during reading a key
+sequence, to translate certain event sequences into others. 
+<code>read-key-sequence</code> checks every subsequence of the key sequence
+being read, as it is read, against <code>input-decode-map</code>, then
+<code>local-function-key-map</code>, and then against <code>key-translation-map</code>.
+
+<div class="defun">
+&mdash; Variable: <b>input-decode-map</b><var><a name="index-input_002ddecode_002dmap-1535"></a></var><br>
+<blockquote><p>This variable holds a keymap that describes the character sequences sent
+by function keys on an ordinary character terminal.  This keymap has the
+same structure as other keymaps, but is used differently: it specifies
+translations to make while reading key sequences, rather than bindings
+for key sequences.
+
+        <p>If <code>input-decode-map</code> &ldquo;binds&rdquo; a key sequence <var>k</var> to a vector
+<var>v</var>, then when <var>k</var> appears as a subsequence <em>anywhere</em> in a
+key sequence, it is replaced with the events in <var>v</var>.
+
+        <p>For example, VT100 terminals send <kbd>&lt;ESC&gt; O P</kbd> when the
+keypad &lt;PF1&gt; key is pressed.  Therefore, we want Emacs to translate
+that sequence of events into the single event <code>pf1</code>.  We accomplish
+this by &ldquo;binding&rdquo; <kbd>&lt;ESC&gt; O P</kbd> to <code>[pf1]</code> in
+<code>input-decode-map</code>, when using a VT100.
+
+        <p>Thus, typing <kbd>C-c &lt;PF1&gt;</kbd> sends the character sequence <kbd>C-c
+&lt;ESC&gt; O P</kbd>; later the function <code>read-key-sequence</code> translates
+this back into <kbd>C-c &lt;PF1&gt;</kbd>, which it returns as the vector
+<code>[?\C-c pf1]</code>.
+
+        <p>The value of <code>input-decode-map</code> is usually set up automatically
+according to the terminal's Terminfo or Termcap entry, but sometimes
+those need help from terminal-specific Lisp files.  Emacs comes with
+terminal-specific files for many common terminals; their main purpose is
+to make entries in <code>input-decode-map</code> beyond those that can be
+deduced from Termcap and Terminfo.  See <a href="Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>local-function-key-map</b><var><a name="index-local_002dfunction_002dkey_002dmap-1536"></a></var><br>
+<blockquote><p>This variable holds a keymap similar to <code>input-decode-map</code> except
+that it describes key sequences which should be translated to
+alternative interpretations that are usually preferred.  It applies
+after <code>input-decode-map</code> and before <code>key-translation-map</code>.
+
+        <p>Entries in <code>local-function-key-map</code> are ignored if they conflict
+with bindings made in the minor mode, local, or global keymaps.  I.e. 
+the remapping only applies if the original key sequence would
+otherwise not have any binding.
+
+        <p><code>local-function-key-map</code> inherits from <code>function-key-map</code>,
+but the latter should not be used directly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>key-translation-map</b><var><a name="index-key_002dtranslation_002dmap-1537"></a></var><br>
+<blockquote><p>This variable is another keymap used just like <code>input-decode-map</code>
+to translate input events into other events.  It differs from
+<code>input-decode-map</code> in that it goes to work after
+<code>local-function-key-map</code> is finished rather than before; it
+receives the results of translation by <code>local-function-key-map</code>.
+
+        <p>Just like <code>input-decode-map</code>, but unlike
+<code>local-function-key-map</code>, this keymap is applied regardless of
+whether the input key-sequence has a normal binding.  Note however
+that actual key bindings can have an effect on
+<code>key-translation-map</code>, even though they are overridden by it. 
+Indeed, actual key bindings override <code>local-function-key-map</code> and
+thus may alter the key sequence that <code>key-translation-map</code>
+receives.  Clearly, it is better to avoid this type of situation.
+
+        <p>The intent of <code>key-translation-map</code> is for users to map one
+character set to another, including ordinary characters normally bound
+to <code>self-insert-command</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-key-translation-function-1538"></a>You can use <code>input-decode-map</code>, <code>local-function-key-map</code>, or
+<code>key-translation-map</code> for more than simple aliases, by using a
+function, instead of a key sequence, as the &ldquo;translation&rdquo; of a key. 
+Then this function is called to compute the translation of that key.
+
+   <p>The key translation function receives one argument, which is the prompt
+that was specified in <code>read-key-sequence</code>&mdash;or <code>nil</code> if the
+key sequence is being read by the editor command loop.  In most cases
+you can ignore the prompt value.
+
+   <p>If the function reads input itself, it can have the effect of altering
+the event that follows.  For example, here's how to define <kbd>C-c h</kbd>
+to turn the character that follows into a Hyper character:
+
+<pre class="example">     (defun hyperify (prompt)
+       (let ((e (read-event)))
+         (vector (if (numberp e)
+                     (logior (lsh 1 24) e)
+                   (if (memq 'hyper (event-modifiers e))
+                       e
+                     (add-event-modifier "H-" e))))))
+     
+     (defun add-event-modifier (string e)
+       (let ((symbol (if (symbolp e) e (car e))))
+         (setq symbol (intern (concat string
+                                      (symbol-name symbol))))
+         (if (symbolp e)
+             symbol
+           (cons symbol (cdr e)))))
+     
+     (define-key local-function-key-map "\C-ch" 'hyperify)
+</pre>
+   <p>If you have enabled keyboard character set decoding using
+<code>set-keyboard-coding-system</code>, decoding is done after the
+translations listed above.  See <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>.  However, in
+future Emacs versions, character set decoding may be done at an
+earlier stage.
+
+   </body></html>
+

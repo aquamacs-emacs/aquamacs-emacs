@@ -1,0 +1,215 @@
+<html lang="en">
+<head>
+<title>Spelling - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fixit.html#Fixit" title="Fixit">
+<link rel="prev" href="Fixing-Case.html#Fixing-Case" title="Fixing Case">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Spelling"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixing-Case.html#Fixing-Case">Fixing Case</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fixit.html#Fixit">Fixit</a>
+<hr>
+</div>
+
+<h3 class="section">20.4 Checking and Correcting Spelling</h3>
+
+<p><a name="index-spelling_002c-checking-and-correcting-737"></a><a name="index-checking-spelling-738"></a><a name="index-correcting-spelling-739"></a>
+  This section describes the commands to check the spelling of a
+single word or of a portion of a buffer.  These commands only work if
+the spelling checker program Aspell, Ispell or Hunspell is installed. 
+Aspell, Ispell or Hunspell are not part of Emacs, but one or the other
+is usually installed in GNU/Linux and other free operating systems. 
+See <a href="../aspell/index.html#Top">Aspell</a>.
+
+     <dl>
+<dt><kbd>M-$</kbd><dd>Check and correct spelling of the active region or the word at point
+(<code>ispell-word</code>). 
+<br><dt><kbd>M-x ispell</kbd><dd>Check and correct spelling in the active region or the entire buffer. 
+<br><dt><kbd>M-x ispell-buffer</kbd><dd>Check and correct spelling in the buffer. 
+<br><dt><kbd>M-x ispell-region</kbd><dd>Check and correct spelling in the region. 
+<br><dt><kbd>M-x ispell-message</kbd><dd>Check and correct spelling in a draft mail message, excluding cited
+material. 
+<br><dt><kbd>M-x ispell-change-dictionary &lt;RET&gt; </kbd><var>dict</var><kbd> &lt;RET&gt;</kbd><dd>Restart the Aspell/Ispell/Hunspell process, using <var>dict</var> as the dictionary. 
+<br><dt><kbd>M-x ispell-kill-ispell</kbd><dd>Kill the Aspell/Ispell/Hunspell subprocess. 
+<br><dt><kbd>M-&lt;TAB&gt;</kbd><dt><kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd><dd>Complete the word before point based on the spelling dictionary
+(<code>ispell-complete-word</code>). 
+<br><dt><kbd>M-x flyspell-mode</kbd><dd>Enable Flyspell mode, which highlights all misspelled words. 
+<br><dt><kbd>M-x flyspell-prog-mode</kbd><dd>Enable Flyspell mode for comments and strings only. 
+</dl>
+
+   <p><a name="index-M_002d_0024-740"></a><a name="index-ispell_002dword-741"></a>  To check the spelling of the word around or before point, and
+optionally correct it as well, type <kbd>M-$</kbd> (<code>ispell-word</code>). 
+If a region is active, <kbd>M-$</kbd> checks the spelling of all words
+within the region.  See <a href="Mark.html#Mark">Mark</a>.  (When Transient Mark mode is off,
+<kbd>M-$</kbd> always acts on the word around or before point, ignoring the
+region.  See <a href="Persistent-Mark.html#Persistent-Mark">Persistent Mark</a>.)
+
+   <p><a name="index-ispell-742"></a><a name="index-ispell_002dbuffer-743"></a><a name="index-ispell_002dregion-744"></a><a name="index-spell_002dchecking-the-active-region-745"></a>  Similarly, the command <kbd>M-x ispell</kbd> performs spell-checking in
+the region if one is active, or in the entire buffer otherwise.  The
+commands <kbd>M-x ispell-buffer</kbd> and <kbd>M-x ispell-region</kbd>
+explicitly perform spell-checking on the entire buffer or the region
+respectively.  To check spelling in an email message you are writing,
+use <kbd>M-x ispell-message</kbd>; that command checks the whole buffer,
+except for material that is indented or appears to be cited from other
+messages.  See <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>.
+
+   <p>When one of these commands encounters what appears to be an
+incorrect word, it asks you what to do.  It usually displays a list of
+numbered &ldquo;near-misses&rdquo;&mdash;words that are close to the incorrect word. 
+Then you must type a single-character response.  Here are the valid
+responses:
+
+     <dl>
+<dt><var>digit</var><dd>Replace the word, just this time, with one of the displayed
+near-misses.  Each near-miss is listed with a digit; type that digit
+to select it.
+
+     <br><dt><kbd>&lt;SPC&gt;</kbd><dd>Skip this word&mdash;continue to consider it incorrect, but don't change it
+here.
+
+     <br><dt><kbd>r </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Replace the word, just this time, with <var>new</var>.  (The replacement
+string will be rescanned for more spelling errors.)
+
+     <br><dt><kbd>R </kbd><var>new</var><kbd> &lt;RET&gt;</kbd><dd>Replace the word with <var>new</var>, and do a <code>query-replace</code> so you
+can replace it elsewhere in the buffer if you wish.  (The replacements
+will be rescanned for more spelling errors.)
+
+     <br><dt><kbd>a</kbd><dd>Accept the incorrect word&mdash;treat it as correct, but only in this
+editing session.
+
+     <br><dt><kbd>A</kbd><dd>Accept the incorrect word&mdash;treat it as correct, but only in this
+editing session and for this buffer.
+
+     <br><dt><kbd>i</kbd><dd>Insert this word in your private dictionary file so that Aspell or Ispell
+or Hunspell will consider it correct from now on, even in future sessions.
+
+     <br><dt><kbd>m</kbd><dd>Like <kbd>i</kbd>, but you can also specify dictionary completion
+information.
+
+     <br><dt><kbd>u</kbd><dd>Insert the lower-case version of this word in your private dictionary
+file.
+
+     <br><dt><kbd>l </kbd><var>word</var><kbd> &lt;RET&gt;</kbd><dd>Look in the dictionary for words that match <var>word</var>.  These words
+become the new list of &ldquo;near-misses&rdquo;; you can select one of them as
+the replacement by typing a digit.  You can use &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in <var>word</var> as a
+wildcard.
+
+     <br><dt><kbd>C-g</kbd><dt><kbd>X</kbd><dd>Quit interactive spell checking, leaving point at the word that was
+being checked.  You can restart checking again afterward with <kbd>C-u
+M-$</kbd>.
+
+     <br><dt><kbd>x</kbd><dd>Quit interactive spell checking and move point back to where it was
+when you started spell checking.
+
+     <br><dt><kbd>q</kbd><dd>Quit interactive spell checking and kill the Aspell/Ispell/Hunspell
+subprocess.
+
+     <br><dt><kbd>?</kbd><dd>Show the list of options. 
+</dl>
+
+   <p><a name="index-ispell_002dcomplete_002dword-746"></a>  In Text mode and related modes, the command <kbd>M-&lt;TAB&gt;</kbd>
+(<code>ispell-complete-word</code>) shows a list of completions based on
+spelling correction.  Insert the beginning of a word, and then type
+<kbd>M-&lt;TAB&gt;</kbd>; the command displays a completion list window.  (If
+your window manager intercepts <kbd>M-&lt;TAB&gt;</kbd>, type <kbd>&lt;ESC&gt;
+&lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd>.)  To choose one of the completions listed,
+click <kbd>Mouse-2</kbd> or <kbd>Mouse-1</kbd> fast on it, or move the cursor
+there in the completions window and type &lt;RET&gt;.  See <a href="Text-Mode.html#Text-Mode">Text Mode</a>.
+
+   <p><a name="index-g_t_0040code_007bispell_007d-program-747"></a><a name="index-ispell_002dkill_002dispell-748"></a>  Once started, the Aspell or Ispell or Hunspell subprocess continues
+to run, waiting for something to do, so that subsequent spell checking
+commands complete more quickly.  If you want to get rid of the
+process, use <kbd>M-x ispell-kill-ispell</kbd>.  This is not usually
+necessary, since the process uses no time except when you do spelling
+correction.
+
+   <p><a name="index-ispell_002ddictionary-749"></a><a name="index-ispell_002dlocal_002ddictionary-750"></a><a name="index-ispell_002dpersonal_002ddictionary-751"></a><a name="index-ispell_002dcomplete_002dword_002ddict-752"></a>  Ispell, Aspell and Hunspell use two dictionaries together for spell checking:
+the standard dictionary and your private dictionary.  The standard
+dictionary is specified by <code>ispell-local-dictionary</code> or,
+if <code>nil</code>, by <code>ispell-dictionary</code>.  If both are <code>nil</code>
+the default dictionary is selected.  The command
+<kbd>M-x ispell-change-dictionary</kbd> sets the standard dictionary for
+the buffer and then restarts the subprocess, so that it will use a
+different standard dictionary.  Personal dictionary is specified by
+<code>ispell-personal-dictionary</code>.  If <code>nil</code>, default value is
+used.
+
+   <p>Set variable <code>ispell-dictionary</code> to select a specific default
+dictionary for all your documents. Set variable
+<code>ispell-local-dictionary</code> in the local variables section to
+select a specific dictionary for a given document.
+
+   <p>A separate dictionary is used for word completion.  The variable
+<code>ispell-complete-word-dict</code> specifies the file name of this
+dictionary.  The completion dictionary must be different because it
+cannot use root and affix information.  For some languages, there
+is a spell checking dictionary but no word completion dictionary.
+
+   <p><a name="index-Flyspell-mode-753"></a><a name="index-flyspell_002dmode-754"></a>  Flyspell mode is a fully-automatic way to check spelling as you edit
+in Emacs.  It operates by checking words as you change or insert them. 
+When it finds a word that it does not recognize, it highlights that
+word.  This does not interfere with your editing, but when you see the
+highlighted word, you can move to it and fix it.  Type <kbd>M-x
+flyspell-mode</kbd> to enable or disable this mode in the current buffer. 
+<a name="index-turn_002don_002dflyspell-755"></a>To enable <code>flyspell-mode</code> in all text mode buffers, add
+<code>turn-on-flyspell</code> to <code>text-mode-hook</code>.
+
+   <p>When Flyspell mode highlights a word as misspelled, you can click on
+it with <kbd>Mouse-2</kbd> to display a menu of possible corrections and
+actions.  You can also correct the word by editing it manually in any
+way you like.
+
+   <p><a name="index-flyspell_002dprog_002dmode-756"></a>  Flyspell Prog mode works just like ordinary Flyspell mode, except
+that it only checks words in comments and string constants.  This
+feature is useful for editing programs.  Type <kbd>M-x
+flyspell-prog-mode</kbd> to enable or disable this mode in the current
+buffer.
+
+<!-- This is part of the Emacs manual. -->
+<!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
+<!-- See file emacs.texi for copying conditions. -->
+   </body></html>
+

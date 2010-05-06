@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Excursions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Positions.html#Positions" title="Positions">
+<link rel="prev" href="Motion.html#Motion" title="Motion">
+<link rel="next" href="Narrowing.html#Narrowing" title="Narrowing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Excursions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Narrowing.html#Narrowing">Narrowing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion.html#Motion">Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
+<hr>
+</div>
+
+<h3 class="section">30.3 Excursions</h3>
+
+<p><a name="index-excursion-2442"></a>
+  It is often useful to move point &ldquo;temporarily&rdquo; within a localized
+portion of the program, or to switch buffers temporarily.  This is
+called an <dfn>excursion</dfn>, and it is done with the <code>save-excursion</code>
+special form.  This construct initially remembers the identity of the
+current buffer, and its values of point and the mark, and restores them
+after the completion of the excursion.
+
+   <p>The forms for saving and restoring the configuration of windows are
+described elsewhere (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>, and see <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>).  When only the identity of the current buffer needs
+to be saved and restored, it is preferable to use
+<code>save-current-buffer</code> instead.
+
+<div class="defun">
+&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-2443"></a></var><br>
+<blockquote><p><a name="index-mark-excursion-2444"></a><a name="index-point-excursion-2445"></a>The <code>save-excursion</code> special form saves the identity of the current
+buffer and the values of point and the mark in it, evaluates
+<var>body</var>, and finally restores the buffer and its saved values of
+point and the mark.  All three saved values are restored even in case of
+an abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
+
+        <p>The <code>save-excursion</code> special form is the standard way to move
+point within one part of a program and avoid affecting the rest of the
+program.  It is used more than 4000 times in the Lisp sources
+of Emacs.
+
+        <p><code>save-excursion</code> does not save the values of point and the mark for
+other buffers, so changes in other buffers remain in effect after
+<code>save-excursion</code> exits.
+
+        <p><a name="index-window-excursions-2446"></a>Likewise, <code>save-excursion</code> does not restore window-buffer
+correspondences altered by functions such as <code>switch-to-buffer</code>. 
+One way to restore these correspondences, and the selected window, is to
+use <code>save-window-excursion</code> inside <code>save-excursion</code>
+(see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
+
+        <p>The value returned by <code>save-excursion</code> is the result of the last
+form in <var>body</var>, or <code>nil</code> if no body forms were given.
+
+     <pre class="example">          (save-excursion <var>forms</var>)
+          ==
+          (let ((old-buf (current-buffer))
+                (old-pnt (point-marker))
+                (old-mark (copy-marker (mark-marker))))
+            (unwind-protect
+                (progn <var>forms</var>)
+              (set-buffer old-buf)
+              (goto-char old-pnt)
+              (set-marker (mark-marker) old-mark)))
+</pre>
+        </blockquote></div>
+
+   <p><strong>Warning:</strong> Ordinary insertion of text adjacent to the saved
+point value relocates the saved value, just as it relocates all markers. 
+More precisely, the saved value is a marker with insertion type
+<code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.  Therefore, when the saved
+point value is restored, it normally comes before the inserted text.
+
+   <p>Although <code>save-excursion</code> saves the location of the mark, it does
+not prevent functions which modify the buffer from setting
+<code>deactivate-mark</code>, and thus causing the deactivation of the mark
+after the command finishes.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
+
+   </body></html>
+

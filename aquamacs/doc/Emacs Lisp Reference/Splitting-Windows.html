@@ -1,0 +1,222 @@
+<html lang="en">
+<head>
+<title>Splitting Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Basic-Windows.html#Basic-Windows" title="Basic Windows">
+<link rel="next" href="Deleting-Windows.html#Deleting-Windows" title="Deleting Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Splitting-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Windows.html#Basic-Windows">Basic Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.2 Splitting Windows</h3>
+
+<p><a name="index-splitting-windows-2044"></a><a name="index-window-splitting-2045"></a>
+The functions described below are the primitives used to split a window
+into two windows.  They do not accept a buffer as an argument.  Rather,
+the two &ldquo;halves&rdquo; of the split window initially display the same buffer
+previously visible in the window that was split.
+
+<div class="defun">
+&mdash; Command: <b>split-window</b><var> &amp;optional window size horizontal<a name="index-split_002dwindow-2046"></a></var><br>
+<blockquote><p>This function splits a new window out of <var>window</var>'s screen area.  It
+returns the new window.  The default for <var>window</var> is the selected
+window.  When you split the selected window, it remains selected.
+
+        <p>If <var>horizontal</var> is non-<code>nil</code>, then <var>window</var> splits into two
+side by side windows.  The original window keeps the leftmost <var>size</var>
+columns, and gives the rest of the columns to the new window. 
+Otherwise, <var>window</var> splits into windows one above the other, the
+original window keeps the upper <var>size</var> lines and gives the rest of
+the lines to the new window.  The original window <var>window</var> is
+therefore the left-hand or upper of the two, and the new window is the
+right-hand or lower.
+
+        <p>If <var>size</var> is omitted or <code>nil</code>, then <var>window</var> is divided
+evenly into two parts.  (If there is an odd line, it is allocated to
+the new window.)  When <code>split-window</code> is called interactively,
+all its arguments are <code>nil</code>.
+
+        <p>If splitting would result in making a window that is smaller than
+<code>window-min-height</code> or <code>window-min-width</code> (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>), <code>split-window</code> signals an error and does not split the
+window at all.
+
+        <p>The following example starts with one window on a screen that is 50
+lines high by 80 columns wide; then it splits the window.
+
+     <pre class="smallexample">          (setq w (selected-window))
+               &rArr; #&lt;window 8 on windows.texi&gt;
+          (window-edges)          ; <span class="roman">Edges in order:</span>
+               &rArr; (0 0 80 50)     ;   <span class="roman">left--top--right--bottom</span>
+          
+          ;; <span class="roman">Returns window created</span>
+          (setq w2 (split-window w 15))
+               &rArr; #&lt;window 28 on windows.texi&gt;
+          (window-edges w2)
+               &rArr; (0 15 80 50)    ; <span class="roman">Bottom window;</span>
+                                  ;   <span class="roman">top is line 15</span>
+          (window-edges w)
+               &rArr; (0 0 80 15)     ; <span class="roman">Top window</span>
+</pre>
+        <p>The screen looks like this:
+
+     <pre class="smallexample">                   __________
+                  |          |  line 0
+                  |    w     |
+                  |__________|
+                  |          |  line 15
+                  |    w2    |
+                  |__________|
+                                line 50
+           column 0   column 80
+</pre>
+        <p>Next, split the top window horizontally:
+
+     <pre class="smallexample">          (setq w3 (split-window w 35 t))
+               &rArr; #&lt;window 32 on windows.texi&gt;
+          (window-edges w3)
+               &rArr; (35 0 80 15)  ; <span class="roman">Left edge at column 35</span>
+          (window-edges w)
+               &rArr; (0 0 35 15)   ; <span class="roman">Right edge at column 35</span>
+          (window-edges w2)
+               &rArr; (0 15 80 50)  ; <span class="roman">Bottom window unchanged</span>
+</pre>
+        <p>Now the screen looks like this:
+
+     <pre class="smallexample">               column 35
+                   __________
+                  |   |      |  line 0
+                  | w |  w3  |
+                  |___|______|
+                  |          |  line 15
+                  |    w2    |
+                  |__________|
+                                line 50
+           column 0   column 80
+</pre>
+        <p>Normally, Emacs indicates the border between two side-by-side windows
+with a scroll bar (see <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>), or with &lsquo;<samp><span class="samp">|</span></samp>&rsquo; characters.  The
+display table can specify alternative border characters; see <a href="Display-Tables.html#Display-Tables">Display Tables</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>split-window-vertically</b><var> &amp;optional size<a name="index-split_002dwindow_002dvertically-2047"></a></var><br>
+<blockquote><p>This function splits the selected window into two windows, one above the
+other, leaving the upper of the two windows selected, with <var>size</var>
+lines.  (If <var>size</var> is negative, then the lower of the two windows
+gets &minus;<var>size</var> lines and the upper window gets the rest, but
+the upper window is still the one selected.)  However, if
+<code>split-window-keep-point</code> (see below) is <code>nil</code>, then either
+window can be selected.
+
+        <p>In other respects, this function is similar to <code>split-window</code>. 
+In particular, the upper window is the original one and the return
+value is the new, lower window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>split-window-keep-point</b><var><a name="index-split_002dwindow_002dkeep_002dpoint-2048"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code> (the default), then
+<code>split-window-vertically</code> behaves as described above.
+
+        <p>If it is <code>nil</code>, then <code>split-window-vertically</code> adjusts point
+in each of the two windows to avoid scrolling.  (This is useful on
+slow terminals.)  It selects whichever window contains the screen line
+that point was previously on.
+
+        <p>This variable affects the behavior of <code>split-window-vertically</code>
+only.  It has no effect on the other functions described here. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>split-window-horizontally</b><var> &amp;optional size<a name="index-split_002dwindow_002dhorizontally-2049"></a></var><br>
+<blockquote><p>This function splits the selected window into two windows
+side-by-side, leaving the selected window on the left with <var>size</var>
+columns.  If <var>size</var> is negative, the rightmost window gets
+&minus;<var>size</var> columns, but the leftmost window still remains
+selected.
+
+        <p>This function is basically an interface to <code>split-window</code>. 
+You could define a simplified version of the function like this:
+
+     <pre class="smallexample">          (defun split-window-horizontally (&amp;optional arg)
+            "Split selected window into two windows, side by side..."
+            (interactive "P")
+            (let ((size (and arg (prefix-numeric-value arg))))
+              (and size (&lt; size 0)
+                   (setq size (+ (window-width) size)))
+              (split-window nil size t)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>one-window-p</b><var> &amp;optional no-mini all-frames<a name="index-one_002dwindow_002dp-2050"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if there is only one window.  The
+argument <var>no-mini</var>, if non-<code>nil</code>, means don't count the
+minibuffer even if it is active; otherwise, the minibuffer window is
+counted when it is active.
+
+        <p>The argument <var>all-frames</var> specifies which frames to consider.  Here
+are the possible values and their meanings:
+
+          <dl>
+<dt><code>nil</code><dd>Count the windows in the selected frame, plus the minibuffer used
+by that frame even if it lies in some other frame.
+
+          <br><dt><code>t</code><dd>Count all windows in all existing frames.
+
+          <br><dt><code>visible</code><dd>Count all windows in all visible frames.
+
+          <br><dt>0<dd>Count all windows in all visible or iconified frames.
+
+          <br><dt>anything else<dd>Count precisely the windows in the selected frame, and no others. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

@@ -7,8 +7,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.146 2009/03/05 02:58:58 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -33,7 +31,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -171,24 +169,97 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
-(defun aquamacs-previous-nonvisual-line (&optional arg try-vscroll)
+(defun aquamacs-previous-line (&optional arg try-vscroll)
   "Move cursor vertically up ARG buffer lines.
-Like `previous-line', but always move by logical buffer lines
-rather than by visual lines.  `line-move-visual' is set to nil
-for this command."
+Like `previous-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
   (interactive "^p\np")
-  (let ((line-move-visual nil)
-	(this-command 'previous-line))
+  (setq this-command 'previous-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
     (previous-line arg try-vscroll)))
-(defun aquamacs-next-nonvisual-line (&optional arg try-vscroll)
+
+(defun aquamacs-next-line (&optional arg try-vscroll)
   "Move cursor vertically down ARG buffer lines.
-Like `next-line', but always move by logical buffer lines
-rather than by visual lines.  `line-move-visual' is set to nil
-for this command."
+Like `next-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
   (interactive "^p\np")
-  (let ((line-move-visual nil)
-	(this-command 'next-line))
+  (setq this-command 'next-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
     (next-line arg try-vscroll)))
+
+
+(defun beginning-of-visual-line (&optional n)
+  "Move point to the beginning of the current line.
+If `word-wrap' is nil, we move to the beginning of the buffer
+line (as in `beginning-of-line'); otherwise, point is moved to
+the beginning of the visual line."
+  (interactive)
+  (if word-wrap
+      (progn 
+	(if (and n (/= n 1))
+	    (vertical-motion (1- n))
+;; the following would need Emacs 23
+;; 	    (let ((line-move-visual t))
+;; 	      (line-move (1- n) t)))
+	  (vertical-motion 0))
+	(skip-read-only-prompt))
+    (beginning-of-line n)))
+
+(defun end-of-visual-line (&optional n)
+  "Move point to the end of the current line.
+If `word-wrap' is nil, we move to the end of the line (as in
+`beginning-of-line'); otherwise, point is moved to the end of the
+visual line."
+  (interactive)
+  (if word-wrap
+      (unless (eobp)
+	(progn
+	  (if (and n (/= n 1))
+	      (vertical-motion (1- n))
+	    (vertical-motion 1))
+	  (skip-chars-backward " \r\n" (- (point) 1))))
+    (end-of-line n)))
+
+
+(defun aquamacs-move-beginning-of-line (arg)
+ "Move point to beginning of current buffer line.
+As `move-beginning-of-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
+  (interactive "^p")
+  (setq this-command 'move-beginning-of-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
+    (if line-move-visual
+	(progn 
+	  (if (and arg (/= arg 1))
+	      (vertical-motion (1- arg))
+	    (vertical-motion 0))
+	  (skip-read-only-prompt))
+      (move-beginning-of-line arg))))
+
+(defun aquamacs-move-end-of-line (arg)
+ "Move point to end of current buffer line.
+As `move-end-of-line', but move by logical buffer lines
+if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'."
+  (interactive "^p")
+  (setq this-command 'move-end-of-line)  ; ensure last-command will be set
+  ;; visual-line-mode sets line-move-visual to t (unconditionally)
+  (let ((line-move-visual (and line-move-visual
+			       (not (eq line-move-visual 'arrow-keys-only)))))
+    (if line-move-visual
+	(unless (eobp)
+	  (progn
+	    (if (and arg (/= arg 1))
+		(vertical-motion (1- arg))
+	      (vertical-motion 1))
+	    (skip-chars-backward " \r\n" (- (point) 1))))
+      (move-end-of-line arg))))
+  
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
@@ -453,7 +524,7 @@ OS X 10.4 and up only."
 	(if word
 	    (mac-spotlight-search word)))))
 
-
+;; (aquamacs-make-mouse-buffer-menu)
 (defun aquamacs-make-mouse-buffer-menu ( )
   "Return a menu keymap of buffers for selection with the mouse.
 This switches buffers in the window that you clicked on,
@@ -527,26 +598,28 @@ and selects that window."
 		     (setq subdivided-menus
 			   (cons (cons "Others" others-list)
 				 subdivided-menus)))))
-	  (setq menu (cons "Buffer Menu" (nreverse subdivided-menus))))
-      (progn
-	(setq alist (mouse-buffer-menu-alist buffers))
-	(setq menu (cons "Buffer Menu"
-			 (mouse-buffer-menu-split "Select Buffer" alist)))))
-  
-    (let ((km (make-sparse-keymap)))
-      (mapc (lambda (pair)
-	      (define-key km (vector (intern (car pair)))
-		`(menu-item ,(car pair) 
-			,(eval
-			  (list 'lambda () 
-				'(interactive)
+	  (aquamacs--keymap-from-alist subdivided-menus))
+       (aquamacs--keymap-from-alist (mouse-buffer-menu-alist buffers)))))
+
+(defun aquamacs--keymap-from-alist (alist)
+  (let ((km (make-sparse-keymap)))
+    (mapc (lambda (pair)
+	    (define-key km (vector (intern (car pair)))
+	      `(menu-item ,(car pair) 
+			  ,(if (consp (cdr pair))
+			       (aquamacs--keymap-from-alist (cdr pair))
+			     (eval
+			      (list 'lambda () 
+				    '(interactive)
 				`(let ((one-buffer-one-frame nil))
-				   (switch-to-buffer ,(cdr pair)))))
-	      ))) alist)
-      km
-	 )  )
-  )
- 
+				   (switch-to-buffer ,(cdr pair))))))
+			  ))) 
+	  (sort alist (lambda (a b) (string< (car b)
+					     (car a)))))
+    km))
+
+
+;; (aquamacs-update-context-menus t)
 
 (defun aquamacs-get-mouse-major-mode-menu ()
   "Pop up a mode-specific menu of mouse commands.
@@ -656,6 +729,7 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
   
     (popup-menu aquamacs-context-menu-map event prefix))
 
+;; (aquamacs-update-context-menus t)
 (defun aquamacs-update-context-menus (&optional force)
   "Update the buffer- and mode-specific items in
 `aquamacs-context-menu-map' if frame or buffer has changed.
@@ -668,7 +742,7 @@ Update unconditionally if optional argument FORCE is non-nil."
 	  ;; TO DO major mode might not work unless we switch buffer
 	  (define-key aquamacs-context-menu-map [mode-menu] 
 	    `(menu-item ,(aquamacs-pretty-mode-name major-mode) ,mode-menu :visible t))
-	(define-key aquamacs-context-menu-map [mode-menu] 
+	(define-key aquamacs-context-menu-map [mode-menu] mouse-buffer-menu
 	  '(menu-item nil :visible nil))))
 
     (define-key aquamacs-context-menu-map [switch-buffer] 
@@ -747,8 +821,10 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
     (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-line)
 
-    (define-key map `[(control p)] 'aquamacs-previous-nonvisual-line)
-    (define-key map `[(control n)] 'aquamacs-next-nonvisual-line)
+    (define-key map `[(control a)] 'aquamacs-move-beginning-of-line)
+    (define-key map `[(control e)] 'aquamacs-move-end-of-line)
+    (define-key map `[(control p)] 'aquamacs-previous-line)
+    (define-key map `[(control n)] 'aquamacs-next-line)
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     ;; left / right (for transient-mark-mode)

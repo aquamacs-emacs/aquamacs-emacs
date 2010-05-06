@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Custom C Indent - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Program-Indent.html#Program-Indent" title="Program Indent">
+<link rel="prev" href="C-Indent.html#C-Indent" title="C Indent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Custom-C-Indent"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="C-Indent.html#C-Indent">C Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program-Indent">Program Indent</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.3.5 Customizing C Indentation</h4>
+
+<p><a name="index-style-_0028for-indentation_0029-2007"></a>
+  C mode and related modes use a flexible mechanism for customizing
+indentation.  C mode indents a source line in two steps: first it
+classifies the line syntactically according to its contents and
+context; second, it determines the indentation offset associated by
+your selected <dfn>style</dfn> with the syntactic construct and adds this
+onto the indentation of the <dfn>anchor statement</dfn>.
+
+     <dl>
+<dt><kbd>C-c . &lt;RET&gt; </kbd><var>style</var><kbd> &lt;RET&gt;</kbd><dd>Select a predefined style <var>style</var> (<code>c-set-style</code>). 
+</dl>
+
+   <p>A <dfn>style</dfn> is a named collection of customizations that can be
+used in C mode and the related modes.  <a href="../ccmode/Styles.html#Styles">Styles</a>, for a complete description.  Emacs comes with several
+predefined styles, including <code>gnu</code>, <code>k&amp;r</code>, <code>bsd</code>,
+<code>stroustrup</code>, <code>linux</code>, <code>python</code>, <code>java</code>,
+<code>whitesmith</code>, <code>ellemtel</code>, and <code>awk</code>.  Some of these
+styles are primarily intended for one language, but any of them can be
+used with any of the languages supported by these modes.  To find out
+what a style looks like, select it and reindent some code, e.g., by
+typing &lt;C-M-q&gt; at the start of a function definition.
+
+   <p><a name="index-C_002dc-_002e-_0040r_007b_0028C-mode_0029_007d-2008"></a><a name="index-c_002dset_002dstyle-2009"></a>  To choose a style for the current buffer, use the command <kbd>C-c&nbsp;.</kbd><!-- /@w -->.  Specify a style name as an argument (case is not significant). 
+This command affects the current buffer only, and it affects only
+future invocations of the indentation commands; it does not reindent
+the code already in the buffer.  To reindent the whole buffer in the
+new style, you can type <kbd>C-x h C-M-\</kbd>.
+
+   <p><a name="index-c_002ddefault_002dstyle-2010"></a>  You can also set the variable <code>c-default-style</code> to specify the
+default style for various major modes.  Its value should be either the
+style's name (a string) or an alist, in which each element specifies
+one major mode and which indentation style to use for it.  For
+example,
+
+<pre class="example">     (setq c-default-style
+           '((java-mode . "java") (awk-mode . "awk") (other . "gnu")))
+</pre>
+   <p class="noindent">specifies explicit choices for Java and AWK modes, and the default
+&lsquo;<samp><span class="samp">gnu</span></samp>&rsquo; style for the other C-like modes.  (These settings are
+actually the defaults.)  This variable takes effect when you select
+one of the C-like major modes; thus, if you specify a new default
+style for Java mode, you can make it take effect in an existing Java
+mode buffer by typing <kbd>M-x java-mode</kbd> there.
+
+   <p>The <code>gnu</code> style specifies the formatting recommended by the GNU
+Project for C; it is the default, so as to encourage use of our
+recommended style.
+
+   <p>See <a href="../ccmode/Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>, and
+<a href="../ccmode/Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>, for more
+information on customizing indentation for C and related modes,
+including how to override parts of an existing style and how to define
+your own styles.
+
+   </body></html>
+

@@ -1,6 +1,6 @@
 ;;; tex-fold.el --- Fold TeX macros.
 
-;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -75,7 +75,7 @@ macros, 'math for math macros and 'comment for comments."
     ("[l]" ("label"))
     ("[r]" ("ref" "pageref" "eqref"))
     ("[i]" ("index" "glossary"))
-    ("*" ("item"))
+    ("[1]:||*" ("item"))
     ("..." ("dots"))
     ("(C)" ("copyright"))
     ("(R)" ("textregistered"))
@@ -86,9 +86,37 @@ macros, 'math for math macros and 'comment for comments."
 	"paragraph*" "subparagraph*"
 	"emph" "textit" "textsl" "textmd" "textrm" "textsf" "texttt"
 	"textbf" "textsc" "textup")))
-  "List of display strings and macros to fold."
+  "List of replacement specifiers and macros to fold.
+
+The first element of each item can be a string, an integer or a
+function symbol.  The second element is a list of macros two fold
+without the leading backslash.
+
+If the first element is a string, it will be used as a display
+replacement for the whole macro.  Numbers in braces, brackets,
+parens or angle brackets will be replaced by the respective macro
+argument.  For example \"{1}\" will be replaced by the first
+mandatory argument of the macro.  One can also define
+alternatives within the specifier which are used if an argument
+is not found.  Alternatives are separated by \"||\".  They are
+most useful with optional arguments.  As an example, the default
+specifier for \\item is \"[1]:||*\" which means that if there is
+an optional argument, its value is shown followed by a colon.  If
+there is no optional argument, only an asterisk is used as the
+display string.
+
+If the first element is an integer, the macro will be replaced by
+the respective macro argument.
+
+If the first element is a function symbol, the function will be
+called with all mandatory arguments of the macro and the result
+of the function call will be used as a replacement for the macro.
+
+Setting this variable does not take effect immediately.  Use
+Customize or reset the mode."
   :type '(repeat (group (choice (string :tag "Display String")
-				(integer :tag "Number of argument" :value 1))
+				(integer :tag "Number of argument" :value 1)
+				(function :tag "Function to execute"))
 			(repeat :tag "Macros" (string))))
   :group 'TeX-fold)
 
@@ -218,19 +246,26 @@ Set it to zero in order to disable help echos."
 (defvar TeX-fold-open-spots nil)
 (make-variable-buffer-local 'TeX-fold-open-spots)
 
+(defcustom TeX-fold-command-prefix "\C-c\C-o"
+  "Prefix key to use for commands in TeX Fold mode.
+The value of this variable is checked as part of loading TeX Fold mode.
+After that, changing the prefix key requires manipulating keymaps."
+  :type 'string
+  :group 'TeX-fold)
+
 (defvar TeX-fold-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-c\C-o\C-o" 'TeX-fold-dwim)
-    (define-key map "\C-c\C-o\C-b" 'TeX-fold-buffer)
-    (define-key map "\C-c\C-o\C-r" 'TeX-fold-region)
-    (define-key map "\C-c\C-o\C-p" 'TeX-fold-paragraph)
-    (define-key map "\C-c\C-o\C-m" 'TeX-fold-macro)
-    (define-key map "\C-c\C-o\C-e" 'TeX-fold-env)
-    (define-key map "\C-c\C-o\C-c" 'TeX-fold-comment)
-    (define-key map "\C-c\C-ob"    'TeX-fold-clearout-buffer)
-    (define-key map "\C-c\C-or"    'TeX-fold-clearout-region)
-    (define-key map "\C-c\C-op"    'TeX-fold-clearout-paragraph)
-    (define-key map "\C-c\C-oi"    'TeX-fold-clearout-item)
+    (define-key map "\C-o" 'TeX-fold-dwim)
+    (define-key map "\C-b" 'TeX-fold-buffer)
+    (define-key map "\C-r" 'TeX-fold-region)
+    (define-key map "\C-p" 'TeX-fold-paragraph)
+    (define-key map "\C-m" 'TeX-fold-macro)
+    (define-key map "\C-e" 'TeX-fold-env)
+    (define-key map "\C-c" 'TeX-fold-comment)
+    (define-key map "b"    'TeX-fold-clearout-buffer)
+    (define-key map "r"    'TeX-fold-clearout-region)
+    (define-key map "p"    'TeX-fold-clearout-paragraph)
+    (define-key map "i"    'TeX-fold-clearout-item)
     map))
 
 
@@ -438,7 +473,8 @@ Return non-nil if an item was found and folded, nil otherwise."
 				(match-string-no-properties 1)
 			      (match-string 1))))
 	       (fold-list (cond ((eq type 'env) TeX-fold-env-spec-list-internal)
-				((eq type 'math) TeX-fold-math-spec-list-internal)
+				((eq type 'math)
+				 TeX-fold-math-spec-list-internal)
 				(t TeX-fold-macro-spec-list-internal)))
 	       fold-item
 	       (display-string-spec
@@ -471,14 +507,16 @@ Return non-nil if a comment was found and folded, nil otherwise."
       (save-excursion
 	(while (progn
 		 (beginning-of-line 0)
-		 (TeX-in-line-comment)))
+		 (and (TeX-in-line-comment)
+		      (not (bobp)))))
 	(goto-char (TeX-search-forward-comment-start (line-end-position 2)))
 	(looking-at TeX-comment-start-regexp)
 	(setq beg (match-end 0))
 	(while (TeX-comment-forward))
 	(end-of-line 0)
-	(TeX-fold-hide-item (TeX-fold-make-overlay beg (point) 'comment
-						   TeX-fold-ellipsis))))))
+	(when (> (point) beg)
+	  (TeX-fold-hide-item (TeX-fold-make-overlay beg (point) 'comment
+						     TeX-fold-ellipsis)))))))
 
 
 ;;; Utilities
@@ -546,10 +584,14 @@ string DISPLAY-STRING."
 		ov-end))
 	  (current-fill-column))))
 
-(defun TeX-fold-macro-nth-arg (n macro-start &optional macro-end)
+(defun TeX-fold-macro-nth-arg (n macro-start &optional macro-end delims)
   "Return a property list of the argument number N of a macro.
 The start of the macro to examine is given by MACRO-START, its
-end optionally by MACRO-END.
+end optionally by MACRO-END.  With DELIMS the type of delimiters
+can be specified as a cons cell containing the opening char as
+the car and the closing char as the cdr.  The chars have to have
+opening and closing syntax as defined in
+`TeX-search-syntax-table'.
 
 The first item in the returned list is the string specified in
 the argument, the second item may be a face if the argument
@@ -558,20 +600,31 @@ as well, so the second item is always nil.  In XEmacs the string
 does not enclose any faces, so these are given in the second item
 of the resulting list."
   (save-excursion
-    (let ((macro-end (or macro-end
-			 (save-excursion (goto-char macro-start)
-					 (TeX-find-macro-end))))
-	  content-start content-end)
+    (let* ((macro-end (or macro-end
+			  (save-excursion (goto-char macro-start)
+					  (TeX-find-macro-end))))
+	   (open-char (if delims (car delims) ?{))
+	   (open-string (char-to-string open-char))
+	   (close-char (if delims (cdr delims) ?}))
+	   (close-string (char-to-string close-char))
+	   content-start content-end)
       (goto-char macro-start)
       (if (condition-case nil
 	      (progn
 		(while (> n 0)
-		  (skip-chars-forward "^{" macro-end)
-		  (when (not (looking-at "{")) (error nil))
+		  (skip-chars-forward (concat "^" open-string) macro-end)
+		  (when (= (point) macro-end)
+		    (error nil))
 		  (setq content-start (progn
-					(skip-chars-forward "{ \t")
+					(skip-chars-forward
+					 (concat open-string " \t"))
 					(point)))
-		  (goto-char (TeX-find-closing-brace))
+		  (goto-char
+		   (if delims
+		       (with-syntax-table
+			   (TeX-search-syntax-table open-char close-char)
+			 (scan-lists (point) 1 1))
+		     (TeX-find-closing-brace)))
 		  (setq content-end (save-excursion
 				      (backward-char)
 				      (skip-chars-backward " \t")
@@ -705,16 +758,62 @@ Return non-nil if a removal happened, nil otherwise."
 
 ;;; Toggling
 
+(defun TeX-fold-expand-spec (spec ov-start ov-end)
+  "Expand instances of {<num>}, [<num>], <<num>>, and (<num>).
+Replace them with the respective macro argument."
+  (let ((spec-list (split-string spec "||"))
+	(delims '((?{ . ?}) (?[ . ?]) (?< . ?>) (?\( . ?\))))
+	match-end success)
+    (catch 'success
+      ;; Iterate over alternatives.
+      (dolist (elt spec-list)
+	(setq spec elt)
+	;; Find and expand every placeholder.
+	(while (and (string-match "\\([[{<]\\)\\([1-9]\\)\\([]}>]\\)" elt
+				  match-end)
+		    ;; Does the closing delim fit to the opening one?
+		    (string-equal
+		     (match-string 3 elt)
+		     (char-to-string
+		      (cdr (assq (string-to-char (match-string 1 elt))
+				 delims)))))
+	  (setq match-end (match-beginning 0))
+	  (let ((arg (car (save-match-data
+			    ;; Get the argument.
+			    (TeX-fold-macro-nth-arg
+			     (string-to-number (match-string 2 elt))
+			     ov-start ov-end
+			     (assoc (string-to-char (match-string 1 elt))
+				    delims))))))
+	    (when arg (setq success t))
+	    ;; Replace the placeholder in the string.
+	    (setq elt (replace-match (or arg TeX-fold-ellipsis) nil t elt)
+		  spec elt)))
+	(when success (throw 'success nil))))
+    spec))
+
 (defun TeX-fold-hide-item (ov)
   "Hide a single macro or environment.
 That means, put respective properties onto overlay OV."
   (let* ((ov-start (overlay-start ov))
 	 (ov-end (overlay-end ov))
 	 (spec (overlay-get ov 'TeX-fold-display-string-spec))
-	 (computed (if (stringp spec)
-		       spec
-		     (or (TeX-fold-macro-nth-arg spec ov-start ov-end)
-			 "[Error: No content found]")))
+	 (computed (cond
+		    ((stringp spec)
+		     (TeX-fold-expand-spec spec ov-start ov-end))
+		    ((functionp spec)
+		     (let (arg arg-list
+			   (n 1))
+		       (while (setq arg (TeX-fold-macro-nth-arg
+					 n ov-start ov-end))
+			 (add-to-list 'arg-list (car arg) t)
+			 (setq n (1+ n)))
+		       (or (condition-case nil
+			       (apply spec arg-list)
+			     (error nil))
+			   "[Error: No content or function found]")))
+		    (t (or (TeX-fold-macro-nth-arg spec ov-start ov-end)
+			   "[Error: No content found]"))))
 	 (display-string (if (listp computed) (car computed) computed))
 	 (face (when (listp computed) (cadr computed))))
     ;; Cater for zero-length display strings.
@@ -842,19 +941,20 @@ the other elements.  The ordering among elements is maintained."
 Called interactively, with no prefix argument, toggle the mode.
 With universal prefix ARG (or if ARG is nil) turn mode on.
 With zero or negative ARG turn mode off."
-  nil nil TeX-fold-keymap
+  nil nil (list (cons TeX-fold-command-prefix TeX-fold-keymap))
   (if TeX-fold-mode
       (progn
 	(set (make-local-variable 'search-invisible) t)
 	(add-hook 'post-command-hook 'TeX-fold-post-command nil t)
 	(add-hook 'LaTeX-fill-newline-hook 'TeX-fold-update-at-point nil t)
-	(add-hook 'TeX-after-insert-macro-hook (lambda ()
-						 (when (and TeX-fold-mode TeX-fold-auto)
-						   (save-excursion
-						     (backward-char)
-						     (or (TeX-fold-item 'macro)
-							 (TeX-fold-item 'math)
-							 (TeX-fold-item 'env))))))
+	(add-hook 'TeX-after-insert-macro-hook
+		  (lambda ()
+		    (when (and TeX-fold-mode TeX-fold-auto)
+		      (save-excursion
+			(backward-char)
+			(or (TeX-fold-item 'macro)
+			    (TeX-fold-item 'math)
+			    (TeX-fold-item 'env))))))
 	;; Update the `TeX-fold-*-spec-list-internal' variables.
 	(dolist (elt '("macro" "env" "math"))
 	  (set (intern (format "TeX-fold-%s-spec-list-internal" elt))

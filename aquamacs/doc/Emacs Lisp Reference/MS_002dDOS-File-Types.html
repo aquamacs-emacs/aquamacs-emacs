@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>MS-DOS File Types - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" title="Terminal I/O Encoding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-File-Types"></a>
+<a name="MS_002dDOS-File-Types"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.9.9 MS-DOS File Types</h4>
+
+<p><a name="index-DOS-file-types-2926"></a><a name="index-MS_002dDOS-file-types-2927"></a><a name="index-Windows-file-types-2928"></a><a name="index-file-types-on-MS_002dDOS-and-Windows-2929"></a><a name="index-text-files-and-binary-files-2930"></a><a name="index-binary-files-and-text-files-2931"></a>
+  On MS-DOS and Microsoft Windows, Emacs guesses the appropriate
+end-of-line conversion for a file by looking at the file's name.  This
+feature classifies files as <dfn>text files</dfn> and <dfn>binary files</dfn>.  By
+&ldquo;binary file&rdquo; we mean a file of literal byte values that are not
+necessarily meant to be characters; Emacs does no end-of-line conversion
+and no character code conversion for them.  On the other hand, the bytes
+in a text file are intended to represent characters; when you create a
+new file whose name implies that it is a text file, Emacs uses DOS
+end-of-line conversion.
+
+<div class="defun">
+&mdash; Variable: <b>buffer-file-type</b><var><a name="index-buffer_002dfile_002dtype-2932"></a></var><br>
+<blockquote><p>This variable, automatically buffer-local in each buffer, records the
+file type of the buffer's visited file.  When a buffer does not specify
+a coding system with <code>buffer-file-coding-system</code>, this variable is
+used to determine which coding system to use when writing the contents
+of the buffer.  It should be <code>nil</code> for text, <code>t</code> for binary. 
+If it is <code>t</code>, the coding system is <code>no-conversion</code>. 
+Otherwise, <code>undecided-dos</code> is used.
+
+        <p>Normally this variable is set by visiting a file; it is set to
+<code>nil</code> if the file was visited without any actual conversion.
+
+        <p>Its default value is used to decide how to handle files for which
+<code>file-name-buffer-file-type-alist</code> says nothing about the type:
+If the default value is non-<code>nil</code>, then these files are treated as
+binary: the coding system <code>no-conversion</code> is used.  Otherwise,
+nothing special is done for them&mdash;the coding system is deduced solely
+from the file contents, in the usual Emacs fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>file-name-buffer-file-type-alist</b><var><a name="index-file_002dname_002dbuffer_002dfile_002dtype_002dalist-2933"></a></var><br>
+<blockquote><p>This variable holds an alist for recognizing text and binary files. 
+Each element has the form (<var>regexp</var> . <var>type</var>), where
+<var>regexp</var> is matched against the file name, and <var>type</var> may be
+<code>nil</code> for text, <code>t</code> for binary, or a function to call to
+compute which.  If it is a function, then it is called with a single
+argument (the file name) and should return <code>t</code> or <code>nil</code>.
+
+        <p>When running on MS-DOS or MS-Windows, Emacs checks this alist to decide
+which coding system to use when reading a file.  For a text file,
+<code>undecided-dos</code> is used.  For a binary file, <code>no-conversion</code>
+is used.
+
+        <p>If no element in this alist matches a given file name, then
+the default value of <code>buffer-file-type</code> says how to treat the file. 
+</p></blockquote></div>
+
+   </body></html>
+

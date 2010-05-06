@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Basic Picture - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Picture-Mode.html#Picture-Mode" title="Picture Mode">
+<link rel="next" href="Insert-in-Picture.html#Insert-in-Picture" title="Insert in Picture">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Basic-Picture"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Insert-in-Picture.html#Insert-in-Picture">Insert in Picture</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Picture-Mode.html#Picture-Mode">Picture Mode</a>
+<hr>
+</div>
+
+<h3 class="section">34.1 Basic Editing in Picture Mode</h3>
+
+<p><a name="index-picture_002dforward_002dcolumn-2643"></a><a name="index-picture_002dbackward_002dcolumn-2644"></a><a name="index-picture_002dmove_002ddown-2645"></a><a name="index-picture_002dmove_002dup-2646"></a><a name="index-editing-in-Picture-mode-2647"></a>
+  Most keys do the same thing in Picture mode that they usually do, but
+do it in a quarter-plane style.  For example, <kbd>C-f</kbd> is rebound to
+run <code>picture-forward-column</code>, a command which moves point one
+column to the right, inserting a space if necessary so that the actual
+end of the line makes no difference.  <kbd>C-b</kbd> is rebound to run
+<code>picture-backward-column</code>, which always moves point left one
+column, converting a tab to multiple spaces if necessary.  <kbd>C-n</kbd> and
+<kbd>C-p</kbd> are rebound to run <code>picture-move-down</code> and
+<code>picture-move-up</code>, which can either insert spaces or convert tabs
+as necessary to make sure that point stays in exactly the same column. 
+<kbd>C-e</kbd> runs <code>picture-end-of-line</code>, which moves to after the last
+nonblank character on the line.  There is no need to change <kbd>C-a</kbd>,
+as the choice of screen model does not affect beginnings of
+lines.
+
+   <p><a name="index-picture_002dnewline-2648"></a>  Insertion of text is adapted to the quarter-plane screen model
+through the use of Overwrite mode
+(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.) 
+Self-inserting characters replace existing text, column by column,
+rather than pushing existing text to the right.  &lt;RET&gt; runs
+<code>picture-newline</code>, which just moves to the beginning of the
+following line so that new text will replace that line.
+
+   <p><a name="index-picture_002dbackward_002dclear_002dcolumn-2649"></a><a name="index-picture_002dclear_002dcolumn-2650"></a><a name="index-picture_002dclear_002dline-2651"></a>  In Picture mode, the commands that normally delete or kill text,
+instead erase text (replacing it with spaces).  &lt;DEL&gt;
+(<code>picture-backward-clear-column</code>) replaces the preceding
+character with a space rather than removing it; this moves point
+backwards.  <kbd>C-d</kbd> (<code>picture-clear-column</code>) replaces the next
+character or characters with spaces, but does not move point.  (If you
+want to clear characters to spaces and move forward over them, use
+&lt;SPC&gt;.)  <kbd>C-k</kbd> (<code>picture-clear-line</code>) really kills the
+contents of lines, but does not delete the newlines from the buffer.
+
+   <p><a name="index-picture_002dopen_002dline-2652"></a>  To do actual insertion, you must use special commands.  <kbd>C-o</kbd>
+(<code>picture-open-line</code>) creates a blank line after the current
+line; it never splits a line.  <kbd>C-M-o</kbd> (<code>split-line</code>) makes
+sense in Picture mode, so it is not changed.  <kbd>C-j</kbd>
+(<code>picture-duplicate-line</code>) inserts another line with the same
+contents below the current line.
+
+   <p><a name="index-C_002dc-C_002dd-_0040r_007b_0028Picture-mode_0029_007d-2653"></a>   To do actual deletion in Picture mode, use <kbd>C-w</kbd>, <kbd>C-c C-d</kbd>
+(which is defined as <code>delete-char</code>, as <kbd>C-d</kbd> is in other
+modes), or one of the picture rectangle commands (see <a href="Rectangles-in-Picture.html#Rectangles-in-Picture">Rectangles in Picture</a>).
+
+   </body></html>
+

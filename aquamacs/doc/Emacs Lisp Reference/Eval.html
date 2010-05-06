@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+<title>Eval - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Evaluation.html#Evaluation" title="Evaluation">
+<link rel="prev" href="Quoting.html#Quoting" title="Quoting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Eval"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoting.html#Quoting">Quoting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Evaluation.html#Evaluation">Evaluation</a>
+<hr>
+</div>
+
+<h3 class="section">9.4 Eval</h3>
+
+<p>Most often, forms are evaluated automatically, by virtue of their
+occurrence in a program being run.  On rare occasions, you may need to
+write code that evaluates a form that is computed at run time, such as
+after reading a form from text being edited or getting one from a
+property list.  On these occasions, use the <code>eval</code> function.
+
+   <p>The functions and variables described in this section evaluate forms,
+specify limits to the evaluation process, or record recently returned
+values.  Loading a file also does evaluation (see <a href="Loading.html#Loading">Loading</a>).
+
+   <p>It is generally cleaner and more flexible to store a function in a
+data structure, and call it with <code>funcall</code> or <code>apply</code>, than
+to store an expression in the data structure and evaluate it.  Using
+functions provides the ability to pass information to them as
+arguments.
+
+<div class="defun">
+&mdash; Function: <b>eval</b><var> form<a name="index-eval-514"></a></var><br>
+<blockquote><p>This is the basic function evaluating an expression.  It evaluates
+<var>form</var> in the current environment and returns the result.  How the
+evaluation proceeds depends on the type of the object (see <a href="Forms.html#Forms">Forms</a>).
+
+        <p>Since <code>eval</code> is a function, the argument expression that appears
+in a call to <code>eval</code> is evaluated twice: once as preparation before
+<code>eval</code> is called, and again by the <code>eval</code> function itself. 
+Here is an example:
+
+     <pre class="example">          (setq foo 'bar)
+               &rArr; bar
+          (setq bar 'baz)
+               &rArr; baz
+          ;; <span class="roman">Here </span><code>eval</code><span class="roman"> receives argument </span><code>foo</code>
+          (eval 'foo)
+               &rArr; bar
+          ;; <span class="roman">Here </span><code>eval</code><span class="roman"> receives argument </span><code>bar</code><span class="roman">, which is the value of </span><code>foo</code>
+          (eval foo)
+               &rArr; baz
+</pre>
+        <p>The number of currently active calls to <code>eval</code> is limited to
+<code>max-lisp-eval-depth</code> (see below). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>eval-region</b><var> start end &amp;optional stream read-function<a name="index-eval_002dregion-515"></a></var><br>
+<blockquote><p><a name="Definition-of-eval_002dregion"></a>This function evaluates the forms in the current buffer in the region
+defined by the positions <var>start</var> and <var>end</var>.  It reads forms from
+the region and calls <code>eval</code> on them until the end of the region is
+reached, or until an error is signaled and not handled.
+
+        <p>By default, <code>eval-region</code> does not produce any output.  However,
+if <var>stream</var> is non-<code>nil</code>, any output produced by output
+functions (see <a href="Output-Functions.html#Output-Functions">Output Functions</a>), as well as the values that
+result from evaluating the expressions in the region are printed using
+<var>stream</var>.  See <a href="Output-Streams.html#Output-Streams">Output Streams</a>.
+
+        <p>If <var>read-function</var> is non-<code>nil</code>, it should be a function,
+which is used instead of <code>read</code> to read expressions one by one. 
+This function is called with one argument, the stream for reading
+input.  You can also use the variable <code>load-read-function</code>
+(see <a href="Definition-of-load_002dread_002dfunction.html#Definition-of-load_002dread_002dfunction">How Programs Do Loading</a>)
+to specify this function, but it is more robust to use the
+<var>read-function</var> argument.
+
+        <p><code>eval-region</code> does not move point.  It always returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-evaluation-of-buffer-contents-516"></a>
+
+<div class="defun">
+&mdash; Command: <b>eval-buffer</b><var> &amp;optional buffer-or-name stream filename unibyte print<a name="index-eval_002dbuffer-517"></a></var><br>
+<blockquote><p>This is similar to <code>eval-region</code>, but the arguments provide
+different optional features.  <code>eval-buffer</code> operates on the
+entire accessible portion of buffer <var>buffer-or-name</var>. 
+<var>buffer-or-name</var> can be a buffer, a buffer name (a string), or
+<code>nil</code> (or omitted), which means to use the current buffer. 
+<var>stream</var> is used as in <code>eval-region</code>, unless <var>stream</var> is
+<code>nil</code> and <var>print</var> non-<code>nil</code>.  In that case, values that
+result from evaluating the expressions are still discarded, but the
+output of the output functions is printed in the echo area. 
+<var>filename</var> is the file name to use for <code>load-history</code>
+(see <a href="Unloading.html#Unloading">Unloading</a>), and defaults to <code>buffer-file-name</code>
+(see <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>).  If <var>unibyte</var> is non-<code>nil</code>,
+<code>read</code> converts strings to unibyte whenever possible.
+
+        <p><a name="index-eval_002dcurrent_002dbuffer-518"></a><code>eval-current-buffer</code> is an alias for this command. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>max-lisp-eval-depth</b><var><a name="index-max_002dlisp_002deval_002ddepth-519"></a></var><br>
+<blockquote><p><a name="Definition-of-max_002dlisp_002deval_002ddepth"></a>This variable defines the maximum depth allowed in calls to <code>eval</code>,
+<code>apply</code>, and <code>funcall</code> before an error is signaled (with error
+message <code>"Lisp nesting exceeds max-lisp-eval-depth"</code>).
+
+        <p>This limit, with the associated error when it is exceeded, is one way
+Emacs Lisp avoids infinite recursion on an ill-defined function.  If
+you increase the value of <code>max-lisp-eval-depth</code> too much, such
+code can cause stack overflow instead. 
+<a name="index-Lisp-nesting-error-520"></a>
+The depth limit counts internal uses of <code>eval</code>, <code>apply</code>, and
+<code>funcall</code>, such as for calling the functions mentioned in Lisp
+expressions, and recursive evaluation of function call arguments and
+function body forms, as well as explicit calls in Lisp code.
+
+        <p>The default value of this variable is 400.  If you set it to a value
+less than 100, Lisp will reset it to 100 if the given value is
+reached.  Entry to the Lisp debugger increases the value, if there is
+little room left, to make sure the debugger itself has room to
+execute.
+
+        <p><code>max-specpdl-size</code> provides another limit on nesting. 
+See <a href="Definition-of-max_002dspecpdl_002dsize.html#Definition-of-max_002dspecpdl_002dsize">Local Variables</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>values</b><var><a name="index-values-521"></a></var><br>
+<blockquote><p>The value of this variable is a list of the values returned by all the
+expressions that were read, evaluated, and printed from buffers
+(including the minibuffer) by the standard Emacs commands which do
+this.  (Note that this does <em>not</em> include evaluation in
+&lsquo;<samp><span class="samp">*ielm*</span></samp>&rsquo; buffers, nor evaluation using <kbd>C-j</kbd> in
+<code>lisp-interaction-mode</code>.)  The elements are ordered most recent
+first.
+
+     <pre class="example">          (setq x 1)
+               &rArr; 1
+          (list 'A (1+ 2) auto-save-default)
+               &rArr; (A 3 t)
+          values
+               &rArr; ((A 3 t) 1 ...)
+</pre>
+        <p>This variable is useful for referring back to values of forms recently
+evaluated.  It is generally a bad idea to print the value of
+<code>values</code> itself, since this may be very long.  Instead, examine
+particular elements, like this:
+
+     <pre class="example">          ;; <span class="roman">Refer to the most recent evaluation result.</span>
+          (nth 0 values)
+               &rArr; (A 3 t)
+          ;; <span class="roman">That put a new element on,</span>
+          ;;   <span class="roman">so all elements move back one.</span>
+          (nth 1 values)
+               &rArr; (A 3 t)
+          ;; <span class="roman">This gets the element that was next-to-most-recent</span>
+          ;;   <span class="roman">before this example.</span>
+          (nth 3 values)
+               &rArr; 1
+</pre>
+        </blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, 2002, -->
+<!-- 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

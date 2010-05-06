@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>User-Chosen Coding Systems - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
+<link rel="prev" href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" title="Lisp and Coding Systems">
+<link rel="next" href="Default-Coding-Systems.html#Default-Coding-Systems" title="Default Coding Systems">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="User-Chosen-Coding-Systems"></a>
+<a name="User_002dChosen-Coding-Systems"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
+<hr>
+</div>
+
+<h4 class="subsection">33.9.4 User-Chosen Coding Systems</h4>
+
+<p><a name="index-select-safe-coding-system-2882"></a>
+
+<div class="defun">
+&mdash; Function: <b>select-safe-coding-system</b><var> from to &amp;optional default-coding-system accept-default-p file<a name="index-select_002dsafe_002dcoding_002dsystem-2883"></a></var><br>
+<blockquote><p>This function selects a coding system for encoding specified text,
+asking the user to choose if necessary.  Normally the specified text
+is the text in the current buffer between <var>from</var> and <var>to</var>.  If
+<var>from</var> is a string, the string specifies the text to encode, and
+<var>to</var> is ignored.
+
+        <p>If the specified text includes raw bytes (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>), <code>select-safe-coding-system</code> suggests
+<code>raw-text</code> for its encoding.
+
+        <p>If <var>default-coding-system</var> is non-<code>nil</code>, that is the first
+coding system to try; if that can handle the text,
+<code>select-safe-coding-system</code> returns that coding system.  It can
+also be a list of coding systems; then the function tries each of them
+one by one.  After trying all of them, it next tries the current
+buffer's value of <code>buffer-file-coding-system</code> (if it is not
+<code>undecided</code>), then the default value of
+<code>buffer-file-coding-system</code> and finally the user's most
+preferred coding system, which the user can set using the command
+<code>prefer-coding-system</code> (see <a href="../emacs/Recognize-Coding.html#Recognize-Coding">Recognizing Coding Systems</a>).
+
+        <p>If one of those coding systems can safely encode all the specified
+text, <code>select-safe-coding-system</code> chooses it and returns it. 
+Otherwise, it asks the user to choose from a list of coding systems
+which can encode all the text, and returns the user's choice.
+
+        <p><var>default-coding-system</var> can also be a list whose first element is
+t and whose other elements are coding systems.  Then, if no coding
+system in the list can handle the text, <code>select-safe-coding-system</code>
+queries the user immediately, without trying any of the three
+alternatives described above.
+
+        <p>The optional argument <var>accept-default-p</var>, if non-<code>nil</code>,
+should be a function to determine whether a coding system selected
+without user interaction is acceptable. <code>select-safe-coding-system</code>
+calls this function with one argument, the base coding system of the
+selected coding system.  If <var>accept-default-p</var> returns <code>nil</code>,
+<code>select-safe-coding-system</code> rejects the silently selected coding
+system, and asks the user to select a coding system from a list of
+possible candidates.
+
+        <p><a name="index-select_002dsafe_002dcoding_002dsystem_002daccept_002ddefault_002dp-2884"></a>If the variable <code>select-safe-coding-system-accept-default-p</code> is
+non-<code>nil</code>, it should be a function taking a single argument. 
+It is used in place of <var>accept-default-p</var>, overriding any
+value supplied for this argument.
+
+        <p>As a final step, before returning the chosen coding system,
+<code>select-safe-coding-system</code> checks whether that coding system is
+consistent with what would be selected if the contents of the region
+were read from a file.  (If not, this could lead to data corruption in
+a file subsequently re-visited and edited.)  Normally,
+<code>select-safe-coding-system</code> uses <code>buffer-file-name</code> as the
+file for this purpose, but if <var>file</var> is non-<code>nil</code>, it uses
+that file instead (this can be relevant for <code>write-region</code> and
+similar functions).  If it detects an apparent inconsistency,
+<code>select-safe-coding-system</code> queries the user before selecting the
+coding system. 
+</p></blockquote></div>
+
+   <p>Here are two functions you can use to let the user specify a coding
+system, with completion.  See <a href="Completion.html#Completion">Completion</a>.
+
+<div class="defun">
+&mdash; Function: <b>read-coding-system</b><var> prompt &amp;optional default<a name="index-read_002dcoding_002dsystem-2885"></a></var><br>
+<blockquote><p>This function reads a coding system using the minibuffer, prompting with
+string <var>prompt</var>, and returns the coding system name as a symbol.  If
+the user enters null input, <var>default</var> specifies which coding system
+to return.  It should be a symbol or a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-non-nil-coding-system</b><var> prompt<a name="index-read_002dnon_002dnil_002dcoding_002dsystem-2886"></a></var><br>
+<blockquote><p>This function reads a coding system using the minibuffer, prompting with
+string <var>prompt</var>, and returns the coding system name as a symbol.  If
+the user tries to enter null input, it asks the user to try again. 
+See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

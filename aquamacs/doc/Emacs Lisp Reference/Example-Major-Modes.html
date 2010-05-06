@@ -1,0 +1,257 @@
+<html lang="en">
+<head>
+<title>Example Major Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Mode-Hooks.html#Mode-Hooks" title="Mode Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Example-Major-Modes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.8 Major Mode Examples</h4>
+
+<p>Text mode is perhaps the simplest mode besides Fundamental mode. 
+Here are excerpts from  <samp><span class="file">text-mode.el</span></samp> that illustrate many of
+the conventions listed above:
+
+<pre class="smallexample">     ;; <span class="roman">Create the syntax table for this mode.</span>
+     (defvar text-mode-syntax-table
+       (let ((st (make-syntax-table)))
+         (modify-syntax-entry ?\" ".   " st)
+         (modify-syntax-entry ?\\ ".   " st)
+         ;; Add `p' so M-c on `hello' leads to `Hello', not `hello'.
+         (modify-syntax-entry ?' "w p" st)
+         st)
+       "Syntax table used while in `text-mode'.")
+     
+     ;; <span class="roman">Create the keymap for this mode.</span>
+     (defvar text-mode-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map "\e\t" 'ispell-complete-word)
+         (define-key map "\es" 'center-line)
+         (define-key map "\eS" 'center-paragraph)
+         map)
+       "Keymap for `text-mode'.
+     Many other modes, such as Mail mode, Outline mode
+     and Indented Text mode, inherit all the commands
+     defined in this map.")
+</pre>
+   <p>Here is how the actual mode command is defined now:
+
+<pre class="smallexample">     (define-derived-mode text-mode nil "Text"
+       "Major mode for editing text written for humans to read.
+     In this mode, paragraphs are delimited only by blank or white lines.
+     You can thus get the full benefit of adaptive filling
+      (see the variable `adaptive-fill-mode').
+     \\{text-mode-map}
+     Turning on Text mode runs the normal hook `text-mode-hook'."
+       (make-local-variable 'text-mode-variant)
+       (setq text-mode-variant t)
+       ;; <span class="roman">These two lines are a feature added recently.</span>
+       (set (make-local-variable 'require-final-newline)
+            mode-require-final-newline)
+       (set (make-local-variable 'indent-line-function) 'indent-relative))
+</pre>
+   <p class="noindent">(The last line is redundant nowadays, since <code>indent-relative</code> is
+the default value, and we'll delete it in a future version.)
+
+   <p>Here is how it was defined formerly, before
+<code>define-derived-mode</code> existed:
+
+<pre class="smallexample">     ;; <span class="roman">This isn't needed nowadays, since </span><code>define-derived-mode</code><span class="roman"> does it.</span>
+     (defvar text-mode-abbrev-table nil
+       "Abbrev table used while in text mode.")
+     (define-abbrev-table 'text-mode-abbrev-table ())
+     
+     (defun text-mode ()
+       "Major mode for editing text intended for humans to read...
+      Special commands: \\{text-mode-map}
+     Turning on text-mode runs the hook `text-mode-hook'."
+       (interactive)
+       (kill-all-local-variables)
+       (use-local-map text-mode-map)
+       (setq local-abbrev-table text-mode-abbrev-table)
+       (set-syntax-table text-mode-syntax-table)
+       ;; <span class="roman">These four lines are absent from the current version</span>
+       ;; <span class="roman">not because this is done some other way, but rather</span>
+       ;; <span class="roman">because nowadays Text mode uses the normal definition of paragraphs.</span>
+       (make-local-variable 'paragraph-start)
+       (setq paragraph-start (concat "[ \t]*$\\|" page-delimiter))
+       (make-local-variable 'paragraph-separate)
+       (setq paragraph-separate paragraph-start)
+       (make-local-variable 'indent-line-function)
+       (setq indent-line-function 'indent-relative-maybe)
+       (setq mode-name "Text")
+       (setq major-mode 'text-mode)
+       (run-mode-hooks 'text-mode-hook)) ; <span class="roman">Finally, this permits the user to</span>
+                                         ;   <span class="roman">customize the mode with a hook.</span>
+</pre>
+   <p><a name="index-g_t_0040file_007blisp_002dmode_002eel_007d-1622"></a>  The three Lisp modes (Lisp mode, Emacs Lisp mode, and Lisp
+Interaction mode) have more features than Text mode and the code is
+correspondingly more complicated.  Here are excerpts from
+<samp><span class="file">lisp-mode.el</span></samp> that illustrate how these modes are written.
+
+   <p><a name="index-syntax-table-example-1623"></a>
+<pre class="smallexample">     ;; <span class="roman">Create mode-specific table variables.</span>
+     (defvar lisp-mode-syntax-table nil "")
+     (defvar lisp-mode-abbrev-table nil "")
+     
+     (defvar emacs-lisp-mode-syntax-table
+       (let ((table (make-syntax-table)))
+         (let ((i 0))
+     
+           ;; <span class="roman">Set syntax of chars up to &lsquo;</span><samp><span class="samp">0</span></samp><span class="roman">&rsquo; to say they are</span>
+           ;;   <span class="roman">part of symbol names but not words.</span>
+           ;;   <span class="roman">(The digit &lsquo;</span><samp><span class="samp">0</span></samp><span class="roman">&rsquo; is </span><code>48</code><span class="roman"> in the <acronym>ASCII</acronym> character set.)</span>
+           (while (&lt; i ?0)
+             (modify-syntax-entry i "_   " table)
+             (setq i (1+ i)))
+           ;; <span class="roman">... similar code follows for other character ranges.</span>
+           ;; <span class="roman">Then set the syntax codes for characters that are special in Lisp.</span>
+           (modify-syntax-entry ?  "    " table)
+           (modify-syntax-entry ?\t "    " table)
+           (modify-syntax-entry ?\f "    " table)
+           (modify-syntax-entry ?\n "&gt;   " table)
+           ;; <span class="roman">Give CR the same syntax as newline, for selective-display.</span>
+           (modify-syntax-entry ?\^m "&gt;   " table)
+           (modify-syntax-entry ?\; "&lt;   " table)
+           (modify-syntax-entry ?` "'   " table)
+           (modify-syntax-entry ?' "'   " table)
+           (modify-syntax-entry ?, "'   " table)
+           ;; <span class="roman">...likewise for many other characters...</span>
+           (modify-syntax-entry ?\( "()  " table)
+           (modify-syntax-entry ?\) ")(  " table)
+           (modify-syntax-entry ?\[ "(]  " table)
+           (modify-syntax-entry ?\] ")[  " table))
+         table))
+     ;; <span class="roman">Create an abbrev table for lisp-mode.</span>
+     (define-abbrev-table 'lisp-mode-abbrev-table ())
+</pre>
+   <p>The three modes for Lisp share much of their code.  For instance,
+each calls the following function to set various variables:
+
+<pre class="smallexample">     (defun lisp-mode-variables (lisp-syntax)
+       (when lisp-syntax
+         (set-syntax-table lisp-mode-syntax-table))
+       (setq local-abbrev-table lisp-mode-abbrev-table)
+       ...
+</pre>
+   <p>In Lisp and most programming languages, we want the paragraph
+commands to treat only blank lines as paragraph separators.  And the
+modes should understand the Lisp conventions for comments.  The rest of
+<code>lisp-mode-variables</code> sets this up:
+
+<pre class="smallexample">       (make-local-variable 'paragraph-start)
+       (setq paragraph-start (concat page-delimiter "\\|$" ))
+       (make-local-variable 'paragraph-separate)
+       (setq paragraph-separate paragraph-start)
+       ...
+       (make-local-variable 'comment-indent-function)
+       (setq comment-indent-function 'lisp-comment-indent))
+       ...
+</pre>
+   <p>Each of the different Lisp modes has a slightly different keymap.  For
+example, Lisp mode binds <kbd>C-c C-z</kbd> to <code>run-lisp</code>, but the other
+Lisp modes do not.  However, all Lisp modes have some commands in
+common.  The following code sets up the common commands:
+
+<pre class="smallexample">     (defvar shared-lisp-mode-map ()
+       "Keymap for commands shared by all sorts of Lisp modes.")
+     
+     ;; <span class="roman">Putting this </span><code>if</code><span class="roman"> after the </span><code>defvar</code><span class="roman"> is an older style.</span>
+     (if shared-lisp-mode-map
+         ()
+        (setq shared-lisp-mode-map (make-sparse-keymap))
+        (define-key shared-lisp-mode-map "\e\C-q" 'indent-sexp)
+        (define-key shared-lisp-mode-map "\177"
+                    'backward-delete-char-untabify))
+</pre>
+   <p class="noindent">And here is the code to set up the keymap for Lisp mode:
+
+<pre class="smallexample">     (defvar lisp-mode-map ()
+       "Keymap for ordinary Lisp mode...")
+     
+     (if lisp-mode-map
+         ()
+       (setq lisp-mode-map (make-sparse-keymap))
+       (set-keymap-parent lisp-mode-map shared-lisp-mode-map)
+       (define-key lisp-mode-map "\e\C-x" 'lisp-eval-defun)
+       (define-key lisp-mode-map "\C-c\C-z" 'run-lisp))
+</pre>
+   <p>Finally, here is the complete major mode function definition for
+Lisp mode.
+
+<pre class="smallexample">     (defun lisp-mode ()
+       "Major mode for editing Lisp code for Lisps other than GNU Emacs Lisp.
+     Commands:
+     Delete converts tabs to spaces as it moves back.
+     Blank lines separate paragraphs.  Semicolons start comments.
+     \\{lisp-mode-map}
+     Note that `run-lisp' may be used either to start an inferior Lisp job
+     or to switch back to an existing one.
+     
+     Entry to this mode calls the value of `lisp-mode-hook'
+     if that value is non-nil."
+       (interactive)
+       (kill-all-local-variables)
+       (use-local-map lisp-mode-map)          ; <span class="roman">Select the mode's keymap.</span>
+       (setq major-mode 'lisp-mode)           ; <span class="roman">This is how </span><code>describe-mode</code>
+                                              ;   <span class="roman">finds out what to describe.</span>
+       (setq mode-name "Lisp")                ; <span class="roman">This goes into the mode line.</span>
+       (lisp-mode-variables t)                ; <span class="roman">This defines various variables.</span>
+       (make-local-variable 'comment-start-skip)
+       (setq comment-start-skip
+             "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
+       (make-local-variable 'font-lock-keywords-case-fold-search)
+       (setq font-lock-keywords-case-fold-search t)
+       (setq imenu-case-fold-search t)
+       (set-syntax-table lisp-mode-syntax-table)
+       (run-mode-hooks 'lisp-mode-hook))      ; <span class="roman">This permits the user to use a</span>
+                                              ;   <span class="roman">hook to customize the mode.</span>
+</pre>
+   </body></html>
+

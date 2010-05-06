@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Input Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Read-and-Print.html#Read-and-Print" title="Read and Print">
+<link rel="prev" href="Input-Streams.html#Input-Streams" title="Input Streams">
+<link rel="next" href="Output-Streams.html#Output-Streams" title="Output Streams">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Input-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Output-Streams.html#Output-Streams">Output Streams</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Streams.html#Input-Streams">Input Streams</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
+<hr>
+</div>
+
+<h3 class="section">19.3 Input Functions</h3>
+
+<p>This section describes the Lisp functions and variables that pertain
+to reading.
+
+   <p>In the functions below, <var>stream</var> stands for an input stream (see
+the previous section).  If <var>stream</var> is <code>nil</code> or omitted, it
+defaults to the value of <code>standard-input</code>.
+
+   <p><a name="index-end_002dof_002dfile-1036"></a>  An <code>end-of-file</code> error is signaled if reading encounters an
+unterminated list, vector, or string.
+
+<div class="defun">
+&mdash; Function: <b>read</b><var> &amp;optional stream<a name="index-read-1037"></a></var><br>
+<blockquote><p>This function reads one textual Lisp expression from <var>stream</var>,
+returning it as a Lisp object.  This is the basic Lisp input function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>read-from-string</b><var> string &amp;optional start end<a name="index-read_002dfrom_002dstring-1038"></a></var><br>
+<blockquote><p><a name="index-string-to-object-1039"></a>This function reads the first textual Lisp expression from the text in
+<var>string</var>.  It returns a cons cell whose <span class="sc">car</span> is that expression,
+and whose <span class="sc">cdr</span> is an integer giving the position of the next
+remaining character in the string (i.e., the first one not read).
+
+        <p>If <var>start</var> is supplied, then reading begins at index <var>start</var> in
+the string (where the first character is at index 0).  If you specify
+<var>end</var>, then reading is forced to stop just before that index, as if
+the rest of the string were not there.
+
+        <p>For example:
+
+     <pre class="example">          (read-from-string "(setq x 55) (setq y 5)")
+               &rArr; ((setq x 55) . 11)
+          (read-from-string "\"A short string\"")
+               &rArr; ("A short string" . 16)
+          
+          ;; <span class="roman">Read starting at the first character.</span>
+          (read-from-string "(list 112)" 0)
+               &rArr; ((list 112) . 10)
+          ;; <span class="roman">Read starting at the second character.</span>
+          (read-from-string "(list 112)" 1)
+               &rArr; (list . 5)
+          ;; <span class="roman">Read starting at the seventh character,</span>
+          ;;   <span class="roman">and stopping at the ninth.</span>
+          (read-from-string "(list 112)" 6 8)
+               &rArr; (11 . 8)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>standard-input</b><var><a name="index-standard_002dinput-1040"></a></var><br>
+<blockquote><p>This variable holds the default input stream&mdash;the stream that
+<code>read</code> uses when the <var>stream</var> argument is <code>nil</code>. 
+The default is <code>t</code>, meaning use the minibuffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>read-circle</b><var><a name="index-read_002dcircle-1041"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable enables the reading of circular and
+shared structures.  See <a href="Circular-Objects.html#Circular-Objects">Circular Objects</a>.  Its default value is
+<code>t</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

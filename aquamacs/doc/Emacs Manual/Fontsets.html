@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Fontsets - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="Terminal-Coding.html#Terminal-Coding" title="Terminal Coding">
+<link rel="next" href="Defining-Fontsets.html#Defining-Fontsets" title="Defining Fontsets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Fontsets"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Fontsets.html#Defining-Fontsets">Defining Fontsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal-Coding.html#Terminal-Coding">Terminal Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.14 Fontsets</h3>
+
+<p><a name="index-fontsets-1452"></a>
+  A font typically defines shapes for a single alphabet or script. 
+Therefore, displaying the entire range of scripts that Emacs supports
+requires a collection of many fonts.  In Emacs, such a collection is
+called a <dfn>fontset</dfn>.  A fontset is defined by a list of font specs,
+each assigned to handle a range of character codes, and may fall back
+on another fontset for characters which are not covered by the fonts
+it specifies.
+
+   <p>Each fontset has a name, like a font.  However, while fonts are
+stored in the system and the available font names are defined by the
+system, fontsets are defined within Emacs itself.  Once you have
+defined a fontset, you can use it within Emacs by specifying its name,
+anywhere that you could use a single font.  Of course, Emacs fontsets
+can use only the fonts that the system supports; if certain characters
+appear on the screen as hollow boxes, this means that the fontset in
+use for them has no font for those characters.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+   <p>Emacs creates three fontsets automatically: the <dfn>standard
+fontset</dfn>, the <dfn>startup fontset</dfn> and the <dfn>default fontset</dfn>. 
+The default fontset is most likely to have fonts for a wide variety of
+non-<acronym>ASCII</acronym> characters and is the default fallback for the
+other two fontsets, and if you set a default font rather than fontset. 
+However it does not specify font family names, so results can be
+somewhat random if you use it directly.  You can specify use of a
+specific fontset with the &lsquo;<samp><span class="samp">-fn</span></samp>&rsquo; option.  For example,
+
+<pre class="example">     emacs -fn fontset-standard
+</pre>
+   <p class="noindent">You can also specify a fontset with the &lsquo;<samp><span class="samp">Font</span></samp>&rsquo; resource (see <a href="X-Resources.html#X-Resources">X Resources</a>).
+
+   <p>If no fontset is specified for use, then Emacs uses an
+<acronym>ASCII</acronym> font, with &lsquo;<samp><span class="samp">fontset-default</span></samp>&rsquo; as a fallback for
+characters the font does not cover.  The standard fontset is only used if
+explicitly requested, despite its name.
+
+   <p>A fontset does not necessarily specify a font for every character
+code.  If a fontset specifies no font for a certain character, or if it
+specifies a font that does not exist on your system, then it cannot
+display that character properly.  It will display that character as an
+empty box instead.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The Emacs
+installation instructions have information on additional font
+support.</p>
+
+   <hr></div>
+
+   </body></html>
+

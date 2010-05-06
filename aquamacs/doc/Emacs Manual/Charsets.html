@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Charsets - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="Unibyte-Mode.html#Unibyte-Mode" title="Unibyte Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Charsets"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Unibyte-Mode.html#Unibyte-Mode">Unibyte Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.19 Charsets</h3>
+
+<p><a name="index-charsets-1475"></a>
+  In Emacs, <dfn>charset</dfn> is short for &ldquo;character set&rdquo;.  Emacs
+supports most popular charsets (such as <code>ascii</code>,
+<code>iso-8859-1</code>, <code>cp1250</code>, <code>big5</code>, and <code>unicode</code>), in
+addition to some charsets of its own (such as <code>emacs</code>,
+<code>unicode-bmp</code>, and <code>eight-bit</code>).  All supported characters
+belong to one or more charsets.
+
+   <p>Emacs normally &ldquo;does the right thing&rdquo; with respect to charsets, so
+that you don't have to worry about them.  However, it is sometimes
+helpful to know some of the underlying details about charsets.
+
+   <p>One example is font selection (see <a href="Fonts.html#Fonts">Fonts</a>).  Each language
+environment (see <a href="Language-Environments.html#Language-Environments">Language Environments</a>) defines a &ldquo;priority
+list&rdquo; for the various charsets.  When searching for a font, Emacs
+initially attempts to find one that can display the highest-priority
+charsets.  For instance, in the Japanese language environment, the
+charset <code>japanese-jisx0208</code> has the highest priority, so Emacs
+tries to use a font whose <code>registry</code> property is
+&lsquo;<samp><span class="samp">JISX0208.1983-0</span></samp>&rsquo;.
+
+   <p><a name="index-list_002dcharset_002dchars-1476"></a><a name="index-characters-in-a-certain-charset-1477"></a><a name="index-describe_002dcharacter_002dset-1478"></a>  There are two commands that can be used to obtain information about
+charsets.  The command <kbd>M-x list-charset-chars</kbd> prompts for a
+charset name, and displays all the characters in that character set. 
+The command <kbd>M-x describe-character-set</kbd> prompts for a charset
+name, and displays information about that charset, including its
+internal representation within Emacs.
+
+   <p><a name="index-list_002dcharacter_002dsets-1479"></a>  To display a list of all supported charsets, type <kbd>M-x
+list-character-sets</kbd>.  The list gives the names of charsets and
+additional information to identity each charset (see
+<a href="http://www.itscj.ipsj.or.jp/ISO-IR/">http://www.itscj.ipsj.or.jp/ISO-IR/</a> for details).  In this list,
+charsets are divided into two categories: <dfn>normal charsets</dfn> are
+listed first, followed by <dfn>supplementary charsets</dfn>.  A
+supplementary charset is one that is used to define another charset
+(as a parent or a subset), or to provide backward-compatibility for
+older Emacs versions.
+
+   <p>To find out which charset a character in the buffer belongs to, put
+point before it and type <kbd>C-u C-x =</kbd> (see <a href="International-Chars.html#International-Chars">International Chars</a>).
+
+<!-- This is part of the Emacs manual. -->
+<!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
+<!-- See file emacs.texi for copying conditions. -->
+   </body></html>
+

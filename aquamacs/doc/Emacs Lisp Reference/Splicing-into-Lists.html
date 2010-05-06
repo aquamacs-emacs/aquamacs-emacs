@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Splicing into Lists - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization-Types.html#Customization-Types" title="Customization Types">
+<link rel="prev" href="Composite-Types.html#Composite-Types" title="Composite Types">
+<link rel="next" href="Type-Keywords.html#Type-Keywords" title="Type Keywords">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Splicing-into-Lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Type-Keywords.html#Type-Keywords">Type Keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Composite-Types.html#Composite-Types">Composite Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization-Types.html#Customization-Types">Customization Types</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.4.3 Splicing into Lists</h4>
+
+<p>The <code>:inline</code> feature lets you splice a variable number of
+elements into the middle of a list or vector.  You use it in a
+<code>set</code>, <code>choice</code> or <code>repeat</code> type which appears among the
+element-types of a <code>list</code> or <code>vector</code>.
+
+   <p>Normally, each of the element-types in a <code>list</code> or <code>vector</code>
+describes one and only one element of the list or vector.  Thus, if an
+element-type is a <code>repeat</code>, that specifies a list of unspecified
+length which appears as one element.
+
+   <p>But when the element-type uses <code>:inline</code>, the value it matches is
+merged directly into the containing sequence.  For example, if it
+matches a list with three elements, those become three elements of the
+overall sequence.  This is analogous to using &lsquo;<samp><span class="samp">,@</span></samp>&rsquo; in the backquote
+construct.
+
+   <p>For example, to specify a list whose first element must be <code>baz</code>
+and whose remaining arguments should be zero or more of <code>foo</code> and
+<code>bar</code>, use this customization type:
+
+<pre class="example">     (list (const baz) (set :inline t (const foo) (const bar)))
+</pre>
+   <p class="noindent">This matches values such as <code>(baz)</code>, <code>(baz foo)</code>, <code>(baz bar)</code>
+and <code>(baz foo bar)</code>.
+
+   <p>When the element-type is a <code>choice</code>, you use <code>:inline</code> not
+in the <code>choice</code> itself, but in (some of) the alternatives of the
+<code>choice</code>.  For example, to match a list which must start with a
+file name, followed either by the symbol <code>t</code> or two strings, use
+this customization type:
+
+<pre class="example">     (list file
+           (choice (const t)
+                   (list :inline t string string)))
+</pre>
+   <p class="noindent">If the user chooses the first alternative in the choice, then the
+overall list has two elements and the second element is <code>t</code>.  If
+the user chooses the second alternative, then the overall list has three
+elements and the second and third must be strings.
+
+   </body></html>
+

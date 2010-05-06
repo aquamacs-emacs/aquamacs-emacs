@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+<title>Equality Predicates - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Data-Types.html#Lisp-Data-Types" title="Lisp Data Types">
+<link rel="prev" href="Type-Predicates.html#Type-Predicates" title="Type Predicates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Equality-Predicates"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Type-Predicates.html#Type-Predicates">Type Predicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 Equality Predicates</h3>
+
+<p><a name="index-equality-122"></a>
+  Here we describe functions that test for equality between any two
+objects.  Other functions test equality of contents between objects of specific
+types, e.g., strings.  For these predicates, see the appropriate chapter
+describing the data type.
+
+<div class="defun">
+&mdash; Function: <b>eq</b><var> object1 object2<a name="index-eq-123"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> are
+the same object, <code>nil</code> otherwise.
+
+        <p><code>eq</code> returns <code>t</code> if <var>object1</var> and <var>object2</var> are
+integers with the same value.  Also, since symbol names are normally
+unique, if the arguments are symbols with the same name, they are
+<code>eq</code>.  For other types (e.g., lists, vectors, strings), two
+arguments with the same contents or elements are not necessarily
+<code>eq</code> to each other: they are <code>eq</code> only if they are the same
+object, meaning that a change in the contents of one will be reflected
+by the same change in the contents of the other.
+
+     <pre class="example">          (eq 'foo 'foo)
+               &rArr; t
+          
+          (eq 456 456)
+               &rArr; t
+          
+          (eq "asdf" "asdf")
+               &rArr; nil
+          
+          (eq "" "")
+               &rArr; t
+          ;; <span class="roman">This exception occurs because Emacs Lisp</span>
+          ;; <span class="roman">makes just one multibyte empty string, to save space.</span>
+          
+          (eq '(1 (2 (3))) '(1 (2 (3))))
+               &rArr; nil
+          
+          (setq foo '(1 (2 (3))))
+               &rArr; (1 (2 (3)))
+          (eq foo foo)
+               &rArr; t
+          (eq foo '(1 (2 (3))))
+               &rArr; nil
+          
+          (eq [(1 2) 3] [(1 2) 3])
+               &rArr; nil
+          
+          (eq (point-marker) (point-marker))
+               &rArr; nil
+</pre>
+        <p>The <code>make-symbol</code> function returns an uninterned symbol, distinct
+from the symbol that is used if you write the name in a Lisp expression. 
+Distinct symbols with the same name are not <code>eq</code>.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.
+
+     <pre class="example">          (eq (make-symbol "foo") 'foo)
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>equal</b><var> object1 object2<a name="index-equal-124"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> have
+equal components, <code>nil</code> otherwise.  Whereas <code>eq</code> tests if its
+arguments are the same object, <code>equal</code> looks inside nonidentical
+arguments to see if their elements or contents are the same.  So, if two
+objects are <code>eq</code>, they are <code>equal</code>, but the converse is not
+always true.
+
+     <pre class="example">          (equal 'foo 'foo)
+               &rArr; t
+          
+          (equal 456 456)
+               &rArr; t
+          
+          (equal "asdf" "asdf")
+               &rArr; t
+          (eq "asdf" "asdf")
+               &rArr; nil
+          
+          (equal '(1 (2 (3))) '(1 (2 (3))))
+               &rArr; t
+          (eq '(1 (2 (3))) '(1 (2 (3))))
+               &rArr; nil
+          
+          (equal [(1 2) 3] [(1 2) 3])
+               &rArr; t
+          (eq [(1 2) 3] [(1 2) 3])
+               &rArr; nil
+          
+          (equal (point-marker) (point-marker))
+               &rArr; t
+          
+          (eq (point-marker) (point-marker))
+               &rArr; nil
+</pre>
+        <p>Comparison of strings is case-sensitive, but does not take account of
+text properties&mdash;it compares only the characters in the strings.  Use
+<code>equal-including-properties</code> to also compare text properties.  For
+technical reasons, a unibyte string and a multibyte string are
+<code>equal</code> if and only if they contain the same sequence of
+character codes and all these codes are either in the range 0 through
+127 (<acronym>ASCII</acronym>) or 160 through 255 (<code>eight-bit-graphic</code>). 
+(see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
+
+     <pre class="example">          (equal "asdf" "ASDF")
+               &rArr; nil
+</pre>
+        <p>However, two distinct buffers are never considered <code>equal</code>, even if
+their textual contents are the same. 
+</p></blockquote></div>
+
+   <p>The test for equality is implemented recursively; for example, given
+two cons cells <var>x</var> and <var>y</var>, <code>(equal </code><var>x</var> <var>y</var><code>)</code>
+returns <code>t</code> if and only if both the expressions below return
+<code>t</code>:
+
+<pre class="example">     (equal (car <var>x</var>) (car <var>y</var>))
+     (equal (cdr <var>x</var>) (cdr <var>y</var>))
+</pre>
+   <p>Because of this recursive method, circular lists may therefore cause
+infinite recursion (leading to an error).
+
+<div class="defun">
+&mdash; Function: <b>equal-including-properties</b><var> object1 object2<a name="index-equal_002dincluding_002dproperties-125"></a></var><br>
+<blockquote><p>This function behaves like <code>equal</code> in all cases but also requires
+that for two strings to be equal, they have the same text properties.
+
+     <pre class="example">          (equal "asdf" (propertize "asdf" '(asdf t)))
+               &rArr; t
+          (equal-including-properties "asdf"
+                                      (propertize "asdf" '(asdf t)))
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
+<!-- Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>Displaying Buffers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Buffers-and-Windows.html#Buffers-and-Windows" title="Buffers and Windows">
+<link rel="next" href="Choosing-Window.html#Choosing-Window" title="Choosing Window">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Displaying-Buffers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Choosing-Window.html#Choosing-Window">Choosing Window</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.7 Displaying Buffers in Windows</h3>
+
+<p><a name="index-switching-to-a-buffer-2085"></a><a name="index-displaying-a-buffer-2086"></a>
+  In this section we describe convenient functions that choose a window
+automatically and use it to display a specified buffer.  These functions
+can also split an existing window in certain circumstances.  We also
+describe variables that parameterize the heuristics used for choosing a
+window. 
+See <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>, for
+low-level primitives that give you more precise control.  All of these
+functions work by calling <code>set-window-buffer</code>.
+
+   <p>Do not use the functions in this section in order to make a buffer
+current so that a Lisp program can access or modify it; they are too
+drastic for that purpose, since they change the display of buffers in
+windows, which would be gratuitous and surprise the user.  Instead, use
+<code>set-buffer</code> and <code>save-current-buffer</code> (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>), which designate buffers as current for programmed access
+without affecting the display of buffers in windows.
+
+<div class="defun">
+&mdash; Command: <b>switch-to-buffer</b><var> buffer-or-name &amp;optional norecord<a name="index-switch_002dto_002dbuffer-2087"></a></var><br>
+<blockquote><p>This function makes <var>buffer-or-name</var> the current buffer, and also
+displays the buffer in the selected window.  This means that a human can
+see the buffer and subsequent keyboard commands will apply to it. 
+Contrast this with <code>set-buffer</code>, which makes <var>buffer-or-name</var>
+the current buffer but does not display it in the selected window;
+see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
+
+        <p>If <var>buffer-or-name</var> is <code>nil</code>, <code>switch-to-buffer</code> chooses a
+buffer using <code>other-buffer</code>.  If <var>buffer-or-name</var> is a string
+that does not identify an existing buffer, then a new buffer by that
+name is created.  The major mode for the new buffer is set according to
+the variable <code>major-mode</code>; see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.
+
+        <p>When the selected window is the minibuffer window or is strongly
+dedicated to its buffer (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>), this function calls
+<code>pop-to-buffer</code> (see below) to display the buffer in some other
+window.
+
+        <p>Normally the specified buffer is put at the front of the buffer list
+(both the selected frame's buffer list and the frame-independent buffer
+list).  This affects the operation of <code>other-buffer</code>.  However, if
+<var>norecord</var> is non-<code>nil</code>, this is not done.  See <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>.
+
+        <p>The <code>switch-to-buffer</code> function is often used interactively, as
+the binding of <kbd>C-x b</kbd>.  It is also used frequently in programs.  It
+returns the buffer that it switched to. 
+</p></blockquote></div>
+
+   <p>The next two functions are similar to <code>switch-to-buffer</code>, except
+for the described features.
+
+<div class="defun">
+&mdash; Command: <b>switch-to-buffer-other-window</b><var> buffer-or-name &amp;optional norecord<a name="index-switch_002dto_002dbuffer_002dother_002dwindow-2088"></a></var><br>
+<blockquote><p>This function makes the buffer specified by <var>buffer-or-name</var> current
+and displays it in a window not currently selected, using the function
+<code>pop-to-buffer</code> (see below).
+
+        <p>The currently selected window is absolutely never used to do the job. 
+If the selected window already displays <var>buffer-or-name</var>, then it
+continues to do so, but another window is nonetheless found to display
+it in as well.
+
+        <p>This function updates the buffer list just like <code>switch-to-buffer</code>
+unless <var>norecord</var> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>pop-to-buffer</b><var> buffer-or-name &amp;optional other-window norecord<a name="index-pop_002dto_002dbuffer-2089"></a></var><br>
+<blockquote><p>This command makes <var>buffer-or-name</var> the current buffer and switches
+to it in some window, preferably not the window previously selected. 
+The &ldquo;popped-to&rdquo; window becomes the selected window.  Its frame is
+given the X server's focus, if possible; see <a href="Input-Focus.html#Input-Focus">Input Focus</a>.  The
+return value is the buffer that was switched to.
+
+        <p>If <var>buffer-or-name</var> is <code>nil</code>, that means to choose some other
+buffer, but you don't specify which.  If <var>buffer-or-name</var> is a
+string that does not name an existing buffer, a buffer by that name is
+created.  The major mode for the new buffer is set according to the
+variable <code>major-mode</code>.  See <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.
+
+        <p>If either of the variables <code>display-buffer-reuse-frames</code> or
+<code>pop-up-frames</code> is non-<code>nil</code>, <code>pop-to-buffer</code> looks for a
+window in any visible frame already displaying the buffer; if there is
+one, it selects and returns that window.  If no such window exists and
+<code>pop-up-frames</code> is non-<code>nil</code>, it creates a new frame and
+displays the buffer in it.  Otherwise, <code>pop-to-buffer</code> operates
+entirely within the selected frame.  (If the selected frame has just a
+minibuffer, <code>pop-to-buffer</code> operates within the most recently
+selected frame that was not just a minibuffer.)
+
+        <p>If the variable <code>pop-up-windows</code> is non-<code>nil</code>, windows may be
+split to create a new window that is different from the original window. 
+For details, see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>.
+
+        <p>If <var>other-window</var> is non-<code>nil</code>, <code>pop-to-buffer</code> finds or
+creates another window even if <var>buffer-or-name</var> is already visible
+in the selected window.  Thus <var>buffer-or-name</var> could end up
+displayed in two windows.  On the other hand, if <var>buffer-or-name</var> is
+already displayed in the selected window and <var>other-window</var> is
+<code>nil</code>, then the selected window is considered sufficient for
+displaying <var>buffer-or-name</var>, so that nothing needs to be done.
+
+        <p>All the variables that affect <code>display-buffer</code> affect
+<code>pop-to-buffer</code> as well.  See <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>.
+
+        <p>This function updates the buffer list just like <code>switch-to-buffer</code>
+unless <var>norecord</var> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>replace-buffer-in-windows</b><var> &amp;optional buffer-or-name<a name="index-replace_002dbuffer_002din_002dwindows-2090"></a></var><br>
+<blockquote><p>This function replaces <var>buffer-or-name</var> in all windows displaying
+it with some other buffer.  It uses <code>other-buffer</code> to choose the
+other buffer.  In the usual applications of this function, you
+don't care which other buffer is used; you just want to make sure that
+<var>buffer-or-name</var> is no longer displayed.
+
+        <p>The argument <var>buffer-or-name</var> may be a buffer or the name of an
+existing buffer and defaults to the current buffer.
+
+        <p>If a window displaying <var>buffer-or-name</var> is dedicated
+(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>), and is not the only window on its frame,
+that window is deleted.  If that window is the only window on its frame
+and there are other frames left, the window's frame is deleted too.  If
+there are no other frames left, some other buffer is displayed in that
+window.
+
+        <p>This function returns <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

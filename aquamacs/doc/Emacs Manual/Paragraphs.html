@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Paragraphs - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Sentences.html#Sentences" title="Sentences">
+<link rel="next" href="Pages.html#Pages" title="Pages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Paragraphs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Pages.html#Pages">Pages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sentences.html#Sentences">Sentences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">29.3 Paragraphs</h3>
+
+<p><a name="index-paragraphs-1562"></a><a name="index-manipulating-paragraphs-1563"></a><a name="index-M_002d_0040_007b-1564"></a><a name="index-M_002d_0040_007d-1565"></a><a name="index-backward_002dparagraph-1566"></a><a name="index-forward_002dparagraph-1567"></a>
+  The Emacs commands for manipulating paragraphs are also on Meta keys.
+
+     <dl>
+<dt><kbd>M-{</kbd><dd>Move back to previous paragraph beginning (<code>backward-paragraph</code>). 
+<br><dt><kbd>M-}</kbd><dd>Move forward to next paragraph end (<code>forward-paragraph</code>). 
+<br><dt><kbd>M-h</kbd><dd>Put point and mark around this or next paragraph (<code>mark-paragraph</code>). 
+</dl>
+
+   <p><kbd>M-{</kbd> moves to the beginning of the current or previous
+paragraph, while <kbd>M-}</kbd> moves to the end of the current or next
+paragraph.  Blank lines and text-formatter command lines separate
+paragraphs and are not considered part of any paragraph.  If there is
+a blank line before the paragraph, <kbd>M-{</kbd> moves to the blank line,
+because that is convenient in practice.
+
+   <p>In Text mode, an indented line is not a paragraph break.  If you
+want indented lines to have this effect, use Paragraph-Indent Text
+mode instead.  See <a href="Text-Mode.html#Text-Mode">Text Mode</a>.
+
+   <p>In major modes for programs, paragraphs begin and end only at blank
+lines.  This makes the paragraph commands useful, even though there
+are no paragraphs as such in a program.
+
+   <p>When you have set a fill prefix, then paragraphs are delimited by
+all lines which don't start with the fill prefix.  See <a href="Filling.html#Filling">Filling</a>.
+
+   <p><a name="index-M_002dh-1568"></a><a name="index-mark_002dparagraph-1569"></a>  When you wish to operate on a paragraph, type <kbd>M-h</kbd>
+(<code>mark-paragraph</code>) to set the region around it.  For example,
+<kbd>M-h C-w</kbd> kills the paragraph around or after point.  <kbd>M-h</kbd>
+puts point at the beginning and mark at the end of the paragraph point
+was in.  If point is between paragraphs (in a run of blank lines, or
+at a boundary), the paragraph following point is surrounded by point
+and mark.  If there are blank lines preceding the first line of the
+paragraph, one of these blank lines is included in the region.  If the
+region is already active, the command sets the mark without changing
+point; furthermore, each subsequent <kbd>M-h</kbd> further advances the
+mark by one paragraph.
+
+   <p><a name="index-paragraph_002dstart-1570"></a><a name="index-paragraph_002dseparate-1571"></a>  The precise definition of a paragraph boundary is controlled by the
+variables <code>paragraph-separate</code> and <code>paragraph-start</code>.  The
+value of <code>paragraph-start</code> is a regexp that should match any line
+that either starts or separates paragraphs.  The value of
+<code>paragraph-separate</code> is another regexp that should match only lines
+that separate paragraphs without being part of any paragraph (for
+example, blank lines).  Lines that start a new paragraph and are
+contained in it must match only <code>paragraph-start</code>, not
+<code>paragraph-separate</code>.  Each regular expression must match at the
+left margin.  For example, in Fundamental mode, <code>paragraph-start</code>
+is <code>"\f\\|[&nbsp;\t]*$"</code><!-- /@w -->, and <code>paragraph-separate</code> is
+<code>"[&nbsp;\t\f]*$"</code><!-- /@w -->.
+
+   <p>Normally it is desirable for page boundaries to separate paragraphs. 
+The default values of these variables recognize the usual separator for
+pages.
+
+   </body></html>
+

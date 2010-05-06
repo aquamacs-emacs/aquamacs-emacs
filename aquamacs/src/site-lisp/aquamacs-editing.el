@@ -111,13 +111,13 @@ like `unfill-region'."
 	(set (make-local-variable 'paragraph-start)
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))))
  
-(defcustom auto-word-wrap-default-function 'turn-on-word-wrap
+(defcustom auto-word-wrap-default-function 'set-word-wrap
   "Function to call if auto-detection of word wrapping failed.
 This serves as the default for word wrapping detection.
 Defaults to `turn-on-auto-fill' if nil."
   :group 'Aquamacs
   :group 'fill
-  :type '(choice (const nil)  (const turn-on-auto-fill) (const turn-on-word-wrap))
+  :type '(choice (const nil)  (const set-auto-fill) (const set-word-wrap))
   :version "22.0")
 
 (defalias 'auto-detect-longlines 'auto-detect-wrap)
@@ -128,9 +128,6 @@ word wrap (autofill) or soft word wrap (word-wrap).  The variable
 `auto-word-wrap-default-function' is used to determine the
 default in case there is not enough text."
   (interactive)
-  ;; (longlines-mode -1) ;; turn it off
-  (setq word-wrap nil)
-  (toggle-truncate-lines -1)
   ;; calc mean length of lines
   (save-excursion
     (beginning-of-buffer)
@@ -152,13 +149,11 @@ default in case there is not enough text."
 	  (let ((mean-line-length 
 		 (/ (- (point) start-point empty-lines) count)))
 	    (if (< mean-line-length (* 1.3 fill-column))
-		(turn-on-auto-fill)
+		(set-auto-fill)
 	      ;; long lines on average
 	      ;;(longlines-mode 1) ;; turn on longlines mode
-	      (turn-on-visual-line-mode)
-	      (if (interactive-p)
-		  (message "Soft word wrap auto-enabled."))))
-	    (funcall (or auto-word-wrap-default-function 'turn-on-auto-fill))))))
+	      (set-word-wrap)))
+	    (funcall (or auto-word-wrap-default-function 'set-auto-fill))))))
 
 ;; Keep a list of page scroll positions so that we can consistenly
 ;; scroll back and forth (page-wise) and end up in the same spots.

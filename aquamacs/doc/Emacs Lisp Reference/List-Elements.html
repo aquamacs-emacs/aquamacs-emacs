@@ -1,0 +1,252 @@
+<html lang="en">
+<head>
+<title>List Elements - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="List_002drelated-Predicates.html#List_002drelated-Predicates" title="List-related Predicates">
+<link rel="next" href="Building-Lists.html#Building-Lists" title="Building Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="List-Elements"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Building-Lists.html#Building-Lists">Building Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="List_002drelated-Predicates.html#List_002drelated-Predicates">List-related Predicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Accessing Elements of Lists</h3>
+
+<p><a name="index-list-elements-298"></a>
+
+<div class="defun">
+&mdash; Function: <b>car</b><var> cons-cell<a name="index-car-299"></a></var><br>
+<blockquote><p>This function returns the value referred to by the first slot of the
+cons cell <var>cons-cell</var>.  In other words, it returns the <span class="sc">car</span> of
+<var>cons-cell</var>.
+
+        <p>As a special case, if <var>cons-cell</var> is <code>nil</code>, this function
+returns <code>nil</code>.  Therefore, any list is a valid argument.  An
+error is signaled if the argument is not a cons cell or <code>nil</code>.
+
+     <pre class="example">          (car '(a b c))
+               &rArr; a
+          (car '())
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cdr</b><var> cons-cell<a name="index-cdr-300"></a></var><br>
+<blockquote><p>This function returns the value referred to by the second slot of the
+cons cell <var>cons-cell</var>.  In other words, it returns the <span class="sc">cdr</span> of
+<var>cons-cell</var>.
+
+        <p>As a special case, if <var>cons-cell</var> is <code>nil</code>, this function
+returns <code>nil</code>; therefore, any list is a valid argument.  An error
+is signaled if the argument is not a cons cell or <code>nil</code>.
+
+     <pre class="example">          (cdr '(a b c))
+               &rArr; (b c)
+          (cdr '())
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>car-safe</b><var> object<a name="index-car_002dsafe-301"></a></var><br>
+<blockquote><p>This function lets you take the <span class="sc">car</span> of a cons cell while avoiding
+errors for other data types.  It returns the <span class="sc">car</span> of <var>object</var> if
+<var>object</var> is a cons cell, <code>nil</code> otherwise.  This is in contrast
+to <code>car</code>, which signals an error if <var>object</var> is not a list.
+
+     <pre class="example">          (car-safe <var>object</var>)
+          ==
+          (let ((x <var>object</var>))
+            (if (consp x)
+                (car x)
+              nil))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cdr-safe</b><var> object<a name="index-cdr_002dsafe-302"></a></var><br>
+<blockquote><p>This function lets you take the <span class="sc">cdr</span> of a cons cell while
+avoiding errors for other data types.  It returns the <span class="sc">cdr</span> of
+<var>object</var> if <var>object</var> is a cons cell, <code>nil</code> otherwise. 
+This is in contrast to <code>cdr</code>, which signals an error if
+<var>object</var> is not a list.
+
+     <pre class="example">          (cdr-safe <var>object</var>)
+          ==
+          (let ((x <var>object</var>))
+            (if (consp x)
+                (cdr x)
+              nil))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>pop</b><var> listname<a name="index-pop-303"></a></var><br>
+<blockquote><p>This macro is a way of examining the <span class="sc">car</span> of a list,
+and taking it off the list, all at once.
+
+        <p>It operates on the list which is stored in the symbol <var>listname</var>. 
+It removes this element from the list by setting <var>listname</var>
+to the <span class="sc">cdr</span> of its old value&mdash;but it also returns the <span class="sc">car</span>
+of that list, which is the element being removed.
+
+     <pre class="example">          x
+               &rArr; (a b c)
+          (pop x)
+               &rArr; a
+          x
+               &rArr; (b c)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nth</b><var> n list<a name="index-nth-304"></a></var><br>
+<blockquote><p><a name="Definition-of-nth"></a>This function returns the <var>n</var>th element of <var>list</var>.  Elements
+are numbered starting with zero, so the <span class="sc">car</span> of <var>list</var> is
+element number zero.  If the length of <var>list</var> is <var>n</var> or less,
+the value is <code>nil</code>.
+
+        <p>If <var>n</var> is negative, <code>nth</code> returns the first element of
+<var>list</var>.
+
+     <pre class="example">          (nth 2 '(1 2 3 4))
+               &rArr; 3
+          (nth 10 '(1 2 3 4))
+               &rArr; nil
+          (nth -3 '(1 2 3 4))
+               &rArr; 1
+          
+          (nth n x) == (car (nthcdr n x))
+</pre>
+        <p>The function <code>elt</code> is similar, but applies to any kind of sequence. 
+For historical reasons, it takes its arguments in the opposite order. 
+See <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nthcdr</b><var> n list<a name="index-nthcdr-305"></a></var><br>
+<blockquote><p>This function returns the <var>n</var>th <span class="sc">cdr</span> of <var>list</var>.  In other
+words, it skips past the first <var>n</var> links of <var>list</var> and returns
+what follows.
+
+        <p>If <var>n</var> is zero or negative, <code>nthcdr</code> returns all of
+<var>list</var>.  If the length of <var>list</var> is <var>n</var> or less,
+<code>nthcdr</code> returns <code>nil</code>.
+
+     <pre class="example">          (nthcdr 1 '(1 2 3 4))
+               &rArr; (2 3 4)
+          (nthcdr 10 '(1 2 3 4))
+               &rArr; nil
+          (nthcdr -3 '(1 2 3 4))
+               &rArr; (1 2 3 4)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>last</b><var> list &amp;optional n<a name="index-last-306"></a></var><br>
+<blockquote><p>This function returns the last link of <var>list</var>.  The <code>car</code> of
+this link is the list's last element.  If <var>list</var> is null,
+<code>nil</code> is returned.  If <var>n</var> is non-<code>nil</code>, the
+<var>n</var>th-to-last link is returned instead, or the whole of <var>list</var>
+if <var>n</var> is bigger than <var>list</var>'s length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>safe-length</b><var> list<a name="index-safe_002dlength-307"></a></var><br>
+<blockquote><p><a name="Definition-of-safe_002dlength"></a>This function returns the length of <var>list</var>, with no risk of either
+an error or an infinite loop.  It generally returns the number of
+distinct cons cells in the list.  However, for circular lists,
+the value is just an upper bound; it is often too large.
+
+        <p>If <var>list</var> is not <code>nil</code> or a cons cell, <code>safe-length</code>
+returns 0. 
+</p></blockquote></div>
+
+   <p>The most common way to compute the length of a list, when you are not
+worried that it may be circular, is with <code>length</code>.  See <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>.
+
+<div class="defun">
+&mdash; Function: <b>caar</b><var> cons-cell<a name="index-caar-308"></a></var><br>
+<blockquote><p>This is the same as <code>(car (car </code><var>cons-cell</var><code>))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cadr</b><var> cons-cell<a name="index-cadr-309"></a></var><br>
+<blockquote><p>This is the same as <code>(car (cdr </code><var>cons-cell</var><code>))</code>
+or <code>(nth 1 </code><var>cons-cell</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cdar</b><var> cons-cell<a name="index-cdar-310"></a></var><br>
+<blockquote><p>This is the same as <code>(cdr (car </code><var>cons-cell</var><code>))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>cddr</b><var> cons-cell<a name="index-cddr-311"></a></var><br>
+<blockquote><p>This is the same as <code>(cdr (cdr </code><var>cons-cell</var><code>))</code>
+or <code>(nthcdr 2 </code><var>cons-cell</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>butlast</b><var> x &amp;optional n<a name="index-butlast-312"></a></var><br>
+<blockquote><p>This function returns the list <var>x</var> with the last element,
+or the last <var>n</var> elements, removed.  If <var>n</var> is greater
+than zero it makes a copy of the list so as not to damage the
+original list.  In general, <code>(append (butlast </code><var>x</var> <var>n</var><code>)
+(last </code><var>x</var> <var>n</var><code>))</code> will return a list equal to <var>x</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nbutlast</b><var> x &amp;optional n<a name="index-nbutlast-313"></a></var><br>
+<blockquote><p>This is a version of <code>butlast</code> that works by destructively
+modifying the <code>cdr</code> of the appropriate element, rather than
+making a copy of the list. 
+</p></blockquote></div>
+
+   </body></html>
+

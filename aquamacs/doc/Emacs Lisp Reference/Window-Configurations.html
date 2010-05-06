@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+<title>Window Configurations - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Window-Tree.html#Window-Tree" title="Window Tree">
+<link rel="next" href="Window-Parameters.html#Window-Parameters" title="Window Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-Configurations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Parameters.html#Window-Parameters">Window Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Tree.html#Window-Tree">Window Tree</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.19 Window Configurations</h3>
+
+<p><a name="index-window-configurations-2191"></a><a name="index-saving-window-information-2192"></a>
+  A <dfn>window configuration</dfn> records the entire layout of one
+frame&mdash;all windows, their sizes, which buffers they contain, how those
+buffers are scrolled, and their values of point and the mark; also their
+fringes, margins, and scroll bar settings.  It also includes the value
+of <code>minibuffer-scroll-window</code>.  As a special exception, the window
+configuration does not record the value of point in the selected window
+for the current buffer.  Also, the window configuration does not record
+the values of window parameters; see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>.
+
+   <p>You can bring back an entire frame layout by restoring a previously
+saved window configuration.  If you want to record the layout of all
+frames instead of just one, use a frame configuration instead of a
+window configuration; see <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>.
+
+<div class="defun">
+&mdash; Function: <b>current-window-configuration</b><var> &amp;optional frame<a name="index-current_002dwindow_002dconfiguration-2193"></a></var><br>
+<blockquote><p>This function returns a new object representing <var>frame</var>'s current
+window configuration.  The default for <var>frame</var> is the selected
+frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-window-configuration</b><var> configuration<a name="index-set_002dwindow_002dconfiguration-2194"></a></var><br>
+<blockquote><p>This function restores the configuration of windows and buffers as
+specified by <var>configuration</var>, for the frame that <var>configuration</var>
+was created for.
+
+        <p>The argument <var>configuration</var> must be a value that was previously
+returned by <code>current-window-configuration</code>.  The configuration is
+restored in the frame from which <var>configuration</var> was made, whether
+that frame is selected or not.  This always counts as a window size
+change and triggers execution of the <code>window-size-change-functions</code>
+(see <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>), because <code>set-window-configuration</code> doesn't
+know how to tell whether the new configuration actually differs from the
+old one.
+
+        <p>If the frame which <var>configuration</var> was saved from is dead, all this
+function does is restore the three variables <code>window-min-height</code>,
+<code>window-min-width</code> and <code>minibuffer-scroll-window</code>. In this
+case, the function returns <code>nil</code>.  Otherwise, it returns <code>t</code>.
+
+        <p>Here is a way of using this function to get the same effect
+as <code>save-window-excursion</code>:
+
+     <pre class="example">          (let ((config (current-window-configuration)))
+            (unwind-protect
+                (progn (split-window-vertically nil)
+                       ...)
+              (set-window-configuration config)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>save-window-excursion</b><var> forms<small class="dots">...</small><a name="index-save_002dwindow_002dexcursion-2195"></a></var><br>
+<blockquote><p>This special form records the window configuration, executes <var>forms</var>
+in sequence, then restores the earlier window configuration.  The window
+configuration includes, for each window, the value of point and the
+portion of the buffer that is visible.  It also includes the choice of
+selected window.  However, it does not include the value of point in
+the current buffer; use <code>save-excursion</code> also, if you wish to
+preserve that.
+
+        <p>Don't use this construct when <code>save-selected-window</code> is sufficient.
+
+        <p>Exit from <code>save-window-excursion</code> always triggers execution of
+<code>window-size-change-functions</code>.  (It doesn't know how to tell
+whether the restored configuration actually differs from the one in
+effect at the end of the <var>forms</var>.)
+
+        <p>The return value is the value of the final form in <var>forms</var>. 
+For example:
+
+     <pre class="example">          (split-window)
+               &rArr; #&lt;window 25 on control.texi&gt;
+          (setq w (selected-window))
+               &rArr; #&lt;window 19 on control.texi&gt;
+          (save-window-excursion
+            (delete-other-windows w)
+            (switch-to-buffer "foo")
+            'do-something)
+               &rArr; do-something
+               ;; <span class="roman">The screen is now split again.</span>
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-configuration-p</b><var> object<a name="index-window_002dconfiguration_002dp-2196"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a window configuration. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compare-window-configurations</b><var> config1 config2<a name="index-compare_002dwindow_002dconfigurations-2197"></a></var><br>
+<blockquote><p>This function compares two window configurations as regards the
+structure of windows, but ignores the values of point and mark and the
+saved scrolling positions&mdash;it can return <code>t</code> even if those
+aspects differ.
+
+        <p>The function <code>equal</code> can also compare two window configurations; it
+regards configurations as unequal if they differ in any respect, even a
+saved point or mark. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-configuration-frame</b><var> config<a name="index-window_002dconfiguration_002dframe-2198"></a></var><br>
+<blockquote><p>This function returns the frame for which the window configuration
+<var>config</var> was made. 
+</p></blockquote></div>
+
+   <p>Other primitives to look inside of window configurations would make
+sense, but are not implemented because we did not need them.  See the
+file <samp><span class="file">winner.el</span></samp> for some more operations on windows
+configurations.
+
+   </body></html>
+

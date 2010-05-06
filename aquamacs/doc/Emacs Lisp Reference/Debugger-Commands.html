@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Debugger Commands - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugger.html#Debugger" title="Debugger">
+<link rel="prev" href="Using-Debugger.html#Using-Debugger" title="Using Debugger">
+<link rel="next" href="Invoking-the-Debugger.html#Invoking-the-Debugger" title="Invoking the Debugger">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Debugger-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Invoking-the-Debugger.html#Invoking-the-Debugger">Invoking the Debugger</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-Debugger.html#Using-Debugger">Using Debugger</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.1.6 Debugger Commands</h4>
+
+<p><a name="index-debugger-command-list-938"></a>
+  The debugger buffer (in Debugger mode) provides special commands in
+addition to the usual Emacs commands.  The most important use of
+debugger commands is for stepping through code, so that you can see
+how control flows.  The debugger can step through the control
+structures of an interpreted function, but cannot do so in a
+byte-compiled function.  If you would like to step through a
+byte-compiled function, replace it with an interpreted definition of
+the same function.  (To do this, visit the source for the function and
+type <kbd>C-M-x</kbd> on its definition.)  You cannot use the Lisp debugger
+to step through a primitive function.
+
+   <p>Here is a list of Debugger mode commands:
+
+     <dl>
+<dt><kbd>c</kbd><dd>Exit the debugger and continue execution.  When continuing is possible,
+it resumes execution of the program as if the debugger had never been
+entered (aside from any side-effects that you caused by changing
+variable values or data structures while inside the debugger).
+
+     <p>Continuing is possible after entry to the debugger due to function entry
+or exit, explicit invocation, or quitting.  You cannot continue if the
+debugger was entered because of an error.
+
+     <br><dt><kbd>d</kbd><dd>Continue execution, but enter the debugger the next time any Lisp
+function is called.  This allows you to step through the
+subexpressions of an expression, seeing what values the subexpressions
+compute, and what else they do.
+
+     <p>The stack frame made for the function call which enters the debugger in
+this way will be flagged automatically so that the debugger will be
+called again when the frame is exited.  You can use the <kbd>u</kbd> command
+to cancel this flag.
+
+     <br><dt><kbd>b</kbd><dd>Flag the current frame so that the debugger will be entered when the
+frame is exited.  Frames flagged in this way are marked with stars
+in the backtrace buffer.
+
+     <br><dt><kbd>u</kbd><dd>Don't enter the debugger when the current frame is exited.  This
+cancels a <kbd>b</kbd> command on that frame.  The visible effect is to
+remove the star from the line in the backtrace buffer.
+
+     <br><dt><kbd>j</kbd><dd>Flag the current frame like <kbd>b</kbd>.  Then continue execution like
+<kbd>c</kbd>, but temporarily disable break-on-entry for all functions that
+are set up to do so by <code>debug-on-entry</code>.
+
+     <br><dt><kbd>e</kbd><dd>Read a Lisp expression in the minibuffer, evaluate it, and print the
+value in the echo area.  The debugger alters certain important
+variables, and the current buffer, as part of its operation; <kbd>e</kbd>
+temporarily restores their values from outside the debugger, so you can
+examine and change them.  This makes the debugger more transparent.  By
+contrast, <kbd>M-:</kbd> does nothing special in the debugger; it shows you
+the variable values within the debugger.
+
+     <br><dt><kbd>R</kbd><dd>Like <kbd>e</kbd>, but also save the result of evaluation in the
+buffer &lsquo;<samp><span class="samp">*Debugger-record*</span></samp>&rsquo;.
+
+     <br><dt><kbd>q</kbd><dd>Terminate the program being debugged; return to top-level Emacs
+command execution.
+
+     <p>If the debugger was entered due to a <kbd>C-g</kbd> but you really want
+to quit, and not debug, use the <kbd>q</kbd> command.
+
+     <br><dt><kbd>r</kbd><dd>Return a value from the debugger.  The value is computed by reading an
+expression with the minibuffer and evaluating it.
+
+     <p>The <kbd>r</kbd> command is useful when the debugger was invoked due to exit
+from a Lisp call frame (as requested with <kbd>b</kbd> or by entering the
+frame with <kbd>d</kbd>); then the value specified in the <kbd>r</kbd> command is
+used as the value of that frame.  It is also useful if you call
+<code>debug</code> and use its return value.  Otherwise, <kbd>r</kbd> has the same
+effect as <kbd>c</kbd>, and the specified return value does not matter.
+
+     <p>You can't use <kbd>r</kbd> when the debugger was entered due to an error.
+
+     <br><dt><kbd>l</kbd><dd>Display a list of functions that will invoke the debugger when called. 
+This is a list of functions that are set to break on entry by means of
+<code>debug-on-entry</code>.  <strong>Warning:</strong> if you redefine such a
+function and thus cancel the effect of <code>debug-on-entry</code>, it may
+erroneously show up in this list. 
+</dl>
+
+   </body></html>
+

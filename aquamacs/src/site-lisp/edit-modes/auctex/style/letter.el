@@ -1,6 +1,6 @@
 ;;; letter.el - Special code for letter style.
 
-;; $Id: letter.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
+;; $Id: letter.el,v 1.4 2008/05/25 06:50:33 angeli Exp $
 
 ;;; Code:
 
@@ -23,15 +23,15 @@
 
 (defun LaTeX-env-recipient (environment)
   "Insert ENVIRONMENT and prompt for recipient and address."
-  (let ((sender (read-input "Sender: " (user-full-name)))
-	(sender-address (read-input "Sender address: "
+  (let ((sender (read-string "Sender: " (user-full-name)))
+	(sender-address (read-string "Sender address: "
 				    LaTeX-letter-sender-address))
-	(recipient (read-input "Recipient: "))
-	(address (read-input "Recipient address: "))
-	(signature (read-input "Signature: "))
-	(opening (read-input "Opening: "))
-	(closing (read-input "Closing: "))
-	(date (read-input "Date: " (LaTeX-today))))
+	(recipient (read-string "Recipient: "))
+	(address (read-string "Recipient address: "))
+	(signature (read-string "Signature: "))
+	(opening (read-string "Opening: "))
+	(closing (read-string "Closing: "))
+	(date (read-string "Date: " (LaTeX-today))))
 
     (insert TeX-esc "name" TeX-grop sender TeX-grcl)
     (newline-and-indent)

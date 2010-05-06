@@ -3676,6 +3676,7 @@ FRAME_PTR f;
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
 
+#if 0 /* does harm and doesnt seem to be needed. */
 	  /* Handle scroll bars */
 	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
 	  if (fs)
@@ -3702,7 +3703,7 @@ FRAME_PTR f;
 						       ns_fullscreen_vertical_scrollbar_state),
 	      					Qnil));
 	    }
-	    
+#endif	    
 	  /* Fixme: after going back to normal mode, scroll bars flicker heavily
 	     Miniaturizing/de-m. removes flicker.  Why? */
 
@@ -4024,9 +4025,9 @@ ns_term_init (Lisp_Object display_name)
   [NSApp setDelegate: NSApp];
 
   /* debugging: log all notifications */
-  /*   [[NSNotificationCenter defaultCenter] addObserver: NSApp
-                                         selector: @selector (logNotification:)
-                                             name: nil object: nil]; */
+    // [[NSNotificationCenter defaultCenter] addObserver: NSApp
+    //                                      selector: @selector (logNotification:)
+    //                                          name: nil object: nil];
 
   dpyinfo = (struct ns_display_info *)xmalloc (sizeof (struct ns_display_info));
   bzero (dpyinfo, sizeof (struct ns_display_info));
@@ -4249,6 +4250,13 @@ ns_term_init (Lisp_Object display_name)
     [NSApp setServicesMenu: svcsMenu];
     /* Needed at least on Cocoa, to get dock menu to show windows */
     [NSApp setWindowsMenu: [[NSMenu alloc] init]];
+
+    [[NSNotificationCenter defaultCenter] addObserver: mainMenu
+					     selector: @selector (trackingNotification:)
+                                             name: NSMenuDidBeginTrackingNotification object: mainMenu];
+    [[NSNotificationCenter defaultCenter] addObserver: mainMenu
+					     selector: @selector (trackingNotification:)
+                                             name: NSMenuDidEndTrackingNotification object: mainMenu];
   }
 #endif /* MAC OS X menu setup */
 
@@ -4730,12 +4738,10 @@ ns_term_shutdown (int sig)
 
 @implementation EmacsView
 
-/* needed to inform when window closed from LISP */
 - (void) setWindowClosing: (BOOL)closing
 {
   windowClosing = closing;
 }
-
 
 - (void)dealloc
 {
@@ -4961,7 +4967,6 @@ ns_term_shutdown (int sig)
   static BOOL firstTime = YES;
 
   NSTRACE (keyDown);
-
   /* Rhapsody and OS X give up and down events for the arrow keys */
   if (ns_fake_keydown == YES)
     ns_fake_keydown = NO;
@@ -5027,7 +5032,8 @@ ns_term_shutdown (int sig)
 
       if (flags & NSCommandKeyMask)
         {
-	  if (flags & NSLeftCommandKeyMask)
+	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
+	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
 	    {
 	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
@@ -5072,7 +5078,7 @@ ns_term_shutdown (int sig)
 
       if (flags & NSControlKeyMask)
 	{
-	  if (flags & NSLeftControlKeyMask)
+	  if (flags & NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier (ns_control_modifier);
 	  if (flags & NSRightControlKeyMask)
@@ -5114,7 +5120,7 @@ ns_term_shutdown (int sig)
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
 	}
-      if (flags & NSLeftAlternateKeyMask) /* default = meta */
+      if (flags & NSLeftAlternateKeyMask || (flags & NSAlternateKeyMask && ! (flags & NSRightAlternateKeyMask))) /* default = meta */
 	{
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
@@ -6211,7 +6217,7 @@ ns_term_shutdown (int sig)
   else if ([type isEqualToString: NSColorPboardType])
     {
       NSColor *c = [NSColor colorFromPasteboard: pb];
-      emacs_event->kind = NS_NONKEY_EVENT;
+      emacs_event->kind = NS_MOUSEDRAG_EVENT;
       emacs_event->code = KEY_NS_DRAG_COLOR;
       XSETINT (emacs_event->x, x);
       XSETINT (emacs_event->y, y);
@@ -6381,6 +6387,9 @@ ns_term_shutdown (int sig)
   else
     [super mouseDragged: theEvent];
 }
+
+
+@end
 
 @end /* EmacsWindow */
 

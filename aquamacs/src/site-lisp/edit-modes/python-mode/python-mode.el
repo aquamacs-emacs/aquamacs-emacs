@@ -9,7 +9,7 @@
 ;; Created:    Feb 1992
 ;; Keywords:   python languages oop
 
-(defconst py-version "5.1.0"
+(defconst py-version "5.1.0aq"
   "`python-mode' version number.")
 
 ;; This file is part of python-mode.el.
@@ -622,26 +622,29 @@ Currently-active file is at the head of the list.")
 (and (fboundp 'make-obsolete-variable)
      (make-obsolete-variable 'py-mode-hook 'python-mode-hook))
 
-(defvar py-mode-map ()
+(and (fboundp 'make-obsolete-variable)
+     (make-obsolete-variable 'py-mode-map 'python-mode-map))
+
+(defvar python-mode-map ()
   "Keymap used in `python-mode' buffers.")
-(if py-mode-map
+(if python-mode-map
     nil
-  (setq py-mode-map (make-sparse-keymap))
+  (setq python-mode-map (make-sparse-keymap))
   ;; electric keys
-  (define-key py-mode-map ":" 'py-electric-colon)
+  (define-key python-mode-map ":" 'py-electric-colon)
   ;; indentation level modifiers
-  (define-key py-mode-map "\C-c\C-l"  'py-shift-region-left)
-  (define-key py-mode-map "\C-c\C-r"  'py-shift-region-right)
-  (define-key py-mode-map "\C-c<"     'py-shift-region-left)
-  (define-key py-mode-map "\C-c>"     'py-shift-region-right)
+  (define-key python-mode-map "\C-c\C-l"  'py-shift-region-left)
+  (define-key python-mode-map "\C-c\C-r"  'py-shift-region-right)
+  (define-key python-mode-map "\C-c<"     'py-shift-region-left)
+  (define-key python-mode-map "\C-c>"     'py-shift-region-right)
   ;; subprocess commands
-  (define-key py-mode-map "\C-c\C-c"  'py-execute-buffer)
-  (define-key py-mode-map "\C-c\C-m"  'py-execute-import-or-reload)
-  (define-key py-mode-map "\C-c\C-s"  'py-execute-string)
-  (define-key py-mode-map "\C-c|"     'py-execute-region)
-  (define-key py-mode-map "\e\C-x"    'py-execute-def-or-class)
-  (define-key py-mode-map "\C-c!"     'py-shell)
-  (define-key py-mode-map "\C-c\C-t"  'py-toggle-shells)
+  (define-key python-mode-map "\C-c\C-c"  'py-execute-buffer)
+  (define-key python-mode-map "\C-c\C-m"  'py-execute-import-or-reload)
+  (define-key python-mode-map "\C-c\C-s"  'py-execute-string)
+  (define-key python-mode-map "\C-c|"     'py-execute-region)
+  (define-key python-mode-map "\e\C-x"    'py-execute-def-or-class)
+  (define-key python-mode-map "\C-c!"     'py-shell)
+  (define-key python-mode-map "\C-c\C-t"  'py-toggle-shells)
   ;; Caution!  Enter here at your own risk.  We are trying to support
   ;; several behaviors and it gets disgusting. :-( This logic ripped
   ;; largely from CC Mode.
@@ -652,44 +655,44 @@ Currently-active file is at the head of the list.")
   ;; behavior in a clean way, so deal with it!  Besides, it's been
   ;; this way since the dawn of time.
   (if (not (boundp 'delete-key-deletes-forward))
-      (define-key py-mode-map "\177" 'py-electric-backspace)
+      (define-key python-mode-map "\177" 'py-electric-backspace)
     ;; However, XEmacs 20 actually achieved enlightenment.  It is
     ;; possible to sanely define both backward and forward deletion
     ;; behavior under X separately (TTYs are forever beyond hope, but
     ;; who cares?  XEmacs 20 does the right thing with these too).
-    (define-key py-mode-map [delete]    'py-electric-delete)
-    (define-key py-mode-map [backspace] 'py-electric-backspace))
+    (define-key python-mode-map [delete]    'py-electric-delete)
+    (define-key python-mode-map [backspace] 'py-electric-backspace))
   ;; Separate M-BS from C-M-h.  The former should remain
   ;; backward-kill-word.
-  (define-key py-mode-map [(control meta h)] 'py-mark-def-or-class)
-  (define-key py-mode-map "\C-c\C-k"  'py-mark-block)
+  (define-key python-mode-map [(control meta h)] 'py-mark-def-or-class)
+  (define-key python-mode-map "\C-c\C-k"  'py-mark-block)
   ;; Miscellaneous
-  (define-key py-mode-map "\C-c:"     'py-guess-indent-offset)
-  (define-key py-mode-map "\C-c\t"    'py-indent-region)
-  (define-key py-mode-map "\C-c\C-d"  'py-pdbtrack-toggle-stack-tracking)
-  (define-key py-mode-map "\C-c\C-f"  'py-sort-imports)
-  (define-key py-mode-map "\C-c\C-n"  'py-next-statement)
-  (define-key py-mode-map "\C-c\C-p"  'py-previous-statement)
-  (define-key py-mode-map "\C-c\C-u"  'py-goto-block-up)
-  (define-key py-mode-map "\C-c#"     'py-comment-region)
-  (define-key py-mode-map "\C-c?"     'py-describe-mode)
-  (define-key py-mode-map "\C-c\C-h"  'py-help-at-point)
-  (define-key py-mode-map "\e\C-a"    'py-beginning-of-def-or-class)
-  (define-key py-mode-map "\e\C-e"    'py-end-of-def-or-class)
-  (define-key py-mode-map "\C-c-"     'py-up-exception)
-  (define-key py-mode-map "\C-c="     'py-down-exception)
+  (define-key python-mode-map "\C-c:"     'py-guess-indent-offset)
+  (define-key python-mode-map "\C-c\t"    'py-indent-region)
+  (define-key python-mode-map "\C-c\C-d"  'py-pdbtrack-toggle-stack-tracking)
+  (define-key python-mode-map "\C-c\C-f"  'py-sort-imports)
+  (define-key python-mode-map "\C-c\C-n"  'py-next-statement)
+  (define-key python-mode-map "\C-c\C-p"  'py-previous-statement)
+  (define-key python-mode-map "\C-c\C-u"  'py-goto-block-up)
+  (define-key python-mode-map "\C-c#"     'py-comment-region)
+  (define-key python-mode-map "\C-c?"     'py-describe-mode)
+  (define-key python-mode-map "\C-c\C-h"  'py-help-at-point)
+  (define-key python-mode-map "\e\C-a"    'py-beginning-of-def-or-class)
+  (define-key python-mode-map "\e\C-e"    'py-end-of-def-or-class)
+  (define-key python-mode-map "\C-c-"     'py-up-exception)
+  (define-key python-mode-map "\C-c="     'py-down-exception)
   ;; stuff that is `standard' but doesn't interface well with
   ;; python-mode, which forces us to rebind to special commands
-  (define-key py-mode-map "\C-xnd"    'py-narrow-to-defun)
+  (define-key python-mode-map "\C-xnd"    'py-narrow-to-defun)
   ;; information
-  (define-key py-mode-map "\C-c\C-b" 'py-submit-bug-report)
-  (define-key py-mode-map "\C-c\C-v" 'py-version)
-  (define-key py-mode-map "\C-c\C-w" 'py-pychecker-run)
+  (define-key python-mode-map "\C-c\C-b" 'py-submit-bug-report)
+  (define-key python-mode-map "\C-c\C-v" 'py-version)
+  (define-key python-mode-map "\C-c\C-w" 'py-pychecker-run)
   ;; shadow global bindings for newline-and-indent w/ the py- version.
   ;; BAW - this is extremely bad form, but I'm not going to change it
   ;; for now.
   (mapc #'(lambda (key)
-            (define-key py-mode-map key 'py-newline-and-indent))
+            (define-key python-mode-map key 'py-newline-and-indent))
         (where-is-internal 'newline-and-indent))
   ;; Force RET to be py-newline-and-indent even if it didn't get
   ;; mapped by the above code.  motivation: Emacs' default binding for
@@ -699,7 +702,7 @@ Currently-active file is at the head of the list.")
   ;; However, we do *not* change C-j since many Emacsers have already
   ;; swapped RET and C-j and they don't want C-j bound to `newline' to
   ;; change.
-  (define-key py-mode-map "\C-m" 'py-newline-and-indent)
+  (define-key python-mode-map "\C-m" 'py-newline-and-indent)
   )
 
 (defvar py-mode-output-map nil
@@ -878,7 +881,7 @@ package.  Note that the latest X/Emacs releases contain this package.")
 
 (and (py-safe (require 'easymenu) t)
      (easy-menu-define
-      py-menu py-mode-map "Python Mode menu"
+      py-menu python-mode-map "Python Mode menu"
       '("Python"
         ["Comment Out Region"   py-comment-region  (mark)]
         ["Uncomment Region"     (py-comment-region (point) (mark) '(4)) (mark)]
@@ -1166,7 +1169,7 @@ This mode knows about Python indentation, tokens, comments and
 continuation lines.  Paragraphs are separated by blank lines only.
 
 COMMANDS
-\\{py-mode-map}
+\\{python-mode-map}
 VARIABLES
 
 py-indent-offset\t\tindentation increment
@@ -1211,7 +1214,7 @@ py-beep-if-tab-change\t\tring the bell if `tab-width' is changed"
 
         fill-paragraph-function 'py-fill-paragraph
         )
-  (use-local-map py-mode-map)
+  (use-local-map python-mode-map)
   ;; add the menu
   (if py-menu
       (easy-menu-add py-menu))
@@ -1226,9 +1229,8 @@ py-beep-if-tab-change\t\tring the bell if `tab-width' is changed"
         (imenu-add-to-menubar (format "%s-%s" "IM" mode-name)))
     )
   ;; Run the mode hook.  Note that py-mode-hook is deprecated.
-  (if python-mode-hook
-      (run-hooks 'python-mode-hook)
-    (run-hooks 'py-mode-hook))
+  
+  (run-mode-hooks (if python-mode-hook 'python-mode-hook 'py-mode-hook))
   ;; Now do the automagical guessing
   (if py-smart-indentation
     (let ((offset py-indent-offset))
@@ -3131,7 +3133,7 @@ A `nomenclature' is a fancy way of saying AWordWithMixedCaseNotUnderscores."
                 keys (concat
                       "Key(s): "
                       (mapconcat 'key-description
-                                 (where-is-internal func py-mode-map)
+                                 (where-is-internal func python-mode-map)
                                  ", "))))
          ((equal funckind "v")          ; variable
           (setq funcdoc (documentation-property func 'variable-documentation)

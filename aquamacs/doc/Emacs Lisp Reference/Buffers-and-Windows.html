@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Buffers and Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" title="Cyclic Window Ordering">
+<link rel="next" href="Displaying-Buffers.html#Displaying-Buffers" title="Displaying Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Buffers-and-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.6 Buffers and Windows</h3>
+
+<p><a name="index-examining-windows-2076"></a><a name="index-windows_002c-controlling-precisely-2077"></a><a name="index-buffers_002c-controlled-in-windows-2078"></a>
+  This section describes low-level functions to examine windows or to
+display buffers in windows in a precisely controlled fashion. 
+See <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>, for
+related functions that find a window to use and specify a buffer for it. 
+The functions described there are easier to use, but they employ
+heuristics in choosing or creating a window; use the functions described
+here when you need complete control.
+
+<div class="defun">
+&mdash; Function: <b>set-window-buffer</b><var> window buffer-or-name &amp;optional keep-margins<a name="index-set_002dwindow_002dbuffer-2079"></a></var><br>
+<blockquote><p>This function makes <var>window</var> display <var>buffer-or-name</var> as its
+contents.  It returns <code>nil</code>.  The default for <var>window</var> is the
+selected window.  The argument <var>buffer-or-name</var> must specify a
+buffer or the name of an existing buffer.
+
+        <p><code>set-window-buffer</code> is the fundamental primitive for changing which
+buffer is displayed in a window, and all ways of doing that call this
+function.
+
+     <pre class="example">          (set-window-buffer (selected-window) "foo")
+               &rArr; nil
+</pre>
+        <p>Normally, displaying <var>buffer-or-name</var> in <var>window</var> resets the
+window's position, display margins, fringe widths, and scroll bar
+settings based on the local variables of that buffer. 
+However, if <var>keep-margins</var> is non-<code>nil</code>, display margins and
+fringe widths of <var>window</var> remain unchanged.  See <a href="Fringes.html#Fringes">Fringes</a>.
+
+        <p><code>set-window-buffer</code> signals an error when <var>window</var> is
+<dfn>strongly</dfn> dedicated to its buffer (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) and
+does not already display <var>buffer-or-name</var>.
+
+        <p>Note that this function runs <code>window-scroll-functions</code> before
+running <code>window-configuration-change-hook</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-display-count</b><var><a name="index-buffer_002ddisplay_002dcount-2080"></a></var><br>
+<blockquote><p>This buffer-local variable records the number of times a buffer has been
+displayed in a window.  It is incremented each time
+<code>set-window-buffer</code> is called for the buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-buffer</b><var> &amp;optional window<a name="index-window_002dbuffer-2081"></a></var><br>
+<blockquote><p>This function returns the buffer that <var>window</var> is displaying.  The
+default for <var>window</var> is the selected window.
+
+     <pre class="example">          (window-buffer)
+               &rArr; #&lt;buffer windows.texi&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-buffer-window</b><var> &amp;optional buffer-or-name all-frames<a name="index-get_002dbuffer_002dwindow-2082"></a></var><br>
+<blockquote><p>This function returns a window currently displaying
+<var>buffer-or-name</var>, or <code>nil</code> if there is none.  If there are
+several such windows, then the function returns the first one in the
+cyclic ordering of windows, starting from the selected window. 
+See <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>.
+
+        <p>The argument <var>BUFFER-OR-NAME</var> may be a buffer or a buffer name and
+defaults to the current buffer.  The optional argument <var>all-frames</var>
+specifies which windows to consider:
+
+          <ul>
+<li><code>nil</code> means consider windows on the selected frame. 
+<li><code>t</code> means consider windows on all existing frames. 
+<li><code>visible</code> means consider windows on all visible frames. 
+<li>0 means consider windows on all visible or iconified frames. 
+<li>A frame means consider windows on that frame only. 
+</ul>
+
+        <p>Observe that the behavior of <code>get-buffer-window</code> may differ from
+that of <code>next-window</code> (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>) when
+<var>all-frames</var> equals <code>nil</code> or any value not listed here. 
+Perhaps we will change <code>get-buffer-window</code> in the future to make it
+compatible with the other functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-buffer-window-list</b><var> &amp;optional buffer-or-name minibuf all-frames<a name="index-get_002dbuffer_002dwindow_002dlist-2083"></a></var><br>
+<blockquote><p>This function returns a list of all windows currently displaying
+<var>buffer-or-name</var>.  The argument <var>buffer-or-name</var> may be a buffer
+or the name of an existing buffer and defaults to the current buffer.
+
+        <p>The two remaining arguments work like the same-named arguments of
+<code>next-window</code>; they are <em>not</em> like the optional arguments of
+<code>get-buffer-window</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>buffer-display-time</b><var><a name="index-buffer_002ddisplay_002dtime-2084"></a></var><br>
+<blockquote><p>This variable records the time at which a buffer was last made visible
+in a window.  It is always local in each buffer; each time
+<code>set-window-buffer</code> is called, it sets this variable to
+<code>(current-time)</code> in the specified buffer (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>). 
+When a buffer is first created, <code>buffer-display-time</code> starts out
+with the value <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

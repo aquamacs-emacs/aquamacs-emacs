@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Indenting Macros - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Macros.html#Macros" title="Macros">
+<link rel="prev" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Indenting-Macros"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+<hr>
+</div>
+
+<h3 class="section">13.7 Indenting Macros</h3>
+
+<p>You can use the <code>declare</code> form in the macro definition to
+specify how to &lt;TAB&gt; should indent calls to the macro.  You
+write it like this:
+
+<pre class="example">     (declare (indent <var>indent-spec</var>))
+</pre>
+   <p class="noindent">Here are the possibilities for <var>indent-spec</var>:
+
+     <dl>
+<dt><code>nil</code><dd>This is the same as no property&mdash;use the standard indentation pattern. 
+<br><dt><code>defun</code><dd>Handle this function like a &lsquo;<samp><span class="samp">def</span></samp>&rsquo; construct: treat the second
+line as the start of a <dfn>body</dfn>. 
+<br><dt>an integer, <var>number</var><dd>The first <var>number</var> arguments of the function are
+<dfn>distinguished</dfn> arguments; the rest are considered the body
+of the expression.  A line in the expression is indented according to
+whether the first argument on it is distinguished or not.  If the
+argument is part of the body, the line is indented <code>lisp-body-indent</code>
+more columns than the open-parenthesis starting the containing
+expression.  If the argument is distinguished and is either the first
+or second argument, it is indented <em>twice</em> that many extra columns. 
+If the argument is distinguished and not the first or second argument,
+the line uses the standard pattern. 
+<br><dt>a symbol, <var>symbol</var><dd><var>symbol</var> should be a function name; that function is called to
+calculate the indentation of a line within this expression.  The
+function receives two arguments:
+          <dl>
+<dt><var>state</var><dd>The value returned by <code>parse-partial-sexp</code> (a Lisp primitive for
+indentation and nesting computation) when it parses up to the
+beginning of this line. 
+<br><dt><var>pos</var><dd>The position at which the line being indented begins. 
+</dl>
+     It should return either a number, which is the number of columns of
+indentation for that line, or a list whose car is such a number.  The
+difference between returning a number and returning a list is that a
+number says that all following lines at the same nesting level should
+be indented just like this one; a list says that following lines might
+call for different indentations.  This makes a difference when the
+indentation is being computed by <kbd>C-M-q</kbd>; if the value is a
+number, <kbd>C-M-q</kbd> need not recalculate indentation for the following
+lines until the end of the list. 
+</dl>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

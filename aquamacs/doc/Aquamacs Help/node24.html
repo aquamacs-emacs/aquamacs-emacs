@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Customizing Aquamacs</TITLE>
+<META NAME="description" CONTENT="Customizing Aquamacs">
+<META NAME="keywords" CONTENT="aquamacs">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="aquamacs.css">
+
+<LINK REL="next" HREF="node25.html">
+<LINK REL="previous" HREF="node23.html">
+<LINK REL="up" HREF="node21.html">
+<LINK REL="next" HREF="node25.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html481"
+  HREF="node25.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html477"
+  HREF="node21.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html471"
+  HREF="node23.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html479"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html482"
+  HREF="node25.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html478"
+  HREF="node21.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html472"
+  HREF="node23.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html480"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00053000000000000000">
+Customizing Aquamacs</A>
+</H2>
+One of the distinguishing features of Emacs is the degree to which it can be customized by the end user. Emacs includes its own internal scripting language, elisp, which allows the user to customize such things as keyboard shortcuts, window settings, fonts, and more. The Aquamacs customizations themselves are implemented in elisp.<A NAME="tex2html15"
+  HREF="footnode.html#foot153"><SUP>5</SUP></A>
+<P>
+We recommend that user customizations be placed in specific locations:
+
+<P>
+
+<UL>
+<LI><TT>/Library/Preferences/Aquamacs&nbsp;Emacs/Preferences.el</TT>: Preferences for  Aquamacs and for all users
+</LI>
+<LI><TT>/Users/User Name/Library/Preferences/Aquamacs&nbsp;Emacs/Preferences.el</TT>: 
+<BR>
+User-specific  preferences for Aquamacs
+</LI>
+</UL>
+
+<P>
+If in doubt, use the last option. This should replace the usual&nbsp;/.emacs file, which is still loaded for
+compatibility.<A NAME="tex2html16"
+  HREF="footnode.html#foot254"><SUP>6</SUP></A>
+<P>
+Note that Emacs Lisp settings in a Preference.el file take priority over any other defined customizations such as those chosen in the Options menu or in customization buffers (Aquamacs / Preferences and elsewhere).  Settings in a&nbsp;/.emacs file have lower priority.  (The order of loading is:&nbsp;/.emacs, custom-file, Preferences.el files.)
+
+<P>
+Below are some specific customization options and groups that may be of interest:
+
+<P>
+
+<UL>
+<LI><B>Frame.</B> Aquamacs opens new files (and other buffers) in new frames. That is usually more convenient and allows you to use the graphical user interface of today's computers, which did not exist when Emacs was conceived almost three decades ago. If you do not like this behavior, perhaps because you are used to traditional Emacs, just deselect ``Display Buffers in Separate Frames'' in the Options menu and save your choice with ``Save Options.'' (The associated global minor mode is called ``one-buffer-one-frame-mode''.)
+
+<P>
+</LI>
+<LI><B>Autofaces.</B> These styles provide a convenient way to tie default faces to specific major modes so that every frame showing a buffer in a particular major mode is styled that way. Such faces can  determine background and foreground color as well as font settings.  Such settings always override any global choices made with, for instance, `default-frame-alist' or the `default' face.   The autofaces may be customized (`customize-face') directly or set through the GUI.  Note that these faces apply <EM>per buffer</EM>.
+
+<P>
+</LI>
+<LI><B>ns-alternate-modifier.</B> This is  the modifier to use for the Mac alt/option key.  The value can
+be alt, hyper, or super for the respective modifier.  If the value is
+nil then the key will act as the normal Mac option modifier, and the option
+key can be used to compose characters depending on the chosen Mac keyboard
+setting. 
+
+<P>
+</LI>
+<LI><B>Additional customization.</B> Of course, Aquamacs Emacs
+  offers you almost all the customization  possibilities that Emacs
+  has. Under ``Customize Emacs,'' you will find  a sub-menu that
+  allows you to browse the vast space of customization
+  settings. Beware: some of them are complex and not easy to
+  understand. If you would like to tinker with some general Aquamacs-specific
+  behavior, you can customize the group ``Aquamacs.'' 
+
+<P>
+</LI>
+<LI><B>The Scratch Buffer</B>
+
+<P>
+As mentioned above, the Aquamacs scratch buffer is simply a buffer into which notes can be typed.  For this reason, the scratch buffer is opened in text mode, as opposed to lisp interaction mode (the default mode for the plain GNU Emacs). Customize `initial-major-mode' (and restart) to change this.  In Aquamacs, the scratch buffer is automatically retained between sessions.  It can also be saved using the normal save commands; you are free to save its contents to another file.
+
+<P>
+</LI>
+<LI><B>Want some GNU Emacs 23 behavior back?</B> In most cases
+  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (23) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
+
+<P>
+Also, see Table <A HREF="#tab:variables">4</A> for a partial list of such settings.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER"><A NAME="175"></A>
+<TABLE>
+<CAPTION><STRONG>Table 4:</STRONG>
+Selection of Aquamacs-specific variables that can be customized in the Aquamacs 
+customization group.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 BORDER="1" ALIGN="CENTER">
+<TR><TH ALIGN="LEFT"><B>Variable</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Set Creator Codes After Writing Files</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Quick Yes Or No Prompt</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Ring Bell On Error</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Known Major Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Default Styles</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Buffer Specific Frame Styles</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Auto Frame Parameters Flag</TD>
+</TR>
+<TR><TD ALIGN="LEFT">One Buffer One Frame Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Tabbar Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Smart Frame Positioning Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Option Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Control Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Command Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Function Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Known Buffer Modes</TD>
+</TR>
+<TR><TD ALIGN="LEFT">OS X Key Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">OS X Key Mode Mouse-3 Behavior</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Visual Scroll Margin</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Emulate Mac ... Keyboard Mode</TD>
+</TR>
+</TABLE> 
+
+<A NAME="tab:variables"></A>
+</DIV></TD></TR>
+</TABLE>
+</DIV><P></P>
+<BR>
+
+<P>
+</LI>
+</UL>
+
+<P>
+The range of possible customizations--including restoring some of Emacs' traditional interface conventions--is beyond the scope of this help document. However, we provide a wiki for users to share their modifications. See <TT><A NAME="tex2html18"
+  HREF="http://www.emacswiki.org/emacs/AquamacsEmacs">http://www.emacswiki.org/emacs/AquamacsEmacs</A></TT> for more details.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html481"
+  HREF="node25.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html477"
+  HREF="node21.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html471"
+  HREF="node23.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html479"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html482"
+  HREF="node25.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html478"
+  HREF="node21.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html472"
+  HREF="node23.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html480"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+<I>David</I>
+<BR><I>2010-05-03</I>
+</ADDRESS>
+</BODY>
+</HTML>

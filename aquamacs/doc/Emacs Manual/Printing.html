@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Printing - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Emacs-Server.html#Emacs-Server" title="Emacs Server">
+<link rel="next" href="Sorting.html#Sorting" title="Sorting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Printing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sorting.html#Sorting">Sorting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-Server.html#Emacs-Server">Emacs Server</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">43 Printing Hard Copies</h2>
+
+<p><a name="index-hardcopy-3714"></a><a name="index-printing-3715"></a>
+  Emacs provides commands for printing hard copies of either an entire
+buffer or just part of one, with or without page headers.  You can
+invoke the printing commands directly, as detailed in the following
+section, or using the &lsquo;<samp><span class="samp">File</span></samp>&rsquo; menu on the menu bar.
+
+   <p><a name="index-htmlfontify_002dbuffer-3716"></a>  Aside from the commands described in this section, you can also
+&ldquo;print&rdquo; an Emacs buffer to HTML with <kbd>M-x htmlfontify-buffer</kbd>. 
+This command converts the current buffer to a HTML file, replacing
+Emacs faces with CSS-based markup.  In addition, see the hardcopy
+commands of Dired (see <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>) and the diary
+(see <a href="Displaying-the-Diary.html#Displaying-the-Diary">Displaying the Diary</a>).
+
+     <dl>
+<dt><kbd>M-x print-buffer</kbd><dd>Print hardcopy of current buffer with page headings containing the file
+name and page number. 
+<br><dt><kbd>M-x lpr-buffer</kbd><dd>Print hardcopy of current buffer without page headings. 
+<br><dt><kbd>M-x print-region</kbd><dd>Like <code>print-buffer</code> but print only the current region. 
+<br><dt><kbd>M-x lpr-region</kbd><dd>Like <code>lpr-buffer</code> but print only the current region. 
+</dl>
+
+   <p><a name="index-print_002dbuffer-3717"></a><a name="index-print_002dregion-3718"></a><a name="index-lpr_002dbuffer-3719"></a><a name="index-lpr_002dregion-3720"></a><a name="index-lpr_002dswitches-3721"></a>  The hardcopy commands (aside from the PostScript commands) pass extra
+switches to the <code>lpr</code> program based on the value of the variable
+<code>lpr-switches</code>.  Its value should be a list of strings, each string
+an option starting with &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  For example, to specify a line width
+of 80 columns for all the printing you do in Emacs, set
+<code>lpr-switches</code> like this:
+
+<pre class="example">     (setq lpr-switches '("-w80"))
+</pre>
+   <p><a name="index-printer_002dname-3722"></a>  You can specify the printer to use by setting the variable
+<code>printer-name</code>.
+
+   <p><a name="index-lpr_002dheaders_002dswitches-3723"></a><a name="index-lpr_002dcommands-3724"></a><a name="index-lpr_002dadd_002dswitches-3725"></a>  The variable <code>lpr-command</code> specifies the name of the printer
+program to run; the default value depends on your operating system type. 
+On most systems, the default is <code>"lpr"</code>.  The variable
+<code>lpr-headers-switches</code> similarly specifies the extra switches to
+use to make page headers.  The variable <code>lpr-add-switches</code> controls
+whether to supply &lsquo;<samp><span class="samp">-T</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-J</span></samp>&rsquo; options (suitable for
+<code>lpr</code>) to the printer program: <code>nil</code> means don't add them. 
+<code>lpr-add-switches</code> should be <code>nil</code> if your printer program is
+not compatible with <code>lpr</code>.
+
+<ul class="menu">
+<li><a accesskey="1" href="PostScript.html#PostScript">PostScript</a>: 	         Printing buffers or regions as PostScript. 
+<li><a accesskey="2" href="PostScript-Variables.html#PostScript-Variables">PostScript Variables</a>:  Customizing the PostScript printing commands. 
+<li><a accesskey="3" href="Printing-Package.html#Printing-Package">Printing Package</a>:      An optional advanced printing interface. 
+</ul>
+
+   </body></html>
+

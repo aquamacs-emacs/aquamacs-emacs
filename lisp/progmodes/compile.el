@@ -285,9 +285,10 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
       (1 (compilation-error-properties 2 3 nil nil nil 0 nil)
 	 append)))
 
-    (maven
-     ;; Maven is a popular build tool for Java.  Maven is Free Software.
-     "\\(.*?\\):\\[\\([0-9]+\\),\\([0-9]+\\)\\]" 1 2 3)
+    ;; This regexp is pathologically slow on long lines (Bug#3441).
+    ;; (maven
+    ;;  ;; Maven is a popular build tool for Java.  Maven is Free Software.
+    ;;  "\\(.*?\\):\\[\\([0-9]+\\),\\([0-9]+\\)\\]" 1 2 3)
 
     ;; Should be lint-1, lint-2 (SysV lint)
     (mips-1
@@ -1973,10 +1974,12 @@ This is the value of `next-error-function' in Compilation buffers."
     ;; (`omake -P' polls filesystem for changes and recompiles when needed
     ;;  in the same process and buffer).
     ;; So, recalculate all markers for that file.
-    (unless (and (nth 3 loc) (marker-buffer (nth 3 loc)) (nthcdr 4 loc)
-                 ;; There may be no timestamp info if the loc is a `fake-loc',
-                 ;; but we just checked that the file has been visited before!
-                 (equal (nth 4 loc)
+    (unless (and (nth 3 loc) (marker-buffer (nth 3 loc))
+                 ;; There may be no timestamp info if the loc is a `fake-loc'.
+                 ;; So we skip the time-check here, although we should maybe
+                 ;; change `compilation-fake-loc' to add timestamp info.
+                 (or (null (nth 4 loc))
+                     (equal (nth 4 loc)
                         (setq timestamp buffer-modtime)))
       (with-current-buffer (compilation-find-file marker (caar (nth 2 loc))
 						  (cadr (car (nth 2 loc))))

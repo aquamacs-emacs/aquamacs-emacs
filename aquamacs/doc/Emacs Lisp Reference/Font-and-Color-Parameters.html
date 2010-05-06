@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Font and Color Parameters - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
+<link rel="prev" href="Cursor-Parameters.html#Cursor-Parameters" title="Cursor Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Font-and-Color-Parameters"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">29.3.3.8 Font and Color Parameters</h5>
+
+<p>These frame parameters control the use of fonts and colors.
+
+     <dl>
+<dt><code>font-backend</code><dd>A list of symbols, specifying the <dfn>font backends</dfn> to use for
+drawing fonts in the frame, in order of priority.  On X, there are
+currently two available font backends: <code>x</code> (the X core font
+driver) and <code>xft</code> (the Xft font driver).  On other systems, there
+is only one available font backend, so it does not make sense to
+modify this frame parameter.
+
+     <br><dt><code>background-mode</code><dd>This parameter is either <code>dark</code> or <code>light</code>, according
+to whether the background color is a light one or a dark one.
+
+     <br><dt><code>tty-color-mode</code><dd><a name="index-standard-colors-for-character-terminals-2245"></a>This parameter overrides the terminal's color support as given by the
+system's terminal capabilities database in that this parameter's value
+specifies the color mode to use in terminal frames.  The value can be
+either a symbol or a number.  A number specifies the number of colors
+to use (and, indirectly, what commands to issue to produce each
+color).  For example, <code>(tty-color-mode . 8)</code> specifies use of the
+ANSI escape sequences for 8 standard text colors.  A value of -1 turns
+off color support.
+
+     <p>If the parameter's value is a symbol, it specifies a number through
+the value of <code>tty-color-mode-alist</code>, and the associated number is
+used instead.
+
+     <br><dt><code>screen-gamma</code><dd><a name="index-gamma-correction-2246"></a>If this is a number, Emacs performs &ldquo;gamma correction&rdquo; which adjusts
+the brightness of all colors.  The value should be the screen gamma of
+your display, a floating point number.
+
+     <p>Usual PC monitors have a screen gamma of 2.2, so color values in
+Emacs, and in X windows generally, are calibrated to display properly
+on a monitor with that gamma value.  If you specify 2.2 for
+<code>screen-gamma</code>, that means no correction is needed.  Other values
+request correction, designed to make the corrected colors appear on
+your screen the way they would have appeared without correction on an
+ordinary monitor with a gamma value of 2.2.
+
+     <p>If your monitor displays colors too light, you should specify a
+<code>screen-gamma</code> value smaller than 2.2.  This requests correction
+that makes colors darker.  A screen gamma value of 1.5 may give good
+results for LCD color displays.
+
+     <br><dt><code>alpha</code><dd><a name="index-opacity_002c-frame-2247"></a><a name="index-transparency_002c-frame-2248"></a><a name="index-frame_002dalpha_002dlower_002dlimit-2249"></a>This parameter specifies the opacity of the frame, on graphical
+displays that support variable opacity.  It should be an integer
+between 0 and 100, where 0 means completely transparent and 100 means
+completely opaque.  It can also have a <code>nil</code> value, which tells
+Emacs not to set the frame opacity (leaving it to the window manager).
+
+     <p>To prevent the frame from disappearing completely from view, the
+variable <code>frame-alpha-lower-limit</code> defines a lower opacity limit. 
+If the value of the frame parameter is less than the value of this
+variable, Emacs uses the latter.  By default,
+<code>frame-alpha-lower-limit</code> is 20.
+
+     <p>The <code>alpha</code> frame parameter can also be a cons cell
+<code>(&lsquo;</code><samp><span class="samp">active</span></samp><code>&rsquo; . &lsquo;</code><samp><span class="samp">inactive</span></samp><code>&rsquo;)</code>, where &lsquo;<samp><span class="samp">active</span></samp>&rsquo; is the
+opacity of the frame when it is selected, and &lsquo;<samp><span class="samp">inactive</span></samp>&rsquo; is the
+opactity when it is not selected. 
+</dl>
+
+   <p>The following frame parameters are semi-obsolete in that they are
+automatically equivalent to particular face attributes of particular
+faces (see <a href="../emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a>):
+
+     <dl>
+<dt><code>font</code><dd>The name of the font for displaying text in the frame.  This is a
+string, either a valid font name for your system or the name of an Emacs
+fontset (see <a href="Fontsets.html#Fontsets">Fontsets</a>).  It is equivalent to the <code>font</code>
+attribute of the <code>default</code> face.
+
+     <br><dt><code>foreground-color</code><dd>The color to use for the image of a character.  It is equivalent to
+the <code>:foreground</code> attribute of the <code>default</code> face.
+
+     <br><dt><code>background-color</code><dd>The color to use for the background of characters.  It is equivalent to
+the <code>:background</code> attribute of the <code>default</code> face.
+
+     <br><dt><code>mouse-color</code><dd>The color for the mouse pointer.  It is equivalent to the <code>:background</code>
+attribute of the <code>mouse</code> face.
+
+     <br><dt><code>cursor-color</code><dd>The color for the cursor that shows point.  It is equivalent to the
+<code>:background</code> attribute of the <code>cursor</code> face.
+
+     <br><dt><code>border-color</code><dd>The color for the border of the frame.  It is equivalent to the
+<code>:background</code> attribute of the <code>border</code> face.
+
+     <br><dt><code>scroll-bar-foreground</code><dd>If non-<code>nil</code>, the color for the foreground of scroll bars.  It is
+equivalent to the <code>:foreground</code> attribute of the
+<code>scroll-bar</code> face.
+
+     <br><dt><code>scroll-bar-background</code><dd>If non-<code>nil</code>, the color for the background of scroll bars.  It is
+equivalent to the <code>:background</code> attribute of the
+<code>scroll-bar</code> face. 
+</dl>
+
+   </body></html>
+

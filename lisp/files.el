@@ -3328,12 +3328,12 @@ Return the new variables list."
 	  (setq variables (dir-locals-collect-mode-variables
 			   (cdr entry) variables))))))))
 
-(defun dir-locals-set-directory-class (directory class mtime)
+(defun dir-locals-set-directory-class (directory class &optional mtime)
   "Declare that the DIRECTORY root is an instance of CLASS.
 DIRECTORY is the name of a directory, a string.
 CLASS is the name of a project class, a symbol.
 MTIME is either the modification time of the directory-local
-variables file that defined this this class, or nil.
+variables file that defined this class, or nil.
 
 When a file beneath DIRECTORY is visited, the mode-specific
 variables from CLASS are applied to the buffer.  The variables
@@ -4463,7 +4463,7 @@ This requires the external program `diff' to be in your `exec-path'."
     ;;     nil)
     ;;  ,(purecopy "view this buffer"))
     (?d ,(lambda (buf)
-           (if (null buffer-file-name)
+           (if (null (buffer-file-name buf))
                (message "Not applicable: no file")
              (save-window-excursion (diff-buffer-with-file buf))
              (if (not enable-recursive-minibuffers)
@@ -4798,10 +4798,14 @@ this happens by default."
       (mapc
        (lambda (file)
 	 (let ((target (expand-file-name
-			(file-name-nondirectory file) newname)))
-	   (if (file-directory-p file)
-	       (copy-directory file target keep-time parents)
-	     (copy-file file target t keep-time))))
+			(file-name-nondirectory file) newname))
+	       (attrs (file-attributes file)))
+	   (cond ((file-directory-p file)
+		  (copy-directory file target keep-time parents))
+		 ((stringp (car attrs)) ; Symbolic link
+		  (make-symbolic-link (car attrs) target t))
+		 (t
+		  (copy-file file target t keep-time)))))
        ;; We do not want to copy "." and "..".
        (directory-files	directory 'full directory-files-no-dot-files-regexp))
 

@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+<title>Standard Errors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
+<link rel="next" href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables" title="Standard Buffer-Local Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Standard-Errors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Standard Buffer-Local Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix F Standard Errors</h2>
+
+<p><a name="index-standard-errors-3903"></a>
+  Here is the complete list of the error symbols in standard Emacs,
+grouped by concept.  The list includes each symbol's message (on the
+<code>error-message</code> property of the symbol) and a cross reference to a
+description of how the error can occur.
+
+   <p>Each error symbol has an <code>error-conditions</code> property that is a
+list of symbols.  Normally this list includes the error symbol itself
+and the symbol <code>error</code>.  Occasionally it includes additional
+symbols, which are intermediate classifications, narrower than
+<code>error</code> but broader than a single error symbol.  For example, all
+the errors in accessing files have the condition <code>file-error</code>.  If
+we do not say here that a certain error symbol has additional error
+conditions, that means it has none.
+
+   <p>As a special exception, the error symbol <code>quit</code> does not have the
+condition <code>error</code>, because quitting is not considered an error.
+
+   <p>See <a href="Errors.html#Errors">Errors</a>, for an explanation of how errors are generated and
+handled.
+
+     <dl>
+<dt><var>symbol</var><dd><var>string</var>; <var>reference</var>.
+
+     <br><dt><code>error</code><dd><code>"error"</code><br>
+See <a href="Errors.html#Errors">Errors</a>.
+
+     <br><dt><code>quit</code><dd><code>"Quit"</code><br>
+See <a href="Quitting.html#Quitting">Quitting</a>.
+
+     <br><dt><code>args-out-of-range</code><dd><code>"Args out of range"</code><br>
+This happens when trying to access an element beyond the range of a
+sequence or buffer.<br>
+See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>, See <a href="Text.html#Text">Text</a>.
+
+     <br><dt><code>arith-error</code><dd><code>"Arithmetic error"</code><br>
+See <a href="Arithmetic-Operations.html#Arithmetic-Operations">Arithmetic Operations</a>.
+
+     <br><dt><code>beginning-of-buffer</code><dd><code>"Beginning of buffer"</code><br>
+See <a href="Character-Motion.html#Character-Motion">Character Motion</a>.
+
+     <br><dt><code>buffer-read-only</code><dd><code>"Buffer is read-only"</code><br>
+See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
+
+     <br><dt><code>coding-system-error</code><dd><code>"Invalid coding system"</code><br>
+See <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>.
+
+     <br><dt><code>cyclic-function-indirection</code><dd><code>"Symbol's chain of function indirections\<br> contains a loop"</code><br>
+See <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
+
+     <br><dt><code>cyclic-variable-indirection</code><dd><code>"Symbol's chain of variable indirections\<br> contains a loop"</code><br>
+See <a href="Variable-Aliases.html#Variable-Aliases">Variable Aliases</a>.
+
+     <br><dt><code>end-of-buffer</code><dd><code>"End of buffer"</code><br>
+See <a href="Character-Motion.html#Character-Motion">Character Motion</a>.
+
+     <br><dt><code>end-of-file</code><dd><code>"End of file during parsing"</code><br>
+Note that this is not a subcategory of <code>file-error</code>,
+because it pertains to the Lisp reader, not to file I/O.<br>
+See <a href="Input-Functions.html#Input-Functions">Input Functions</a>.
+
+     <br><dt><code>file-already-exists</code><dd>This is a subcategory of <code>file-error</code>.<br>
+See <a href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>.
+
+     <br><dt><code>file-date-error</code><dd>This is a subcategory of <code>file-error</code>.  It occurs when
+<code>copy-file</code> tries and fails to set the last-modification time of
+the output file.<br>
+See <a href="Changing-Files.html#Changing-Files">Changing Files</a>.
+
+     <br><dt><code>file-error</code><dd>We do not list the error-strings of this error and its subcategories,
+because the error message is normally constructed from the data items
+alone when the error condition <code>file-error</code> is present.  Thus,
+the error-strings are not very relevant.  However, these error symbols
+do have <code>error-message</code> properties, and if no data is provided,
+the <code>error-message</code> property <em>is</em> used.<br>
+See <a href="Files.html#Files">Files</a>.
+
+     <br><dt><code>file-locked</code><dd>This is a subcategory of <code>file-error</code>.<br>
+See <a href="File-Locks.html#File-Locks">File Locks</a>.
+
+     <br><dt><code>file-supersession</code><dd>This is a subcategory of <code>file-error</code>.<br>
+See <a href="Modification-Time.html#Modification-Time">Modification Time</a>.
+
+     <br><dt><code>ftp-error</code><dd>This is a subcategory of <code>file-error</code>, which results from problems
+in accessing a remote file using ftp.<br>
+See <a href="../emacs/Remote-Files.html#Remote-Files">Remote Files</a>.
+
+     <br><dt><code>invalid-function</code><dd><code>"Invalid function"</code><br>
+See <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
+
+     <br><dt><code>invalid-read-syntax</code><dd><code>"Invalid read syntax"</code><br>
+See <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>.
+
+     <br><dt><code>invalid-regexp</code><dd><code>"Invalid regexp"</code><br>
+See <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>.
+
+     <br><dt><code>mark-inactive</code><dd><code>"The mark is not active now"</code><br>
+See <a href="The-Mark.html#The-Mark">The Mark</a>.
+
+     <br><dt><code>no-catch</code><dd><code>"No catch for tag"</code><br>
+See <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>.
+
+     <br><dt><code>scan-error</code><dd><code>"Scan error"</code><br>
+This happens when certain syntax-parsing functions
+find invalid syntax or mismatched parentheses.<br>
+See <a href="List-Motion.html#List-Motion">List Motion</a>, and <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>.
+
+     <br><dt><code>search-failed</code><dd><code>"Search failed"</code><br>
+See <a href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>.
+
+     <br><dt><code>setting-constant</code><dd><code>"Attempt to set a constant symbol"</code><br>
+The values of the symbols <code>nil</code> and <code>t</code>,
+and any symbols that start with &lsquo;<samp><span class="samp">:</span></samp>&rsquo;,
+may not be changed.<br>
+See <a href="Constant-Variables.html#Constant-Variables">Variables that Never Change</a>.
+
+     <br><dt><code>text-read-only</code><dd><code>"Text is read-only"</code><br>
+This is a subcategory of <code>buffer-read-only</code>.<br>
+See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
+
+     <br><dt><code>undefined-color</code><dd><code>"Undefined color"</code><br>
+See <a href="Color-Names.html#Color-Names">Color Names</a>.
+
+     <br><dt><code>void-function</code><dd><code>"Symbol's function definition is void"</code><br>
+See <a href="Function-Cells.html#Function-Cells">Function Cells</a>.
+
+     <br><dt><code>void-variable</code><dd><code>"Symbol's value as variable is void"</code><br>
+See <a href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>.
+
+     <br><dt><code>wrong-number-of-arguments</code><dd><code>"Wrong number of arguments"</code><br>
+See <a href="Classifying-Lists.html#Classifying-Lists">Classifying Lists</a>.
+
+     <br><dt><code>wrong-type-argument</code><dd><code>"Wrong type argument"</code><br>
+See <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>. 
+</dl>
+
+   <p>These kinds of error, which are classified as special cases of
+<code>arith-error</code>, can occur on certain systems for invalid use of
+mathematical functions.
+
+     <dl>
+<dt><code>domain-error</code><dd><code>"Arithmetic domain error"</code><br>
+See <a href="Math-Functions.html#Math-Functions">Math Functions</a>.
+
+     <br><dt><code>overflow-error</code><dd><code>"Arithmetic overflow error"</code><br>
+This is a subcategory of <code>domain-error</code>.<br>
+See <a href="Math-Functions.html#Math-Functions">Math Functions</a>.
+
+     <br><dt><code>range-error</code><dd><code>"Arithmetic range error"</code><br>
+See <a href="Math-Functions.html#Math-Functions">Math Functions</a>.
+
+     <br><dt><code>singularity-error</code><dd><code>"Arithmetic singularity error"</code><br>
+This is a subcategory of <code>domain-error</code>.<br>
+See <a href="Math-Functions.html#Math-Functions">Math Functions</a>.
+
+     <br><dt><code>underflow-error</code><dd><code>"Arithmetic underflow error"</code><br>
+This is a subcategory of <code>domain-error</code>.<br>
+See <a href="Math-Functions.html#Math-Functions">Math Functions</a>. 
+</dl>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1999, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

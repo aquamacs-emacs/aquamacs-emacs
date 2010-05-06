@@ -1,0 +1,175 @@
+<html lang="en">
+<head>
+<title>Selecting Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Deleting-Windows.html#Deleting-Windows" title="Deleting Windows">
+<link rel="next" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" title="Cyclic Window Ordering">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Selecting-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.4 Selecting Windows</h3>
+
+<p><a name="index-selecting-a-window-2056"></a>
+  When a window is selected, the buffer in the window becomes the current
+buffer, and the cursor will appear in it.
+
+<div class="defun">
+&mdash; Function: <b>selected-window</b><var><a name="index-selected_002dwindow-2057"></a></var><br>
+<blockquote><p>This function returns the selected window.  This is the window in
+which the cursor appears and to which many commands apply. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>select-window</b><var> window &amp;optional norecord<a name="index-select_002dwindow-2058"></a></var><br>
+<blockquote><p>This function makes <var>window</var> the selected window.  The cursor then
+appears in <var>window</var> (after redisplay).  Unless <var>window</var> was
+already selected, <code>select-window</code> makes <var>window</var>'s buffer the
+current buffer.  The return value is <var>window</var>.
+
+        <p>Normally, <var>window</var>'s selected buffer is moved to the front of the
+buffer list (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>) and <var>window</var> becomes the most
+recently selected window.  But if <var>norecord</var> is non-<code>nil</code>, the
+buffer list remains unchanged and <var>window</var> does not become the most
+recently selected one.
+
+     <pre class="example">          (setq w (next-window))
+          (select-window w)
+               &rArr; #&lt;window 65 on windows.texi&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>save-selected-window</b><var> forms<small class="dots">...</small><a name="index-save_002dselected_002dwindow-2059"></a></var><br>
+<blockquote><p>This macro records the selected frame, as well as the selected window
+of each frame, executes <var>forms</var> in sequence, then restores the
+earlier selected frame and windows.  It also saves and restores the
+current buffer.  It returns the value of the last form in <var>forms</var>.
+
+        <p>This macro does not save or restore anything about the sizes,
+arrangement or contents of windows; therefore, if <var>forms</var> change
+them, the change persists.  If the previously selected window of some
+frame is no longer live at the time of exit from <var>forms</var>, that
+frame's selected window is left alone.  If the previously selected
+window is no longer live, then whatever window is selected at the end of
+<var>forms</var> remains selected.  The current buffer is restored if and
+only if it is still live when exiting <var>forms</var>.
+
+        <p>This macro changes neither the ordering of recently selected windows nor
+the buffer list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-selected-window</b><var> window forms<small class="dots">...</small><a name="index-with_002dselected_002dwindow-2060"></a></var><br>
+<blockquote><p>This macro selects <var>window</var>, executes <var>forms</var> in sequence, then
+restores the previously selected window and current buffer.  The ordering
+of recently selected windows and the buffer list remain unchanged unless
+you deliberately change them within <var>forms</var>, for example, by calling
+<code>select-window</code> with argument <var>norecord</var> <code>nil</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-finding-windows-2061"></a>  The following functions choose one of the windows on the screen,
+offering various criteria for the choice.
+
+<div class="defun">
+&mdash; Function: <b>get-lru-window</b><var> &amp;optional frame dedicated<a name="index-get_002dlru_002dwindow-2062"></a></var><br>
+<blockquote><p>This function returns the window least recently &ldquo;used&rdquo; (that is,
+selected) among a set of candidate windows.  If any full-width windows
+are present, it only considers these.
+
+        <p>The selected window is returned if it is the only candidate.  A
+minibuffer window is never a candidate.  A dedicated window
+(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless the optional
+argument <var>dedicated</var> is non-<code>nil</code>.
+
+        <p>The optional argument <var>frame</var> specifies which windows are
+considered.
+
+          <ul>
+<li>If it is <code>nil</code>, consider windows on the selected frame. 
+<li>If it is <code>t</code>, consider windows on all frames. 
+<li>If it is <code>visible</code>, consider windows on all visible frames. 
+<li>If it is 0, consider windows on all visible or iconified frames. 
+<li>If it is a frame, consider windows on that frame. 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-largest-window</b><var> &amp;optional frame dedicated<a name="index-get_002dlargest_002dwindow-2063"></a></var><br>
+<blockquote><p>This function returns the window with the largest area (height times
+width).  If there are no side-by-side windows, then this is the window
+with the most lines.  A minibuffer window is never a candidate.  A
+dedicated window (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless
+the optional argument <var>dedicated</var> is non-<code>nil</code>.
+
+        <p>If there are two candidate windows of the same size, this function
+prefers the one that comes first in the cyclic ordering of windows,
+starting from the selected window (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
+
+        <p>The optional argument <var>frame</var> specifies which set of windows to
+consider, see <code>get-lru-window</code> above. 
+</p></blockquote></div>
+
+   <p><a name="index-window-that-satisfies-a-predicate-2064"></a><a name="index-conditional-selection-of-windows-2065"></a>
+
+<div class="defun">
+&mdash; Function: <b>get-window-with-predicate</b><var> predicate &amp;optional minibuf all-frames default<a name="index-get_002dwindow_002dwith_002dpredicate-2066"></a></var><br>
+<blockquote><p>This function returns a window satisfying <var>predicate</var>.  It cycles
+through all visible windows using <code>walk-windows</code> (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>), calling <var>predicate</var> on each one of them with that
+window as its argument.  The function returns the first window for which
+<var>predicate</var> returns a non-<code>nil</code> value; if that never happens,
+it returns <var>default</var> (which defaults to <code>nil</code>).
+
+        <p>The optional arguments <var>minibuf</var> and <var>all-frames</var> specify the
+set of windows to include in the scan.  See the description of
+<code>next-window</code> in <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>, for details. 
+</p></blockquote></div>
+
+   </body></html>
+

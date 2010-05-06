@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Rmail Inbox - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rmail.html#Rmail" title="Rmail">
+<link rel="prev" href="Rmail-Deletion.html#Rmail-Deletion" title="Rmail Deletion">
+<link rel="next" href="Rmail-Files.html#Rmail-Files" title="Rmail Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rmail-Inbox"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Files.html#Rmail-Files">Rmail Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Deletion.html#Rmail-Deletion">Rmail Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr>
+</div>
+
+<h3 class="section">36.5 Rmail Files and Inboxes</h3>
+
+<p><a name="index-inbox-file-2826"></a>
+  When you receive mail locally, the operating system places incoming
+mail for you in a file that we call your <dfn>inbox</dfn>.  When you start
+up Rmail, it runs a C program called <code>movemail</code> to copy the new
+messages from your local inbox into your primary Rmail file, which
+also contains other messages saved from previous Rmail sessions.  It
+is in this file that you actually read the mail with Rmail.  This
+operation is called <dfn>getting new mail</dfn>.  You can get new mail at
+any time in Rmail by typing <kbd>g</kbd>.
+
+   <p><a name="index-rmail_002dprimary_002dinbox_002dlist-2827"></a><a name="index-g_t_0040env_007bMAIL_007d-environment-variable-2828"></a>  The variable <code>rmail-primary-inbox-list</code> contains a list of the
+files which are inboxes for your primary Rmail file.  If you don't set
+this variable explicitly, Rmail uses the <samp><span class="env">MAIL</span></samp> environment
+variable, or, as a last resort, a default inbox based on
+<code>rmail-spool-directory</code>.  The default inbox file depends on your
+operating system; often it is <samp><span class="file">/var/mail/</span><var>username</var></samp>,
+<samp><span class="file">/var/spool/mail/</span><var>username</var></samp>, or
+<samp><span class="file">/usr/spool/mail/</span><var>username</var></samp>.
+
+   <p>You can specify the inbox file(s) for any Rmail file for the current
+session with the command <code>set-rmail-inbox-list</code>; see <a href="Rmail-Files.html#Rmail-Files">Rmail Files</a>.
+
+   <p>There are two reasons for having separate Rmail files and inboxes.
+
+     <ol type=1 start=1>
+<li>The inbox file format varies between operating systems and according to
+the other mail software in use.  Only one part of Rmail needs to know
+about the alternatives, and it need only understand how to convert all
+of them to Rmail's own format.
+
+     <li>It is very cumbersome to access an inbox file without danger of losing
+mail, because it is necessary to interlock with mail delivery. 
+Moreover, different operating systems use different interlocking
+techniques.  The strategy of moving mail out of the inbox once and for
+all into a separate Rmail file avoids the need for interlocking in all
+the rest of Rmail, since only Rmail operates on the Rmail file.
+        </ol>
+
+   <p>Rmail was originally written to use the Babyl format as its internal
+format.  Since then, we have recognized that the usual inbox format
+(&lsquo;<samp><span class="samp">mbox</span></samp>&rsquo;) on Unix and GNU systems is adequate for the job, and so
+since Emacs 23 Rmail uses that as its internal format.  The Rmail file
+is still separate from the inbox file, even though their format is the
+same.
+
+   <p><a name="index-rmail_002dpreserve_002dinbox-2829"></a>  When getting new mail, Rmail first copies the new mail from the
+inbox file to the Rmail file; then it saves the Rmail file; then it
+clears out the inbox file.  This way, a system crash may cause
+duplication of mail between the inbox and the Rmail file, but cannot
+lose mail.  If <code>rmail-preserve-inbox</code> is non-<code>nil</code>, then
+Rmail does not clear out the inbox file when it gets new mail.  You
+may wish to set this, for example, on a portable computer you use to
+check your mail via POP while traveling, so that your mail will remain
+on the server and you can save it later on your workstation.
+
+   <p>In some cases, Rmail copies the new mail from the inbox file
+indirectly.  First it runs the <code>movemail</code> program to move the mail
+from the inbox to an intermediate file called
+<samp><span class="file">.newmail-</span><var>inboxname</var></samp>, in the same directory as the Rmail
+file.  Then Rmail merges the new mail from that file, saves the Rmail
+file, and only then deletes the intermediate file.  If there is a crash
+at the wrong time, this file continues to exist, and Rmail will use it
+again the next time it gets new mail from that inbox.
+
+   <p>If Rmail is unable to convert the data in
+<samp><span class="file">.newmail-</span><var>inboxname</var></samp> into mbox format, it renames the file to
+<samp><span class="file">RMAILOSE.</span><var>n</var></samp> (<var>n</var> is an integer chosen to make the name
+unique) so that Rmail will not have trouble with the data again.  You
+should look at the file, find whatever message confuses Rmail (probably
+one that includes the control-underscore character, octal code 037), and
+delete it.  Then you can use <kbd>1 g</kbd> to get new mail from the
+corrected file.
+
+   </body></html>
+
