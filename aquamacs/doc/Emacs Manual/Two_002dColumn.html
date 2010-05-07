@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Two-Column - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Narrowing.html#Narrowing" title="Narrowing">
+<link rel="next" href="Editing-Binary-Files.html#Editing-Binary-Files" title="Editing Binary Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Two-Column"></a>
+<a name="Two_002dColumn"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-Binary-Files.html#Editing-Binary-Files">Editing Binary Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Narrowing.html#Narrowing">Narrowing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">49 Two-Column Editing</h2>
+
+<p><a name="index-two_002dcolumn-editing-3778"></a><a name="index-splitting-columns-3779"></a><a name="index-columns_002c-splitting-3780"></a>
+  Two-column mode lets you conveniently edit two side-by-side columns of
+text.  It uses two side-by-side windows, each showing its own
+buffer.
+
+   <p>There are three ways to enter two-column mode:
+
+     <dl>
+<dt><kbd>&lt;F2&gt; 2</kbd> or <kbd>C-x 6 2</kbd><dd><a name="index-F2-2-3781"></a><a name="index-C_002dx-6-2-3782"></a><a name="index-g_t2C_002dtwo_002dcolumns-3783"></a>Enter two-column mode with the current buffer on the left, and on the
+right, a buffer whose name is based on the current buffer's name
+(<code>2C-two-columns</code>).  If the right-hand buffer doesn't already
+exist, it starts out empty; the current buffer's contents are not
+changed.
+
+     <p>This command is appropriate when the current buffer is empty or contains
+just one column and you want to add another column.
+
+     <br><dt><kbd>&lt;F2&gt; s</kbd> or <kbd>C-x 6 s</kbd><dd><a name="index-F2-s-3784"></a><a name="index-C_002dx-6-s-3785"></a><a name="index-g_t2C_002dsplit-3786"></a>Split the current buffer, which contains two-column text, into two
+buffers, and display them side by side (<code>2C-split</code>).  The current
+buffer becomes the left-hand buffer, but the text in the right-hand
+column is moved into the right-hand buffer.  The current column
+specifies the split point.  Splitting starts with the current line and
+continues to the end of the buffer.
+
+     <p>This command is appropriate when you have a buffer that already contains
+two-column text, and you wish to separate the columns temporarily.
+
+     <br><dt><kbd>&lt;F2&gt; b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd><dt><kbd>C-x 6 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-F2-b-3787"></a><a name="index-C_002dx-6-b-3788"></a><a name="index-g_t2C_002dassociate_002dbuffer-3789"></a>Enter two-column mode using the current buffer as the left-hand buffer,
+and using buffer <var>buffer</var> as the right-hand buffer
+(<code>2C-associate-buffer</code>). 
+</dl>
+
+   <p><kbd>&lt;F2&gt; s</kbd> or <kbd>C-x 6 s</kbd> looks for a column separator, which
+is a string that appears on each line between the two columns.  You can
+specify the width of the separator with a numeric argument to
+<kbd>&lt;F2&gt; s</kbd>; that many characters, before point, constitute the
+separator string.  By default, the width is 1, so the column separator
+is the character before point.
+
+   <p>When a line has the separator at the proper place, <kbd>&lt;F2&gt; s</kbd>
+puts the text after the separator into the right-hand buffer, and
+deletes the separator.  Lines that don't have the column separator at
+the proper place remain unsplit; they stay in the left-hand buffer, and
+the right-hand buffer gets an empty line to correspond.  (This is the
+way to write a line that &ldquo;spans both columns while in two-column
+mode&rdquo;: write it in the left-hand buffer, and put an empty line in the
+right-hand buffer.)
+
+   <p><a name="index-F2-RET-3790"></a><a name="index-C_002dx-6-RET-3791"></a><a name="index-g_t2C_002dnewline-3792"></a>  The command <kbd>C-x 6 &lt;RET&gt;</kbd> or <kbd>&lt;F2&gt; &lt;RET&gt;</kbd>
+(<code>2C-newline</code>) inserts a newline in each of the two buffers at
+corresponding positions.  This is the easiest way to add a new line to
+the two-column text while editing it in split buffers.
+
+   <p><a name="index-F2-1-3793"></a><a name="index-C_002dx-6-1-3794"></a><a name="index-g_t2C_002dmerge-3795"></a>  When you have edited both buffers as you wish, merge them with
+<kbd>&lt;F2&gt; 1</kbd> or <kbd>C-x 6 1</kbd> (<code>2C-merge</code>).  This copies the
+text from the right-hand buffer as a second column in the other buffer. 
+To go back to two-column editing, use <kbd>&lt;F2&gt; s</kbd>.
+
+   <p><a name="index-F2-d-3796"></a><a name="index-C_002dx-6-d-3797"></a><a name="index-g_t2C_002ddissociate-3798"></a>  Use <kbd>&lt;F2&gt; d</kbd> or <kbd>C-x 6 d</kbd> to dissociate the two buffers,
+leaving each as it stands (<code>2C-dissociate</code>).  If the other buffer,
+the one not current when you type <kbd>&lt;F2&gt; d</kbd>, is empty,
+<kbd>&lt;F2&gt; d</kbd> kills it.
+
+   </body></html>
+

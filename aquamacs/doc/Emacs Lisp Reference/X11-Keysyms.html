@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>X11 Keysyms - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Sound-Output.html#Sound-Output" title="Sound Output">
+<link rel="next" href="Batch-Mode.html#Batch-Mode" title="Batch Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="X11-Keysyms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Batch-Mode.html#Batch-Mode">Batch Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sound-Output.html#Sound-Output">Sound Output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.15 Operating on X11 Keysyms</h3>
+
+<p><a name="index-X11-keysyms-3808"></a>
+To define system-specific X11 keysyms, set the variable
+<code>system-key-alist</code>.
+
+<div class="defun">
+&mdash; Variable: <b>system-key-alist</b><var><a name="index-system_002dkey_002dalist-3809"></a></var><br>
+<blockquote><p>This variable's value should be an alist with one element for each
+system-specific keysym.  Each element has the form <code>(</code><var>code</var><code>
+. </code><var>symbol</var><code>)</code>, where <var>code</var> is the numeric keysym code (not
+including the &ldquo;vendor specific&rdquo; bit,
+-2**28),
+and <var>symbol</var> is the name for the function key.
+
+        <p>For example <code>(168 . mute-acute)</code> defines a system-specific key (used
+by HP X servers) whose numeric code is
+-2**28
++ 168.
+
+        <p>It is not crucial to exclude from the alist the keysyms of other X
+servers; those do no harm, as long as they don't conflict with the ones
+used by the X server actually in use.
+
+        <p>The variable is always local to the current terminal, and cannot be
+buffer-local.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>. 
+</p></blockquote></div>
+
+   <p>You can specify which keysyms Emacs should use for the Meta, Alt, Hyper, and Super modifiers by setting these variables:
+
+<div class="defun">
+&mdash; Variable: <b>x-alt-keysym</b><var><a name="index-x_002dalt_002dkeysym-3810"></a></var><br>
+&mdash; Variable: <b>x-meta-keysym</b><var><a name="index-x_002dmeta_002dkeysym-3811"></a></var><br>
+&mdash; Variable: <b>x-hyper-keysym</b><var><a name="index-x_002dhyper_002dkeysym-3812"></a></var><br>
+&mdash; Variable: <b>x-super-keysym</b><var><a name="index-x_002dsuper_002dkeysym-3813"></a></var><br>
+<blockquote><p>The name of the keysym that should stand for the Alt modifier
+(respectively, for Meta, Hyper, and Super).  For example, here is
+how to swap the Meta and Alt modifiers within Emacs:
+     <pre class="lisp">          (setq x-alt-keysym 'meta)
+          (setq x-meta-keysym 'alt)
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

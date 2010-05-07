@@ -6,7 +6,7 @@
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
-;; Version: $Id: scrartcl.el,v 1.5 2008/02/25 18:02:11 davidswelt Exp $
+;; Version: $Id: scrartcl.el,v 1.4 2005/03/17 10:02:06 angeli Exp $
 ;; Keywords: tex
 
 ;;; Commentary:

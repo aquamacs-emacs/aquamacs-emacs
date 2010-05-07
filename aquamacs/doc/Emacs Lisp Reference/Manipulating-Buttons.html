@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Manipulating Buttons - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buttons.html#Buttons" title="Buttons">
+<link rel="prev" href="Making-Buttons.html#Making-Buttons" title="Making Buttons">
+<link rel="next" href="Button-Buffer-Commands.html#Button-Buffer-Commands" title="Button Buffer Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Manipulating-Buttons"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Button-Buffer-Commands.html#Button-Buffer-Commands">Button Buffer Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Making-Buttons.html#Making-Buttons">Making Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buttons.html#Buttons">Buttons</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.17.4 Manipulating Buttons</h4>
+
+<p><a name="index-manipulating-buttons-3585"></a>
+These are functions for getting and setting properties of buttons. 
+Often these are used by a button's invocation function to determine
+what to do.
+
+   <p>Where a <var>button</var> parameter is specified, it means an object
+referring to a specific button, either an overlay (for overlay
+buttons), or a buffer-position or marker (for text property buttons). 
+Such an object is passed as the first argument to a button's
+invocation function when it is invoked.
+
+<div class="defun">
+&mdash; Function: <b>button-start</b><var> button<a name="index-button_002dstart-3586"></a></var><br>
+<blockquote><p>Return the position at which <var>button</var> starts. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-end</b><var> button<a name="index-button_002dend-3587"></a></var><br>
+<blockquote><p>Return the position at which <var>button</var> ends. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-get</b><var> button prop<a name="index-button_002dget-3588"></a></var><br>
+<blockquote><p>Get the property of button <var>button</var> named <var>prop</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-put</b><var> button prop val<a name="index-button_002dput-3589"></a></var><br>
+<blockquote><p>Set <var>button</var>'s <var>prop</var> property to <var>val</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-activate</b><var> button &amp;optional use-mouse-action<a name="index-button_002dactivate-3590"></a></var><br>
+<blockquote><p>Call <var>button</var>'s <code>action</code> property (i.e., invoke it).  If
+<var>use-mouse-action</var> is non-<code>nil</code>, try to invoke the button's
+<code>mouse-action</code> property instead of <code>action</code>; if the button
+has no <code>mouse-action</code> property, use <code>action</code> as normal. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-label</b><var> button<a name="index-button_002dlabel-3591"></a></var><br>
+<blockquote><p>Return <var>button</var>'s text label. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-type</b><var> button<a name="index-button_002dtype-3592"></a></var><br>
+<blockquote><p>Return <var>button</var>'s button-type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-has-type-p</b><var> button type<a name="index-button_002dhas_002dtype_002dp-3593"></a></var><br>
+<blockquote><p>Return <code>t</code> if <var>button</var> has button-type <var>type</var>, or one of
+<var>type</var>'s subtypes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-at</b><var> pos<a name="index-button_002dat-3594"></a></var><br>
+<blockquote><p>Return the button at position <var>pos</var> in the current buffer, or <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-type-put</b><var> type prop val<a name="index-button_002dtype_002dput-3595"></a></var><br>
+<blockquote><p>Set the button-type <var>type</var>'s <var>prop</var> property to <var>val</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-type-get</b><var> type prop<a name="index-button_002dtype_002dget-3596"></a></var><br>
+<blockquote><p>Get the property of button-type <var>type</var> named <var>prop</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>button-type-subtype-p</b><var> type supertype<a name="index-button_002dtype_002dsubtype_002dp-3597"></a></var><br>
+<blockquote><p>Return <code>t</code> if button-type <var>type</var> is a subtype of <var>supertype</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

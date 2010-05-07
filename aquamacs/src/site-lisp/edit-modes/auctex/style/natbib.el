@@ -68,9 +68,10 @@
 	4 'LaTeX-bibitem-list "}")))
 
     ;; Fontification
-    (when (and (featurep 'font-latex)
+    (when (and (fboundp 'font-latex-add-keywords)
 	       (eq TeX-install-font-lock 'font-latex-setup))
-      (font-latex-add-keywords '(("citet" "*[[{")
+      (font-latex-add-keywords '(("cite" "*[[{")
+				 ("citet" "*[[{")
 				 ("citealt" "*[[{")
 				 ("citep" "*[[{")
 				 ("citealp" "*[[{")

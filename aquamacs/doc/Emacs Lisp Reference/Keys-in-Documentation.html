@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Keys in Documentation - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Documentation.html#Documentation" title="Documentation">
+<link rel="prev" href="Accessing-Documentation.html#Accessing-Documentation" title="Accessing Documentation">
+<link rel="next" href="Describing-Characters.html#Describing-Characters" title="Describing Characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Keys-in-Documentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Describing-Characters.html#Describing-Characters">Describing Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Documentation</a>
+<hr>
+</div>
+
+<h3 class="section">24.3 Substituting Key Bindings in Documentation</h3>
+
+<p><a name="index-documentation_002c-keys-in-1716"></a><a name="index-keys-in-documentation-strings-1717"></a><a name="index-substituting-keys-in-documentation-1718"></a>
+  When documentation strings refer to key sequences, they should use the
+current, actual key bindings.  They can do so using certain special text
+sequences described below.  Accessing documentation strings in the usual
+way substitutes current key binding information for these special
+sequences.  This works by calling <code>substitute-command-keys</code>.  You
+can also call that function yourself.
+
+   <p>Here is a list of the special sequences and what they mean:
+
+     <dl>
+<dt><code>\[</code><var>command</var><code>]</code><dd>stands for a key sequence that will invoke <var>command</var>, or &lsquo;<samp><span class="samp">M-x
+</span><var>command</var></samp>&rsquo; if <var>command</var> has no key bindings.
+
+     <br><dt><code>\{</code><var>mapvar</var><code>}</code><dd>stands for a summary of the keymap which is the value of the variable
+<var>mapvar</var>.  The summary is made using <code>describe-bindings</code>.
+
+     <br><dt><code>\&lt;</code><var>mapvar</var><code>&gt;</code><dd>stands for no text itself.  It is used only for a side effect: it
+specifies <var>mapvar</var>'s value as the keymap for any following
+&lsquo;<samp><span class="samp">\[</span><var>command</var><span class="samp">]</span></samp>&rsquo; sequences in this documentation string.
+
+     <br><dt><code>\=</code><dd>quotes the following character and is discarded; thus, &lsquo;<samp><span class="samp">\=\[</span></samp>&rsquo; puts
+&lsquo;<samp><span class="samp">\[</span></samp>&rsquo; into the output, and &lsquo;<samp><span class="samp">\=\=</span></samp>&rsquo; puts &lsquo;<samp><span class="samp">\=</span></samp>&rsquo; into the
+output. 
+</dl>
+
+   <p><strong>Please note:</strong> Each &lsquo;<samp><span class="samp">\</span></samp>&rsquo; must be doubled when written in a
+string in Emacs Lisp.
+
+<div class="defun">
+&mdash; Function: <b>substitute-command-keys</b><var> string<a name="index-substitute_002dcommand_002dkeys-1719"></a></var><br>
+<blockquote><p>This function scans <var>string</var> for the above special sequences and
+replaces them by what they stand for, returning the result as a string. 
+This permits display of documentation that refers accurately to the
+user's own customized key bindings. 
+</p></blockquote></div>
+
+   <p>Here are examples of the special sequences:
+
+<pre class="smallexample">     (substitute-command-keys
+        "To abort recursive edit, type: \\[abort-recursive-edit]")
+     &rArr; "To abort recursive edit, type: C-]"
+     
+     (substitute-command-keys
+        "The keys that are defined for the minibuffer here are:
+       \\{minibuffer-local-must-match-map}")
+     &rArr; "The keys that are defined for the minibuffer here are:
+     
+     ?               minibuffer-completion-help
+     SPC             minibuffer-complete-word
+     TAB             minibuffer-complete
+     C-j             minibuffer-complete-and-exit
+     RET             minibuffer-complete-and-exit
+     C-g             abort-recursive-edit
+     "
+     
+     (substitute-command-keys
+        "To abort a recursive edit from the minibuffer, type\
+     \\&lt;minibuffer-local-must-match-map&gt;\\[abort-recursive-edit].")
+     &rArr; "To abort a recursive edit from the minibuffer, type C-g."
+</pre>
+   <p>There are other special conventions for the text in documentation
+strings&mdash;for instance, you can refer to functions, variables, and
+sections of this manual.  See <a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>, for details.
+
+   </body></html>
+

@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Numbered Backups - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Backup-Files.html#Backup-Files" title="Backup Files">
+<link rel="prev" href="Rename-or-Copy.html#Rename-or-Copy" title="Rename or Copy">
+<link rel="next" href="Backup-Names.html#Backup-Names" title="Backup Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Numbered-Backups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Backup-Names.html#Backup-Names">Backup Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rename-or-Copy.html#Rename-or-Copy">Rename or Copy</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Backup-Files.html#Backup-Files">Backup Files</a>
+<hr>
+</div>
+
+<h4 class="subsection">26.1.3 Making and Deleting Numbered Backup Files</h4>
+
+<p>If a file's name is <samp><span class="file">foo</span></samp>, the names of its numbered backup
+versions are <samp><span class="file">foo.~</span><var>v</var><span class="file">~</span></samp>, for various integers <var>v</var>, like
+this: <samp><span class="file">foo.~1~</span></samp>, <samp><span class="file">foo.~2~</span></samp>, <samp><span class="file">foo.~3~</span></samp>, <small class="dots">...</small>,
+<samp><span class="file">foo.~259~</span></samp>, and so on.
+
+<div class="defun">
+&mdash; User Option: <b>version-control</b><var><a name="index-version_002dcontrol-1926"></a></var><br>
+<blockquote><p>This variable controls whether to make a single non-numbered backup
+file or multiple numbered backups.
+
+          <dl>
+<dt><code>nil</code><dd>Make numbered backups if the visited file already has numbered backups;
+otherwise, do not.  This is the default.
+
+          <br><dt><code>never</code><dd>Do not make numbered backups.
+
+          <br><dt><var>anything else</var><dd>Make numbered backups. 
+</dl>
+        </p></blockquote></div>
+
+   <p>The use of numbered backups ultimately leads to a large number of
+backup versions, which must then be deleted.  Emacs can do this
+automatically or it can ask the user whether to delete them.
+
+<div class="defun">
+&mdash; User Option: <b>kept-new-versions</b><var><a name="index-kept_002dnew_002dversions-1927"></a></var><br>
+<blockquote><p>The value of this variable is the number of newest versions to keep
+when a new numbered backup is made.  The newly made backup is included
+in the count.  The default value is&nbsp;2. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>kept-old-versions</b><var><a name="index-kept_002dold_002dversions-1928"></a></var><br>
+<blockquote><p>The value of this variable is the number of oldest versions to keep
+when a new numbered backup is made.  The default value is&nbsp;2. 
+</p></blockquote></div>
+
+   <p>If there are backups numbered 1, 2, 3, 5, and 7, and both of these
+variables have the value 2, then the backups numbered 1 and 2 are kept
+as old versions and those numbered 5 and 7 are kept as new versions;
+backup version 3 is excess.  The function <code>find-backup-file-name</code>
+(see <a href="Backup-Names.html#Backup-Names">Backup Names</a>) is responsible for determining which backup
+versions to delete, but does not delete them itself.
+
+<div class="defun">
+&mdash; User Option: <b>delete-old-versions</b><var><a name="index-delete_002dold_002dversions-1929"></a></var><br>
+<blockquote><p>If this variable is <code>t</code>, then saving a file deletes excess
+backup versions silently.  If it is <code>nil</code>, that means
+to ask for confirmation before deleting excess backups. 
+Otherwise, they are not deleted at all. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>dired-kept-versions</b><var><a name="index-dired_002dkept_002dversions-1930"></a></var><br>
+<blockquote><p>This variable specifies how many of the newest backup versions to keep
+in the Dired command <kbd>.</kbd> (<code>dired-clean-directory</code>).  That's the
+same thing <code>kept-new-versions</code> specifies when you make a new backup
+file.  The default is&nbsp;2. 
+</p></blockquote></div>
+
+   </body></html>
+

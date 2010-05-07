@@ -1,6 +1,6 @@
 ;;; virtex.el - Common code for all TeX formats.
 
-;; $Id: virtex.el,v 1.5 2008/02/25 18:02:15 davidswelt Exp $
+;; $Id: virtex.el,v 1.1 1994/01/23 08:14:44 amanda Exp $
 
 ;;; Code:
 

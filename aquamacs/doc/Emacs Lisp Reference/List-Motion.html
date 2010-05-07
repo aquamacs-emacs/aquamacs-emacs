@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>List Motion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Motion.html#Motion" title="Motion">
+<link rel="prev" href="Screen-Lines.html#Screen-Lines" title="Screen Lines">
+<link rel="next" href="Skipping-Characters.html#Skipping-Characters" title="Skipping Characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="List-Motion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Skipping-Characters.html#Skipping-Characters">Skipping Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Screen-Lines.html#Screen-Lines">Screen Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">30.2.6 Moving over Balanced Expressions</h4>
+
+<p><a name="index-sexp-motion-2423"></a><a name="index-Lisp-expression-motion-2424"></a><a name="index-list-motion-2425"></a><a name="index-balanced-parenthesis-motion-2426"></a>
+  Here are several functions concerned with balanced-parenthesis
+expressions (also called <dfn>sexps</dfn> in connection with moving across
+them in Emacs).  The syntax table controls how these functions interpret
+various characters; see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.  See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>, for lower-level primitives for scanning sexps or parts of
+sexps.  For user-level commands, see <a href="../emacs/Parentheses.html#Parentheses">Commands for Editing with Parentheses</a>.
+
+<div class="defun">
+&mdash; Command: <b>forward-list</b><var> &amp;optional arg<a name="index-forward_002dlist-2427"></a></var><br>
+<blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced groups of
+parentheses.  (Other syntactic entities such as words or paired string
+quotes are ignored.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>backward-list</b><var> &amp;optional arg<a name="index-backward_002dlist-2428"></a></var><br>
+<blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced groups of
+parentheses.  (Other syntactic entities such as words or paired string
+quotes are ignored.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>up-list</b><var> &amp;optional arg<a name="index-up_002dlist-2429"></a></var><br>
+<blockquote><p>This function moves forward out of <var>arg</var> (default 1) levels of parentheses. 
+A negative argument means move backward but still to a less deep spot. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>down-list</b><var> &amp;optional arg<a name="index-down_002dlist-2430"></a></var><br>
+<blockquote><p>This function moves forward into <var>arg</var> (default 1) levels of
+parentheses.  A negative argument means move backward but still go
+deeper in parentheses (&minus;<var>arg</var> levels). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>forward-sexp</b><var> &amp;optional arg<a name="index-forward_002dsexp-2431"></a></var><br>
+<blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced expressions. 
+Balanced expressions include both those delimited by parentheses and
+other kinds, such as words and string constants. 
+See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>.  For example,
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          (concat-!- "foo " (car x) y z)
+          ---------- Buffer: foo ----------
+          
+          (forward-sexp 3)
+               &rArr; nil
+          
+          ---------- Buffer: foo ----------
+          (concat "foo " (car x) y-!- z)
+          ---------- Buffer: foo ----------
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>backward-sexp</b><var> &amp;optional arg<a name="index-backward_002dsexp-2432"></a></var><br>
+<blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced expressions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>beginning-of-defun</b><var> &amp;optional arg<a name="index-beginning_002dof_002ddefun-2433"></a></var><br>
+<blockquote><p>This function moves back to the <var>arg</var>th beginning of a defun.  If
+<var>arg</var> is negative, this actually moves forward, but it still moves
+to the beginning of a defun, not to the end of one.  <var>arg</var> defaults
+to 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>end-of-defun</b><var> &amp;optional arg<a name="index-end_002dof_002ddefun-2434"></a></var><br>
+<blockquote><p>This function moves forward to the <var>arg</var>th end of a defun.  If
+<var>arg</var> is negative, this actually moves backward, but it still moves
+to the end of a defun, not to the beginning of one.  <var>arg</var> defaults
+to 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>defun-prompt-regexp</b><var><a name="index-defun_002dprompt_002dregexp-2435"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this buffer-local variable holds a regular
+expression that specifies what text can appear before the
+open-parenthesis that starts a defun.  That is to say, a defun begins
+on a line that starts with a match for this regular expression,
+followed by a character with open-parenthesis syntax. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>open-paren-in-column-0-is-defun-start</b><var><a name="index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart-2436"></a></var><br>
+<blockquote><p>If this variable's value is non-<code>nil</code>, an open parenthesis in
+column 0 is considered to be the start of a defun.  If it is
+<code>nil</code>, an open parenthesis in column 0 has no special meaning. 
+The default is <code>t</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>beginning-of-defun-function</b><var><a name="index-beginning_002dof_002ddefun_002dfunction-2437"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the
+beginning of a defun.  The function <code>beginning-of-defun</code>
+calls this function instead of using its normal method, passing it its
+optional argument.  If the argument is non-<code>nil</code>, the function
+should move back by that many functions, like
+<code>beginning-of-defun</code> does. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>end-of-defun-function</b><var><a name="index-end_002dof_002ddefun_002dfunction-2438"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the end of
+a defun.  The function <code>end-of-defun</code> calls this function instead
+of using its normal method. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Sticky Properties - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Properties.html#Text-Properties" title="Text Properties">
+<link rel="prev" href="Format-Properties.html#Format-Properties" title="Format Properties">
+<link rel="next" href="Lazy-Properties.html#Lazy-Properties" title="Lazy Properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Sticky-Properties"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Lazy-Properties.html#Lazy-Properties">Lazy Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Properties.html#Format-Properties">Format Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.19.6 Stickiness of Text Properties</h4>
+
+<p><a name="index-sticky-text-properties-2717"></a><a name="index-inheritance-of-text-properties-2718"></a>
+  Self-inserting characters normally take on the same properties as the
+preceding character.  This is called <dfn>inheritance</dfn> of properties.
+
+   <p>In a Lisp program, you can do insertion with inheritance or without,
+depending on your choice of insertion primitive.  The ordinary text
+insertion functions such as <code>insert</code> do not inherit any properties. 
+They insert text with precisely the properties of the string being
+inserted, and no others.  This is correct for programs that copy text
+from one context to another&mdash;for example, into or out of the kill ring. 
+To insert with inheritance, use the special primitives described in this
+section.  Self-inserting characters inherit properties because they work
+using these primitives.
+
+   <p>When you do insertion with inheritance, <em>which</em> properties are
+inherited, and from where, depends on which properties are <dfn>sticky</dfn>. 
+Insertion after a character inherits those of its properties that are
+<dfn>rear-sticky</dfn>.  Insertion before a character inherits those of its
+properties that are <dfn>front-sticky</dfn>.  When both sides offer different
+sticky values for the same property, the previous character's value
+takes precedence.
+
+   <p>By default, a text property is rear-sticky but not front-sticky; thus,
+the default is to inherit all the properties of the preceding character,
+and nothing from the following character.
+
+   <p>You can control the stickiness of various text properties with two
+specific text properties, <code>front-sticky</code> and <code>rear-nonsticky</code>,
+and with the variable <code>text-property-default-nonsticky</code>.  You can
+use the variable to specify a different default for a given property. 
+You can use those two text properties to make any specific properties
+sticky or nonsticky in any particular part of the text.
+
+   <p>If a character's <code>front-sticky</code> property is <code>t</code>, then all
+its properties are front-sticky.  If the <code>front-sticky</code> property is
+a list, then the sticky properties of the character are those whose
+names are in the list.  For example, if a character has a
+<code>front-sticky</code> property whose value is <code>(face read-only)</code>,
+then insertion before the character can inherit its <code>face</code> property
+and its <code>read-only</code> property, but no others.
+
+   <p>The <code>rear-nonsticky</code> property works the opposite way.  Most
+properties are rear-sticky by default, so the <code>rear-nonsticky</code>
+property says which properties are <em>not</em> rear-sticky.  If a
+character's <code>rear-nonsticky</code> property is <code>t</code>, then none of its
+properties are rear-sticky.  If the <code>rear-nonsticky</code> property is a
+list, properties are rear-sticky <em>unless</em> their names are in the
+list.
+
+<div class="defun">
+&mdash; Variable: <b>text-property-default-nonsticky</b><var><a name="index-text_002dproperty_002ddefault_002dnonsticky-2719"></a></var><br>
+<blockquote><p>This variable holds an alist which defines the default rear-stickiness
+of various text properties.  Each element has the form
+<code>(</code><var>property</var><code> . </code><var>nonstickiness</var><code>)</code>, and it defines the
+stickiness of a particular text property, <var>property</var>.
+
+        <p>If <var>nonstickiness</var> is non-<code>nil</code>, this means that the property
+<var>property</var> is rear-nonsticky by default.  Since all properties are
+front-nonsticky by default, this makes <var>property</var> nonsticky in both
+directions by default.
+
+        <p>The text properties <code>front-sticky</code> and <code>rear-nonsticky</code>, when
+used, take precedence over the default <var>nonstickiness</var> specified in
+<code>text-property-default-nonsticky</code>. 
+</p></blockquote></div>
+
+   <p>Here are the functions that insert text with inheritance of properties:
+
+<div class="defun">
+&mdash; Function: <b>insert-and-inherit</b><var> &amp;rest strings<a name="index-insert_002dand_002dinherit-2720"></a></var><br>
+<blockquote><p>Insert the strings <var>strings</var>, just like the function <code>insert</code>,
+but inherit any sticky properties from the adjoining text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>insert-before-markers-and-inherit</b><var> &amp;rest strings<a name="index-insert_002dbefore_002dmarkers_002dand_002dinherit-2721"></a></var><br>
+<blockquote><p>Insert the strings <var>strings</var>, just like the function
+<code>insert-before-markers</code>, but inherit any sticky properties from the
+adjoining text. 
+</p></blockquote></div>
+
+   <p>See <a href="Insertion.html#Insertion">Insertion</a>, for the ordinary insertion functions which do not
+inherit.
+
+   </body></html>
+

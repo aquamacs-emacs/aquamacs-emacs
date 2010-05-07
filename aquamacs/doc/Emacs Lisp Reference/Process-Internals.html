@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Process Internals - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Object-Internals.html#Object-Internals" title="Object Internals">
+<link rel="prev" href="Window-Internals.html#Window-Internals" title="Window Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Process-Internals"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Internals.html#Window-Internals">Window Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals">Object Internals</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">E.6.3 Process Internals</h4>
+
+<p><a name="index-internals_002c-of-process-3901"></a><a name="index-process-internals-3902"></a>
+  The fields of a process are:
+
+     <dl>
+<dt><code>name</code><dd>A string, the name of the process.
+
+     <br><dt><code>command</code><dd>A list containing the command arguments that were used to start this
+process.  For a network or serial process, it is <code>nil</code> if the
+process is running or <code>t</code> if the process is stopped.
+
+     <br><dt><code>filter</code><dd>A function used to accept output from the process instead of a buffer,
+or <code>nil</code>.
+
+     <br><dt><code>sentinel</code><dd>A function called whenever the process receives a signal, or <code>nil</code>.
+
+     <br><dt><code>buffer</code><dd>The associated buffer of the process.
+
+     <br><dt><code>pid</code><dd>An integer, the operating system's process <acronym>ID</acronym>.
+
+     <br><dt><code>childp</code><dd>A flag, non-<code>nil</code> if this is really a child process. 
+It is <code>nil</code> for a network or serial connection.
+
+     <br><dt><code>mark</code><dd>A marker indicating the position of the end of the last output from this
+process inserted into the buffer.  This is often but not always the end
+of the buffer.
+
+     <br><dt><code>kill_without_query</code><dd>If this is non-zero, killing Emacs while this process is still running
+does not ask for confirmation about killing the process.
+
+     <br><dt><code>raw_status_low</code><dt><code>raw_status_high</code><dd>These two fields record 16 bits each of the process status returned by
+the <code>wait</code> system call.
+
+     <br><dt><code>status</code><dd>The process status, as <code>process-status</code> should return it.
+
+     <br><dt><code>tick</code><dt><code>update_tick</code><dd>If these two fields are not equal, a change in the status of the process
+needs to be reported, either by running the sentinel or by inserting a
+message in the process buffer.
+
+     <br><dt><code>pty_flag</code><dd>Non-<code>nil</code> if communication with the subprocess uses a <acronym>PTY</acronym>;
+<code>nil</code> if it uses a pipe.
+
+     <br><dt><code>infd</code><dd>The file descriptor for input from the process.
+
+     <br><dt><code>outfd</code><dd>The file descriptor for output to the process.
+
+     <br><dt><code>subtty</code><dd>The file descriptor for the terminal that the subprocess is using.  (On
+some systems, there is no need to record this, so the value is
+<code>nil</code>.)
+
+     <br><dt><code>tty_name</code><dd>The name of the terminal that the subprocess is using,
+or <code>nil</code> if it is using pipes.
+
+     <br><dt><code>decode_coding_system</code><dd>Coding-system for decoding the input from this process.
+
+     <br><dt><code>decoding_buf</code><dd>A working buffer for decoding.
+
+     <br><dt><code>decoding_carryover</code><dd>Size of carryover in decoding.
+
+     <br><dt><code>encode_coding_system</code><dd>Coding-system for encoding the output to this process.
+
+     <br><dt><code>encoding_buf</code><dd>A working buffer for encoding.
+
+     <br><dt><code>encoding_carryover</code><dd>Size of carryover in encoding.
+
+     <br><dt><code>inherit_coding_system_flag</code><dd>Flag to set <code>coding-system</code> of the process buffer from the
+coding system used to decode process output.
+
+     <br><dt><code>type</code><dd>Symbol indicating the type of process: <code>real</code>, <code>network</code>,
+<code>serial</code>
+
+   </dl>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1999, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

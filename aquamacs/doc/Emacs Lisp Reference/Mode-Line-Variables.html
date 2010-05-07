@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+<title>Mode Line Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
+<link rel="prev" href="Mode-Line-Top.html#Mode-Line-Top" title="Mode Line Top">
+<link rel="next" href="_0025_002dConstructs.html#g_t_0025_002dConstructs" title="%-Constructs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mode-Line-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Top.html#Mode-Line-Top">Mode Line Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.4.4 Variables Used in the Mode Line</h4>
+
+<p>This section describes variables incorporated by the standard value
+of <code>mode-line-format</code> into the text of the mode line.  There is
+nothing inherently special about these variables; any other variables
+could have the same effects on the mode line if
+<code>mode-line-format</code>'s value were changed to use them.  However,
+various parts of Emacs set these variables on the understanding that
+they will control parts of the mode line; therefore, practically
+speaking, it is essential for the mode line to use them.
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-mule-info</b><var><a name="index-mode_002dline_002dmule_002dinfo-1638"></a></var><br>
+<blockquote><p>This variable holds the value of the mode-line construct that displays
+information about the language environment, buffer coding system, and
+current input method.  See <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-modified</b><var><a name="index-mode_002dline_002dmodified-1639"></a></var><br>
+<blockquote><p>This variable holds the value of the mode-line construct that displays
+whether the current buffer is modified.  Its default value displays
+&lsquo;<samp><span class="samp">**</span></samp>&rsquo; if the buffer is modified, &lsquo;<samp><span class="samp">--</span></samp>&rsquo; if the buffer is not
+modified, &lsquo;<samp><span class="samp">%%</span></samp>&rsquo; if the buffer is read only, and &lsquo;<samp><span class="samp">%*</span></samp>&rsquo; if the
+buffer is read only and modified.
+
+        <p>Changing this variable does not force an update of the mode line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-frame-identification</b><var><a name="index-mode_002dline_002dframe_002didentification-1640"></a></var><br>
+<blockquote><p>This variable identifies the current frame.  Its default value
+displays <code>" "</code> if you are using a window system which can show
+multiple frames, or <code>"-%F "</code> on an ordinary terminal which shows
+only one frame at a time. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-buffer-identification</b><var><a name="index-mode_002dline_002dbuffer_002didentification-1641"></a></var><br>
+<blockquote><p>This variable identifies the buffer being displayed in the window. 
+Its default value displays the buffer name, padded with spaces to at
+least 12 columns. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>mode-line-position</b><var><a name="index-mode_002dline_002dposition-1642"></a></var><br>
+<blockquote><p>This variable indicates the position in the buffer.  Its default value
+displays the buffer percentage and, optionally, the buffer size, the
+line number and the column number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>vc-mode</b><var><a name="index-vc_002dmode-1643"></a></var><br>
+<blockquote><p>The variable <code>vc-mode</code>, buffer-local in each buffer, records
+whether the buffer's visited file is maintained with version control,
+and, if so, which kind.  Its value is a string that appears in the mode
+line, or <code>nil</code> for no version control. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>mode-line-modes</b><var><a name="index-mode_002dline_002dmodes-1644"></a></var><br>
+<blockquote><p>This variable displays the buffer's major and minor modes.  Its
+default value also displays the recursive editing level, information
+on the process status, and whether narrowing is in effect. 
+</p></blockquote></div>
+
+   <p>The following three variables are used in <code>mode-line-modes</code>:
+
+<div class="defun">
+&mdash; Variable: <b>mode-name</b><var><a name="index-mode_002dname-1645"></a></var><br>
+<blockquote><p>This buffer-local variable holds the &ldquo;pretty&rdquo; name of the current
+buffer's major mode.  Each major mode should set this variable so that
+the mode name will appear in the mode line.  The value does not have
+to be a string, but can use any of the data types valid in a mode-line
+construct (see <a href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>).  To compute the string that will
+identify the mode name in the mode line, use <code>format-mode-line</code>
+(see <a href="Emulating-Mode-Line.html#Emulating-Mode-Line">Emulating Mode Line</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>mode-line-process</b><var><a name="index-mode_002dline_002dprocess-1646"></a></var><br>
+<blockquote><p>This buffer-local variable contains the mode-line information on process
+status in modes used for communicating with subprocesses.  It is
+displayed immediately following the major mode name, with no intervening
+space.  For example, its value in the &lsquo;<samp><span class="samp">*shell*</span></samp>&rsquo; buffer is
+<code>(":%s")</code>, which allows the shell to display its status along
+with the major mode as: &lsquo;<samp><span class="samp">(Shell:run)</span></samp>&rsquo;.  Normally this variable
+is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>minor-mode-alist</b><var><a name="index-minor_002dmode_002dalist-1647"></a></var><br>
+<blockquote><p><a name="Definition-of-minor_002dmode_002dalist"></a>This variable holds an association list whose elements specify how the
+mode line should indicate that a minor mode is active.  Each element of
+the <code>minor-mode-alist</code> should be a two-element list:
+
+     <pre class="example">          (<var>minor-mode-variable</var> <var>mode-line-string</var>)
+</pre>
+        <p>More generally, <var>mode-line-string</var> can be any mode-line spec.  It
+appears in the mode line when the value of <var>minor-mode-variable</var>
+is non-<code>nil</code>, and not otherwise.  These strings should begin with
+spaces so that they don't run together.  Conventionally, the
+<var>minor-mode-variable</var> for a specific mode is set to a
+non-<code>nil</code> value when that minor mode is activated.
+
+        <p><code>minor-mode-alist</code> itself is not buffer-local.  Each variable
+mentioned in the alist should be buffer-local if its minor mode can be
+enabled separately in each buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>global-mode-string</b><var><a name="index-global_002dmode_002dstring-1648"></a></var><br>
+<blockquote><p>This variable holds a mode-line spec that, by default, appears in the
+mode line just after the <code>which-func-mode</code> minor mode if set,
+else after <code>mode-line-modes</code>.  The command <code>display-time</code>
+sets <code>global-mode-string</code> to refer to the variable
+<code>display-time-string</code>, which holds a string containing the time
+and load information.
+
+        <p>The &lsquo;<samp><span class="samp">%M</span></samp>&rsquo; construct substitutes the value of
+<code>global-mode-string</code>, but that is obsolete, since the variable is
+included in the mode line from <code>mode-line-format</code>. 
+</p></blockquote></div>
+
+   <p>Here is a simplified version of the default value of
+<code>mode-line-format</code>.  The real default value also
+specifies addition of text properties.
+
+<pre class="example">     ("-"
+      mode-line-mule-info
+      mode-line-modified
+      mode-line-frame-identification
+      mode-line-buffer-identification
+      "   "
+      mode-line-position
+      (vc-mode vc-mode)
+      "   "
+      mode-line-modes
+      (which-func-mode ("" which-func-format "--"))
+      (global-mode-string ("--" global-mode-string))
+      "-%-")
+</pre>
+   </body></html>
+

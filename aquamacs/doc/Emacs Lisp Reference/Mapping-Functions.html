@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Mapping Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Calling-Functions.html#Calling-Functions" title="Calling Functions">
+<link rel="next" href="Anonymous-Functions.html#Anonymous-Functions" title="Anonymous Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mapping-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Calling-Functions.html#Calling-Functions">Calling Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.6 Mapping Functions</h3>
+
+<p><a name="index-mapping-functions-705"></a>
+  A <dfn>mapping function</dfn> applies a given function (<em>not</em> a
+special form or macro) to each element of a list or other collection. 
+Emacs Lisp has several such functions; <code>mapcar</code> and
+<code>mapconcat</code>, which scan a list, are described here. 
+See <a href="Definition-of-mapatoms.html#Definition-of-mapatoms">Definition of mapatoms</a>, for the function <code>mapatoms</code> which
+maps over the symbols in an obarray.  See <a href="Definition-of-maphash.html#Definition-of-maphash">Definition of maphash</a>,
+for the function <code>maphash</code> which maps over key/value associations
+in a hash table.
+
+   <p>These mapping functions do not allow char-tables because a char-table
+is a sparse array whose nominal range of indices is very large.  To map
+over a char-table in a way that deals properly with its sparse nature,
+use the function <code>map-char-table</code> (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>).
+
+<div class="defun">
+&mdash; Function: <b>mapcar</b><var> function sequence<a name="index-mapcar-706"></a></var><br>
+<blockquote><p><a name="Definition-of-mapcar"></a><code>mapcar</code> applies <var>function</var> to each element of <var>sequence</var>
+in turn, and returns a list of the results.
+
+        <p>The argument <var>sequence</var> can be any kind of sequence except a
+char-table; that is, a list, a vector, a bool-vector, or a string.  The
+result is always a list.  The length of the result is the same as the
+length of <var>sequence</var>.  For example:
+
+     <pre class="smallexample">          (mapcar 'car '((a b) (c d) (e f)))
+               &rArr; (a c e)
+          (mapcar '1+ [1 2 3])
+               &rArr; (2 3 4)
+          (mapcar 'char-to-string "abc")
+               &rArr; ("a" "b" "c")
+          
+          ;; <span class="roman">Call each function in </span><code>my-hooks</code><span class="roman">.</span>
+          (mapcar 'funcall my-hooks)
+          
+          (defun mapcar* (function &amp;rest args)
+            "Apply FUNCTION to successive cars of all ARGS.
+          Return the list of results."
+            ;; <span class="roman">If no list is exhausted,</span>
+            (if (not (memq nil args))
+                ;; <span class="roman">apply function to cars.</span>
+                (cons (apply function (mapcar 'car args))
+                      (apply 'mapcar* function
+                             ;; <span class="roman">Recurse for rest of elements.</span>
+                             (mapcar 'cdr args)))))
+          
+          (mapcar* 'cons '(a b c) '(1 2 3 4))
+               &rArr; ((a . 1) (b . 2) (c . 3))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapc</b><var> function sequence<a name="index-mapc-707"></a></var><br>
+<blockquote><p><code>mapc</code> is like <code>mapcar</code> except that <var>function</var> is used for
+side-effects only&mdash;the values it returns are ignored, not collected
+into a list.  <code>mapc</code> always returns <var>sequence</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapconcat</b><var> function sequence separator<a name="index-mapconcat-708"></a></var><br>
+<blockquote><p><code>mapconcat</code> applies <var>function</var> to each element of
+<var>sequence</var>: the results, which must be strings, are concatenated. 
+Between each pair of result strings, <code>mapconcat</code> inserts the string
+<var>separator</var>.  Usually <var>separator</var> contains a space or comma or
+other suitable punctuation.
+
+        <p>The argument <var>function</var> must be a function that can take one
+argument and return a string.  The argument <var>sequence</var> can be any
+kind of sequence except a char-table; that is, a list, a vector, a
+bool-vector, or a string.
+
+     <pre class="smallexample">          (mapconcat 'symbol-name
+                     '(The cat in the hat)
+                     " ")
+               &rArr; "The cat in the hat"
+          
+          (mapconcat (function (lambda (x) (format "%c" (1+ x))))
+                     "HAL-8000"
+                     "")
+               &rArr; "IBM.9111"
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

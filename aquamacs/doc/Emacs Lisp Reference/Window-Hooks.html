@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Window Hooks - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Window-Parameters.html#Window-Parameters" title="Window Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-Hooks"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Parameters.html#Window-Parameters">Window Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.21 Hooks for Window Scrolling and Changes</h3>
+
+<p><a name="index-hooks-for-window-operations-2203"></a>
+This section describes how a Lisp program can take action whenever a
+window displays a different part of its buffer or a different buffer. 
+There are three actions that can change this: scrolling the window,
+switching buffers in the window, and changing the size of the window. 
+The first two actions run <code>window-scroll-functions</code>; the last runs
+<code>window-size-change-functions</code>.
+
+<div class="defun">
+&mdash; Variable: <b>window-scroll-functions</b><var><a name="index-window_002dscroll_002dfunctions-2204"></a></var><br>
+<blockquote><p>This variable holds a list of functions that Emacs should call before
+redisplaying a window with scrolling.  Displaying a different buffer in
+the window also runs these functions.
+
+        <p>This variable is not a normal hook, because each function is called with
+two arguments: the window, and its new display-start position.
+
+        <p>These functions must be careful in using <code>window-end</code>
+(see <a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>); if you need an up-to-date value, you
+must use the <var>update</var> argument to ensure you get it.
+
+        <p><strong>Warning:</strong> don't use this feature to alter the way the window
+is scrolled.  It's not designed for that, and such use probably won't
+work. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>window-size-change-functions</b><var><a name="index-window_002dsize_002dchange_002dfunctions-2205"></a></var><br>
+<blockquote><p>This variable holds a list of functions to be called if the size of any
+window changes for any reason.  The functions are called just once per
+redisplay, and just once for each frame on which size changes have
+occurred.
+
+        <p>Each function receives the frame as its sole argument.  There is no
+direct way to find out which windows on that frame have changed size, or
+precisely how.  However, if a size-change function records, at each
+call, the existing windows and their sizes, it can also compare the
+present sizes and the previous sizes.
+
+        <p>Creating or deleting windows counts as a size change, and therefore
+causes these functions to be called.  Changing the frame size also
+counts, because it changes the sizes of the existing windows.
+
+        <p>It is not a good idea to use <code>save-window-excursion</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>) in these functions, because that always counts as a
+size change, and it would cause these functions to be called over and
+over.  In most cases, <code>save-selected-window</code> (see <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>) is what you need here. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>window-configuration-change-hook</b><var><a name="index-window_002dconfiguration_002dchange_002dhook-2206"></a></var><br>
+<blockquote><p>A normal hook that is run every time you change the window configuration
+of an existing frame.  This includes splitting or deleting windows,
+changing the sizes of windows, or displaying a different buffer in a
+window.
+
+        <p>The buffer-local part of this hook is run once per each window on the
+affected frame, with the relevant window selected and its buffer
+current.  The global part is run once for the modified frame, with that
+frame selected. 
+</p></blockquote></div>
+
+   <p>In addition, you can use <code>jit-lock-register</code> to register a Font
+Lock fontification function, which will be called whenever parts of a
+buffer are (re)fontified because a window was scrolled or its size
+changed.  See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
+<!-- Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

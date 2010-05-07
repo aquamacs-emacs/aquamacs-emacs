@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Command-Line Arguments - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
+<link rel="prev" href="Terminal_002dSpecific.html#Terminal_002dSpecific" title="Terminal-Specific">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Command-Line-Arguments"></a>
+<a name="Command_002dLine-Arguments"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
+<hr>
+</div>
+
+<h4 class="subsection">39.1.4 Command-Line Arguments</h4>
+
+<p><a name="index-command_002dline-arguments-3703"></a>
+  You can use command-line arguments to request various actions when you
+start Emacs.  Since you do not need to start Emacs more than once per
+day, and will often leave your Emacs session running longer than that,
+command-line arguments are hardly ever used.  As a practical matter, it
+is best to avoid making the habit of using them, since this habit would
+encourage you to kill and restart Emacs unnecessarily often.  These
+options exist for two reasons: to be compatible with other editors (for
+invocation by other programs) and to enable shell scripts to run
+specific Lisp programs.
+
+   <p>This section describes how Emacs processes command-line arguments,
+and how you can customize them.
+
+<div class="defun">
+&mdash; Function: <b>command-line</b><var><a name="index-command_002dline-3704"></a></var><br>
+<blockquote><p>This function parses the command line that Emacs was called with,
+processes it, loads the user's init file and displays the
+startup messages. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-line-processed</b><var><a name="index-command_002dline_002dprocessed-3705"></a></var><br>
+<blockquote><p>The value of this variable is <code>t</code> once the command line has been
+processed.
+
+        <p>If you redump Emacs by calling <code>dump-emacs</code>, you may wish to set
+this variable to <code>nil</code> first in order to cause the new dumped Emacs
+to process its new command-line arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-switch-alist</b><var><a name="index-command_002dswitch_002dalist-3706"></a></var><br>
+<blockquote><p><a name="index-switches-on-command-line-3707"></a><a name="index-options-on-command-line-3708"></a><a name="index-command_002dline-options-3709"></a>The value of this variable is an alist of user-defined command-line
+options and associated handler functions.  This variable exists so you
+can add elements to it.
+
+        <p>A <dfn>command-line option</dfn> is an argument on the command line, which
+has the form:
+
+     <pre class="example">          -<var>option</var>
+</pre>
+        <p>The elements of the <code>command-switch-alist</code> look like this:
+
+     <pre class="example">          (<var>option</var> . <var>handler-function</var>)
+</pre>
+        <p>The <span class="sc">car</span>, <var>option</var>, is a string, the name of a command-line
+option (not including the initial hyphen).  The <var>handler-function</var>
+is called to handle <var>option</var>, and receives the option name as its
+sole argument.
+
+        <p>In some cases, the option is followed in the command line by an
+argument.  In these cases, the <var>handler-function</var> can find all the
+remaining command-line arguments in the variable
+<code>command-line-args-left</code>.  (The entire list of command-line
+arguments is in <code>command-line-args</code>.)
+
+        <p>The command-line arguments are parsed by the <code>command-line-1</code>
+function in the <samp><span class="file">startup.el</span></samp> file.  See also <a href="../emacs/Emacs-Invocation.html#Emacs-Invocation">Command Line Arguments for Emacs Invocation</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-line-args</b><var><a name="index-command_002dline_002dargs-3710"></a></var><br>
+<blockquote><p>The value of this variable is the list of command-line arguments passed
+to Emacs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-line-args-left</b><var><a name="index-command_002dline_002dargs_002dleft-3711"></a></var><br>
+<blockquote><p><a name="index-argv-3712"></a>The value of this variable is the list of command-line arguments that
+have not yet been processed.  <code>argv</code> is an alias for this. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>command-line-functions</b><var><a name="index-command_002dline_002dfunctions-3713"></a></var><br>
+<blockquote><p>This variable's value is a list of functions for handling an
+unrecognized command-line argument.  Each time the next argument to be
+processed has no special meaning, the functions in this list are called,
+in order of appearance, until one of them returns a non-<code>nil</code>
+value.
+
+        <p>These functions are called with no arguments.  They can access the
+command-line argument under consideration through the variable
+<code>argi</code>, which is bound temporarily at this point.  The remaining
+arguments (not including the current one) are in the variable
+<code>command-line-args-left</code>.
+
+        <p>When a function recognizes and processes the argument in <code>argi</code>, it
+should return a non-<code>nil</code> value to say it has dealt with that
+argument.  If it has also dealt with some of the following arguments, it
+can indicate that by deleting them from <code>command-line-args-left</code>.
+
+        <p>If all of these functions return <code>nil</code>, then the argument is used
+as a file name to visit. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -5,7 +5,7 @@ ESS -- Emacs Speaks Statistics
 
 INFO-DIR-SECTION Emacs
 START-INFO-DIR-ENTRY
-* ESS: (ess). Emacs Speaks Statistics (S/S+/R, SAS, BUGS/JAGS, Stata, XLisp-Stat).
+* ESS: (ess). Emacs Speaks Statistics (S/S+/R, SAS, BUGS, Stata, XLisp-Stat).
 END-INFO-DIR-ENTRY
 
 
@@ -14,7 +14,7 @@ File: ess.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 ESS: Emacs Speaks Statistics
 ****************************
 
-ESS version 5.3.10
+ESS version 5.3.6
 
      by  A.J. Rossini,
          R.M. Heiberger,
@@ -25,15 +25,15 @@ ESS version 5.3.10
 
      Emacs Speaks Statistics (ESS) provides an intelligent, consistent
      interface between the user and the software.  ESS interfaces with
-     SAS, S-PLUS, R, BUGS/JAGS and other statistical analysis packages
-     under the Unix, Microsoft Windows, and Apple Mac operating
-     systems.  ESS is itself a package within the emacs text editor and
-     uses emacs features to streamline the creation and use of
-     statistical software.  ESS knows the syntax and grammar of
-     statistical analysis packages and provides consistent display and
-     editing features based on that knowledge.  ESS assists in
-     interactive and batch execution of statements written in these
-     statistical analysis languages.
+     SAS, S-PLUS, R, BUGS and other statistical analysis packages under
+     the Unix, Microsoft Windows, and Apple Mac operating systems.  ESS
+     is itself a package within the emacs text editor and uses emacs
+     features to streamline the creation and use of statistical
+     software.  ESS knows the syntax and grammar of statistical
+     analysis packages and provides consistent display and editing
+     features based on that knowledge.  ESS assists in interactive and
+     batch execution of statements written in these statistical
+     analysis languages.
 
 * Menu:
 
@@ -51,7 +51,6 @@ ESS version 5.3.10
 
 * ESS for SAS::
 * ESS for BUGS::
-* ESS for JAGS::
 
 * Miscellaneous::               Other features of ESS
 * Mailing lists/bug reports::   How to get assistance with ESS
@@ -76,8 +75,8 @@ incorporated.
 
    ESS provides a common, generic, and useful interface, through emacs,
 to many statistical packages.  It currently supports the S family, SAS,
-BUGS/JAGS, Stata and XLisp-Stat with the level of support roughly in
-that order.
+BUGS, Stata and XLisp-Stat with the level of support roughly in that
+order.
 
    A bit of notation before we begin.  _emacs_ refers to both _GNU
 Emacs_ by the Free Software Foundation, as well as _XEmacs_ by the
@@ -206,111 +205,15 @@ File: ess.info,  Node: New features,  Next: Credits,  Prev: Features,  Up: Intro
 1.2 New features in ESS
 =======================
 
-Changes/New Features in 5.3.10:
-   * Fixed noweb-mode bug accidentally introduced into 5.3.9
-
-   * In noweb-mode, e.g., Rnw-mode, electric "<" also inserts closing
-     "@".   Further, the code chunk boundaries are better kept
-     up-to-date, such that  code[R] <-> text[LaTeX] minor mode
-     switching should happen more reliably.
-
-   * In noweb-mode, fix a buglet in rare [Enter] or [Tab] behavior;
-     further,  by default disable the former `[[' .. `]]'
-     code-protection-when-filling  behavior which has been found to be
-     buggy.
-
-   Changes/New Features in 5.3.9:
-   * ESS[SAS]: evince PDF viewer now supported as well; search order:
-     evince, Xpdf, Adobe/Acrobat Reader
-
-   * ESS[R]: added support for Roxygen, potentially to be extended.
-
-   * ESS[S] (and R): inferior (`*R*') and transcript modes no longer
-     fontify language keywords (such as `for', `in', etc).
-
-   * iESS[Stata]: Customize the `ess-sta-delimiter-friendly' setting to
-     t to convert embedded semi-colons to newlines for Stata processing.
-
-   * Sweave fix for embedded blanks in PDF reader and PDF files
-
-   * Several fixes for Major Mode Convention violations in `ess-mode'
-     and `noweb-mode'.
-
-   * ESS[JAGS]: `M-x comment-region' now available!
-
-   * ESS[S] The `ess-swv-*' commands (and keybindings) are now in a
-     submenu of the "Noweb" menu, when editing Sweave files.
-
-   Changes/New Features in 5.3.8:
-   * ESS[JAGS]: more separation from ESS[BUGS] (as much as is currently
-     planned); now `C-c C-c' on an empty `.jmd' creates a template as
-     it should; symbolic links are created for CODA output so BOA is
-     happy: from `index.txt' to `.ind' and `chain#.txt' to `#.out'
-
-   * ESS[SAS]: buffer-local `ess-sas-submit-command' and
-     `ess-sas-submit-command-options' now recognized by
-     `ess-sas-submit-region'
-
-   * ESS[S]: When trying to evaluate code in an S language buffer and
-     there is no associated process, now start R automatically instead
-     of  signalling an error.  Also, restart R if there is an
-     associated process  which is not running.  However, do not start R
-     just via the "electric"  `(' (`ess-r-args-auto-show').
-
-   * ESS[S]: For (one-line) functions withOUT '{ .. }' bodys, the end
-     of function is now correctly found more often.  This notably
-     improves  `C-c C-c' (`ess-eval-function-or-paragraph-and-step').
-
-   * ESS[JAGS]: cleanup/re-organization of elisp code; symbolic links
-     for CODA output are now only created by the new JAGS `system'
-     command in version 1.0.3; specify whether this command is
-     available via `ess-jags-system'; if not present, then no links are
-     created so that the `*shell*' buffer does not become unresponsive
-     during the batch run
-
-   Changes/New Features in 5.3.7:
-   * ESS: `ess-default-style' now *is* customizable, i.e.,   changing
-     its value in `~/.emacs' now does have the desired effect.
-
-   * ESS: `ess-font-lock-mode' is a new variable (default: t) which
-     controls whether font-locking is enabled in ESS buffers.
-
-   * ESS[R]: for XEmacs on Windows; another tweak to find R versions
-
-   * ESS[SAS]: font-locking updated for ODS and SAS Bayesian Procedures;
-     a more consistent handling of SAS options by
-     `ess-sas-submit-command-options' which is buffer-local; portable
-     snooze for MS Windows via customize-able `ess-sleep-for' (floats
-     welcome); Xpdf now supported as a PDF viewer
-
-   * ESS[Rnw]: now also works with "emacs -nw" and Emacs 22.
-
-   * ESS[JAGS]: now requires JAGS 1.0 (see the new ESS for JAGS help
-     section for more information): both need work; suggestions welcome
-
-   * ESS[R]: [TAB] completion now uses the R-internal completion
-     mechanism (for R >= 2.5.0).
-
-   * ESS[R] ([S]): interpretation of "_" as assignment has been removed
-     in `ess-continued-statement-p' for R and S.
-
-   * several internal code cleanups.
-
-   * ESS[R]: An experimental version of a new command `Rgui' on MS
-     Windows to send lines directly from emacs to `Rgui' is available
-     in file `lisp/essd-rgui.el'.  Preliminary documentation is in file
-     `doc/rgui-doc.txt'.
-
-   Changes/New Features in 5.3.6:
-   * ESS: for XEmacs, using "gnuclient" (without a "-q") works for
+Changes/New Features in 5.3.6:
+   * ESS: for Xemacs, using "gnuclient" (without a "-q") works for
      things like fix() after M-x gnuserv-start has been done.
 
-   * ESS[R]: M-x R-newest should now work in more situations on MS
+   * ESSR: M-x R-newest should now work in more situations on MS
      Windows, e.g., when R has been installed in a non-default
-     "ProgramFiles"  directory tree.  In these cases, there's no need
-     to specify the name (and  full path) of the R program anymore.
+     "ProgramFiles"  directory tree.
 
-   * ESS[R]: For XEmacs, startup (with new tooltip code) works again.
+   * ESSR: For Xemacs, startup (with new tooltip code) works again.
 
    Changes/New Features in 5.3.5:
    * ESS[R] a new defun is available, `M-x R-newest', which will start
@@ -320,13 +223,13 @@ Changes/New Features in 5.3.10:
      functionality, via new file `../lisp/essd-r-args.el'.   Note that
      this includes an "electric "("" behavior inside `R-mode'  which is
      _active by default_ and can be customized via
-     `ess-r-args-electric-paren'; i.e., use `(setq
+     ESS-R-ARGS-ELECTRIC-PAREN; i.e., use `(setq
      ess-r-args-electric-paren nil)' to turn it off.  Further,
-     `ess-r-args-show-as' allows to switch to the "tooltip" mode.
+     ESS-R-ARGS-SHOW-AS allows to switch to the "tooltip" mode.
 
    * ESS: functions `ess-get-pdf-viewer' and *-ps-viewer; built on new
-     customizable variables `ess-pdf-viewer-pref' and
-     `ess-ps-viewer-pref'; currently used in `ess-swv-PDF' and  `*-PS'.
+     customizable variables ESS-PDF-VIEWER-PREF and
+     ESS-PS-VIEWER-PREF; currently used in `ess-swv-PDF' and  `*-PS'.
 
    * ESS[R] Improved `ess-swv-PDF' to run pdf viewer only if  pdflatex
      was ok
@@ -1344,27 +1247,28 @@ ESS has been tested with
 
    * BUGS 0.5, 0.6
 
-   * JAGS 1.0
+   * JAGS 0.9
 
-   * Stata >=6.0 (command line only)
+   * Stata >=6.0
+
+   * XLispStat >=3.50
 
    on the following platforms
 
-   * Linux/x86 (all)
+   * GNU Linux (all)
 
-   * Solaris (all)
+   * Sun Solaris (all)
 
-   * MS Windows 98/NT/2000/XP (R, S-PLUS, SAS interactive only, and
-     BUGS)
+   * Microsoft Windows 98/NT/2000/XP (R, SPLUS 4.5/2000/6.0-2/7.0/8.0,
+     SAS, and BUGS 0.6)
 
-   * Apple Mac OS X 10.4-5 (R, JAGS, Stata)
+   * Apple Mac OS X 10.3-4 (R, JAGS)
 
    with the following versions of emacs
 
    * GNU Emacs 20.3-7, 21.1, 21.3-4, 22.1
 
-   * XEmacs 21.4.0-8, 21.4.9-13(1), 21.4.14-15, 21.4.17-21 (betas not
-     supported, but 21.5.23+ may work)
+   * XEmacs 21.4.0-8, 21.4.9-13(1), 21.4.14-15, 21.4.17-19, 21.5.23
 
    ---------- Footnotes ----------
 
@@ -2895,11 +2799,6 @@ after the expression on the line containing the comment if it extends
 beyond the indentation column.  You turn off the default behavior by
 adding the line `(setq ess-fancy-comments nil)' to your `.emacs' file.  
 
-   ESS now has preliminary support for editing roxygen tags within R
-mode buffers.  In particular, when the function `ess-roxygen-fn' (bound
-to `C-c C-o') is called with point inside a R function, the roxygen
-template for the function is added just above the function.
-
    The indentation commands provided by ESS are: 
 
    * `TAB' (`ess-indent-command')
@@ -3944,7 +3843,7 @@ File: ess.info,  Node: ESS(SAS)--Windows,  Prev: ESS(SAS)--Graphics,  Up: ESS fo
 
 
 
-File: ess.info,  Node: ESS for BUGS,  Next: ESS for JAGS,  Prev: ESS for SAS,  Up: Top
+File: ess.info,  Node: ESS for BUGS,  Next: Miscellaneous,  Prev: ESS for SAS,  Up: Top
 
 11 ESS for BUGS
 ***************
@@ -3955,18 +3854,20 @@ File: ess.info,  Node: ESS for BUGS,  Next: ESS for JAGS,  Prev: ESS for SAS,  U
 * ESS(BUGS)--Command files::
 * ESS(BUGS)--Log files::
 
-   ESS[BUGS] was originally designed for use with BUGS software.
-Later, it evolved to support JAGS as a dialect of the BUGS language via
-ESS[JAGS], however, ESS[JAGS] is documented in the section Help for
-JAGS.  ESS[BUGS] provides 5 features.  First, BUGS syntax is described
-to allow for proper fontification of statements, distributions,
-functions, commands and comments in BUGS model files, command files and
-log files.  Second, ESS creates templates for the command file from the
-model file so that a BUGS batch process can be defined by a single
-file.  Third, ESS provides a BUGS batch script that allows ESS to set
-BUGS batch parameters.  Fourth, key sequences are defined to create a
-command file and submit a BUGS batch process.  Lastly, interactive
-submission of BUGS commands is also supported.
+   ESS[BUGS] was originally designed for use with BUGS software.  It
+was developed by Rodney A. Sparapani and has some similarities with
+ESS[SAS].  Later, it evolved to support JAGS as a dialect of the BUGS
+language via ESS[JAGS].  Unless otherwise noted, whenever this
+documentation says BUGS, you can assume that it applies to JAGS as
+well.  ESS provides 5 features.  First, BUGS syntax is described to
+allow for proper fontification of statements, distributions, functions,
+commands and comments in BUGS model files, command files and log files.
+Second, ESS creates templates for the command file from the model file
+so that a BUGS batch process can be defined by a single file.  Third,
+ESS provides a BUGS batch script that allows ESS to set BUGS batch
+parameters.  Fourth, key sequences are defined to create a command file
+and submit a BUGS batch process.  Lastly, interactive submission of
+BUGS commands is also supported.
 
 
 File: ess.info,  Node: ESS(BUGS)--Model files,  Next: ESS(BUGS)--Command files,  Prev: ESS for BUGS,  Up: ESS for BUGS
@@ -3988,7 +3889,9 @@ created as part of the template, i.e. with the first press of `C-c C-c'
 in an empty buffer.  They are named by all capitals and start with `%':
 `%N', `%DATA', `%INIT', `%MONITOR' and `%STATS'.  When you are finished
 editing your model file, pressing `C-c C-c' will perform the necessary
-replacements and build your command file for you.
+replacements and build your command file for you.  Note that ESS[JAGS]
+only supports `%MONITOR' since none of the other variables are
+compatible with the JAGS dialect.
 
    The `%DATA' variable appears in the line `data in "%DATA";'.  On the
 second press of `C-c C-c', `%DATA' will be replaced by the model file
@@ -4068,97 +3971,9 @@ appear in ESS[BUGS] mode.  You may find `F2' useful to refresh the
 `.log' if the batch process over-writes or appends it.
 
 
-File: ess.info,  Node: ESS for JAGS,  Next: Miscellaneous,  Prev: ESS for BUGS,  Up: Top
+File: ess.info,  Node: Miscellaneous,  Next: Mailing lists/bug reports,  Prev: ESS for BUGS,  Up: Top
 
-12 ESS for JAGS
-***************
-
-* Menu:
-
-* ESS(JAGS)--Model files::
-* ESS(JAGS)--Command files::
-* ESS(JAGS)--Log files::
-
-   ESS[BUGS] was originally designed for use with BUGS software.
-Later, it evolved to support JAGS as a dialect of the BUGS language via
-ESS[JAGS].  Since BUGS and JAGS are quite similar, ESS[BUGS] and
-ESS[JAGS] are necessarily similar.  ESS[JAGS] provides 4 features.
-First, JAGS syntax is described to allow for proper fontification of
-statements, distributions, functions, commands and comments in JAGS
-model files, command files and log files.  Second, ESS creates
-templates for the command file from the model file so that a JAGS batch
-process can be defined by a single file.  Third, ESS provides a JAGS
-batch script that allows ESS to set JAGS batch parameters.  Fourth, key
-sequences are defined to create a command file and submit a JAGS batch
-process.
-
-
-File: ess.info,  Node: ESS(JAGS)--Model files,  Next: ESS(JAGS)--Command files,  Prev: ESS for JAGS,  Up: ESS for JAGS
-
-12.1 ESS[JAGS]-Model files
-==========================
-
-Model files with the `.bug' extension are edited in ESS[BUGS] mode if
-`(require 'essd-bugs)' was performed or edited in ESS[JAGS] mode if
-`(require 'essd-jags)'.  Two keys are bound for your use in ESS[JAGS],
-`F2' and `C-c C-c'.  `F2' performs the same action as it does in
-ESS[SAS], *Note ESS(SAS)--Function keys for batch processing::.  `C-c
-C-c' performs the function `ess-bugs-next-action' which you will use a
-lot.  Pressing it in an empty buffer for a model file will produce a
-template for you.
-
-   ESS[JAGS] does not support "replacement" variables which were part of
-ESS[BUGS].  Although, "replacement" variables are an extremely
-convenient feature, creating the elisp code for their operation was
-challenging.  So, a more elisp-ish approach was adopted for ESS[JAGS]:
-elisp local variables.  These variables are created as part of the
-template, i.e. with the first press of `C-c C-c' in an empty buffer.
-For your `.bug' file, they are named `ess-jags-chains',
-`ess-jags-monitor' and `ess-jags-thin', and they appear in the `Local
-Variables' section.  When you are finished editing your model file,
-pressing `C-c C-c' will perform the necessary actions to build your
-command file for you.
-
-   The `ess-jags-chains' variable is the number of chains that you want
-to initialize and sample from; defaults to 1.  The `ess-jags-monitor'
-variable is a list of variables that you want monitored: encase each
-variable in double quotes.  When you press `C-c C-c', the appropriate
-statements are created in the command file to monitor the list of
-variables.  By default, no variables are explicitly monitored which
-means JAGS will implicitly monitor all "default" variables.  The
-`ess-jags-thin' variable is the thinning parameter.  By default, the
-thinning parameter is set to 1, i.e. no thinning.
-
-
-File: ess.info,  Node: ESS(JAGS)--Command files,  Next: ESS(JAGS)--Log files,  Prev: ESS(JAGS)--Model files,  Up: ESS for JAGS
-
-12.2 ESS[JAGS]-Command files
-============================
-
-To avoid extension name collision, `.bmd' is used for BUGS command
-files and `.jmd' for JAGS command files.  For your `.jmd' file, there
-is only one variable, `ess-jags-command', in the `Local Variables'
-section.  When you have finished editing your model file and press `C-c
-C-c', a command file is created if one does not already exist.  When
-you are finished editing your command file, pressing `C-c C-c' again
-will submit your command file as a batch job.  The `ess-jags-command'
-variable allows you to specify a different JAGS program to use to run
-your model; defaults to "jags".
-
-
-File: ess.info,  Node: ESS(JAGS)--Log files,  Prev: ESS(JAGS)--Command files,  Up: ESS for JAGS
-
-12.3 ESS[JAGS]-Log files
-========================
-
-The `.out' extension is used for JAGS log files.  You may find `F2'
-useful to refresh the `.out' if the batch process over-writes or
-appends it.
-
-
-File: ess.info,  Node: Miscellaneous,  Next: Mailing lists/bug reports,  Prev: ESS for JAGS,  Up: Top
-
-13 Other features of ESS
+12 Other features of ESS
 ************************
 
 ESS has a few miscellaneous features, which didn't fit anywhere else.
@@ -4176,39 +3991,40 @@ ESS has a few miscellaneous features, which didn't fit anywhere else.
 
 File: ess.info,  Node: Highlighting,  Next: Parens,  Prev: Miscellaneous,  Up: Miscellaneous
 
-13.1 Syntactic highlighting of buffers
+12.1 Syntactic highlighting of buffers
 ======================================
 
 ESS provides Font-Lock (*note Using Multiple Typefaces: (emacs)Faces.)
 patterns for Inferior S Mode, S Mode, and S Transcript Mode buffers.  
 
-   Syntax highlighting within ESS buffers is controlled by the variable
-`ess-font-lock-mode', which by default is true.  Input to inferior ESS
-processes is also highlighted syntactically if
-`inferior-ess-font-lock-input' is non-nil (the default).  If you change
-the value of either of these varibles, you need to restart emacs for
-your changes to take effect.
+   To activate highlighting, you need to turn on Font Lock mode in the
+appropriate buffers.  This can be done on a per-buffer basis with `M-x
+font-lock-mode', or may be done by adding `turn-on-font-lock' to
+`inferior-ess-mode-hook', `ess-mode-hook' and
+`ess-transcript-mode-hook'.  Your systems administrator may have done
+this for you in `ess-site.el' (*note Customization::).
 
-   The font-lock patterns are defined in the following variables, which
-you may modify if desired:
+   The font-lock patterns are defined in three variables, which you may
+modify if desired:
 
- -- Variable: inferior-ess-R-font-lock-keywords
-     Font-lock patterns for inferior *R* processes.  (There is a
-     corresponding `inferior-ess-S-font-lock-keywords' for *S*
-     processes.) The default value highlights prompts, inputs,
-     assignments, output messages, vector and matrix labels, and
-     literals such as `NA' and `TRUE'.
+ -- Variable: inferior-ess-font-lock-keywords
+     Font-lock patterns for Inferior ESS Mode.  The default value
+     highlights prompts, inputs, assignments, output messages, vector
+     and matrix labels, and literals such as `NA' and `TRUE'.
 
- -- Variable: ess-R-mode-font-lock-keywords
-     Font-lock patterns for ESS R programming mode.  (There is a
-     corresponding `ess-S-mode-font-lock-keywords' for S buffers.) The
-     default value highlights function names, literals, assignments,
-     source functions and reserved words.
+ -- Variable: ess-mode-font-lock-keywords
+     Font-lock patterns for ESS programming mode.  The default value
+     highlights function names, literals, assignments, source functions
+     and reserved words.
+
+ -- Variable: ess-trans-font-lock-keywords
+     Font-lock patterns for ESS Transcript Mode.  The default value
+     highlights the same patterns as in Inferior ESS Mode.
 
 
 File: ess.info,  Node: Parens,  Next: Graphics,  Prev: Highlighting,  Up: Miscellaneous
 
-13.2 Parenthesis matching
+12.2 Parenthesis matching
 =========================
 
 Emacs and XEmacs have facilities for highlighting the parenthesis
@@ -4224,7 +4040,7 @@ initialisation file:
 
 File: ess.info,  Node: Graphics,  Next: Imenu,  Prev: Parens,  Up: Miscellaneous
 
-13.3 Using graphics with ESS
+12.3 Using graphics with ESS
 ============================
 
 One of the main features of the `S' package is its ability to generate
@@ -4240,7 +4056,7 @@ for dealing with such plots.
 
 File: ess.info,  Node: printer,  Next: X11,  Prev: Graphics,  Up: Graphics
 
-13.3.1 Using ESS with the `printer()' driver
+12.3.1 Using ESS with the `printer()' driver
 --------------------------------------------
 
 This is the simplest (and least desirable) method of using graphics
@@ -4257,7 +4073,7 @@ issued, which displays the current figure.
 
 File: ess.info,  Node: X11,  Next: winjava,  Prev: printer,  Up: Graphics
 
-13.3.2 Using ESS with windowing devices
+12.3.2 Using ESS with windowing devices
 ---------------------------------------
 
 Of course, the ideal way to use graphics with ESS is to use a windowing
@@ -4270,7 +4086,7 @@ DISPLAY before the ESS process is started if the variable
 
 File: ess.info,  Node: winjava,  Prev: X11,  Up: Graphics
 
-13.3.3 Java Graphics Device
+12.3.3 Java Graphics Device
 ---------------------------
 
 S+6.1 and newer on Windows contains a java library that supports
@@ -4286,7 +4102,7 @@ this information.)
 
 File: ess.info,  Node: Imenu,  Next: Toolbar,  Prev: Graphics,  Up: Miscellaneous
 
-13.4 Imenu
+12.4 Imenu
 ==========
 
 Imenu is an Emacs tool for providing mode-specific buffer indexes.  In
@@ -4305,7 +4121,7 @@ various ESS variables such as `ess-imenu-S-generic-expression'.
 
 File: ess.info,  Node: Toolbar,  Next: TAGS,  Prev: Imenu,  Up: Miscellaneous
 
-13.5 Toolbar
+12.5 Toolbar
 ============
 
 The R and S editing modes have support for a toolbar.  This toolbar
@@ -4317,7 +4133,7 @@ ways to change the toolbar.
 
 File: ess.info,  Node: TAGS,  Next: Rdired,  Prev: Toolbar,  Up: Miscellaneous
 
-13.6 TAGS
+12.6 TAGS
 =========
 
 The Emacs tags facility can be used to navigate around your files
@@ -4345,7 +4161,7 @@ to change the single quotes to double quotes.
 
 File: ess.info,  Node: Rdired,  Prev: TAGS,  Up: Miscellaneous
 
-13.7 Rdired
+12.7 Rdired
 ===========
 
 Ess-rdired provides a dired-like buffer for viewing, editing and
@@ -4382,7 +4198,7 @@ the object, `v' will view it, and `d' will mark the object for deletion
 
 File: ess.info,  Node: Mailing lists/bug reports,  Next: Customization,  Prev: Miscellaneous,  Up: Top
 
-14 Bugs and Bug Reporting, Mailing Lists
+13 Bugs and Bug Reporting, Mailing Lists
 ****************************************
 
 * Menu:
@@ -4395,7 +4211,7 @@ File: ess.info,  Node: Mailing lists/bug reports,  Next: Customization,  Prev: M
 
 File: ess.info,  Node: Bugs,  Next: Reporting Bugs,  Prev: Mailing lists/bug reports,  Up: Mailing lists/bug reports
 
-14.1 Bugs
+13.1 Bugs
 =========
 
    * Commands like `ess-display-help-on-object' and list completion
@@ -4436,7 +4252,7 @@ File: ess.info,  Node: Bugs,  Next: Reporting Bugs,  Prev: Mailing lists/bug rep
 
 File: ess.info,  Node: Reporting Bugs,  Next: Mailing Lists,  Prev: Bugs,  Up: Mailing lists/bug reports
 
-14.2 Reporting Bugs
+13.2 Reporting Bugs
 ===================
 
 Please send bug reports, suggestions etc. to
@@ -4460,7 +4276,7 @@ donations are also more than welcome.
 
 File: ess.info,  Node: Mailing Lists,  Next: Help with emacs,  Prev: Reporting Bugs,  Up: Mailing lists/bug reports
 
-14.3 Mailing Lists
+13.3 Mailing Lists
 ==================
 
 There is a mailing list for discussions and announcements relating to
@@ -4485,7 +4301,7 @@ low-volume mailing list.
 
 File: ess.info,  Node: Help with emacs,  Prev: Mailing Lists,  Up: Mailing lists/bug reports
 
-14.4 Help with emacs
+13.4 Help with emacs
 ====================
 
 Emacs is a complex editor with many abilities that we do not have space
@@ -4530,7 +4346,7 @@ Concept Index
 * Menu:
 
 * .emacs file <1>:                       Source Directories.  (line  30)
-* .emacs file:                           Indenting.           (line  64)
+* .emacs file:                           Indenting.           (line  59)
 * aborting S commands:                   Other.               (line  10)
 * aborting the ESS process:              Other.               (line  18)
 * arguments to S program:                Customizing startup. (line  47)
@@ -4541,8 +4357,6 @@ Concept Index
 * cleaning up:                           Hot keys.            (line  66)
 * comint:                                Credits.             (line   6)
 * command history:                       Command History.     (line   6)
-* command line arguments:                iESS(S)--Inferior ESS processes.
-                                                              (line  39)
 * command-line completion:               Completion.          (line   6)
 * command-line editing:                  Command-line editing.
                                                               (line   6)
@@ -4579,13 +4393,13 @@ Concept Index
 * evaluating code with echoed commands:  Evaluating code.     (line  18)
 * evaluating S expressions:              Evaluating code.     (line  24)
 * Font-lock mode:                        Highlighting.        (line   7)
-* formatting source code:                Indenting.           (line  35)
+* formatting source code:                Indenting.           (line  30)
 * graphics:                              Graphics.            (line   6)
 * help files:                            Help.                (line   6)
 * highlighting:                          Highlighting.        (line   7)
 * historic backups:                      Source Files.        (line  40)
 * hot keys:                              Hot keys.            (line  37)
-* indenting:                             Indenting.           (line  35)
+* indenting:                             Indenting.           (line  30)
 * installation:                          Installation.        (line   6)
 * interactive use of S:                  Introduction.        (line  31)
 * interrupting S commands:               Other.               (line  10)
@@ -4615,7 +4429,6 @@ Concept Index
 * Remote Computers:                      ESS processes on Remote Computers.
                                                               (line   6)
 * reverting function definitions:        Edit buffer.         (line  27)
-* roxygen:                               Indenting.           (line  30)
 * running S:                             Starting up.         (line   6)
 * search list <1>:                       Source Directories.  (line  55)
 * search list:                           Hot keys.            (line  27)
@@ -4724,11 +4537,11 @@ Variable and command index
 * ess-list-object-completions:           Completion.          (line  36)
 * ess-load-file <1>:                     Loading.             (line  13)
 * ess-load-file:                         Hot keys.            (line  51)
+* ess-mode-font-lock-keywords:           Highlighting.        (line  25)
 * ess-parse-errors <1>:                  Error Checking.      (line   9)
 * ess-parse-errors:                      Hot keys.            (line  53)
 * ess-quit <1>:                          Help.                (line 150)
 * ess-quit:                              Other.               (line  18)
-* ess-R-mode-font-lock-keywords:         Highlighting.        (line  27)
 * ess-remote:                            ESS processes on Remote Computers.
                                                               (line   6)
 * ess-request-a-process:                 Multiple ESS processes.
@@ -4745,13 +4558,14 @@ Variable and command index
                                                               (line  32)
 * ess-switch-to-ESS:                     Other edit buffer commands.
                                                               (line  36)
+* ess-trans-font-lock-keywords:          Highlighting.        (line  30)
 * ess-transcript-clean-region:           Saving transcripts.  (line  31)
 * ess-transcript-copy-command:           Resubmit.            (line  14)
 * ess-transcript-send-command:           Resubmit.            (line  10)
 * ess-transcript-send-command-and-move:  Transcript resubmit. (line  22)
 * exit():                                Hot keys.            (line  61)
+* inferior-ess-font-lock-keywords:       Highlighting.        (line  20)
 * inferior-ess-program:                  Customizing startup. (line  44)
-* inferior-ess-R-font-lock-keywords:     Highlighting.        (line  20)
 * inferior-ess-send-input <1>:           Transcript resubmit. (line  13)
 * inferior-ess-send-input:               Command-line editing.
                                                               (line  10)
@@ -4771,98 +4585,94 @@ Variable and command index
 
 
 Tag Table:
-Node: Top277
-Node: Introduction2104
-Node: Features5086
-Node: New features8507
-Node: Credits39469
-Node: Latest version42850
-Node: Manual44634
-Node: Installation47176
-Node: Unix installation47654
-Node: Microsoft Windows installation50226
-Node: Requirements58166
-Ref: Requirements-Footnote-158920
-Node: Interactive ESS59013
-Node: Starting up59867
-Node: Multiple ESS processes60678
-Node: ESS processes on Remote Computers61713
-Node: S+elsewhere and ESS-elsewhere64863
-Node: Customizing startup67626
-Node: Entering commands70306
-Node: Command-line editing71605
-Node: Completion72889
-Node: Completion details75658
-Ref: Completion details-Footnote-177064
-Node: Transcript77344
-Node: Last command79119
-Node: Process buffer motion80609
-Node: Transcript resubmit82130
-Node: Saving transcripts84739
-Node: Command History86785
-Node: History expansion89409
-Node: Hot keys92617
-Node: Statistical Process running in ESS?96084
-Node: Emacsclient97389
-Node: Other98196
-Node: Transcript Mode99242
-Node: Resubmit100398
-Node: Clean101482
-Node: ESS for the S family102201
-Node: ESS(S)--Editing files102608
-Node: iESS(S)--Inferior ESS processes103660
-Node: ESS-help--assistance with viewing help109358
-Node: Philosophies for using ESS(S)109688
-Node: Scenarios for use (possibilities--based on actual usage)110824
-Node: Customization Examples and Solutions to Problems115515
-Node: Editing116801
-Node: Edit buffer117988
-Node: Loading120022
-Node: Error Checking121073
-Node: Evaluating code122119
-Node: Indenting125554
-Node: Other edit buffer commands128805
-Node: Source Files130722
-Node: Source Directories135252
-Node: Editing R documentation files138391
-Node: Help142240
-Node: ESS for SAS146570
-Node: ESS(SAS)--Design philosophy147292
-Node: ESS(SAS)--Editing files148246
-Node: ESS(SAS)--TAB key150106
-Node: ESS(SAS)--Batch SAS processes151404
-Node: ESS(SAS)--Function keys for batch processing156428
-Node: iESS(SAS)--Interactive SAS processes166020
-Node: iESS(SAS)--Common problems169770
-Node: ESS(SAS)--Graphics171302
-Node: ESS(SAS)--Windows172085
-Node: ESS for BUGS172664
-Node: ESS(BUGS)--Model files173684
-Node: ESS(BUGS)--Command files176810
-Node: ESS(BUGS)--Log files178126
-Node: ESS for JAGS178676
-Node: ESS(JAGS)--Model files179655
-Node: ESS(JAGS)--Command files181631
-Node: ESS(JAGS)--Log files182407
-Node: Miscellaneous182703
-Node: Highlighting183349
-Node: Parens184764
-Node: Graphics185352
-Node: printer185868
-Node: X11186641
-Node: winjava187172
-Node: Imenu187585
-Node: Toolbar188433
-Node: TAGS188848
-Node: Rdired189827
-Node: Mailing lists/bug reports191083
-Node: Bugs191348
-Node: Reporting Bugs193011
-Node: Mailing Lists193824
-Node: Help with emacs194589
-Node: Customization195143
-Node: Key Index195908
-Node: Concept Index196063
-Node: Variable and command index204153
+Node: Top272
+Node: Introduction2076
+Node: Features5053
+Node: New features8474
+Node: Credits35194
+Node: Latest version38575
+Node: Manual40359
+Node: Installation42901
+Node: Unix installation43379
+Node: Microsoft Windows installation45951
+Node: Requirements53891
+Ref: Requirements-Footnote-154620
+Node: Interactive ESS54713
+Node: Starting up55567
+Node: Multiple ESS processes56378
+Node: ESS processes on Remote Computers57413
+Node: S+elsewhere and ESS-elsewhere60563
+Node: Customizing startup63326
+Node: Entering commands66006
+Node: Command-line editing67305
+Node: Completion68589
+Node: Completion details71358
+Ref: Completion details-Footnote-172764
+Node: Transcript73044
+Node: Last command74819
+Node: Process buffer motion76309
+Node: Transcript resubmit77830
+Node: Saving transcripts80439
+Node: Command History82485
+Node: History expansion85109
+Node: Hot keys88317
+Node: Statistical Process running in ESS?91784
+Node: Emacsclient93089
+Node: Other93896
+Node: Transcript Mode94942
+Node: Resubmit96098
+Node: Clean97182
+Node: ESS for the S family97901
+Node: ESS(S)--Editing files98308
+Node: iESS(S)--Inferior ESS processes99360
+Node: ESS-help--assistance with viewing help105058
+Node: Philosophies for using ESS(S)105388
+Node: Scenarios for use (possibilities--based on actual usage)106524
+Node: Customization Examples and Solutions to Problems111215
+Node: Editing112501
+Node: Edit buffer113688
+Node: Loading115722
+Node: Error Checking116773
+Node: Evaluating code117819
+Node: Indenting121254
+Node: Other edit buffer commands124235
+Node: Source Files126152
+Node: Source Directories130682
+Node: Editing R documentation files133821
+Node: Help137670
+Node: ESS for SAS142000
+Node: ESS(SAS)--Design philosophy142722
+Node: ESS(SAS)--Editing files143676
+Node: ESS(SAS)--TAB key145536
+Node: ESS(SAS)--Batch SAS processes146834
+Node: ESS(SAS)--Function keys for batch processing151858
+Node: iESS(SAS)--Interactive SAS processes161450
+Node: iESS(SAS)--Common problems165200
+Node: ESS(SAS)--Graphics166732
+Node: ESS(SAS)--Windows167515
+Node: ESS for BUGS168094
+Node: ESS(BUGS)--Model files169240
+Node: ESS(BUGS)--Command files172484
+Node: ESS(BUGS)--Log files173800
+Node: Miscellaneous174350
+Node: Highlighting174996
+Node: Parens176410
+Node: Graphics176998
+Node: printer177514
+Node: X11178287
+Node: winjava178818
+Node: Imenu179231
+Node: Toolbar180079
+Node: TAGS180494
+Node: Rdired181473
+Node: Mailing lists/bug reports182729
+Node: Bugs182994
+Node: Reporting Bugs184657
+Node: Mailing Lists185470
+Node: Help with emacs186235
+Node: Customization186789
+Node: Key Index187554
+Node: Concept Index187709
+Node: Variable and command index195579
 
 End Tag Table

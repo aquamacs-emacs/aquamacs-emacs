@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Basic Indent - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Program-Indent.html#Program-Indent" title="Program Indent">
+<link rel="next" href="Multi_002dline-Indent.html#Multi_002dline-Indent" title="Multi-line Indent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Basic-Indent"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dline-Indent.html#Multi_002dline-Indent">Multi-line Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program-Indent">Program Indent</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.3.1 Basic Program Indentation Commands</h4>
+
+<p>The basic indentation commands indent a single line according to the
+usual conventions of the language you are editing.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd><dd>Adjust indentation of current line. 
+<br><dt><kbd>C-j</kbd><dd>Insert a newline, then adjust indentation of following line
+(<code>newline-and-indent</code>). 
+</dl>
+
+   <p><a name="index-TAB-_0040r_007b_0028programming-modes_0029_007d-1987"></a><a name="index-c_002dindent_002dcommand-1988"></a><a name="index-indent_002dline_002dfunction-1989"></a><a name="index-indent_002dfor_002dtab_002dcommand-1990"></a>  The basic indentation command is &lt;TAB&gt;.  In any
+programming-language major mode, &lt;TAB&gt; gives the current line the
+correct indentation as determined from the previous lines.  It does
+this by inserting or deleting whitespace at the beginning of the
+current line.  If point was inside the whitespace at the beginning of
+the line, &lt;TAB&gt; puts it at the end of that whitespace; otherwise,
+&lt;TAB&gt; keeps point fixed with respect to the characters around it. 
+If the region is active (see <a href="Mark.html#Mark">Mark</a>), &lt;TAB&gt; indents every line
+within the region instead of just the current line.  The function that
+&lt;TAB&gt; runs depends on the major mode; for instance, it is
+<code>c-indent-line-or-region</code> in C mode.  Each function is aware of
+the syntax and conventions for its particular language.
+
+   <p>Use <kbd>C-q &lt;TAB&gt;</kbd> to insert a tab character at point.
+
+   <p><a name="index-C_002dj-1991"></a><a name="index-newline_002dand_002dindent-1992"></a>  When entering lines of new code, use <kbd>C-j</kbd>
+(<code>newline-and-indent</code>), which inserts a newline and then adjusts
+indentation after it.  (It also deletes any trailing whitespace which
+remains before the new newline.)  For instance, <kbd>C-j</kbd> at the end
+of a line creates a blank line with appropriate indentation.  In
+programming language modes, it is equivalent to &lt;RET&gt; &lt;TAB&gt;.
+
+   <p>When Emacs indents a line that starts within a parenthetical
+grouping, it usually places the start of the line under the preceding
+line within the group, or under the text after the parenthesis.  If
+you manually give one of these lines a nonstandard indentation, the
+lines below will tend to follow it.  This behavior is convenient in
+cases where you have overridden the standard result of &lt;TAB&gt;
+indentation (e.g., for aesthetic purposes).
+
+   <p>Many programming-language modes assume that an open-parenthesis,
+open-brace or other opening delimiter at the left margin is the start
+of a function.  This assumption speeds up indentation commands.  If
+the text you are editing contains opening delimiters in column zero
+that aren't the beginning of a functions&mdash;even if these delimiters
+occur inside strings or comments&mdash;then you must set
+<code>open-paren-in-column-0-is-defun-start</code>.  See <a href="Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>.
+
+   <p>Normally, Emacs indents lines using an &ldquo;optimal&rdquo; mix of tab and
+space characters.  If you want Emacs to use spaces only, set
+<code>indent-tabs-mode</code> (see <a href="Just-Spaces.html#Just-Spaces">Just Spaces</a>).
+
+   </body></html>
+

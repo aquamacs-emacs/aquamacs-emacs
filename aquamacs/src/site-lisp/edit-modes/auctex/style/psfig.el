@@ -25,8 +25,8 @@
 (defun TeX-arg-psfig (optional)
    "Ask for file, width and length. Insert psfig macro"
    (let ((psfile (read-file-name "PS-file: " "" "" nil))
-	 (figwidth (read-input "Figure width: "))
-	 (figheight (read-input "Figure height: "))
+	 (figwidth (read-string "Figure width: "))
+	 (figheight (read-string "Figure height: "))
 	 )
 
      (insert TeX-grop "figure=" psfile)
@@ -41,13 +41,13 @@
 
 (defun LaTeX-env-psfigure (environment)
   "Create  with \\label and \\caption and \\psfig commands."
-  (let ((float (read-input "Float to: " LaTeX-float))
-	(caption (read-input "Caption: "))
-	(label (read-input "Label: " LaTeX-figure-label))
+  (let ((float (read-string "Float to: " LaTeX-float))
+	(caption (read-string "Caption: "))
+	(label (read-string "Label: " LaTeX-figure-label))
         ; gf: ask if this should be centered
 	(psfile (read-file-name "PS-file: " "" "" nil))
-	(figwidth (read-input "Figure width: "))
-	(figheight (read-input "Figure height: "))
+	(figwidth (read-string "Figure width: "))
+	(figheight (read-string "Figure height: "))
 	)
 
     (setq LaTeX-float (if (zerop (length float))

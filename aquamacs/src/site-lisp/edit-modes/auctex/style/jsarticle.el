@@ -1,6 +1,6 @@
 ;;; jsarticle.el - Special code for jsarticle style.
 
-;; $Id: jsarticle.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
+;; $Id: jsarticle.el,v 1.2 2005/03/17 10:02:06 angeli Exp $
 
 ;;; Code:
 

@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Generic Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Derived-Modes.html#Derived-Modes" title="Derived Modes">
+<link rel="next" href="Mode-Hooks.html#Mode-Hooks" title="Mode Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Generic-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Derived-Modes.html#Derived-Modes">Derived Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.6 Generic Modes</h4>
+
+<p><a name="index-generic-mode-1617"></a>
+  <dfn>Generic modes</dfn> are simple major modes with basic support for
+comment syntax and Font Lock mode.  To define a generic mode, use the
+macro <code>define-generic-mode</code>.  See the file <samp><span class="file">generic-x.el</span></samp>
+for some examples of the use of <code>define-generic-mode</code>.
+
+<div class="defun">
+&mdash; Macro: <b>define-generic-mode</b><var> mode comment-list keyword-list font-lock-list auto-mode-list function-list &amp;optional docstring<a name="index-define_002dgeneric_002dmode-1618"></a></var><br>
+<blockquote><p>This macro defines a generic mode command named <var>mode</var> (a symbol,
+not quoted).  The optional argument <var>docstring</var> is the
+documentation for the mode command.  If you do not supply it,
+<code>define-generic-mode</code> generates one by default.
+
+        <p>The argument <var>comment-list</var> is a list in which each element is
+either a character, a string of one or two characters, or a cons cell. 
+A character or a string is set up in the mode's syntax table as a
+&ldquo;comment starter.&rdquo;  If the entry is a cons cell, the <span class="sc">car</span> is set
+up as a &ldquo;comment starter&rdquo; and the <span class="sc">cdr</span> as a &ldquo;comment ender.&rdquo;
+(Use <code>nil</code> for the latter if you want comments to end at the end
+of the line.)  Note that the syntax table mechanism has limitations
+about what comment starters and enders are actually possible. 
+See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
+
+        <p>The argument <var>keyword-list</var> is a list of keywords to highlight
+with <code>font-lock-keyword-face</code>.  Each keyword should be a string. 
+Meanwhile, <var>font-lock-list</var> is a list of additional expressions to
+highlight.  Each element of this list should have the same form as an
+element of <code>font-lock-keywords</code>.  See <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>.
+
+        <p>The argument <var>auto-mode-list</var> is a list of regular expressions to
+add to the variable <code>auto-mode-alist</code>.  They are added by the execution
+of the <code>define-generic-mode</code> form, not by expanding the macro call.
+
+        <p>Finally, <var>function-list</var> is a list of functions for the mode
+command to call for additional setup.  It calls these functions just
+before it runs the mode hook variable <var>mode</var><code>-hook</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,203 @@
+<html lang="en">
+<head>
+<title>Current Buffer - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="Buffer-Basics.html#Buffer-Basics" title="Buffer Basics">
+<link rel="next" href="Buffer-Names.html#Buffer-Names" title="Buffer Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Current-Buffer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer-Names.html#Buffer-Names">Buffer Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Basics.html#Buffer-Basics">Buffer Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<h3 class="section">27.2 The Current Buffer</h3>
+
+<p><a name="index-selecting-a-buffer-1961"></a><a name="index-changing-to-another-buffer-1962"></a><a name="index-current-buffer-1963"></a>
+  There are, in general, many buffers in an Emacs session.  At any time,
+one of them is designated as the <dfn>current buffer</dfn>.  This is the
+buffer in which most editing takes place, because most of the primitives
+for examining or changing text in a buffer operate implicitly on the
+current buffer (see <a href="Text.html#Text">Text</a>).  Normally the buffer that is displayed on
+the screen in the selected window is the current buffer, but this is not
+always so: a Lisp program can temporarily designate any buffer as
+current in order to operate on its contents, without changing what is
+displayed on the screen.
+
+   <p>The way to designate a current buffer in a Lisp program is by calling
+<code>set-buffer</code>.  The specified buffer remains current until a new one
+is designated.
+
+   <p>When an editing command returns to the editor command loop, the
+command loop designates the buffer displayed in the selected window as
+current, to prevent confusion: the buffer that the cursor is in when
+Emacs reads a command is the buffer that the command will apply to. 
+(See <a href="Command-Loop.html#Command-Loop">Command Loop</a>.)  Therefore, <code>set-buffer</code> is not the way to
+switch visibly to a different buffer so that the user can edit it.  For
+that, you must use the functions described in <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>.
+
+   <p><strong>Warning:</strong> Lisp functions that change to a different current buffer
+should not depend on the command loop to set it back afterwards. 
+Editing commands written in Emacs Lisp can be called from other programs
+as well as from the command loop; it is convenient for the caller if
+the subroutine does not change which buffer is current (unless, of
+course, that is the subroutine's purpose).  Therefore, you should
+normally use <code>set-buffer</code> within a <code>save-current-buffer</code> or
+<code>save-excursion</code> (see <a href="Excursions.html#Excursions">Excursions</a>) form that will restore the
+current buffer when your function is done.  Here, as an example, is a
+simplified version of the command <code>append-to-buffer</code>:
+
+<pre class="example">     (defun append-to-buffer (buffer start end)
+       "Append to specified buffer the text of the region."
+       (interactive "BAppend to buffer: \nr")
+       (let ((oldbuf (current-buffer)))
+         (save-current-buffer
+           (set-buffer (get-buffer-create buffer))
+           (insert-buffer-substring oldbuf start end))))
+</pre>
+   <p class="noindent">This function binds a local variable to record the current buffer, and
+then <code>save-current-buffer</code> arranges to make it current again. 
+Next, <code>set-buffer</code> makes the specified buffer current.  Finally,
+<code>insert-buffer-substring</code> copies the string from the original
+current buffer to the specified (and now current) buffer.
+
+   <p>If the buffer appended to happens to be displayed in some window,
+the next redisplay will show how its text has changed.  Otherwise, you
+will not see the change immediately on the screen.  The buffer becomes
+current temporarily during the execution of the command, but this does
+not cause it to be displayed.
+
+   <p>If you make local bindings (with <code>let</code> or function arguments) for
+a variable that may also have buffer-local bindings, make sure that the
+same buffer is current at the beginning and at the end of the local
+binding's scope.  Otherwise you might bind it in one buffer and unbind
+it in another!  There are two ways to do this.  In simple cases, you may
+see that nothing ever changes the current buffer within the scope of the
+binding.  Otherwise, use <code>save-current-buffer</code> or
+<code>save-excursion</code> to make sure that the buffer current at the
+beginning is current again whenever the variable is unbound.
+
+   <p>Do not rely on using <code>set-buffer</code> to change the current buffer
+back, because that won't do the job if a quit happens while the wrong
+buffer is current.  For instance, in the previous example, it would
+have been wrong to do this:
+
+<pre class="example">       (let ((oldbuf (current-buffer)))
+         (set-buffer (get-buffer-create buffer))
+         (insert-buffer-substring oldbuf start end)
+         (set-buffer oldbuf))
+</pre>
+   <p class="noindent">Using <code>save-current-buffer</code>, as we did, handles quitting, errors,
+and <code>throw</code>, as well as ordinary evaluation.
+
+<div class="defun">
+&mdash; Function: <b>current-buffer</b><var><a name="index-current_002dbuffer-1964"></a></var><br>
+<blockquote><p>This function returns the current buffer.
+
+     <pre class="example">          (current-buffer)
+               &rArr; #&lt;buffer buffers.texi&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-buffer</b><var> buffer-or-name<a name="index-set_002dbuffer-1965"></a></var><br>
+<blockquote><p>This function makes <var>buffer-or-name</var> the current buffer. 
+<var>buffer-or-name</var> must be an existing buffer or the name of an
+existing buffer.  The return value is the buffer made current.
+
+        <p>This function does not display the buffer in any window, so the user
+cannot necessarily see the buffer.  But Lisp programs will now operate
+on it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>save-current-buffer</b><var> body<small class="dots">...</small><a name="index-save_002dcurrent_002dbuffer-1966"></a></var><br>
+<blockquote><p>The <code>save-current-buffer</code> special form saves the identity of the
+current buffer, evaluates the <var>body</var> forms, and finally restores
+that buffer as current.  The return value is the value of the last
+form in <var>body</var>.  The current buffer is restored even in case of an
+abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
+
+        <p>If the buffer that used to be current has been killed by the time of
+exit from <code>save-current-buffer</code>, then it is not made current again,
+of course.  Instead, whichever buffer was current just before exit
+remains current. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-current-buffer</b><var> buffer-or-name body<small class="dots">...</small><a name="index-with_002dcurrent_002dbuffer-1967"></a></var><br>
+<blockquote><p>The <code>with-current-buffer</code> macro saves the identity of the current
+buffer, makes <var>buffer-or-name</var> current, evaluates the <var>body</var>
+forms, and finally restores the current buffer.  <var>buffer-or-name</var>
+must specify an existing buffer or the name of an existing buffer.
+
+        <p>The return value is the value of the last form in <var>body</var>.  The
+current buffer is restored even in case of an abnormal exit via
+<code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-temp-buffer</b><var> body<small class="dots">...</small><a name="index-with_002dtemp_002dbuffer-1968"></a></var><br>
+<blockquote><p><a name="Definition-of-with_002dtemp_002dbuffer"></a>The <code>with-temp-buffer</code> macro evaluates the <var>body</var> forms
+with a temporary buffer as the current buffer.  It saves the identity of
+the current buffer, creates a temporary buffer and makes it current,
+evaluates the <var>body</var> forms, and finally restores the previous
+current buffer while killing the temporary buffer.  By default, undo
+information (see <a href="Undo.html#Undo">Undo</a>) is not recorded in the buffer created by
+this macro (but <var>body</var> can enable that, if needed).
+
+        <p>The return value is the value of the last form in <var>body</var>.  You can
+return the contents of the temporary buffer by using
+<code>(buffer-string)</code> as the last form.
+
+        <p>The current buffer is restored even in case of an abnormal exit via
+<code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
+
+        <p>See also <code>with-temp-file</code> in <a href="Definition-of-with_002dtemp_002dfile.html#Definition-of-with_002dtemp_002dfile">Writing to Files</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

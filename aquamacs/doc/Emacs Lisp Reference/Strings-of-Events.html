@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Strings of Events - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
+<link rel="prev" href="Accessing-Scroll.html#Accessing-Scroll" title="Accessing Scroll">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Strings-of-Events"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Scroll.html#Accessing-Scroll">Accessing Scroll</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
+<hr>
+</div>
+
+<h4 class="subsection">21.7.15 Putting Keyboard Events in Strings</h4>
+
+<p><a name="index-keyboard-events-in-strings-1325"></a><a name="index-strings-with-keyboard-events-1326"></a>
+  In most of the places where strings are used, we conceptualize the
+string as containing text characters&mdash;the same kind of characters found
+in buffers or files.  Occasionally Lisp programs use strings that
+conceptually contain keyboard characters; for example, they may be key
+sequences or keyboard macro definitions.  However, storing keyboard
+characters in a string is a complex matter, for reasons of historical
+compatibility, and it is not always possible.
+
+   <p>We recommend that new programs avoid dealing with these complexities
+by not storing keyboard events in strings.  Here is how to do that:
+
+     <ul>
+<li>Use vectors instead of strings for key sequences, when you plan to use
+them for anything other than as arguments to <code>lookup-key</code> and
+<code>define-key</code>.  For example, you can use
+<code>read-key-sequence-vector</code> instead of <code>read-key-sequence</code>, and
+<code>this-command-keys-vector</code> instead of <code>this-command-keys</code>.
+
+     <li>Use vectors to write key sequence constants containing meta characters,
+even when passing them directly to <code>define-key</code>.
+
+     <li>When you have to look at the contents of a key sequence that might be a
+string, use <code>listify-key-sequence</code> (see <a href="Event-Input-Misc.html#Event-Input-Misc">Event Input Misc</a>)
+first, to convert it to a list. 
+</ul>
+
+   <p>The complexities stem from the modifier bits that keyboard input
+characters can include.  Aside from the Meta modifier, none of these
+modifier bits can be included in a string, and the Meta modifier is
+allowed only in special cases.
+
+   <p>The earliest GNU Emacs versions represented meta characters as codes
+in the range of 128 to 255.  At that time, the basic character codes
+ranged from 0 to 127, so all keyboard character codes did fit in a
+string.  Many Lisp programs used &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in string constants to stand
+for meta characters, especially in arguments to <code>define-key</code> and
+similar functions, and key sequences and sequences of events were always
+represented as strings.
+
+   <p>When we added support for larger basic character codes beyond 127, and
+additional modifier bits, we had to change the representation of meta
+characters.  Now the flag that represents the Meta modifier in a
+character is
+2**27
+and such numbers cannot be included in a string.
+
+   <p>To support programs with &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in string constants, there are
+special rules for including certain meta characters in a string. 
+Here are the rules for interpreting a string as a sequence of input
+characters:
+
+     <ul>
+<li>If the keyboard character value is in the range of 0 to 127, it can go
+in the string unchanged.
+
+     <li>The meta variants of those characters, with codes in the range of
+2**27
+to
+2**27+127,
+can also go in the string, but you must change their
+numeric values.  You must set the
+2**7
+bit instead of the
+2**27
+bit, resulting in a value between 128 and 255.  Only a unibyte string
+can include these codes.
+
+     <li>Non-<acronym>ASCII</acronym> characters above 256 can be included in a multibyte string.
+
+     <li>Other keyboard character events cannot fit in a string.  This includes
+keyboard events in the range of 128 to 255. 
+</ul>
+
+   <p>Functions such as <code>read-key-sequence</code> that construct strings of
+keyboard input characters follow these rules: they construct vectors
+instead of strings, when the events won't fit in a string.
+
+   <p>When you use the read syntax &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; in a string, it produces a
+code in the range of 128 to 255&mdash;the same code that you get if you
+modify the corresponding keyboard event to put it in the string.  Thus,
+meta events in strings work consistently regardless of how they get into
+the strings.
+
+   <p>However, most programs would do well to avoid these issues by
+following the recommendations at the beginning of this section.
+
+   </body></html>
+

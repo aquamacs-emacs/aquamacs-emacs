@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Waiting - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
+<link rel="prev" href="Special-Events.html#Special-Events" title="Special Events">
+<link rel="next" href="Quitting.html#Quitting" title="Quitting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Waiting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Quitting.html#Quitting">Quitting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Events.html#Special-Events">Special Events</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
+<hr>
+</div>
+
+<h3 class="section">21.10 Waiting for Elapsed Time or Input</h3>
+
+<p><a name="index-waiting-1376"></a>
+  The wait functions are designed to wait for a certain amount of time
+to pass or until there is input.  For example, you may wish to pause in
+the middle of a computation to allow the user time to view the display. 
+<code>sit-for</code> pauses and updates the screen, and returns immediately if
+input comes in, while <code>sleep-for</code> pauses without updating the
+screen.
+
+<div class="defun">
+&mdash; Function: <b>sit-for</b><var> seconds &amp;optional nodisp<a name="index-sit_002dfor-1377"></a></var><br>
+<blockquote><p>This function performs redisplay (provided there is no pending input
+from the user), then waits <var>seconds</var> seconds, or until input is
+available.  The usual purpose of <code>sit-for</code> is to give the user
+time to read text that you display.  The value is <code>t</code> if
+<code>sit-for</code> waited the full time with no input arriving
+(see <a href="Event-Input-Misc.html#Event-Input-Misc">Event Input Misc</a>).  Otherwise, the value is <code>nil</code>.
+
+        <p>The argument <var>seconds</var> need not be an integer.  If it is a floating
+point number, <code>sit-for</code> waits for a fractional number of seconds. 
+Some systems support only a whole number of seconds; on these systems,
+<var>seconds</var> is rounded down.
+
+        <p>The expression <code>(sit-for 0)</code> is equivalent to <code>(redisplay)</code>,
+i.e. it requests a redisplay, without any delay, if there is no pending input. 
+See <a href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>.
+
+        <p>If <var>nodisp</var> is non-<code>nil</code>, then <code>sit-for</code> does not
+redisplay, but it still returns as soon as input is available (or when
+the timeout elapses).
+
+        <p>In batch mode (see <a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>), <code>sit-for</code> cannot be
+interrupted, even by input from the standard input descriptor.  It is
+thus equivalent to <code>sleep-for</code>, which is described below.
+
+        <p>It is also possible to call <code>sit-for</code> with three arguments,
+as <code>(sit-for </code><var>seconds</var> <var>millisec</var> <var>nodisp</var><code>)</code>,
+but that is considered obsolete. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sleep-for</b><var> seconds &amp;optional millisec<a name="index-sleep_002dfor-1378"></a></var><br>
+<blockquote><p>This function simply pauses for <var>seconds</var> seconds without updating
+the display.  It pays no attention to available input.  It returns
+<code>nil</code>.
+
+        <p>The argument <var>seconds</var> need not be an integer.  If it is a floating
+point number, <code>sleep-for</code> waits for a fractional number of seconds. 
+Some systems support only a whole number of seconds; on these systems,
+<var>seconds</var> is rounded down.
+
+        <p>The optional argument <var>millisec</var> specifies an additional waiting
+period measured in milliseconds.  This adds to the period specified by
+<var>seconds</var>.  If the system doesn't support waiting fractions of a
+second, you get an error if you specify nonzero <var>millisec</var>.
+
+        <p>Use <code>sleep-for</code> when you wish to guarantee a delay. 
+</p></blockquote></div>
+
+   <p>See <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>, for functions to get the current time.
+
+   </body></html>
+

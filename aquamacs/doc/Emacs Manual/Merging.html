@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Merging - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Branches.html#Branches" title="Branches">
+<link rel="prev" href="Creating-Branches.html#Creating-Branches" title="Creating Branches">
+<link rel="next" href="Multi_002dUser-Branching.html#Multi_002dUser-Branching" title="Multi-User Branching">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Merging"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dUser-Branching.html#Multi_002dUser-Branching">Multi-User Branching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Branches.html#Creating-Branches">Creating Branches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Branches.html#Branches">Branches</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">32.1.7.3 Merging Branches</h5>
+
+<p><a name="index-merging-changes-2488"></a>  When you have finished the changes on a certain branch, you will
+often want to incorporate them into the file's main line of development
+(the trunk).  This is not a trivial operation, because development might
+also have proceeded on the trunk, so that you must <dfn>merge</dfn> the
+changes into a file that has already been changed otherwise.  VC allows
+you to do this (and other things) with the <code>vc-merge</code> command.
+
+     <dl>
+<dt><kbd>C-x v m (vc-merge)</kbd><dd>Merge changes into the work file. 
+</dl>
+
+   <p><a name="index-C_002dx-v-m-2489"></a><a name="index-vc_002dmerge-2490"></a>  <kbd>C-x v m</kbd> (<code>vc-merge</code>) takes a set of changes and merges it
+into the current version of the work file.  It firsts asks you in the
+minibuffer where the changes should come from.  If you just type
+&lt;RET&gt;, Emacs merges any changes that were made on the same branch
+since you checked the file out (we call this <dfn>merging the news</dfn>). 
+This is the common way to pick up recent changes from the repository,
+regardless of whether you have already changed the file yourself.
+
+   <p>You can also enter a branch ID or a pair of revision IDs in
+the minibuffer.  Then <kbd>C-x v m</kbd> finds the changes from that
+branch, or the differences between the two revisions you specified, and
+merges them into the current revision of the current file.
+
+   <p>As an example, suppose that you have finished a certain feature on
+branch 1.3.1.  In the meantime, development on the trunk has proceeded
+to revision 1.5.  To merge the changes from the branch to the trunk,
+first go to the head revision of the trunk, by typing <kbd>C-u C-x v v
+&lt;RET&gt;</kbd>.  Revision 1.5 is now current.  If locking is used for the file,
+type <kbd>C-x v v</kbd> to lock revision 1.5 so that you can change it.  Next,
+type <kbd>C-x v m 1.3.1 &lt;RET&gt;</kbd>.  This takes the entire set of changes on
+branch 1.3.1 (relative to revision 1.3, where the branch started, up to
+the last revision on the branch) and merges it into the current revision
+of the work file.  You can now check in the changed file, thus creating
+revision 1.6 containing the changes from the branch.
+
+   <p>It is possible to do further editing after merging the branch, before
+the next check-in.  But it is usually wiser to check in the merged
+revision, then lock it and make the further changes.  This will keep
+a better record of the history of changes.
+
+   <p><a name="index-conflicts-2491"></a><a name="index-resolving-conflicts-2492"></a>  When you merge changes into a file that has itself been modified, the
+changes might overlap.  We call this situation a <dfn>conflict</dfn>, and
+reconciling the conflicting changes is called <dfn>resolving a
+conflict</dfn>.
+
+   <p>Whenever conflicts occur during merging, VC detects them, tells you
+about them in the echo area, and asks whether you want help in merging. 
+If you say yes, it starts an Ediff session (see <a href="../ediff/index.html#Top">Ediff</a>).
+
+   <p>If you say no, the conflicting changes are both inserted into the
+file, surrounded by <dfn>conflict markers</dfn>.  The example below shows how
+a conflict region looks; the file is called &lsquo;<samp><span class="samp">name</span></samp>&rsquo; and the current
+master file revision with user B's changes in it is 1.11.
+
+<!-- @w here is so CVS won't think this is a conflict. -->
+<pre class="smallexample">     &lt;<!-- /@w -->&lt;&lt;&lt;&lt;&lt;&lt; name
+       <var>User A's version</var>
+     =======
+       <var>User B's version</var>
+     &gt;<!-- /@w -->&gt;&gt;&gt;&gt;&gt;&gt; 1.11
+</pre>
+   <p><a name="index-vc_002dresolve_002dconflicts-2493"></a>  Then you can resolve the conflicts by editing the file manually.  Or
+you can type <code>M-x vc-resolve-conflicts</code> after visiting the file. 
+This starts an Ediff session, as described above.  Don't forget to
+check in the merged version afterwards.
+
+   </body></html>
+

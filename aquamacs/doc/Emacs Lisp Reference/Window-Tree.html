@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Window Tree - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Coordinates-and-Windows.html#Coordinates-and-Windows" title="Coordinates and Windows">
+<link rel="next" href="Window-Configurations.html#Window-Configurations" title="Window Configurations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-Tree"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Configurations.html#Window-Configurations">Window Configurations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Coordinates-and-Windows.html#Coordinates-and-Windows">Coordinates and Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.18 The Window Tree</h3>
+
+<p><a name="index-window-tree-2189"></a>
+  A <dfn>window tree</dfn> specifies the layout, size, and relationship
+between all windows in one frame.
+
+<div class="defun">
+&mdash; Function: <b>window-tree</b><var> &amp;optional frame<a name="index-window_002dtree-2190"></a></var><br>
+<blockquote><p>This function returns the window tree for frame <var>frame</var>. 
+If <var>frame</var> is omitted, the selected frame is used.
+
+        <p>The return value is a list of the form <code>(</code><var>root</var> <var>mini</var><code>)</code>,
+where <var>root</var> represents the window tree of the frame's
+root window, and <var>mini</var> is the frame's minibuffer window.
+
+        <p>If the root window is not split, <var>root</var> is the root window itself. 
+Otherwise, <var>root</var> is a list <code>(</code><var>dir</var> <var>edges</var> <var>w1</var>
+<var>w2</var><code> ...)</code> where <var>dir</var> is <code>nil</code> for a horizontal split,
+and <code>t</code> for a vertical split, <var>edges</var> gives the combined size and
+position of the subwindows in the split, and the rest of the elements
+are the subwindows in the split.  Each of the subwindows may again be
+a window or a list representing a window split, and so on.  The
+<var>edges</var> element is a list <code>(</code><var>left</var><var> top</var><var> right</var><var> bottom</var><code>)</code>
+similar to the value returned by <code>window-edges</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

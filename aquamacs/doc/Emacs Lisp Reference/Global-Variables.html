@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Global Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="next" href="Constant-Variables.html#Constant-Variables" title="Constant Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Global-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Constant-Variables.html#Constant-Variables">Constant Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.1 Global Variables</h3>
+
+<p><a name="index-global-variable-576"></a>
+  The simplest way to use a variable is <dfn>globally</dfn>.  This means that
+the variable has just one value at a time, and this value is in effect
+(at least for the moment) throughout the Lisp system.  The value remains
+in effect until you specify a new one.  When a new value replaces the
+old one, no trace of the old value remains in the variable.
+
+   <p>You specify a value for a symbol with <code>setq</code>.  For example,
+
+<pre class="example">     (setq x '(a b))
+</pre>
+   <p class="noindent">gives the variable <code>x</code> the value <code>(a b)</code>.  Note that
+<code>setq</code> is a special form (see <a href="Special-Forms.html#Special-Forms">Special Forms</a>); it does not
+evaluate its first argument, the name of the variable, but it does
+evaluate the second argument, the new value.
+
+   <p>Once the variable has a value, you can refer to it by using the
+symbol itself as an expression.  Thus,
+
+<pre class="example">     x &rArr; (a b)
+</pre>
+   <p class="noindent">assuming the <code>setq</code> form shown above has already been executed.
+
+   <p>If you do set the same variable again, the new value replaces the old
+one:
+
+<pre class="example">     x
+          &rArr; (a b)
+     (setq x 4)
+          &rArr; 4
+     x
+          &rArr; 4
+</pre>
+   </body></html>
+

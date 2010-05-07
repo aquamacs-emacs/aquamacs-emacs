@@ -1181,18 +1181,18 @@ language you are using."
   (interactive "P")
   (if arg
       (info-complete-symbol)
-    (let ((res (run-hook-with-args-until-success
-		'completion-at-point-functions)))
-      (cond
-       ((functionp res) (funcall res))
-       (res
-	(let* ((plist (nthcdr 3 res))
-	       (start (nth 0 res))
-	       (end (nth 1 res))
-	       (completion-annotate-function
-		(or (plist-get plist :annotation-function)
-		    completion-annotate-function)))
-	  (completion-in-region start end (nth 2 res)
+  (let ((res (run-hook-with-args-until-success
+              'completion-at-point-functions)))
+    (cond
+     ((functionp res) (funcall res))
+     (res
+      (let* ((plist (nthcdr 3 res))
+             (start (nth 0 res))
+             (end (nth 1 res))
+             (completion-annotate-function
+              (or (plist-get plist :annotation-function)
+                  completion-annotate-function)))
+        (completion-in-region start end (nth 2 res)
 				(plist-get plist :predicate))))))))
 
 (defalias 'completion-at-point 'complete-symbol)

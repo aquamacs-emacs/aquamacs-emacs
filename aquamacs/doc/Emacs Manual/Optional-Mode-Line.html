@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Optional Mode Line - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Selective-Display.html#Selective-Display" title="Selective Display">
+<link rel="next" href="Text-Display.html#Text-Display" title="Text Display">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Optional-Mode-Line"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Display.html#Text-Display">Text Display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-Display.html#Selective-Display">Selective Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">18.14 Optional Mode Line Features</h3>
+
+<p><a name="index-buffer-size-display-562"></a><a name="index-display-of-buffer-size-563"></a><a name="index-size_002dindication_002dmode-564"></a>  The buffer percentage <var>pos</var> indicates the percentage of the
+buffer above the top of the window.  You can additionally display the
+size of the buffer by typing <kbd>M-x size-indication-mode</kbd> to turn on
+Size Indication mode.  The size will be displayed immediately
+following the buffer percentage like this:
+
+<pre class="example">     <var>POS</var> of <var>SIZE</var>
+</pre>
+   <p class="noindent">Here <var>SIZE</var> is the human readable representation of the number of
+characters in the buffer, which means that &lsquo;<samp><span class="samp">k</span></samp>&rsquo; for 10^3, &lsquo;<samp><span class="samp">M</span></samp>&rsquo;
+for 10^6, &lsquo;<samp><span class="samp">G</span></samp>&rsquo; for 10^9, etc., are used to abbreviate.
+
+   <p><a name="index-line-number-display-565"></a><a name="index-display-of-line-number-566"></a><a name="index-line_002dnumber_002dmode-567"></a>  The current line number of point appears in the mode line when Line
+Number mode is enabled.  Use the command <kbd>M-x line-number-mode</kbd> to
+turn this mode on and off; normally it is on.  The line number appears
+after the buffer percentage <var>pos</var>, with the letter &lsquo;<samp><span class="samp">L</span></samp>&rsquo; to
+indicate what it is.
+
+   <p><a name="index-Column-Number-mode-568"></a><a name="index-mode_002c-Column-Number-569"></a><a name="index-column_002dnumber_002dmode-570"></a>  Similarly, you can display the current column number by turning on
+Column number mode with <kbd>M-x column-number-mode</kbd>.  The column
+number is indicated by the letter &lsquo;<samp><span class="samp">C</span></samp>&rsquo;.  However, when both of
+these modes are enabled, the line and column numbers are displayed in
+parentheses, the line number first, rather than with &lsquo;<samp><span class="samp">L</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">C</span></samp>&rsquo;.  For example: &lsquo;<samp><span class="samp">(561,2)</span></samp>&rsquo;.  See <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>, for more
+information about minor modes and about how to use these commands.
+
+   <p><a name="index-narrowing_002c-and-line-number-display-571"></a>  If you have narrowed the buffer (see <a href="Narrowing.html#Narrowing">Narrowing</a>), the displayed
+line number is relative to the accessible portion of the buffer. 
+Thus, it isn't suitable as an argument to <code>goto-line</code>.  (Use
+<code>what-line</code> command to see the line number relative to the whole
+file.)
+
+   <p><a name="index-line_002dnumber_002ddisplay_002dlimit-572"></a>  If the buffer is very large (larger than the value of
+<code>line-number-display-limit</code>), Emacs won't compute the line
+number, because that would be too slow; therefore, the line number
+won't appear on the mode-line.  To remove this limit, set
+<code>line-number-display-limit</code> to <code>nil</code>.
+
+   <p><a name="index-line_002dnumber_002ddisplay_002dlimit_002dwidth-573"></a>  Line-number computation can also be slow if the lines in the buffer
+are too long.  For this reason, Emacs doesn't display line numbers if
+the average width, in characters, of lines near point is larger than
+the value of <code>line-number-display-limit-width</code>.  The default
+value is 200 characters.
+
+   <p><a name="index-display_002dtime-574"></a><a name="index-time-_0028on-mode-line_0029-575"></a>  Emacs can optionally display the time and system load in all mode
+lines.  To enable this feature, type <kbd>M-x display-time</kbd> or customize
+the option <code>display-time-mode</code>.  The information added to the mode
+line usually appears after the buffer name, before the mode names and
+their parentheses.  It looks like this:
+
+<pre class="example">     <var>hh</var>:<var>mm</var>pm <var>l.ll</var>
+</pre>
+   <p class="noindent"><a name="index-display_002dtime_002d24hr_002dformat-576"></a>Here <var>hh</var> and <var>mm</var> are the hour and minute, followed always by
+&lsquo;<samp><span class="samp">am</span></samp>&rsquo; or &lsquo;<samp><span class="samp">pm</span></samp>&rsquo;.  <var>l.ll</var> is the average number of running
+processes in the whole system recently.  (Some fields may be missing if
+your operating system cannot support them.)  If you prefer time display
+in 24-hour format, set the variable <code>display-time-24hr-format</code>
+to <code>t</code>.
+
+   <p><a name="index-mail-_0028on-mode-line_0029-577"></a><a name="index-display_002dtime_002duse_002dmail_002dicon-578"></a><a name="index-display_002dtime_002dmail_002dface-579"></a><a name="index-display_002dtime_002dmail_002dfile-580"></a><a name="index-display_002dtime_002dmail_002ddirectory-581"></a>  The word &lsquo;<samp><span class="samp">Mail</span></samp>&rsquo; appears after the load level if there is mail
+for you that you have not read yet.  On a graphical display you can use
+an icon instead of &lsquo;<samp><span class="samp">Mail</span></samp>&rsquo; by customizing
+<code>display-time-use-mail-icon</code>; this may save some space on the mode
+line.  You can customize <code>display-time-mail-face</code> to make the mail
+indicator prominent.  Use <code>display-time-mail-file</code> to specify
+the mail file to check, or set <code>display-time-mail-directory</code>
+to specify the directory to check for incoming mail (any nonempty regular
+file in the directory is considered as &ldquo;newly arrived mail&rdquo;).
+
+   <p><a name="index-mail-_0028on-mode-line_0029-582"></a><a name="index-display_002dbattery_002dmode-583"></a><a name="index-display_002dbattery_002dmode-584"></a><a name="index-battery_002dmode_002dline_002dformat-585"></a>  When running Emacs on a laptop computer, you can display the battery
+charge on the mode-line, by using the command
+<code>display-battery-mode</code> or customizing the variable
+<code>display-battery-mode</code>.  The variable
+<code>battery-mode-line-format</code> determines the way the battery charge
+is displayed; the exact mode-line message depends on the operating
+system, and it usually shows the current battery charge as a
+percentage of the total charge.
+
+   <p><a name="index-mode-line_002c-3D-appearance-586"></a><a name="index-attributes-of-mode-line_002c-changing-587"></a><a name="index-non_002dintegral-number-of-lines-in-a-window-588"></a>  By default, the mode line is drawn on graphics displays with
+3D-style highlighting, like that of a button when it is not being
+pressed.  If you don't like this effect, you can disable the 3D
+highlighting of the mode line, by customizing the attributes of the
+<code>mode-line</code> face.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.
+
+   <p><a name="index-non_002dselected-windows_002c-mode-line-appearance-589"></a>  By default, the mode line of nonselected windows is displayed in a
+different face, called <code>mode-line-inactive</code>.  Only the selected
+window is displayed in the <code>mode-line</code> face.  This helps show
+which window is selected.  When the minibuffer is selected, since
+it has no mode line, the window from which you activated the minibuffer
+has its mode line displayed using <code>mode-line</code>; as a result,
+ordinary entry to the minibuffer does not change any mode lines.
+
+   <p><a name="index-mode_002dline_002din_002dnon_002dselected_002dwindows-590"></a>  You can disable use of <code>mode-line-inactive</code> by setting variable
+<code>mode-line-in-non-selected-windows</code> to <code>nil</code>; then all mode
+lines are displayed in the <code>mode-line</code> face.
+
+   <p><a name="index-eol_002dmnemonic_002dunix-591"></a><a name="index-eol_002dmnemonic_002ddos-592"></a><a name="index-eol_002dmnemonic_002dmac-593"></a><a name="index-eol_002dmnemonic_002dundecided-594"></a>  You can customize the mode line display for each of the end-of-line
+formats by setting each of the variables <code>eol-mnemonic-unix</code>,
+<code>eol-mnemonic-dos</code>, <code>eol-mnemonic-mac</code>, and
+<code>eol-mnemonic-undecided</code> to the strings you prefer.
+
+   </body></html>
+

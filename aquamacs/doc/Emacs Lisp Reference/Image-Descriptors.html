@@ -1,0 +1,216 @@
+<html lang="en">
+<head>
+<title>Image Descriptors - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Images.html#Images" title="Images">
+<link rel="prev" href="Image-Formats.html#Image-Formats" title="Image Formats">
+<link rel="next" href="XBM-Images.html#XBM-Images" title="XBM Images">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Image-Descriptors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="XBM-Images.html#XBM-Images">XBM Images</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Image-Formats.html#Image-Formats">Image Formats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.16.2 Image Descriptors</h4>
+
+<p><a name="index-image-descriptor-3543"></a>
+  An image description is a list of the form <code>(image . </code><var>props</var><code>)</code>,
+where <var>props</var> is a property list containing alternating keyword
+symbols (symbols whose names start with a colon) and their values. 
+You can use any Lisp object as a property, but the only properties
+that have any special meaning are certain symbols, all of them keywords.
+
+   <p>Every image descriptor must contain the property <code>:type
+</code><var>type</var> to specify the format of the image.  The value of <var>type</var>
+should be an image type symbol; for example, <code>xpm</code> for an image in
+XPM format.
+
+   <p>Here is a list of other properties that are meaningful for all image
+types:
+
+     <dl>
+<dt><code>:file </code><var>file</var><dd>The <code>:file</code> property says to load the image from file
+<var>file</var>.  If <var>file</var> is not an absolute file name, it is expanded
+in <code>data-directory</code>.
+
+     <br><dt><code>:data </code><var>data</var><dd>The <code>:data</code> property says the actual contents of the image. 
+Each image must use either <code>:data</code> or <code>:file</code>, but not both. 
+For most image types, the value of the <code>:data</code> property should be a
+string containing the image data; we recommend using a unibyte string.
+
+     <p>Before using <code>:data</code>, look for further information in the section
+below describing the specific image format.  For some image types,
+<code>:data</code> may not be supported; for some, it allows other data types;
+for some, <code>:data</code> alone is not enough, so you need to use other
+image properties along with <code>:data</code>.
+
+     <br><dt><code>:margin </code><var>margin</var><dd>The <code>:margin</code> property specifies how many pixels to add as an
+extra margin around the image.  The value, <var>margin</var>, must be a
+non-negative number, or a pair <code>(</code><var>x</var><code> . </code><var>y</var><code>)</code> of such
+numbers.  If it is a pair, <var>x</var> specifies how many pixels to add
+horizontally, and <var>y</var> specifies how many pixels to add vertically. 
+If <code>:margin</code> is not specified, the default is zero.
+
+     <br><dt><code>:ascent </code><var>ascent</var><dd>The <code>:ascent</code> property specifies the amount of the image's
+height to use for its ascent&mdash;that is, the part above the baseline. 
+The value, <var>ascent</var>, must be a number in the range 0 to 100, or
+the symbol <code>center</code>.
+
+     <p>If <var>ascent</var> is a number, that percentage of the image's height is
+used for its ascent.
+
+     <p>If <var>ascent</var> is <code>center</code>, the image is vertically centered
+around a centerline which would be the vertical centerline of text drawn
+at the position of the image, in the manner specified by the text
+properties and overlays that apply to the image.
+
+     <p>If this property is omitted, it defaults to 50.
+
+     <br><dt><code>:relief </code><var>relief</var><dd>The <code>:relief</code> property, if non-<code>nil</code>, adds a shadow rectangle
+around the image.  The value, <var>relief</var>, specifies the width of the
+shadow lines, in pixels.  If <var>relief</var> is negative, shadows are drawn
+so that the image appears as a pressed button; otherwise, it appears as
+an unpressed button.
+
+     <br><dt><code>:conversion </code><var>algorithm</var><dd>The <code>:conversion</code> property, if non-<code>nil</code>, specifies a
+conversion algorithm that should be applied to the image before it is
+displayed; the value, <var>algorithm</var>, specifies which algorithm.
+
+          <dl>
+<dt><code>laplace</code><dt><code>emboss</code><dd>Specifies the Laplace edge detection algorithm, which blurs out small
+differences in color while highlighting larger differences.  People
+sometimes consider this useful for displaying the image for a
+&ldquo;disabled&rdquo; button.
+
+          <br><dt><code>(edge-detection :matrix </code><var>matrix</var><code> :color-adjust </code><var>adjust</var><code>)</code><dd>Specifies a general edge-detection algorithm.  <var>matrix</var> must be
+either a nine-element list or a nine-element vector of numbers.  A pixel
+at position x/y in the transformed image is computed from
+original pixels around that position.  <var>matrix</var> specifies, for each
+pixel in the neighborhood of x/y, a factor with which that pixel
+will influence the transformed pixel; element 0 specifies the
+factor for the pixel at x-1/y-1, element 1 the factor for
+the pixel at x/y-1 etc., as shown below:
+          <pre class="display">                 (x-1/y-1  x/y-1  x+1/y-1
+                  x-1/y    x/y    x+1/y
+                  x-1/y+1  x/y+1  x+1/y+1)
+</pre>
+          <p>The resulting pixel is computed from the color intensity of the color
+resulting from summing up the RGB values of surrounding pixels,
+multiplied by the specified factors, and dividing that sum by the sum
+of the factors' absolute values.
+
+          <p>Laplace edge-detection currently uses a matrix of
+          <pre class="display">                 (1  0  0
+                  0  0  0
+                  9  9 -1)
+</pre>
+          <p>Emboss edge-detection uses a matrix of
+          <pre class="display">                 ( 2 -1  0
+                  -1  0  1
+                   0  1 -2)
+</pre>
+          <br><dt><code>disabled</code><dd>Specifies transforming the image so that it looks &ldquo;disabled.&rdquo;
+</dl>
+
+     <br><dt><code>:mask </code><var>mask</var><dd>If <var>mask</var> is <code>heuristic</code> or <code>(heuristic </code><var>bg</var><code>)</code>, build
+a clipping mask for the image, so that the background of a frame is
+visible behind the image.  If <var>bg</var> is not specified, or if <var>bg</var>
+is <code>t</code>, determine the background color of the image by looking at
+the four corners of the image, assuming the most frequently occurring
+color from the corners is the background color of the image.  Otherwise,
+<var>bg</var> must be a list <code>(</code><var>red</var> <var>green</var> <var>blue</var><code>)</code>
+specifying the color to assume for the background of the image.
+
+     <p>If <var>mask</var> is <code>nil</code>, remove a mask from the image, if it has
+one.  Images in some formats include a mask which can be removed by
+specifying <code>:mask nil</code>.
+
+     <br><dt><code>:pointer </code><var>shape</var><dd>This specifies the pointer shape when the mouse pointer is over this
+image.  See <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for available pointer shapes.
+
+     <br><dt><code>:map </code><var>map</var><dd>This associates an image map of <dfn>hot spots</dfn> with this image.
+
+     <p>An image map is an alist where each element has the format
+<code>(</code><var>area</var> <var>id</var> <var>plist</var><code>)</code>.  An <var>area</var> is specified
+as either a rectangle, a circle, or a polygon.
+
+     <p>A rectangle is a cons
+<code>(rect . ((</code><var>x0</var><code> . </code><var>y0</var><code>) . (</code><var>x1</var><code> . </code><var>y1</var><code>)))</code>
+which specifies the pixel coordinates of the upper left and bottom right
+corners of the rectangle area.
+
+     <p>A circle is a cons
+<code>(circle . ((</code><var>x0</var><code> . </code><var>y0</var><code>) . </code><var>r</var><code>))</code>
+which specifies the center and the radius of the circle; <var>r</var> may
+be a float or integer.
+
+     <p>A polygon is a cons
+<code>(poly . [</code><var>x0</var> <var>y0</var> <var>x1</var> <var>y1</var><code> ...])</code>
+where each pair in the vector describes one corner in the polygon.
+
+     <p>When the mouse pointer lies on a hot-spot area of an image, the
+<var>plist</var> of that hot-spot is consulted; if it contains a <code>help-echo</code>
+property, that defines a tool-tip for the hot-spot, and if it contains
+a <code>pointer</code> property, that defines the shape of the mouse cursor when
+it is on the hot-spot. 
+See <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for available pointer shapes.
+
+     <p>When you click the mouse when the mouse pointer is over a hot-spot, an
+event is composed by combining the <var>id</var> of the hot-spot with the
+mouse event; for instance, <code>[area4 mouse-1]</code> if the hot-spot's
+<var>id</var> is <code>area4</code>. 
+</dl>
+
+<div class="defun">
+&mdash; Function: <b>image-mask-p</b><var> spec &amp;optional frame<a name="index-image_002dmask_002dp-3544"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if image <var>spec</var> has a mask bitmap. 
+<var>frame</var> is the frame on which the image will be displayed. 
+<var>frame</var> <code>nil</code> or omitted means to use the selected frame
+(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

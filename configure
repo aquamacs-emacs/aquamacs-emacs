@@ -6027,7 +6027,7 @@ test "$opsys" = "aix4.2" && test "x$GCC" = "xyes" && \
 if test x"${OVERRIDE_CPPFLAGS}" != x; then
   CPPFLAGS="${OVERRIDE_CPPFLAGS}"
 else
-  CPPFLAGS="$C_SWITCH_SYSTEM $C_SWITCH_MACHINE $CPPFLAGS"
+  CPPFLAGS="$c_switch_system $c_switch_machine $CPPFLAGS"
 fi
 
 
@@ -6394,7 +6394,7 @@ fi
 if test "X$CRT_DIR" = "X"; then
 
   case "$canonical" in
-    x86_64-*-linux-gnu* | s390x-*-linux-gnu*)
+  x86_64-*-linux-gnu* | s390x-*-linux-gnu* )
     ## On x86-64 and s390x GNU/Linux distributions, the standard library
     ## can be in a variety of places.  We only try /usr/lib64 and /usr/lib.
     ## For anything else (eg /usr/lib32), it is up the user to specify
@@ -6410,7 +6410,7 @@ if test "X$CRT_DIR" = "X"; then
 
   case "$opsys" in
     hpux10-20) CRT_DIR=/lib ;;
-  esac
+esac
 
   ## Default is /usr/lib.
   test "X$CRT_DIR" = "X" && CRT_DIR=/usr/lib
@@ -15116,7 +15116,7 @@ rm -f conftest*
   fi
   if test "${HAVE_JPEG}" = "yes"; then
     LIBJPEG=-ljpeg
-  fi
+fi
 fi
 
 
@@ -15863,7 +15863,7 @@ else
 fi
 
     test "$HAVE_GIF" = yes && LIBGIF=-lungif
-  fi
+    fi
 
   if test "${HAVE_GIF}" = "yes"; then
 
@@ -16112,7 +16112,7 @@ fi
 
 
 
-  if test "${HAVE_GPM}" = "yes"; then
+if test "${HAVE_GPM}" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_GPM 1
@@ -16120,7 +16120,7 @@ _ACEOF
 
     LIBGPM=-lgpm
     GPM_MOUSE_SUPPORT="\${lispsource}mouse.elc"
-  fi
+fi
 fi
 
 
@@ -21381,7 +21381,7 @@ for ac_lib in '' ncurses terminfo termcap; do
     ac_res=-l$ac_lib
     LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
   fi
-  rm -f conftest.$ac_objext conftest$ac_exeext
+rm -f conftest.$ac_objext conftest$ac_exeext
 if { (ac_try="$ac_link"
 case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
@@ -22070,7 +22070,7 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
     LIBHESIOD=-lhesiod
-  fi
+fi
 fi
 
 
@@ -22095,7 +22095,7 @@ DESLIB=
 KRB4LIB=
 
 if test "${with_kerberos}" != no; then
-  { $as_echo "$as_me:$LINENO: checking for com_err in -lcom_err" >&5
+{ $as_echo "$as_me:$LINENO: checking for com_err in -lcom_err" >&5
 $as_echo_n "checking for com_err in -lcom_err... " >&6; }
 if test "${ac_cv_lib_com_err_com_err+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22174,7 +22174,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBCOM_ERR 1
 _ACEOF
 
-  fi
+fi
   { $as_echo "$as_me:$LINENO: checking for mit_des_cbc_encrypt in -lcrypto" >&5
 $as_echo_n "checking for mit_des_cbc_encrypt in -lcrypto... " >&6; }
 if test "${ac_cv_lib_crypto_mit_des_cbc_encrypt+set}" = set; then
@@ -22254,7 +22254,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBCRYPTO 1
 _ACEOF
 
-  fi
+fi
   { $as_echo "$as_me:$LINENO: checking for mit_des_cbc_encrypt in -lk5crypto" >&5
 $as_echo_n "checking for mit_des_cbc_encrypt in -lk5crypto... " >&6; }
 if test "${ac_cv_lib_k5crypto_mit_des_cbc_encrypt+set}" = set; then
@@ -22334,8 +22334,8 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBK5CRYPTO 1
 _ACEOF
 
-  fi
-  { $as_echo "$as_me:$LINENO: checking for krb5_init_context in -lkrb5" >&5
+fi
+{ $as_echo "$as_me:$LINENO: checking for krb5_init_context in -lkrb5" >&5
 $as_echo_n "checking for krb5_init_context in -lkrb5... " >&6; }
 if test "${ac_cv_lib_krb5_krb5_init_context+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22414,9 +22414,9 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBKRB5 1
 _ACEOF
 
-  fi
-    if test "${with_kerberos5}" = no; then
-    { $as_echo "$as_me:$LINENO: checking for des_cbc_encrypt in -ldes425" >&5
+fi
+  if test "${with_kerberos5}" = no; then
+{ $as_echo "$as_me:$LINENO: checking for des_cbc_encrypt in -ldes425" >&5
 $as_echo_n "checking for des_cbc_encrypt in -ldes425... " >&6; }
 if test "${ac_cv_lib_des425_des_cbc_encrypt+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22495,8 +22495,8 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBDES425 1
 _ACEOF
 
-    else
-      { $as_echo "$as_me:$LINENO: checking for des_cbc_encrypt in -ldes" >&5
+else
+{ $as_echo "$as_me:$LINENO: checking for des_cbc_encrypt in -ldes" >&5
 $as_echo_n "checking for des_cbc_encrypt in -ldes... " >&6; }
 if test "${ac_cv_lib_des_des_cbc_encrypt+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22575,9 +22575,9 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBDES 1
 _ACEOF
 
-      fi
-    fi
-    { $as_echo "$as_me:$LINENO: checking for krb_get_cred in -lkrb4" >&5
+fi
+fi
+{ $as_echo "$as_me:$LINENO: checking for krb_get_cred in -lkrb4" >&5
 $as_echo_n "checking for krb_get_cred in -lkrb4... " >&6; }
 if test "${ac_cv_lib_krb4_krb_get_cred+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22656,8 +22656,8 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBKRB4 1
 _ACEOF
 
-    else
-      { $as_echo "$as_me:$LINENO: checking for krb_get_cred in -lkrb" >&5
+else
+{ $as_echo "$as_me:$LINENO: checking for krb_get_cred in -lkrb" >&5
 $as_echo_n "checking for krb_get_cred in -lkrb... " >&6; }
 if test "${ac_cv_lib_krb_krb_get_cred+set}" = set; then
   $as_echo_n "(cached) " >&6
@@ -22736,8 +22736,8 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBKRB 1
 _ACEOF
 
-      fi
-    fi
+fi
+fi
   fi
 
   if test "${with_kerberos5}" != no; then
@@ -26024,6 +26024,16 @@ fi
 CFLAGS="$REAL_CFLAGS"
 CPPFLAGS="$REAL_CPPFLAGS"
 
+## Hack to detect a buggy GCC version.
+if test "x$GCC" = xyes \
+   && test x"`$CC --version 2> /dev/null | grep 'gcc.* 4.5.0'`" != x \
+   && test x"`echo $CFLAGS | grep '\-O[23]'`" != x \
+   && test x"`echo $CFLAGS | grep '\-fno-optimize-sibling-calls'`" = x; then
+   { { $as_echo "$as_me:$LINENO: error: GCC 4.5.0 has problems compiling Emacs; see etc/PROBLEMS'." >&5
+$as_echo "$as_me: error: GCC 4.5.0 has problems compiling Emacs; see etc/PROBLEMS'." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 #### Find out which version of Emacs this is.
 version=`grep 'defconst[	 ]*emacs-version' ${srcdir}/lisp/version.el \
 	 | sed -e 's/^[^"]*"\([^"]*\)".*$/\1/'`
@@ -26200,7 +26210,7 @@ _ACEOF
     OLDXMENU="\${oldXMenudir}libXMenu11.a"
   else
     OLDXMENU="\${lwlibdir}liblw.a"
-  fi
+fi
   LIBXMENU="\$(OLDXMENU)"
   LIBX_OTHER="\$(LIBXT) \$(LIBX_EXTRA)"
 else

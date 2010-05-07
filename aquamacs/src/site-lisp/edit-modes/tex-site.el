@@ -41,6 +41,17 @@
 (if (< emacs-major-version 21)
   (error "AUCTeX requires Emacs 21 or later"))
 
+;; Define here in order for `M-x customize-group <RET> AUCTeX <RET>'
+;; to work if the main AUCTeX files are not loaded yet.
+(defgroup AUCTeX nil
+  "A (La)TeX environment."
+  :tag "AUCTeX"
+  :link '(custom-manual "(auctex)Top")
+  :link '(url-link :tag "Home Page" "http://www.gnu.org/software/auctex/")
+  :prefix "TeX-"
+  :group 'tex
+  :load "tex" :load "latex" :load "tex-style")
+
 (defvar TeX-lisp-directory
   (expand-file-name "auctex" (file-name-directory load-file-name))
   "The directory where most of the AUCTeX lisp files are located.
@@ -131,12 +142,15 @@ set it with `TeX-modes-set'."
 		      `(TeX-modes-set ',var ,var t))
 		    (setq list (cdr list))))))
 
-(defconst AUCTeX-version "11.85"
+(defconst AUCTeX-version "11.86"
     "AUCTeX version.
 If not a regular release, the date of the last change.")
 
-(defconst AUCTeX-date "2008-02-10"
+(defconst AUCTeX-date "2010-02-21"
   "AUCTeX release date using the ISO 8601 format, yyyy-mm-dd.")
+
+;; Store bibitems when saving a BibTeX buffer
+(add-hook 'bibtex-mode-hook 'BibTeX-auto-store)
 
 ;;; auto-loads.el --- automatically extracted autoloads
 ;;
@@ -162,7 +176,7 @@ Unconditionally turn on Bib Cite mode.
 
 ;;;***
 
-;;;### (autoloads (context-mode) "context" "context.el" (18341 54637))
+;;;### (autoloads (context-mode) "context" "context.el" (19318 46167))
 ;;; Generated autoloads from context.el
 
 (defalias (quote ConTeXt-mode) (quote context-mode))
@@ -182,7 +196,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-en-mode) "context-en" "context-en.el"
-;;;;;;  (18341 54637))
+;;;;;;  (18541 18440))
 ;;; Generated autoloads from context-en.el
 
 (autoload (quote context-en-mode) "context-en" "\
@@ -200,7 +214,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-nl-mode) "context-nl" "context-nl.el"
-;;;;;;  (18341 54637))
+;;;;;;  (18489 3127))
 ;;; Generated autoloads from context-nl.el
 
 (autoload (quote context-nl-mode) "context-nl" "\
@@ -218,7 +232,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (font-latex-setup) "font-latex" "font-latex.el"
-;;;;;;  (18344 55640))
+;;;;;;  (19254 11585))
 ;;; Generated autoloads from font-latex.el
 
 (autoload (quote font-latex-setup) "font-latex" "\
@@ -229,7 +243,7 @@ Setup this buffer for LaTeX font-lock.  Usually called from a hook.
 ;;;***
 
 ;;;### (autoloads (docTeX-mode TeX-latex-mode BibTeX-auto-store)
-;;;;;;  "latex" "latex.el" (18341 54637))
+;;;;;;  "latex" "latex.el" (19180 28128))
 ;;; Generated autoloads from latex.el
 
 (autoload (quote BibTeX-auto-store) "latex" "\
@@ -266,8 +280,8 @@ runs the hooks in `docTeX-mode-hook'.
 
 ;;;***
 
-;;;### (autoloads (multi-prompt) "multi-prompt" "multi-prompt.el"
-;;;;;;  (18341 54637))
+;;;### (autoloads (multi-prompt-key-value multi-prompt) "multi-prompt"
+;;;;;;  "multi-prompt.el" (18915 28236))
 ;;; Generated autoloads from multi-prompt.el
 
 (autoload (quote multi-prompt) "multi-prompt" "\
@@ -279,11 +293,57 @@ are the arguments to `completing-read'.  See that.
 
 \(fn SEPARATOR UNIQUE PROMPT TABLE &optional MP-PREDICATE REQUIRE-MATCH INITIAL HISTORY)" nil nil)
 
+(autoload (quote multi-prompt-key-value) "multi-prompt" "\
+Read multiple strings, with completion and key=value support.
+PROMPT is a string to prompt with, usually ending with a colon
+and a space.  TABLE is an alist.  The car of each element should
+be a string representing a key and the optional cdr should be a
+list with strings to be used as values for the key.
+
+See the documentation for `completing-read' for details on the
+other arguments: PREDICATE, REQUIRE-MATCH, INITIAL-INPUT, HIST,
+DEF, and INHERIT-INPUT-METHOD.
+
+The return value is the string as entered in the minibuffer.
+
+\(fn PROMPT TABLE &optional PREDICATE REQUIRE-MATCH INITIAL-INPUT HIST DEF INHERIT-INPUT-METHOD)" nil nil)
+
 ;;;***
 
-;;;### (autoloads (TeX-submit-bug-report ams-tex-mode TeX-auto-generate-global
-;;;;;;  TeX-auto-generate TeX-plain-tex-mode TeX-tex-mode) "tex"
-;;;;;;  "tex.el" (18349 63029))
+;;;### (autoloads (ams-tex-mode TeX-plain-tex-mode) "plain-tex" "plain-tex.el"
+;;;;;;  (19406 6283))
+;;; Generated autoloads from plain-tex.el
+
+(autoload (quote TeX-plain-tex-mode) "plain-tex" "\
+Major mode in AUCTeX for editing plain TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{plain-TeX-mode-map}
+
+Entering `plain-tex-mode' calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of plain-TeX-mode-hook.
+
+\(fn)" t nil)
+
+(autoload (quote ams-tex-mode) "plain-tex" "\
+Major mode in AUCTeX for editing AmS-TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{AmSTeX-mode-map}
+
+Entering AmS-tex-mode calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of `AmS-TeX-mode-hook'.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (TeX-submit-bug-report TeX-auto-generate-global
+;;;;;;  TeX-auto-generate TeX-tex-mode) "tex" "tex.el" (19399 29115))
 ;;; Generated autoloads from tex.el
 
 (autoload (quote TeX-tex-mode) "tex" "\
@@ -300,19 +360,6 @@ The algorithm is as follows:
 
 \(fn)" t nil)
 
-(autoload (quote TeX-plain-tex-mode) "tex" "\
-Major mode in AUCTeX for editing plain TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{plain-TeX-mode-map}
-
-Entering `plain-tex-mode' calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of plain-TeX-mode-hook.
-
-\(fn)" t nil)
-
 (autoload (quote TeX-auto-generate) "tex" "\
 Generate style file for TEX and store it in AUTO.
 If TEX is a directory, generate style files for all files in the directory.
@@ -321,19 +368,6 @@ If TEX is a directory, generate style files for all files in the directory.
 
 (autoload (quote TeX-auto-generate-global) "tex" "\
 Create global auto directory for global TeX macro definitions.
-
-\(fn)" t nil)
-
-(autoload (quote ams-tex-mode) "tex" "\
-Major mode in AUCTeX for editing AmS-TeX files.
-See info under AUCTeX for documentation.
-
-Special commands:
-\\{AmSTeX-mode-map}
-
-Entering AmS-tex-mode calls the value of `text-mode-hook',
-then the value of `TeX-mode-hook', and then the value
-of `AmS-TeX-mode-hook'.
 
 \(fn)" t nil)
 
@@ -351,7 +385,7 @@ information about your AUCTeX version and AUCTeX configuration.
 ;;;***
 
 ;;;### (autoloads (LaTeX-install-toolbar TeX-install-toolbar) "tex-bar"
-;;;;;;  "tex-bar.el" (18348 43827))
+;;;;;;  "tex-bar.el" (18580 49499))
 ;;; Generated autoloads from tex-bar.el
 
 (autoload (quote TeX-install-toolbar) "tex-bar" "\
@@ -366,7 +400,7 @@ Install toolbar buttons for LaTeX mode.
 
 ;;;***
 
-;;;### (autoloads nil "tex-fold" "tex-fold.el" (18341 54637))
+;;;### (autoloads nil "tex-fold" "tex-fold.el" (19227 40177))
 ;;; Generated autoloads from tex-fold.el
  (autoload 'TeX-fold-mode "tex-fold" "Minor mode for hiding and revealing macros and environments." t)
 
@@ -385,8 +419,8 @@ Setup font lock support for TeX.
 
 ;;;***
 
-;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (18341
-;;;;;;  54636))
+;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (18903
+;;;;;;  48810))
 ;;; Generated autoloads from tex-info.el
 
 (defalias (quote Texinfo-mode) (quote texinfo-mode))
@@ -405,7 +439,7 @@ value of `Texinfo-mode-hook'.
 ;;;***
 
 ;;;### (autoloads (japanese-latex-mode japanese-plain-tex-mode) "tex-jp"
-;;;;;;  "tex-jp.el" (18341 54636))
+;;;;;;  "tex-jp.el" (18768 5174))
 ;;; Generated autoloads from tex-jp.el
 
 (autoload (quote japanese-plain-tex-mode) "tex-jp" "\
@@ -423,7 +457,7 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'.
 ;;;***
 
 ;;;### (autoloads (texmathp-match-switch texmathp) "texmathp" "texmathp.el"
-;;;;;;  (18341 54636))
+;;;;;;  (18489 3128))
 ;;; Generated autoloads from texmathp.el
 
 (autoload (quote texmathp) "texmathp" "\
@@ -443,7 +477,7 @@ Limit searched to BOUND.
 
 ;;;***
 
-;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (18348 43827))
+;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (18580 49487))
 ;;; Generated autoloads from toolbar-x.el
  (autoload 'toolbarx-install-toolbar "toolbar-x")
 

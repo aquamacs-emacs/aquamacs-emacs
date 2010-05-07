@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Change Log Commands - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Change-Log.html#Change-Log" title="Change Log">
+<link rel="next" href="Format-of-ChangeLog.html#Format-of-ChangeLog" title="Format of ChangeLog">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Change-Log-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-of-ChangeLog.html#Format-of-ChangeLog">Format of ChangeLog</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Change-Log.html#Change-Log">Change Log</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.2.1 Change Log Commands</h4>
+
+<p><a name="index-C_002dx-4-a-2535"></a><a name="index-add_002dchange_002dlog_002dentry_002dother_002dwindow-2536"></a>  The Emacs command <kbd>C-x 4 a</kbd> adds a new entry to the change log
+file for the file you are editing
+(<code>add-change-log-entry-other-window</code>).  If that file is actually
+a backup file, it makes an entry appropriate for the file's
+parent&mdash;that is useful for making log entries for functions that
+have been deleted in the current version.
+
+   <p><kbd>C-x 4 a</kbd> visits the change log file and creates a new entry
+unless the most recent entry is for today's date and your name.  It
+also creates a new item for the current file.  For many languages, it
+can even guess the name of the function or other object that was
+changed.
+
+   <p><a name="index-add_002dlog_002dkeep_002dchanges_002dtogether-2537"></a>  When the variable <code>add-log-keep-changes-together</code> is
+non-<code>nil</code>, <kbd>C-x 4 a</kbd> adds to any existing item for the file
+rather than starting a new item.
+
+   <p><a name="index-add_002dlog_002dalways_002dstart_002dnew_002drecord-2538"></a>  If <code>add-log-always-start-new-record</code> is non-<code>nil</code>,
+<kbd>C-x 4 a</kbd> always makes a new entry, even if the last entry
+was made by you and on the same date.
+
+   <p><a name="index-change_002dlog_002dversion_002dinfo_002denabled-2539"></a><a name="index-change_002dlog_002dversion_002dnumber_002dregexp_002dlist-2540"></a><a name="index-file-version-in-change-log-entries-2541"></a>  If the value of the variable <code>change-log-version-info-enabled</code>
+is non-<code>nil</code>, <kbd>C-x 4 a</kbd> adds the file's version number to the
+change log entry.  It finds the version number by searching the first
+ten percent of the file, using regular expressions from the variable
+<code>change-log-version-number-regexp-list</code>.
+
+   <p><a name="index-Change-Log-mode-2542"></a><a name="index-change_002dlog_002dmode-2543"></a>  The change log file is visited in Change Log mode.  In this major
+mode, each bunch of grouped items counts as one paragraph, and each
+entry is considered a page.  This facilitates editing the entries. 
+<kbd>C-j</kbd> and auto-fill indent each new line like the previous line;
+this is convenient for entering the contents of an entry.
+
+   <p>You can use the <code>next-error</code> command (by default bound to
+<kbd>C-x `</kbd>) to move between entries in the Change Log, when Change
+Log mode is on.  You will jump to the actual site in the file that was
+changed, not just to the next Change Log entry.  You can also use
+<code>previous-error</code> to move back in the same list.
+
+   <p><a name="index-change_002dlog_002dmerge-2544"></a>  You can use the command <kbd>M-x change-log-merge</kbd> to merge other
+log files into a buffer in Change Log Mode, preserving the date
+ordering of entries.
+
+   <p>Version control systems are another way to keep track of changes in
+your program and keep a change log.  In the VC log buffer, typing
+<kbd>C-c C-a</kbd> (<code>log-edit-insert-changelog</code>) inserts the relevant
+Change Log entry, if one exists (see <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>).  You can also
+insert a VC log entry into a Change Log buffer by typing <kbd>C-x v a</kbd>
+(<code>vc-update-change-log</code>) in the Change Log buffer
+(see <a href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a>).
+
+   </body></html>
+

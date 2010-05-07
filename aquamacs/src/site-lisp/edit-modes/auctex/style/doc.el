@@ -1,6 +1,6 @@
 ;;; doc.el --- AUCTeX style for `doc.sty'
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2008 Free Software Foundation, Inc.
 
 ;; Author: Frank Küster <frank@kuesterei.ch>
 ;; Maintainer: auctex-devel@gnu.org
@@ -40,6 +40,21 @@
       (delete-region (line-beginning-position) (line-end-position))
       (indent-according-to-mode))))
 
+(defun LaTeX-doc-after-insert-macrocode (env start end)
+  "Make sure the macrocode environment is properly formatted after insertion."
+  (when (TeX-member env '("macrocode" "macrocode*") 'string-equal)
+    (save-excursion
+      (goto-char end)
+      (skip-chars-backward " \t")
+      (when (bolp)
+	(insert "%")
+	(indent-according-to-mode))
+      (goto-char start)
+      (skip-chars-backward " \t")
+      (when (bolp)
+	(insert "%")
+	(indent-according-to-mode)))))
+
 (TeX-add-style-hook
  "doc"
  (function
@@ -48,6 +63,8 @@
 		 '("macrocode" current-indentation))
     (add-to-list 'LaTeX-indent-environment-list
 		 '("macrocode*" current-indentation))
+    (add-hook 'LaTeX-after-insert-env-hooks 'LaTeX-doc-after-insert-macrocode
+	      nil t)
     (LaTeX-add-environments
      "theglossary"
      '("macrocode" LaTeX-env-no-comment)

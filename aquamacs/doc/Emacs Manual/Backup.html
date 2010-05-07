@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Backup - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Saving.html#Saving" title="Saving">
+<link rel="prev" href="Save-Commands.html#Save-Commands" title="Save Commands">
+<link rel="next" href="Customize-Save.html#Customize-Save" title="Customize Save">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Backup"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customize-Save.html#Customize-Save">Customize Save</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Save-Commands.html#Save-Commands">Save Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Saving.html#Saving">Saving</a>
+<hr>
+</div>
+
+<h4 class="subsection">22.3.2 Backup Files</h4>
+
+<p><a name="index-backup-file-850"></a><a name="index-make_002dbackup_002dfiles-851"></a><a name="index-vc_002dmake_002dbackup_002dfiles-852"></a>
+  On most operating systems, rewriting a file automatically destroys all
+record of what the file used to contain.  Thus, saving a file from Emacs
+throws away the old contents of the file&mdash;or it would, except that
+Emacs carefully copies the old contents to another file, called the
+<dfn>backup</dfn> file, before actually saving.
+
+   <p>Emacs makes a backup for a file only the first time the file is
+saved from a buffer.  No matter how many times you subsequently save
+the file, its backup remains unchanged.  However, if you kill the
+buffer and then visit the file again, a new backup file will be made.
+
+   <p>For most files, the variable <code>make-backup-files</code> determines
+whether to make backup files.  On most operating systems, its default
+value is <code>t</code>, so that Emacs does write backup files.
+
+   <p>For files managed by a version control system (see <a href="Version-Control.html#Version-Control">Version Control</a>), the variable <code>vc-make-backup-files</code> determines whether
+to make backup files.  By default it is <code>nil</code>, since backup files
+are redundant when you store all the previous versions in a version
+control system. 
+See <a href="General-VC-Options.html#General-VC-Options">General VC Options</a>.
+
+   <p>At your option, Emacs can keep either a single backup for each file,
+or make a series of numbered backup files for each file that you edit. 
+See <a href="Backup-Names.html#Backup-Names">Backup Names</a>.
+
+   <p><a name="index-backup_002denable_002dpredicate-853"></a><a name="index-temporary_002dfile_002ddirectory-854"></a><a name="index-small_002dtemporary_002dfile_002ddirectory-855"></a>  The default value of the <code>backup-enable-predicate</code> variable
+prevents backup files being written for files in the directories used
+for temporary files, specified by <code>temporary-file-directory</code> or
+<code>small-temporary-file-directory</code>.
+
+   <p>You can explicitly tell Emacs to make another backup file from a
+buffer, even though that buffer has been saved before.  If you save
+the buffer with <kbd>C-u C-x C-s</kbd>, the version thus saved will be made
+into a backup file if you save the buffer again.  <kbd>C-u C-u C-x
+C-s</kbd> saves the buffer, but first makes the previous file contents into
+a new backup file.  <kbd>C-u C-u C-u C-x C-s</kbd> does both things: it
+makes a backup from the previous contents, and arranges to make
+another from the newly saved contents if you save again.
+
+<ul class="menu">
+<li><a accesskey="1" href="Backup-Names.html#Backup-Names">Names</a>: 		How backup files are named. 
+<li><a accesskey="2" href="Backup-Deletion.html#Backup-Deletion">Deletion</a>: 	Emacs deletes excess numbered backups. 
+<li><a accesskey="3" href="Backup-Copying.html#Backup-Copying">Copying</a>: 	Backups can be made by copying or renaming. 
+</ul>
+
+   </body></html>
+

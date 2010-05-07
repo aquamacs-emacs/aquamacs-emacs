@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Minibuffer Windows - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="prev" href="Minibuffer-Contents.html#Minibuffer-Contents" title="Minibuffer Contents">
+<link rel="next" href="Recursive-Mini.html#Recursive-Mini" title="Recursive Mini">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Minibuffer-Windows"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Recursive-Mini.html#Recursive-Mini">Recursive Mini</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.11 Minibuffer Windows</h3>
+
+<p><a name="index-minibuffer-windows-1176"></a>
+  These functions access and select minibuffer windows
+and test whether they are active.
+
+<div class="defun">
+&mdash; Function: <b>active-minibuffer-window</b><var><a name="index-active_002dminibuffer_002dwindow-1177"></a></var><br>
+<blockquote><p>This function returns the currently active minibuffer window, or
+<code>nil</code> if none is currently active. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>minibuffer-window</b><var> &amp;optional frame<a name="index-minibuffer_002dwindow-1178"></a></var><br>
+<blockquote><p><a name="Definition-of-minibuffer_002dwindow"></a>This function returns the minibuffer window used for frame <var>frame</var>. 
+If <var>frame</var> is <code>nil</code>, that stands for the current frame.  Note
+that the minibuffer window used by a frame need not be part of that
+frame&mdash;a frame that has no minibuffer of its own necessarily uses some
+other frame's minibuffer window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-minibuffer-window</b><var> window<a name="index-set_002dminibuffer_002dwindow-1179"></a></var><br>
+<blockquote><p>This function specifies <var>window</var> as the minibuffer window to use. 
+This affects where the minibuffer is displayed if you put text in it
+without invoking the usual minibuffer commands.  It has no effect on
+the usual minibuffer input functions because they all start by
+choosing the minibuffer window according to the current frame. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>window-minibuffer-p</b><var> &amp;optional window<a name="index-window_002dminibuffer_002dp-1180"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>window</var> is a minibuffer
+window. 
+<var>window</var> defaults to the selected window. 
+</p></blockquote></div>
+
+   <p>It is not correct to determine whether a given window is a minibuffer by
+comparing it with the result of <code>(minibuffer-window)</code>, because
+there can be more than one minibuffer window if there is more than one
+frame.
+
+<div class="defun">
+&mdash; Function: <b>minibuffer-window-active-p</b><var> window<a name="index-minibuffer_002dwindow_002dactive_002dp-1181"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>window</var>, assumed to be
+a minibuffer window, is currently active. 
+</p></blockquote></div>
+
+   </body></html>
+

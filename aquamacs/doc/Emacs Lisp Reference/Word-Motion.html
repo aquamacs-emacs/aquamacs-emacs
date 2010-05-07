@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Word Motion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Motion.html#Motion" title="Motion">
+<link rel="prev" href="Character-Motion.html#Character-Motion" title="Character Motion">
+<link rel="next" href="Buffer-End-Motion.html#Buffer-End-Motion" title="Buffer End Motion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Word-Motion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer-End-Motion.html#Buffer-End-Motion">Buffer End Motion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Motion.html#Character-Motion">Character Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.2.2 Motion by Words</h4>
+
+<p>These functions for parsing words use the syntax table to decide
+whether a given character is part of a word.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
+
+<div class="defun">
+&mdash; Command: <b>forward-word</b><var> &amp;optional count<a name="index-forward_002dword-2401"></a></var><br>
+<blockquote><p>This function moves point forward <var>count</var> words (or backward if
+<var>count</var> is negative).  If <var>count</var> is <code>nil</code>, it moves
+forward one word.
+
+        <p>&ldquo;Moving one word&rdquo; means moving until point crosses a
+word-constituent character and then encounters a word-separator
+character.  However, this function cannot move point past the boundary
+of the accessible portion of the buffer, or across a field boundary
+(see <a href="Fields.html#Fields">Fields</a>).  The most common case of a field boundary is the end
+of the prompt in the minibuffer.
+
+        <p>If it is possible to move <var>count</var> words, without being stopped
+prematurely by the buffer boundary or a field boundary, the value is
+<code>t</code>.  Otherwise, the return value is <code>nil</code> and point stops at
+the buffer boundary or field boundary.
+
+        <p>If <code>inhibit-field-text-motion</code> is non-<code>nil</code>,
+this function ignores field boundaries.
+
+        <p>In an interactive call, <var>count</var> is specified by the numeric prefix
+argument.  If <var>count</var> is omitted or <code>nil</code>, it defaults to 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>backward-word</b><var> &amp;optional count<a name="index-backward_002dword-2402"></a></var><br>
+<blockquote><p>This function is just like <code>forward-word</code>, except that it moves
+backward until encountering the front of a word, rather than forward. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>words-include-escapes</b><var><a name="index-words_002dinclude_002descapes-2403"></a></var><br>
+<blockquote><!-- Emacs 19 feature -->
+        <p>This variable affects the behavior of <code>forward-word</code> and everything
+that uses it.  If it is non-<code>nil</code>, then characters in the
+&ldquo;escape&rdquo; and &ldquo;character quote&rdquo; syntax classes count as part of
+words.  Otherwise, they do not. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>inhibit-field-text-motion</b><var><a name="index-inhibit_002dfield_002dtext_002dmotion-2404"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, certain motion functions including
+<code>forward-word</code>, <code>forward-sentence</code>, and
+<code>forward-paragraph</code> ignore field boundaries. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Color Names - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Drag-and-Drop.html#Drag-and-Drop" title="Drag and Drop">
+<link rel="next" href="Text-Terminal-Colors.html#Text-Terminal-Colors" title="Text Terminal Colors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Color-Names"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Terminal-Colors.html#Text-Terminal-Colors">Text Terminal Colors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.21 Color Names</h3>
+
+<p><a name="index-color-names-2342"></a><a name="index-specify-color-2343"></a><a name="index-numerical-RGB-color-specification-2344"></a>  A color name is text (usually in a string) that specifies a color. 
+Symbolic names such as &lsquo;<samp><span class="samp">black</span></samp>&rsquo;, &lsquo;<samp><span class="samp">white</span></samp>&rsquo;, &lsquo;<samp><span class="samp">red</span></samp>&rsquo;, etc.,
+are allowed; use <kbd>M-x list-colors-display</kbd> to see a list of
+defined names.  You can also specify colors numerically in forms such
+as &lsquo;<samp><span class="samp">#</span><var>rgb</var></samp>&rsquo; and &lsquo;<samp><span class="samp">RGB:</span><var>r</var><span class="samp">/</span><var>g</var><span class="samp">/</span><var>b</var></samp>&rsquo;, where
+<var>r</var> specifies the red level, <var>g</var> specifies the green level,
+and <var>b</var> specifies the blue level.  You can use either one, two,
+three, or four hex digits for <var>r</var>; then you must use the same
+number of hex digits for all <var>g</var> and <var>b</var> as well, making
+either 3, 6, 9 or 12 hex digits in all.  (See the documentation of the
+X Window System for more details about numerical RGB specification of
+colors.)
+
+   <p>These functions provide a way to determine which color names are
+valid, and what they look like.  In some cases, the value depends on the
+<dfn>selected frame</dfn>, as described below; see <a href="Input-Focus.html#Input-Focus">Input Focus</a>, for the
+meaning of the term &ldquo;selected frame.&rdquo;
+
+   <p>To read user input of color names with completion, use
+<code>read-color</code> (see <a href="High_002dLevel-Completion.html#High_002dLevel-Completion">read-color</a>).
+
+<div class="defun">
+&mdash; Function: <b>color-defined-p</b><var> color &amp;optional frame<a name="index-color_002ddefined_002dp-2345"></a></var><br>
+<blockquote><p>This function reports whether a color name is meaningful.  It returns
+<code>t</code> if so; otherwise, <code>nil</code>.  The argument <var>frame</var> says
+which frame's display to ask about; if <var>frame</var> is omitted or
+<code>nil</code>, the selected frame is used.
+
+        <p>Note that this does not tell you whether the display you are using
+really supports that color.  When using X, you can ask for any defined
+color on any kind of display, and you will get some result&mdash;typically,
+the closest it can do.  To determine whether a frame can really display
+a certain color, use <code>color-supported-p</code> (see below).
+
+        <p><a name="index-x_002dcolor_002ddefined_002dp-2346"></a>This function used to be called <code>x-color-defined-p</code>,
+and that name is still supported as an alias. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>defined-colors</b><var> &amp;optional frame<a name="index-defined_002dcolors-2347"></a></var><br>
+<blockquote><p>This function returns a list of the color names that are defined
+and supported on frame <var>frame</var> (default, the selected frame). 
+If <var>frame</var> does not support colors, the value is <code>nil</code>.
+
+        <p><a name="index-x_002ddefined_002dcolors-2348"></a>This function used to be called <code>x-defined-colors</code>,
+and that name is still supported as an alias. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>color-supported-p</b><var> color &amp;optional frame background-p<a name="index-color_002dsupported_002dp-2349"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>frame</var> can really display the color
+<var>color</var> (or at least something close to it).  If <var>frame</var> is
+omitted or <code>nil</code>, the question applies to the selected frame.
+
+        <p>Some terminals support a different set of colors for foreground and
+background.  If <var>background-p</var> is non-<code>nil</code>, that means you are
+asking whether <var>color</var> can be used as a background; otherwise you
+are asking whether it can be used as a foreground.
+
+        <p>The argument <var>color</var> must be a valid color name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>color-gray-p</b><var> color &amp;optional frame<a name="index-color_002dgray_002dp-2350"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>color</var> is a shade of gray, as defined on
+<var>frame</var>'s display.  If <var>frame</var> is omitted or <code>nil</code>, the
+question applies to the selected frame.  If <var>color</var> is not a valid
+color name, this function returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>color-values</b><var> color &amp;optional frame<a name="index-color_002dvalues-2351"></a></var><br>
+<blockquote><p><a name="index-rgb-value-2352"></a>This function returns a value that describes what <var>color</var> should
+ideally look like on <var>frame</var>.  If <var>color</var> is defined, the
+value is a list of three integers, which give the amount of red, the
+amount of green, and the amount of blue.  Each integer ranges in
+principle from 0 to 65535, but some displays may not use the full
+range.  This three-element list is called the <dfn>rgb values</dfn> of the
+color.
+
+        <p>If <var>color</var> is not defined, the value is <code>nil</code>.
+
+     <pre class="example">          (color-values "black")
+               &rArr; (0 0 0)
+          (color-values "white")
+               &rArr; (65280 65280 65280)
+          (color-values "red")
+               &rArr; (65280 0 0)
+          (color-values "pink")
+               &rArr; (65280 49152 51968)
+          (color-values "hungry")
+               &rArr; nil
+</pre>
+        <p>The color values are returned for <var>frame</var>'s display.  If
+<var>frame</var> is omitted or <code>nil</code>, the information is returned for
+the selected frame's display.  If the frame cannot display colors, the
+value is <code>nil</code>.
+
+        <p><a name="index-x_002dcolor_002dvalues-2353"></a>This function used to be called <code>x-color-values</code>,
+and that name is still supported as an alias. 
+</p></blockquote></div>
+
+   </body></html>
+

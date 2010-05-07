@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Display Table Format - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Tables.html#Display-Tables" title="Display Tables">
+<link rel="next" href="Active-Display-Table.html#Active-Display-Table" title="Active Display Table">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Display-Table-Format"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Active-Display-Table.html#Active-Display-Table">Active Display Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Tables.html#Display-Tables">Display Tables</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.21.1 Display Table Format</h4>
+
+<p>A display table is actually a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) with
+<code>display-table</code> as its subtype.
+
+<div class="defun">
+&mdash; Function: <b>make-display-table</b><var><a name="index-make_002ddisplay_002dtable-3646"></a></var><br>
+<blockquote><p>This creates and returns a display table.  The table initially has
+<code>nil</code> in all elements. 
+</p></blockquote></div>
+
+   <p>The ordinary elements of the display table are indexed by character
+codes; the element at index <var>c</var> says how to display the character
+code <var>c</var>.  The value should be <code>nil</code> or a vector of the
+glyphs to be output (see <a href="Glyphs.html#Glyphs">Glyphs</a>).  <code>nil</code> says to display the
+character <var>c</var> according to the usual display conventions
+(see <a href="Usual-Display.html#Usual-Display">Usual Display</a>).
+
+   <p><strong>Warning:</strong> if you use the display table to change the display
+of newline characters, the whole buffer will be displayed as one long
+&ldquo;line.&rdquo;
+
+   <p>The display table also has six &ldquo;extra slots&rdquo; which serve special
+purposes.  Here is a table of their meanings; <code>nil</code> in any slot
+means to use the default for that slot, as stated below.
+
+     <dl>
+<dt>0<dd>The glyph for the end of a truncated screen line (the default for this
+is &lsquo;<samp><span class="samp">$</span></samp>&rsquo;).  See <a href="Glyphs.html#Glyphs">Glyphs</a>.  On graphical terminals, Emacs uses
+arrows in the fringes to indicate truncation, so the display table has
+no effect.
+
+     <br><dt>1<dd>The glyph for the end of a continued line (the default is &lsquo;<samp><span class="samp">\</span></samp>&rsquo;). 
+On graphical terminals, Emacs uses curved arrows in the fringes to
+indicate continuation, so the display table has no effect.
+
+     <br><dt>2<dd>The glyph for indicating a character displayed as an octal character
+code (the default is &lsquo;<samp><span class="samp">\</span></samp>&rsquo;).
+
+     <br><dt>3<dd>The glyph for indicating a control character (the default is &lsquo;<samp><span class="samp">^</span></samp>&rsquo;).
+
+     <br><dt>4<dd>A vector of glyphs for indicating the presence of invisible lines (the
+default is &lsquo;<samp><span class="samp">...</span></samp>&rsquo;).  See <a href="Selective-Display.html#Selective-Display">Selective Display</a>.
+
+     <br><dt>5<dd>The glyph used to draw the border between side-by-side windows (the
+default is &lsquo;<samp><span class="samp">|</span></samp>&rsquo;).  See <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>.  This takes effect only
+when there are no scroll bars; if scroll bars are supported and in use,
+a scroll bar separates the two windows. 
+</dl>
+
+   <p>For example, here is how to construct a display table that mimics the
+effect of setting <code>ctl-arrow</code> to a non-<code>nil</code> value:
+
+<pre class="example">     (setq disptab (make-display-table))
+     (let ((i 0))
+       (while (&lt; i 32)
+         (or (= i ?\t) (= i ?\n)
+             (aset disptab i (vector ?^ (+ i 64))))
+         (setq i (1+ i)))
+       (aset disptab 127 (vector ?^ ??)))
+</pre>
+   <div class="defun">
+&mdash; Function: <b>display-table-slot</b><var> display-table slot<a name="index-display_002dtable_002dslot-3647"></a></var><br>
+<blockquote><p>This function returns the value of the extra slot <var>slot</var> of
+<var>display-table</var>.  The argument <var>slot</var> may be a number from 0 to
+5 inclusive, or a slot name (symbol).  Valid symbols are
+<code>truncation</code>, <code>wrap</code>, <code>escape</code>, <code>control</code>,
+<code>selective-display</code>, and <code>vertical-border</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-display-table-slot</b><var> display-table slot value<a name="index-set_002ddisplay_002dtable_002dslot-3648"></a></var><br>
+<blockquote><p>This function stores <var>value</var> in the extra slot <var>slot</var> of
+<var>display-table</var>.  The argument <var>slot</var> may be a number from 0 to
+5 inclusive, or a slot name (symbol).  Valid symbols are
+<code>truncation</code>, <code>wrap</code>, <code>escape</code>, <code>control</code>,
+<code>selective-display</code>, and <code>vertical-border</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>describe-display-table</b><var> display-table<a name="index-describe_002ddisplay_002dtable-3649"></a></var><br>
+<blockquote><p>This function displays a description of the display table
+<var>display-table</var> in a help buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>describe-current-display-table</b><var><a name="index-describe_002dcurrent_002ddisplay_002dtable-3650"></a></var><br>
+<blockquote><p>This command displays a description of the current display table in a
+help buffer. 
+</p></blockquote></div>
+
+   </body></html>
+

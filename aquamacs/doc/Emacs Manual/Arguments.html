@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Arguments - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic.html#Basic" title="Basic">
+<link rel="prev" href="Position-Info.html#Position-Info" title="Position Info">
+<link rel="next" href="Repeating.html#Repeating" title="Repeating">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Arguments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Repeating.html#Repeating">Repeating</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Position-Info.html#Position-Info">Position Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr>
+</div>
+
+<h3 class="section">7.10 Numeric Arguments</h3>
+
+<p><a name="index-numeric-arguments-136"></a><a name="index-prefix-arguments-137"></a><a name="index-arguments-to-commands-138"></a>
+  In the terminology of mathematics and computing, <dfn>argument</dfn>
+means &ldquo;data provided to a function or operation.&rdquo;  You can give any
+Emacs command a <dfn>numeric argument</dfn> (also called a <dfn>prefix
+argument</dfn>).  Some commands interpret the argument as a repetition
+count.  For example, giving <kbd>C-f</kbd> an argument of ten causes it to
+move point forward by ten characters instead of one.  With these
+commands, no argument is equivalent to an argument of one, and
+negative arguments cause them to move or act in the opposite
+direction.
+
+   <p><a name="index-M_002d1-139"></a><a name="index-M_002d_0040t_007b_002d_007d-140"></a><a name="index-digit_002dargument-141"></a><a name="index-negative_002dargument-142"></a>  The easiest way to specify a numeric argument is to type a digit
+and/or a minus sign while holding down the &lt;META&gt; key.  For
+example,
+
+<pre class="example">     M-5 C-n
+</pre>
+   <p class="noindent">moves down five lines.  The keys <kbd>M-1</kbd>, <kbd>M-2</kbd>, and so on, as
+well as <kbd>M--</kbd>, are bound to commands (<code>digit-argument</code> and
+<code>negative-argument</code>) that set up an argument for the next
+command.  <kbd>Meta--</kbd> without digits normally means &minus;1.
+
+   <p>If you enter more than one digit, you need not hold down the
+&lt;META&gt; key for the second and subsequent digits.  Thus, to move
+down fifty lines, type
+
+<pre class="example">     M-5 0 C-n
+</pre>
+   <p class="noindent">Note that this <em>does not</em> insert five copies of &lsquo;<samp><span class="samp">0</span></samp>&rsquo; and move
+down one line, as you might expect&mdash;the &lsquo;<samp><span class="samp">0</span></samp>&rsquo; is treated as part
+of the prefix argument.
+
+   <p>(What if you do want to insert five copies of &lsquo;<samp><span class="samp">0</span></samp>&rsquo;?  Type <kbd>M-5
+C-u 0</kbd>.  Here, <kbd>C-u</kbd> &ldquo;terminates&rdquo; the prefix argument, so that
+the next keystroke begins the command that you want to execute.  Note
+that this meaning of <kbd>C-u</kbd> applies only to this case.  For the
+usual role of <kbd>C-u</kbd>, see below.)
+
+   <p><a name="index-C_002du-143"></a><a name="index-universal_002dargument-144"></a>  Instead of typing <kbd>M-1</kbd>, <kbd>M-2</kbd>, and so on, another way to
+specify a numeric argument is to type <kbd>C-u</kbd>
+(<code>universal-argument</code>) followed by some digits, or (for a
+negative argument) a minus sign followed by digits.  A minus sign
+without digits normally means &minus;1.
+
+   <p><kbd>C-u</kbd> alone has the special meaning of &ldquo;four times&rdquo;: it
+multiplies the argument for the next command by four.  <kbd>C-u C-u</kbd>
+multiplies it by sixteen.  Thus, <kbd>C-u C-u C-f</kbd> moves forward
+sixteen characters.  Other useful combinations are <kbd>C-u C-n</kbd>,
+<kbd>C-u C-u C-n</kbd> (move down a good fraction of a screen), <kbd>C-u
+C-u C-o</kbd> (make &ldquo;a lot&rdquo; of blank lines), and <kbd>C-u C-k</kbd> (kill four
+lines).
+
+   <p>You can use a numeric argument before a self-inserting character to
+insert multiple copies of it.  This is straightforward when the
+character is not a digit; for example, <kbd>C-u 6 4 a</kbd> inserts 64
+copies of the character &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.  But this does not work for
+inserting digits; <kbd>C-u 6 4 1</kbd> specifies an argument of 641.  You
+can separate the argument from the digit to insert with another
+<kbd>C-u</kbd>; for example, <kbd>C-u 6 4 C-u 1</kbd> does insert 64 copies of
+the character &lsquo;<samp><span class="samp">1</span></samp>&rsquo;.
+
+   <p>Some commands care whether there is an argument, but ignore its
+value.  For example, the command <kbd>M-q</kbd> (<code>fill-paragraph</code>)
+fills text; with an argument, it justifies the text as well. 
+(See <a href="Filling.html#Filling">Filling</a>, for more information on <kbd>M-q</kbd>.)  For these
+commands, it is enough to the argument with a single <kbd>C-u</kbd>.
+
+   <p>Some commands use the value of the argument as a repeat count, but
+do something special when there is no argument.  For example, the
+command <kbd>C-k</kbd> (<code>kill-line</code>) with argument <var>n</var> kills
+<var>n</var> lines, including their terminating newlines.  But <kbd>C-k</kbd>
+with no argument is special: it kills the text up to the next newline,
+or, if point is right at the end of the line, it kills the newline
+itself.  Thus, two <kbd>C-k</kbd> commands with no arguments can kill a
+nonblank line, just like <kbd>C-k</kbd> with an argument of one. 
+(See <a href="Killing.html#Killing">Killing</a>, for more information on <kbd>C-k</kbd>.)
+
+   <p>A few commands treat a plain <kbd>C-u</kbd> differently from an ordinary
+argument.  A few others may treat an argument of just a minus sign
+differently from an argument of &minus;1.  These unusual cases are
+described when they come up; they exist to make an individual command
+more convenient, and they are documented in that command's
+documentation string.
+
+   <p>We use the term &ldquo;prefix argument&rdquo; as well as &ldquo;numeric argument,&rdquo;
+to emphasize that you type these argument before the command, and to
+distinguish them from minibuffer arguments that come after the
+command.
+
+   </body></html>
+

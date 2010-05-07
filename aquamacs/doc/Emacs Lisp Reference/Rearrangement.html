@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+<title>Rearrangement - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Modifying-Lists.html#Modifying-Lists" title="Modifying Lists">
+<link rel="prev" href="Setcdr.html#Setcdr" title="Setcdr">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rearrangement"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setcdr.html#Setcdr">Setcdr</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Lists.html#Modifying-Lists">Modifying Lists</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.6.3 Functions that Rearrange Lists</h4>
+
+<p><a name="index-rearrangement-of-lists-334"></a><a name="index-modification-of-lists-335"></a>
+  Here are some functions that rearrange lists &ldquo;destructively&rdquo; by
+modifying the <span class="sc">cdr</span>s of their component cons cells.  We call these
+functions &ldquo;destructive&rdquo; because they chew up the original lists passed
+to them as arguments, relinking their cons cells to form a new list that
+is the returned value.
+
+   <p>See <code>delq</code>, in <a href="Sets-And-Lists.html#Sets-And-Lists">Sets And Lists</a>, for another function
+that modifies cons cells.
+
+<div class="defun">
+&mdash; Function: <b>nconc</b><var> &amp;rest lists<a name="index-nconc-336"></a></var><br>
+<blockquote><p><a name="index-concatenating-lists-337"></a><a name="index-joining-lists-338"></a>This function returns a list containing all the elements of <var>lists</var>. 
+Unlike <code>append</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>), the <var>lists</var> are
+<em>not</em> copied.  Instead, the last <span class="sc">cdr</span> of each of the
+<var>lists</var> is changed to refer to the following list.  The last of the
+<var>lists</var> is not altered.  For example:
+
+     <pre class="example">          (setq x '(1 2 3))
+               &rArr; (1 2 3)
+          (nconc x '(4 5))
+               &rArr; (1 2 3 4 5)
+          x
+               &rArr; (1 2 3 4 5)
+</pre>
+        <p>Since the last argument of <code>nconc</code> is not itself modified, it is
+reasonable to use a constant list, such as <code>'(4 5)</code>, as in the
+above example.  For the same reason, the last argument need not be a
+list:
+
+     <pre class="example">          (setq x '(1 2 3))
+               &rArr; (1 2 3)
+          (nconc x 'z)
+               &rArr; (1 2 3 . z)
+          x
+               &rArr; (1 2 3 . z)
+</pre>
+        <p>However, the other arguments (all but the last) must be lists.
+
+        <p>A common pitfall is to use a quoted constant list as a non-last
+argument to <code>nconc</code>.  If you do this, your program will change
+each time you run it!  Here is what happens:
+
+     <pre class="smallexample">          (defun add-foo (x)            ; <span class="roman">We want this function to add</span>
+            (nconc '(foo) x))           ;   <code>foo</code><span class="roman"> to the front of its arg.</span>
+          
+          (symbol-function 'add-foo)
+               &rArr; (lambda (x) (nconc (quote (foo)) x))
+          
+          (setq xx (add-foo '(1 2)))    ; <span class="roman">It seems to work.</span>
+               &rArr; (foo 1 2)
+          (setq xy (add-foo '(3 4)))    ; <span class="roman">What happened?</span>
+               &rArr; (foo 1 2 3 4)
+          (eq xx xy)
+               &rArr; t
+          
+          (symbol-function 'add-foo)
+               &rArr; (lambda (x) (nconc (quote (foo 1 2 3 4) x)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nreverse</b><var> list<a name="index-nreverse-339"></a></var><br>
+<blockquote><p><a name="index-reversing-a-list-340"></a>  This function reverses the order of the elements of <var>list</var>. 
+Unlike <code>reverse</code>, <code>nreverse</code> alters its argument by reversing
+the <span class="sc">cdr</span>s in the cons cells forming the list.  The cons cell that
+used to be the last one in <var>list</var> becomes the first cons cell of the
+value.
+
+        <p>For example:
+
+     <pre class="example">          (setq x '(a b c))
+               &rArr; (a b c)
+          x
+               &rArr; (a b c)
+          (nreverse x)
+               &rArr; (c b a)
+          ;; <span class="roman">The cons cell that was first is now last.</span>
+          x
+               &rArr; (a)
+</pre>
+        <p>To avoid confusion, we usually store the result of <code>nreverse</code>
+back in the same variable which held the original list:
+
+     <pre class="example">          (setq x (nreverse x))
+</pre>
+        <p>Here is the <code>nreverse</code> of our favorite example, <code>(a b c)</code>,
+presented graphically:
+
+     <pre class="smallexample">          <span class="roman">Original list head:</span>                       <span class="roman">Reversed list:</span>
+           -------------        -------------        ------------
+          | car  | cdr  |      | car  | cdr  |      | car | cdr  |
+          |   a  |  nil |&lt;--   |   b  |   o  |&lt;--   |   c |   o  |
+          |      |      |   |  |      |   |  |   |  |     |   |  |
+           -------------    |   --------- | -    |   -------- | -
+                            |             |      |            |
+                             -------------        ------------
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sort</b><var> list predicate<a name="index-sort-341"></a></var><br>
+<blockquote><p><a name="index-stable-sort-342"></a><a name="index-sorting-lists-343"></a>This function sorts <var>list</var> stably, though destructively, and
+returns the sorted list.  It compares elements using <var>predicate</var>.  A
+stable sort is one in which elements with equal sort keys maintain their
+relative order before and after the sort.  Stability is important when
+successive sorts are used to order elements according to different
+criteria.
+
+        <p>The argument <var>predicate</var> must be a function that accepts two
+arguments.  It is called with two elements of <var>list</var>.  To get an
+increasing order sort, the <var>predicate</var> should return non-<code>nil</code> if the
+first element is &ldquo;less than&rdquo; the second, or <code>nil</code> if not.
+
+        <p>The comparison function <var>predicate</var> must give reliable results for
+any given pair of arguments, at least within a single call to
+<code>sort</code>.  It must be <dfn>antisymmetric</dfn>; that is, if <var>a</var> is
+less than <var>b</var>, <var>b</var> must not be less than <var>a</var>.  It must be
+<dfn>transitive</dfn>&mdash;that is, if <var>a</var> is less than <var>b</var>, and <var>b</var>
+is less than <var>c</var>, then <var>a</var> must be less than <var>c</var>.  If you
+use a comparison function which does not meet these requirements, the
+result of <code>sort</code> is unpredictable.
+
+        <p>The destructive aspect of <code>sort</code> is that it rearranges the cons
+cells forming <var>list</var> by changing <span class="sc">cdr</span>s.  A nondestructive sort
+function would create new cons cells to store the elements in their
+sorted order.  If you wish to make a sorted copy without destroying the
+original, copy it first with <code>copy-sequence</code> and then sort.
+
+        <p>Sorting does not change the <span class="sc">car</span>s of the cons cells in <var>list</var>;
+the cons cell that originally contained the element <code>a</code> in
+<var>list</var> still has <code>a</code> in its <span class="sc">car</span> after sorting, but it now
+appears in a different position in the list due to the change of
+<span class="sc">cdr</span>s.  For example:
+
+     <pre class="example">          (setq nums '(1 3 2 6 5 4 0))
+               &rArr; (1 3 2 6 5 4 0)
+          (sort nums '&lt;)
+               &rArr; (0 1 2 3 4 5 6)
+          nums
+               &rArr; (1 2 3 4 5 6)
+</pre>
+        <p class="noindent"><strong>Warning</strong>: Note that the list in <code>nums</code> no longer contains
+0; this is the same cons cell that it was before, but it is no longer
+the first one in the list.  Don't assume a variable that formerly held
+the argument now holds the entire sorted list!  Instead, save the result
+of <code>sort</code> and use that.  Most often we store the result back into
+the variable that held the original list:
+
+     <pre class="example">          (setq nums (sort nums '&lt;))
+</pre>
+        <p>See <a href="Sorting.html#Sorting">Sorting</a>, for more functions that perform sorting. 
+See <code>documentation</code> in <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>, for a
+useful example of <code>sort</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

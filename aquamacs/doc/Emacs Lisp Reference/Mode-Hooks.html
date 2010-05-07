@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Mode Hooks - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
+<link rel="next" href="Example-Major-Modes.html#Example-Major-Modes" title="Example Major Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mode-Hooks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Example-Major-Modes.html#Example-Major-Modes">Example Major Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.7 Mode Hooks</h4>
+
+<p>Every major mode function should finish by running its mode hook and
+the mode-independent normal hook <code>after-change-major-mode-hook</code>. 
+It does this by calling <code>run-mode-hooks</code>.  If the major mode is a
+derived mode, that is if it calls another major mode (the parent mode)
+in its body, it should do this inside <code>delay-mode-hooks</code> so that
+the parent won't run these hooks itself.  Instead, the derived mode's
+call to <code>run-mode-hooks</code> runs the parent's mode hook too. 
+See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
+
+   <p>Emacs versions before Emacs 22 did not have <code>delay-mode-hooks</code>. 
+When user-implemented major modes have not been updated to use it,
+they won't entirely follow these conventions: they may run the
+parent's mode hook too early, or fail to run
+<code>after-change-major-mode-hook</code>.  If you encounter such a major
+mode, please correct it to follow these conventions.
+
+   <p>When you defined a major mode using <code>define-derived-mode</code>, it
+automatically makes sure these conventions are followed.  If you
+define a major mode &ldquo;by hand,&rdquo; not using <code>define-derived-mode</code>,
+use the following functions to handle these conventions automatically.
+
+<div class="defun">
+&mdash; Function: <b>run-mode-hooks</b><var> &amp;rest hookvars<a name="index-run_002dmode_002dhooks-1619"></a></var><br>
+<blockquote><p>Major modes should run their mode hook using this function.  It is
+similar to <code>run-hooks</code> (see <a href="Hooks.html#Hooks">Hooks</a>), but it also runs
+<code>after-change-major-mode-hook</code>.
+
+        <p>When this function is called during the execution of a
+<code>delay-mode-hooks</code> form, it does not run the hooks immediately. 
+Instead, it arranges for the next call to <code>run-mode-hooks</code> to run
+them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>delay-mode-hooks</b><var> body<small class="dots">...</small><a name="index-delay_002dmode_002dhooks-1620"></a></var><br>
+<blockquote><p>When one major mode command calls another, it should do so inside of
+<code>delay-mode-hooks</code>.
+
+        <p>This macro executes <var>body</var>, but tells all <code>run-mode-hooks</code>
+calls during the execution of <var>body</var> to delay running their hooks. 
+The hooks will actually run during the next call to
+<code>run-mode-hooks</code> after the end of the <code>delay-mode-hooks</code>
+construct. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>after-change-major-mode-hook</b><var><a name="index-after_002dchange_002dmajor_002dmode_002dhook-1621"></a></var><br>
+<blockquote><p>This is a normal hook run by <code>run-mode-hooks</code>.  It is run at the
+very end of every properly-written major mode function. 
+</p></blockquote></div>
+
+   </body></html>
+

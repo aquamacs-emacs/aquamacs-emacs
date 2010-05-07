@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Dired and Find - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dired.html#Dired" title="Dired">
+<link rel="prev" href="Dired-Updating.html#Dired-Updating" title="Dired Updating">
+<link rel="next" href="Wdired.html#Wdired" title="Wdired">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Dired-and-Find"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Wdired.html#Wdired">Wdired</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-Updating.html#Dired-Updating">Dired Updating</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr>
+</div>
+
+<h3 class="section">37.16 Dired and <code>find</code></h3>
+
+<p><a name="index-g_t_0040code_007bfind_007d-and-Dired-3156"></a>
+  You can select a set of files for display in a Dired buffer more
+flexibly by using the <samp><span class="command">find</span></samp> utility to choose the files.
+
+   <p><a name="index-find_002dname_002ddired-3157"></a>  To search for files with names matching a wildcard pattern use
+<kbd>M-x find-name-dired</kbd>.  It reads arguments <var>directory</var> and
+<var>pattern</var>, and chooses all the files in <var>directory</var> or its
+subdirectories whose individual names match <var>pattern</var>.
+
+   <p>The files thus chosen are displayed in a Dired buffer, in which the
+ordinary Dired commands are available.
+
+   <p><a name="index-find_002dgrep_002ddired-3158"></a>  If you want to test the contents of files, rather than their names,
+use <kbd>M-x find-grep-dired</kbd>.  This command reads two minibuffer
+arguments, <var>directory</var> and <var>regexp</var>; it chooses all the files
+in <var>directory</var> or its subdirectories that contain a match for
+<var>regexp</var>.  It works by running the programs <samp><span class="command">find</span></samp> and
+<samp><span class="command">grep</span></samp>.  See also <kbd>M-x grep-find</kbd>, in <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>.  Remember to write the regular expression for
+<samp><span class="command">grep</span></samp>, not for Emacs.  (An alternative method of showing
+files whose contents match a given regexp is the <kbd>% g
+</kbd><var>regexp</var> command, see <a href="Marks-vs-Flags.html#Marks-vs-Flags">Marks vs Flags</a>.)
+
+   <p><a name="index-find_002ddired-3159"></a>  The most general command in this series is <kbd>M-x find-dired</kbd>,
+which lets you specify any condition that <samp><span class="command">find</span></samp> can test.  It
+takes two minibuffer arguments, <var>directory</var> and <var>find-args</var>;
+it runs <samp><span class="command">find</span></samp> in <var>directory</var>, passing <var>find-args</var> to
+tell <samp><span class="command">find</span></samp> what condition to test.  To use this command, you
+need to know how to use <samp><span class="command">find</span></samp>.
+
+   <p><a name="index-find_002dls_002doption-3160"></a>  The format of listing produced by these commands is controlled by the
+variable <code>find-ls-option</code>, whose default value specifies using
+options &lsquo;<samp><span class="samp">-ld</span></samp>&rsquo; for <code>ls</code>.  If your listings are corrupted, you
+may need to change the value of this variable.
+
+   <p><a name="index-locate-3161"></a><a name="index-locate_002dwith_002dfilter-3162"></a><a name="index-file-database-_0028locate_0029-3163"></a><a name="index-locate_002dcommand-3164"></a>  The command <kbd>M-x locate</kbd> provides a similar interface to the
+<samp><span class="command">locate</span></samp> program.  <kbd>M-x locate-with-filter</kbd> is similar, but
+keeps only files whose names match a given regular expression.
+
+   <p>These buffers don't work entirely like ordinary Dired buffers: file
+operations work, but do not always automatically update the buffer. 
+Reverting the buffer with <kbd>g</kbd> deletes all inserted subdirectories,
+and erases all flags and marks.
+
+   </body></html>
+

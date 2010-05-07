@@ -993,7 +993,7 @@ AC_SUBST(C_SWITCH_SYSTEM)
 if test x"${OVERRIDE_CPPFLAGS}" != x; then
   CPPFLAGS="${OVERRIDE_CPPFLAGS}"
 else
-  CPPFLAGS="$C_SWITCH_SYSTEM $C_SWITCH_MACHINE $CPPFLAGS"
+  CPPFLAGS="$c_switch_system $c_switch_machine $CPPFLAGS"
 fi
 
 dnl For AC_FUNC_GETLOADAVG, at least:
@@ -1007,7 +1007,7 @@ AC_SYS_LARGEFILE
 if test "X$CRT_DIR" = "X"; then
 
   case "$canonical" in
-    x86_64-*-linux-gnu* | s390x-*-linux-gnu*)
+  x86_64-*-linux-gnu* | s390x-*-linux-gnu* )
     ## On x86-64 and s390x GNU/Linux distributions, the standard library
     ## can be in a variety of places.  We only try /usr/lib64 and /usr/lib.
     ## For anything else (eg /usr/lib32), it is up the user to specify
@@ -1019,7 +1019,7 @@ if test "X$CRT_DIR" = "X"; then
     ;;
 
     powerpc64-*-linux-gnu* | sparc64-*-linux-gnu*) CRT_DIR=/usr/lib64 ;;
-  esac
+esac
 
   case "$opsys" in
     hpux10-20) CRT_DIR=/lib ;;
@@ -2215,7 +2215,7 @@ if test "${HAVE_X11}" = "yes"; then
   fi
   if test "${HAVE_JPEG}" = "yes"; then
     LIBJPEG=-ljpeg
-  fi
+fi
 fi
 AC_SUBST(LIBJPEG)
 
@@ -2274,7 +2274,7 @@ if test "${HAVE_X11}" = "yes" && test "${with_gif}" != "no"; then
 # If gif_lib.h but no libgif, try libungif.
     AC_CHECK_LIB(ungif, EGifPutExtensionLast, HAVE_GIF=yes, HAVE_GIF=no)
     test "$HAVE_GIF" = yes && LIBGIF=-lungif
-  fi
+    fi
 
   if test "${HAVE_GIF}" = "yes"; then
     AC_DEFINE(HAVE_GIF, 1, [Define to 1 if you have a gif (or ungif) library.])
@@ -2315,11 +2315,11 @@ if test "${with_gpm}" != "no"; then
   AC_CHECK_HEADER(gpm.h,
     [AC_CHECK_LIB(gpm, Gpm_Open, HAVE_GPM=yes)])
 
-  if test "${HAVE_GPM}" = "yes"; then
-    AC_DEFINE(HAVE_GPM, 1, [Define to 1 if you have the gpm library (-lgpm).])
+if test "${HAVE_GPM}" = "yes"; then
+  AC_DEFINE(HAVE_GPM, 1, [Define to 1 if you have the gpm library (-lgpm).])
     LIBGPM=-lgpm
     GPM_MOUSE_SUPPORT="\${lispsource}mouse.elc"
-  fi
+fi
 fi
 AC_SUBST(LIBGPM)
 AC_SUBST(GPM_MOUSE_SUPPORT)
@@ -2530,7 +2530,7 @@ if test "$with_hesiod" != no ; then
     AC_DEFINE(HAVE_LIBHESIOD, 1,
               [Define to 1 if you have the hesiod library (-lhesiod).])
     LIBHESIOD=-lhesiod
-  fi
+fi
 fi
 AC_SUBST(LIBHESIOD)
 
@@ -2589,7 +2589,7 @@ if test "${with_kerberos}" != no; then
         DESLIB=-ldes
         LIBS="$DESLIB $LIBS"
         AC_DEFINE(HAVE_LIBDES, 1, [Define to 1 if you have the `des' library (-ldes).])
-      fi
+  fi
     fi
     AC_CHECK_LIB(krb4, krb_get_cred, have_krb4=yes, have_krb4=no)
     if test $have_krb4 = yes; then
@@ -2794,6 +2794,14 @@ dnl Fixme: Use AC_FUNC_MEMCMP since memcmp is used.  (Needs libobj replacement.)
 CFLAGS="$REAL_CFLAGS"
 CPPFLAGS="$REAL_CPPFLAGS"
 
+## Hack to detect a buggy GCC version.
+if test "x$GCC" = xyes \
+   && test x"`$CC --version 2> /dev/null | grep 'gcc.* 4.5.0'`" != x \
+   && test x"`echo $CFLAGS | grep '\-O@<:@23@:>@'`" != x \
+   && test x"`echo $CFLAGS | grep '\-fno-optimize-sibling-calls'`" = x; then
+   AC_MSG_ERROR([GCC 4.5.0 has problems compiling Emacs; see etc/PROBLEMS'.])
+fi
+
 #### Find out which version of Emacs this is.
 [version=`grep 'defconst[	 ]*emacs-version' ${srcdir}/lisp/version.el \
 	 | sed -e 's/^[^"]*"\([^"]*\)".*$/\1/'`]
@@ -2940,7 +2948,7 @@ if test "${HAVE_X11}" = "yes" ; then
     OLDXMENU="\${oldXMenudir}libXMenu11.a"
   else
     OLDXMENU="\${lwlibdir}liblw.a"
-  fi
+fi
   LIBXMENU="\$(OLDXMENU)"
   LIBX_OTHER="\$(LIBXT) \$(LIBX_EXTRA)"
 else

@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Horizontal Scrolling - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Auto-Scrolling.html#Auto-Scrolling" title="Auto Scrolling">
+<link rel="next" href="Follow-Mode.html#Follow-Mode" title="Follow Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Horizontal-Scrolling"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Follow-Mode.html#Follow-Mode">Follow Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Scrolling.html#Auto-Scrolling">Auto Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">18.3 Horizontal Scrolling</h3>
+
+<p><a name="index-horizontal-scrolling-470"></a>
+<a name="index-auto_002dhscroll_002dmode-471"></a>  <dfn>Horizontal scrolling</dfn> means shifting all the lines sideways
+within a window, so that some of the text near the left margin is not
+displayed.  When the text in a window is scrolled horizontally, text
+lines are truncated rather than continued (see <a href="Line-Truncation.html#Line-Truncation">Line Truncation</a>). 
+If a window shows truncated lines, Emacs performs automatic horizontal
+scrolling whenever point moves off the left or right edge of the
+screen.  To disable automatic horizontal scrolling, set the variable
+<code>auto-hscroll-mode</code> to <code>nil</code>.  Note that when the automatic
+horizontal scrolling is turned off, if point moves off the edge of the
+screen, the cursor disappears to indicate that.  (On text-mode
+terminals, the cursor is left at the edge instead.)
+
+   <p><a name="index-hscroll_002dmargin-472"></a>  The variable <code>hscroll-margin</code> controls how close point can get
+to the window's edges before automatic scrolling occurs.  It is
+measured in columns.  For example, if the value is 5, then moving
+point within 5 columns of an edge causes horizontal scrolling away
+from that edge.
+
+   <p><a name="index-hscroll_002dstep-473"></a>  The variable <code>hscroll-step</code> determines how many columns to
+scroll the window when point gets too close to the edge.  Zero, the
+default value, means to center point horizontally within the window. 
+A positive integer value specifies the number of columns to scroll by. 
+A floating-point number specifies the fraction of the window's width
+to scroll by.
+
+   <p>You can also perform explicit horizontal scrolling with the
+following commands:
+
+     <dl>
+<dt><kbd>C-x &lt;</kbd><dd>Scroll text in current window to the left (<code>scroll-left</code>). 
+<br><dt><kbd>C-x &gt;</kbd><dd>Scroll to the right (<code>scroll-right</code>). 
+</dl>
+
+   <p><a name="index-C_002dx-_003c-474"></a><a name="index-C_002dx-_003e-475"></a><a name="index-scroll_002dleft-476"></a><a name="index-scroll_002dright-477"></a>  <kbd>C-x &lt;</kbd> (<code>scroll-left</code>) scrolls text in the selected window
+to the left by the full width of the window, less two columns.  (In
+other words, the text in the window moves left relative to the
+window.)  With a numeric argument <var>n</var>, it scrolls by <var>n</var>
+columns.
+
+   <p>If the text is scrolled to the left, and point moves off the left
+edge of the window, the cursor will freeze at the left edge of the
+window, until point moves back to the displayed portion of the text. 
+This is independent of the current setting of
+<code>auto-hscroll-mode</code>, which, for text scrolled to the left, only
+affects the behavior at the right edge of the window.
+
+   <p><kbd>C-x &gt;</kbd> (<code>scroll-right</code>) scrolls similarly to the right. 
+The window cannot be scrolled any farther to the right once it is
+displayed normally, with each line starting at the window's left
+margin; attempting to do so has no effect.  This means that you don't
+have to calculate the argument precisely for <kbd>C-x&nbsp;&gt;</kbd><!-- /@w -->; any
+sufficiently large argument will restore the normal display.
+
+   <p>If you use those commands to scroll a window horizontally, that sets
+a lower bound for automatic horizontal scrolling.  Automatic scrolling
+will continue to scroll the window, but never farther to the right
+than the amount you previously set by <code>scroll-left</code>.
+
+   </body></html>
+

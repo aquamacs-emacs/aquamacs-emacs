@@ -147,7 +147,7 @@
 
 (defun ConTeXt-nl-mode-initialization ()
   "ConTeXt dutch interface specific initialization."
-  (mapcar 'ConTeXt-add-environments (reverse ConTeXt-environment-list-nl))
+  (mapc 'ConTeXt-add-environments (reverse ConTeXt-environment-list-nl))
 
   (TeX-add-symbols
    '("but" ConTeXt-arg-define-ref (TeX-arg-literal " "))

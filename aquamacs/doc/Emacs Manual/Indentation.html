@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Indentation - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="next" href="Text.html#Text" title="Text">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Indentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Text.html#Text">Text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Modes.html#Major-Modes">Major Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">28 Indentation</h2>
+
+<p><a name="index-indentation-1494"></a><a name="index-tabs-1495"></a><a name="index-columns-_0028indentation_0029-1496"></a>
+  This chapter describes the Emacs commands that add, remove, or
+adjust indentation.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd><dd>Indent the current line appropriately, in a mode-dependent fashion. 
+<br><dt><kbd>C-j</kbd><dd>Perform &lt;RET&gt; followed by &lt;TAB&gt; (<code>newline-and-indent</code>). 
+<br><dt><kbd>M-^</kbd><dd>Merge the previous and the current line (<code>delete-indentation</code>). 
+This would cancel the effect of a preceding <kbd>C-j</kbd>. 
+<br><dt><kbd>C-M-o</kbd><dd>Split the current line at point; text on the line after point becomes a
+new line indented to the same column where point is located
+(<code>split-line</code>). 
+<br><dt><kbd>M-m</kbd><dd>Move (forward or back) to the first nonblank character on the current
+line (<code>back-to-indentation</code>). 
+<br><dt><kbd>C-M-\</kbd><dd>Indent lines in the region to the same column (<code>indent-region</code>). 
+<br><dt><kbd>C-x &lt;TAB&gt;</kbd><dd>Shift lines in the region rigidly right or left (<code>indent-rigidly</code>). 
+<br><dt><kbd>M-i</kbd><dd>Indent from point to the next prespecified tab stop column
+(<code>tab-to-tab-stop</code>). 
+<br><dt><kbd>M-x indent-relative</kbd><dd>Indent from point to under an indentation point in the previous line. 
+</dl>
+
+<p class="noindent">The &lt;TAB&gt; key runs <code>indent-for-tab-command</code> in most major
+modes (in C and related modes, &lt;TAB&gt; runs a separate command,
+<code>c-indent-line-or-region</code>, which behaves similarly).  The major
+mode determines just what this entails.
+
+   <p>In text modes, &lt;TAB&gt; inserts some combination of space and tab
+characters to advance point to the next tab stop (see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>). 
+If the region is active and spans multiple lines, it advances the
+first character of each of those lines to the next tab stop
+(see <a href="Using-Region.html#Using-Region">Using Region</a>).  For the purposes of this command, the
+position of the first non-whitespace character on the preceding line
+is treated as an additional tab stop.  Thus, you can use &lt;TAB&gt; to
+&ldquo;align&rdquo; point with the preceding line.
+
+   <p>In programming modes, &lt;TAB&gt; adds or removes some combination of
+space and tab characters at the start of the line, in a way that makes
+sense given the text in the preceding lines.  If the region is active
+and spans multiple lines, all those lines are indented this way.  If
+point was initially within the current line's indentation, it is
+positioned after that indentation; otherwise, it remains at same point
+in the newly-indented text.  See <a href="Program-Indent.html#Program-Indent">Program Indent</a>.
+
+   <p><a name="index-tab_002dwidth-1497"></a>  Normally, indentation commands insert (or remove) an optimal mix of
+<dfn>tab characters</dfn> and spaces to align to the desired column.  Tab
+characters (<acronym>ASCII</acronym> code 9) are displayed as a stretch of
+empty space extending to the next <dfn>display tab stop</dfn>.  By default,
+there is one display tab stop every eight columns; the number of
+columns is determined by the variable <code>tab-width</code>.  You can
+insert a single tab character by typing <kbd>C-q &lt;TAB&gt;</kbd>. 
+See <a href="Text-Display.html#Text-Display">Text Display</a>.
+
+   <p><a name="index-edit_002dtab_002dstops-1498"></a><a name="index-tab_002dto_002dtab_002dstop-1499"></a><a name="index-M_002di-1500"></a>  The command <kbd>M-i</kbd> (<code>tab-to-tab-stop</code>) adjusts the
+whitespace characters around point, inserting just enough whitespace
+to advance point up to the next tab stop.  By default, this involves
+deleting the existing whitespace and inserting a single tab character.
+
+   <p>See <a href="Just-Spaces.html#Just-Spaces">Just Spaces</a>, for how to disable use of tabs.  However,
+<kbd>C-q &lt;TAB&gt;</kbd> always inserts a tab, even when tabs are disabled
+for the indentation commands.
+
+   <p><a name="index-tab_002dalways_002dindent-1501"></a>  The variable <code>tab-always-indent</code> tweaks the behavior of the
+&lt;TAB&gt; (<code>indent-for-tab-command</code>) command.  The default value,
+<code>t</code>, gives the behavior described above.  If you change the value
+to the symbol <code>complete</code>, then &lt;TAB&gt; first tries to indent
+the current line, and if the line was already indented, it tries to
+complete the text at point (see <a href="Symbol-Completion.html#Symbol-Completion">Symbol Completion</a>).  If the value
+is <code>nil</code>, then &lt;TAB&gt; indents the current line only if point
+is at the left margin or in the line's indentation; otherwise, it
+inserts a real tab character.
+
+<ul class="menu">
+<li><a accesskey="1" href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>:   Various commands and techniques for indentation. 
+<li><a accesskey="2" href="Tab-Stops.html#Tab-Stops">Tab Stops</a>:              You can set arbitrary "tab stops" and then
+                            indent to the next tab stop when you want to. 
+<li><a accesskey="3" href="Just-Spaces.html#Just-Spaces">Just Spaces</a>:            You can request indentation using just spaces. 
+</ul>
+
+   </body></html>
+

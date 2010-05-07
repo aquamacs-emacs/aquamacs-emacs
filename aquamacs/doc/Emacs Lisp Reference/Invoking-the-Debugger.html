@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Invoking the Debugger - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugger.html#Debugger" title="Debugger">
+<link rel="prev" href="Debugger-Commands.html#Debugger-Commands" title="Debugger Commands">
+<link rel="next" href="Internals-of-Debugger.html#Internals-of-Debugger" title="Internals of Debugger">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Invoking-the-Debugger"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Internals-of-Debugger.html#Internals-of-Debugger">Internals of Debugger</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugger-Commands.html#Debugger-Commands">Debugger Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.1.7 Invoking the Debugger</h4>
+
+<p>Here we describe in full detail the function <code>debug</code> that is used
+to invoke the debugger.
+
+<div class="defun">
+&mdash; Function: <b>debug</b><var> &amp;rest debugger-args<a name="index-debug-939"></a></var><br>
+<blockquote><p>This function enters the debugger.  It switches buffers to a buffer
+named &lsquo;<samp><span class="samp">*Backtrace*</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">*Backtrace*&lt;2&gt;</span></samp>&rsquo; if it is the second
+recursive entry to the debugger, etc.), and fills it with information
+about the stack of Lisp function calls.  It then enters a recursive
+edit, showing the backtrace buffer in Debugger mode.
+
+        <p>The Debugger mode <kbd>c</kbd>, <kbd>d</kbd>, <kbd>j</kbd>, and <kbd>r</kbd> commands exit
+the recursive edit; then <code>debug</code> switches back to the previous
+buffer and returns to whatever called <code>debug</code>.  This is the only
+way the function <code>debug</code> can return to its caller.
+
+        <p>The use of the <var>debugger-args</var> is that <code>debug</code> displays the
+rest of its arguments at the top of the &lsquo;<samp><span class="samp">*Backtrace*</span></samp>&rsquo; buffer, so
+that the user can see them.  Except as described below, this is the
+<em>only</em> way these arguments are used.
+
+        <p>However, certain values for first argument to <code>debug</code> have a
+special significance.  (Normally, these values are used only by the
+internals of Emacs, and not by programmers calling <code>debug</code>.)  Here
+is a table of these special values:
+
+          <dl>
+<dt><code>lambda</code><dd><a name="index-g_t_0040code_007blambda_007d-in-debug-940"></a>A first argument of <code>lambda</code> means <code>debug</code> was called
+because of entry to a function when <code>debug-on-next-call</code> was
+non-<code>nil</code>.  The debugger displays &lsquo;<samp><span class="samp">Debugger
+entered--entering a function:</span></samp>&rsquo; as a line of text at the top of the
+buffer.
+
+          <br><dt><code>debug</code><dd><code>debug</code> as first argument means <code>debug</code> was called because
+of entry to a function that was set to debug on entry.  The debugger
+displays the string &lsquo;<samp><span class="samp">Debugger entered--entering a function:</span></samp>&rsquo;,
+just as in the <code>lambda</code> case.  It also marks the stack frame for
+that function so that it will invoke the debugger when exited.
+
+          <br><dt><code>t</code><dd>When the first argument is <code>t</code>, this indicates a call to
+<code>debug</code> due to evaluation of a function call form when
+<code>debug-on-next-call</code> is non-<code>nil</code>.  The debugger displays
+&lsquo;<samp><span class="samp">Debugger entered--beginning evaluation of function call form:</span></samp>&rsquo;
+as the top line in the buffer.
+
+          <br><dt><code>exit</code><dd>When the first argument is <code>exit</code>, it indicates the exit of a
+stack frame previously marked to invoke the debugger on exit.  The
+second argument given to <code>debug</code> in this case is the value being
+returned from the frame.  The debugger displays &lsquo;<samp><span class="samp">Debugger
+entered--returning value:</span></samp>&rsquo; in the top line of the buffer, followed by
+the value being returned.
+
+          <br><dt><code>error</code><dd><a name="index-g_t_0040code_007berror_007d-in-debug-941"></a>When the first argument is <code>error</code>, the debugger indicates that
+it is being entered because an error or <code>quit</code> was signaled and
+not handled, by displaying &lsquo;<samp><span class="samp">Debugger entered--Lisp error:</span></samp>&rsquo;
+followed by the error signaled and any arguments to <code>signal</code>. 
+For example,
+
+          <pre class="example">               (let ((debug-on-error t))
+                 (/ 1 0))
+               
+               ------ Buffer: *Backtrace* ------
+               Debugger entered--Lisp error: (arith-error)
+                 /(1 0)
+               ...
+               ------ Buffer: *Backtrace* ------
+</pre>
+          <p>If an error was signaled, presumably the variable
+<code>debug-on-error</code> is non-<code>nil</code>.  If <code>quit</code> was signaled,
+then presumably the variable <code>debug-on-quit</code> is non-<code>nil</code>.
+
+          <br><dt><code>nil</code><dd>Use <code>nil</code> as the first of the <var>debugger-args</var> when you want
+to enter the debugger explicitly.  The rest of the <var>debugger-args</var>
+are printed on the top line of the buffer.  You can use this feature to
+display messages&mdash;for example, to remind yourself of the conditions
+under which <code>debug</code> is called. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

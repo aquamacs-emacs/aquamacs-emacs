@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Version Headers - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous-VC.html#Miscellaneous-VC" title="Miscellaneous VC">
+<link rel="prev" href="Renaming-and-VC.html#Renaming-and-VC" title="Renaming and VC">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Version-Headers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Renaming-and-VC.html#Renaming-and-VC">Renaming and VC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-VC.html#Miscellaneous-VC">Miscellaneous VC</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">32.1.10.3 Inserting Version Control Headers</h5>
+
+<p>Sometimes it is convenient to put version identification strings
+directly into working files.  Certain special strings called
+<dfn>version headers</dfn> are replaced in each successive version by the
+number of that version, the name of the user who created it, and other
+relevant information.  All of the back ends that VC supports have such
+a mechanism, except GNU Arch.
+
+   <p>VC does not normally use the information contained in these headers. 
+The exception is RCS&mdash;with RCS, version headers are sometimes more
+reliable than the master file to determine which version of the file
+you are editing.  Note that in a multi-branch environment, version
+headers are necessary to make VC behave correctly
+(see <a href="Multi_002dUser-Branching.html#Multi_002dUser-Branching">Multi-User Branching</a>).
+
+   <p>Searching for RCS version headers is controlled by the variable
+<code>vc-consult-headers</code>.  If it is non-<code>nil</code> (the default),
+Emacs searches for headers to determine the version number you are
+editing.  Setting it to <code>nil</code> disables this feature.
+
+   <p>Note that although CVS uses the same kind of version headers as RCS
+does, VC never searches for these headers if you are using CVS,
+regardless of the above setting.
+
+   <p><a name="index-C_002dx-v-h-2510"></a><a name="index-vc_002dinsert_002dheaders-2511"></a>  You can use the <kbd>C-x v h</kbd> command (<code>vc-insert-headers</code>) to
+insert a suitable header string.
+
+     <dl>
+<dt><kbd>C-x v h</kbd><dd>Insert headers in a file for use with your version-control system. 
+</dl>
+
+   <p><a name="index-vc_002d_0040var_007bbackend_007d_002dheader-2512"></a>  The default header string is &lsquo;<samp><span class="samp">$<!-- /@w -->Id$</span></samp>&rsquo; for RCS and
+&lsquo;<samp><span class="samp">%<!-- /@w -->W%</span></samp>&rsquo; for SCCS.  You can specify other headers to insert by
+setting the variables <code>vc-</code><var>backend</var><code>-header</code> where
+<var>backend</var> is <code>rcs</code> or <code>sccs</code>.
+
+   <p>Instead of a single string, you can specify a list of strings; then
+each string in the list is inserted as a separate header on a line of
+its own.
+
+   <p>It may be necessary to use apparently-superfluous backslashes when
+writing the strings that you put in this variable.  For instance, you
+might write <code>"$Id\$"</code> rather than <code>"$Id$<!-- /@w -->"</code>.  The extra
+backslash prevents the string constant from being interpreted as a
+header, if the Emacs Lisp file containing it is maintained with
+version control.
+
+   <p><a name="index-vc_002dcomment_002dalist-2513"></a>  Each header is inserted surrounded by tabs, inside comment delimiters,
+on a new line at point.  Normally the ordinary comment
+start and comment end strings of the current mode are used, but for
+certain modes, there are special comment delimiters for this purpose;
+the variable <code>vc-comment-alist</code> specifies them.  Each element of
+this list has the form <code>(</code><var>mode</var> <var>starter</var> <var>ender</var><code>)</code>.
+
+   <p><a name="index-vc_002dstatic_002dheader_002dalist-2514"></a>  The variable <code>vc-static-header-alist</code> specifies further strings
+to add based on the name of the buffer.  Its value should be a list of
+elements of the form <code>(</code><var>regexp</var><code> . </code><var>format</var><code>)</code>.  Whenever
+<var>regexp</var> matches the buffer name, <var>format</var> is inserted as part
+of the header.  A header line is inserted for each element that matches
+the buffer name, and for each string specified by
+<code>vc-</code><var>backend</var><code>-header</code>.  The header line is made by processing the
+string from <code>vc-</code><var>backend</var><code>-header</code> with the format taken from the
+element.  The default value for <code>vc-static-header-alist</code> is as follows:
+
+<pre class="example">     (("\\.c$" .
+       "\n#ifndef lint\nstatic char vcid[] = \"\%s\";\n\
+     #endif /* lint */\n"))
+</pre>
+   <p class="noindent">It specifies insertion of text of this form:
+
+<pre class="example">     
+     #ifndef lint
+     static char vcid[] = "<var>string</var>";
+     #endif /* lint */
+</pre>
+   <p class="noindent">Note that the text above starts with a blank line.
+
+   <p>If you use more than one version header in a file, put them close
+together in the file.  The mechanism in <code>revert-buffer</code> that
+preserves markers may not handle markers positioned between two version
+headers.
+
+   </body></html>
+

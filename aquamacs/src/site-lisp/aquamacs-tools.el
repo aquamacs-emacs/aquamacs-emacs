@@ -55,6 +55,7 @@
 
 (defun aquamacs-ask-for-confirmation (text long &optional yes-button no-button sheet no-cancel)
     (let ((f (window-frame (minibuffer-window))))
+      (make-frame-visible f)
       (raise-frame f)			; make sure frame is visible
       (if (or  
 	   (and last-nonmenu-event 

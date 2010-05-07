@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Argument Access in Advice - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Preactivation.html#Preactivation" title="Preactivation">
+<link rel="next" href="Advising-Primitives.html#Advising-Primitives" title="Advising Primitives">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Argument-Access-in-Advice"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advising-Primitives.html#Advising-Primitives">Advising Primitives</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Preactivation.html#Preactivation">Preactivation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h3 class="section">17.8 Argument Access in Advice</h3>
+
+<p>The simplest way to access the arguments of an advised function in the
+body of a piece of advice is to use the same names that the function
+definition uses.  To do this, you need to know the names of the argument
+variables of the original function.
+
+   <p>While this simple method is sufficient in many cases, it has a
+disadvantage: it is not robust, because it hard-codes the argument names
+into the advice.  If the definition of the original function changes,
+the advice might break.
+
+   <p>Another method is to specify an argument list in the advice itself. 
+This avoids the need to know the original function definition's argument
+names, but it has a limitation: all the advice on any particular
+function must use the same argument list, because the argument list
+actually used for all the advice comes from the first piece of advice
+for that function.
+
+   <p>A more robust method is to use macros that are translated into the
+proper access forms at activation time, i.e., when constructing the
+advised definition.  Access macros access actual arguments by their
+(zero-based) position, regardless of how these actual arguments get
+distributed onto the argument variables of a function.  This is robust
+because in Emacs Lisp the meaning of an argument is strictly
+determined by its position in the argument list.
+
+<div class="defun">
+&mdash; Macro: <b>ad-get-arg</b><var> position<a name="index-ad_002dget_002darg-913"></a></var><br>
+<blockquote><p>This returns the actual argument that was supplied at <var>position</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>ad-get-args</b><var> position<a name="index-ad_002dget_002dargs-914"></a></var><br>
+<blockquote><p>This returns the list of actual arguments supplied starting at
+<var>position</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>ad-set-arg</b><var> position value<a name="index-ad_002dset_002darg-915"></a></var><br>
+<blockquote><p>This sets the value of the actual argument at <var>position</var> to
+<var>value</var>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>ad-set-args</b><var> position value-list<a name="index-ad_002dset_002dargs-916"></a></var><br>
+<blockquote><p>This sets the list of actual arguments starting at <var>position</var> to
+<var>value-list</var>. 
+</p></blockquote></div>
+
+   <p>Now an example.  Suppose the function <code>foo</code> is defined as
+
+<pre class="example">     (defun foo (x y &amp;optional z &amp;rest r) ...)
+</pre>
+   <p class="noindent">and is then called with
+
+<pre class="example">     (foo 0 1 2 3 4 5 6)
+</pre>
+   <p class="noindent">which means that <var>x</var> is 0, <var>y</var> is 1, <var>z</var> is 2 and <var>r</var> is
+<code>(3 4 5 6)</code> within the body of <code>foo</code>.  Here is what
+<code>ad-get-arg</code> and <code>ad-get-args</code> return in this case:
+
+<pre class="example">     (ad-get-arg 0) &rArr; 0
+     (ad-get-arg 1) &rArr; 1
+     (ad-get-arg 2) &rArr; 2
+     (ad-get-arg 3) &rArr; 3
+     (ad-get-args 2) &rArr; (2 3 4 5 6)
+     (ad-get-args 4) &rArr; (4 5 6)
+</pre>
+   <p>Setting arguments also makes sense in this example:
+
+<pre class="example">     (ad-set-arg 5 "five")
+</pre>
+   <p class="noindent">has the effect of changing the sixth argument to <code>"five"</code>.  If this
+happens in advice executed before the body of <code>foo</code> is run, then
+<var>r</var> will be <code>(3 4 "five" 6)</code> within that body.
+
+   <p>Here is an example of setting a tail of the argument list:
+
+<pre class="example">     (ad-set-args 0 '(5 4 3 2 1 0))
+</pre>
+   <p class="noindent">If this happens in advice executed before the body of <code>foo</code> is run,
+then within that body, <var>x</var> will be 5, <var>y</var> will be 4, <var>z</var>
+will be 3, and <var>r</var> will be <code>(2 1 0)</code> inside the body of
+<code>foo</code>.
+
+   <p>These argument constructs are not really implemented as Lisp macros. 
+Instead they are implemented specially by the advice mechanism.
+
+   </body></html>
+

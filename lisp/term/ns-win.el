@@ -169,23 +169,67 @@ The return value is ARGS minus the number of arguments processed."
 	(setq args (cons orig-this-switch args)))))
   (nreverse args))
 
+
+;; Handle the geometry option
+(defun x-handle-geometry (switch)
+  ;; In NS, x-parse-geometry just calls ns-parse-geometry
+  (let* ((geo (x-parse-geometry (car ns-invocation-args)))
+	 (left (assq 'left geo))
+	 (top (assq 'top geo))
+	 (height (assq 'height geo))
+	 (width (assq 'width geo)))
+    (if (or height width)
+	(setq default-frame-alist
+	      (append default-frame-alist
+		      '((user-size . t))
+		      (if height (list height))
+		      (if width (list width)))
+	      initial-frame-alist
+	      (append initial-frame-alist
+		      '((user-size . t))
+		      (if height (list height))
+		      (if width (list width)))))
+    (if (or left top)
+	(setq initial-frame-alist
+	      (append initial-frame-alist
+		      '((user-position . t))
+		      (if left (list left))
+		      (if top (list top)))))
+    (setq ns-invocation-args (cdr ns-invocation-args))))
+
 (defun ns-parse-geometry (geom)
-  "Parse a Nextstep-style geometry string GEOM.
+  "Parse a Nextstep- or X-style geometry string GEOM.
 Returns an alist of the form ((top . TOP), (left . LEFT) ... ).
 The properties returned may include `top', `left', `height', and `width'."
-  (when (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
+
+  (or
+   ;; X-Style specification
+   (append
+    (when (string-match "\\([0-9]+\\)x\\([0-9]+\\)" geom)
+      (append
+       (if (match-string 2 geom)
+	   (list (cons 'height (string-to-number (match-string 2 geom)))))
+       (if (match-string 1 geom)
+	   (list (cons 'width (string-to-number (match-string 1 geom)))))))
+    (when (string-match "\\([+-][0-9]+\\)\\([+-][0-9]+\\)" geom)
+      (append
+       (if (match-string 1 geom)
+	   (list (cons 'left (string-to-number (match-string 1 geom)))))
+       (if (match-string 2 geom)
+	   (list (cons 'top (string-to-number (match-string 2 geom))))))))
+
+   ;; NS-Style specification
+   (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		      geom)
-    (apply
-     'append
-     (list
-      (list (cons 'top (string-to-number (match-string 1 geom))))
-      (if (match-string 3 geom)
-	  (list (cons 'left (string-to-number (match-string 3 geom)))))
-      (if (match-string 5 geom)
-	  (list (cons 'height (string-to-number (match-string 5 geom)))))
-      (if (match-string 7 geom)
-	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+		     geom)
+       (append
+	 (list (cons 'top (string-to-number (match-string 1 geom))))
+	 (if (match-string 3 geom)
+	     (list (cons 'left (string-to-number (match-string 3 geom)))))
+	 (if (match-string 5 geom)
+	     (list (cons 'height (string-to-number (match-string 5 geom)))))
+	 (if (match-string 7 geom)
+	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
 
@@ -826,6 +870,7 @@ unless the current buffer is a scratch buffer."
 (defun ns-find-file ()
   "Do a `find-file' with the `ns-input-file' as argument."
   (interactive)
+  (while (car ns-input-file) 
   (let ((f) (file) (bufwin1) (bufwin2))
     (setq f (file-truename (car ns-input-file)))
     (setq ns-input-file (cdr ns-input-file))
@@ -848,7 +893,7 @@ unless the current buffer is a scratch buffer."
       (let ((pop-up-frames t)) (pop-to-buffer file nil)))
      (t
       (ns-hide-emacs 'activate)
-      (find-file f)))))
+      (find-file f))))))
 
 
 
@@ -916,12 +961,14 @@ unless the current buffer is a scratch buffer."
   "Switches the tool bar on and off in frame FRAME.
  If FRAME is nil, the change applies to the selected frame."
   (interactive)
+  (when (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
+      (tool-bar-setup (or frame (selected-frame)))
+      (redisplay t))
   (modify-frame-parameters
-   frame (list (cons 'tool-bar-lines
-		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-				   0 1)) ))
-  (if (not tool-bar-mode) (tool-bar-mode t)))
-
+   (or frame (selected-frame))
+   (list (cons 'tool-bar-lines
+	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+		   0 1)) )))
 
 
 ;;;; Dialog-related functions.
@@ -1223,82 +1270,68 @@ the operating system.")
     defined-colors))
 
 ;; Functions for color panel + drag
-(defun ns-face-at-pos (pos)
-  (let* ((frame (car pos))
-         (frame-pos (cons (cadr pos) (cddr pos)))
-         (window (window-at (car frame-pos) (cdr frame-pos) frame))
-         (window-pos (coordinates-in-window-p frame-pos window))
-         (buffer (window-buffer window))
-         (edges (window-edges window)))
+(defun ns-face-at-pos (position)
+  (let* ((p (posn-point position))
+	 (area (posn-area position))
+	 (window (posn-window position)))
     (cond
-     ((not window-pos)
-      nil)
-     ((eq window-pos 'mode-line)
-      'modeline)
-     ((eq window-pos 'vertical-line)
+     ((eq area 'mode-line)
+      (if (eq (frame-selected-window) window)
+	  'mode-line ; does not work yet - frame is always selected
+	  'mode-line-inactive))
+     ((eq area 'vertical-line)
       'default)
-     ((consp window-pos)
-      (with-current-buffer buffer
-        (let ((p (car (compute-motion (window-start window)
-                                      (cons (nth 0 edges)
-					    ;; Workaround: compute-motion fails to 
-					    ;; take into account header line.
-					    ;; See bug #4893
-					    (+ (if header-line-format 1 0) (nth 1 edges)))
-                                      (window-end window)
-                                      frame-pos
-                                      (- (window-width window) 1)
-                                      nil
-                                      window))))
-          (cond
-           ((eq p (window-point window))
-            'cursor)
-           ((and mark-active (< (region-beginning) p) (< p (region-end)))
-            'region)
-           (t
-	    (let* ((faces (or (get-char-property p 'face window) 'default))
-		   (face (if (consp faces) (car faces) faces)))
-	      (or (cdr-safe (assq face face-remapping-alist))
-		  face)))))))
-     (t
-      nil))))
+     ((and (not area) (eq p (window-point window)))
+      'cursor)
+     ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
+      'region)
+     ((not area)
+      (let* ((faces (or (get-char-property p 'face window) 'default))
+	     (face (if (consp faces) (car faces) faces)))
+	(or (cdr-safe (assq face face-remapping-alist))
+	    face))))))
 
 (defvar ns-input-color)			; nsterm.m
 
-(defun ns-set-foreground-at-mouse ()
+(defun ns-set-foreground-at-mouse (event)
   "Set the foreground color at the mouse location to `ns-input-color'."
-  (interactive)
-  (let* ((pos (mouse-position))
-         (frame (car pos))
-         (face (ns-face-at-pos pos)))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
-      (modify-frame-parameters frame (list (cons 'foreground-color
-                                                 ns-input-color))))
-     (t
-      (set-face-foreground face ns-input-color frame)))
-    (message "Foreground color set for %s." face)))
+  (interactive "e")
+  (let ((position (event-end event)))
+    (if (not (windowp (posn-window position)))
+	(error "Position not in text area of window"))
+    (let* ((face (ns-face-at-pos position))
+	   (frame (window-frame (posn-window position))))
+      
+      (cond
+       ((eq face 'cursor)
+	(modify-frame-parameters frame (list (cons 'cursor-color
+						   ns-input-color))))
+       ((not face)
+	(modify-frame-parameters frame (list (cons 'foreground-color
+						   ns-input-color))))
+       (t
+	(set-face-foreground face ns-input-color frame)))
+      (message "Foreground color set for %s." face))))
 
-(defun ns-set-background-at-mouse ()
+(defun ns-set-background-at-mouse (event)
   "Set the background color at the mouse location to `ns-input-color'."
-  (interactive)
-  (let* ((pos (mouse-position))
-         (frame (car pos))
-         (face (ns-face-at-pos pos)))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
-      (modify-frame-parameters frame (list (cons 'background-color
-                                                 ns-input-color))))
-     (t
-      (set-face-background face ns-input-color frame)))
-    (message "Background color set for %s." face)))
-
+   (interactive "e")
+  (let ((position (event-end event)))
+    (if (not (windowp (posn-window position)))
+	(error "Position not in text area of window"))
+    (let* ((face (ns-face-at-pos position))
+	   (frame (window-frame (posn-window position))))
+      (cond
+       ((eq face 'cursor)
+	(modify-frame-parameters frame (list (cons 'cursor-color
+						   ns-input-color))))
+       ((not face)
+	(modify-frame-parameters frame (list (cons 'background-color
+						   ns-input-color))))
+       (t
+	(set-face-background face ns-input-color frame)))
+      (message "Background color set for %s." face))))
+ 
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
       icon-title-format t)

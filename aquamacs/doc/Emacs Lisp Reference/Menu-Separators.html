@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Menu Separators - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Menus.html#Defining-Menus" title="Defining Menus">
+<link rel="prev" href="Extended-Menu-Items.html#Extended-Menu-Items" title="Extended Menu Items">
+<link rel="next" href="Alias-Menu-Items.html#Alias-Menu-Items" title="Alias Menu Items">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Menu-Separators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Alias-Menu-Items.html#Alias-Menu-Items">Alias Menu Items</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Menus.html#Defining-Menus">Defining Menus</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">22.17.1.3 Menu Separators</h5>
+
+<p><a name="index-menu-separators-1555"></a>
+  A menu separator is a kind of menu item that doesn't display any
+text&mdash;instead, it divides the menu into subparts with a horizontal line. 
+A separator looks like this in the menu keymap:
+
+<pre class="example">     (menu-item <var>separator-type</var>)
+</pre>
+   <p class="noindent">where <var>separator-type</var> is a string starting with two or more dashes.
+
+   <p>In the simplest case, <var>separator-type</var> consists of only dashes. 
+That specifies the default kind of separator.  (For compatibility,
+<code>""</code> and <code>-</code> also count as separators.)
+
+   <p>Certain other values of <var>separator-type</var> specify a different
+style of separator.  Here is a table of them:
+
+     <dl>
+<dt><code>"--no-line"</code><dt><code>"--space"</code><dd>An extra vertical space, with no actual line.
+
+     <br><dt><code>"--single-line"</code><dd>A single line in the menu's foreground color.
+
+     <br><dt><code>"--double-line"</code><dd>A double line in the menu's foreground color.
+
+     <br><dt><code>"--single-dashed-line"</code><dd>A single dashed line in the menu's foreground color.
+
+     <br><dt><code>"--double-dashed-line"</code><dd>A double dashed line in the menu's foreground color.
+
+     <br><dt><code>"--shadow-etched-in"</code><dd>A single line with a 3D sunken appearance.  This is the default,
+used separators consisting of dashes only.
+
+     <br><dt><code>"--shadow-etched-out"</code><dd>A single line with a 3D raised appearance.
+
+     <br><dt><code>"--shadow-etched-in-dash"</code><dd>A single dashed line with a 3D sunken appearance.
+
+     <br><dt><code>"--shadow-etched-out-dash"</code><dd>A single dashed line with a 3D raised appearance.
+
+     <br><dt><code>"--shadow-double-etched-in"</code><dd>Two lines with a 3D sunken appearance.
+
+     <br><dt><code>"--shadow-double-etched-out"</code><dd>Two lines with a 3D raised appearance.
+
+     <br><dt><code>"--shadow-double-etched-in-dash"</code><dd>Two dashed lines with a 3D sunken appearance.
+
+     <br><dt><code>"--shadow-double-etched-out-dash"</code><dd>Two dashed lines with a 3D raised appearance. 
+</dl>
+
+   <p>You can also give these names in another style, adding a colon after
+the double-dash and replacing each single dash with capitalization of
+the following word.  Thus, <code>"--:singleLine"</code>, is equivalent to
+<code>"--single-line"</code>.
+
+   <p>Some systems and display toolkits don't really handle all of these
+separator types.  If you use a type that isn't supported, the menu
+displays a similar kind of separator that is supported.
+
+   </body></html>
+

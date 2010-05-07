@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Low-Level Parsing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parsing-Expressions.html#Parsing-Expressions" title="Parsing Expressions">
+<link rel="prev" href="Parser-State.html#Parser-State" title="Parser State">
+<link rel="next" href="Control-Parsing.html#Control-Parsing" title="Control Parsing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Low-Level-Parsing"></a>
+<a name="Low_002dLevel-Parsing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Control-Parsing.html#Control-Parsing">Control Parsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Parser-State.html#Parser-State">Parser State</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>
+<hr>
+</div>
+
+<h4 class="subsection">35.6.4 Low-Level Parsing</h4>
+
+<p>The most basic way to use the expression parser is to tell it
+to start at a given position with a certain state, and parse up to
+a specified end position.
+
+<div class="defun">
+&mdash; Function: <b>parse-partial-sexp</b><var> start limit &amp;optional target-depth stop-before state stop-comment<a name="index-parse_002dpartial_002dsexp-3098"></a></var><br>
+<blockquote><p>This function parses a sexp in the current buffer starting at
+<var>start</var>, not scanning past <var>limit</var>.  It stops at position
+<var>limit</var> or when certain criteria described below are met, and sets
+point to the location where parsing stops.  It returns a parser state
+describing the status of the parse at the point where it stops.
+
+        <p><a name="index-parenthesis-depth-3099"></a>If the third argument <var>target-depth</var> is non-<code>nil</code>, parsing
+stops if the depth in parentheses becomes equal to <var>target-depth</var>. 
+The depth starts at 0, or at whatever is given in <var>state</var>.
+
+        <p>If the fourth argument <var>stop-before</var> is non-<code>nil</code>, parsing
+stops when it comes to any character that starts a sexp.  If
+<var>stop-comment</var> is non-<code>nil</code>, parsing stops when it comes to the
+start of a comment.  If <var>stop-comment</var> is the symbol
+<code>syntax-table</code>, parsing stops after the start of a comment or a
+string, or the end of a comment or a string, whichever comes first.
+
+        <p>If <var>state</var> is <code>nil</code>, <var>start</var> is assumed to be at the top
+level of parenthesis structure, such as the beginning of a function
+definition.  Alternatively, you might wish to resume parsing in the
+middle of the structure.  To do this, you must provide a <var>state</var>
+argument that describes the initial status of parsing.  The value
+returned by a previous call to <code>parse-partial-sexp</code> will do
+nicely. 
+</p></blockquote></div>
+
+   </body></html>
+

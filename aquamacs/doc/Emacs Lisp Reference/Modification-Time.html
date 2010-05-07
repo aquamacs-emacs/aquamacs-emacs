@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Modification Time - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="Buffer-Modification.html#Buffer-Modification" title="Buffer Modification">
+<link rel="next" href="Read-Only-Buffers.html#Read-Only-Buffers" title="Read Only Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Modification-Time"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">27.6 Buffer Modification Time</h3>
+
+<p><a name="index-comparing-file-modification-time-1995"></a><a name="index-modification-time-of-buffer-1996"></a>
+  Suppose that you visit a file and make changes in its buffer, and
+meanwhile the file itself is changed on disk.  At this point, saving the
+buffer would overwrite the changes in the file.  Occasionally this may
+be what you want, but usually it would lose valuable information.  Emacs
+therefore checks the file's modification time using the functions
+described below before saving the file.  (See <a href="File-Attributes.html#File-Attributes">File Attributes</a>,
+for how to examine a file's modification time.)
+
+<div class="defun">
+&mdash; Function: <b>verify-visited-file-modtime</b><var> buffer<a name="index-verify_002dvisited_002dfile_002dmodtime-1997"></a></var><br>
+<blockquote><p>This function compares what <var>buffer</var> has recorded for the
+modification time of its visited file against the actual modification
+time of the file as recorded by the operating system.  The two should be
+the same unless some other process has written the file since Emacs
+visited or saved it.
+
+        <p>The function returns <code>t</code> if the last actual modification time and
+Emacs's recorded modification time are the same, <code>nil</code> otherwise. 
+It also returns <code>t</code> if the buffer has no recorded last
+modification time, that is if <code>visited-file-modtime</code> would return
+zero.
+
+        <p>It always returns <code>t</code> for buffers that are not visiting a file,
+even if <code>visited-file-modtime</code> returns a non-zero value.  For
+instance, it always returns <code>t</code> for dired buffers.  It returns
+<code>t</code> for buffers that are visiting a file that does not exist and
+never existed, but <code>nil</code> for file-visiting buffers whose file has
+been deleted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>clear-visited-file-modtime</b><var><a name="index-clear_002dvisited_002dfile_002dmodtime-1998"></a></var><br>
+<blockquote><p>This function clears out the record of the last modification time of
+the file being visited by the current buffer.  As a result, the next
+attempt to save this buffer will not complain of a discrepancy in
+file modification times.
+
+        <p>This function is called in <code>set-visited-file-name</code> and other
+exceptional places where the usual test to avoid overwriting a changed
+file should not be done. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>visited-file-modtime</b><var><a name="index-visited_002dfile_002dmodtime-1999"></a></var><br>
+<blockquote><p>This function returns the current buffer's recorded last file
+modification time, as a list of the form <code>(</code><var>high</var> <var>low</var><code>)</code>. 
+(This is the same format that <code>file-attributes</code> uses to return
+time values; see <a href="File-Attributes.html#File-Attributes">File Attributes</a>.)
+
+        <p>If the buffer has no recorded last modification time, this function
+returns zero.  This case occurs, for instance, if the buffer is not
+visiting a file or if the time has been explicitly cleared by
+<code>clear-visited-file-modtime</code>.  Note, however, that
+<code>visited-file-modtime</code> returns a list for some non-file buffers
+too.  For instance, in a Dired buffer listing a directory, it returns
+the last modification time of that directory, as recorded by Dired.
+
+        <p>For a new buffer visiting a not yet existing file, <var>high</var> is
+&minus;1 and <var>low</var> is 65535, that is,
+2**16&nbsp;-&nbsp;1.<!-- /@w -->
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+<div class="defun">
+&mdash; Function: <b>set-visited-file-modtime</b><var> &amp;optional time<a name="index-set_002dvisited_002dfile_002dmodtime-2000"></a></var><br>
+<blockquote><p>This function updates the buffer's record of the last modification time
+of the visited file, to the value specified by <var>time</var> if <var>time</var>
+is not <code>nil</code>, and otherwise to the last modification time of the
+visited file.
+
+        <p>If <var>time</var> is neither <code>nil</code> nor zero, it should have the form
+<code>(</code><var>high</var><code> . </code><var>low</var><code>)</code> or <code>(</code><var>high</var> <var>low</var><code>)</code>, in
+either case containing two integers, each of which holds 16 bits of the
+time.
+
+        <p>This function is useful if the buffer was not read from the file
+normally, or if the file itself has been changed for some known benign
+reason. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ask-user-about-supersession-threat</b><var> filename<a name="index-ask_002duser_002dabout_002dsupersession_002dthreat-2001"></a></var><br>
+<blockquote><p>This function is used to ask a user how to proceed after an attempt to
+modify an buffer visiting file <var>filename</var> when the file is newer
+than the buffer text.  Emacs detects this because the modification
+time of the file on disk is newer than the last save-time of the
+buffer.  This means some other program has probably altered the file.
+
+        <p><a name="index-file_002dsupersession-2002"></a>Depending on the user's answer, the function may return normally, in
+which case the modification of the buffer proceeds, or it may signal a
+<code>file-supersession</code> error with data <code>(</code><var>filename</var><code>)</code>, in which
+case the proposed buffer modification is not allowed.
+
+        <p>This function is called automatically by Emacs on the proper
+occasions.  It exists so you can customize Emacs by redefining it. 
+See the file <samp><span class="file">userlock.el</span></samp> for the standard definition.
+
+        <p>See also the file locking mechanism in <a href="File-Locks.html#File-Locks">File Locks</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

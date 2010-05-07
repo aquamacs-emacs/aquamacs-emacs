@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Float Basics - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numbers.html#Numbers" title="Numbers">
+<link rel="prev" href="Integer-Basics.html#Integer-Basics" title="Integer Basics">
+<link rel="next" href="Predicates-on-Numbers.html#Predicates-on-Numbers" title="Predicates on Numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Float-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Predicates-on-Numbers.html#Predicates-on-Numbers">Predicates on Numbers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Integer-Basics.html#Integer-Basics">Integer Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Floating Point Basics</h3>
+
+<p>Floating point numbers are useful for representing numbers that are
+not integral.  The precise range of floating point numbers is
+machine-specific; it is the same as the range of the C data type
+<code>double</code> on the machine you are using.
+
+   <p>The read-syntax for floating point numbers requires either a decimal
+point (with at least one digit following), an exponent, or both.  For
+example, &lsquo;<samp><span class="samp">1500.0</span></samp>&rsquo;, &lsquo;<samp><span class="samp">15e2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">15.0e2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">1.5e3</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">.15e4</span></samp>&rsquo; are five ways of writing a floating point number whose
+value is 1500.  They are all equivalent.  You can also use a minus sign
+to write negative floating point numbers, as in &lsquo;<samp><span class="samp">-1.0</span></samp>&rsquo;.
+
+   <p><a name="index-g_t_0040acronym_007bIEEE_007d-floating-point-138"></a><a name="index-positive-infinity-139"></a><a name="index-negative-infinity-140"></a><a name="index-infinity-141"></a><a name="index-NaN-142"></a>  Most modern computers support the <acronym>IEEE</acronym> floating point standard,
+which provides for positive infinity and negative infinity as floating point
+values.  It also provides for a class of values called NaN or
+&ldquo;not-a-number&rdquo;; numerical functions return such values in cases where
+there is no correct answer.  For example, <code>(/ 0.0 0.0)</code> returns a
+NaN.  For practical purposes, there's no significant difference between
+different NaN values in Emacs Lisp, and there's no rule for precisely
+which NaN value should be used in a particular case, so Emacs Lisp
+doesn't try to distinguish them (but it does report the sign, if you
+print it).  Here are the read syntaxes for these special floating
+point values:
+
+     <dl>
+<dt>positive infinity<dd>&lsquo;<samp><span class="samp">1.0e+INF</span></samp>&rsquo;
+<br><dt>negative infinity<dd>&lsquo;<samp><span class="samp">-1.0e+INF</span></samp>&rsquo;
+<br><dt>Not-a-number<dd>&lsquo;<samp><span class="samp">0.0e+NaN</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-0.0e+NaN</span></samp>&rsquo;. 
+</dl>
+
+   <p>To test whether a floating point value is a NaN, compare it with
+itself using <code>=</code>.  That returns <code>nil</code> for a NaN, and
+<code>t</code> for any other floating point value.
+
+   <p>The value <code>-0.0</code> is distinguishable from ordinary zero in
+<acronym>IEEE</acronym> floating point, but Emacs Lisp <code>equal</code> and
+<code>=</code> consider them equal values.
+
+   <p>You can use <code>logb</code> to extract the binary exponent of a floating
+point number (or estimate the logarithm of an integer):
+
+<div class="defun">
+&mdash; Function: <b>logb</b><var> number<a name="index-logb-143"></a></var><br>
+<blockquote><p>This function returns the binary exponent of <var>number</var>.  More
+precisely, the value is the logarithm of <var>number</var> base 2, rounded
+down to an integer.
+
+     <pre class="example">          (logb 10)
+               &rArr; 3
+          (logb 10.0e20)
+               &rArr; 69
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

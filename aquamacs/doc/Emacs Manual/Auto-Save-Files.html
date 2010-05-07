@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Auto Save Files - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Auto-Save.html#Auto-Save" title="Auto Save">
+<link rel="next" href="Auto-Save-Control.html#Auto-Save-Control" title="Auto Save Control">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Auto-Save-Files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Save-Control.html#Auto-Save-Control">Auto Save Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Auto-Save.html#Auto-Save">Auto Save</a>
+<hr>
+</div>
+
+<h4 class="subsection">22.6.1 Auto-Save Files</h4>
+
+<p>Auto-saving does not normally save in the files that you visited,
+because it can be very undesirable to save a change that you did not
+want to make permanent.  Instead, auto-saving is done in a different
+file called the <dfn>auto-save file</dfn>, and the visited file is changed
+only when you request saving explicitly (such as with <kbd>C-x C-s</kbd>).
+
+   <p>Normally, the auto-save file name is made by appending &lsquo;<samp><span class="samp">#</span></samp>&rsquo; to the
+front and rear of the visited file name.  Thus, a buffer visiting file
+<samp><span class="file">foo.c</span></samp> is auto-saved in a file <samp><span class="file">#foo.c#</span></samp>.  Most buffers that
+are not visiting files are auto-saved only if you request it explicitly;
+when they are auto-saved, the auto-save file name is made by appending
+&lsquo;<samp><span class="samp">#</span></samp>&rsquo; to the front and rear of buffer name, then
+adding digits and letters at the end for uniqueness.  For
+example, the &lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; buffer in which you compose messages to be
+sent might be auto-saved in a file named <samp><span class="file">#*mail*#704juu</span></samp>.  Auto-save file
+names are made this way unless you reprogram parts of Emacs to do
+something different (the functions <code>make-auto-save-file-name</code> and
+<code>auto-save-file-name-p</code>).  The file name to be used for auto-saving
+in a buffer is calculated when auto-saving is turned on in that buffer.
+
+   <p><a name="index-auto_002dsave-for-remote-files-900"></a><a name="index-auto_002dsave_002dfile_002dname_002dtransforms-901"></a>  The variable <code>auto-save-file-name-transforms</code> allows a degree
+of control over the auto-save file name.  It lets you specify a series
+of regular expressions and replacements to transform the auto save
+file name.  The default value puts the auto-save files for remote
+files (see <a href="Remote-Files.html#Remote-Files">Remote Files</a>) into the temporary file directory on the
+local machine.
+
+   <p>When you delete a substantial part of the text in a large buffer, auto
+save turns off temporarily in that buffer.  This is because if you
+deleted the text unintentionally, you might find the auto-save file more
+useful if it contains the deleted text.  To reenable auto-saving after
+this happens, save the buffer with <kbd>C-x C-s</kbd>, or use <kbd>C-u 1 M-x
+auto-save-mode</kbd>.
+
+   <p><a name="index-auto_002dsave_002dvisited_002dfile_002dname-902"></a>  If you want auto-saving to be done in the visited file rather than
+in a separate auto-save file, set the variable
+<code>auto-save-visited-file-name</code> to a non-<code>nil</code> value.  In this
+mode, there is no real difference between auto-saving and explicit
+saving.
+
+   <p><a name="index-delete_002dauto_002dsave_002dfiles-903"></a>  A buffer's auto-save file is deleted when you save the buffer in its
+visited file.  (You can inhibit this by setting the variable
+<code>delete-auto-save-files</code> to <code>nil</code>.)  Changing the visited
+file name with <kbd>C-x C-w</kbd> or <code>set-visited-file-name</code> renames
+any auto-save file to go with the new visited name.
+
+   </body></html>
+

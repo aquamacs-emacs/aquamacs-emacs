@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>International Chars - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="next" href="Enabling-Multibyte.html#Enabling-Multibyte" title="Enabling Multibyte">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="International-Chars"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Enabling-Multibyte.html#Enabling-Multibyte">Enabling Multibyte</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.1 Introduction to International Character Sets</h3>
+
+<p>The users of international character sets and scripts have
+established many more-or-less standard coding systems for storing
+files.  These coding systems are typically <dfn>multibyte</dfn>, meaning
+that sequences of two or more bytes are used to represent individual
+non-<acronym>ASCII</acronym> characters.
+
+   <p><a name="index-Unicode-1350"></a>  Internally, Emacs uses its own multibyte character encoding, which
+is a superset of the <dfn>Unicode</dfn> standard.  This internal encoding
+allows characters from almost every known script to be intermixed in a
+single buffer or string.  Emacs translates between the multibyte
+character encoding and various other coding systems when reading and
+writing files, and when exchanging data with subprocesses.
+
+   <p><a name="index-C_002dh-h-1351"></a><a name="index-view_002dhello_002dfile-1352"></a><a name="index-undisplayable-characters-1353"></a><a name="index-g_t_0040samp_007b_003f_007d-in-display-1354"></a>  The command <kbd>C-h h</kbd> (<code>view-hello-file</code>) displays the file
+<samp><span class="file">etc/HELLO</span></samp>, which shows how to say &ldquo;hello&rdquo; in many languages. 
+This illustrates various scripts.  If some characters can't be
+displayed on your terminal, they appear as &lsquo;<samp><span class="samp">?</span></samp>&rsquo; or as hollow boxes
+(see <a href="Undisplayable-Characters.html#Undisplayable-Characters">Undisplayable Characters</a>).
+
+   <p>Keyboards, even in the countries where these character sets are
+used, generally don't have keys for all the characters in them.  You
+can insert characters that your keyboard does not support, using
+<kbd>C-q</kbd> (<code>quoted-insert</code>) or <kbd>C-x 8 &lt;RET&gt;</kbd>
+(<code>ucs-insert</code>).  See <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>.  Emacs also supports
+various <dfn>input methods</dfn>, typically one for each script or
+language, which make it easier to type characters in the script. 
+See <a href="Input-Methods.html#Input-Methods">Input Methods</a>.
+
+   <p><a name="index-C_002dx-RET-1355"></a>  The prefix key <kbd>C-x &lt;RET&gt;</kbd> is used for commands that pertain
+to multibyte characters, coding systems, and input methods.
+
+   <p><a name="index-C_002dx-_003d-1356"></a><a name="index-what_002dcursor_002dposition-1357"></a>  The command <kbd>C-x =</kbd> (<code>what-cursor-position</code>) shows
+information about the character at point.  In addition to the
+character position, which was described in <a href="Position-Info.html#Position-Info">Position Info</a>, this
+command displays how the character is encoded.  For instance, it
+displays the following line in the echo area for the character
+&lsquo;<samp><span class="samp">c</span></samp>&rsquo;:
+
+<pre class="smallexample">     Char: c (99, #o143, #x63) point=28062 of 36168 (78%) column=53
+</pre>
+   <p>The four values after &lsquo;<samp><span class="samp">Char:</span></samp>&rsquo; describe the character that
+follows point, first by showing it and then by giving its character
+code in decimal, octal and hex.  For a non-<acronym>ASCII</acronym> multibyte
+character, these are followed by &lsquo;<samp><span class="samp">file</span></samp>&rsquo; and the character's
+representation, in hex, in the buffer's coding system, if that coding
+system encodes the character safely and with a single byte
+(see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).  If the character's encoding is longer than
+one byte, Emacs shows &lsquo;<samp><span class="samp">file ...</span></samp>&rsquo;.
+
+   <p>As a special case, if the character lies in the range 128 (0200
+octal) through 159 (0237 octal), it stands for a &ldquo;raw&rdquo; byte that
+does not correspond to any specific displayable character.  Such a
+&ldquo;character&rdquo; lies within the <code>eight-bit-control</code> character set,
+and is displayed as an escaped octal character code.  In this case,
+<kbd>C-x =</kbd> shows &lsquo;<samp><span class="samp">part of display ...</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">file</span></samp>&rsquo;.
+
+   <p><a name="index-character-set-of-character-at-point-1358"></a><a name="index-font-of-character-at-point-1359"></a><a name="index-text-properties-at-point-1360"></a><a name="index-face-at-point-1361"></a>  With a prefix argument (<kbd>C-u C-x =</kbd>), this command displays a
+detailed description of the character in a window:
+
+     <ul>
+<li>The character set name, and the codes that identify the character
+within that character set; <acronym>ASCII</acronym> characters are identified
+as belonging to the <code>ascii</code> character set.
+
+     <li>The character's syntax and categories.
+
+     <li>The character's encodings, both internally in the buffer, and externally
+if you were to save the file.
+
+     <li>What keys to type to input the character in the current input method
+(if it supports the character).
+
+     <li>If you are running Emacs on a graphical display, the font name and
+glyph code for the character.  If you are running Emacs on a text-only
+terminal, the code(s) sent to the terminal.
+
+     <li>The character's text properties (see <a href="../elisp/Text-Properties.html#Text-Properties">Text Properties</a>), including any non-default
+faces used to display the character, and any overlays containing it
+(see <a href="../elisp/Overlays.html#Overlays">Overlays</a>). 
+</ul>
+
+   <p>Here's an example showing the Latin-1 character A with grave accent,
+in a buffer whose coding system is <code>utf-8-unix</code>:
+
+<pre class="smallexample">             character: &Agrave; (192, #o300, #xc0)
+     preferred charset: unicode (Unicode (ISO10646))
+            code point: 0xC0
+                syntax: w 	which means: word
+              category: j:Japanese l:Latin v:Vietnamese
+           buffer code: #xC3 #x80
+             file code: not encodable by coding system undecided-unix
+               display: by this font (glyph code)
+         xft:-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1 (#x82)
+     
+     Character code properties: customize what to show
+       name: LATIN CAPITAL LETTER A WITH GRAVE
+       general-category: Lu (Letter, Uppercase)
+       decomposition: (65 768) ('A' '̀')
+       old-name: LATIN CAPITAL LETTER A GRAVE
+     
+     There are text properties here:
+       auto-composed        t
+</pre>
+   </body></html>
+

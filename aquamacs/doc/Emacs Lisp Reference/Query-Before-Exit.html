@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Query Before Exit - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Sentinels.html#Sentinels" title="Sentinels">
+<link rel="next" href="System-Processes.html#System-Processes" title="System Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Query-Before-Exit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="System-Processes.html#System-Processes">System Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sentinels.html#Sentinels">Sentinels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.11 Querying Before Exit</h3>
+
+<p>When Emacs exits, it terminates all its subprocesses by sending them
+the <code>SIGHUP</code> signal.  Because subprocesses may be doing
+valuable work, Emacs normally asks the user to confirm that it is ok
+to terminate them.  Each process has a query flag which, if
+non-<code>nil</code>, says that Emacs should ask for confirmation before
+exiting and thus killing that process.  The default for the query flag
+is <code>t</code>, meaning <em>do</em> query.
+
+<div class="defun">
+&mdash; Function: <b>process-query-on-exit-flag</b><var> process<a name="index-process_002dquery_002don_002dexit_002dflag-3263"></a></var><br>
+<blockquote><p>This returns the query flag of <var>process</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-process-query-on-exit-flag</b><var> process flag<a name="index-set_002dprocess_002dquery_002don_002dexit_002dflag-3264"></a></var><br>
+<blockquote><p>This function sets the query flag of <var>process</var> to <var>flag</var>.  It
+returns <var>flag</var>.
+
+     <pre class="smallexample">          ;; <span class="roman">Don't query about the shell process</span>
+          (set-process-query-on-exit-flag (get-process "shell") nil)
+               &rArr; t
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-kill-without-query</b><var> process &amp;optional do-query<a name="index-process_002dkill_002dwithout_002dquery-3265"></a></var><br>
+<blockquote><p>This function clears the query flag of <var>process</var>, so that
+Emacs will not query the user on account of that process.
+
+        <p>Actually, the function does more than that: it returns the old value of
+the process's query flag, and sets the query flag to <var>do-query</var>. 
+Please don't use this function to do those things any more&mdash;please
+use the newer, cleaner functions <code>process-query-on-exit-flag</code> and
+<code>set-process-query-on-exit-flag</code> in all but the simplest cases. 
+The only way you should use <code>process-kill-without-query</code> nowadays
+is like this:
+
+     <pre class="smallexample">          ;; <span class="roman">Don't query about the shell process</span>
+          (process-kill-without-query (get-process "shell"))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

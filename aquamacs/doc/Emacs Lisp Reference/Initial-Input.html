@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Initial Input - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
+<link rel="prev" href="Minibuffer-History.html#Minibuffer-History" title="Minibuffer History">
+<link rel="next" href="Completion.html#Completion" title="Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Initial-Input"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion.html#Completion">Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+<hr>
+</div>
+
+<h3 class="section">20.5 Initial Input</h3>
+
+<p>Several of the functions for minibuffer input have an argument called
+<var>initial</var> or <var>initial-contents</var>.  This is a mostly-deprecated
+feature for specifying that the minibuffer should start out with
+certain text, instead of empty as usual.
+
+   <p>If <var>initial</var> is a string, the minibuffer starts out containing the
+text of the string, with point at the end, when the user starts to
+edit the text.  If the user simply types &lt;RET&gt; to exit the
+minibuffer, it will use the initial input string to determine the
+value to return.
+
+   <p><strong>We discourage use of a non-</strong><code>nil</code><strong> value for
+</strong><var>initial</var>, because initial input is an intrusive interface. 
+History lists and default values provide a much more convenient method
+to offer useful default inputs to the user.
+
+   <p>There is just one situation where you should specify a string for an
+<var>initial</var> argument.  This is when you specify a cons cell for the
+<var>hist</var> or <var>history</var> argument.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
+
+   <p><var>initial</var> can also be a cons cell of the form <code>(</code><var>string</var><code>
+. </code><var>position</var><code>)</code>.  This means to insert <var>string</var> in the
+minibuffer but put point at <var>position</var> within the string's text.
+
+   <p>As a historical accident, <var>position</var> was implemented
+inconsistently in different functions.  In <code>completing-read</code>,
+<var>position</var>'s value is interpreted as origin-zero; that is, a value
+of 0 means the beginning of the string, 1 means after the first
+character, etc.  In <code>read-minibuffer</code>, and the other
+non-completion minibuffer input functions that support this argument,
+1 means the beginning of the string 2 means after the first character,
+etc.
+
+   <p>Use of a cons cell as the value for <var>initial</var> arguments is
+deprecated in user code.
+
+   </body></html>
+

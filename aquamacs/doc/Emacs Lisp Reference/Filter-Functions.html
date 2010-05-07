@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Filter Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Output-from-Processes.html#Output-from-Processes" title="Output from Processes">
+<link rel="prev" href="Process-Buffers.html#Process-Buffers" title="Process Buffers">
+<link rel="next" href="Decoding-Output.html#Decoding-Output" title="Decoding Output">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Filter-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Decoding-Output.html#Decoding-Output">Decoding Output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Process-Buffers.html#Process-Buffers">Process Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.9.2 Process Filter Functions</h4>
+
+<p><a name="index-filter-function-3249"></a><a name="index-process-filter-3250"></a>
+  A process <dfn>filter function</dfn> is a function that receives the
+standard output from the associated process.  If a process has a filter,
+then <em>all</em> output from that process is passed to the filter.  The
+process buffer is used directly for output from the process only when
+there is no filter.
+
+   <p>The filter function can only be called when Emacs is waiting for
+something, because process output arrives only at such times.  Emacs
+waits when reading terminal input, in <code>sit-for</code> and
+<code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in <code>accept-process-output</code>
+(see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).
+
+   <p>A filter function must accept two arguments: the associated process
+and a string, which is output just received from it.  The function is
+then free to do whatever it chooses with the output.
+
+   <p>Quitting is normally inhibited within a filter function&mdash;otherwise,
+the effect of typing <kbd>C-g</kbd> at command level or to quit a user
+command would be unpredictable.  If you want to permit quitting inside
+a filter function, bind <code>inhibit-quit</code> to <code>nil</code>.  In most
+cases, the right way to do this is with the macro
+<code>with-local-quit</code>.  See <a href="Quitting.html#Quitting">Quitting</a>.
+
+   <p>If an error happens during execution of a filter function, it is
+caught automatically, so that it doesn't stop the execution of whatever
+program was running when the filter function was started.  However, if
+<code>debug-on-error</code> is non-<code>nil</code>, the error-catching is turned
+off.  This makes it possible to use the Lisp debugger to debug the
+filter function.  See <a href="Debugger.html#Debugger">Debugger</a>.
+
+   <p>Many filter functions sometimes or always insert the text in the
+process's buffer, mimicking the actions of Emacs when there is no
+filter.  Such filter functions need to use <code>set-buffer</code> in order to
+be sure to insert in that buffer.  To avoid setting the current buffer
+semipermanently, these filter functions must save and restore the
+current buffer.  They should also update the process marker, and in some
+cases update the value of point.  Here is how to do these things:
+
+<pre class="smallexample">     (defun ordinary-insertion-filter (proc string)
+       (with-current-buffer (process-buffer proc)
+         (let ((moving (= (point) (process-mark proc))))
+           (save-excursion
+             ;; <span class="roman">Insert the text, advancing the process marker.</span>
+             (goto-char (process-mark proc))
+             (insert string)
+             (set-marker (process-mark proc) (point)))
+           (if moving (goto-char (process-mark proc))))))
+</pre>
+   <p class="noindent">The reason to use <code>with-current-buffer</code>, rather than using
+<code>save-excursion</code> to save and restore the current buffer, is so as
+to preserve the change in point made by the second call to
+<code>goto-char</code>.
+
+   <p>To make the filter force the process buffer to be visible whenever new
+text arrives, insert the following line just before the
+<code>with-current-buffer</code> construct:
+
+<pre class="smallexample">     (display-buffer (process-buffer proc))
+</pre>
+   <p>To force point to the end of the new output, no matter where it was
+previously, eliminate the variable <code>moving</code> and call
+<code>goto-char</code> unconditionally.
+
+   <p>In earlier Emacs versions, every filter function that did regular
+expression searching or matching had to explicitly save and restore the
+match data.  Now Emacs does this automatically for filter functions;
+they never need to do it explicitly.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
+
+   <p>A filter function that writes the output into the buffer of the
+process should check whether the buffer is still alive.  If it tries to
+insert into a dead buffer, it will get an error.  The expression
+<code>(buffer-name (process-buffer </code><var>process</var><code>))</code> returns <code>nil</code>
+if the buffer is dead.
+
+   <p>The output to the function may come in chunks of any size.  A program
+that produces the same output twice in a row may send it as one batch of
+200 characters one time, and five batches of 40 characters the next.  If
+the filter looks for certain text strings in the subprocess output, make
+sure to handle the case where one of these strings is split across two
+or more batches of output; one way to do this is to insert the
+received text into a temporary buffer, which can then be searched.
+
+<div class="defun">
+&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3251"></a></var><br>
+<blockquote><p>This function gives <var>process</var> the filter function <var>filter</var>.  If
+<var>filter</var> is <code>nil</code>, it gives the process no filter. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3252"></a></var><br>
+<blockquote><p>This function returns the filter function of <var>process</var>, or <code>nil</code>
+if it has none. 
+</p></blockquote></div>
+
+   <p>Here is an example of use of a filter function:
+
+<pre class="smallexample">     (defun keep-output (process output)
+        (setq kept (cons output kept)))
+          &rArr; keep-output
+     (setq kept nil)
+          &rArr; nil
+     (set-process-filter (get-process "shell") 'keep-output)
+          &rArr; keep-output
+     (process-send-string "shell" "ls ~/other\n")
+          &rArr; nil
+     kept
+          &rArr; ("lewis@slug[8] % "
+     "FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
+     address.txt             backup.psf              kolstad.psf
+     backup.bib~             david.mss               resume-Dec-86.mss~
+     backup.err              david.psf               resume-Dec.psf
+     backup.mss              dland                   syllabus.mss
+     "
+     "#backups.mss#          backup.mss~             kolstad.mss
+     ")
+</pre>
+   </body></html>
+

@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>Character Sets - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link rel="prev" href="Character-Properties.html#Character-Properties" title="Character Properties">
+<link rel="next" href="Scanning-Charsets.html#Scanning-Charsets" title="Scanning Charsets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Character-Sets"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Scanning-Charsets.html#Scanning-Charsets">Scanning Charsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Properties.html#Character-Properties">Character Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
+<hr>
+</div>
+
+<h3 class="section">33.6 Character Sets</h3>
+
+<p><a name="index-character-sets-2806"></a>
+<a name="index-charset-2807"></a><a name="index-coded-character-set-2808"></a>An Emacs <dfn>character set</dfn>, or <dfn>charset</dfn>, is a set of characters
+in which each character is assigned a numeric code point.  (The
+Unicode Standard calls this a <dfn>coded character set</dfn>.)  Each Emacs
+charset has a name which is a symbol.  A single character can belong
+to any number of different character sets, but it will generally have
+a different code point in each charset.  Examples of character sets
+include <code>ascii</code>, <code>iso-8859-1</code>, <code>greek-iso8859-7</code>, and
+<code>windows-1255</code>.  The code point assigned to a character in a
+charset is usually different from its code point used in Emacs buffers
+and strings.
+
+   <p><a name="index-g_t_0040code_007bemacs_007d_002c-a-charset-2809"></a><a name="index-g_t_0040code_007bunicode_007d_002c-a-charset-2810"></a><a name="index-g_t_0040code_007beight_002dbit_007d_002c-a-charset-2811"></a>  Emacs defines several special character sets.  The character set
+<code>unicode</code> includes all the characters whose Emacs code points are
+in the range <code>0..#x10FFFF</code>.  The character set <code>emacs</code>
+includes all <acronym>ASCII</acronym> and non-<acronym>ASCII</acronym> characters. 
+Finally, the <code>eight-bit</code> charset includes the 8-bit raw bytes;
+Emacs uses it to represent raw bytes encountered in text.
+
+<div class="defun">
+&mdash; Function: <b>charsetp</b><var> object<a name="index-charsetp-2812"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <var>object</var> is a symbol that names a character set,
+<code>nil</code> otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>charset-list</b><var><a name="index-charset_002dlist-2813"></a></var><br>
+<blockquote><p>The value is a list of all defined character set names. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>charset-priority-list</b><var> &amp;optional highestp<a name="index-charset_002dpriority_002dlist-2814"></a></var><br>
+<blockquote><p>This functions returns a list of all defined character sets ordered by
+their priority.  If <var>highestp</var> is non-<code>nil</code>, the function
+returns a single character set of the highest priority. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-charset-priority</b><var> &amp;rest charsets<a name="index-set_002dcharset_002dpriority-2815"></a></var><br>
+<blockquote><p>This function makes <var>charsets</var> the highest priority character sets. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>char-charset</b><var> character &amp;optional restriction<a name="index-char_002dcharset-2816"></a></var><br>
+<blockquote><p>This function returns the name of the character set of highest
+priority that <var>character</var> belongs to.  <acronym>ASCII</acronym> characters
+are an exception: for them, this function always returns <code>ascii</code>.
+
+        <p>If <var>restriction</var> is non-<code>nil</code>, it should be a list of
+charsets to search.  Alternatively, it can be a coding system, in
+which case the returned charset must be supported by that coding
+system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>charset-plist</b><var> charset<a name="index-charset_002dplist-2817"></a></var><br>
+<blockquote><p>This function returns the property list of the character set
+<var>charset</var>.  Although <var>charset</var> is a symbol, this is not the
+same as the property list of that symbol.  Charset properties include
+important information about the charset, such as its documentation
+string, short name, etc. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>put-charset-property</b><var> charset propname value<a name="index-put_002dcharset_002dproperty-2818"></a></var><br>
+<blockquote><p>This function sets the <var>propname</var> property of <var>charset</var> to the
+given <var>value</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-charset-property</b><var> charset propname<a name="index-get_002dcharset_002dproperty-2819"></a></var><br>
+<blockquote><p>This function returns the value of <var>charset</var>s property
+<var>propname</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>list-charset-chars</b><var> charset<a name="index-list_002dcharset_002dchars-2820"></a></var><br>
+<blockquote><p>This command displays a list of characters in the character set
+<var>charset</var>. 
+</p></blockquote></div>
+
+   <p>Emacs can convert between its internal representation of a character
+and the character's codepoint in a specific charset.  The following
+two functions support these conversions.
+
+<!-- FIXME: decode-char and encode-char accept and ignore an additional -->
+<!-- argument @var{restriction}.  When that argument actually makes a -->
+<!-- difference, it should be documented here. -->
+<div class="defun">
+&mdash; Function: <b>decode-char</b><var> charset code-point<a name="index-decode_002dchar-2821"></a></var><br>
+<blockquote><p>This function decodes a character that is assigned a <var>code-point</var>
+in <var>charset</var>, to the corresponding Emacs character, and returns
+it.  If <var>charset</var> doesn't contain a character of that code point,
+the value is <code>nil</code>.  If <var>code-point</var> doesn't fit in a Lisp
+integer (see <a href="Integer-Basics.html#Integer-Basics">most-positive-fixnum</a>), it can be
+specified as a cons cell <code>(</code><var>high</var><code> . </code><var>low</var><code>)</code>, where
+<var>low</var> are the lower 16 bits of the value and <var>high</var> are the
+high 16 bits. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>encode-char</b><var> char charset<a name="index-encode_002dchar-2822"></a></var><br>
+<blockquote><p>This function returns the code point assigned to the character
+<var>char</var> in <var>charset</var>.  If the result does not fit in a Lisp
+integer, it is returned as a cons cell <code>(</code><var>high</var><code> . </code><var>low</var><code>)</code>
+that fits the second argument of <code>decode-char</code> above.  If
+<var>charset</var> doesn't have a codepoint for <var>char</var>, the value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+   <p>The following function comes in handy for applying a certain
+function to all or part of the characters in a charset:
+
+<div class="defun">
+&mdash; Function: <b>map-charset-chars</b><var> function charset &amp;optional arg from-code to-code<a name="index-map_002dcharset_002dchars-2823"></a></var><br>
+<blockquote><p>Call <var>function</var> for characters in <var>charset</var>.  <var>function</var>
+is called with two arguments.  The first one is a cons cell
+<code>(</code><var>from</var><code> .  </code><var>to</var><code>)</code>, where <var>from</var> and <var>to</var>
+indicate a range of characters contained in charset.  The second
+argument passed to <var>function</var> is <var>arg</var>.
+
+        <p>By default, the range of codepoints passed to <var>function</var> includes
+all the characters in <var>charset</var>, but optional arguments
+<var>from-code</var> and <var>to-code</var> limit that to the range of
+characters between these two codepoints of <var>charset</var>.  If either
+of them is <code>nil</code>, it defaults to the first or last codepoint of
+<var>charset</var>, respectively. 
+</p></blockquote></div>
+
+   </body></html>
+

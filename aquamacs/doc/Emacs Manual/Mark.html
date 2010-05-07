@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Mark - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Help.html#Help" title="Help">
+<link rel="next" href="Killing.html#Killing" title="Killing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mark"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Killing.html#Killing">Killing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Help.html#Help">Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">11 The Mark and the Region</h2>
+
+<p><a name="index-mark-297"></a><a name="index-setting-a-mark-298"></a><a name="index-region-299"></a>
+  Many Emacs commands operate on an arbitrary contiguous part of the
+current buffer.  To specify the text for such a command to operate on,
+you set <dfn>the mark</dfn> at one end of it, and move point to the other
+end.  The text between point and the mark is called <dfn>the region</dfn>. 
+The region always extends between point and the mark, no matter which
+one comes earlier in the text; each time you move point, the region
+changes.
+
+   <p>Setting the mark at a position in the text also <dfn>activates</dfn> it. 
+When the mark is active, Emacs indicates the extent of the region by
+highlighting the text within it, using the <code>region</code> face
+(see <a href="Face-Customization.html#Face-Customization">Face Customization</a>).  After certain non-motion commands,
+including any command that changes the text in the buffer, Emacs
+automatically <dfn>deactivates</dfn> the mark; this turns off the
+highlighting.  You can also explicitly deactivate the mark at any
+time, by typing <kbd>C-g</kbd> (see <a href="Quitting.html#Quitting">Quitting</a>).
+
+   <p>This default behavior of the mark is known as Transient Mark mode. 
+Disabling Transient Mark mode switches Emacs to an alternative
+behavior, in which the mark is always active, which was the default
+prior to Emacs 23.  See <a href="Persistent-Mark.html#Persistent-Mark">Persistent Mark</a>.
+
+   <p><a name="index-highlight_002dnonselected_002dwindows-300"></a>  Setting the mark in one buffer has no effect on the marks in other
+buffers.  When you return to a buffer with an active mark, the mark is
+at the same place as before.  When multiple windows show the same
+buffer, they can have different values of point, and thus different
+regions, but they all share one common mark position.  See <a href="Windows.html#Windows">Windows</a>. 
+Ordinarily, only the selected window highlights its region; however,
+if the variable <code>highlight-nonselected-windows</code> is
+non-<code>nil</code>, each window highlights its own region.
+
+<ul class="menu">
+<li><a accesskey="1" href="Setting-Mark.html#Setting-Mark">Setting Mark</a>: 	Commands to set the mark. 
+<li><a accesskey="2" href="Marking-Objects.html#Marking-Objects">Marking Objects</a>: 	Commands to put region around textual units. 
+<li><a accesskey="3" href="Using-Region.html#Using-Region">Using Region</a>: 	Summary of ways to operate on contents of the region. 
+<li><a accesskey="4" href="Mark-Ring.html#Mark-Ring">Mark Ring</a>:    	Previous mark positions saved so you can go back there. 
+<li><a accesskey="5" href="Global-Mark-Ring.html#Global-Mark-Ring">Global Mark Ring</a>:     Previous mark positions in various buffers. 
+<li><a accesskey="6" href="Shift-Selection.html#Shift-Selection">Shift Selection</a>:      Using shifted cursor motion keys. 
+<li><a accesskey="7" href="Persistent-Mark.html#Persistent-Mark">Persistent Mark</a>: 	Keeping the mark active all the time. 
+</ul>
+
+   </body></html>
+

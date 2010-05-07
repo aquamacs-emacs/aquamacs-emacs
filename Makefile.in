@@ -450,24 +450,19 @@ install-aquamacs: mkdir
 	  (cd $(ns_appresdir)/etc/images && find . -name '*.svg' -delete ; cd -) ; \
 	  cp $(AQUAMACS_DIR)/src/etc/aquamacs-splash-screen.jpg $(ns_appresdir)/etc/images/ ; \
 	  rm -r "$(ns_appresdir)/Emacs Manual" 2>/dev/null ; \
-	  cp -r $(AQUAMACS_DIR)/doc/EmacsManual "$(ns_appresdir)/Emacs Manual" ; \
-	  mv "$(ns_appresdir)/Emacs Manual/EmacsManual.helpindex" "$(ns_appresdir)/Emacs Manual/Emacs Manual.helpindex" ; \
+	  cp -r "$(AQUAMACS_DIR)/doc/Emacs Manual" "$(ns_appresdir)/Emacs Manual" ; \
+	  rm -r "$(ns_appresdir)/Emacs Lisp Reference" 2>/dev/null ; \
+	  cp -r "$(AQUAMACS_DIR)/doc/Emacs Lisp Reference" "$(ns_appresdir)/Emacs Lisp Reference" ; \
 	  rm -r "$(ns_appresdir)/Aquamacs Help" 2>/dev/null ; \
-	  cp -r $(AQUAMACS_DIR)/doc/AquamacsHelp "$(ns_appresdir)/Aquamacs Help" ; \
-	  mv "$(ns_appresdir)/Aquamacs Help/AquamacsHelp.helpindex" "$(ns_appresdir)/Aquamacs Help/Aquamacs Help.helpindex" ; \
-	  cd $(ns_appresdir) ; \
-	  rm -rf "Emacs Lisp Reference" ; \
-	  tar xzf $(AQUAMACS_DIR)/doc/EmacsLispReference.tgz ; \
-	  mv "EmacsLispReference" "Emacs Lisp Reference" ; \
-	  mv "Emacs Lisp Reference/EmacsLispReference.helpindex" "Emacs Lisp Reference/Emacs Lisp Reference.helpindex" ; \
-	  cd - >/dev/null ; \
+	  cp -r $(AQUAMACS_DIR)"/doc/Aquamacs Help" "$(ns_appresdir)/Aquamacs Help" ; \
 	  (cd $(ns_appresdir)/leim ; rm quail/*.el quail/*.el.gz ja-dic/*.el ja-dic/*.el.gz ; cd -) ; \
 	  (cd $(DESTDIR)${docdir} ; \
 	    rm NEWS.1-17 NEWS.18 NEWS.19 NEWS.20 NEWS.21 NEWS.22 PROBLEMS MH-E-NEWS ms-kermit ; \
 	    cd -) ; \
 	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
 	  ( echo "Setting Aquamacs version: $(AQUAMACS_VERSION)" ; \
-	    perl -p0777i -e 's/<key>CFBundleShortVersionString<\/key>\s*<string>.*?<\/string>/<key>CFBundleShortVersionString<\/key>\n<string>$(AQUAMACS_VERSION)<\/string>/sg' ${ns_appdir}/Contents/Info.plist ) ; \
+	    perl -p0777i -e 's/!EMACS_VERSION!/$(version)/sg' ${ns_appdir}/Contents/Info.plist ; \
+	    perl -p0777i -e 's/!AQUAMACS_VERSION!/$(AQUAMACS_VERSION)/sg' ${ns_appdir}/Contents/Info.plist ) ; \
 	  rm -r $(ns_appresdir)/site-lisp 2>/dev/null ; \
 	  touch $(ns_appdir) ; \
 	  echo "Find the Aquamacs build in $(ns_appdir)" ) ; \

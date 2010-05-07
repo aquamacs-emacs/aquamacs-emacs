@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Standard Regexps - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Searching-and-Matching.html#Searching-and-Matching" title="Searching and Matching">
+<link rel="prev" href="Search-and-Replace.html#Search-and-Replace" title="Search and Replace">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Standard-Regexps"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Search-and-Replace.html#Search-and-Replace">Search and Replace</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>
+<hr>
+</div>
+
+<h3 class="section">34.8 Standard Regular Expressions Used in Editing</h3>
+
+<p><a name="index-regexps-used-standardly-in-editing-3041"></a><a name="index-standard-regexps-used-in-editing-3042"></a>
+  This section describes some variables that hold regular expressions
+used for certain purposes in editing:
+
+<div class="defun">
+&mdash; User Option: <b>page-delimiter</b><var><a name="index-page_002ddelimiter-3043"></a></var><br>
+<blockquote><p>This is the regular expression describing line-beginnings that separate
+pages.  The default value is <code>"^\014"</code> (i.e., <code>"^^L"</code> or
+<code>"^\C-l"</code>); this matches a line that starts with a formfeed
+character. 
+</p></blockquote></div>
+
+   <p>The following two regular expressions should <em>not</em> assume the
+match always starts at the beginning of a line; they should not use
+&lsquo;<samp><span class="samp">^</span></samp>&rsquo; to anchor the match.  Most often, the paragraph commands do
+check for a match only at the beginning of a line, which means that
+&lsquo;<samp><span class="samp">^</span></samp>&rsquo; would be superfluous.  When there is a nonzero left margin,
+they accept matches that start after the left margin.  In that case, a
+&lsquo;<samp><span class="samp">^</span></samp>&rsquo; would be incorrect.  However, a &lsquo;<samp><span class="samp">^</span></samp>&rsquo; is harmless in modes
+where a left margin is never used.
+
+<div class="defun">
+&mdash; User Option: <b>paragraph-separate</b><var><a name="index-paragraph_002dseparate-3044"></a></var><br>
+<blockquote><p>This is the regular expression for recognizing the beginning of a line
+that separates paragraphs.  (If you change this, you may have to
+change <code>paragraph-start</code> also.)  The default value is
+<code>"[&nbsp;\t\f]*$"</code><!-- /@w -->, which matches a line that consists entirely of
+spaces, tabs, and form feeds (after its left margin). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>paragraph-start</b><var><a name="index-paragraph_002dstart-3045"></a></var><br>
+<blockquote><p>This is the regular expression for recognizing the beginning of a line
+that starts <em>or</em> separates paragraphs.  The default value is
+<code>"\f\\|[&nbsp;\t]*$"</code><!-- /@w -->, which matches a line containing only
+whitespace or starting with a form feed (after its left margin). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>sentence-end</b><var><a name="index-sentence_002dend-3046"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, the value should be a regular expression describing
+the end of a sentence, including the whitespace following the
+sentence.  (All paragraph boundaries also end sentences, regardless.)
+
+        <p>If the value is <code>nil</code>, the default, then the function
+<code>sentence-end</code> has to construct the regexp.  That is why you
+should always call the function <code>sentence-end</code> to obtain the
+regexp to be used to recognize the end of a sentence. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sentence-end</b><var><a name="index-sentence_002dend-3047"></a></var><br>
+<blockquote><p>This function returns the value of the variable <code>sentence-end</code>,
+if non-<code>nil</code>.  Otherwise it returns a default value based on the
+values of the variables <code>sentence-end-double-space</code>
+(see <a href="Definition-of-sentence_002dend_002ddouble_002dspace.html#Definition-of-sentence_002dend_002ddouble_002dspace">Definition of sentence-end-double-space</a>),
+<code>sentence-end-without-period</code> and
+<code>sentence-end-without-space</code>. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

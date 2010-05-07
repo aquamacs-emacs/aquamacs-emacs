@@ -32,7 +32,7 @@
 
  ; Requires and autoloads
 
-(require 'ess); includes ess-cust.el
+(require 'ess); includes ess-custom.el
 
 ;;; AJR: THIS IS GROSS AND DISGUSTING (but I wrote it).
 ;;; MM:	 and I had to add all other 'ess-eval-*** ...
@@ -362,8 +362,10 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
   (kill-all-local-variables) ;; NOTICE THIS!
   (ess-setq-vars-local alist)
   ;; must happen here, since the mode map is set up too early:
-  (define-key ess-mode-map "("  ;; allow to toggle after customization:
-    (if ess-r-args-electric-paren 'ess-r-args-auto-show 'self-insert-command))
+;;this is bass-ackwards
+;;  (define-key ess-mode-map "("  ;; allow to toggle after customization:
+;;    (if ess-r-args-electric-paren 'ess-r-args-auto-show 'self-insert-command))
+  (if ess-r-args-electric-paren (define-key ess-mode-map "(" 'ess-r-args-auto-show))
   (ess-write-to-dribble-buffer
    (format "(ess-mode-1): ess-language=%s, ess-dialect=%s buf=%s \n"
 	   ess-language
@@ -382,7 +384,7 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
 	   ess-mode-editing-alist))
   (ess-setq-vars-local ess-mode-editing-alist)
 
-  (ess-set-style ess-style)
+  (ess-set-style ess-style t)
   (use-local-map ess-mode-map)
   (set-syntax-table ess-mode-syntax-table)
 
@@ -418,7 +420,10 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
 	'(" [" (ess-local-process-name ess-local-process-name "none") "]"))
   ;; SJE Tue 28 Dec 2004: do not attempt to load object name db.
   ;; (ess-load-object-name-db-file)
-  (run-mode-hooks 'ess-mode-hook)
+  (if (> emacs-major-version 21)
+      (run-mode-hooks 'ess-mode-hook)
+    ;; old emacs 21.x
+    (run-hooks 'ess-mode-hook))
   (ess-write-to-dribble-buffer "\nFinished setting up ESS-mode.\n"))
 
 ;;*;; User commands in ess-mode
@@ -731,6 +736,10 @@ With prefix argument, only shows the errors ESS reported."
 (defun ess-electric-brace (arg)
   "Insert character and correct line's indentation."
   (interactive "P")
+;; skeleton-pair takes precedence
+(if (and (boundp 'skeleton-pair) skeleton-pair (fboundp 'skeleton-pair-insert-maybe))
+  (skeleton-pair-insert-maybe "{")
+;; else
   (let (insertpos)
     (if (and (not arg)
 	     (eolp)
@@ -754,7 +763,7 @@ With prefix argument, only shows the errors ESS reported."
 	(save-excursion
 	  (goto-char insertpos)
 	  (self-insert-command (prefix-numeric-value arg)))
-      (self-insert-command (prefix-numeric-value arg)))))
+      (self-insert-command (prefix-numeric-value arg))))))
 
 (defun ess-indent-command (&optional whole-exp)
   "Indent current line as ESS code, or in some cases insert a tab character.

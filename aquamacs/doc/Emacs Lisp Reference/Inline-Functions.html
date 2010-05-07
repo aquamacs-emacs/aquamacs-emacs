@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Inline Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Obsolete-Functions.html#Obsolete-Functions" title="Obsolete Functions">
+<link rel="next" href="Declaring-Functions.html#Declaring-Functions" title="Declaring Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Inline-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.10 Inline Functions</h3>
+
+<p><a name="index-inline-functions-723"></a>
+<a name="index-defsubst-724"></a>You can define an <dfn>inline function</dfn> by using <code>defsubst</code> instead
+of <code>defun</code>.  An inline function works just like an ordinary
+function except for one thing: when you compile a call to the function,
+the function's definition is open-coded into the caller.
+
+   <p>Making a function inline makes explicit calls run faster.  But it also
+has disadvantages.  For one thing, it reduces flexibility; if you
+change the definition of the function, calls already inlined still use
+the old definition until you recompile them.
+
+   <p>Another disadvantage is that making a large function inline can increase
+the size of compiled code both in files and in memory.  Since the speed
+advantage of inline functions is greatest for small functions, you
+generally should not make large functions inline.
+
+   <p>Also, inline functions do not behave well with respect to debugging,
+tracing, and advising (see <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>).  Since ease of
+debugging and the flexibility of redefining functions are important
+features of Emacs, you should not make a function inline, even if it's
+small, unless its speed is really crucial, and you've timed the code
+to verify that using <code>defun</code> actually has performance problems.
+
+   <p>It's possible to define a macro to expand into the same code that an
+inline function would execute.  (See <a href="Macros.html#Macros">Macros</a>.)  But the macro would be
+limited to direct use in expressions&mdash;a macro cannot be called with
+<code>apply</code>, <code>mapcar</code> and so on.  Also, it takes some work to
+convert an ordinary function into a macro.  To convert it into an inline
+function is very easy; simply replace <code>defun</code> with <code>defsubst</code>. 
+Since each argument of an inline function is evaluated exactly once, you
+needn't worry about how many times the body uses the arguments, as you
+do for macros.  (See <a href="Argument-Evaluation.html#Argument-Evaluation">Argument Evaluation</a>.)
+
+   <p>Inline functions can be used and open-coded later on in the same file,
+following the definition, just like macros.
+
+   </body></html>
+

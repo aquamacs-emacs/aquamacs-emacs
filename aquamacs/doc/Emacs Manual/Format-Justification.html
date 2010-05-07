@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Format Justification - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Formatted-Text.html#Formatted-Text" title="Formatted Text">
+<link rel="prev" href="Format-Indentation.html#Format-Indentation" title="Format Indentation">
+<link rel="next" href="Format-Properties.html#Format-Properties" title="Format Properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Format-Justification"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-Properties.html#Format-Properties">Format Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Indentation.html#Format-Indentation">Format Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted-Text">Formatted Text</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.12.7 Justification in Formatted Text</h4>
+
+<p>When editing formatted text, you can specify various styles of
+justification for a paragraph.  The style you specify automatically
+affects the Emacs fill commands.
+
+   <p>The Justification submenu of Text Properties provides a convenient
+interface for specifying the style.  The submenu contains five items:
+
+     <dl>
+<dt><code>Left</code><dd>This is the most common style of justification (at least for English). 
+Lines are aligned at the left margin but left uneven at the right.
+
+     <br><dt><code>Right</code><dd>This aligns each line with the right margin.  Spaces and tabs are added
+on the left, if necessary, to make lines line up on the right.
+
+     <br><dt><code>Full</code><dd>This justifies the text, aligning both edges of each line.  Justified
+text looks very nice in a printed book, where the spaces can all be
+adjusted equally, but it does not look as nice with a fixed-width font
+on the screen.  Perhaps a future version of Emacs will be able to adjust
+the width of spaces in a line to achieve elegant justification.
+
+     <br><dt><code>Center</code><dd>This centers every line between the current margins.
+
+     <br><dt><code>Unfilled</code><dd>This turns off filling entirely.  Each line will remain as you wrote it;
+the fill and auto-fill functions will have no effect on text which has
+this setting.  You can, however, still indent the left margin.  In
+unfilled regions, all newlines are treated as hard newlines (see <a href="Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">Hard and Soft Newlines</a>) . 
+</dl>
+
+   <p>In Enriched mode, you can also specify justification from the keyboard
+using the <kbd>M-j</kbd> prefix character:
+
+     
+<a name="index-M_002dj-l-_0040r_007b_0028Enriched-mode_0029_007d-1860"></a>
+<a name="index-set_002djustification_002dleft-1861"></a>
+<dl><dt><kbd>M-j l</kbd><dd>Make the region left-filled (<code>set-justification-left</code>). 
+<a name="index-M_002dj-r-_0040r_007b_0028Enriched-mode_0029_007d-1862"></a><a name="index-set_002djustification_002dright-1863"></a><br><dt><kbd>M-j r</kbd><dd>Make the region right-filled (<code>set-justification-right</code>). 
+<a name="index-M_002dj-b-_0040r_007b_0028Enriched-mode_0029_007d-1864"></a><a name="index-set_002djustification_002dfull-1865"></a><br><dt><kbd>M-j b</kbd><dd>Make the region fully justified (<code>set-justification-full</code>). 
+<a name="index-M_002dj-c-_0040r_007b_0028Enriched-mode_0029_007d-1866"></a><a name="index-M_002dS-_0040r_007b_0028Enriched-mode_0029_007d-1867"></a><a name="index-set_002djustification_002dcenter-1868"></a><br><dt><kbd>M-j c</kbd><dt><kbd>M-S</kbd><dd>Make the region centered (<code>set-justification-center</code>). 
+<a name="index-M_002dj-u-_0040r_007b_0028Enriched-mode_0029_007d-1869"></a><a name="index-set_002djustification_002dnone-1870"></a><br><dt><kbd>M-j u</kbd><dd>Make the region unfilled (<code>set-justification-none</code>). 
+</dl>
+
+   <p>Justification styles apply to entire paragraphs.  All the
+justification-changing commands operate on the paragraph containing
+point, or, if the region is active, on all paragraphs which overlap the
+region.
+
+   <p><a name="index-default_002djustification-1871"></a>  The default justification style is specified by the variable
+<code>default-justification</code>.  Its value should be one of the symbols
+<code>left</code>, <code>right</code>, <code>full</code>, <code>center</code>, or <code>none</code>. 
+This is a per-buffer variable.  Setting the variable directly affects
+only the current buffer.  However, customizing it in a Custom buffer
+sets (as always) the default value for buffers that do not override it. 
+See <a href="Locals.html#Locals">Locals</a>, and <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
+
+   </body></html>
+

@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Format Faces - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Formatted-Text.html#Formatted-Text" title="Formatted Text">
+<link rel="prev" href="Editing-Format-Info.html#Editing-Format-Info" title="Editing Format Info">
+<link rel="next" href="Format-Colors.html#Format-Colors" title="Format Colors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Format-Faces"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-Colors.html#Format-Colors">Format Colors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Format-Info.html#Editing-Format-Info">Editing Format Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted-Text">Formatted Text</a>
+<hr>
+</div>
+
+<h4 class="subsection">29.12.4 Faces in Formatted Text</h4>
+
+<p>The Faces submenu under Text Properties lists various Emacs faces
+including <code>bold</code>, <code>italic</code>, and <code>underline</code>
+(see <a href="Faces.html#Faces">Faces</a>).  These menu items operate on the region if it is
+active and nonempty.  Otherwise, they specify to use that face for an
+immediately following self-inserting character.  There is also an item
+&lsquo;<samp><span class="samp">Other</span></samp>&rsquo; with which you can enter a face name through the
+minibuffer (see <a href="Standard-Faces.html#Standard-Faces">Standard Faces</a>).
+
+   <p>Instead of the Faces submenu, you can use these keyboard commands:
+
+     
+<a name="index-M_002do-d-_0040r_007b_0028Enriched-mode_0029_007d-1839"></a>
+<a name="index-facemenu_002dset_002ddefault-1840"></a>
+<dl><dt><kbd>M-o d</kbd><dd>Remove all <code>face</code> properties from the region (which includes
+specified colors), or force the following inserted character to have no
+<code>face</code> property (<code>facemenu-set-default</code>). 
+<a name="index-M_002do-b-_0040r_007b_0028Enriched-mode_0029_007d-1841"></a><a name="index-facemenu_002dset_002dbold-1842"></a><br><dt><kbd>M-o b</kbd><dd>Add the face <code>bold</code> to the region or to the following inserted
+character (<code>facemenu-set-bold</code>). 
+<a name="index-M_002do-i-_0040r_007b_0028Enriched-mode_0029_007d-1843"></a><a name="index-facemenu_002dset_002ditalic-1844"></a><br><dt><kbd>M-o i</kbd><dd>Add the face <code>italic</code> to the region or to the following inserted
+character (<code>facemenu-set-italic</code>). 
+<a name="index-M_002do-l-_0040r_007b_0028Enriched-mode_0029_007d-1845"></a><a name="index-facemenu_002dset_002dbold_002ditalic-1846"></a><br><dt><kbd>M-o l</kbd><dd>Add the face <code>bold-italic</code> to the region or to the following
+inserted character (<code>facemenu-set-bold-italic</code>). 
+<a name="index-M_002do-u-_0040r_007b_0028Enriched-mode_0029_007d-1847"></a><a name="index-facemenu_002dset_002dunderline-1848"></a><br><dt><kbd>M-o u</kbd><dd>Add the face <code>underline</code> to the region or to the following inserted
+character (<code>facemenu-set-underline</code>). 
+<a name="index-M_002do-o-_0040r_007b_0028Enriched-mode_0029_007d-1849"></a><a name="index-facemenu_002dset_002dface-1850"></a><br><dt><kbd>M-o o </kbd><var>face</var><kbd> &lt;RET&gt;</kbd><dd>Add the face <var>face</var> to the region or to the following inserted
+character (<code>facemenu-set-face</code>). 
+</dl>
+
+   <p>With a prefix argument, all these commands apply to an immediately
+following self-inserting character, disregarding the region.
+
+   <p>A self-inserting character normally inherits the <code>face</code>
+property (and most other text properties) from the preceding character
+in the buffer.  If you use the above commands to specify face for the
+next self-inserting character, or the next section's commands to
+specify a foreground or background color for it, then it does not
+inherit the <code>face</code> property from the preceding character; instead
+it uses whatever you specified.  It will still inherit other text
+properties, though.
+
+   <p>Strictly speaking, these commands apply only to the first following
+self-inserting character that you type.  But if you insert additional
+characters after it, they will inherit from the first one.  So it
+appears that these commands apply to all of them.
+
+   <p>Enriched mode defines two additional faces: <code>excerpt</code> and
+<code>fixed</code>.  These correspond to codes used in the text/enriched file
+format.
+
+   <p>The <code>excerpt</code> face is intended for quotations.  This face is the
+same as <code>italic</code> unless you customize it (see <a href="Face-Customization.html#Face-Customization">Face Customization</a>).
+
+   <p>The <code>fixed</code> face means, &ldquo;Use a fixed-width font for this part
+of the text.&rdquo;  Applying the <code>fixed</code> face to a part of the text
+will cause that part of the text to appear in a fixed-width font, even
+if the default font is variable-width.  This applies to Emacs and to
+other systems that display text/enriched format.  So if you
+specifically want a certain part of the text to use a fixed-width
+font, you should specify the <code>fixed</code> face for that part.
+
+   <p>By default, the <code>fixed</code> face looks the same as <code>bold</code>. 
+This is an attempt to distinguish it from <code>default</code>.  You may
+wish to customize <code>fixed</code> to some other fixed-width medium font. 
+See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.
+
+   <p>If your terminal cannot display different faces, you will not be
+able to see them, but you can still edit documents containing faces,
+and even add faces and colors to documents.  The faces you specify
+will be visible when the file is viewed on a terminal that can display
+them.
+
+   </body></html>
+

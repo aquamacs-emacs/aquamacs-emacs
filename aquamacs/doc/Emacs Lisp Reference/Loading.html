@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Loading - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Loading"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization.html#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">15 Loading</h2>
+
+<p><a name="index-loading-789"></a><a name="index-library-790"></a><a name="index-Lisp-library-791"></a>
+  Loading a file of Lisp code means bringing its contents into the Lisp
+environment in the form of Lisp objects.  Emacs finds and opens the
+file, reads the text, evaluates each form, and then closes the file.
+
+   <p>The load functions evaluate all the expressions in a file just
+as the <code>eval-buffer</code> function evaluates all the
+expressions in a buffer.  The difference is that the load functions
+read and evaluate the text in the file as found on disk, not the text
+in an Emacs buffer.
+
+   <p><a name="index-top_002dlevel-form-792"></a>  The loaded file must contain Lisp expressions, either as source code
+or as byte-compiled code.  Each form in the file is called a
+<dfn>top-level form</dfn>.  There is no special format for the forms in a
+loadable file; any form in a file may equally well be typed directly
+into a buffer and evaluated there.  (Indeed, most code is tested this
+way.)  Most often, the forms are function definitions and variable
+definitions.
+
+   <p>A file containing Lisp code is often called a <dfn>library</dfn>.  Thus,
+the &ldquo;Rmail library&rdquo; is a file containing code for Rmail mode. 
+Similarly, a &ldquo;Lisp library directory&rdquo; is a directory of files
+containing Lisp code.
+
+<ul class="menu">
+<li><a accesskey="1" href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>:  The <code>load</code> function and others. 
+<li><a accesskey="2" href="Load-Suffixes.html#Load-Suffixes">Load Suffixes</a>:            Details about the suffixes that <code>load</code> tries. 
+<li><a accesskey="3" href="Library-Search.html#Library-Search">Library Search</a>:           Finding a library to load. 
+<li><a accesskey="4" href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>:        Non-<acronym>ASCII</acronym> characters in Emacs Lisp files. 
+<li><a accesskey="5" href="Autoload.html#Autoload">Autoload</a>:                 Setting up a function to autoload. 
+<li><a accesskey="6" href="Repeated-Loading.html#Repeated-Loading">Repeated Loading</a>:         Precautions about loading a file twice. 
+<li><a accesskey="7" href="Named-Features.html#Named-Features">Named Features</a>:           Loading a library if it isn't already loaded. 
+<li><a accesskey="8" href="Where-Defined.html#Where-Defined">Where Defined</a>:            Finding which file defined a certain symbol. 
+<li><a accesskey="9" href="Unloading.html#Unloading">Unloading</a>: 		    How to "unload" a library that was loaded. 
+<li><a href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for Loading</a>: 	    Providing code to be run when
+			      particular libraries are loaded. 
+</ul>
+
+   </body></html>
+

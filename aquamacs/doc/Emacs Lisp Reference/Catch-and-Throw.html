@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Catch and Throw - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
+<link rel="next" href="Examples-of-Catch.html#Examples-of-Catch" title="Examples of Catch">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Catch-and-Throw"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Examples-of-Catch.html#Examples-of-Catch">Examples of Catch</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.5.1 Explicit Nonlocal Exits: <code>catch</code> and <code>throw</code></h4>
+
+<p>Most control constructs affect only the flow of control within the
+construct itself.  The function <code>throw</code> is the exception to this
+rule of normal program execution: it performs a nonlocal exit on
+request.  (There are other exceptions, but they are for error handling
+only.)  <code>throw</code> is used inside a <code>catch</code>, and jumps back to
+that <code>catch</code>.  For example:
+
+<pre class="example">     (defun foo-outer ()
+       (catch 'foo
+         (foo-inner)))
+     
+     (defun foo-inner ()
+       ...
+       (if x
+           (throw 'foo t))
+       ...)
+</pre>
+   <p class="noindent">The <code>throw</code> form, if executed, transfers control straight back to
+the corresponding <code>catch</code>, which returns immediately.  The code
+following the <code>throw</code> is not executed.  The second argument of
+<code>throw</code> is used as the return value of the <code>catch</code>.
+
+   <p>The function <code>throw</code> finds the matching <code>catch</code> based on the
+first argument: it searches for a <code>catch</code> whose first argument is
+<code>eq</code> to the one specified in the <code>throw</code>.  If there is more
+than one applicable <code>catch</code>, the innermost one takes precedence. 
+Thus, in the above example, the <code>throw</code> specifies <code>foo</code>, and
+the <code>catch</code> in <code>foo-outer</code> specifies the same symbol, so that
+<code>catch</code> is the applicable one (assuming there is no other matching
+<code>catch</code> in between).
+
+   <p>Executing <code>throw</code> exits all Lisp constructs up to the matching
+<code>catch</code>, including function calls.  When binding constructs such as
+<code>let</code> or function calls are exited in this way, the bindings are
+unbound, just as they are when these constructs exit normally
+(see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  Likewise, <code>throw</code> restores the buffer
+and position saved by <code>save-excursion</code> (see <a href="Excursions.html#Excursions">Excursions</a>), and
+the narrowing status saved by <code>save-restriction</code> and the window
+selection saved by <code>save-window-excursion</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).  It also runs any cleanups established with the
+<code>unwind-protect</code> special form when it exits that form
+(see <a href="Cleanups.html#Cleanups">Cleanups</a>).
+
+   <p>The <code>throw</code> need not appear lexically within the <code>catch</code>
+that it jumps to.  It can equally well be called from another function
+called within the <code>catch</code>.  As long as the <code>throw</code> takes place
+chronologically after entry to the <code>catch</code>, and chronologically
+before exit from it, it has access to that <code>catch</code>.  This is why
+<code>throw</code> can be used in commands such as <code>exit-recursive-edit</code>
+that throw back to the editor command loop (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>).
+
+   <p><a name="index-CL-note_002d_002d_002donly-_0040code_007bthrow_007d-in-Emacs-543"></a><blockquote>
+<b>Common Lisp note:</b> Most other versions of Lisp, including Common Lisp,
+have several ways of transferring control nonsequentially: <code>return</code>,
+<code>return-from</code>, and <code>go</code>, for example.  Emacs Lisp has only
+<code>throw</code>. 
+</blockquote>
+
+<div class="defun">
+&mdash; Special Form: <b>catch</b><var> tag body<small class="dots">...</small><a name="index-catch-544"></a></var><br>
+<blockquote><p><a name="index-tag-on-run-time-stack-545"></a><code>catch</code> establishes a return point for the <code>throw</code> function. 
+The return point is distinguished from other such return points by
+<var>tag</var>, which may be any Lisp object except <code>nil</code>.  The argument
+<var>tag</var> is evaluated normally before the return point is established.
+
+        <p>With the return point in effect, <code>catch</code> evaluates the forms of the
+<var>body</var> in textual order.  If the forms execute normally (without
+error or nonlocal exit) the value of the last body form is returned from
+the <code>catch</code>.
+
+        <p>If a <code>throw</code> is executed during the execution of <var>body</var>,
+specifying the same value <var>tag</var>, the <code>catch</code> form exits
+immediately; the value it returns is whatever was specified as the
+second argument of <code>throw</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>throw</b><var> tag value<a name="index-throw-546"></a></var><br>
+<blockquote><p>The purpose of <code>throw</code> is to return from a return point previously
+established with <code>catch</code>.  The argument <var>tag</var> is used to choose
+among the various existing return points; it must be <code>eq</code> to the value
+specified in the <code>catch</code>.  If multiple return points match <var>tag</var>,
+the innermost one is used.
+
+        <p>The argument <var>value</var> is used as the value to return from that
+<code>catch</code>.
+
+        <p><a name="index-no_002dcatch-547"></a>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
+error is signaled with data <code>(</code><var>tag</var> <var>value</var><code>)</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

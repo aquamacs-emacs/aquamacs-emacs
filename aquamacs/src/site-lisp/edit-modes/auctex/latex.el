@@ -1,7 +1,7 @@
 ;;; latex.el --- Support for LaTeX documents.
 
-;; Copyright (C) 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000,
-;;   2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+;; Copyright (C) 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000, 2003,
+;;   2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -612,12 +612,16 @@ With prefix-argument, reopen environment afterwards."
 			 marker))
 	(move-marker marker nil)))))
 
+(defvar LaTeX-after-insert-env-hooks nil
+  "List of functions to be run at the end of `LaTeX-insert-environment'.
+Each function is called with three arguments: the name of the
+environment just inserted, the buffer position just before
+\\begin and the position just before \\end.")
+
 (defun LaTeX-insert-environment (environment &optional extra)
   "Insert LaTeX ENVIRONMENT with optional argument EXTRA."
   (let ((active-mark (and (TeX-active-mark) (not (eq (mark) (point)))))
-	(macrocode-p (and (eq major-mode 'doctex-mode)
-			  (string-match "\\`macrocode\\*?\\'" environment)))
-	prefix content-start)
+	prefix content-start env-start env-end)
     (when (and active-mark (< (mark) (point))) (exchange-point-and-mark))
     ;; Compute the prefix.
     (when (and LaTeX-insert-into-comments (TeX-in-commented-line))
@@ -663,7 +667,8 @@ With prefix-argument, reopen environment afterwards."
 	       (newline)
 	       (when prefix (insert prefix))))))
     ;; Now insert the environment.
-    (if macrocode-p (insert "%") (when prefix (insert prefix)))
+    (when prefix (insert prefix))
+    (setq env-start (point))
     (insert TeX-esc "begin" TeX-grop environment TeX-grcl)
     (indent-according-to-mode)
     (when extra (insert extra))
@@ -673,7 +678,8 @@ With prefix-argument, reopen environment afterwards."
       (when prefix (insert prefix))
       (newline))
     (when active-mark (goto-char (mark)))
-    (if macrocode-p (insert "%") (when prefix (insert prefix)))
+    (when prefix (insert prefix))
+    (setq env-end (point))
     (insert TeX-esc "end" TeX-grop environment TeX-grcl)
     (end-of-line 0)
     (if active-mark
@@ -682,8 +688,10 @@ With prefix-argument, reopen environment afterwards."
 	      (LaTeX-fill-region content-start (line-beginning-position 2)))
 	  (set-mark content-start))
       (indent-according-to-mode))
-    (save-excursion (beginning-of-line 2) (indent-according-to-mode)))
-  (TeX-math-input-method-off))
+    (save-excursion (beginning-of-line 2) (indent-according-to-mode))
+    (TeX-math-input-method-off)
+    (run-hook-with-args 'LaTeX-after-insert-env-hooks
+			environment env-start env-end)))
 
 (defun LaTeX-modify-environment (environment)
   "Modify current ENVIRONMENT."
@@ -720,33 +728,21 @@ work analogously."
   (let* ((in-comment (TeX-in-commented-line))
 	 (comment-prefix (and in-comment (TeX-comment-prefix))))
     (save-excursion
-      (while (and
-	      (/= arg 0)
-	      (re-search-backward
-	       (concat (regexp-quote TeX-esc) "begin" (regexp-quote TeX-grop)
-		       "\\|"
-		       (regexp-quote TeX-esc) "end" (regexp-quote TeX-grop))
-	       nil t 1)
-	      (or (and LaTeX-syntactic-comments
+      (while (and (/= arg 0)
+		  (re-search-backward
+		   "\\\\\\(begin\\|end\\) *{ *\\([A-Za-z*]+\\) *}" nil t))
+	(when (or (and LaTeX-syntactic-comments
 		       (eq in-comment (TeX-in-commented-line))
-		       ;; If we are in a commented line, check if the
-		       ;; prefix matches the one we started out with.
 		       (or (not in-comment)
+			   ;; Consider only matching prefixes in the
+			   ;; commented case.
 			   (string= comment-prefix (TeX-comment-prefix))))
 		  (and (not LaTeX-syntactic-comments)
-		       (not (TeX-in-commented-line)))))
-	(cond ((looking-at (concat "[ \t]*" (regexp-quote TeX-esc)
-				   "end" (regexp-quote TeX-grop)))
-	       (setq arg (1+ arg)))
-	      (t
-	       (setq arg (1- arg)))))
+		       (not (TeX-in-commented-line))))
+	  (setq arg (if (string= (match-string 1) "end") (1+ arg) (1- arg)))))
       (if (/= arg 0)
 	  "document"
-	(search-forward TeX-grop)
-	(let ((beg (point)))
-	  (search-forward TeX-grcl)
-	  (backward-char 1)
-	  (buffer-substring-no-properties beg (point)))))))
+	(match-string-no-properties 2)))))
 
 (defun docTeX-in-macrocode-p ()
   "Determine if point is inside a macrocode environment."
@@ -769,7 +765,6 @@ To insert a hook here, you must insert it in the appropiate style file.")
   "Create new LaTeX document.
 The compatibility argument IGNORE is ignored."
   (TeX-insert-macro "documentclass")
-
   (LaTeX-newline)
   (LaTeX-newline)
   (LaTeX-newline)
@@ -861,6 +856,10 @@ If nil, act like the empty string is given, but do not prompt."
 			    "^[ \t]*" TeX-comment-start-regexp "+[ \t]*$"))
     (delete-region (point) (line-end-position)))
   (delete-horizontal-space)
+  ;; Deactivate the mark here in order to prevent `TeX-parse-macro'
+  ;; from swapping point and mark and the \item ending up right after
+  ;; \begin{...}.
+  (TeX-deactivate-mark)
   (LaTeX-insert-item)
   ;; The inserted \item may have outdented the first line to the
   ;; right.  Fill it, if appropriate.
@@ -1097,6 +1096,14 @@ Just like array and tabular."
 				    TeX-grcl))
   (delete-horizontal-space))
 
+(defun LaTeX-env-args (environment &rest args)
+  "Insert ENVIRONMENT and arguments defined by ARGS."
+  (LaTeX-insert-environment environment)
+  (let ((pos (point-marker)))
+    (end-of-line 0)
+    (TeX-parse-arguments args)
+    (goto-char pos)))
+
 ;;; Item hooks
 
 (defvar LaTeX-item-list nil
@@ -1108,7 +1115,10 @@ The cdr is the name of the function, used to insert this kind of items.")
 You may use `LaTeX-item-list' to change the routines used to insert the item."
   (interactive "*")
   (let ((environment (LaTeX-current-environment)))
-    (LaTeX-newline)
+    (when (and (TeX-active-mark)
+	       (> (point) (mark)))
+      (exchange-point-and-mark))
+    (unless (bolp) (LaTeX-newline))
     (if (assoc environment LaTeX-item-list)
 	(funcall (cdr (assoc environment LaTeX-item-list)))
       (TeX-insert-macro "item"))
@@ -1304,49 +1314,49 @@ The input string may include LaTeX comments and newlines."
 	       (add-to-list 'TeX-auto-file "latex2"))))))
 
   ;; Cleanup optional arguments
-  (mapcar (lambda (entry)
-	    (add-to-list 'TeX-auto-symbol
-			 (list (nth 0 entry)
-			       (string-to-int (nth 1 entry)))))
-	  LaTeX-auto-arguments)
+  (mapc (lambda (entry)
+	  (add-to-list 'TeX-auto-symbol
+		       (list (nth 0 entry)
+			     (string-to-number (nth 1 entry)))))
+	LaTeX-auto-arguments)
 
   ;; Cleanup default optional arguments
-  (mapcar (lambda (entry)
-	    (add-to-list 'TeX-auto-symbol
-			 (list (nth 0 entry)
-			       (vector "argument")
-			       (1- (string-to-int (nth 1 entry))))))
-	  LaTeX-auto-optional)
+  (mapc (lambda (entry)
+	  (add-to-list 'TeX-auto-symbol
+		       (list (nth 0 entry)
+			     (vector "argument")
+			     (1- (string-to-number (nth 1 entry))))))
+	LaTeX-auto-optional)
 
   ;; Cleanup environments arguments
-  (mapcar (lambda (entry)
-	    (add-to-list 'LaTeX-auto-environment
-			 (list (nth 0 entry)
-			       (string-to-int (nth 1 entry)))))
-	  LaTeX-auto-env-args)
+  (mapc (lambda (entry)
+	  (add-to-list 'LaTeX-auto-environment
+		       (list (nth 0 entry)
+			     (string-to-number (nth 1 entry)))))
+	LaTeX-auto-env-args)
 
   ;; Cleanup use of def to add environments
   ;; NOTE: This uses an O(N^2) algorithm, while an O(N log N)
   ;; algorithm is possible.
-  (mapcar (lambda (symbol)
-	    (if (not (TeX-member symbol TeX-auto-symbol 'equal))
-		;; No matching symbol, insert in list
-		(add-to-list 'TeX-auto-symbol (concat "end" symbol))
-	      ;; Matching symbol found, remove from list
-	      (if (equal (car TeX-auto-symbol) symbol)
-		  ;; Is it the first symbol?
-		  (setq TeX-auto-symbol (cdr TeX-auto-symbol))
-		;; Nope!  Travel the list
-		(let ((list TeX-auto-symbol))
-		  (while (consp (cdr list))
-		    ;; Until we find it.
-		    (if (equal (car (cdr list)) symbol)
-			;; Then remove it.
-			(setcdr list (cdr (cdr list))))
-		    (setq list (cdr list)))))
-	      ;; and add the symbol as an environment.
-	      (add-to-list 'LaTeX-auto-environment symbol)))
-	  LaTeX-auto-end-symbol))
+  (mapc (lambda (symbol)
+	  (if (not (TeX-member symbol TeX-auto-symbol 'equal))
+	      ;; No matching symbol, insert in list
+	      (add-to-list 'TeX-auto-symbol (concat "end" symbol))
+	    ;; Matching symbol found, remove from list
+	    (if (equal (car TeX-auto-symbol) symbol)
+		;; Is it the first symbol?
+		(setq TeX-auto-symbol (cdr TeX-auto-symbol))
+	      ;; Nope!  Travel the list
+	      (let ((list TeX-auto-symbol))
+		(while (consp (cdr list))
+		  ;; Until we find it.
+		  (if (equal (car (cdr list)) symbol)
+		      ;; Then remove it.
+		      (setcdr list (cdr (cdr list))))
+		  (setq list (cdr list)))))
+	    ;; and add the symbol as an environment.
+	    (add-to-list 'LaTeX-auto-environment symbol)))
+	LaTeX-auto-end-symbol))
 
 (add-hook 'TeX-auto-cleanup-hook 'LaTeX-auto-cleanup)
 
@@ -1403,22 +1413,28 @@ It will setup BibTeX to store keys in an auto file."
 
 ;;; Macro Argument Hooks
 
-;; FIXME: Make doc-strings of the following functions checkdoc clean.
-;; Especially the "optional" argument.  -- rs
-
 (defun TeX-arg-conditional (optional expr then else)
   "Implement if EXPR THEN ELSE.
+
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.
 
 If EXPR evaluate to true, parse THEN as an argument list, else parse
 ELSE as an argument list."
   (TeX-parse-arguments (if (eval expr) then else)))
 
 (defun TeX-arg-eval (optional &rest args)
-  "Evaluate args and insert value in buffer."
+  "Evaluate ARGS and insert value in buffer.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one."
   (TeX-argument-insert (eval args) optional))
 
 (defun TeX-arg-label (optional &optional prompt definition)
-  "Prompt for a label completing with known labels."
+  "Prompt for a label completing with known labels.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  If DEFINITION is non-nil, add the chosen label to the
+list of defined labels."
   (let ((label (completing-read (TeX-argument-prompt optional prompt "Key")
 				(LaTeX-label-list))))
     (if (and definition (not (string-equal "" label)))
@@ -1428,7 +1444,12 @@ ELSE as an argument list."
 (defalias 'TeX-arg-ref 'TeX-arg-label)
 
 (defun TeX-arg-index-tag (optional &optional prompt &rest args)
-  "Prompt for an index tag.  This is the name of an index, not the entry."
+  "Prompt for an index tag.
+This is the name of an index, not the entry.
+
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  ARGS is unused."
   (let (tag)
     (setq prompt (concat (if optional "(Optional) " "")
 			 (if prompt prompt "Index tag")
@@ -1437,7 +1458,10 @@ ELSE as an argument list."
     (TeX-argument-insert tag optional)))
 
 (defun TeX-arg-index (optional &optional prompt &rest args)
-  "Prompt for an index entry completing with known entries."
+  "Prompt for an index entry completing with known entries.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  ARGS is unused."
   (let ((entry (completing-read (TeX-argument-prompt optional prompt "Key")
 				(LaTeX-index-entry-list))))
     (if (and (not (string-equal "" entry))
@@ -1448,7 +1472,11 @@ ELSE as an argument list."
 (defalias 'TeX-arg-define-index 'TeX-arg-index)
 
 (defun TeX-arg-macro (optional &optional prompt definition)
-  "Prompt for a TeX macro with completion."
+  "Prompt for a TeX macro with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  If DEFINITION is non-nil, add the chosen macro to the
+list of defined macros."
   (let ((macro (completing-read (TeX-argument-prompt optional prompt
 						     (concat "Macro: "
 							     TeX-esc)
@@ -1459,7 +1487,11 @@ ELSE as an argument list."
     (TeX-argument-insert macro optional TeX-esc)))
 
 (defun TeX-arg-environment (optional &optional prompt definition)
-  "Prompt for a LaTeX environment with completion."
+  "Prompt for a LaTeX environment with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  If DEFINITION is non-nil, add the chosen environment to
+the list of defined environments."
   (let ((environment (completing-read (TeX-argument-prompt optional prompt
 							   "Environment")
 				      (TeX-symbol-list))))
@@ -1468,8 +1500,12 @@ ELSE as an argument list."
 
     (TeX-argument-insert environment optional)))
 
+;; Why is DEFINITION unused?
 (defun TeX-arg-cite (optional &optional prompt definition)
-  "Prompt for a BibTeX citation with completion."
+  "Prompt for a BibTeX citation with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  DEFINITION is unused."
   (setq prompt (concat (if optional "(Optional) " "")
 		       (if prompt prompt "Add key")
 		       ": (default none) "))
@@ -1477,15 +1513,23 @@ ELSE as an argument list."
     (apply 'LaTeX-add-bibitems items)
     (TeX-argument-insert (mapconcat 'identity items ",") optional optional)))
 
+;; Why is DEFINITION unused?
 (defun TeX-arg-counter (optional &optional prompt definition)
-  "Prompt for a LaTeX counter."
+  "Prompt for a LaTeX counter.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  DEFINITION is unused."
   ;; Completion not implemented yet.
   (TeX-argument-insert
    (read-string (TeX-argument-prompt optional prompt "Counter"))
    optional))
 
+;; Why is DEFINITION unused?
 (defun TeX-arg-savebox (optional &optional prompt definition)
-  "Prompt for a LaTeX savebox."
+  "Prompt for a LaTeX savebox.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string.  DEFINITION is unused."
   ;; Completion not implemented yet.
   (TeX-argument-insert
    (read-string (TeX-argument-prompt optional prompt
@@ -1494,34 +1538,55 @@ ELSE as an argument list."
    optional TeX-esc))
 
 (defun TeX-arg-file (optional &optional prompt)
-  "Prompt for a filename in the current directory."
+  "Prompt for a filename in the current directory.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-argument-insert (read-file-name (TeX-argument-prompt optional
 							    prompt "File")
 				       "" "" nil)
 		       optional))
 
 (defun TeX-arg-define-label (optional &optional prompt)
-  "Prompt for a label completing with known labels."
+  "Prompt for a label completing with known labels.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-label optional prompt t))
 
 (defun TeX-arg-define-macro (optional &optional prompt)
-  "Prompt for a TeX macro with completion."
+  "Prompt for a TeX macro with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-macro optional prompt t))
 
 (defun TeX-arg-define-environment (optional &optional prompt)
-  "Prompt for a LaTeX environment with completion."
+  "Prompt for a LaTeX environment with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-environment optional prompt t))
 
 (defun TeX-arg-define-cite (optional &optional prompt)
-  "Prompt for a BibTeX citation."
+  "Prompt for a BibTeX citation.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-cite optional prompt t))
 
 (defun TeX-arg-define-counter (optional &optional prompt)
-  "Prompt for a LaTeX counter."
+  "Prompt for a LaTeX counter.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-counter optional prompt t))
 
 (defun TeX-arg-define-savebox (optional &optional prompt)
-  "Prompt for a LaTeX savebox."
+  "Prompt for a LaTeX savebox.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-arg-savebox optional prompt t))
 
 (defcustom LaTeX-style-list '(("amsart")
@@ -1545,7 +1610,8 @@ ELSE as an argument list."
   :type '(repeat (group (string :format "%v"))))
 
 (defun TeX-arg-document (optional &optional ignore)
-  "Insert arguments to documentclass."
+  "Insert arguments to documentclass.
+OPTIONAL and IGNORE are ignored."
   (let ((style (completing-read
 		(concat "Document class: (default " LaTeX-default-style ") ")
 		LaTeX-style-list))
@@ -1568,7 +1634,8 @@ ELSE as an argument list."
   (TeX-update-style))
 
 (defun LaTeX-arg-usepackage (optional)
-  "Insert arguments to usepackage."
+  "Insert arguments to usepackage.
+OPTIONAL is ignored."
   (let ((TeX-file-extensions '("sty")))
     (TeX-arg-input-file nil "Package")
     (save-excursion
@@ -1601,7 +1668,7 @@ ELSE as an argument list."
 	  ;; in the style list can come from documentclass options and
 	  ;; does not necessarily mean that the babel-related
 	  ;; extensions should be activated.
-	  (mapcar 'TeX-run-style-hooks (LaTeX-listify-package-options options))
+	  (mapc 'TeX-run-style-hooks (LaTeX-listify-package-options options))
 	  (TeX-argument-insert options t))))))
 
 (defvar TeX-global-input-files nil
@@ -1610,11 +1677,12 @@ ELSE as an argument list."
 Initialized once at the first time you prompt for an input file.
 May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
-(defun TeX-arg-input-file (optionel &optional prompt local)
+(defun TeX-arg-input-file (optional &optional prompt local)
   "Prompt for a tex or sty file.
-
-First optional argument is the prompt, the second is a flag.
-If the flag is set, only complete with local files."
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  PROMPT is the prompt,
+LOCAL is a flag.  If the flag is set, only complete with local
+files."
   (unless (or TeX-global-input-files local)
     (message "Searching for files...")
     (setq TeX-global-input-files
@@ -1623,7 +1691,7 @@ If the flag is set, only complete with local files."
 					  TeX-file-extensions t t))))
   (let ((file (if TeX-check-path
 		  (completing-read
-		   (TeX-argument-prompt optionel prompt "File")
+		   (TeX-argument-prompt optional prompt "File")
 		   (TeX-delete-dups-by-car
 		    (append (mapcar 'list
 				    (TeX-search-files '("./")
@@ -1632,12 +1700,12 @@ If the flag is set, only complete with local files."
 			    (unless local
 			      TeX-global-input-files))))
 		(read-file-name
-		 (TeX-argument-prompt optionel prompt "File")))))
+		 (TeX-argument-prompt optional prompt "File")))))
     (if (null file)
 	(setq file ""))
     (if (not (string-equal "" file))
 	(TeX-run-style-hooks file))
-    (TeX-argument-insert file optionel)))
+    (TeX-argument-insert file optional)))
 
 (defvar BibTeX-global-style-files nil
   "Association list of BibTeX style files.
@@ -1646,7 +1714,10 @@ Initialized once at the first time you prompt for an input file.
 May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
 (defun TeX-arg-bibstyle (optional &optional prompt)
-  "Prompt for a BibTeX style file."
+  "Prompt for a BibTeX style file.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (message "Searching for BibTeX styles...")
   (or BibTeX-global-style-files
       (setq BibTeX-global-style-files
@@ -1671,7 +1742,10 @@ Initialized once at the first time you prompt for an BibTeX file.
 May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
 (defun TeX-arg-bibliography (optional &optional prompt)
-  "Prompt for a BibTeX database file."
+  "Prompt for a BibTeX database file.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (message "Searching for BibTeX files...")
   (or BibTeX-global-files
       (setq BibTeX-global-files
@@ -1689,7 +1763,10 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
     (TeX-argument-insert (mapconcat 'identity styles ",") optional)))
 
 (defun TeX-arg-corner (optional &optional prompt)
-  "Prompt for a LaTeX side or corner position with completion."
+  "Prompt for a LaTeX side or corner position with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-argument-insert
    (completing-read (TeX-argument-prompt optional prompt "Position")
 		    '(("") ("l") ("r") ("t") ("b") ("tl") ("tr") ("bl") ("br"))
@@ -1697,7 +1774,10 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
    optional))
 
 (defun TeX-arg-lr (optional &optional prompt)
-  "Prompt for a LaTeX side with completion."
+  "Prompt for a LaTeX side with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-argument-insert
    (completing-read (TeX-argument-prompt optional prompt "Position")
 		    '(("") ("l") ("r"))
@@ -1705,7 +1785,10 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
    optional))
 
 (defun TeX-arg-tb (optional &optional prompt)
-  "Prompt for a LaTeX side with completion."
+  "Prompt for a LaTeX side with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-argument-insert
    (completing-read (TeX-argument-prompt optional prompt "Position")
 		    '(("") ("t") ("b"))
@@ -1713,7 +1796,10 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
    optional))
 
 (defun TeX-arg-pagestyle (optional &optional prompt)
-  "Prompt for a LaTeX pagestyle with completion."
+  "Prompt for a LaTeX pagestyle with completion.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (TeX-argument-insert
    (completing-read (TeX-argument-prompt optional prompt "Pagestyle")
 		    '(("plain") ("empty") ("headings") ("myheadings")))
@@ -1725,7 +1811,9 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
   :type 'character)
 
 (defun TeX-arg-verb (optional &optional ignore)
-  "Prompt for delimiter and text."
+  "Prompt for delimiter and text.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  IGNORE is ignored."
   (let ((del (read-quoted-char
 	      (concat "Delimiter: (default "
 		      (char-to-string LaTeX-default-verb-delimiter) ") "))))
@@ -1742,16 +1830,23 @@ May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
   "Insert a pair of number, prompted by FIRST and SECOND.
 
 The numbers are surounded by parenthesizes and separated with a
-comma."
+comma.
+
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one."
   (insert "(" (read-string (concat first  ": ")) ","
 	      (read-string (concat second ": ")) ")"))
 
 (defun TeX-arg-size (optional)
-  "Insert width and height as a pair."
+  "Insert width and height as a pair.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one."
   (TeX-arg-pair optional "Width" "Height"))
 
 (defun TeX-arg-coordinate (optional)
-  "Insert x and y coordinate as a pair."
+  "Insert x and y coordinate as a pair.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one."
  (TeX-arg-pair optional "X position" "Y position"))
 
 (defconst TeX-braces-default-association
@@ -1794,6 +1889,10 @@ the cdr is the brace used with \\right.")
   "List of symbols which can follow the \\left or \\right command.")
 
 (defun TeX-arg-insert-braces (optional &optional prompt)
+  "Prompt for a brace for \\left and insert the corresponding \\right.
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
   (save-excursion
     (backward-word 1)
     (backward-char)
@@ -1821,6 +1920,20 @@ the cdr is the brace used with \\right.")
 		   (TeX-argument-prompt optional prompt "Which brace")
 		   TeX-left-right-braces)))
 	(indent-according-to-mode)))))
+
+(defun TeX-arg-key-val (optional key-val-alist)
+  "Prompt for keys and values in KEY-VAL-ALIST.
+Insert the given value as a TeX macro argument.  If OPTIONAL is
+non-nil, insert it as an optional argument.  KEY-VAL-ALIST is an
+alist.  The car of each element should be a string representing a
+key and the optional cdr should be a list with strings to be used
+as values for the key."
+  (let ((options (multi-prompt-key-value
+		  (TeX-argument-prompt optional "Options (k=v)" nil)
+		  (if (symbolp key-val-alist)
+		      (eval key-val-alist)
+		    key-val-alist))))
+    (TeX-argument-insert options optional)))
 
 
 ;;; Verbatim constructs
@@ -1917,15 +2030,17 @@ non-parenthetical delimiters, like \\verb+foo+, are recognized."
   (save-excursion
     (let ((orig (point))
 	  (verbatim-regexp (regexp-opt (LaTeX-verbatim-macros-with-delims) t)))
+      ;; Search backwards for the macro start, unless we are facing one
       (unless (looking-at (concat (regexp-quote TeX-esc) verbatim-regexp))
 	(catch 'found
 	  (while (progn
 		   (skip-chars-backward (concat "^\n" (regexp-quote TeX-esc))
 					(line-beginning-position))
 		   (when (looking-at verbatim-regexp) (throw 'found nil))
-		   (forward-char -1)
+		   (or (bobp) (forward-char -1))
 		   (/= (point) (line-beginning-position))))))
-      (unless (= (point) (line-beginning-position))
+      ;; Search forward for the macro end, unless we failed to find a start
+      (unless (bolp)
 	(let ((beg (1- (point))))
 	  (goto-char (1+ (match-end 0)))
 	  (skip-chars-forward (concat "^" (buffer-substring-no-properties
@@ -2744,8 +2859,8 @@ space does not end a sentence, so don't break a line there."
 	    (unless (or (bolp)
 			;; Comment starters and whitespace.
 			(TeX-looking-at-backward
-			 (concat "^\\([ \t]*" TeX-comment-start-regexp
-				 "+\\)+[ \t]*")
+			 (concat "^\\([ \t]*" TeX-comment-start-regexp "+\\)*"
+				 "[ \t]*")
 			 (line-beginning-position)))
 	      (LaTeX-fill-newline)))))
       ;; Leave point after final newline.
@@ -3336,17 +3451,25 @@ environment in commented regions with the same comment prefix."
     (or (= level 0)
 	(error "Can't locate beginning of current environment"))))
 
-(defun LaTeX-mark-environment ()
+(defun LaTeX-mark-environment (&optional count)
   "Set mark to end of current environment and point to the matching begin.
-Will not work properly if there are unbalanced begin-end pairs in
-comments and verbatim environments"
-  (interactive)
-  (let ((cur (point)))
-    (LaTeX-find-matching-end)
-    (beginning-of-line 2)
-    (set-mark (point))
-    (goto-char cur)
-    (LaTeX-find-matching-begin)
+If prefix argument COUNT is given, mark the respective number of
+enclosing environments.  The command will not work properly if
+there are unbalanced begin-end pairs in comments and verbatim
+environments."
+  (interactive "p")
+  (setq count (if count (abs count) 1))
+  (let ((cur (point)) beg end)
+    ;; Only change point and mark after beginning and end were found.
+    ;; Point should not end up in the middle of nowhere if the search fails.
+    (save-excursion
+      (dotimes (c count) (LaTeX-find-matching-end))
+      (setq end (line-beginning-position 2))
+      (goto-char cur)
+      (dotimes (c count) (LaTeX-find-matching-begin))
+      (setq beg (point)))
+    (set-mark end)
+    (goto-char beg)
     (TeX-activate-region)))
 
 (defun LaTeX-fill-environment (justify)
@@ -3417,11 +3540,9 @@ value of NO-SUBSECTIONS."
 
 (defun LaTeX-paragraph-commands-regexp-make ()
   "Return a regular expression matching defined paragraph commands."
-  (concat (regexp-quote TeX-esc)
-	  (regexp-opt LaTeX-paragraph-commands-internal t)))
-
-(defvar LaTeX-paragraph-commands-regexp (LaTeX-paragraph-commands-regexp-make)
-    "Regular expression matching LaTeX macros that should have their own line.")
+  (concat (regexp-quote TeX-esc) "\\("
+	  (regexp-opt (append LaTeX-paragraph-commands
+			      LaTeX-paragraph-commands-internal)) "\\)"))
 
 (defcustom LaTeX-paragraph-commands nil
   "List of LaTeX macros that should have their own line.
@@ -3432,6 +3553,9 @@ The list should contain macro names without the leading backslash."
          (set-default symbol value)
 	 (setq LaTeX-paragraph-commands-regexp
 	       (LaTeX-paragraph-commands-regexp-make))))
+
+(defvar LaTeX-paragraph-commands-regexp (LaTeX-paragraph-commands-regexp-make)
+    "Regular expression matching LaTeX macros that should have their own line.")
 
 (defun LaTeX-set-paragraph-start ()
   "Set `paragraph-start'."
@@ -3590,14 +3714,16 @@ This function makes sure that any comment starters found inside
 of verbatim constructs are not considered."
   (setq limit (or limit (point-max)))
   (save-excursion
-    (catch 'found
-      (while (progn
-	       (when (and (TeX-re-search-forward-unescaped
-			   TeX-comment-start-regexp limit 'move)
-			  (not (LaTeX-verbatim-p)))
-		 (throw 'found t))
-	       (< (point) limit))))
-    (unless (= (point) limit) (match-beginning 0))))
+    (let (start)
+      (catch 'found
+	(while (progn
+		 (when (and (TeX-re-search-forward-unescaped
+			     TeX-comment-start-regexp limit 'move)
+			    (not (LaTeX-verbatim-p)))
+		   (setq start (match-beginning 0))
+		   (throw 'found t))
+		 (< (point) limit))))
+      start)))
 
 
 ;;; Math Minor Mode
@@ -3609,7 +3735,7 @@ of verbatim constructs are not considered."
 (defcustom LaTeX-math-list nil
   "Alist of your personal LaTeX math symbols.
 
-Each entry should be a list with upto four elements, KEY, VALUE,
+Each entry should be a list with up to four elements, KEY, VALUE,
 MENU and CHARACTER.
 
 KEY is the key (after `LaTeX-math-abbrev-prefix') to be redefined
@@ -4491,7 +4617,7 @@ The argument IGNORED is not used in any way."
   (or LaTeX-section-menu
       (progn
 	(setq LaTeX-section-list-changed nil)
-	(mapcar 'LaTeX-section-enable LaTeX-section-list)
+	(mapc 'LaTeX-section-enable LaTeX-section-list)
 	(setq LaTeX-section-menu
 	      (mapcar 'LaTeX-section-menu-entry LaTeX-section-list)))))
 
@@ -4725,6 +4851,8 @@ If prefix argument FORCE is non-nil, always insert a regular hyphen."
        (h-after-h
 	(call-interactively 'self-insert-command))
        (t (insert hyphen))))))
+;; Cater for Delete Selection mode
+(put 'LaTeX-babel-insert-hyphen 'delete-selection t)
 
 (defcustom LaTeX-enable-toolbar t
   "Enable LaTeX tool bar."
@@ -4820,7 +4948,7 @@ runs the hooks in `docTeX-mode-hook'."
   ;; Make filling and indentation aware of DocStrip guards.
   (setq paragraph-start (concat paragraph-start "\\|%<")
 	paragraph-separate (concat paragraph-separate "\\|%<")
-	TeX-comment-start-regexp "%\\(?:<[^>]+>\\)?")
+	TeX-comment-start-regexp "\\(?:%\\(?:<[^>]+>\\)?\\)")
   (setq TeX-base-mode-name "docTeX")
   (TeX-set-mode-name)
   (funcall TeX-install-font-lock))
@@ -4920,6 +5048,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 	 "\\$\\$" ; Plain TeX display math
 	 "\\|$\\)"))
 
+  (setq TeX-verbatim-p-function 'LaTeX-verbatim-p)
   (setq TeX-search-forward-comment-start-function
 	'LaTeX-search-forward-comment-start)
 
@@ -5316,7 +5445,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
       (setq optlist (cdr optlist)))
     ;;(message (format "%S %S" 2eoptlist 2epackages))
     (goto-char docline)
-    (next-line 1)
+    (forward-line 1)
     (insert "\\documentclass")
     (if 2eoptlist
 	(insert "["

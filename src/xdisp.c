@@ -6170,20 +6170,23 @@ get_next_display_element (it)
     {
       struct face *face = FACE_FROM_ID (it->f, it->face_id);
 
-      if (it->what == IT_COMPOSITION && it->cmp_it.ch >= 0)
+      if (face) /* is face id valid? */
 	{
-	  /* Automatic composition with glyph-string.   */
-	  Lisp_Object gstring = composition_gstring_from_id (it->cmp_it.id);
+	  if (it->what == IT_COMPOSITION && it->cmp_it.ch >= 0)
+	    {
+	      /* Automatic composition with glyph-string.   */
+	      Lisp_Object gstring = composition_gstring_from_id (it->cmp_it.id);
 
-	  it->face_id = face_for_font (it->f, LGSTRING_FONT (gstring), face);
-	}
-      else
-	{
-	  int pos = (it->s ? -1
-		     : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
-		     : IT_CHARPOS (*it));
+	      it->face_id = face_for_font (it->f, LGSTRING_FONT (gstring), face);
+	    }
+	  else
+	    {
+	      int pos = (it->s ? -1
+			 : STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
+			 : IT_CHARPOS (*it));
 
-	  it->face_id = FACE_FOR_CHAR (it->f, face, it->c, pos, it->string);
+	      it->face_id = FACE_FOR_CHAR (it->f, face, it->c, pos, it->string);
+	    }
 	}
     }
 #endif
@@ -12205,6 +12208,10 @@ redisplay_internal (preserve_echo_area)
 	      if (FRAME_VISIBLE_P (f) && !FRAME_OBSCURED_P (f))
 		redisplay_windows (FRAME_ROOT_WINDOW (f));
 
+	      /* The X error handler may have deleted that frame.  */
+	      if (!FRAME_LIVE_P (f))
+		continue;
+
 	      /* Any scroll bars which redisplay_windows should have
 		 nuked should now go away.  */
 	      if (FRAME_TERMINAL (f)->judge_scroll_bars_hook)
@@ -12622,7 +12629,7 @@ redisplay_windows (window)
 	redisplay_windows (w->hchild);
       else if (!NILP (w->vchild))
 	redisplay_windows (w->vchild);
-      else
+      else if (!NILP (w->buffer))
 	{
 	  displayed_buffer = XBUFFER (w->buffer);
 	  /* Use list_of_error, not Qerror, so that

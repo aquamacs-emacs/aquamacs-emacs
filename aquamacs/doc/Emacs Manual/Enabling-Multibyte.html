@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Enabling Multibyte - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="International-Chars.html#International-Chars" title="International Chars">
+<link rel="next" href="Language-Environments.html#Language-Environments" title="Language Environments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Enabling-Multibyte"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Language-Environments.html#Language-Environments">Language Environments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="International-Chars.html#International-Chars">International Chars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">26.2 Enabling Multibyte Characters</h3>
+
+<p>By default, Emacs starts in multibyte mode: it stores the contents
+of buffers and strings using an internal encoding that represents
+non-<acronym>ASCII</acronym> characters using multi-byte sequences.  Multibyte
+mode allows you to use all the supported languages and scripts without
+limitations.
+
+   <p><a name="index-turn-multibyte-support-on-or-off-1362"></a>  Under very special circumstances, you may want to disable multibyte
+character support, for a specific buffer. 
+When multibyte characters are disabled in a buffer, we call
+that <dfn>unibyte mode</dfn>.  In unibyte mode, each character in the
+buffer has a character code ranging from 0 through 255 (0377 octal); 0
+through 127 (0177 octal) represent <acronym>ASCII</acronym> characters, and 128
+(0200 octal) through 255 (0377 octal) represent non-<acronym>ASCII</acronym>
+characters.
+
+   <p>To edit a particular file in unibyte representation, visit it using
+<code>find-file-literally</code>.  See <a href="Visiting.html#Visiting">Visiting</a>.  You can convert a
+multibyte buffer to unibyte by saving it to a file, killing the
+buffer, and visiting the file again with <code>find-file-literally</code>. 
+Alternatively, you can use <kbd>C-x &lt;RET&gt; c</kbd>
+(<code>universal-coding-system-argument</code>) and specify &lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo;
+as the coding system with which to visit or save a file.  See <a href="Text-Coding.html#Text-Coding">Text Coding</a>.  Unlike <code>find-file-literally</code>, finding a file as
+&lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo; doesn't disable format conversion, uncompression, or
+auto mode selection.
+
+   <p><a name="index-Lisp-files_002c-and-multibyte-operation-1363"></a><a name="index-multibyte-operation_002c-and-Lisp-files-1364"></a><a name="index-unibyte-operation_002c-and-Lisp-files-1365"></a><a name="index-init-file_002c-and-non_002d_0040acronym_007bASCII_007d-characters-1366"></a>  Emacs normally loads Lisp files as multibyte. 
+This includes the Emacs initialization
+file, <samp><span class="file">.emacs</span></samp>, and the initialization files of Emacs packages
+such as Gnus.  However, you can specify unibyte loading for a
+particular Lisp file, by putting &lsquo;<samp><span class="samp">-*-unibyte:&nbsp;t;-*-</span></samp>&rsquo;<!-- /@w --> in a
+comment on the first line (see <a href="File-Variables.html#File-Variables">File Variables</a>).  Then that file is
+always loaded as unibyte text.  The motivation for these conventions
+is that it is more reliable to always load any particular Lisp file in
+the same way.  However, you can load a Lisp file as unibyte, on any
+one occasion, by typing <kbd>C-x &lt;RET&gt; c raw-text &lt;RET&gt;</kbd>
+immediately before loading it.
+
+   <p>The mode line indicates whether multibyte character support is
+enabled in the current buffer.  If it is, there are two or more
+characters (most often two dashes) near the beginning of the mode
+line, before the indication of the visited file's end-of-line
+convention (colon, backslash, etc.).  When multibyte characters
+are not enabled, nothing precedes the colon except a single dash. 
+See <a href="Mode-Line.html#Mode-Line">Mode Line</a>, for more details about this.
+
+   <p><a name="index-toggle_002denable_002dmultibyte_002dcharacters-1367"></a>You can turn on multibyte support in a specific buffer by invoking the
+command <code>toggle-enable-multibyte-characters</code> in that buffer.
+
+   </body></html>
+

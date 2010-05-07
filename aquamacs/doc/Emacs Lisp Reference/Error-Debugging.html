@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Error Debugging - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debugger.html#Debugger" title="Debugger">
+<link rel="next" href="Infinite-Loops.html#Infinite-Loops" title="Infinite Loops">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Error-Debugging"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Infinite-Loops.html#Infinite-Loops">Infinite Loops</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.1.1 Entering the Debugger on an Error</h4>
+
+<p><a name="index-error-debugging-922"></a><a name="index-debugging-errors-923"></a>
+  The most important time to enter the debugger is when a Lisp error
+happens.  This allows you to investigate the immediate causes of the
+error.
+
+   <p>However, entry to the debugger is not a normal consequence of an
+error.  Many commands frequently cause Lisp errors when invoked
+inappropriately, and during ordinary editing it would be very
+inconvenient to enter the debugger each time this happens.  So if you
+want errors to enter the debugger, set the variable
+<code>debug-on-error</code> to non-<code>nil</code>.  (The command
+<code>toggle-debug-on-error</code> provides an easy way to do this.)
+
+<div class="defun">
+&mdash; User Option: <b>debug-on-error</b><var><a name="index-debug_002don_002derror-924"></a></var><br>
+<blockquote><p>This variable determines whether the debugger is called when an error
+is signaled and not handled.  If <code>debug-on-error</code> is <code>t</code>,
+all kinds of errors call the debugger, except those listed in
+<code>debug-ignored-errors</code> (see below).  If it is <code>nil</code>, none
+call the debugger.  (Note that <code>eval-expression-debug-on-error</code>
+affects the setting of this variable in some cases; see below.)
+
+        <p>The value can also be a list of error conditions that should call the
+debugger.  For example, if you set it to the list
+<code>(void-variable)</code>, then only errors about a variable that has no
+value invoke the debugger.
+
+        <p>When this variable is non-<code>nil</code>, Emacs does not create an error
+handler around process filter functions and sentinels.  Therefore,
+errors in these functions also invoke the debugger.  See <a href="Processes.html#Processes">Processes</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>debug-ignored-errors</b><var><a name="index-debug_002dignored_002derrors-925"></a></var><br>
+<blockquote><p>This variable specifies certain kinds of errors that should not enter
+the debugger.  Its value is a list of error condition symbols and/or
+regular expressions.  If the error has any of those condition symbols,
+or if the error message matches any of the regular expressions, then
+that error does not enter the debugger, regardless of the value of
+<code>debug-on-error</code>.
+
+        <p>The normal value of this variable lists several errors that happen often
+during editing but rarely result from bugs in Lisp programs.  However,
+&ldquo;rarely&rdquo; is not &ldquo;never&rdquo;; if your program fails with an error that
+matches this list, you will need to change this list in order to debug
+the error.  The easiest way is usually to set
+<code>debug-ignored-errors</code> to <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>eval-expression-debug-on-error</b><var><a name="index-eval_002dexpression_002ddebug_002don_002derror-926"></a></var><br>
+<blockquote><p>If this variable has a non-<code>nil</code> value, then
+<code>debug-on-error</code> is set to <code>t</code> when evaluating with the
+command <code>eval-expression</code>.  If
+<code>eval-expression-debug-on-error</code> is <code>nil</code>, then the value of
+<code>debug-on-error</code> is not changed.  See <a href="../emacs/Lisp-Eval.html#Lisp-Eval">Evaluating Emacs-Lisp Expressions</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>debug-on-signal</b><var><a name="index-debug_002don_002dsignal-927"></a></var><br>
+<blockquote><p>Normally, errors that are caught by <code>condition-case</code> never run the
+debugger, even if <code>debug-on-error</code> is non-<code>nil</code>.  In other
+words, <code>condition-case</code> gets a chance to handle the error before
+the debugger gets a chance.
+
+        <p>If you set <code>debug-on-signal</code> to a non-<code>nil</code> value, then the
+debugger gets the first chance at every error; an error will invoke the
+debugger regardless of any <code>condition-case</code>, if it fits the
+criteria specified by the values of <code>debug-on-error</code> and
+<code>debug-ignored-errors</code>.
+
+        <p><strong>Warning:</strong> This variable is strong medicine!  Various parts of
+Emacs handle errors in the normal course of affairs, and you may not
+even realize that errors happen there.  If you set
+<code>debug-on-signal</code> to a non-<code>nil</code> value, those errors will
+enter the debugger.
+
+        <p><strong>Warning:</strong> <code>debug-on-signal</code> has no effect when
+<code>debug-on-error</code> is <code>nil</code>. 
+</p></blockquote></div>
+
+   <p>To debug an error that happens during loading of the init
+file, use the option &lsquo;<samp><span class="samp">--debug-init</span></samp>&rsquo;.  This binds
+<code>debug-on-error</code> to <code>t</code> while loading the init file, and
+bypasses the <code>condition-case</code> which normally catches errors in the
+init file.
+
+   </body></html>
+

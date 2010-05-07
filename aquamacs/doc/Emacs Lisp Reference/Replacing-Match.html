@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Replacing Match - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Match-Data.html#Match-Data" title="Match Data">
+<link rel="next" href="Simple-Match-Data.html#Simple-Match-Data" title="Simple Match Data">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Replacing-Match"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Simple-Match-Data.html#Simple-Match-Data">Simple Match Data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Match-Data.html#Match-Data">Match Data</a>
+<hr>
+</div>
+
+<h4 class="subsection">34.6.1 Replacing the Text that Matched</h4>
+
+<p><a name="index-replace-matched-text-3018"></a>
+  This function replaces all or part of the text matched by the last
+search.  It works by means of the match data.
+
+   <p><a name="index-case-in-replacements-3019"></a>
+
+<div class="defun">
+&mdash; Function: <b>replace-match</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-replace_002dmatch-3020"></a></var><br>
+<blockquote><p>This function replaces the text in the buffer (or in <var>string</var>) that
+was matched by the last search.  It replaces that text with
+<var>replacement</var>.
+
+        <p>If you did the last search in a buffer, you should specify <code>nil</code>
+for <var>string</var> and make sure that the current buffer when you call
+<code>replace-match</code> is the one in which you did the searching or
+matching.  Then <code>replace-match</code> does the replacement by editing
+the buffer; it leaves point at the end of the replacement text, and
+returns <code>t</code>.
+
+        <p>If you did the search in a string, pass the same string as <var>string</var>. 
+Then <code>replace-match</code> does the replacement by constructing and
+returning a new string.
+
+        <p>If <var>fixedcase</var> is non-<code>nil</code>, then <code>replace-match</code> uses
+the replacement text without case conversion; otherwise, it converts
+the replacement text depending upon the capitalization of the text to
+be replaced.  If the original text is all upper case, this converts
+the replacement text to upper case.  If all words of the original text
+are capitalized, this capitalizes all the words of the replacement
+text.  If all the words are one-letter and they are all upper case,
+they are treated as capitalized words rather than all-upper-case
+words.
+
+        <p>If <var>literal</var> is non-<code>nil</code>, then <var>replacement</var> is inserted
+exactly as it is, the only alterations being case changes as needed. 
+If it is <code>nil</code> (the default), then the character &lsquo;<samp><span class="samp">\</span></samp>&rsquo; is treated
+specially.  If a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; appears in <var>replacement</var>, then it must be
+part of one of the following sequences:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0026_007d-in-replacement-3021"></a>&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; stands for the entire text being replaced.
+
+          <br><dt>&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_0040var_007bn_007d_007d-in-replacement-3022"></a>&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;, where <var>n</var> is a digit, stands for the text that
+matched the <var>n</var>th subexpression in the original regexp. 
+Subexpressions are those expressions grouped inside &lsquo;<samp><span class="samp">\(...\)</span></samp>&rsquo;. 
+If the <var>n</var>th subexpression never matched, an empty string is substituted.
+
+          <br><dt>&lsquo;<samp><span class="samp">\\</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_007d-in-replacement-3023"></a>&lsquo;<samp><span class="samp">\\</span></samp>&rsquo; stands for a single &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in the replacement text. 
+</dl>
+
+        <p>These substitutions occur after case conversion, if any,
+so the strings they substitute are never case-converted.
+
+        <p>If <var>subexp</var> is non-<code>nil</code>, that says to replace just
+subexpression number <var>subexp</var> of the regexp that was matched, not
+the entire match.  For example, after matching &lsquo;<samp><span class="samp">foo \(ba*r\)</span></samp>&rsquo;,
+calling <code>replace-match</code> with 1 as <var>subexp</var> means to replace
+just the text that matched &lsquo;<samp><span class="samp">\(ba*r\)</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>match-substitute-replacement</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-match_002dsubstitute_002dreplacement-3024"></a></var><br>
+<blockquote><p>This function returns the text that would be inserted into the buffer
+by <code>replace-match</code>, but without modifying the buffer.  It is
+useful if you want to present the user with actual replacement result,
+with constructs like &lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo; or &lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; substituted with
+matched groups.  Arguments <var>replacement</var> and optional
+<var>fixedcase</var>, <var>literal</var>, <var>string</var> and <var>subexp</var> have the
+same meaning as for <code>replace-match</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

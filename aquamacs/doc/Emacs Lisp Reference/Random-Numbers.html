@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Random Numbers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numbers.html#Numbers" title="Numbers">
+<link rel="prev" href="Math-Functions.html#Math-Functions" title="Math Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Random-Numbers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Math-Functions.html#Math-Functions">Math Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">3.10 Random Numbers</h3>
+
+<p><a name="index-random-numbers-214"></a>
+A deterministic computer program cannot generate true random numbers. 
+For most purposes, <dfn>pseudo-random numbers</dfn> suffice.  A series of
+pseudo-random numbers is generated in a deterministic fashion.  The
+numbers are not truly random, but they have certain properties that
+mimic a random series.  For example, all possible values occur equally
+often in a pseudo-random series.
+
+   <p>In Emacs, pseudo-random numbers are generated from a &ldquo;seed&rdquo; number. 
+Starting from any given seed, the <code>random</code> function always
+generates the same sequence of numbers.  Emacs always starts with the
+same seed value, so the sequence of values of <code>random</code> is actually
+the same in each Emacs run!  For example, in one operating system, the
+first call to <code>(random)</code> after you start Emacs always returns
+&minus;1457731, and the second one always returns &minus;7692030.  This
+repeatability is helpful for debugging.
+
+   <p>If you want random numbers that don't always come out the same, execute
+<code>(random t)</code>.  This chooses a new seed based on the current time of
+day and on Emacs's process <acronym>ID</acronym> number.
+
+<div class="defun">
+&mdash; Function: <b>random</b><var> &amp;optional limit<a name="index-random-215"></a></var><br>
+<blockquote><p>This function returns a pseudo-random integer.  Repeated calls return a
+series of pseudo-random integers.
+
+        <p>If <var>limit</var> is a positive integer, the value is chosen to be
+nonnegative and less than <var>limit</var>.
+
+        <p>If <var>limit</var> is <code>t</code>, it means to choose a new seed based on the
+current time of day and on Emacs's process <acronym>ID</acronym> number. 
+<!-- "Emacs'" is incorrect usage! -->
+
+        <p>On some machines, any integer representable in Lisp may be the result
+of <code>random</code>.  On other machines, the result can never be larger
+than a certain maximum or less than a certain (negative) minimum. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

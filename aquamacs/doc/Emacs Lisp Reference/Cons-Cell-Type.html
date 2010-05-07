@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Cons Cell Type - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming-Types.html#Programming-Types" title="Programming Types">
+<link rel="prev" href="Sequence-Type.html#Sequence-Type" title="Sequence Type">
+<link rel="next" href="Array-Type.html#Array-Type" title="Array Type">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Cons-Cell-Type"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Array-Type.html#Array-Type">Array Type</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequence-Type.html#Sequence-Type">Sequence Type</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Types">Programming Types</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.3.6 Cons Cell and List Types</h4>
+
+<p><a name="index-address-field-of-register-88"></a><a name="index-decrement-field-of-register-89"></a><a name="index-pointers-90"></a>
+  A <dfn>cons cell</dfn> is an object that consists of two slots, called the
+<span class="sc">car</span> slot and the <span class="sc">cdr</span> slot.  Each slot can <dfn>hold</dfn> or
+<dfn>refer to</dfn> any Lisp object.  We also say that &ldquo;the <span class="sc">car</span> of
+this cons cell is&rdquo; whatever object its <span class="sc">car</span> slot currently holds,
+and likewise for the <span class="sc">cdr</span>.
+
+   <blockquote>
+A note to C programmers: in Lisp, we do not distinguish between
+&ldquo;holding&rdquo; a value and &ldquo;pointing to&rdquo; the value, because pointers in
+Lisp are implicit. 
+</blockquote>
+
+   <p>A <dfn>list</dfn> is a series of cons cells, linked together so that the
+<span class="sc">cdr</span> slot of each cons cell holds either the next cons cell or the
+empty list.  The empty list is actually the symbol <code>nil</code>. 
+See <a href="Lists.html#Lists">Lists</a>, for functions that work on lists.  Because most cons
+cells are used as part of lists, the phrase <dfn>list structure</dfn> has
+come to refer to any structure made out of cons cells.
+
+   <p><a name="index-atoms-91"></a>  Because cons cells are so central to Lisp, we also have a word for
+&ldquo;an object which is not a cons cell.&rdquo;  These objects are called
+<dfn>atoms</dfn>.
+
+   <p><a name="index-parenthesis-92"></a><a name="index-g_t_0040samp_007b_0028_0040dots_007b_007d_0029_007d-in-lists-93"></a>  The read syntax and printed representation for lists are identical, and
+consist of a left parenthesis, an arbitrary number of elements, and a
+right parenthesis.  Here are examples of lists:
+
+<pre class="example">     (A 2 "A")            ; <span class="roman">A list of three elements.</span>
+     ()                   ; <span class="roman">A list of no elements (the empty list).</span>
+     nil                  ; <span class="roman">A list of no elements (the empty list).</span>
+     ("A ()")             ; <span class="roman">A list of one element: the string </span><code>"A ()"</code><span class="roman">.</span>
+     (A ())               ; <span class="roman">A list of two elements: </span><code>A</code><span class="roman"> and the empty list.</span>
+     (A nil)              ; <span class="roman">Equivalent to the previous.</span>
+     ((A B C))            ; <span class="roman">A list of one element</span>
+                          ;   <span class="roman">(which is a list of three elements).</span>
+</pre>
+   <p>Upon reading, each object inside the parentheses becomes an element
+of the list.  That is, a cons cell is made for each element.  The
+<span class="sc">car</span> slot of the cons cell holds the element, and its <span class="sc">cdr</span>
+slot refers to the next cons cell of the list, which holds the next
+element in the list.  The <span class="sc">cdr</span> slot of the last cons cell is set to
+hold <code>nil</code>.
+
+   <p>The names <span class="sc">car</span> and <span class="sc">cdr</span> derive from the history of Lisp.  The
+original Lisp implementation ran on an IBM&nbsp;704<!-- /@w --> computer which
+divided words into two parts, called the &ldquo;address&rdquo; part and the
+&ldquo;decrement&rdquo;; <span class="sc">car</span> was an instruction to extract the contents of
+the address part of a register, and <span class="sc">cdr</span> an instruction to extract
+the contents of the decrement.  By contrast, &ldquo;cons cells&rdquo; are named
+for the function <code>cons</code> that creates them, which in turn was named
+for its purpose, the construction of cells.
+
+<ul class="menu">
+<li><a accesskey="1" href="Box-Diagrams.html#Box-Diagrams">Box Diagrams</a>:                 Drawing pictures of lists. 
+<li><a accesskey="2" href="Dotted-Pair-Notation.html#Dotted-Pair-Notation">Dotted Pair Notation</a>:         A general syntax for cons cells. 
+<li><a accesskey="3" href="Association-List-Type.html#Association-List-Type">Association List Type</a>:        A specially constructed list. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+<title>User-Level Deletion - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Deletion.html#Deletion" title="Deletion">
+<link rel="next" href="The-Kill-Ring.html#The-Kill-Ring" title="The Kill Ring">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="User-Level-Deletion"></a>
+<a name="User_002dLevel-Deletion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deletion.html#Deletion">Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.7 User-Level Deletion Commands</h3>
+
+<p>This section describes higher-level commands for deleting text,
+commands intended primarily for the user but useful also in Lisp
+programs.
+
+<div class="defun">
+&mdash; Command: <b>delete-horizontal-space</b><var> &amp;optional backward-only<a name="index-delete_002dhorizontal_002dspace-2544"></a></var><br>
+<blockquote><p><a name="index-deleting-whitespace-2545"></a>This function deletes all spaces and tabs around point.  It returns
+<code>nil</code>.
+
+        <p>If <var>backward-only</var> is non-<code>nil</code>, the function deletes
+spaces and tabs before point, but not after point.
+
+        <p>In the following examples, we call <code>delete-horizontal-space</code> four
+times, once on each line, with point between the second and third
+characters on the line each time.
+
+     <pre class="example">          ---------- Buffer: foo ----------
+          I -!-thought
+          I -!-     thought
+          We-!- thought
+          Yo-!-u thought
+          ---------- Buffer: foo ----------
+          
+          (delete-horizontal-space)   ; <span class="roman">Four times.</span>
+               &rArr; nil
+          
+          ---------- Buffer: foo ----------
+          Ithought
+          Ithought
+          Wethought
+          You thought
+          ---------- Buffer: foo ----------
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-indentation</b><var> &amp;optional join-following-p<a name="index-delete_002dindentation-2546"></a></var><br>
+<blockquote><p>This function joins the line point is on to the previous line, deleting
+any whitespace at the join and in some cases replacing it with one
+space.  If <var>join-following-p</var> is non-<code>nil</code>,
+<code>delete-indentation</code> joins this line to the following line
+instead.  The function returns <code>nil</code>.
+
+        <p>If there is a fill prefix, and the second of the lines being joined
+starts with the prefix, then <code>delete-indentation</code> deletes the
+fill prefix before joining the lines.  See <a href="Margins.html#Margins">Margins</a>.
+
+        <p>In the example below, point is located on the line starting
+&lsquo;<samp><span class="samp">events</span></samp>&rsquo;, and it makes no difference if there are trailing spaces
+in the preceding line.
+
+     <pre class="smallexample">          ---------- Buffer: foo ----------
+          When in the course of human
+          -!-    events, it becomes necessary
+          ---------- Buffer: foo ----------
+          
+          (delete-indentation)
+               &rArr; nil
+          
+          ---------- Buffer: foo ----------
+          When in the course of human-!- events, it becomes necessary
+          ---------- Buffer: foo ----------
+</pre>
+        <p>After the lines are joined, the function <code>fixup-whitespace</code> is
+responsible for deciding whether to leave a space at the junction. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>fixup-whitespace</b><var><a name="index-fixup_002dwhitespace-2547"></a></var><br>
+<blockquote><p>This function replaces all the horizontal whitespace surrounding point
+with either one space or no space, according to the context.  It
+returns <code>nil</code>.
+
+        <p>At the beginning or end of a line, the appropriate amount of space is
+none.  Before a character with close parenthesis syntax, or after a
+character with open parenthesis or expression-prefix syntax, no space is
+also appropriate.  Otherwise, one space is appropriate.  See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>.
+
+        <p>In the example below, <code>fixup-whitespace</code> is called the first time
+with point before the word &lsquo;<samp><span class="samp">spaces</span></samp>&rsquo; in the first line.  For the
+second invocation, point is directly after the &lsquo;<samp><span class="samp">(</span></samp>&rsquo;.
+
+     <pre class="smallexample">          ---------- Buffer: foo ----------
+          This has too many     -!-spaces
+          This has too many spaces at the start of (-!-   this list)
+          ---------- Buffer: foo ----------
+          
+          (fixup-whitespace)
+               &rArr; nil
+          (fixup-whitespace)
+               &rArr; nil
+          
+          ---------- Buffer: foo ----------
+          This has too many spaces
+          This has too many spaces at the start of (this list)
+          ---------- Buffer: foo ----------
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>just-one-space</b><var> &amp;optional n<a name="index-just_002done_002dspace-2548"></a></var><br>
+<blockquote><!-- !!SourceFile simple.el -->
+        <p>This command replaces any spaces and tabs around point with a single
+space, or <var>n</var> spaces if <var>n</var> is specified.  It returns
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>delete-blank-lines</b><var><a name="index-delete_002dblank_002dlines-2549"></a></var><br>
+<blockquote><p>This function deletes blank lines surrounding point.  If point is on a
+blank line with one or more blank lines before or after it, then all but
+one of them are deleted.  If point is on an isolated blank line, then it
+is deleted.  If point is on a nonblank line, the command deletes all
+blank lines immediately following it.
+
+        <p>A blank line is defined as a line containing only tabs and spaces.
+
+        <p><code>delete-blank-lines</code> returns <code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

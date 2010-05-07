@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>Active Keymaps - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
+<link rel="prev" href="Prefix-Keys.html#Prefix-Keys" title="Prefix Keys">
+<link rel="next" href="Searching-Keymaps.html#Searching-Keymaps" title="Searching Keymaps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Active-Keymaps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Searching-Keymaps.html#Searching-Keymaps">Searching Keymaps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+<hr>
+</div>
+
+<h3 class="section">22.7 Active Keymaps</h3>
+
+<p><a name="index-active-keymap-1481"></a><a name="index-global-keymap-1482"></a><a name="index-local-keymap-1483"></a>
+  Emacs normally contains many keymaps; at any given time, just a few
+of them are <dfn>active</dfn>, meaning that they participate in the
+interpretation of user input.  All the active keymaps are used
+together to determine what command to execute when a key is entered.
+
+   <p>Normally the active keymaps are the <code>keymap</code> property keymap,
+the keymaps of any enabled minor modes, the current buffer's local
+keymap, and the global keymap, in that order.  Emacs searches for each
+input key sequence in all these keymaps.  See <a href="Searching-Keymaps.html#Searching-Keymaps">Searching Keymaps</a>,
+for more details of this procedure.
+
+   <p>When the key sequence starts with a mouse event (optionally preceded
+by a symbolic prefix), the active keymaps are determined based on the
+position in that event.  If the event happened on a string embedded
+with a <code>display</code>, <code>before-string</code>, or <code>after-string</code>
+property (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>), the non-<code>nil</code> map
+properties of the string override those of the buffer (if the
+underlying buffer text contains map properties in its text properties
+or overlays, they are ignored).
+
+   <p>The <dfn>global keymap</dfn> holds the bindings of keys that are defined
+regardless of the current buffer, such as <kbd>C-f</kbd>.  The variable
+<code>global-map</code> holds this keymap, which is always active.
+
+   <p>Each buffer may have another keymap, its <dfn>local keymap</dfn>, which
+may contain new or overriding definitions for keys.  The current
+buffer's local keymap is always active except when
+<code>overriding-local-map</code> overrides it.  The <code>local-map</code> text
+or overlay property can specify an alternative local keymap for certain
+parts of the buffer; see <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
+
+   <p>Each minor mode can have a keymap; if it does, the keymap is active
+when the minor mode is enabled.  Modes for emulation can specify
+additional active keymaps through the variable
+<code>emulation-mode-map-alists</code>.
+
+   <p>The highest precedence normal keymap comes from the <code>keymap</code>
+text or overlay property.  If that is non-<code>nil</code>, it is the first
+keymap to be processed, in normal circumstances.
+
+   <p>However, there are also special ways for programs to substitute
+other keymaps for some of those.  The variable
+<code>overriding-local-map</code>, if non-<code>nil</code>, specifies a keymap
+that replaces all the usual active keymaps except the global keymap. 
+Another way to do this is with <code>overriding-terminal-local-map</code>;
+it operates on a per-terminal basis.  These variables are documented
+below.
+
+   <p><a name="index-major-mode-keymap-1484"></a>  Since every buffer that uses the same major mode normally uses the
+same local keymap, you can think of the keymap as local to the mode.  A
+change to the local keymap of a buffer (using <code>local-set-key</code>, for
+example) is seen also in the other buffers that share that keymap.
+
+   <p>The local keymaps that are used for Lisp mode and some other major
+modes exist even if they have not yet been used.  These local keymaps are
+the values of variables such as <code>lisp-mode-map</code>.  For most major
+modes, which are less frequently used, the local keymap is constructed
+only when the mode is used for the first time in a session.
+
+   <p>The minibuffer has local keymaps, too; they contain various completion
+and exit commands.  See <a href="Intro-to-Minibuffers.html#Intro-to-Minibuffers">Intro to Minibuffers</a>.
+
+   <p>Emacs has other keymaps that are used in a different way&mdash;translating
+events within <code>read-key-sequence</code>.  See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
+
+   <p>See <a href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>, for a list of standard keymaps.
+
+<div class="defun">
+&mdash; Function: <b>current-active-maps</b><var> &amp;optional olp position<a name="index-current_002dactive_002dmaps-1485"></a></var><br>
+<blockquote><p>This returns the list of active keymaps that would be used by the
+command loop in the current circumstances to look up a key sequence. 
+Normally it ignores <code>overriding-local-map</code> and
+<code>overriding-terminal-local-map</code>, but if <var>olp</var> is non-<code>nil</code>
+then it pays attention to them.  <var>position</var> can optionally be either
+an event position as returned by <code>event-start</code> or a buffer
+position, and may change the keymaps as described for
+<code>key-binding</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>key-binding</b><var> key &amp;optional accept-defaults no-remap position<a name="index-key_002dbinding-1486"></a></var><br>
+<blockquote><p>This function returns the binding for <var>key</var> according to the
+current active keymaps.  The result is <code>nil</code> if <var>key</var> is
+undefined in the keymaps.
+
+        <p>The argument <var>accept-defaults</var> controls checking for default
+bindings, as in <code>lookup-key</code> (see <a href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup">Functions for Key Lookup</a>).
+
+        <p>When commands are remapped (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>),
+<code>key-binding</code> normally processes command remappings so as to
+returns the remapped command that will actually be executed.  However,
+if <var>no-remap</var> is non-<code>nil</code>, <code>key-binding</code> ignores
+remappings and returns the binding directly specified for <var>key</var>.
+
+        <p>If <var>key</var> starts with a mouse event (perhaps following a prefix
+event), the maps to be consulted are determined based on the event's
+position.  Otherwise, they are determined based on the value of point. 
+However, you can override either of them by specifying <var>position</var>. 
+If <var>position</var> is non-<code>nil</code>, it should be either a buffer
+position or an event position like the value of <code>event-start</code>. 
+Then the maps consulted are determined based on <var>position</var>.
+
+        <p>An error is signaled if <var>key</var> is not a string or a vector.
+
+     <pre class="example">          (key-binding "\C-x\C-f")
+              &rArr; find-file
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

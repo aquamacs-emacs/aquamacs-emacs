@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Text - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Markers.html#Markers" title="Markers">
+<link rel="next" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Markers.html#Markers">Markers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">32 Text</h2>
+
+<p><a name="index-text-2497"></a>
+  This chapter describes the functions that deal with the text in a
+buffer.  Most examine, insert, or delete text in the current buffer,
+often operating at point or on text adjacent to point.  Many are
+interactive.  All the functions that change the text provide for undoing
+the changes (see <a href="Undo.html#Undo">Undo</a>).
+
+   <p>Many text-related functions operate on a region of text defined by two
+buffer positions passed in arguments named <var>start</var> and <var>end</var>. 
+These arguments should be either markers (see <a href="Markers.html#Markers">Markers</a>) or numeric
+character positions (see <a href="Positions.html#Positions">Positions</a>).  The order of these arguments
+does not matter; it is all right for <var>start</var> to be the end of the
+region and <var>end</var> the beginning.  For example, <code>(delete-region 1
+10)</code> and <code>(delete-region 10 1)</code> are equivalent.  An
+<code>args-out-of-range</code> error is signaled if either <var>start</var> or
+<var>end</var> is outside the accessible portion of the buffer.  In an
+interactive call, point and the mark are used for these arguments.
+
+   <p><a name="index-buffer-contents-2498"></a>  Throughout this chapter, &ldquo;text&rdquo; refers to the characters in the
+buffer, together with their properties (when relevant).  Keep in mind
+that point is always between two characters, and the cursor appears on
+the character after point.
+
+<ul class="menu">
+<li><a accesskey="1" href="Near-Point.html#Near-Point">Near Point</a>:        Examining text in the vicinity of point. 
+<li><a accesskey="2" href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>:   Examining text in a general fashion. 
+<li><a accesskey="3" href="Comparing-Text.html#Comparing-Text">Comparing Text</a>:    Comparing substrings of buffers. 
+<li><a accesskey="4" href="Insertion.html#Insertion">Insertion</a>:         Adding new text to a buffer. 
+<li><a accesskey="5" href="Commands-for-Insertion.html#Commands-for-Insertion">Commands for Insertion</a>:   User-level commands to insert text. 
+<li><a accesskey="6" href="Deletion.html#Deletion">Deletion</a>:          Removing text from a buffer. 
+<li><a accesskey="7" href="User_002dLevel-Deletion.html#User_002dLevel-Deletion">User-Level Deletion</a>:      User-level commands to delete text. 
+<li><a accesskey="8" href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>:     Where removed text sometimes is saved for later use. 
+<li><a accesskey="9" href="Undo.html#Undo">Undo</a>:              Undoing changes to the text of a buffer. 
+<li><a href="Maintaining-Undo.html#Maintaining-Undo">Maintaining Undo</a>:  How to enable and disable undo information. 
+			How to control how much information is kept. 
+<li><a href="Filling.html#Filling">Filling</a>:           Functions for explicit filling. 
+<li><a href="Margins.html#Margins">Margins</a>:           How to specify margins for filling commands. 
+<li><a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>:     Adaptive Fill mode chooses a fill prefix from context. 
+<li><a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>:      How auto-fill mode is implemented to break lines. 
+<li><a href="Sorting.html#Sorting">Sorting</a>:           Functions for sorting parts of the buffer. 
+<li><a href="Columns.html#Columns">Columns</a>:           Computing horizontal positions, and using them. 
+<li><a href="Indentation.html#Indentation">Indentation</a>:       Functions to insert or adjust indentation. 
+<li><a href="Case-Changes.html#Case-Changes">Case Changes</a>:      Case conversion of parts of the buffer. 
+<li><a href="Text-Properties.html#Text-Properties">Text Properties</a>:   Assigning Lisp property lists to text characters. 
+<li><a href="Substitution.html#Substitution">Substitution</a>:      Replacing a given character wherever it appears. 
+<li><a href="Transposition.html#Transposition">Transposition</a>:     Swapping two portions of a buffer. 
+<li><a href="Registers.html#Registers">Registers</a>:         How registers are implemented.  Accessing the text or
+                       position stored in a register. 
+<li><a href="Base-64.html#Base-64">Base 64</a>:           Conversion to or from base 64 encoding. 
+<li><a href="MD5-Checksum.html#MD5-Checksum">MD5 Checksum</a>:      Compute the MD5 "message digest"/"checksum". 
+<li><a href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>:    Installing several buffer changes "atomically". 
+<li><a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>:      Supplying functions to be run when text is changed. 
+</ul>
+
+   </body></html>
+

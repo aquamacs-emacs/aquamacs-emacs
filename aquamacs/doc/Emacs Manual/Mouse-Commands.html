@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Mouse Commands - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Cut-and-Paste.html#Cut-and-Paste" title="Cut and Paste">
+<link rel="next" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse" title="Word and Line Mouse">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mouse-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse">Word and Line Mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>
+<hr>
+</div>
+
+<h4 class="subsection">25.1.1 Mouse Commands for Editing</h4>
+
+<p><a name="index-mouse-buttons-_0028what-they-do_0029-1171"></a>
+<a name="index-Mouse_002d1-1172"></a><a name="index-Mouse_002d2-1173"></a><a name="index-Mouse_002d3-1174"></a>
+     <dl>
+<dt><kbd>Mouse-1</kbd><dd>Move point to where you click (<code>mouse-set-point</code>).
+
+     <br><dt><kbd>Drag-Mouse-1</kbd><dd>Activate the region around the text selected by dragging, and copy it
+to the kill ring (<code>mouse-set-region</code>).
+
+     <br><dt><kbd>Mouse-2</kbd><dd>Yank the last killed text at the click position
+(<code>mouse-yank-at-click</code>).
+
+     <br><dt><kbd>Mouse-3</kbd><dd>If the region is active, move the nearer end of the region to the
+click position; otherwise, set mark at the current value of point and
+point at the click position.  Save the resulting region in the kill
+ring; on a second click, kill it (<code>mouse-save-then-kill</code>). 
+</dl>
+
+   <p><a name="index-mouse_002dset_002dpoint-1175"></a>  The most basic mouse command is <code>mouse-set-point</code>, which is
+called by clicking with the left mouse button, <kbd>Mouse-1</kbd>, in the
+text area of a window.  This moves point to the position where you
+clicked.
+
+   <p><a name="index-x_002dmouse_002dclick_002dfocus_002dignore_002dposition-1176"></a>  Normally, Emacs does not distinguish between ordinary mouse clicks
+and clicks that select a frame.  When you click on a frame to select
+it, that also changes the selected window and cursor position
+according to the mouse click position.  On the X window system, you
+can change this behavior by setting the variable
+<code>x-mouse-click-focus-ignore-position</code> to <code>t</code>.  Then the
+first click selects the frame, but does not affect the selected window
+or cursor position.  If you click again in the same place, that click
+will be in the selected frame, so it will change the window or cursor
+position.
+
+   <p><a name="index-mouse_002dset_002dregion-1177"></a><a name="index-mouse_002ddrag_002dcopy_002dregion-1178"></a>  Holding down <kbd>Mouse-1</kbd> and &ldquo;dragging&rdquo; the mouse over a stretch
+of text activates the region around that text
+(<code>mouse-set-region</code>).  See <a href="Mark.html#Mark">Mark</a>.  Emacs places the mark where
+you started holding down the mouse button, and point where you release
+it.  In addition, the region is copied into the kill ring (see <a href="Kill-Ring.html#Kill-Ring">Kill Ring</a>).  If you don't want Emacs to copy the region, change the
+variable <code>mouse-drag-copy-region</code> to <code>nil</code>.
+
+   <p><a name="index-mouse_002dscroll_002dmin_002dlines-1179"></a>  If you move the mouse off the top or bottom of the window while
+dragging, the window scrolls at a steady rate until you move the mouse
+back into the window.  This way, you can select regions that don't fit
+entirely on the screen.  The number of lines scrolled per step depends
+on how far away from the window edge the mouse has gone; the variable
+<code>mouse-scroll-min-lines</code> specifies a minimum step size.
+
+   <p><a name="index-mouse_002dyank_002dat_002dclick-1180"></a><a name="index-mouse_002dyank_002dat_002dpoint-1181"></a>  Clicking with the middle mouse button, <kbd>Mouse-2</kbd>, moves point to
+the position where you clicked and performs a yank
+(<code>mouse-yank-at-click</code>).  See <a href="Yanking.html#Yanking">Yanking</a>.  If you change the
+variable <code>mouse-yank-at-point</code> to a non-<code>nil</code> value,
+<kbd>Mouse-2</kbd> does not move point.  Then it does not matter where you
+click, or even which of the frame's windows you click on; the yank
+occurs at the existing point.  This variable also affects yanking the
+primary and secondary selections (see <a href="Cut_002fPaste-Other-App.html#Cut_002fPaste-Other-App">Cut/Paste Other App</a>).
+
+   <p><a name="index-mouse_002dsave_002dthen_002dkill-1182"></a>  Clicking with the right mouse button, <kbd>Mouse-3</kbd>, runs the
+command <code>mouse-save-then-kill</code>.  This performs several actions
+depending on where you click and the status of the region:
+
+     <ul>
+<li>If no region is active, clicking <kbd>Mouse-3</kbd> activates the region,
+placing the mark where point was and point at the clicked position. 
+In addition, the text in the region is copied to the kill ring.
+
+     <li>If a region is active, clicking <kbd>Mouse-3</kbd> adjusts the nearer end
+of the region by moving it to the clicked position.  The adjusted
+region's text is copied to the kill ring; if the text in the original
+region was already on the kill ring, it replaces it there.
+
+     <li>If you originally specified the region using a double or triple
+<kbd>Mouse-1</kbd>, so that the region is defined to consist of entire
+words or lines, then adjusting the region with <kbd>Mouse-3</kbd> also
+proceeds by entire words or lines.
+
+     <li>If you use <kbd>Mouse-3</kbd> a second time consecutively, at the same
+place, that kills the region already selected.  Thus, the simplest way
+to kill text with the mouse is to click <kbd>Mouse-1</kbd> at one end, then
+click <kbd>Mouse-3</kbd> twice at the other end.  To copy the text into the
+kill ring without deleting it from the buffer, press <kbd>Mouse-3</kbd>
+just once&mdash;or just drag across the text with <kbd>Mouse-1</kbd>.  Then you
+can copy it elsewhere by yanking it. 
+</ul>
+
+   <p>Whenever you set the region using any of the mouse commands
+described above, the mark will be deactivated by any subsequent
+unshifted cursor motion command, in addition to the usual ways of
+deactivating the mark.  See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>.  While the region
+remains active, typing &lt;Backspace&gt; or &lt;Delete&gt; deletes the
+text in that region and deactivates the mark; this behavior follows a
+convention established by other graphical programs, and it does
+<em>not</em> apply when you set the region any other way, including
+shift-selection (see <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>).
+
+   <p><a name="index-Delete-Selection-mode-1183"></a><a name="index-mode_002c-Delete-Selection-1184"></a><a name="index-delete_002dselection_002dmode-1185"></a>  Many graphical applications also follow the convention that
+insertion while text is selected deletes the selected text.  You can
+make Emacs behave this way by enabling Delete Selection mode. 
+See <a href="Using-Region.html#Using-Region">Using Region</a>.
+
+   </body></html>
+

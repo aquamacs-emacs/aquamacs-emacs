@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Using Edebug - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug.html#Edebug" title="Edebug">
+<link rel="next" href="Instrumenting.html#Instrumenting" title="Instrumenting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Using-Edebug"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Instrumenting.html#Instrumenting">Instrumenting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.1 Using Edebug</h4>
+
+<p>To debug a Lisp program with Edebug, you must first <dfn>instrument</dfn>
+the Lisp code that you want to debug.  A simple way to do this is to
+first move point into the definition of a function or macro and then do
+<kbd>C-u C-M-x</kbd> (<code>eval-defun</code> with a prefix argument).  See
+<a href="Instrumenting.html#Instrumenting">Instrumenting</a>, for alternative ways to instrument code.
+
+   <p>Once a function is instrumented, any call to the function activates
+Edebug.  Depending on which Edebug execution mode you have selected,
+activating Edebug may stop execution and let you step through the
+function, or it may update the display and continue execution while
+checking for debugging commands.  The default execution mode is step,
+which stops execution.  See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>.
+
+   <p>Within Edebug, you normally view an Emacs buffer showing the source of
+the Lisp code you are debugging.  This is referred to as the <dfn>source
+code buffer</dfn>, and it is temporarily read-only.
+
+   <p>An arrow in the left fringe indicates the line where the function is
+executing.  Point initially shows where within the line the function is
+executing, but this ceases to be true if you move point yourself.
+
+   <p>If you instrument the definition of <code>fac</code> (shown below) and then
+execute <code>(fac 3)</code>, here is what you would normally see.  Point is
+at the open-parenthesis before <code>if</code>.
+
+<pre class="example">     (defun fac (n)
+     =&gt;-!-(if (&lt; 0 n)
+           (* n (fac (1- n)))
+         1))
+</pre>
+   <p><a name="index-stop-points-954"></a>The places within a function where Edebug can stop execution are called
+<dfn>stop points</dfn>.  These occur both before and after each subexpression
+that is a list, and also after each variable reference. 
+Here we use periods to show the stop points in the function
+<code>fac</code>:
+
+<pre class="example">     (defun fac (n)
+       .(if .(&lt; 0 n.).
+           .(* n. .(fac .(1- n.).).).
+         1).)
+</pre>
+   <p>The special commands of Edebug are available in the source code buffer
+in addition to the commands of Emacs Lisp mode.  For example, you can
+type the Edebug command &lt;SPC&gt; to execute until the next stop point. 
+If you type &lt;SPC&gt; once after entry to <code>fac</code>, here is the
+display you will see:
+
+<pre class="example">     (defun fac (n)
+     =&gt;(if -!-(&lt; 0 n)
+           (* n (fac (1- n)))
+         1))
+</pre>
+   <p>When Edebug stops execution after an expression, it displays the
+expression's value in the echo area.
+
+   <p>Other frequently used commands are <kbd>b</kbd> to set a breakpoint at a stop
+point, <kbd>g</kbd> to execute until a breakpoint is reached, and <kbd>q</kbd> to
+exit Edebug and return to the top-level command loop.  Type <kbd>?</kbd> to
+display a list of all Edebug commands.
+
+   </body></html>
+

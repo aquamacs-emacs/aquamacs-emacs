@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Region Indent - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Indentation.html#Indentation" title="Indentation">
+<link rel="prev" href="Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent" title="Mode-Specific Indent">
+<link rel="next" href="Relative-Indent.html#Relative-Indent" title="Relative Indent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Region-Indent"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Relative-Indent.html#Relative-Indent">Relative Indent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent">Mode-Specific Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Indentation.html#Indentation">Indentation</a>
+<hr>
+</div>
+
+<h4 class="subsection">32.17.3 Indenting an Entire Region</h4>
+
+<p>This section describes commands that indent all the lines in the
+region.  They return unpredictable values.
+
+<div class="defun">
+&mdash; Command: <b>indent-region</b><var> start end &amp;optional to-column<a name="index-indent_002dregion-2641"></a></var><br>
+<blockquote><p>This command indents each nonblank line starting between <var>start</var>
+(inclusive) and <var>end</var> (exclusive).  If <var>to-column</var> is
+<code>nil</code>, <code>indent-region</code> indents each nonblank line by calling
+the current mode's indentation function, the value of
+<code>indent-line-function</code>.
+
+        <p>If <var>to-column</var> is non-<code>nil</code>, it should be an integer
+specifying the number of columns of indentation; then this function
+gives each line exactly that much indentation, by either adding or
+deleting whitespace.
+
+        <p>If there is a fill prefix, <code>indent-region</code> indents each line
+by making it start with the fill prefix. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>indent-region-function</b><var><a name="index-indent_002dregion_002dfunction-2642"></a></var><br>
+<blockquote><p>The value of this variable is a function that can be used by
+<code>indent-region</code> as a short cut.  It should take two arguments, the
+start and end of the region.  You should design the function so
+that it will produce the same results as indenting the lines of the
+region one by one, but presumably faster.
+
+        <p>If the value is <code>nil</code>, there is no short cut, and
+<code>indent-region</code> actually works line by line.
+
+        <p>A short-cut function is useful in modes such as C mode and Lisp mode,
+where the <code>indent-line-function</code> must scan from the beginning of
+the function definition: applying it to each line would be quadratic in
+time.  The short cut can update the scan information as it moves through
+the lines indenting them; this takes linear time.  In a mode where
+indenting a line individually is fast, there is no need for a short cut.
+
+        <p><code>indent-region</code> with a non-<code>nil</code> argument <var>to-column</var> has
+a different meaning and does not use this variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>indent-rigidly</b><var> start end count<a name="index-indent_002drigidly-2643"></a></var><br>
+<blockquote><p>This command indents all lines starting between <var>start</var>
+(inclusive) and <var>end</var> (exclusive) sideways by <var>count</var> columns. 
+This &ldquo;preserves the shape&rdquo; of the affected region, moving it as a
+rigid unit.  Consequently, this command is useful not only for indenting
+regions of unindented text, but also for indenting regions of formatted
+code.
+
+        <p>For example, if <var>count</var> is 3, this command adds 3 columns of
+indentation to each of the lines beginning in the region specified.
+
+        <p>In Mail mode, <kbd>C-c C-y</kbd> (<code>mail-yank-original</code>) uses
+<code>indent-rigidly</code> to indent the text copied from the message being
+replied to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>indent-code-rigidly</b><var> start end columns &amp;optional nochange-regexp<a name="index-indent_002dcode_002drigidly-2644"></a></var><br>
+<blockquote><p>This is like <code>indent-rigidly</code>, except that it doesn't alter lines
+that start within strings or comments.
+
+        <p>In addition, it doesn't alter a line if <var>nochange-regexp</var> matches at
+the beginning of the line (if <var>nochange-regexp</var> is non-<code>nil</code>). 
+</p></blockquote></div>
+
+   </body></html>
+

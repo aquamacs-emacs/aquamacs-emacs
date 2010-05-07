@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Output Streams - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Read-and-Print.html#Read-and-Print" title="Read and Print">
+<link rel="prev" href="Input-Functions.html#Input-Functions" title="Input Functions">
+<link rel="next" href="Output-Functions.html#Output-Functions" title="Output Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Output-Streams"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Output-Functions.html#Output-Functions">Output Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Functions.html#Input-Functions">Input Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
+<hr>
+</div>
+
+<h3 class="section">19.4 Output Streams</h3>
+
+<p><a name="index-stream-_0028for-printing_0029-1042"></a><a name="index-output-stream-1043"></a>
+  An output stream specifies what to do with the characters produced
+by printing.  Most print functions accept an output stream as an
+optional argument.  Here are the possible types of output stream:
+
+     <dl>
+<dt><var>buffer</var><dd><a name="index-buffer-output-stream-1044"></a>The output characters are inserted into <var>buffer</var> at point. 
+Point advances as characters are inserted.
+
+     <br><dt><var>marker</var><dd><a name="index-marker-output-stream-1045"></a>The output characters are inserted into the buffer that <var>marker</var>
+points into, at the marker position.  The marker position advances as
+characters are inserted.  The value of point in the buffer has no effect
+on printing when the stream is a marker, and this kind of printing
+does not move point (except that if the marker points at or before the
+position of point, point advances with the surrounding text, as
+usual).
+
+     <br><dt><var>function</var><dd><a name="index-function-output-stream-1046"></a>The output characters are passed to <var>function</var>, which is responsible
+for storing them away.  It is called with a single character as
+argument, as many times as there are characters to be output, and
+is responsible for storing the characters wherever you want to put them.
+
+     <br><dt><code>t</code><dd><a name="index-g_t_0040code_007bt_007d-output-stream-1047"></a>The output characters are displayed in the echo area.
+
+     <br><dt><code>nil</code><dd><a name="index-g_t_0040code_007bnil_007d-output-stream-1048"></a><code>nil</code> specified as an output stream means to use the value of
+<code>standard-output</code> instead; that value is the <dfn>default output
+stream</dfn>, and must not be <code>nil</code>.
+
+     <br><dt><var>symbol</var><dd>A symbol as output stream is equivalent to the symbol's function
+definition (if any). 
+</dl>
+
+   <p>Many of the valid output streams are also valid as input streams.  The
+difference between input and output streams is therefore more a matter
+of how you use a Lisp object, than of different types of object.
+
+   <p>Here is an example of a buffer used as an output stream.  Point is
+initially located as shown immediately before the &lsquo;<samp><span class="samp">h</span></samp>&rsquo; in
+&lsquo;<samp><span class="samp">the</span></samp>&rsquo;.  At the end, point is located directly before that same
+&lsquo;<samp><span class="samp">h</span></samp>&rsquo;.
+
+   <p><a name="index-print-example-1049"></a>
+<pre class="example">     ---------- Buffer: foo ----------
+     This is t-!-he contents of foo.
+     ---------- Buffer: foo ----------
+     
+     (print "This is the output" (get-buffer "foo"))
+          &rArr; "This is the output"
+     
+     ---------- Buffer: foo ----------
+     This is t
+     "This is the output"
+     -!-he contents of foo.
+     ---------- Buffer: foo ----------
+</pre>
+   <p>Now we show a use of a marker as an output stream.  Initially, the
+marker is in buffer <code>foo</code>, between the &lsquo;<samp><span class="samp">t</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">h</span></samp>&rsquo; in
+the word &lsquo;<samp><span class="samp">the</span></samp>&rsquo;.  At the end, the marker has advanced over the
+inserted text so that it remains positioned before the same &lsquo;<samp><span class="samp">h</span></samp>&rsquo;. 
+Note that the location of point, shown in the usual fashion, has no
+effect.
+
+<pre class="example">     ---------- Buffer: foo ----------
+     This is the -!-output
+     ---------- Buffer: foo ----------
+     
+     (setq m (copy-marker 10))
+          &rArr; #&lt;marker at 10 in foo&gt;
+     
+     (print "More output for foo." m)
+          &rArr; "More output for foo."
+     
+     ---------- Buffer: foo ----------
+     This is t
+     "More output for foo."
+     he -!-output
+     ---------- Buffer: foo ----------
+     
+     m
+          &rArr; #&lt;marker at 34 in foo&gt;
+</pre>
+   <p>The following example shows output to the echo area:
+
+<pre class="example">     (print "Echo Area output" t)
+          &rArr; "Echo Area output"
+     ---------- Echo Area ----------
+     "Echo Area output"
+     ---------- Echo Area ----------
+</pre>
+   <p>Finally, we show the use of a function as an output stream.  The
+function <code>eat-output</code> takes each character that it is given and
+conses it onto the front of the list <code>last-output</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>).  At the end, the list contains all the characters output, but
+in reverse order.
+
+<pre class="example">     (setq last-output nil)
+          &rArr; nil
+     
+     (defun eat-output (c)
+       (setq last-output (cons c last-output)))
+          &rArr; eat-output
+     
+     (print "This is the output" 'eat-output)
+          &rArr; "This is the output"
+     
+     last-output
+          &rArr; (10 34 116 117 112 116 117 111 32 101 104
+         116 32 115 105 32 115 105 104 84 34 10)
+</pre>
+   <p class="noindent">Now we can put the output in the proper order by reversing the list:
+
+<pre class="example">     (concat (nreverse last-output))
+          &rArr; "
+     \"This is the output\"
+     "
+</pre>
+   <p class="noindent">Calling <code>concat</code> converts the list to a string so you can see its
+contents more clearly.
+
+   </body></html>
+

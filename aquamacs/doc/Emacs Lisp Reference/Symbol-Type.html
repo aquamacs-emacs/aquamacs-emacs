@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Symbol Type - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming-Types.html#Programming-Types" title="Programming Types">
+<link rel="prev" href="Character-Type.html#Character-Type" title="Character Type">
+<link rel="next" href="Sequence-Type.html#Sequence-Type" title="Sequence Type">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Symbol-Type"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sequence-Type.html#Sequence-Type">Sequence Type</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Type.html#Character-Type">Character Type</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Types">Programming Types</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.3.4 Symbol Type</h4>
+
+<p>A <dfn>symbol</dfn> in GNU Emacs Lisp is an object with a name.  The
+symbol name serves as the printed representation of the symbol.  In
+ordinary Lisp use, with one single obarray (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>),
+a symbol's name is unique&mdash;no two symbols have the same name.
+
+   <p>A symbol can serve as a variable, as a function name, or to hold a
+property list.  Or it may serve only to be distinct from all other Lisp
+objects, so that its presence in a data structure may be recognized
+reliably.  In a given context, usually only one of these uses is
+intended.  But you can use one symbol in all of these ways,
+independently.
+
+   <p>A symbol whose name starts with a colon (&lsquo;<samp><span class="samp">:</span></samp>&rsquo;) is called a
+<dfn>keyword symbol</dfn>.  These symbols automatically act as constants, and
+are normally used only by comparing an unknown symbol with a few
+specific alternatives.
+
+   <p><a name="index-g_t_0040samp_007b_005c_007d-in-symbols-84"></a><a name="index-backslash-in-symbols-85"></a>  A symbol name can contain any characters whatever.  Most symbol names
+are written with letters, digits, and the punctuation characters
+&lsquo;<samp><span class="samp">-+=*/</span></samp>&rsquo;.  Such names require no special punctuation; the characters
+of the name suffice as long as the name does not look like a number. 
+(If it does, write a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; at the beginning of the name to force
+interpretation as a symbol.)  The characters &lsquo;<samp><span class="samp">_~!@$%^&amp;:&lt;&gt;{}?</span></samp>&rsquo; are
+less often used but also require no special punctuation.  Any other
+characters may be included in a symbol's name by escaping them with a
+backslash.  In contrast to its use in strings, however, a backslash in
+the name of a symbol simply quotes the single character that follows the
+backslash.  For example, in a string, &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; represents a tab
+character; in the name of a symbol, however, &lsquo;<samp><span class="samp">\t</span></samp>&rsquo; merely quotes the
+letter &lsquo;<samp><span class="samp">t</span></samp>&rsquo;.  To have a symbol with a tab character in its name, you
+must actually use a tab (preceded with a backslash).  But it's rare to
+do such a thing.
+
+   <p><a name="index-CL-note_002d_002d_002dcase-of-letters-86"></a><blockquote>
+<b>Common Lisp note:</b> In Common Lisp, lower case letters are always
+&ldquo;folded&rdquo; to upper case, unless they are explicitly escaped.  In Emacs
+Lisp, upper case and lower case letters are distinct. 
+</blockquote>
+
+   <p>Here are several examples of symbol names.  Note that the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; in
+the fifth example is escaped to prevent it from being read as a number. 
+This is not necessary in the fourth example because the rest of the name
+makes it invalid as a number.
+
+<pre class="example">     foo                 ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo;.</span>
+     FOO                 ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">FOO</span></samp><span class="roman">&rsquo;, different from &lsquo;</span><samp><span class="samp">foo</span></samp><span class="roman">&rsquo;.</span>
+     char-to-string      ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">char-to-string</span></samp><span class="roman">&rsquo;.</span>
+     1+                  ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">1+</span></samp><span class="roman">&rsquo;</span>
+                         ;   <span class="roman">(not &lsquo;</span><samp><span class="samp">+1</span></samp><span class="roman">&rsquo;, which is an integer).</span>
+     \+1                 ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">+1</span></samp><span class="roman">&rsquo;</span>
+                         ;   <span class="roman">(not a very readable name).</span>
+     \(*\ 1\ 2\)         ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">(* 1 2)</span></samp><span class="roman">&rsquo; (a worse name).</span>
+     <!-- the @'s in this next line use up three characters, hence the -->
+     <!-- apparent misalignment of the comment. -->
+     +-*/_~!@$%^&amp;=:&lt;&gt;{}  ; <span class="roman">A symbol named &lsquo;</span><samp><span class="samp">+-*/_~!@$%^&amp;=:&lt;&gt;{}</span></samp><span class="roman">&rsquo;.</span>
+                         ;   <span class="roman">These characters need not be escaped.</span>
+</pre>
+   <p><a name="index-g_t_0040samp_007b_0023_003a_007d-read-syntax-87"></a>  Normally the Lisp reader interns all symbols (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>).  To prevent interning, you can write &lsquo;<samp><span class="samp">#:</span></samp>&rsquo; before the
+name of the symbol.
+
+   </body></html>
+

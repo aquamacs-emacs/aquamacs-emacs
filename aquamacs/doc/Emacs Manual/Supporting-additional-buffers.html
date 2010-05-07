@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Supporting additional buffers - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Autorevert.html#Autorevert" title="Autorevert">
+<link rel="prev" href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" title="Auto Reverting Dired">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Supporting-additional-buffers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Reverting-Dired.html#Auto-Reverting-Dired">Auto Reverting Dired</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Autorevert.html#Autorevert">Autorevert</a>
+<hr>
+</div>
+
+<h4 class="subsection">22.5.3 Adding Support for Auto-Reverting additional Buffers.</h4>
+
+<p>This section is intended for Elisp programmers who would like to add
+support for auto-reverting new types of buffers.
+
+   <p>To support auto-reverting the buffer must first of all have a
+<code>revert-buffer-function</code>.  See <a href="../elisp/Definition-of-revert_002dbuffer_002dfunction.html#Definition-of-revert_002dbuffer_002dfunction">Reverting</a>.
+
+   <p>In addition, it <em>must</em> have a <code>buffer-stale-function</code>.
+
+<div class="defun">
+&mdash; Variable: <b>buffer-stale-function</b><var><a name="index-buffer_002dstale_002dfunction-896"></a></var><br>
+<blockquote><p>The value of this variable is a function to check whether a non-file
+buffer needs reverting.  This should be a function with one optional
+argument <var>noconfirm</var>.  The function should return non-<code>nil</code>
+if the buffer should be reverted.  The buffer is current when this
+function is called.
+
+        <p>While this function is mainly intended for use in auto-reverting, it
+could be used for other purposes as well.  For instance, if
+auto-reverting is not enabled, it could be used to warn the user that
+the buffer needs reverting.  The idea behind the <var>noconfirm</var>
+argument is that it should be <code>t</code> if the buffer is going to be
+reverted without asking the user and <code>nil</code> if the function is
+just going to be used to warn the user that the buffer is out of date. 
+In particular, for use in auto-reverting, <var>noconfirm</var> is <code>t</code>. 
+If the function is only going to be used for auto-reverting, you can
+ignore the <var>noconfirm</var> argument.
+
+        <p>If you just want to automatically auto-revert every
+<code>auto-revert-interval</code> seconds (like the Buffer Menu), use:
+
+     <pre class="example">          (set (make-local-variable 'buffer-stale-function)
+               #'(lambda (&amp;optional noconfirm) 'fast))
+</pre>
+        <p class="noindent">in the buffer's mode function.
+
+        <p>The special return value &lsquo;<samp><span class="samp">fast</span></samp>&rsquo; tells the caller that the need
+for reverting was not checked, but that reverting the buffer is fast. 
+It also tells Auto Revert not to print any revert messages, even if
+<code>auto-revert-verbose</code> is non-<code>nil</code>.  This is important, as
+getting revert messages every <code>auto-revert-interval</code> seconds can
+be very annoying.  The information provided by this return value could
+also be useful if the function is consulted for purposes other than
+auto-reverting. 
+</p></blockquote></div>
+
+   <p>Once the buffer has a <code>revert-buffer-function</code> and a
+<code>buffer-stale-function</code>, several problems usually remain.
+
+   <p>The buffer will only auto-revert if it is marked unmodified.  Hence,
+you will have to make sure that various functions mark the buffer
+modified if and only if either the buffer contains information that
+might be lost by reverting, or there is reason to believe that the user
+might be inconvenienced by auto-reverting, because he is actively
+working on the buffer.  The user can always override this by manually
+adjusting the modified status of the buffer.  To support this, calling
+the <code>revert-buffer-function</code> on a buffer that is marked
+unmodified should always keep the buffer marked unmodified.
+
+   <p>It is important to assure that point does not continuously jump around
+as a consequence of auto-reverting.  Of course, moving point might be
+inevitable if the buffer radically changes.
+
+   <p>You should make sure that the <code>revert-buffer-function</code> does not
+print messages that unnecessarily duplicate Auto Revert's own messages,
+displayed if <code>auto-revert-verbose</code> is <code>t</code>, and effectively
+override a <code>nil</code> value for <code>auto-revert-verbose</code>.  Hence,
+adapting a mode for auto-reverting often involves getting rid of such
+messages.  This is especially important for buffers that automatically
+revert every <code>auto-revert-interval</code> seconds.
+
+   <p>If the new auto-reverting is part of Emacs, you should mention it
+in the documentation string of <code>global-auto-revert-non-file-buffers</code>.
+
+   <p>Similarly, you should add a section to this chapter.  This section
+should at the very least make clear whether enabling auto-reverting
+for the buffer reliably assures that all information in the buffer is
+completely up to date (or will be after <code>auto-revert-interval</code>
+seconds).
+
+   </body></html>
+

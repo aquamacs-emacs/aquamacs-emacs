@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+<title>Multiple Terminals - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Creating-Frames.html#Creating-Frames" title="Creating Frames">
+<link rel="next" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Multiple-Terminals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr>
+</div>
+
+<h3 class="section">29.2 Multiple Terminals</h3>
+
+<p><a name="index-multiple-terminals-2218"></a><a name="index-multi_002dtty-2219"></a><a name="index-multiple-X-displays-2220"></a><a name="index-displays_002c-multiple-2221"></a>
+  Emacs represents each terminal, whether graphical or text-only, as a
+<dfn>terminal object</dfn> data type (see <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>).  On GNU and
+Unix systems, Emacs can use multiple terminals simultaneously in each
+session.  On other systems, it can only use a single terminal.  Each
+terminal object has the following attributes:
+
+     <ul>
+<li>The name of the device used by the terminal (e.g., &lsquo;<samp><span class="samp">:0.0</span></samp>&rsquo; or
+<samp><span class="file">/dev/tty</span></samp>).
+
+     <li>The terminal and keyboard coding systems used on the terminal. 
+See <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>.
+
+     <li>The kind of display associated with the terminal.  This is the symbol
+returned by the function <code>terminal-live-p</code> (i.e., <code>x</code>,
+<code>t</code>, <code>w32</code>, <code>ns</code>, or <code>pc</code>).  See <a href="Frames.html#Frames">Frames</a>.
+
+     <li>A list of terminal parameters.  See <a href="Terminal-Parameters.html#Terminal-Parameters">Terminal Parameters</a>. 
+</ul>
+
+   <p>There is no primitive for creating terminal objects.  Emacs creates
+them as needed, such as when you call <code>make-frame-on-display</code>
+(which is described below).
+
+<div class="defun">
+&mdash; Function: <b>terminal-name</b><var> &amp;optional terminal<a name="index-terminal_002dname-2222"></a></var><br>
+<blockquote><p>This function returns the file name of the device used by
+<var>terminal</var>.  If <var>terminal</var> is omitted or <code>nil</code>, it
+defaults to the selected frame's terminal.  <var>terminal</var> can also be
+a frame, meaning that frame's terminal. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>terminal-list</b><var><a name="index-terminal_002dlist-2223"></a></var><br>
+<blockquote><p>This function returns a list of all terminal objects currently in use. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-device-terminal</b><var> device<a name="index-get_002ddevice_002dterminal-2224"></a></var><br>
+<blockquote><p>This function returns a terminal whose device name is given by
+<var>device</var>.  If <var>device</var> is a string, it can be either the file
+name of a terminal device, or the name of an X display of the form
+&lsquo;<samp><var>host</var><span class="samp">:</span><var>server</var><span class="samp">.</span><var>screen</var></samp>&rsquo;.  If <var>device</var> is a
+frame, this function returns that frame's terminal; <code>nil</code> means
+the selected frame.  Finally, if <var>device</var> is a terminal object
+that represents a live terminal, that terminal is returned.  The
+function signals an error if its argument is none of the above. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-terminal</b><var> &amp;optional terminal force<a name="index-delete_002dterminal-2225"></a></var><br>
+<blockquote><p>This function deletes all frames on <var>terminal</var> and frees the
+resources used by it.  It runs the abnormal hook
+<code>delete-terminal-functions</code>, passing <var>terminal</var> as the
+argument to each function.
+
+        <p>If <var>terminal</var> is omitted or <code>nil</code>, it defaults to the
+selected frame's terminal.  <var>terminal</var> can also be a frame,
+meaning that frame's terminal.
+
+        <p>Normally, this function signals an error if you attempt to delete the
+sole active terminal, but if <var>force</var> is non-<code>nil</code>, you are
+allowed to do so.  Emacs automatically calls this function when the
+last frame on a terminal is deleted (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>delete-terminal-functions</b><var><a name="index-delete_002dterminal_002dfunctions-2226"></a></var><br>
+<blockquote><p>An abnormal hook run by <code>delete-terminal</code>.  Each function
+receives one argument, the <var>terminal</var> argument passed to
+<code>delete-terminal</code>.  Due to technical details, the functions may
+be called either just before the terminal is deleted, or just
+afterwards. 
+</p></blockquote></div>
+
+   <p><a name="index-terminal_002dlocal-variables-2227"></a>  A few Lisp variables are <dfn>terminal-local</dfn>; that is, they have a
+separate binding for each terminal.  The binding in effect at any time
+is the one for the terminal that the currently selected frame belongs
+to.  These variables include <code>default-minibuffer-frame</code>,
+<code>defining-kbd-macro</code>, <code>last-kbd-macro</code>, and
+<code>system-key-alist</code>.  They are always terminal-local, and can
+never be buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>).
+
+   <p>On GNU and Unix systems, each X display is a separate graphical
+terminal.  When Emacs is started from within the X window system, it
+uses the X display chosen with the <code>DISPLAY</code> environment
+variable, or with the &lsquo;<samp><span class="samp">--display</span></samp>&rsquo; option.  See <a href="../emacs/Initial-Options.html#Initial-Options">Initial Options</a>.  Emacs can connect to other X
+displays via the command <code>make-frame-on-display</code>.  Each X display
+has its own selected frame and its own minibuffer windows; however,
+only one of those frames is &ldquo;<em>the</em> selected frame&rdquo; at any given
+moment (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  Emacs can even connect to other
+text-only terminals, by interacting with the <samp><span class="command">emacsclient</span></samp>
+program.  See <a href="../emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a>.
+
+   <p>A single X server can handle more than one display.  Each X display
+has a three-part name, &lsquo;<samp><var>host</var><span class="samp">:</span><var>server</var><span class="samp">.</span><var>screen</var></samp>&rsquo;. 
+The first two parts, <var>host</var> and <var>server</var>, identify the X
+server; the third part, <var>screen</var>, identifies a screen number on
+that X server.  When you use two or more screens belonging to one
+server, Emacs knows by the similarity in their names that they share a
+single keyboard.
+
+   <p>On some &ldquo;multi-monitor&rdquo; setups, a single X display outputs to more
+than one monitor.  Currently, there is no way for Emacs to distinguish
+between the different physical monitors.
+
+<div class="defun">
+&mdash; Command: <b>make-frame-on-display</b><var> display &amp;optional parameters<a name="index-make_002dframe_002don_002ddisplay-2228"></a></var><br>
+<blockquote><p>This function creates and returns a new frame on <var>display</var>, taking
+the other frame parameters from the alist <var>parameters</var>. 
+<var>display</var> should be the name of an X display (a string).
+
+        <p>Before creating the frame, this function ensures that Emacs is &ldquo;set
+up&rdquo; to display graphics.  For instance, if Emacs has not processed X
+resources (e.g., if it was started on a text-only terminal), it does
+so at this time.  In all other respects, this function behaves like
+<code>make-frame</code> (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-display-list</b><var><a name="index-x_002ddisplay_002dlist-2229"></a></var><br>
+<blockquote><p>This function returns a list that indicates which X displays Emacs has
+a connection to.  The elements of the list are strings, and each one
+is a display name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-open-connection</b><var> display &amp;optional xrm-string must-succeed<a name="index-x_002dopen_002dconnection-2230"></a></var><br>
+<blockquote><p>This function opens a connection to the X display <var>display</var>,
+without creating a frame on that display.  Normally, Emacs Lisp
+programs need not call this function, as <code>make-frame-on-display</code>
+calls it automatically.  The only reason for calling it is to check
+whether communication can be established with a given X display.
+
+        <p>The optional argument <var>xrm-string</var>, if not <code>nil</code>, is a string
+of resource names and values, in the same format used in the
+<samp><span class="file">.Xresources</span></samp> file.  See <a href="../emacs/X-Resources.html#X-Resources">X Resources</a>.  These values apply to all Emacs frames created on
+this display, overriding the resource values recorded in the X server. 
+Here's an example of what this string might look like:
+
+     <pre class="example">          "*BorderWidth: 3\n*InternalBorder: 2\n"
+</pre>
+        <p>If <var>must-succeed</var> is non-<code>nil</code>, failure to open the connection
+terminates Emacs.  Otherwise, it is an ordinary Lisp error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>x-close-connection</b><var> display<a name="index-x_002dclose_002dconnection-2231"></a></var><br>
+<blockquote><p>This function closes the connection to display <var>display</var>.  Before
+you can do this, you must first delete all the frames that were open
+on that display (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

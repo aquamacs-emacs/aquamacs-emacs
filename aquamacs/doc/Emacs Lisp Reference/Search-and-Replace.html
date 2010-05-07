@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+<title>Search and Replace - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Searching-and-Matching.html#Searching-and-Matching" title="Searching and Matching">
+<link rel="prev" href="Match-Data.html#Match-Data" title="Match Data">
+<link rel="next" href="Standard-Regexps.html#Standard-Regexps" title="Standard Regexps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Search-and-Replace"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Match-Data.html#Match-Data">Match Data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>
+<hr>
+</div>
+
+<h3 class="section">34.7 Search and Replace</h3>
+
+<p><a name="index-replacement-after-search-3033"></a><a name="index-searching-and-replacing-3034"></a>
+  If you want to find all matches for a regexp in part of the buffer,
+and replace them, the best way is to write an explicit loop using
+<code>re-search-forward</code> and <code>replace-match</code>, like this:
+
+<pre class="example">     (while (re-search-forward "foo[ \t]+bar" nil t)
+       (replace-match "foobar"))
+</pre>
+   <p class="noindent">See <a href="Replacing-Match.html#Replacing-Match">Replacing the Text that Matched</a>, for a
+description of <code>replace-match</code>.
+
+   <p>However, replacing matches in a string is more complex, especially
+if you want to do it efficiently.  So Emacs provides a function to do
+this.
+
+<div class="defun">
+&mdash; Function: <b>replace-regexp-in-string</b><var> regexp rep string &amp;optional fixedcase literal subexp start<a name="index-replace_002dregexp_002din_002dstring-3035"></a></var><br>
+<blockquote><p>This function copies <var>string</var> and searches it for matches for
+<var>regexp</var>, and replaces them with <var>rep</var>.  It returns the
+modified copy.  If <var>start</var> is non-<code>nil</code>, the search for
+matches starts at that index in <var>string</var>, so matches starting
+before that index are not changed.
+
+        <p>This function uses <code>replace-match</code> to do the replacement, and it
+passes the optional arguments <var>fixedcase</var>, <var>literal</var> and
+<var>subexp</var> along to <code>replace-match</code>.
+
+        <p>Instead of a string, <var>rep</var> can be a function.  In that case,
+<code>replace-regexp-in-string</code> calls <var>rep</var> for each match,
+passing the text of the match as its sole argument.  It collects the
+value <var>rep</var> returns and passes that to <code>replace-match</code> as the
+replacement string.  The match-data at this point are the result
+of matching <var>regexp</var> against a substring of <var>string</var>. 
+</p></blockquote></div>
+
+   <p>If you want to write a command along the lines of <code>query-replace</code>,
+you can use <code>perform-replace</code> to do the work.
+
+<div class="defun">
+&mdash; Function: <b>perform-replace</b><var> from-string replacements query-flag regexp-flag delimited-flag &amp;optional repeat-count map start end<a name="index-perform_002dreplace-3036"></a></var><br>
+<blockquote><p>This function is the guts of <code>query-replace</code> and related
+commands.  It searches for occurrences of <var>from-string</var> in the
+text between positions <var>start</var> and <var>end</var> and replaces some or
+all of them.  If <var>start</var> is <code>nil</code> (or omitted), point is used
+instead, and the end of the buffer's accessible portion is used for
+<var>end</var>.
+
+        <p>If <var>query-flag</var> is <code>nil</code>, it replaces all
+occurrences; otherwise, it asks the user what to do about each one.
+
+        <p>If <var>regexp-flag</var> is non-<code>nil</code>, then <var>from-string</var> is
+considered a regular expression; otherwise, it must match literally.  If
+<var>delimited-flag</var> is non-<code>nil</code>, then only replacements
+surrounded by word boundaries are considered.
+
+        <p>The argument <var>replacements</var> specifies what to replace occurrences
+with.  If it is a string, that string is used.  It can also be a list of
+strings, to be used in cyclic order.
+
+        <p>If <var>replacements</var> is a cons cell, <code>(</code><var>function</var><code>&nbsp;.&nbsp;</code><var>data</var><code>)</code><!-- /@w -->, this means to call <var>function</var> after each match to
+get the replacement text.  This function is called with two arguments:
+<var>data</var>, and the number of replacements already made.
+
+        <p>If <var>repeat-count</var> is non-<code>nil</code>, it should be an integer.  Then
+it specifies how many times to use each of the strings in the
+<var>replacements</var> list before advancing cyclically to the next one.
+
+        <p>If <var>from-string</var> contains upper-case letters, then
+<code>perform-replace</code> binds <code>case-fold-search</code> to <code>nil</code>, and
+it uses the <code>replacements</code> without altering the case of them.
+
+        <p>Normally, the keymap <code>query-replace-map</code> defines the possible
+user responses for queries.  The argument <var>map</var>, if
+non-<code>nil</code>, specifies a keymap to use instead of
+<code>query-replace-map</code>.
+
+        <p>This function uses one of two functions to search for the next
+occurrence of <var>from-string</var>.  These functions are specified by the
+values of two variables: <code>replace-re-search-function</code> and
+<code>replace-search-function</code>.  The former is called when the
+argument <var>regexp-flag</var> is non-<code>nil</code>, the latter when it is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>query-replace-map</b><var><a name="index-query_002dreplace_002dmap-3037"></a></var><br>
+<blockquote><p>This variable holds a special keymap that defines the valid user
+responses for <code>perform-replace</code> and the commands that use it, as
+well as <code>y-or-n-p</code> and <code>map-y-or-n-p</code>.  This map is unusual
+in two ways:
+
+          <ul>
+<li>The &ldquo;key bindings&rdquo; are not commands, just symbols that are meaningful
+to the functions that use this map.
+
+          <li>Prefix keys are not supported; each key binding must be for a
+single-event key sequence.  This is because the functions don't use
+<code>read-key-sequence</code> to get the input; instead, they read a single
+event and look it up &ldquo;by hand.&rdquo;
+</ul>
+        </p></blockquote></div>
+
+   <p>Here are the meaningful &ldquo;bindings&rdquo; for <code>query-replace-map</code>. 
+Several of them are meaningful only for <code>query-replace</code> and
+friends.
+
+     <dl>
+<dt><code>act</code><dd>Do take the action being considered&mdash;in other words, &ldquo;yes.&rdquo;
+
+     <br><dt><code>skip</code><dd>Do not take action for this question&mdash;in other words, &ldquo;no.&rdquo;
+
+     <br><dt><code>exit</code><dd>Answer this question &ldquo;no,&rdquo; and give up on the entire series of
+questions, assuming that the answers will be &ldquo;no.&rdquo;
+
+     <br><dt><code>act-and-exit</code><dd>Answer this question &ldquo;yes,&rdquo; and give up on the entire series of
+questions, assuming that subsequent answers will be &ldquo;no.&rdquo;
+
+     <br><dt><code>act-and-show</code><dd>Answer this question &ldquo;yes,&rdquo; but show the results&mdash;don't advance yet
+to the next question.
+
+     <br><dt><code>automatic</code><dd>Answer this question and all subsequent questions in the series with
+&ldquo;yes,&rdquo; without further user interaction.
+
+     <br><dt><code>backup</code><dd>Move back to the previous place that a question was asked about.
+
+     <br><dt><code>edit</code><dd>Enter a recursive edit to deal with this question&mdash;instead of any
+other action that would normally be taken.
+
+     <br><dt><code>delete-and-edit</code><dd>Delete the text being considered, then enter a recursive edit to replace
+it.
+
+     <br><dt><code>recenter</code><dd>Redisplay and center the window, then ask the same question again.
+
+     <br><dt><code>quit</code><dd>Perform a quit right away.  Only <code>y-or-n-p</code> and related functions
+use this answer.
+
+     <br><dt><code>help</code><dd>Display some help, then ask again. 
+</dl>
+
+<div class="defun">
+&mdash; Variable: <b>multi-query-replace-map</b><var><a name="index-multi_002dquery_002dreplace_002dmap-3038"></a></var><br>
+<blockquote><p>This variable holds a keymap that extends <code>query-replace-map</code> by
+providing additional keybindings that are useful in multi-buffer
+replacements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>replace-search-function</b><var><a name="index-replace_002dsearch_002dfunction-3039"></a></var><br>
+<blockquote><p>This variable specifies a function that <code>perform-replace</code> calls
+to search for the next string to replace.  Its default value is
+<code>search-forward</code>.  Any other value should name a function of 3
+arguments: the first 3 arguments of <code>search-forward</code>
+(see <a href="String-Search.html#String-Search">String Search</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>replace-re-search-function</b><var><a name="index-replace_002dre_002dsearch_002dfunction-3040"></a></var><br>
+<blockquote><p>This variable specifies a function that <code>perform-replace</code> calls
+to search for the next regexp to replace.  Its default value is
+<code>re-search-forward</code>.  Any other value should name a function of 3
+arguments: the first 3 arguments of <code>re-search-forward</code>
+(see <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

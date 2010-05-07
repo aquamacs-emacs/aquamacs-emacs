@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Compilation Tips - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tips.html#Tips" title="Tips">
+<link rel="prev" href="Programming-Tips.html#Programming-Tips" title="Programming Tips">
+<link rel="next" href="Warning-Tips.html#Warning-Tips" title="Warning Tips">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Compilation-Tips"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Warning-Tips.html#Warning-Tips">Warning Tips</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming-Tips.html#Programming-Tips">Programming Tips</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
+<hr>
+</div>
+
+<h3 class="section">D.4 Tips for Making Compiled Code Fast</h3>
+
+<p><a name="index-execution-speed-3830"></a><a name="index-speedups-3831"></a>
+  Here are ways of improving the execution speed of byte-compiled
+Lisp programs.
+
+     <ul>
+<li><a name="index-profiling-3832"></a><a name="index-timing-programs-3833"></a><a name="index-g_t_0040file_007belp_002eel_007d-3834"></a>Profile your program with the <samp><span class="file">elp</span></samp> library.  See the file
+<samp><span class="file">elp.el</span></samp> for instructions.
+
+     <li><a name="index-g_t_0040file_007bbenchmark_002eel_007d-3835"></a><a name="index-benchmarking-3836"></a>Check the speed of individual Emacs Lisp forms using the
+<samp><span class="file">benchmark</span></samp> library.  See the functions <code>benchmark-run</code> and
+<code>benchmark-run-compiled</code> in <samp><span class="file">benchmark.el</span></samp>.
+
+     <li>Use iteration rather than recursion whenever possible. 
+Function calls are slow in Emacs Lisp even when a compiled function
+is calling another compiled function.
+
+     <li>Using the primitive list-searching functions <code>memq</code>, <code>member</code>,
+<code>assq</code>, or <code>assoc</code> is even faster than explicit iteration.  It
+can be worth rearranging a data structure so that one of these primitive
+search functions can be used.
+
+     <li>Certain built-in functions are handled specially in byte-compiled code,
+avoiding the need for an ordinary function call.  It is a good idea to
+use these functions rather than alternatives.  To see whether a function
+is handled specially by the compiler, examine its <code>byte-compile</code>
+property.  If the property is non-<code>nil</code>, then the function is
+handled specially.
+
+     <p>For example, the following input will show you that <code>aref</code> is
+compiled specially (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>):
+
+     <pre class="example">          (get 'aref 'byte-compile)
+               &rArr; byte-compile-two-args
+</pre>
+     <li>If calling a small function accounts for a substantial part of your
+program's running time, make the function inline.  This eliminates
+the function call overhead.  Since making a function inline reduces
+the flexibility of changing the program, don't do it unless it gives
+a noticeable speedup in something slow enough that users care about
+the speed.  See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>. 
+</ul>
+
+   </body></html>
+

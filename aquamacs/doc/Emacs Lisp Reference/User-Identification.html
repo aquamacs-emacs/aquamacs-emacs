@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>User Identification - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="System-Environment.html#System-Environment" title="System Environment">
+<link rel="next" href="Time-of-Day.html#Time-of-Day" title="Time of Day">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="User-Identification"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-of-Day.html#Time-of-Day">Time of Day</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="System-Environment.html#System-Environment">System Environment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.4 User Identification</h3>
+
+<p><a name="index-user-identification-3749"></a>
+
+<div class="defun">
+&mdash; Variable: <b>init-file-user</b><var><a name="index-init_002dfile_002duser-3750"></a></var><br>
+<blockquote><p>This variable says which user's init files should be used by
+Emacs&mdash;or <code>nil</code> if none.  <code>""</code> stands for the user who
+originally logged in.  The value reflects command-line options such as
+&lsquo;<samp><span class="samp">-q</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-u </span><var>user</var></samp>&rsquo;.
+
+        <p>Lisp packages that load files of customizations, or any other sort of
+user profile, should obey this variable in deciding where to find it. 
+They should load the profile of the user name found in this variable. 
+If <code>init-file-user</code> is <code>nil</code>, meaning that the &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;
+option was used, then Lisp packages should not load any customization
+files or user profile. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>user-mail-address</b><var><a name="index-user_002dmail_002daddress-3751"></a></var><br>
+<blockquote><p>This holds the nominal email address of the user who is using Emacs. 
+Emacs normally sets this variable to a default value after reading your
+init files, but not if you have already set it.  So you can set the
+variable to some other value in your init file if you do not
+want to use the default value. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>user-login-name</b><var> &amp;optional uid<a name="index-user_002dlogin_002dname-3752"></a></var><br>
+<blockquote><p>If you don't specify <var>uid</var>, this function returns the name under
+which the user is logged in.  If the environment variable <code>LOGNAME</code>
+is set, that value is used.  Otherwise, if the environment variable
+<code>USER</code> is set, that value is used.  Otherwise, the value is based
+on the effective <acronym>UID</acronym>, not the real <acronym>UID</acronym>.
+
+        <p>If you specify <var>uid</var>, the value is the user name that corresponds
+to <var>uid</var> (which should be an integer), or <code>nil</code> if there is
+no such user.
+
+     <pre class="example">          (user-login-name)
+               &rArr; "lewis"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>user-real-login-name</b><var><a name="index-user_002dreal_002dlogin_002dname-3753"></a></var><br>
+<blockquote><p>This function returns the user name corresponding to Emacs's real
+<acronym>UID</acronym>.  This ignores the effective <acronym>UID</acronym> and ignores the
+environment variables <code>LOGNAME</code> and <code>USER</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>user-full-name</b><var> &amp;optional uid<a name="index-user_002dfull_002dname-3754"></a></var><br>
+<blockquote><p>This function returns the full name of the logged-in user&mdash;or the value
+of the environment variable <code>NAME</code>, if that is set.
+
+     <!-- "Bil" is the correct spelling. -->
+     <pre class="example">          (user-full-name)
+               &rArr; "Bil Lewis"
+</pre>
+        <p>If the Emacs job's user-id does not correspond to any known user (and
+provided <code>NAME</code> is not set), the value is <code>"unknown"</code>.
+
+        <p>If <var>uid</var> is non-<code>nil</code>, then it should be a number (a user-id)
+or a string (a login name).  Then <code>user-full-name</code> returns the full
+name corresponding to that user-id or login name.  If you specify a
+user-id or login name that isn't defined, it returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-user_002dfull_002dname-3755"></a><a name="index-user_002dreal_002dlogin_002dname-3756"></a><a name="index-user_002dlogin_002dname-3757"></a>  The symbols <code>user-login-name</code>, <code>user-real-login-name</code> and
+<code>user-full-name</code> are variables as well as functions.  The functions
+return the same values that the variables hold.  These variables allow
+you to &ldquo;fake out&rdquo; Emacs by telling the functions what to return.  The
+variables are also useful for constructing frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
+
+<div class="defun">
+&mdash; Function: <b>user-real-uid</b><var><a name="index-user_002dreal_002duid-3758"></a></var><br>
+<blockquote><p>This function returns the real <acronym>UID</acronym> of the user. 
+The value may be a floating point number.
+
+     <pre class="example">          (user-real-uid)
+               &rArr; 19
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>user-uid</b><var><a name="index-user_002duid-3759"></a></var><br>
+<blockquote><p>This function returns the effective <acronym>UID</acronym> of the user. 
+The value may be a floating point number. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>Maintaining Undo - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Undo.html#Undo" title="Undo">
+<link rel="next" href="Filling.html#Filling" title="Filling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Maintaining-Undo"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filling.html#Filling">Filling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Undo.html#Undo">Undo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.10 Maintaining Undo Lists</h3>
+
+<p>This section describes how to enable and disable undo information for
+a given buffer.  It also explains how the undo list is truncated
+automatically so it doesn't get too big.
+
+   <p>Recording of undo information in a newly created buffer is normally
+enabled to start with; but if the buffer name starts with a space, the
+undo recording is initially disabled.  You can explicitly enable or
+disable undo recording with the following two functions, or by setting
+<code>buffer-undo-list</code> yourself.
+
+<div class="defun">
+&mdash; Command: <b>buffer-enable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002denable_002dundo-2573"></a></var><br>
+<blockquote><p>This command enables recording undo information for buffer
+<var>buffer-or-name</var>, so that subsequent changes can be undone.  If no
+argument is supplied, then the current buffer is used.  This function
+does nothing if undo recording is already enabled in the buffer.  It
+returns <code>nil</code>.
+
+        <p>In an interactive call, <var>buffer-or-name</var> is the current buffer. 
+You cannot specify any other buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>buffer-disable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002ddisable_002dundo-2574"></a></var><br>
+<blockquote><p><a name="index-disabling-undo-2575"></a>This function discards the undo list of <var>buffer-or-name</var>, and disables
+further recording of undo information.  As a result, it is no longer
+possible to undo either previous changes or any subsequent changes.  If
+the undo list of <var>buffer-or-name</var> is already disabled, this function
+has no effect.
+
+        <p>This function returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <p>As editing continues, undo lists get longer and longer.  To prevent
+them from using up all available memory space, garbage collection trims
+them back to size limits you can set.  (For this purpose, the &ldquo;size&rdquo;
+of an undo list measures the cons cells that make up the list, plus the
+strings of deleted text.)  Three variables control the range of acceptable
+sizes: <code>undo-limit</code>, <code>undo-strong-limit</code> and
+<code>undo-outer-limit</code>.  In these variables, size is counted as the
+number of bytes occupied, which includes both saved text and other
+data.
+
+<div class="defun">
+&mdash; User Option: <b>undo-limit</b><var><a name="index-undo_002dlimit-2576"></a></var><br>
+<blockquote><p>This is the soft limit for the acceptable size of an undo list.  The
+change group at which this size is exceeded is the last one kept. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>undo-strong-limit</b><var><a name="index-undo_002dstrong_002dlimit-2577"></a></var><br>
+<blockquote><p>This is the upper limit for the acceptable size of an undo list.  The
+change group at which this size is exceeded is discarded itself (along
+with all older change groups).  There is one exception: the very latest
+change group is only discarded if it exceeds <code>undo-outer-limit</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>undo-outer-limit</b><var><a name="index-undo_002douter_002dlimit-2578"></a></var><br>
+<blockquote><p>If at garbage collection time the undo info for the current command
+exceeds this limit, Emacs discards the info and displays a warning. 
+This is a last ditch limit to prevent memory overflow. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>undo-ask-before-discard</b><var><a name="index-undo_002dask_002dbefore_002ddiscard-2579"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, when the undo info exceeds
+<code>undo-outer-limit</code>, Emacs asks in the echo area whether to
+discard the info.  The default value is <code>nil</code>, which means to
+discard it automatically.
+
+        <p>This option is mainly intended for debugging.  Garbage collection is
+inhibited while the question is asked, which means that Emacs might
+leak memory if the user waits too long before answering the question. 
+</p></blockquote></div>
+
+   </body></html>
+

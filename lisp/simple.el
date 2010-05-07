@@ -2769,16 +2769,16 @@ major or minor modes can use `filter-buffer-substring-functions' to
 extract characters that are special to a buffer, and should not
 be copied into other buffers."
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
-    (cond
-     ((or delete buffer-substring-filters)
-      (save-excursion
-        (goto-char beg)
-        (let ((string (if delete (delete-and-extract-region beg end)
-                        (buffer-substring beg end))))
-          (dolist (filter buffer-substring-filters)
-            (setq string (funcall filter string)))
-          string)))
-     (t
+  (cond
+   ((or delete buffer-substring-filters)
+    (save-excursion
+      (goto-char beg)
+      (let ((string (if delete (delete-and-extract-region beg end)
+		      (buffer-substring beg end))))
+	(dolist (filter buffer-substring-filters)
+	  (setq string (funcall filter string)))
+	string)))
+   (t
       (buffer-substring beg end)))))
 
 
@@ -2908,8 +2908,8 @@ argument should still be a \"useful\" string for such uses."
       (setcar kill-ring string)
     (push string kill-ring)
     (if (> (length kill-ring) kill-ring-max)
-	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
-  (setq kill-ring-yank-pointer kill-ring)
+	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))) 
+  (setq kill-ring-yank-pointer kill-ring) 
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
 
@@ -3512,15 +3512,15 @@ START and END specify the portion of the current buffer to be copied."
 	 (region-beginning) (region-end)))
   (let* ((oldbuf (current-buffer))
          (append-to (get-buffer-create buffer))
-         (windows (get-buffer-window-list append-to t t))
-         point)
-    (save-excursion
-      (with-current-buffer append-to
-        (setq point (point))
-        (barf-if-buffer-read-only)
-        (insert-buffer-substring oldbuf start end)
-        (dolist (window windows)
-          (when (= (window-point window) point)
+           (windows (get-buffer-window-list append-to t t))
+           point)
+      (save-excursion
+	(with-current-buffer append-to
+	  (setq point (point))
+	  (barf-if-buffer-read-only)
+	  (insert-buffer-substring oldbuf start end)
+	  (dolist (window windows)
+	    (when (= (window-point window) point)
             (set-window-point window (point))))))))
 
 (defun prepend-to-buffer (buffer start end)
@@ -4753,7 +4753,7 @@ other purposes."
 This also turns on `word-wrap' in the buffer."
   :keymap visual-line-mode-map
   :group 'visual-line
-  :lighter " Wrap"
+  :lighter " WordWrap"
   (if visual-line-mode
       (progn
 	(set (make-local-variable 'visual-line--saved-state) nil)
@@ -4787,8 +4787,8 @@ This also turns on `word-wrap' in the buffer."
 (define-globalized-minor-mode global-visual-line-mode
   visual-line-mode turn-on-visual-line-mode
   :lighter " vl")
-
 
+
 (defun transpose-chars (arg)
   "Interchange characters around point, moving forward one character.
 With prefix arg ARG, effect is to take character before point
@@ -5150,6 +5150,10 @@ Some major modes set this.")
 (put 'auto-fill-function 'safe-local-variable 'null)
 ;; FIXME: turn into a proper minor mode.
 ;; Add a global minor mode version of it.
+(defvar auto-fill-mode nil "Non-nil if auto-fill-mode is on.
+Setting this variable takes no effect.  Use `auto-fill-mode' function.")
+(make-variable-buffer-local 'auto-fill-mode)
+
 (defun auto-fill-mode (&optional arg)
   "Toggle Auto Fill mode.
 With ARG, turn Auto Fill mode on if and only if ARG is positive.
@@ -5159,18 +5163,20 @@ automatically breaks the line at a previous space.
 The value of `normal-auto-fill-function' specifies the function to use
 for `auto-fill-function' when turning Auto Fill mode on."
   (interactive "P")
-  (prog1 (setq auto-fill-function
-	       (if (if (null arg)
-		       (not auto-fill-function)
-		       (> (prefix-numeric-value arg) 0))
-		   normal-auto-fill-function
-		   nil))
+  (prog1 (setq auto-fill-mode 
+	       (setq auto-fill-function
+		     (if (if (null arg)
+			     (not auto-fill-function)
+			   (> (prefix-numeric-value arg) 0))
+			 normal-auto-fill-function
+		       nil)))
     (force-mode-line-update)))
 
 ;; This holds a document string used to document auto-fill-mode.
 (defun auto-fill-function ()
   "Automatically break line at a previous space, in insertion of text."
   nil)
+
 
 (defun turn-on-auto-fill ()
   "Unconditionally turn on Auto Fill mode."
@@ -5179,8 +5185,6 @@ for `auto-fill-function' when turning Auto Fill mode on."
 (defun turn-off-auto-fill ()
   "Unconditionally turn off Auto Fill mode."
   (auto-fill-mode -1))
-
-(custom-add-option 'text-mode-hook 'turn-on-auto-fill)
 
 (defun toggle-auto-fill ()
   "Toggle whether to use Auto Fill Mode."
@@ -5261,36 +5265,63 @@ is non-nil.  This function disables `visual-line-mode' when enabling
 	   (if truncate-lines "enabled" "disabled")))
 
 
-;;  backward compatibility (in case users have it in their customizations)
-(defun turn-on-longlines ()
-  "Turn on Longlines mode.
-... unless buffer is read-only."
-  (unless buffer-read-only
-    (require 'longlines)
-    (longlines-mode 1)))
-
-(defun turn-off-longlines ()
-  "Unconditionally turn off Longlines mode."
-  (and (boundp 'longlines-mode)
-       (longlines-mode -1)))
-; (custom-add-option 'text-mode-hook 'turn-on-longlines)
-
-(defun toggle-longlines ()
-  "Toggle whether to use Longlines Mode."
+(defun set-auto-fill ()
+  "Unconditionally turn on Auto Fill mode."
   (interactive)
-  (require 'longlines-mode)
-  (unless longlines-mode 
-    (auto-fill-mode -1))
-  (longlines-mode))
+  (turn-off-longlines)
+  (visual-line-mode 0)
+  (setq truncate-lines nil)
+  (auto-fill-mode 1)
+  (if (interactive-p)
+      (message "Line wrapping set to Line Breaking (Auto Fill) mode in this buffer.")))
 
-(defun turn-on-word-wrap ()
-  "Turn on Word Wrap mode in current buffer."
+(defun set-truncate-lines ()
+  "Turn on Truncate Lines mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (turn-on-visual-line-mode))
+  (toggle-truncate-lines t)
+  (if (interactive-p)
+      (message "Line wrapping set to Truncate Lines mode in this buffer.")))
+
+(defun set-line-wrap ()
+  "Turn off Line Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+    (message "Line wrapping set to Wrap mode in this buffer.")))
+
+(defun set-word-wrap ()
+  "Turn on Word Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (turn-on-visual-line-mode) ; let it save settings first
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+      (message "Line wrapping set to Word Wrap mode in this buffer.")))
+
+
+(custom-add-option 'text-mode-hook 'set-auto-fill)
+(custom-add-option 'text-mode-hook 'set-word-wrap)
+(custom-add-option 'text-mode-hook 'set-line-wrap)
+(custom-add-option 'text-mode-hook 'set-truncate-lines)
+
+(defun turn-on-word-wrap ()
+  "Turn on Visual Line mode in current buffer.
+See `visual-line-mode'."
+  (visual-line-mode 1))
 
 (defun turn-off-word-wrap ()
-  "Turn off Word Wrap mode in current buffer."
+  "Turn off Visual Line mode in current buffer.
+See `visual-line-mode'."
   (visual-line-mode 0))
 
 (defun toggle-word-wrap ()
@@ -5300,8 +5331,42 @@ is non-nil.  This function disables `visual-line-mode' when enabling
       (turn-off-word-wrap)
     (turn-on-word-wrap))
   (when (interactive-p)
-  (force-mode-line-update)
+    (force-mode-line-update)
     (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
+
+;;  backward compatibility (in case users have it in their customizations)
+
+(defun turn-on-longlines ()
+  "Switch to Word Wrap mode in current buffer.
+`longlines-mode' is deprecated.  Use `visual-line-mode' instead,
+or `set-word-wrap'.  This function calls `set-word-wrap'.
+To turn on the classic `longlines-mode', use `turn-on-longlines*'."
+  (set-word-wrap))
+
+(defun turn-on-longlines* ()
+  "Turn on Longlines mode.
+... unless buffer is read-only."
+  (unless buffer-read-only
+    (require 'longlines)
+    (longlines-mode 1)))
+
+(defun turn-off-longlines ()
+  "Unconditionally turn off Longlines mode."
+  (interactive)
+  (and (boundp 'longlines-mode)
+       (longlines-mode -1)))
+; (custom-add-option 'text-mode-hook 'turn-on-longlines)
+
+(make-obsolete 'longlines-mode 'visual-line-mode "23.1")
+(make-obsolete 'turn-on-longlines 'set-word-wrap "23.1")
+
+(defun toggle-longlines ()
+  "Toggle whether to use Longlines Mode."
+  (interactive)
+  (require 'longlines-mode)
+  (unless longlines-mode 
+    (auto-fill-mode -1))
+  (longlines-mode))
 
 
 (defvar overwrite-mode-textual (purecopy " Ovwrt")
@@ -6593,7 +6658,7 @@ the first N arguments are fixed at the values with which this function
 was called."
   (lexical-let ((fun fun) (args1 args))
     (lambda (&rest args2) (apply fun (append args1 args2)))))
-
+
 ;; Minibuffer prompt stuff.
 
 ;(defun minibuffer-prompt-modification (start end)
@@ -6708,6 +6773,8 @@ This feature is part of Aquamacs."
   (interactive)
   (smart-spacing-mode 0))
 
+(custom-add-option 'text-mode-hook 'turn-on-smart-spacing-mode)
+
 (define-globalized-minor-mode 
   global-smart-spacing-mode smart-spacing-mode
   turn-on-smart-spacing-mode)
@@ -6739,7 +6806,7 @@ the point is when the command is called.")
   "Evaluate to t if buffer BUF is not an internal buffer."
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
-(defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete)   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
 	;; (move-point (memq (point) (list beg end))) 
@@ -6752,7 +6819,7 @@ the point is when the command is called.")
 	  (smart-spacing-char-is-word-boundary to (1+ to))))
 	;; the following is destructive (side-effect).  
 	;; do after checking for word boundaries.
-	(string (filter-buffer-substring beg end delete noprops)))
+	(string (filter-buffer-substring beg end delete)))
    (when use-smart-string
      (put-text-property 0 (length string)
 			'yank-handler 

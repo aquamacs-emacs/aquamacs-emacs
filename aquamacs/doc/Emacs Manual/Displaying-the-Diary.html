@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Displaying the Diary - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Diary.html#Diary" title="Diary">
+<link rel="next" href="Format-of-Diary-File.html#Format-of-Diary-File" title="Format of Diary File">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Displaying-the-Diary"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-of-Diary-File.html#Format-of-Diary-File">Format of Diary File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.10.1 Displaying the Diary</h4>
+
+<p>Once you have created a diary file, you can use the calendar to view
+it.  You can also view today's events outside of Calendar mode.  In the
+following, key bindings refer to the Calendar buffer.
+
+     <dl>
+<dt><kbd>d</kbd><dd>Display all diary entries for the selected date
+(<code>diary-view-entries</code>). 
+<br><dt><kbd>Mouse-3 Diary</kbd><dd>Display all diary entries for the date you click on. 
+<br><dt><kbd>s</kbd><dd>Display the entire diary file (<code>diary-show-all-entries</code>). 
+<br><dt><kbd>m</kbd><dd>Mark all visible dates that have diary entries
+(<code>diary-mark-entries</code>). 
+<br><dt><kbd>u</kbd><dd>Unmark the calendar window (<code>calendar-unmark</code>). 
+<br><dt><kbd>M-x diary-print-entries</kbd><dd>Print hard copy of the diary display as it appears. 
+<br><dt><kbd>M-x diary</kbd><dd>Display all diary entries for today's date. 
+<br><dt><kbd>M-x diary-mail-entries</kbd><dd>Mail yourself email reminders about upcoming diary entries. 
+</dl>
+
+   <p><a name="index-d-_0040r_007b_0028Calendar-mode_0029_007d-3334"></a><a name="index-diary_002dview_002dentries-3335"></a><a name="index-calendar_002dview_002ddiary_002dinitially_002dflag-3336"></a>  Displaying the diary entries with <kbd>d</kbd> shows in a separate window
+the diary entries for the selected date in the calendar.  The mode line
+of the new window shows the date of the diary entries.  Holidays are
+shown either in the buffer or in the mode line, depending on the display
+method you choose
+(see <a href="Diary-Display.html#Diary-Display">Diary Display</a>). 
+If you specify a numeric argument with <kbd>d</kbd>, it shows all the diary
+entries for that many successive days.  Thus, <kbd>2 d</kbd> displays all the
+entries for the selected date and for the following day.
+
+   <p>Another way to display the diary entries for a date is to click
+<kbd>Mouse-3</kbd> on the date, and then choose <kbd>Diary entries</kbd> from
+the menu that appears.  If the variable
+<code>calendar-view-diary-initially-flag</code> is non-<code>nil</code>, creating the
+calendar lists the diary entries for the current date (provided the
+current date is visible).
+
+   <p><a name="index-m-_0040r_007b_0028Calendar-mode_0029_007d-3337"></a><a name="index-diary_002dmark_002dentries-3338"></a><a name="index-calendar_002dmark_002ddiary_002dentries_002dflag-3339"></a>  To get a broader view of which days are mentioned in the diary, use
+the <kbd>m</kbd> command.  This marks the dates that have diary entries in
+a different face. 
+See <a href="Calendar-Customizing.html#Calendar-Customizing">diary-entry-marker</a>.
+
+   <p>The command applies both to the currently visible months and to
+other months that subsequently become visible by scrolling.  To turn
+marking off and erase the current marks, type <kbd>u</kbd>, which also
+turns off holiday marks (see <a href="Holidays.html#Holidays">Holidays</a>).  If the variable
+<code>calendar-mark-diary-entries-flag</code> is non-<code>nil</code>, creating or
+updating the calendar marks diary dates automatically.
+
+   <p><a name="index-s-_0040r_007b_0028Calendar-mode_0029_007d-3340"></a><a name="index-diary_002dshow_002dall_002dentries-3341"></a>  To see the full diary file, rather than just some of the entries, use
+the <kbd>s</kbd> command.
+
+   <p><a name="index-diary-3342"></a>  The command <kbd>M-x diary</kbd> displays the diary entries for the current
+date, independently of the calendar display, and optionally for the next
+few days as well; the variable <code>diary-number-of-entries</code> specifies
+how many days to include. 
+See <a href="Diary-Customizing.html#Diary-Customizing">diary-number-of-entries</a>.
+
+   <p>If you put <code>(diary)</code> in your <samp><span class="file">.emacs</span></samp> file, this
+automatically displays a window with the day's diary entries, when you
+enter Emacs.
+
+   <p><a name="index-diary_002dmail_002dentries-3343"></a><a name="index-diary_002dmail_002ddays-3344"></a>  Many users like to receive notice of events in their diary as email. 
+To send such mail to yourself, use the command <kbd>M-x
+diary-mail-entries</kbd>.  A prefix argument specifies how many days
+(starting with today) to check; otherwise, the variable
+<code>diary-mail-days</code> says how many days.
+
+   </body></html>
+

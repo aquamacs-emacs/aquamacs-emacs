@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Trace Buffer - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug.html#Edebug" title="Edebug">
+<link rel="prev" href="Printing-in-Edebug.html#Printing-in-Edebug" title="Printing in Edebug">
+<link rel="next" href="Coverage-Testing.html#Coverage-Testing" title="Coverage Testing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Trace-Buffer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Printing-in-Edebug.html#Printing-in-Edebug">Printing in Edebug</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.12 Trace Buffer</h4>
+
+<p><a name="index-trace-buffer-979"></a>
+  Edebug can record an execution trace, storing it in a buffer named
+&lsquo;<samp><span class="samp">*edebug-trace*</span></samp>&rsquo;.  This is a log of function calls and returns,
+showing the function names and their arguments and values.  To enable
+trace recording, set <code>edebug-trace</code> to a non-<code>nil</code> value.
+
+   <p>Making a trace buffer is not the same thing as using trace execution
+mode (see <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>).
+
+   <p>When trace recording is enabled, each function entry and exit adds
+lines to the trace buffer.  A function entry record consists of
+&lsquo;<samp><span class="samp">::::{</span></samp>&rsquo;, followed by the function name and argument values.  A
+function exit record consists of &lsquo;<samp><span class="samp">::::}</span></samp>&rsquo;, followed by the function
+name and result of the function.
+
+   <p>The number of &lsquo;<samp><span class="samp">:</span></samp>&rsquo;s in an entry shows its recursion depth.  You
+can use the braces in the trace buffer to find the matching beginning or
+end of function calls.
+
+   <p><a name="index-edebug_002dprint_002dtrace_002dbefore-980"></a><a name="index-edebug_002dprint_002dtrace_002dafter-981"></a>  You can customize trace recording for function entry and exit by
+redefining the functions <code>edebug-print-trace-before</code> and
+<code>edebug-print-trace-after</code>.
+
+<div class="defun">
+&mdash; Macro: <b>edebug-tracing</b><var> string body<small class="dots">...</small><a name="index-edebug_002dtracing-982"></a></var><br>
+<blockquote><p>This macro requests additional trace information around the execution
+of the <var>body</var> forms.  The argument <var>string</var> specifies text
+to put in the trace buffer, after the &lsquo;<samp><span class="samp">{</span></samp>&rsquo; or &lsquo;<samp><span class="samp">}</span></samp>&rsquo;.  All
+the arguments are evaluated, and <code>edebug-tracing</code> returns the
+value of the last form in <var>body</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>edebug-trace</b><var> format-string &amp;rest format-args<a name="index-edebug_002dtrace-983"></a></var><br>
+<blockquote><p>This function inserts text in the trace buffer.  It computes the text
+with <code>(apply 'format </code><var>format-string</var> <var>format-args</var><code>)</code>. 
+It also appends a newline to separate entries. 
+</p></blockquote></div>
+
+   <p><code>edebug-tracing</code> and <code>edebug-trace</code> insert lines in the
+trace buffer whenever they are called, even if Edebug is not active. 
+Adding text to the trace buffer also scrolls its window to show the last
+lines inserted.
+
+   </body></html>
+

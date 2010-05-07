@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Position Parameters - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
+<link rel="prev" href="Basic-Parameters.html#Basic-Parameters" title="Basic Parameters">
+<link rel="next" href="Size-Parameters.html#Size-Parameters" title="Size Parameters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Position-Parameters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Size-Parameters.html#Size-Parameters">Size Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Parameters.html#Basic-Parameters">Basic Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">29.3.3.2 Position Parameters</h5>
+
+<p>Position parameters' values are normally measured in pixels, but on
+text-only terminals they count characters or lines instead.
+
+     <dl>
+<dt><code>left</code><dd>The position, in pixels, of the left (or right) edge of the frame with
+respect to the left (or right) edge of the screen.  The value may be:
+
+          <dl>
+<dt>an integer<dd>A positive integer relates the left edge of the frame to the left edge
+of the screen.  A negative integer relates the right frame edge to the
+right screen edge.
+
+          <br><dt><code>(+ </code><var>pos</var><code>)</code><dd>This specifies the position of the left frame edge relative to the left
+screen edge.  The integer <var>pos</var> may be positive or negative; a
+negative value specifies a position outside the screen.
+
+          <br><dt><code>(- </code><var>pos</var><code>)</code><dd>This specifies the position of the right frame edge relative to the right
+screen edge.  The integer <var>pos</var> may be positive or negative; a
+negative value specifies a position outside the screen. 
+</dl>
+
+     <p>Some window managers ignore program-specified positions.  If you want to
+be sure the position you specify is not ignored, specify a
+non-<code>nil</code> value for the <code>user-position</code> parameter as well.
+
+     <br><dt><code>top</code><dd>The screen position of the top (or bottom) edge, in pixels, with respect
+to the top (or bottom) edge of the screen.  It works just like
+<code>left</code>, except vertically instead of horizontally.
+
+     <br><dt><code>icon-left</code><dd>The screen position of the left edge <em>of the frame's icon</em>, in
+pixels, counting from the left edge of the screen.  This takes effect if
+and when the frame is iconified.
+
+     <p>If you specify a value for this parameter, then you must also specify
+a value for <code>icon-top</code> and vice versa.  The window manager may
+ignore these two parameters.
+
+     <br><dt><code>icon-top</code><dd>The screen position of the top edge <em>of the frame's icon</em>, in
+pixels, counting from the top edge of the screen.  This takes effect if
+and when the frame is iconified.
+
+     <br><dt><code>user-position</code><dd>When you create a frame and specify its screen position with the
+<code>left</code> and <code>top</code> parameters, use this parameter to say whether
+the specified position was user-specified (explicitly requested in some
+way by a human user) or merely program-specified (chosen by a program). 
+A non-<code>nil</code> value says the position was user-specified.
+
+     <p>Window managers generally heed user-specified positions, and some heed
+program-specified positions too.  But many ignore program-specified
+positions, placing the window in a default fashion or letting the user
+place it with the mouse.  Some window managers, including <code>twm</code>,
+let the user specify whether to obey program-specified positions or
+ignore them.
+
+     <p>When you call <code>make-frame</code>, you should specify a non-<code>nil</code>
+value for this parameter if the values of the <code>left</code> and <code>top</code>
+parameters represent the user's stated preference; otherwise, use
+<code>nil</code>. 
+</dl>
+
+   </body></html>
+

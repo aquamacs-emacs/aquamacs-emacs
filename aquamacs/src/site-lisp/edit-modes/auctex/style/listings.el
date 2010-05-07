@@ -1,6 +1,6 @@
 ;;; listings.el --- AUCTeX style for `listings.sty'
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2009 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -32,22 +32,181 @@
 
 ;;; Code:
 
+;; The following are options taken from chapter 4 of the listings
+;; manual (2006/05/08 Version 1.3c).  Experimental options described
+;; in chapter 5 are not included.
+(defvar LaTeX-listings-key-val-options
+  '(;; Space and placement
+    ("float" ("t" "b" "p" "h")) ; Support [*] as an optional prefix and that
+				; tbph are not exclusive.
+    ("floatplacement" ("t" "b" "p" "h"))
+    ("aboveskip")
+    ("belowskip")
+    ("lineskip")
+    ("boxpos" ("b" "c" "t"))
+    ;; The printed range
+    ("print" ("true" "false"))
+    ("firstline")
+    ("lastline")
+    ("linerange")
+    ("showlines" ("true" "false"))
+    ("emptylines")
+    ("gobble")
+    ;; Languages and styles
+    ("style")
+    ("language")
+    ("alsolanguage")
+    ("defaultdialect")
+    ("printpod" ("true" "false"))
+    ("usekeywordsintag" ("true" "false"))
+    ("tagstyle")
+    ("markfirstintag")
+    ("makemacrouse" ("true" "false"))
+    ;; Figure out the appearance
+    ("basicstyle")
+    ("identifierstyle")
+    ("commentstyle")
+    ("stringstyle")
+    ("keywordstyle")
+    ("classoffset")
+    ("texcsstyle")
+    ("directivestyle")
+    ("emph")
+    ("moreemph")
+    ("deleteemph")
+    ("emphstyle")
+    ("delim")
+    ("moredelim")
+    ("deletedelim")
+    ;; Getting all characters right
+    ("extendedchars" ("true" "false"))
+    ("inputencoding") ; Could make use of `latex-inputenc-coding-alist'.
+    ("upquote" ("true" "false"))
+    ("tabsize")
+    ("showtabs" ("true" "false"))
+    ("tab")
+    ("showspaces" ("true" "false"))
+    ("showstringspaces" ("true" "false"))
+    ("formfeed")
+    ;; Line numbers
+    ("numbers" ("none" "left" "right"))
+    ("stepnumber")
+    ("numberfirstline" ("true" "false"))
+    ("numberstyle")
+    ("numbersep")
+    ("numberblanklines" ("true" "false"))
+    ("firstnumber" ("auto" "last")) ; Can also take a number.
+    ("name")
+    ;; Captions
+    ("title")
+    ("caption") ; Insert braces?
+    ("label")
+    ("nolol" ("true" "false"))
+    ("captionpos" ("t" "b")) ; Can be a subset of tb.
+    ("abovecaptionskip")
+    ("belowcaptionskip")
+    ;; Margins and line shape
+    ("linewidth")
+    ("xleftmargin")
+    ("xrightmargin")
+    ("resetmargins" ("true" "false"))
+    ("breaklines" ("true" "false"))
+    ("breakatwhitespace" ("true" "false"))
+    ("prebreak")
+    ("postbreak")
+    ("breakindent")
+    ("breakautoindent" ("true" "false"))
+    ;; Frames
+    ("frame" ("none" "leftline" "topline" "bottomline" "lines" "single"
+	      "shadowbox"
+	      ;; Alternative to the above values.  A subset of trblTRBL can be
+	      ;; given.
+	      "t" "r" "b" "l" "T" "R" "B" "L"))
+    ("frameround" ("t" "f")) ; The input actually has to be four times {t,f}.
+    ("framesep")
+    ("rulesep")
+    ("framerule")
+    ("framexleftmargin")
+    ("framexrightmargin")
+    ("framextopmargin")
+    ("framebottommargin")
+    ("backgroundcolor")
+    ("rulecolor")
+    ("fillcolor")
+    ("fulesepcolor")
+    ("frameshape")
+    ;; Indexing
+    ("index")
+    ("moreindex")
+    ("deleteindex")
+    ("indexstyle")
+    ;; Column alignment
+    ("columns" ("fixed" "flexible" "fullflexible")) ; Also supports an optional
+						    ; argument with {c,l,r}.
+    ("flexiblecolumns" ("true" "false"))
+    ("keepspaces" ("true" "false"))
+    ("basewidth")
+    ("fontadjust" ("true" "false"))
+    ;; Escaping to LaTeX
+    ("texcl" ("true" "false"))
+    ("mathescape" ("true" "false"))
+    ("escapechar")
+    ("escapeinside")
+    ("escapebegin")
+    ("escapeend")
+    ;; Interface to fancyvrb
+    ("fancyvrb" ("true" "false"))
+    ("fvcmdparams")
+    ("morefvcmdparams")
+    ;; Language definitions
+    ("keywordsprefix")
+    ("keywords")
+    ("morekeywords")
+    ("deletekeywords")
+    ("texcs")
+    ("moretexcs")
+    ("deletetexcs")
+    ("directives")
+    ("moredirectives")
+    ("deletedirectives")
+    ("sensitive" ("true" "false"))
+    ("alsoletter")
+    ("alsodigit")
+    ("alsoother")
+    ("otherkeywords")
+    ("tag")
+    ("string")
+    ("morestring")
+    ("deletestring")
+    ("comment")
+    ("morecomment")
+    ("deletecomment")
+    ("keywordcomment")
+    ("morekeywordcomment")
+    ("deletekeywordcomment")
+    ("keywordcommentsemicolon")
+    ("podcomment" ("true" "false")))
+  "Key=value options for listings macros and environments.")
+
 (TeX-add-style-hook
  "listings"
  (lambda ()
    ;; New symbols
    (TeX-add-symbols
     '("lstalias" ["Alias dialect"] "Alias" ["Dialect"] "Language")
-    '("lstdefinestyle" "Style name" "Arguments (key=value list)")
+    '("lstdefinestyle" "Style name"
+      (TeX-arg-key-val LaTeX-listings-key-val-options))
     '("lstinline" TeX-arg-verb)
-    '("lstinputlisting" ["Arguments (key=value list)"] TeX-arg-file)
+    '("lstinputlisting" [TeX-arg-key-val LaTeX-listings-key-val-options]
+      TeX-arg-file)
     "lstlistoflistings"
     '("lstnewenvironment" "Name" ["Number or arguments"] ["Default argument"]
       "Starting code" "Ending code")
-    "lstset")
+    '("lstset" (TeX-arg-key-val LaTeX-listings-key-val-options)))
    ;; New environments
    (LaTeX-add-environments
-    "lstlisting")
+    '("lstlisting" LaTeX-env-args
+      [TeX-arg-key-val LaTeX-listings-key-val-options]))
    ;; Filling
    (make-local-variable 'LaTeX-indent-environment-list)
    (add-to-list 'LaTeX-indent-environment-list
@@ -58,7 +217,8 @@
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "lstinline")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "lstinline")
    ;; Fontification
-   (when (and (featurep 'font-latex)
+   (when (and (fboundp 'font-latex-add-keywords)
+	      (fboundp 'font-latex-set-syntactic-keywords)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("lstnewenvironment" "{[[{{")) 'function)
      (font-latex-add-keywords '(("lstinputlisting" "[{")) 'reference)

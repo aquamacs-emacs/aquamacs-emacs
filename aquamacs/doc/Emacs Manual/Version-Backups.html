@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Version Backups - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Remote-Repositories.html#Remote-Repositories" title="Remote Repositories">
+<link rel="next" href="Local-Version-Control.html#Local-Version-Control" title="Local Version Control">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Version-Backups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Local-Version-Control.html#Local-Version-Control">Local Version Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Remote-Repositories.html#Remote-Repositories">Remote Repositories</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">32.1.8.1 Version Backups</h5>
+
+<p><a name="index-version-backups-2495"></a>
+<a name="index-automatic-version-backups-2496"></a>  When VC sees that the repository for a file is on a remote
+machine, it automatically makes local backups of unmodified versions
+of the file&mdash;<dfn>automatic version backups</dfn>.  This means that you
+can compare the file to the repository version (<kbd>C-x v =</kbd>), or
+revert to that version (<kbd>C-x v u</kbd>), without any network
+interactions.
+
+   <p>The local copy of the unmodified file is called a <dfn>version
+backup</dfn> to indicate that it corresponds exactly to a version that is
+stored in the repository.  Note that version backups are not the same
+as ordinary Emacs backup files
+(see <a href="Backup.html#Backup">Backup</a>). 
+But they follow a similar naming convention.
+
+   <p>For a file that comes from a remote repository, VC makes a
+version backup whenever you save the first changes to the file, and
+removes it after you have committed your modified version to the
+repository. You can disable the making of automatic version backups by
+setting <code>vc-cvs-stay-local</code> to <code>nil</code> (see <a href="CVS-Options.html#CVS-Options">CVS Options</a>).
+
+   <p><a name="index-manual-version-backups-2497"></a>  The name of the automatic version backup for version <var>version</var>
+of file <var>file</var> is <var>file</var><code>.~</code><var>version</var><code>.~</code>.  This is
+almost the same as the name used by <kbd>C-x v ~</kbd>
+(see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>),
+the only difference being the additional dot (&lsquo;<samp><span class="samp">.</span></samp>&rsquo;)  after the
+version number.  This similarity is intentional, because both kinds of
+files store the same kind of information.  The file made by <kbd>C-x v
+~</kbd> acts as a <dfn>manual version backup</dfn>.
+
+   <p>All the VC commands that operate on old versions of a file can use
+both kinds of version backups.  For instance, <kbd>C-x v ~</kbd> uses
+either an automatic or a manual version backup, if possible, to get
+the contents of the version you request.  Likewise, <kbd>C-x v =</kbd> and
+<kbd>C-x v u</kbd> use either an automatic or a manual version backup, if
+one of them exists, to get the contents of a version to compare or
+revert to.  If you changed a file outside of Emacs, so that no
+automatic version backup was created for the previous text, you can
+create a manual backup of that version using <kbd>C-x v ~</kbd>, and thus
+obtain the benefit of the local copy for Emacs commands.
+
+   <p>The only difference in Emacs's handling of manual and automatic
+version backups, once they exist, is that Emacs deletes automatic
+version backups when you commit to the repository.  By contrast,
+manual version backups remain until you delete them.
+
+   </body></html>
+

@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>PostScript - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Printing.html#Printing" title="Printing">
+<link rel="next" href="PostScript-Variables.html#PostScript-Variables" title="PostScript Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="PostScript"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="PostScript-Variables.html#PostScript-Variables">PostScript Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Printing.html#Printing">Printing</a>
+<hr>
+</div>
+
+<h2 class="chapter">44 PostScript Hardcopy</h2>
+
+<p>These commands convert buffer contents to PostScript,
+either printing it or leaving it in another Emacs buffer.
+
+     <dl>
+<dt><kbd>M-x ps-print-buffer</kbd><dd>Print hardcopy of the current buffer in PostScript form. 
+<br><dt><kbd>M-x ps-print-region</kbd><dd>Print hardcopy of the current region in PostScript form. 
+<br><dt><kbd>M-x ps-print-buffer-with-faces</kbd><dd>Print hardcopy of the current buffer in PostScript form, showing the
+faces used in the text by means of PostScript features. 
+<br><dt><kbd>M-x ps-print-region-with-faces</kbd><dd>Print hardcopy of the current region in PostScript form, showing the
+faces used in the text. 
+<br><dt><kbd>M-x ps-spool-buffer</kbd><dd>Generate and spool a PostScript image for the current buffer text. 
+<br><dt><kbd>M-x ps-spool-region</kbd><dd>Generate and spool a PostScript image for the current region. 
+<br><dt><kbd>M-x ps-spool-buffer-with-faces</kbd><dd>Generate and spool a PostScript image for the current buffer, showing the faces used. 
+<br><dt><kbd>M-x ps-spool-region-with-faces</kbd><dd>Generate and spool a PostScript image for the current region, showing the faces used. 
+<br><dt><kbd>M-x ps-despool</kbd><dd>Send the spooled PostScript to the printer. 
+<br><dt><kbd>M-x handwrite</kbd><dd>Generate/print PostScript for the current buffer as if handwritten. 
+</dl>
+
+   <p><a name="index-ps_002dprint_002dregion-3726"></a><a name="index-ps_002dprint_002dbuffer-3727"></a><a name="index-ps_002dprint_002dregion_002dwith_002dfaces-3728"></a><a name="index-ps_002dprint_002dbuffer_002dwith_002dfaces-3729"></a>  The PostScript commands, <code>ps-print-buffer</code> and
+<code>ps-print-region</code>, print buffer contents in PostScript form.  One
+command prints the entire buffer; the other, just the region.  The
+corresponding &lsquo;<samp><span class="samp">-with-faces</span></samp>&rsquo; commands,
+<code>ps-print-buffer-with-faces</code> and <code>ps-print-region-with-faces</code>,
+use PostScript features to show the faces (fonts and colors) in the text
+properties of the text being printed.  The &lsquo;<samp><span class="samp">-with-faces</span></samp>&rsquo; commands only
+work if they are used in a window system, so it has a way to determine color
+values.
+
+   <p>Interactively, when you use a prefix argument (<kbd>C-u</kbd>), the command
+prompts the user for a file name, and saves the PostScript image in that file
+instead of sending it to the printer.
+
+   <p>Noninteractively, the argument <var>filename</var> is treated as follows: if it is
+<code>nil</code>, send the image to the printer.  If <var>filename</var> is a string, save
+the PostScript image in a file with that name.
+
+   <p>If you are using a color display, you can print a buffer of program
+code with color highlighting by turning on Font-Lock mode in that
+buffer, and using <code>ps-print-buffer-with-faces</code>.
+
+   <p><a name="index-ps_002dspool_002dregion-3730"></a><a name="index-ps_002dspool_002dbuffer-3731"></a><a name="index-ps_002dspool_002dregion_002dwith_002dfaces-3732"></a><a name="index-ps_002dspool_002dbuffer_002dwith_002dfaces-3733"></a>  The commands whose names have &lsquo;<samp><span class="samp">spool</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">print</span></samp>&rsquo;,
+generate the PostScript output in an Emacs buffer instead of sending
+it to the printer.
+
+   <p>Use the command <code>ps-despool</code> to send the spooled images to the printer.
+
+   <p><a name="index-ps_002ddespool-3734"></a>  This command sends the PostScript generated by  &lsquo;<samp><span class="samp">-spool-</span></samp>&rsquo; commands (see
+commands above) to the printer.
+
+   <p>Interactively, when you use a prefix argument (<kbd>C-u</kbd>), the command
+prompts the user for a file name, and saves the spooled PostScript image in
+that file instead of sending it to the printer.
+
+   <p>Noninteractively, the argument <var>filename</var> is treated as follows: if it is
+<code>nil</code>, send the image to the printer.  If <var>filename</var> is a string, save
+the PostScript image in a file with that name.
+
+   <p><a name="index-handwrite-3735"></a><a name="index-handwriting-3736"></a><kbd>M-x handwrite</kbd> is more frivolous.  It generates a PostScript
+rendition of the current buffer as a cursive handwritten document.  It
+can be customized in group <code>handwrite</code>.  This function only
+supports ISO 8859-1 characters.
+
+   <p>The following section describes variables for customizing these commands.
+
+   </body></html>
+

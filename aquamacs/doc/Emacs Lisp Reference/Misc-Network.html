@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Misc Network - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Low_002dLevel-Network.html#Low_002dLevel-Network" title="Low-Level Network">
+<link rel="next" href="Serial-Ports.html#Serial-Ports" title="Serial Ports">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Misc-Network"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Serial-Ports.html#Serial-Ports">Serial Ports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.18 Misc Network Facilities</h3>
+
+<p>These additional functions are useful for creating and operating
+on network connections.  Note that they are supported only on some
+systems.
+
+<div class="defun">
+&mdash; Function: <b>network-interface-list</b><var><a name="index-network_002dinterface_002dlist-3283"></a></var><br>
+<blockquote><p>This function returns a list describing the network interfaces
+of the machine you are using.  The value is an alist whose
+elements have the form <code>(</code><var>name</var><code> . </code><var>address</var><code>)</code>. 
+<var>address</var> has the same form as the <var>local-address</var>
+and <var>remote-address</var> arguments to <code>make-network-process</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>network-interface-info</b><var> ifname<a name="index-network_002dinterface_002dinfo-3284"></a></var><br>
+<blockquote><p>This function returns information about the network interface named
+<var>ifname</var>.  The value is a list of the form
+<code>(</code><var>addr</var> <var>bcast</var> <var>netmask</var> <var>hwaddr</var> <var>flags</var><code>)</code>.
+
+          <dl>
+<dt><var>addr</var><dd>The Internet protocol address. 
+<br><dt><var>bcast</var><dd>The broadcast address. 
+<br><dt><var>netmask</var><dd>The network mask. 
+<br><dt><var>hwaddr</var><dd>The layer 2 address (Ethernet MAC address, for instance). 
+<br><dt><var>flags</var><dd>The current flags of the interface. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>format-network-address</b><var> address &amp;optional omit-port<a name="index-format_002dnetwork_002daddress-3285"></a></var><br>
+<blockquote><p>This function converts the Lisp representation of a network address to
+a string.
+
+        <p>A five-element vector <code>[</code><var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>p</var><code>]</code>
+represents an IPv4 address <var>a</var>.<var>b</var>.<var>c</var>.<var>d</var> and port
+number <var>p</var>.  <code>format-network-address</code> converts that to the
+string <code>"</code><var>a</var><code>.</code><var>b</var><code>.</code><var>c</var><code>.</code><var>d</var><code>:</code><var>p</var><code>"</code>.
+
+        <p>A nine-element vector <code>[</code><var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var>
+<var>f</var> <var>g</var> <var>h</var> <var>p</var><code>]</code> represents an IPv6 address along
+with a port number.  <code>format-network-address</code> converts that to
+the string
+<code>"[</code><var>a</var><code>:</code><var>b</var><code>:</code><var>c</var><code>:</code><var>d</var><code>:</code><var>e</var><code>:</code><var>f</var><code>:</code><var>g</var><code>:</code><var>h</var><code>]:</code><var>p</var><code>"</code>.
+
+        <p>If the vector does not include the port number, <var>p</var>, or if
+<var>omit-port</var> is non-<code>nil</code>, the result does not include the
+<code>:</code><var>p</var> suffix. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -686,13 +686,8 @@ The file is specified in `smart-frame-position-file'."
 		o))
 	  parms))
 
-; (setq frame (selected-frame))
-; (smart-move-minibuffer-inside-screen)
-(defun smart-move-minibuffer-inside-screen (&optional frame)
-  (when (and initial-window-system ; this should probably be window-system with frame selected for Multi-TTY
-	     (not (frame-parameter frame 'fullscreen)))
-    (unless
-	(let* ((frame (or frame (selected-frame)))
+(defun smart-minibuffer-inside-screen-p (&optional frame)
+  (let* ((frame (or frame (selected-frame)))
 	       ;; on some systems, we can retrieve the available pixel width with
 	       ;; non-standard methods.
 	       ;; on OS X, e.g. display-available-pixel-bounds (patch!!) returns
@@ -716,14 +711,22 @@ The file is specified in `smart-frame-position-file'."
 	  (and  (>= left (- (nth 0 bounds) 4))
 		(>= top (nth 1 bounds))
 		(<= right (+ (nth 0 bounds) (nth 2 bounds)))
-		(<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4))))
+		(<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
+
+; (setq frame (selected-frame))
+; (smart-move-minibuffer-inside-screen)
+(defun smart-move-minibuffer-inside-screen (&optional frame)
+  (when (and initial-window-system ; this should probably be window-system with frame selected for Multi-TTY
+	     (not (frame-parameter frame 'fullscreen)))
+    (unless
+	(smart-minibuffer-inside-screen-p frame)
       (smart-move-frame-inside-screen frame))))
 
 ; (display-available-pixel-bounds (selected-frame))
 ;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
 ; (smart-move-frame-inside-screen)
 ; (setq frame nil)
-(defun smart-move-frame-inside-screen (&optional frame)
+(defun smart-move-frame-inside-screen (&optional frame vertical-only)
   "Move a frame inside the available screen boundaries. 
 The frame specified in FRAME is moved so it is entirely visible on
 the screen. The function tries to avoid leaving frames on screen
@@ -758,28 +761,27 @@ on the main screen, i.e. where the menu is."
 	   (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
 	   (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame))))
       (when rect
+	(unless vertical-only
+	  (modify-frame-parameters 
+	   frame
+	   (let* ((next-x (max min-x 
+			       (min
+				(- max-x next-w )
+				next-x)))
+		  
+		  (next-wc  (if (<= next-w (- max-x next-x))
+				next-wc
+			      (smart-fp--pixel-to-char-width (- max-x next-x) 
+							     frame 'round-lower))))
+	     (smart-fp--convert-negative-ordinates `((left .
+							   ,next-x)
+						     
+						     (width .
+							    ,next-wc)   
+						     )))))
 	(modify-frame-parameters 
 	 frame
-	 (let* ((next-x (max min-x 
-			     (min
-			      (- max-x next-w )
-			      next-x)))
-		
-		(next-wc  (if (<= next-w (- max-x next-x))
-			      next-wc
-			    (smart-fp--pixel-to-char-width (- max-x next-x) 
-							   frame 'round-lower)))
-		)
-	   (smart-fp--convert-negative-ordinates `((left .
-							 ,next-x)
-						   
-						   (width .
-							  ,next-wc)   
-						   ))))
-	(modify-frame-parameters 
-	 frame
-	 (let* (
-		(next-y (max min-y 
+	 (let* ((next-y (max min-y 
 			     (min 
 			      (- max-y next-h-total)	
 			      next-y)))
@@ -822,5 +824,18 @@ on the main screen, i.e. where the menu is."
       (smart-move-frame-inside-screen frame))
 ;    (make-frame-visible frame)
     (select-frame frame))))
+
+;; bug workaround:
+;; if the toolbar hasn't been filled,
+;; COcoa does not know its height, so expanding it will move
+;; the echo area out of the screen
+(defadvice ns-toggle-toolbar (around toolbar-enlarge-ensure-inside-screen activate)
+  (let ((inside (smart-minibuffer-inside-screen-p)))
+    ad-do-it
+    (and smart-frame-positioning-mode
+	 inside
+	 (> (frame-parameter nil 'tool-bar-lines) 0)
+	 (smart-move-frame-inside-screen nil t))))
+
 
 (provide 'smart-frame-positioning) 

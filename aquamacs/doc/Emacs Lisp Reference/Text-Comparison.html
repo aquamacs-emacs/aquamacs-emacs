@@ -1,0 +1,209 @@
+<html lang="en">
+<head>
+<title>Text Comparison - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
+<link rel="prev" href="Modifying-Strings.html#Modifying-Strings" title="Modifying Strings">
+<link rel="next" href="String-Conversion.html#String-Conversion" title="String Conversion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Text-Comparison"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="String-Conversion.html#String-Conversion">String Conversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifying-Strings.html#Modifying-Strings">Modifying Strings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
+<hr>
+</div>
+
+<h3 class="section">4.5 Comparison of Characters and Strings</h3>
+
+<p><a name="index-string-equality-234"></a>
+
+<div class="defun">
+&mdash; Function: <b>char-equal</b><var> character1 character2<a name="index-char_002dequal-235"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the arguments represent the same
+character, <code>nil</code> otherwise.  This function ignores differences
+in case if <code>case-fold-search</code> is non-<code>nil</code>.
+
+     <pre class="example">          (char-equal ?x ?x)
+               &rArr; t
+          (let ((case-fold-search nil))
+            (char-equal ?x ?X))
+               &rArr; nil
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string=</b><var> string1 string2<a name="index-string_003d-236"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the characters of the two strings
+match exactly.  Symbols are also allowed as arguments, in which case
+their print names are used. 
+Case is always significant, regardless of <code>case-fold-search</code>.
+
+     <pre class="example">          (string= "abc" "abc")
+               &rArr; t
+          (string= "abc" "ABC")
+               &rArr; nil
+          (string= "ab" "ABC")
+               &rArr; nil
+</pre>
+        <p>The function <code>string=</code> ignores the text properties of the two
+strings.  When <code>equal</code> (see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>) compares two
+strings, it uses <code>string=</code>.
+
+        <p>For technical reasons, a unibyte and a multibyte string are
+<code>equal</code> if and only if they contain the same sequence of
+character codes and all these codes are either in the range 0 through
+127 (<acronym>ASCII</acronym>) or 160 through 255 (<code>eight-bit-graphic</code>). 
+However, when a unibyte string is converted to a multibyte string, all
+characters with codes in the range 160 through 255 are converted to
+characters with higher codes, whereas <acronym>ASCII</acronym> characters
+remain unchanged.  Thus, a unibyte string and its conversion to
+multibyte are only <code>equal</code> if the string is all <acronym>ASCII</acronym>. 
+Character codes 160 through 255 are not entirely proper in multibyte
+text, even though they can occur.  As a consequence, the situation
+where a unibyte and a multibyte string are <code>equal</code> without both
+being all <acronym>ASCII</acronym> is a technical oddity that very few Emacs
+Lisp programmers ever get confronted with.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-equal</b><var> string1 string2<a name="index-string_002dequal-237"></a></var><br>
+<blockquote><p><code>string-equal</code> is another name for <code>string=</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-lexical-comparison-238"></a>
+
+<div class="defun">
+&mdash; Function: <b>string&lt;</b><var> string1 string2<a name="index-string_003c-239"></a></var><br>
+<blockquote><!-- (findex string< causes problems for permuted index!!) -->
+        <p>This function compares two strings a character at a time.  It
+scans both the strings at the same time to find the first pair of corresponding
+characters that do not match.  If the lesser character of these two is
+the character from <var>string1</var>, then <var>string1</var> is less, and this
+function returns <code>t</code>.  If the lesser character is the one from
+<var>string2</var>, then <var>string1</var> is greater, and this function returns
+<code>nil</code>.  If the two strings match entirely, the value is <code>nil</code>.
+
+        <p>Pairs of characters are compared according to their character codes. 
+Keep in mind that lower case letters have higher numeric values in the
+<acronym>ASCII</acronym> character set than their upper case counterparts; digits and
+many punctuation characters have a lower numeric value than upper case
+letters.  An <acronym>ASCII</acronym> character is less than any non-<acronym>ASCII</acronym>
+character; a unibyte non-<acronym>ASCII</acronym> character is always less than any
+multibyte non-<acronym>ASCII</acronym> character (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
+
+     <pre class="example">          (string&lt; "abc" "abd")
+               &rArr; t
+          (string&lt; "abd" "abc")
+               &rArr; nil
+          (string&lt; "123" "abc")
+               &rArr; t
+</pre>
+        <p>When the strings have different lengths, and they match up to the
+length of <var>string1</var>, then the result is <code>t</code>.  If they match up
+to the length of <var>string2</var>, the result is <code>nil</code>.  A string of
+no characters is less than any other string.
+
+     <pre class="example">          (string&lt; "" "abc")
+               &rArr; t
+          (string&lt; "ab" "abc")
+               &rArr; t
+          (string&lt; "abc" "")
+               &rArr; nil
+          (string&lt; "abc" "ab")
+               &rArr; nil
+          (string&lt; "" "")
+               &rArr; nil
+</pre>
+        <p>Symbols are also allowed as arguments, in which case their print names
+are used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-lessp</b><var> string1 string2<a name="index-string_002dlessp-240"></a></var><br>
+<blockquote><p><code>string-lessp</code> is another name for <code>string&lt;</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compare-strings</b><var> string1 start1 end1 string2 start2 end2 &amp;optional ignore-case<a name="index-compare_002dstrings-241"></a></var><br>
+<blockquote><p>This function compares the specified part of <var>string1</var> with the
+specified part of <var>string2</var>.  The specified part of <var>string1</var>
+runs from index <var>start1</var> up to index <var>end1</var> (<code>nil</code> means
+the end of the string).  The specified part of <var>string2</var> runs from
+index <var>start2</var> up to index <var>end2</var> (<code>nil</code> means the end of
+the string).
+
+        <p>The strings are both converted to multibyte for the comparison
+(see <a href="Text-Representations.html#Text-Representations">Text Representations</a>) so that a unibyte string and its
+conversion to multibyte are always regarded as equal.  If
+<var>ignore-case</var> is non-<code>nil</code>, then case is ignored, so that
+upper case letters can be equal to lower case letters.
+
+        <p>If the specified portions of the two strings match, the value is
+<code>t</code>.  Otherwise, the value is an integer which indicates how many
+leading characters agree, and which string is less.  Its absolute value
+is one plus the number of characters that agree at the beginning of the
+two strings.  The sign is negative if <var>string1</var> (or its specified
+portion) is less. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>assoc-string</b><var> key alist &amp;optional case-fold<a name="index-assoc_002dstring-242"></a></var><br>
+<blockquote><p>This function works like <code>assoc</code>, except that <var>key</var> must be a
+string or symbol, and comparison is done using <code>compare-strings</code>. 
+Symbols are converted to strings before testing. 
+If <var>case-fold</var> is non-<code>nil</code>, it ignores case differences. 
+Unlike <code>assoc</code>, this function can also match elements of the alist
+that are strings or symbols rather than conses.  In particular, <var>alist</var> can
+be a list of strings or symbols rather than an actual alist. 
+See <a href="Association-Lists.html#Association-Lists">Association Lists</a>. 
+</p></blockquote></div>
+
+   <p>See also the function <code>compare-buffer-substrings</code> in
+<a href="Comparing-Text.html#Comparing-Text">Comparing Text</a>, for a way to compare text in buffers.  The
+function <code>string-match</code>, which matches a regular expression
+against a string, can be used for a kind of string comparison; see
+<a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
+
+   </body></html>
+

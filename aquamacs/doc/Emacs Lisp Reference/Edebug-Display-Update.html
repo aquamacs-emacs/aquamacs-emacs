@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Edebug Display Update - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Outside-Context.html#The-Outside-Context" title="The Outside Context">
+<link rel="prev" href="Checking-Whether-to-Stop.html#Checking-Whether-to-Stop" title="Checking Whether to Stop">
+<link rel="next" href="Edebug-Recursive-Edit.html#Edebug-Recursive-Edit" title="Edebug Recursive Edit">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Edebug-Display-Update"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Edebug-Recursive-Edit.html#Edebug-Recursive-Edit">Edebug Recursive Edit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Checking-Whether-to-Stop.html#Checking-Whether-to-Stop">Checking Whether to Stop</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Outside-Context.html#The-Outside-Context">The Outside Context</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.14.2 Edebug Display Update</h5>
+
+<!-- This paragraph is not filled, because LaLiberte's conversion script -->
+<!-- needs an xref to be on just one line. -->
+<p>When Edebug needs to display something (e.g., in trace mode), it saves
+the current window configuration from &ldquo;outside&rdquo; Edebug
+(see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).  When you exit Edebug (by continuing
+the program), it restores the previous window configuration.
+
+   <p>Emacs redisplays only when it pauses.  Usually, when you continue
+execution, the program re-enters Edebug at a breakpoint or after
+stepping, without pausing or reading input in between.  In such cases,
+Emacs never gets a chance to redisplay the &ldquo;outside&rdquo; configuration. 
+Consequently, what you see is the same window configuration as the last
+time Edebug was active, with no interruption.
+
+   <p>Entry to Edebug for displaying something also saves and restores the
+following data (though some of them are deliberately not restored if an
+error or quit signal occurs).
+
+     <ul>
+<li><a name="index-current-buffer-point-and-mark-_0028Edebug_0029-990"></a>Which buffer is current, and the positions of point and the mark in the
+current buffer, are saved and restored.
+
+     <li><a name="index-window-configuration-_0028Edebug_0029-991"></a>The outside window configuration is saved and restored if
+<code>edebug-save-windows</code> is non-<code>nil</code> (see <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>).
+
+     <p>The window configuration is not restored on error or quit, but the
+outside selected window <em>is</em> reselected even on error or quit in
+case a <code>save-excursion</code> is active.  If the value of
+<code>edebug-save-windows</code> is a list, only the listed windows are saved
+and restored.
+
+     <p>The window start and horizontal scrolling of the source code buffer are
+not restored, however, so that the display remains coherent within Edebug.
+
+     <li>The value of point in each displayed buffer is saved and restored if
+<code>edebug-save-displayed-buffer-points</code> is non-<code>nil</code>.
+
+     <li>The variables <code>overlay-arrow-position</code> and
+<code>overlay-arrow-string</code> are saved and restored, so you can safely
+invoke Edebug from the recursive edit elsewhere in the same buffer.
+
+     <li><code>cursor-in-echo-area</code> is locally bound to <code>nil</code> so that
+the cursor shows up in the window. 
+</ul>
+
+   </body></html>
+

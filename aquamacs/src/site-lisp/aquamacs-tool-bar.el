@@ -22,7 +22,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2009, 2010: David Reitter
 
 
 
@@ -130,10 +130,10 @@
   (tool-bar-add-item-from-menu 'mac-key-open-file "open" nil :label "Open")
 
   (tool-bar-add-item "history" (lambda ()
-				 (interactive)
-				 (popup-menu (easy-menu-filter-return
-					      (recentf-make-menu-items)
-					      "Open Recent")))
+			      (interactive)
+			      (popup-menu (easy-menu-filter-return
+					   (recentf-make-menu-items)
+					   "Open Recent")))
 		     'recent-files
 		     :label "Recent"
 		     :visible '(and (boundp 'recentf-mode) recentf-mode)
@@ -145,14 +145,17 @@
 				   (not one-buffer-one-frame-mode)))
  
   (tool-bar-add-item-from-menu 'revert-buffer "update" nil :label "Revert")
-  
-  (tool-bar-add-item "save" 'mac-key-save-file 'save-file
+
+  (tool-bar-add-item "save" 'mac-key-save-file 'save-buffer
 		     :label "Save"
+		     :enable '(and (buffer-modified-p)
+				   (buffer-file-name))
 		     :visible '(and buffer-file-name
 				    (not (eq 'special
 					     (get major-mode
 						  'mode-class)))))
-  (tool-bar-add-item "saveas" 'mac-key-save-file-as 'save-file-as
+
+  (tool-bar-add-item "saveas" 'mac-key-save-file-as 'write-file
 		     :label "Save"
 		     :visible '(and (not buffer-file-name)
 				    (not (eq 'special
@@ -277,14 +280,15 @@ This variable is used in the AUCTeX configuration.")
      (visible-frame-list))))
 
 (defun tool-bar-hash ()
-  (sxhash (sort (apply #'append
-		       (mapcar
-			(lambda (m)
-			  (when (and (consp m)
-				     (not (equal (car-safe (cdr-safe (cdr-safe m)))
-						 "--")))
-			    (list (car m))))
-			tool-bar-map)) 'string<)))
+  (logand ?\x3FFFFFF  ;; ensure compatibility across machines
+	  (sxhash (sort (apply #'append
+			       (mapcar
+				(lambda (m)
+				  (when (and (consp m)
+					     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+							 "--")))
+				    (list (car m))))
+				tool-bar-map)) 'string<))))
 
 (defconst tool-bar-user-visible t)
 (defconst tool-bar-user-invisible nil)

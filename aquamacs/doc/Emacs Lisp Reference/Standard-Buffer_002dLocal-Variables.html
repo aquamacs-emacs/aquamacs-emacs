@@ -1,0 +1,208 @@
+<html lang="en">
+<head>
+<title>Standard Buffer-Local Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Standard-Errors.html#Standard-Errors" title="Standard Errors">
+<link rel="next" href="Standard-Keymaps.html#Standard-Keymaps" title="Standard Keymaps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Standard-Buffer-Local-Variables"></a>
+<a name="Standard-Buffer_002dLocal-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Errors.html#Standard-Errors">Standard Errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix G Buffer-Local Variables</h2>
+
+<!-- The title "Standard Buffer-Local Variables" is too long for -->
+<!-- smallbook. -rjc 30mar92 -->
+<p><a name="index-buffer_002dlocal-variables_002c-general_002dpurpose-3904"></a><a name="index-standard-buffer_002dlocal-variables-3905"></a>
+  The table below lists the general-purpose Emacs variables that
+automatically become buffer-local in each buffer.  Most become
+buffer-local only when set; a few of them are always local in every
+buffer.  Many Lisp packages define such variables for their internal
+use, but we don't try to list them all here.
+
+   <p>Every buffer-specific minor mode defines a buffer-local variable
+named &lsquo;<samp><var>modename</var><span class="samp">-mode</span></samp>&rsquo;.  See <a href="Minor-Mode-Conventions.html#Minor-Mode-Conventions">Minor Mode Conventions</a>. 
+Minor mode variables will not be listed here.
+
+     <dl>
+<dt><code>auto-fill-function</code><dd>See <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>.
+
+     <br><dt><code>buffer-auto-save-file-format</code><dd>See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.
+
+     <br><dt><code>buffer-auto-save-file-name</code><dd>See <a href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>.
+
+     <br><dt><code>buffer-backed-up</code><dd>See <a href="Making-Backups.html#Making-Backups">Making Backups</a>.
+
+     <br><dt><code>buffer-display-count</code><dd>See <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>.
+
+     <br><dt><code>buffer-display-table</code><dd>See <a href="Active-Display-Table.html#Active-Display-Table">Active Display Table</a>.
+
+     <br><dt><code>buffer-display-time</code><dd>See <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>.
+
+     <br><dt><code>buffer-file-coding-system</code><dd>See <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>.
+
+     <br><dt><code>buffer-file-format</code><dd>See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.
+
+     <br><dt><code>buffer-file-name</code><dd>See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>.
+
+     <br><dt><code>buffer-file-number</code><dd>See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>.
+
+     <br><dt><code>buffer-file-truename</code><dd>See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>.
+
+     <br><dt><code>buffer-file-type</code><dd>See <a href="MS_002dDOS-File-Types.html#MS_002dDOS-File-Types">MS-DOS File Types</a>.
+
+     <br><dt><code>buffer-invisibility-spec</code><dd>See <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>.
+
+     <br><dt><code>buffer-offer-save</code><dd>See <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>.
+
+     <br><dt><code>buffer-save-without-query</code><dd>See <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>.
+
+     <br><dt><code>buffer-read-only</code><dd>See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
+
+     <br><dt><code>buffer-saved-size</code><dd>See <a href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>.
+
+     <br><dt><code>buffer-undo-list</code><dd>See <a href="Undo.html#Undo">Undo</a>.
+
+     <br><dt><code>cache-long-line-scans</code><dd>See <a href="Truncation.html#Truncation">Truncation</a>.
+
+     <br><dt><code>case-fold-search</code><dd>See <a href="Searching-and-Case.html#Searching-and-Case">Searching and Case</a>.
+
+     <br><dt><code>ctl-arrow</code><dd>See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+     <br><dt><code>cursor-in-non-selected-windows</code><dd>See <a href="Basic-Windows.html#Basic-Windows">Basic Windows</a>.
+
+     <br><dt><code>cursor-type</code><dd>See <a href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>.
+
+     <br><dt><code>comment-column</code><dd>See <a href="../emacs/Comments.html#Comments">Comments</a>.
+
+     <br><dt><code>default-directory</code><dd>See <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>.
+
+     <br><dt><code>defun-prompt-regexp</code><dd>See <a href="List-Motion.html#List-Motion">List Motion</a>.
+
+     <br><dt><code>desktop-save-buffer</code><dd>See <a href="Desktop-Save-Mode.html#Desktop-Save-Mode">Desktop Save Mode</a>.
+
+     <br><dt><code>enable-multibyte-characters</code><dd><a href="Text-Representations.html#Text-Representations">Text Representations</a>.
+
+     <br><dt><code>fill-column</code><dd>See <a href="Margins.html#Margins">Margins</a>.
+
+     <br><dt><code>fill-prefix</code><dd>See <a href="Margins.html#Margins">Margins</a>.
+
+     <br><dt><code>font-lock-defaults</code><dd>See <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>.
+
+     <br><dt><code>fringe-cursor-alist</code><dd>See <a href="Fringe-Cursors.html#Fringe-Cursors">Fringe Cursors</a>.
+
+     <br><dt><code>fringe-indicator-alist</code><dd>See <a href="Fringe-Indicators.html#Fringe-Indicators">Fringe Indicators</a>.
+
+     <br><dt><code>fringes-outside-margins</code><dd>See <a href="Fringes.html#Fringes">Fringes</a>.
+
+     <br><dt><code>goal-column</code><dd>See <a href="../emacs/Moving-Point.html#Moving-Point">Moving Point</a>.
+
+     <br><dt><code>header-line-format</code><dd>See <a href="Header-Lines.html#Header-Lines">Header Lines</a>.
+
+     <br><dt><code>indicate-buffer-boundaries</code><dd>See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+     <br><dt><code>indicate-empty-lines</code><dd>See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+     <br><dt><code>left-fringe-width</code><dd>See <a href="Fringe-Size_002fPos.html#Fringe-Size_002fPos">Fringe Size/Pos</a>.
+
+     <br><dt><code>left-margin</code><dd>See <a href="Margins.html#Margins">Margins</a>.
+
+     <br><dt><code>left-margin-width</code><dd>See <a href="Display-Margins.html#Display-Margins">Display Margins</a>.
+
+     <br><dt><code>line-spacing</code><dd>See <a href="Line-Height.html#Line-Height">Line Height</a>.
+
+     <br><dt><code>local-abbrev-table</code><dd>See <a href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>.
+
+     <br><dt><code>major-mode</code><dd>See <a href="Mode-Help.html#Mode-Help">Mode Help</a>.
+
+     <br><dt><code>mark-active</code><dd>See <a href="The-Mark.html#The-Mark">The Mark</a>.
+
+     <br><dt><code>mark-ring</code><dd>See <a href="The-Mark.html#The-Mark">The Mark</a>.
+
+     <br><dt><code>mode-line-buffer-identification</code><dd>See <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>.
+
+     <br><dt><code>mode-line-format</code><dd>See <a href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>.
+
+     <br><dt><code>mode-line-modified</code><dd>See <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>.
+
+     <br><dt><code>mode-line-process</code><dd>See <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>.
+
+     <br><dt><code>mode-name</code><dd>See <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>.
+
+     <br><dt><code>point-before-scroll</code><dd>Used for communication between mouse commands and scroll-bar commands.
+
+     <br><dt><code>right-fringe-width</code><dd>See <a href="Fringe-Size_002fPos.html#Fringe-Size_002fPos">Fringe Size/Pos</a>.
+
+     <br><dt><code>right-margin-width</code><dd>See <a href="Display-Margins.html#Display-Margins">Display Margins</a>.
+
+     <br><dt><code>save-buffer-coding-system</code><dd>See <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>.
+
+     <br><dt><code>scroll-bar-width</code><dd>See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>.
+
+     <br><dt><code>scroll-down-aggressively</code><dt><code>scroll-up-aggressively</code><dd>See <a href="Textual-Scrolling.html#Textual-Scrolling">Textual Scrolling</a>.
+
+     <br><dt><code>selective-display</code><dt><code>selective-display-ellipses</code><dd>See <a href="Selective-Display.html#Selective-Display">Selective Display</a>.
+
+     <br><dt><code>tab-width</code><dd>See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
+
+     <br><dt><code>truncate-lines</code><dd>See <a href="Truncation.html#Truncation">Truncation</a>.
+
+     <br><dt><code>vertical-scroll-bar</code><dd>See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>.
+
+     <br><dt><code>window-size-fixed</code><dd>See <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>.
+
+     <br><dt><code>write-contents-functions</code><dd>See <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>. 
+</dl>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1999, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

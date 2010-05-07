@@ -1,6 +1,6 @@
 ;;; plhb.el - Setup AUC TeX for editing Polish text with plhb.sty
 
-;; $Id: plhb.el,v 1.5 2008/02/25 18:02:11 davidswelt Exp $
+;; $Id: plhb.el,v 1.1 1994/01/30 21:17:27 amanda Exp $
 
 ;;; Commentary:
 ;;

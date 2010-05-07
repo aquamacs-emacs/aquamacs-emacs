@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Desktop Save Mode - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Modes.html#Modes" title="Modes">
+<link rel="prev" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Desktop-Save-Mode"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
+<hr>
+</div>
+
+<h3 class="section">23.7 Desktop Save Mode</h3>
+
+<p><a name="index-desktop-save-mode-1700"></a>
+<dfn>Desktop Save Mode</dfn> is a feature to save the state of Emacs from
+one session to another.  The user-level commands for using Desktop
+Save Mode are described in the GNU Emacs Manual (see <a href="../emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>).  Modes whose buffers visit
+a file, don't have to do anything to use this feature.
+
+   <p>For buffers not visiting a file to have their state saved, the major
+mode must bind the buffer local variable <code>desktop-save-buffer</code> to
+a non-<code>nil</code> value.
+
+<div class="defun">
+&mdash; Variable: <b>desktop-save-buffer</b><var><a name="index-desktop_002dsave_002dbuffer-1701"></a></var><br>
+<blockquote><p>If this buffer-local variable is non-<code>nil</code>, the buffer will have
+its state saved in the desktop file at desktop save.  If the value is
+a function, it is called at desktop save with argument
+<var>desktop-dirname</var>, and its value is saved in the desktop file along
+with the state of the buffer for which it was called.  When file names
+are returned as part of the auxiliary information, they should be
+formatted using the call
+
+     <pre class="example">          (desktop-file-name <var>file-name</var> <var>desktop-dirname</var>)
+</pre>
+        </blockquote></div>
+
+   <p>For buffers not visiting a file to be restored, the major mode must
+define a function to do the job, and that function must be listed in
+the alist <code>desktop-buffer-mode-handlers</code>.
+
+<div class="defun">
+&mdash; Variable: <b>desktop-buffer-mode-handlers</b><var><a name="index-desktop_002dbuffer_002dmode_002dhandlers-1702"></a></var><br>
+<blockquote><p>Alist with elements
+
+     <pre class="example">          (<var>major-mode</var> . <var>restore-buffer-function</var>)
+</pre>
+        <p>The function <var>restore-buffer-function</var> will be called with
+argument list
+
+     <pre class="example">          (<var>buffer-file-name</var> <var>buffer-name</var> <var>desktop-buffer-misc</var>)
+</pre>
+        <p>and it should return the restored buffer. 
+Here <var>desktop-buffer-misc</var> is the value returned by the function
+optionally bound to <code>desktop-save-buffer</code>. 
+</p></blockquote></div>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

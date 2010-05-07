@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+<title>Serial Ports - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Processes.html#Processes" title="Processes">
+<link rel="prev" href="Misc-Network.html#Misc-Network" title="Misc Network">
+<link rel="next" href="Byte-Packing.html#Byte-Packing" title="Byte Packing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Serial-Ports"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Byte-Packing.html#Byte-Packing">Byte Packing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Misc-Network.html#Misc-Network">Misc Network</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
+<hr>
+</div>
+
+<h3 class="section">37.19 Communicating with Serial Ports</h3>
+
+<p><a name="index-g_t_0040file_007b_002fdev_002ftty_007d-3286"></a><a name="index-g_t_0040file_007bCOM1_007d-3287"></a><a name="index-serial-connections-3288"></a>
+  Emacs can communicate with serial ports.  For interactive use,
+<kbd>M-x serial-term</kbd> opens a terminal window.  In a Lisp program,
+<code>make-serial-process</code> creates a process object.
+
+   <p>The serial port can be configured at run-time, without having to
+close and re-open it.  The function <code>serial-process-configure</code>
+lets you change the speed, bytesize, and other parameters.  In a
+terminal window created by <code>serial-term</code>, you can click on the
+mode line for configuration.
+
+   <p>A serial connection is represented by a process object which can be
+used similar to a subprocess or network process.  You can send and
+receive data and configure the serial port.  A serial process object
+has no process ID, you can't send signals to it, and the status codes
+are different from other types of processes. 
+<code>delete-process</code> on the process object or <code>kill-buffer</code> on
+the process buffer close the connection, but this does not affect the
+device connected to the serial port.
+
+   <p>The function <code>process-type</code> returns the symbol <code>serial</code>
+for a process object representing a serial port connection.
+
+   <p>Serial ports are available on GNU/Linux, Unix, and Windows systems.
+
+<div class="defun">
+&mdash; Command: <b>serial-term</b><var> port speed<a name="index-serial_002dterm-3289"></a></var><br>
+<blockquote><p>Start a terminal-emulator for a serial port in a new buffer. 
+<var>port</var> is the name of the serial port to which to connect.  For
+example, this could be <samp><span class="file">/dev/ttyS0</span></samp> on Unix.  On Windows, this
+could be <samp><span class="file">COM1</span></samp>, or <samp><span class="file">\\.\COM10</span></samp> (double the backslashes in
+Lisp strings).
+
+        <p><var>speed</var> is the speed of the serial port in bits per second.  9600
+is a common value.  The buffer is in Term mode; see <a href="../emacs/Term-Mode.html#Term-Mode">Term Mode</a>, for the commands to use in that buffer. 
+You can change the speed and the configuration in the mode line menu. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-serial-process</b><var> &amp;rest args<a name="index-make_002dserial_002dprocess-3290"></a></var><br>
+<blockquote><p>This function creates a process and a buffer.  Arguments are specified
+as keyword/argument pairs.  Here's the list of the meaningful keywords:
+
+          <dl>
+<dt><code>:port </code><var>port</var><span class="roman"> (mandatory)</span><dd>This is the name of the serial port.  On Unix and GNU systems, this is
+a file name such as <samp><span class="file">/dev/ttyS0</span></samp>.  On Windows, this could be
+<samp><span class="file">COM1</span></samp>, or <samp><span class="file">\\.\COM10</span></samp> for ports higher than <samp><span class="file">COM9</span></samp>
+(double the backslashes in Lisp strings).
+
+          <br><dt><code>:speed </code><var>speed</var><span class="roman"> (mandatory)</span><dd>The speed of the serial port in bits per second.  This function calls
+<code>serial-process-configure</code> to handle the speed.
+
+          <br><dt><code>:name </code><var>name</var><dd>The name of the process.  If <var>name</var> is not given, <var>port</var> will
+serve as the process name as well.
+
+          <br><dt><code>:buffer </code><var>buffer</var><dd>The buffer to associate with the process.  The value could be either a
+buffer or a string that names a buffer.  Process output goes at the
+end of that buffer, unless you specify an output stream or filter
+function to handle the output.  If <var>buffer</var> is not given, the
+process buffer's name is taken from the value of the <code>:name</code>
+keyword.
+
+          <br><dt><code>:coding </code><var>coding</var><dd>If <var>coding</var> is a symbol, it specifies the coding system used for
+both reading and writing for this process.  If <var>coding</var> is a cons
+<code>(decoding . encoding)</code>, <var>decoding</var> is used for reading, and
+<var>encoding</var> is used for writing.  If not specified, the default is
+to determine the coding systems from data itself.
+
+          <br><dt><code>:noquery </code><var>query-flag</var><dd>Initialize the process query flag to <var>query-flag</var>.  See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.  The flags defaults to <code>nil</code> if unspecified.
+
+          <br><dt><code>:stop </code><var>bool</var><dd>Start process in the <code>stopped</code> state if <var>bool</var> is
+non-<code>nil</code>.  In the stopped state, a serial process does not
+accept incoming data, but you can send outgoing data.  The stopped
+state is cleared by <code>continue-process</code> and set by
+<code>stop-process</code>.
+
+          <br><dt><code>:filter </code><var>filter</var><dd>Install <var>filter</var> as the process filter.
+
+          <br><dt><code>:sentinel </code><var>sentinel</var><dd>Install <var>sentinel</var> as the process sentinel.
+
+          <br><dt><code>:plist </code><var>plist</var><dd>Install <var>plist</var> as the initial plist of the process.
+
+          <br><dt><code>:speed</code><dt><code>:bytesize</code><dt><code>:parity</code><dt><code>:stopbits</code><dt><code>:flowcontrol</code><dd>These arguments are handled by <code>serial-process-configure</code>, which
+is called by <code>make-serial-process</code>. 
+</dl>
+
+        <p>The original argument list, possibly modified by later configuration,
+is available via the function <code>process-contact</code>.
+
+        <p>Examples:
+
+     <pre class="example">          (make-serial-process :port "/dev/ttyS0" :speed 9600)
+          
+          (make-serial-process :port "COM1" :speed 115200 :stopbits 2)
+          
+          (make-serial-process :port "\\\\.\\COM13" :speed 1200
+                               :bytesize 7 :parity 'odd)
+          
+          (make-serial-process :port "/dev/tty.BlueConsole-SPP-1"
+                               :speed nil)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>serial-process-configure</b><var> &amp;rest args<a name="index-serial_002dprocess_002dconfigure-3291"></a></var><br>
+<blockquote><p><a name="index-baud_002c-in-serial-connections-3292"></a><a name="index-bytesize_002c-in-serial-connections-3293"></a><a name="index-parity_002c-in-serial-connections-3294"></a><a name="index-stopbits_002c-in-serial-connections-3295"></a><a name="index-flowcontrol_002c-in-serial-connections-3296"></a>
+This functions configures a serial port connection.  Arguments are
+specified as keyword/argument pairs.  Attributes that are not given
+are re-initialized from the process's current configuration (available
+via the function <code>process-contact</code>) or set to reasonable default
+values.  The following arguments are defined:
+
+          <dl>
+<dt><code>:process </code><var>process</var><dt><code>:name </code><var>name</var><dt><code>:buffer </code><var>buffer</var><dt><code>:port </code><var>port</var><dd>Any of these arguments can be given to identify the process that is to
+be configured.  If none of these arguments is given, the current
+buffer's process is used.
+
+          <br><dt><code>:speed </code><var>speed</var><dd>The speed of the serial port in bits per second, a.k.a. <dfn>baud
+rate</dfn>.  The value can be any number, but most serial ports work only
+at a few defined values between 1200 and 115200, with 9600 being the
+most common value.  If <var>speed</var> is <code>nil</code>, the function ignores
+all other arguments and does not configure the port.  This may be
+useful for special serial ports such as Bluetooth-to-serial converters
+which can only be configured through AT commands sent through the
+connection.  The value of <code>nil</code> for <var>speed</var> is valid only for
+connections that were already opened by a previous call to
+<code>make-serial-process</code> or <code>serial-term</code>.
+
+          <br><dt><code>:bytesize </code><var>bytesize</var><dd>The number of bits per byte, which can be 7 or 8.  If <var>bytesize</var>
+is not given or <code>nil</code>, it defaults to 8.
+
+          <br><dt><code>:parity </code><var>parity</var><dd>The value can be <code>nil</code> (don't use parity), the symbol
+<code>odd</code> (use odd parity), or the symbol <code>even</code> (use even
+parity).  If <var>parity</var> is not given, it defaults to no parity.
+
+          <br><dt><code>:stopbits </code><var>stopbits</var><dd>The number of stopbits used to terminate a transmission
+of each byte.  <var>stopbits</var> can be 1 or 2.  If <var>stopbits</var> is not
+given or <code>nil</code>, it defaults to 1.
+
+          <br><dt><code>:flowcontrol </code><var>flowcontrol</var><dd>The type of flow control to use for this connection, which is either
+<code>nil</code> (don't use flow control), the symbol <code>hw</code> (use RTS/CTS
+hardware flow control), or the symbol <code>sw</code> (use XON/XOFF software
+flow control).  If <var>flowcontrol</var> is not given, it defaults to no
+flow control. 
+</dl>
+
+        <p><code>serial-process-configure</code> is called by <code>make-serial-process</code> for the
+initial configuration of the serial port.
+
+        <p>Examples:
+
+     <pre class="example">          (serial-process-configure :process "/dev/ttyS0" :speed 1200)
+          
+          (serial-process-configure :buffer "COM1" :stopbits 1
+                                    :parity 'odd :flowcontrol 'hw)
+          
+          (serial-process-configure :port "\\\\.\\COM13" :bytesize 7)
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+<title>Process Buffers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Output-from-Processes.html#Output-from-Processes" title="Output from Processes">
+<link rel="next" href="Filter-Functions.html#Filter-Functions" title="Filter Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Process-Buffers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filter-Functions.html#Filter-Functions">Filter Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>
+<hr>
+</div>
+
+<h4 class="subsection">37.9.1 Process Buffers</h4>
+
+<p>A process can (and usually does) have an <dfn>associated buffer</dfn>,
+which is an ordinary Emacs buffer that is used for two purposes: storing
+the output from the process, and deciding when to kill the process.  You
+can also use the buffer to identify a process to operate on, since in
+normal practice only one process is associated with any given buffer. 
+Many applications of processes also use the buffer for editing input to
+be sent to the process, but this is not built into Emacs Lisp.
+
+   <p>Unless the process has a filter function (see <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>),
+its output is inserted in the associated buffer.  The position to insert
+the output is determined by the <code>process-mark</code>, which is then
+updated to point to the end of the text just inserted.  Usually, but not
+always, the <code>process-mark</code> is at the end of the buffer.
+
+   <p><a name="index-process_002dkill_002dbuffer_002dquery_002dfunction-3244"></a>  Killing the associated buffer of a process also kills the process. 
+Emacs asks for confirmation first, if the process's
+<code>process-query-on-exit-flag</code> is non-<code>nil</code> (see <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>).  This confirmation is done by the function
+<code>process-kill-buffer-query-function</code>, which is run from
+<code>kill-buffer-query-functions</code> (see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>).
+
+<div class="defun">
+&mdash; Function: <b>process-buffer</b><var> process<a name="index-process_002dbuffer-3245"></a></var><br>
+<blockquote><p>This function returns the associated buffer of the process
+<var>process</var>.
+
+     <pre class="smallexample">          (process-buffer (get-process "shell"))
+               &rArr; #&lt;buffer *shell*&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>process-mark</b><var> process<a name="index-process_002dmark-3246"></a></var><br>
+<blockquote><p>This function returns the process marker for <var>process</var>, which is the
+marker that says where to insert output from the process.
+
+        <p>If <var>process</var> does not have a buffer, <code>process-mark</code> returns a
+marker that points nowhere.
+
+        <p>Insertion of process output in a buffer uses this marker to decide where
+to insert, and updates it to point after the inserted text.  That is why
+successive batches of output are inserted consecutively.
+
+        <p>Filter functions normally should use this marker in the same fashion
+as is done by direct insertion of output in the buffer.  A good
+example of a filter function that uses <code>process-mark</code> is found at
+the end of the following section.
+
+        <p>When the user is expected to enter input in the process buffer for
+transmission to the process, the process marker separates the new input
+from previous output. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-process-buffer</b><var> process buffer<a name="index-set_002dprocess_002dbuffer-3247"></a></var><br>
+<blockquote><p>This function sets the buffer associated with <var>process</var> to
+<var>buffer</var>.  If <var>buffer</var> is <code>nil</code>, the process becomes
+associated with no buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-buffer-process</b><var> buffer-or-name<a name="index-get_002dbuffer_002dprocess-3248"></a></var><br>
+<blockquote><p>This function returns a nondeleted process associated with the buffer
+specified by <var>buffer-or-name</var>.  If there are several processes
+associated with it, this function chooses one (currently, the one most
+recently created, but don't count on that).  Deletion of a process
+(see <code>delete-process</code>) makes it ineligible for this function to
+return.
+
+        <p>It is usually a bad idea to have more than one process associated with
+the same buffer.
+
+     <pre class="smallexample">          (get-buffer-process "*shell*")
+               &rArr; #&lt;process shell&gt;
+</pre>
+        <p>Killing the process's buffer deletes the process, which kills the
+subprocess with a <code>SIGHUP</code> signal (see <a href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

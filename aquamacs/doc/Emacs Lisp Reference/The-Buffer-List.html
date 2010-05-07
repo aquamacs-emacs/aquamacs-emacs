@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>The Buffer List - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Buffers.html#Buffers" title="Buffers">
+<link rel="prev" href="Read-Only-Buffers.html#Read-Only-Buffers" title="Read Only Buffers">
+<link rel="next" href="Creating-Buffers.html#Creating-Buffers" title="Creating Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="The-Buffer-List"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr>
+</div>
+
+<h3 class="section">27.8 The Buffer List</h3>
+
+<p><a name="index-buffer-list-2009"></a>
+  The <dfn>buffer list</dfn> is a list of all live buffers.  The order of the
+buffers in this list is based primarily on how recently each buffer has
+been displayed in a window.  Several functions, notably
+<code>other-buffer</code>, use this ordering.  A buffer list displayed for the
+user also follows this order.
+
+   <p>Creating a buffer adds it to the end of the buffer list, and killing a
+buffer removes it from that list.  A buffer moves to the front of this
+list whenever it is chosen for display in a window (see <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>) or a window displaying it is selected (see <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>).  A buffer moves to the end of the list when it is buried (see
+<code>bury-buffer</code>, below).  There are no functions available to the
+Lisp programmer which directly manipulate the buffer list.
+
+   <p>In addition to the fundamental buffer list just described, Emacs
+maintains a local buffer list for each frame, in which the buffers that
+have been displayed (or had their windows selected) in that frame come
+first.  (This order is recorded in the frame's <code>buffer-list</code> frame
+parameter; see <a href="Buffer-Parameters.html#Buffer-Parameters">Buffer Parameters</a>.)  Buffers never displayed in
+that frame come afterward, ordered according to the fundamental buffer
+list.
+
+<div class="defun">
+&mdash; Function: <b>buffer-list</b><var> &amp;optional frame<a name="index-buffer_002dlist-2010"></a></var><br>
+<blockquote><p>This function returns the buffer list, including all buffers, even those
+whose names begin with a space.  The elements are actual buffers, not
+their names.
+
+        <p>If <var>frame</var> is a frame, this returns <var>frame</var>'s local buffer list. 
+If <var>frame</var> is <code>nil</code> or omitted, the fundamental buffer list is
+used: the buffers appear in order of most recent display or selection,
+regardless of which frames they were displayed on.
+
+     <pre class="example">          (buffer-list)
+               &rArr; (#&lt;buffer buffers.texi&gt;
+                   #&lt;buffer  *Minibuf-1*&gt; #&lt;buffer buffer.c&gt;
+                   #&lt;buffer *Help*&gt; #&lt;buffer TAGS&gt;)
+          
+          ;; <span class="roman">Note that the name of the minibuffer</span>
+          ;;   <span class="roman">begins with a space!</span>
+          (mapcar (function buffer-name) (buffer-list))
+              &rArr; ("buffers.texi" " *Minibuf-1*"
+                  "buffer.c" "*Help*" "TAGS")
+</pre>
+        </blockquote></div>
+
+   <p>The list returned by <code>buffer-list</code> is constructed specifically;
+it is not an internal Emacs data structure, and modifying it has no
+effect on the order of buffers.  If you want to change the order of
+buffers in the fundamental buffer list, here is an easy way:
+
+<pre class="example">     (defun reorder-buffer-list (new-list)
+       (while new-list
+         (bury-buffer (car new-list))
+         (setq new-list (cdr new-list))))
+</pre>
+   <p>With this method, you can specify any order for the list, but there is
+no danger of losing a buffer or adding something that is not a valid
+live buffer.
+
+   <p>To change the order or value of a specific frame's buffer list, set
+that frame's <code>buffer-list</code> parameter with
+<code>modify-frame-parameters</code> (see <a href="Parameter-Access.html#Parameter-Access">Parameter Access</a>).
+
+<div class="defun">
+&mdash; Function: <b>other-buffer</b><var> &amp;optional buffer visible-ok frame<a name="index-other_002dbuffer-2011"></a></var><br>
+<blockquote><p>This function returns the first buffer in the buffer list other than
+<var>buffer</var>.  Usually, this is the buffer appearing in the most
+recently selected window (in frame <var>frame</var> or else the selected
+frame, see <a href="Input-Focus.html#Input-Focus">Input Focus</a>), aside from <var>buffer</var>.  Buffers whose
+names start with a space are not considered at all.
+
+        <p>If <var>buffer</var> is not supplied (or if it is not a live buffer), then
+<code>other-buffer</code> returns the first buffer in the selected frame's
+local buffer list. (If <var>frame</var> is non-<code>nil</code>, it returns the
+first buffer in <var>frame</var>'s local buffer list instead.)
+
+        <p>If <var>frame</var> has a non-<code>nil</code> <code>buffer-predicate</code> parameter,
+then <code>other-buffer</code> uses that predicate to decide which buffers to
+consider.  It calls the predicate once for each buffer, and if the value
+is <code>nil</code>, that buffer is ignored.  See <a href="Buffer-Parameters.html#Buffer-Parameters">Buffer Parameters</a>.
+
+     <!-- Emacs 19 feature -->
+        <p>If <var>visible-ok</var> is <code>nil</code>, <code>other-buffer</code> avoids returning
+a buffer visible in any window on any visible frame, except as a last
+resort.  If <var>visible-ok</var> is non-<code>nil</code>, then it does not matter
+whether a buffer is displayed somewhere or not.
+
+        <p>If no suitable buffer exists, the buffer &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; is returned
+(and created, if necessary). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>last-buffer</b><var> &amp;optional buffer visible-ok frame<a name="index-last_002dbuffer-2012"></a></var><br>
+<blockquote><p>This function returns the last buffer in <var>frame</var>'s buffer list other
+than <var>BUFFER</var>.  If <var>frame</var> is omitted or <code>nil</code>, it uses the
+selected frame's buffer list.
+
+        <p>The argument <var>visible-ok</var> is handled as with <code>other-buffer</code>,
+see above.  If no suitable buffer can be found, the buffer
+&lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>bury-buffer</b><var> &amp;optional buffer-or-name<a name="index-bury_002dbuffer-2013"></a></var><br>
+<blockquote><p>This command puts <var>buffer-or-name</var> at the end of the buffer list,
+without changing the order of any of the other buffers on the list. 
+This buffer therefore becomes the least desirable candidate for
+<code>other-buffer</code> to return.  The argument can be either a buffer
+itself or the name of one.
+
+        <p><code>bury-buffer</code> operates on each frame's <code>buffer-list</code> parameter
+as well as the fundamental buffer list; therefore, the buffer that you
+bury will come last in the value of <code>(buffer-list </code><var>frame</var><code>)</code> and
+in the value of <code>(buffer-list)</code>.
+
+        <p>If <var>buffer-or-name</var> is <code>nil</code> or omitted, this means to bury the
+current buffer.  In addition, if the buffer is displayed in the selected
+window, this switches to some other buffer (obtained using
+<code>other-buffer</code>) in the selected window.  See <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>. 
+But if the selected window is dedicated to its buffer, it deletes that
+window if there are other windows left on its frame.  Otherwise, if the
+selected window is the only window on its frame, it iconifies that
+frame.  If <var>buffer-or-name</var> is displayed in some other window, it
+remains displayed there.
+
+        <p>To replace a buffer in all the windows that display it, use
+<code>replace-buffer-in-windows</code>.  See <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>unbury-buffer</b><var><a name="index-unbury_002dbuffer-2014"></a></var><br>
+<blockquote><p>This command switches to the last buffer in the local buffer list of the
+selected frame.  More precisely, it calls the function
+<code>switch-to-buffer</code> (see <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>), to display the
+buffer returned by <code>last-buffer</code>, see above, in the selected
+window. 
+</p></blockquote></div>
+
+   </body></html>
+

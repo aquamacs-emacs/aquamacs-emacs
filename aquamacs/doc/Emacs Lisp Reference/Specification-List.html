@@ -1,0 +1,236 @@
+<html lang="en">
+<head>
+<title>Specification List - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Edebug-and-Macros.html#Edebug-and-Macros" title="Edebug and Macros">
+<link rel="prev" href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls" title="Instrumenting Macro Calls">
+<link rel="next" href="Backtracking.html#Backtracking" title="Backtracking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Specification-List"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Backtracking.html#Backtracking">Backtracking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.15.2 Specification List</h5>
+
+<p><a name="index-Edebug-specification-list-994"></a>A <dfn>specification list</dfn> is required for an Edebug specification if
+some arguments of a macro call are evaluated while others are not.  Some
+elements in a specification list match one or more arguments, but others
+modify the processing of all following elements.  The latter, called
+<dfn>specification keywords</dfn>, are symbols beginning with &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo; (such
+as <code>&amp;optional</code>).
+
+   <p>A specification list may contain sublists which match arguments that are
+themselves lists, or it may contain vectors used for grouping.  Sublists
+and groups thus subdivide the specification list into a hierarchy of
+levels.  Specification keywords apply only to the remainder of the
+sublist or group they are contained in.
+
+   <p>When a specification list involves alternatives or repetition, matching
+it against an actual macro call may require backtracking.  For more
+details, see <a href="Backtracking.html#Backtracking">Backtracking</a>.
+
+   <p>Edebug specifications provide the power of regular expression matching,
+plus some context-free grammar constructs: the matching of sublists with
+balanced parentheses, recursive processing of forms, and recursion via
+indirect specifications.
+
+   <p>Here's a table of the possible elements of a specification list, with
+their meanings (see <a href="Specification-Examples.html#Specification-Examples">Specification Examples</a>, for the referenced
+examples):
+
+     <dl>
+<dt><code>sexp</code><dd>A single unevaluated Lisp object, which is not instrumented. 
+<!-- an "expression" is not necessarily intended for evaluation. -->
+
+     <br><dt><code>form</code><dd>A single evaluated expression, which is instrumented.
+
+     <br><dt><code>place</code><dd><!-- I can't see that this index entry is useful without any explanation. -->
+<!-- @findex edebug-unwrap -->
+A place to store a value, as in the Common Lisp <code>setf</code> construct.
+
+     <br><dt><code>body</code><dd>Short for <code>&amp;rest form</code>.  See <code>&amp;rest</code> below.
+
+     <br><dt><code>function-form</code><dd>A function form: either a quoted function symbol, a quoted lambda
+expression, or a form (that should evaluate to a function symbol or
+lambda expression).  This is useful when an argument that's a lambda
+expression might be quoted with <code>quote</code> rather than
+<code>function</code>, since it instruments the body of the lambda expression
+either way.
+
+     <br><dt><code>lambda-expr</code><dd>A lambda expression with no quoting.
+
+     <br><dt><code>&amp;optional</code><dd><!-- @kindex &optional @r{(Edebug)} -->
+All following elements in the specification list are optional; as soon
+as one does not match, Edebug stops matching at this level.
+
+     <p>To make just a few elements optional followed by non-optional elements,
+use <code>[&amp;optional </code><var>specs</var><code>...]</code>.  To specify that several
+elements must all match or none, use <code>&amp;optional
+[</code><var>specs</var><code>...]</code>.  See the <code>defun</code> example.
+
+     <br><dt><code>&amp;rest</code><dd><!-- @kindex &rest @r{(Edebug)} -->
+All following elements in the specification list are repeated zero or
+more times.  In the last repetition, however, it is not a problem if the
+expression runs out before matching all of the elements of the
+specification list.
+
+     <p>To repeat only a few elements, use <code>[&amp;rest </code><var>specs</var><code>...]</code>. 
+To specify several elements that must all match on every repetition, use
+<code>&amp;rest [</code><var>specs</var><code>...]</code>.
+
+     <br><dt><code>&amp;or</code><dd><!-- @kindex &or @r{(Edebug)} -->
+Each of the following elements in the specification list is an
+alternative.  One of the alternatives must match, or the <code>&amp;or</code>
+specification fails.
+
+     <p>Each list element following <code>&amp;or</code> is a single alternative.  To
+group two or more list elements as a single alternative, enclose them in
+<code>[...]</code>.
+
+     <br><dt><code>&amp;not</code><dd><!-- @kindex &not @r{(Edebug)} -->
+Each of the following elements is matched as alternatives as if by using
+<code>&amp;or</code>, but if any of them match, the specification fails.  If none
+of them match, nothing is matched, but the <code>&amp;not</code> specification
+succeeds.
+
+     <br><dt><code>&amp;define</code><dd><!-- @kindex &define @r{(Edebug)} -->
+Indicates that the specification is for a defining form.  The defining
+form itself is not instrumented (that is, Edebug does not stop before and
+after the defining form), but forms inside it typically will be
+instrumented.  The <code>&amp;define</code> keyword should be the first element in
+a list specification.
+
+     <br><dt><code>nil</code><dd>This is successful when there are no more arguments to match at the
+current argument list level; otherwise it fails.  See sublist
+specifications and the backquote example.
+
+     <br><dt><code>gate</code><dd><a name="index-preventing-backtracking-995"></a>No argument is matched but backtracking through the gate is disabled
+while matching the remainder of the specifications at this level.  This
+is primarily used to generate more specific syntax error messages.  See
+<a href="Backtracking.html#Backtracking">Backtracking</a>, for more details.  Also see the <code>let</code> example.
+
+     <br><dt><var>other-symbol</var><dd><a name="index-indirect-specifications-996"></a>Any other symbol in a specification list may be a predicate or an
+indirect specification.
+
+     <p>If the symbol has an Edebug specification, this <dfn>indirect
+specification</dfn> should be either a list specification that is used in
+place of the symbol, or a function that is called to process the
+arguments.  The specification may be defined with <code>def-edebug-spec</code>
+just as for macros.  See the <code>defun</code> example.
+
+     <p>Otherwise, the symbol should be a predicate.  The predicate is called
+with the argument and the specification fails if the predicate returns
+<code>nil</code>, and the argument is not instrumented.
+
+     <p>Some suitable predicates include <code>symbolp</code>, <code>integerp</code>,
+<code>stringp</code>, <code>vectorp</code>, and <code>atom</code>.
+
+     <br><dt><code>[</code><var>elements</var><code>...]</code><dd><a name="index-g_t_005b_0040dots_007b_007d_005d-_0028Edebug_0029-997"></a>A vector of elements groups the elements into a single <dfn>group
+specification</dfn>.  Its meaning has nothing to do with vectors.
+
+     <br><dt><code>"</code><var>string</var><code>"</code><dd>The argument should be a symbol named <var>string</var>.  This specification
+is equivalent to the quoted symbol, <code>'</code><var>symbol</var>, where the name
+of <var>symbol</var> is the <var>string</var>, but the string form is preferred.
+
+     <br><dt><code>(vector </code><var>elements</var><code>...)</code><dd>The argument should be a vector whose elements must match the
+<var>elements</var> in the specification.  See the backquote example.
+
+     <br><dt><code>(</code><var>elements</var><code>...)</code><dd>Any other list is a <dfn>sublist specification</dfn> and the argument must be
+a list whose elements match the specification <var>elements</var>.
+
+     <p><a name="index-dotted-lists-_0028Edebug_0029-998"></a>A sublist specification may be a dotted list and the corresponding list
+argument may then be a dotted list.  Alternatively, the last <span class="sc">cdr</span> of a
+dotted list specification may be another sublist specification (via a
+grouping or an indirect specification, e.g., <code>(spec .  [(more
+specs...)])</code>) whose elements match the non-dotted list arguments. 
+This is useful in recursive specifications such as in the backquote
+example.  Also see the description of a <code>nil</code> specification
+above for terminating such recursion.
+
+     <p>Note that a sublist specification written as <code>(specs .  nil)</code>
+is equivalent to <code>(specs)</code>, and <code>(specs . 
+(sublist-elements...))</code> is equivalent to <code>(specs
+sublist-elements...)</code>. 
+</dl>
+
+<!-- Need to document extensions with &symbol and :symbol -->
+   <p>Here is a list of additional specifications that may appear only after
+<code>&amp;define</code>.  See the <code>defun</code> example.
+
+     <dl>
+<dt><code>name</code><dd>The argument, a symbol, is the name of the defining form.
+
+     <p>A defining form is not required to have a name field; and it may have
+multiple name fields.
+
+     <br><dt><code>:name</code><dd>This construct does not actually match an argument.  The element
+following <code>:name</code> should be a symbol; it is used as an additional
+name component for the definition.  You can use this to add a unique,
+static component to the name of the definition.  It may be used more
+than once.
+
+     <br><dt><code>arg</code><dd>The argument, a symbol, is the name of an argument of the defining form. 
+However, lambda-list keywords (symbols starting with &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;)
+are not allowed.
+
+     <br><dt><code>lambda-list</code><dd><a name="index-lambda_002dlist-_0028Edebug_0029-999"></a>This matches a lambda list&mdash;the argument list of a lambda expression.
+
+     <br><dt><code>def-body</code><dd>The argument is the body of code in a definition.  This is like
+<code>body</code>, described above, but a definition body must be instrumented
+with a different Edebug call that looks up information associated with
+the definition.  Use <code>def-body</code> for the highest level list of forms
+within the definition.
+
+     <br><dt><code>def-form</code><dd>The argument is a single, highest-level form in a definition.  This is
+like <code>def-body</code>, except it is used to match a single form rather than
+a list of forms.  As a special case, <code>def-form</code> also means that
+tracing information is not output when the form is executed.  See the
+<code>interactive</code> example. 
+</dl>
+
+   </body></html>
+

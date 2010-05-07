@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Comment Commands - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Comments.html#Comments" title="Comments">
+<link rel="next" href="Multi_002dLine-Comments.html#Multi_002dLine-Comments" title="Multi-Line Comments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Comment-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.5.1 Comment Commands</h4>
+
+<p><a name="index-indentation-for-comments-2052"></a><a name="index-alignment-for-comments-2053"></a>
+  The commands in this table insert, kill and align comments:
+
+     <dl>
+<dt><kbd>M-;</kbd><dd>Insert or realign comment on current line; alternatively, comment or
+uncomment the region (<code>comment-dwim</code>). 
+<br><dt><kbd>C-u M-;</kbd><dd>Kill comment on current line (<code>comment-kill</code>). 
+<br><dt><kbd>C-x ;</kbd><dd>Set comment column (<code>comment-set-column</code>). 
+<br><dt><kbd>C-M-j</kbd><dt><kbd>M-j</kbd><dd>Like &lt;RET&gt; followed by inserting and aligning a comment
+(<code>comment-indent-new-line</code>).  See <a href="Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>. 
+<br><dt><kbd>M-x comment-region</kbd><dt><kbd>C-c C-c</kbd> (in C-like modes)<dd>Add or remove comment delimiters on all the lines in the region. 
+</dl>
+
+   <p><a name="index-M_002d_003b-2054"></a><a name="index-comment_002ddwim-2055"></a>  The command to create or align a comment is <kbd>M-;</kbd>
+(<code>comment-dwim</code>).  The word &ldquo;dwim&rdquo; is an acronym for &ldquo;Do What
+I Mean&rdquo;; it indicates that this command can be used for many
+different jobs relating to comments, depending on the situation where
+you use it.
+
+   <p>When a region is active, <kbd>M-;</kbd> either adds or removes comment
+delimiters on each line of the region.  See <a href="Mark.html#Mark">Mark</a>.  If every line in
+the region is a comment, it removes comment delimiters from each;
+otherwise, it adds comment delimiters to each.  You can also use the
+commands <code>comment-region</code> and <code>uncomment-region</code> to
+explicitly comment or uncomment the text in the region
+(see <a href="Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>).  If you supply a prefix argument to
+<kbd>M-;</kbd> when a region is active, that specifies how many comment
+delimiters to add or how many to delete.
+
+   <p>If the region is not active, <kbd>M-;</kbd> inserts a new comment if
+there is no comment already on the line.  The new comment is normally
+aligned at a specific column called the <dfn>comment column</dfn>; if the
+text of the line extends past the comment column, <kbd>M-;</kbd> aligns the
+comment start string to a suitable boundary (usually, at least one
+space is inserted).  The comment begins with the string Emacs thinks
+comments should start with (the value of <code>comment-start</code>; see
+below).  Emacs places point after that string, so you can insert the
+text of the comment right away.  If the major mode has specified a
+string to terminate comments, <kbd>M-;</kbd> inserts that string after
+point, to keep the syntax valid.
+
+   <p>You can also use <kbd>M-;</kbd> to align an existing comment.  If a line
+already contains the comment-start string, <kbd>M-;</kbd> realigns it to
+the conventional alignment and moves point after it.  (Exception:
+comments starting in column 0 are not moved.)  Even when an existing
+comment is properly aligned, <kbd>M-;</kbd> is still useful for moving
+directly to the start of the text inside the comment.
+
+   <p><a name="index-comment_002dkill-2056"></a><a name="index-C_002du-M_002d_003b-2057"></a>  <kbd>C-u M-;</kbd> kills any comment on the current line, along with the
+whitespace before it.  To reinsert the comment on another line, move
+to the end of that line, do <kbd>C-y</kbd>, and then do <kbd>M-;</kbd> to
+realign it.
+
+   <p>Note that <kbd>C-u M-;</kbd> is not a distinct key; it is <kbd>M-;</kbd>
+(<code>comment-dwim</code>) with a prefix argument.  That command is
+programmed so that when it receives a prefix argument it calls
+<code>comment-kill</code>.  However, <code>comment-kill</code> is a valid command
+in its own right, and you can bind it directly to a key if you wish.
+
+   <p>Some major modes have special rules for aligning certain kinds of
+comments in certain contexts.  For example, in Lisp code, comments which
+start with two semicolons are indented as if they were lines of code,
+instead of at the comment column.  Comments which start with three
+semicolons are supposed to start at the left margin and are often used
+for sectioning purposes.  Emacs understands
+these conventions by indenting a double-semicolon comment using &lt;TAB&gt;,
+and by not changing the indentation of a triple-semicolon comment at all.
+
+<pre class="example">     ;; This function is just an example.
+     ;;; Here either two or three semicolons are appropriate.
+     (defun foo (x)
+     ;;;  And now, the first part of the function:
+       ;; The following line adds one.
+       (1+ x))           ; This line adds one.
+</pre>
+   <p>For C-like modes, you can configure the exact effect of <kbd>M-;</kbd> by
+setting the variables <code>c-indent-comment-alist</code> and
+<code>c-indent-comments-syntactically-p</code>.  For example, on a line
+ending in a closing brace, <kbd>M-;</kbd> puts the comment one space after
+the brace rather than at <code>comment-column</code>.  For full details see
+<a href="../ccmode/Comment-Commands.html#Comment-Commands">Comment Commands</a>.
+
+   </body></html>
+

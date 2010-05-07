@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Regexp Replace - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Replace.html#Replace" title="Replace">
+<link rel="prev" href="Unconditional-Replace.html#Unconditional-Replace" title="Unconditional Replace">
+<link rel="next" href="Replacement-and-Case.html#Replacement-and-Case" title="Replacement and Case">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Regexp-Replace"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Replacement-and-Case.html#Replacement-and-Case">Replacement and Case</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Unconditional-Replace.html#Unconditional-Replace">Unconditional Replace</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replace.html#Replace">Replace</a>
+<hr>
+</div>
+
+<h4 class="subsection">19.9.2 Regexp Replacement</h4>
+
+<p><a name="index-replace_002dregexp-692"></a>
+  The <kbd>M-x replace-string</kbd> command replaces exact matches for a
+single string.  The similar command <kbd>M-x replace-regexp</kbd> replaces
+any match for a specified pattern.
+
+     <dl>
+<dt><kbd>M-x replace-regexp &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd><dd>Replace every match for <var>regexp</var> with <var>newstring</var>. 
+</dl>
+
+   <p><a name="index-back-reference_002c-in-regexp-replacement-693"></a>  In <code>replace-regexp</code>, the <var>newstring</var> need not be constant:
+it can refer to all or part of what is matched by the <var>regexp</var>. 
+&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; in <var>newstring</var> stands for the entire match being
+replaced.  &lsquo;<samp><span class="samp">\</span><var>d</var></samp>&rsquo; in <var>newstring</var>, where <var>d</var> is a
+digit, stands for whatever matched the <var>d</var>th parenthesized
+grouping in <var>regexp</var>.  (This is called a &ldquo;back reference.&rdquo;)
+&lsquo;<samp><span class="samp">\#</span></samp>&rsquo; refers to the count of replacements already made in this
+command, as a decimal number.  In the first replacement, &lsquo;<samp><span class="samp">\#</span></samp>&rsquo;
+stands for &lsquo;<samp><span class="samp">0</span></samp>&rsquo;; in the second, for &lsquo;<samp><span class="samp">1</span></samp>&rsquo;; and so on.  For
+example,
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; c[ad]+r &lt;RET&gt; \&amp;-safe &lt;RET&gt;
+</pre>
+   <p class="noindent">replaces (for example) &lsquo;<samp><span class="samp">cadr</span></samp>&rsquo; with &lsquo;<samp><span class="samp">cadr-safe</span></samp>&rsquo; and &lsquo;<samp><span class="samp">cddr</span></samp>&rsquo;
+with &lsquo;<samp><span class="samp">cddr-safe</span></samp>&rsquo;.
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; \(c[ad]+r\)-safe &lt;RET&gt; \1 &lt;RET&gt;
+</pre>
+   <p class="noindent">performs the inverse transformation.  To include a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in the
+text to replace with, you must enter &lsquo;<samp><span class="samp">\\</span></samp>&rsquo;.
+
+   <p>If you want to enter part of the replacement string by hand each
+time, use &lsquo;<samp><span class="samp">\?</span></samp>&rsquo; in the replacement string.  Each replacement will
+ask you to edit the replacement string in the minibuffer, putting
+point where the &lsquo;<samp><span class="samp">\?</span></samp>&rsquo; was.
+
+   <p>The remainder of this subsection is intended for specialized tasks
+and requires knowledge of Lisp.  Most readers can skip it.
+
+   <p>You can use Lisp expressions to calculate parts of the
+replacement string.  To do this, write &lsquo;<samp><span class="samp">\,</span></samp>&rsquo; followed by the
+expression in the replacement string.  Each replacement calculates the
+value of the expression and converts it to text without quoting (if
+it's a string, this means using the string's contents), and uses it in
+the replacement string in place of the expression itself.  If the
+expression is a symbol, one space in the replacement string after the
+symbol name goes with the symbol name, so the value replaces them
+both.
+
+   <p>Inside such an expression, you can use some special sequences. 
+&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo; refer here, as usual, to the entire
+match as a string, and to a submatch as a string.  <var>n</var> may be
+multiple digits, and the value of &lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo; is <code>nil</code> if
+subexpression <var>n</var> did not match.  You can also use &lsquo;<samp><span class="samp">\#&amp;</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">\#</span><var>n</var></samp>&rsquo; to refer to those matches as numbers (this is valid
+when the match or submatch has the form of a numeral).  &lsquo;<samp><span class="samp">\#</span></samp>&rsquo; here
+too stands for the number of already-completed replacements.
+
+   <p>Repeating our example to exchange &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, we can thus
+do it also this way:
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; \(x\)\|y &lt;RET&gt;
+     \,(if \1 "y" "x") &lt;RET&gt;
+</pre>
+   <p>For computing replacement strings for &lsquo;<samp><span class="samp">\,</span></samp>&rsquo;, the <code>format</code>
+function is often useful (see <a href="../elisp/Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>).  For example, to add consecutively numbered
+strings like &lsquo;<samp><span class="samp">ABC00042</span></samp>&rsquo; to columns 73 to&nbsp;80<!-- /@w --> (unless they are
+already occupied), you can use
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; ^.\{0,72\}$ &lt;RET&gt;
+     \,(format "%-72sABC%05d" \&amp; \#) &lt;RET&gt;
+</pre>
+   </body></html>
+

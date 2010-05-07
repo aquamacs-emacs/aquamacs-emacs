@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Special Isearch - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Incremental-Search.html#Incremental-Search" title="Incremental Search">
+<link rel="prev" href="Error-in-Isearch.html#Error-in-Isearch" title="Error in Isearch">
+<link rel="next" href="Isearch-Yank.html#Isearch-Yank" title="Isearch Yank">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Special-Isearch"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Isearch-Yank.html#Isearch-Yank">Isearch Yank</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Error-in-Isearch.html#Error-in-Isearch">Error in Isearch</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Incremental-Search.html#Incremental-Search">Incremental Search</a>
+<hr>
+</div>
+
+<h4 class="subsection">19.1.4 Special Input for Incremental Search</h4>
+
+<p>Some of the characters you type during incremental search have
+special effects.
+
+   <p>If the search string you entered contains only lower-case letters,
+the search is case-insensitive; as long as an upper-case letter exists
+in the search string, the search becomes case-sensitive.  If you
+delete the upper-case character from the search string, it ceases to
+have this effect.  See <a href="Search-Case.html#Search-Case">Search Case</a>.
+
+   <p>To search for a newline character, type <kbd>C-j</kbd>.
+
+   <p>To search for other control characters, such as &lt;control-S&gt;,
+quote it by typing <kbd>C-q</kbd> first (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).  To
+search for non-<acronym>ASCII</acronym> characters, you can either use
+<kbd>C-q</kbd> and enter its octal code, or use an input method
+(see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).  If an input method is enabled in the current
+buffer when you start the search, you can use it in the search string
+also.  While typing the search string, you can toggle the input method
+with the command <kbd>C-\</kbd> (<code>isearch-toggle-input-method</code>).  You
+can also turn on a non-default input method with <kbd>C-^</kbd>
+(<code>isearch-toggle-specified-input-method</code>), which prompts for the
+name of the input method.  When an input method is active during
+incremental search, the search prompt includes the input method
+mnemonic, like this:
+
+<pre class="example">     I-search [<var>im</var>]:
+</pre>
+   <p class="noindent"><a name="index-isearch_002dtoggle_002dinput_002dmethod-653"></a><a name="index-isearch_002dtoggle_002dspecified_002dinput_002dmethod-654"></a>where <var>im</var> is the mnemonic of the active input method.  Any input
+method you enable during incremental search remains enabled in the
+current buffer afterwards.
+
+   <p><a name="index-M_002d_0025-_0040r_007b_0028Incremental-search_0029_007d-655"></a>  Typing <kbd>M-%</kbd> in incremental search invokes <code>query-replace</code>
+or <code>query-replace-regexp</code> (depending on search mode) with the
+current search string used as the string to replace.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>.
+
+   <p><a name="index-M_002dTAB-_0040r_007b_0028Incremental-search_0029_007d-656"></a>  Typing <kbd>M-&lt;TAB&gt;</kbd> in incremental search invokes
+<code>isearch-complete</code>, which attempts to complete the search string
+using the search ring as a list of completion alternatives. 
+See <a href="Completion.html#Completion">Completion</a>.  In many operating systems, the <kbd>M-&lt;TAB&gt;</kbd>
+key sequence is captured by the window manager; you then need to
+rebind <code>isearch-complete</code> to another key sequence if you want to
+use it (see <a href="Rebinding.html#Rebinding">Rebinding</a>).
+
+   <p><a name="index-isearch_002dmode_002dmap-657"></a>  When incremental search is active, you can type <kbd>C-h C-h</kbd> to
+access interactive help options, including a list of special
+keybindings.  These keybindings are part of the keymap
+<code>isearch-mode-map</code> (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
+
+   </body></html>
+

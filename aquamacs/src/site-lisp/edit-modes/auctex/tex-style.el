@@ -355,6 +355,13 @@ Inserting the subdirectory in the filename (as
 					 (TeX-master-directory))))
 		 (function :tag "other")))
 
+;; style/shortvrb.el
+
+(defcustom LaTeX-shortvrb-chars '(?|)
+  "List of characters toggling verbatim mode."
+  :group 'LaTeX-style
+  :type '(repeat character))
 
 (provide 'tex-style)
+
 ;;; tex-style.el ends here

@@ -1,0 +1,193 @@
+<html lang="en">
+<head>
+<title>Defining Advice - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Simple-Advice.html#Simple-Advice" title="Simple Advice">
+<link rel="next" href="Around_002dAdvice.html#Around_002dAdvice" title="Around-Advice">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Defining-Advice"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Around_002dAdvice.html#Around_002dAdvice">Around-Advice</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Simple-Advice.html#Simple-Advice">Simple Advice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h3 class="section">17.2 Defining Advice</h3>
+
+<p><a name="index-defining-advice-875"></a><a name="index-advice_002c-defining-876"></a>
+  To define a piece of advice, use the macro <code>defadvice</code>.  A call
+to <code>defadvice</code> has the following syntax, which is based on the
+syntax of <code>defun</code> and <code>defmacro</code>, but adds more:
+
+   <p><a name="index-defadvice-877"></a>
+<pre class="example">     (defadvice <var>function</var> (<var>class</var> <var>name</var>
+                              <span class="roman">[</span><var>position</var><span class="roman">]</span> <span class="roman">[</span><var>arglist</var><span class="roman">]</span>
+                              <var>flags</var>...)
+       <span class="roman">[</span><var>documentation-string</var><span class="roman">]</span>
+       <span class="roman">[</span><var>interactive-form</var><span class="roman">]</span>
+       <var>body-forms</var>...)
+</pre>
+   <p class="noindent">Here, <var>function</var> is the name of the function (or macro or special
+form) to be advised.  From now on, we will write just &ldquo;function&rdquo; when
+describing the entity being advised, but this always includes macros and
+special forms.
+
+   <p>In place of the argument list in an ordinary definition, an advice
+definition calls for several different pieces of information.
+
+   <p><a name="index-class-of-advice-878"></a><a name="index-before_002dadvice-879"></a><a name="index-after_002dadvice-880"></a><a name="index-around_002dadvice-881"></a><var>class</var> specifies the <dfn>class</dfn> of the advice&mdash;one of <code>before</code>,
+<code>after</code>, or <code>around</code>.  Before-advice runs before the function
+itself; after-advice runs after the function itself; around-advice is
+wrapped around the execution of the function itself.  After-advice and
+around-advice can override the return value by setting
+<code>ad-return-value</code>.
+
+<div class="defun">
+&mdash; Variable: <b>ad-return-value</b><var><a name="index-ad_002dreturn_002dvalue-882"></a></var><br>
+<blockquote><p>While advice is executing, after the function's original definition has
+been executed, this variable holds its return value, which will
+ultimately be returned to the caller after finishing all the advice. 
+After-advice and around-advice can arrange to return some other value
+by storing it in this variable. 
+</p></blockquote></div>
+
+   <p>The argument <var>name</var> is the name of the advice, a non-<code>nil</code>
+symbol.  The advice name uniquely identifies one piece of advice, within all
+the pieces of advice in a particular class for a particular
+<var>function</var>.  The name allows you to refer to the piece of
+advice&mdash;to redefine it, or to enable or disable it.
+
+   <p>The optional <var>position</var> specifies where, in the current list of
+advice of the specified <var>class</var>, this new advice should be placed. 
+It should be either <code>first</code>, <code>last</code> or a number that specifies
+a zero-based position (<code>first</code> is equivalent to 0).  If no position
+is specified, the default is <code>first</code>.  Position values outside the
+range of existing positions in this class are mapped to the beginning or
+the end of the range, whichever is closer.  The <var>position</var> value is
+ignored when redefining an existing piece of advice.
+
+   <p>The optional <var>arglist</var> can be used to define the argument list for
+the sake of advice.  This becomes the argument list of the combined
+definition that is generated in order to run the advice (see <a href="Combined-Definition.html#Combined-Definition">Combined Definition</a>).  Therefore, the advice expressions can use the argument
+variables in this list to access argument values.
+
+   <p>The argument list used in advice need not be the same as the argument
+list used in the original function, but must be compatible with it, so
+that it can handle the ways the function is actually called.  If two
+pieces of advice for a function both specify an argument list, they must
+specify the same argument list.
+
+   <p>See <a href="Argument-Access-in-Advice.html#Argument-Access-in-Advice">Argument Access in Advice</a>, for more information about argument
+lists and advice, and a more flexible way for advice to access the
+arguments.
+
+   <p>The remaining elements, <var>flags</var>, are symbols that specify further
+information about how to use this piece of advice.  Here are the valid
+symbols and their meanings:
+
+     <dl>
+<dt><code>activate</code><dd>Activate the advice for <var>function</var> now.  Changes in a function's
+advice always take effect the next time you activate advice for the
+function; this flag says to do so, for <var>function</var>, immediately after
+defining this piece of advice.
+
+     <p><a name="index-forward-advice-883"></a>This flag has no immediate effect if <var>function</var> itself is not defined yet (a
+situation known as <dfn>forward advice</dfn>), because it is impossible to
+activate an undefined function's advice.  However, defining
+<var>function</var> will automatically activate its advice.
+
+     <br><dt><code>protect</code><dd>Protect this piece of advice against non-local exits and errors in
+preceding code and advice.  Protecting advice places it as a cleanup in
+an <code>unwind-protect</code> form, so that it will execute even if the
+previous code gets an error or uses <code>throw</code>.  See <a href="Cleanups.html#Cleanups">Cleanups</a>.
+
+     <br><dt><code>compile</code><dd>Compile the combined definition that is used to run the advice.  This
+flag is ignored unless <code>activate</code> is also specified. 
+See <a href="Combined-Definition.html#Combined-Definition">Combined Definition</a>.
+
+     <br><dt><code>disable</code><dd>Initially disable this piece of advice, so that it will not be used
+unless subsequently explicitly enabled.  See <a href="Enabling-Advice.html#Enabling-Advice">Enabling Advice</a>.
+
+     <br><dt><code>preactivate</code><dd>Activate advice for <var>function</var> when this <code>defadvice</code> is
+compiled or macroexpanded.  This generates a compiled advised definition
+according to the current advice state, which will be used during
+activation if appropriate.  See <a href="Preactivation.html#Preactivation">Preactivation</a>.
+
+     <p>This is useful only if this <code>defadvice</code> is byte-compiled. 
+</dl>
+
+   <p>The optional <var>documentation-string</var> serves to document this piece of
+advice.  When advice is active for <var>function</var>, the documentation for
+<var>function</var> (as returned by <code>documentation</code>) combines the
+documentation strings of all the advice for <var>function</var> with the
+documentation string of its original function definition.
+
+   <p>The optional <var>interactive-form</var> form can be supplied to change the
+interactive behavior of the original function.  If more than one piece
+of advice has an <var>interactive-form</var>, then the first one (the one
+with the smallest position) found among all the advice takes precedence.
+
+   <p>The possibly empty list of <var>body-forms</var> specifies the body of the
+advice.  The body of an advice can access or change the arguments, the
+return value, the binding environment, and perform any other kind of
+side effect.
+
+   <p><strong>Warning:</strong> When you advise a macro, keep in mind that macros are
+expanded when a program is compiled, not when a compiled program is run. 
+All subroutines used by the advice need to be available when the byte
+compiler expands the macro.
+
+<div class="defun">
+&mdash; Command: <b>ad-unadvise</b><var> function<a name="index-ad_002dunadvise-884"></a></var><br>
+<blockquote><p>This command deletes the advice from <var>function</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>ad-unadvise-all</b><var><a name="index-ad_002dunadvise_002dall-885"></a></var><br>
+<blockquote><p>This command deletes all pieces of advice from all functions. 
+</p></blockquote></div>
+
+   </body></html>
+

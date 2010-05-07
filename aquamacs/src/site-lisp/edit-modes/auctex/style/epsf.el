@@ -19,12 +19,8 @@
 (defun TeX-arg-epsfsize (optional &optional prompt definition)
   "Create a line that print epsf figures at a certain percentage"
   (interactive)
-  (let ((scale (read-input "Scale (%): "))
-	)
-    (setq scalestr (if (zerop (length scale))
-		       "75"
-		     (format "%s" scale)
-		     ))
+  (let ((scale (read-string "Scale in percent (default 75): ")))
+    (setq scale (if (zerop (length scale)) "75" scale))
     (save-excursion
       ; append #1#{scale#1}
       (insert "#1#2" TeX-grop "0." scale "#1" TeX-grcl)
@@ -33,8 +29,7 @@
       (newline)
       (insert TeX-esc "def")
       (forward-line -1)
-      (insert "% From now on print figures at " scale "% of original size")
-      )
+      (insert "% From now on print figures at " scale "% of original size"))
     (end-of-line)))
 
 ;;; epsf.el ends here

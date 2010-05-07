@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Mail Headers - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
+<link rel="prev" href="Mail-Format.html#Mail-Format" title="Mail Format">
+<link rel="next" href="Mail-Aliases.html#Mail-Aliases" title="Mail Aliases">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mail-Headers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Aliases.html#Mail-Aliases">Mail Aliases</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Format.html#Mail-Format">Mail Format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>
+<hr>
+</div>
+
+<h3 class="section">35.2 Mail Header Fields</h3>
+
+<p><a name="index-headers-_0028of-mail-message_0029-2701"></a>
+  A header field in the mail buffer starts with a field name at the
+beginning of a line, terminated by a colon.  Upper and lower case are
+equivalent in field names (and in mailing addresses also).  After the
+colon and optional whitespace comes the contents of the field.
+
+   <p>You can use any name you like for a header field, but normally
+people use only standard field names with accepted meanings.  Here is
+a table of commonly-used fields.  Emacs pre-initializes some of these,
+depending on various options you can set.  You can delete or alter any
+header field before you send the message, if you wish.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">From</span></samp>&rsquo;<dd><a name="index-user_002dmail_002daddress-2702"></a>The address of the sender (you).  This should be a valid mailing
+address, as replies will normally go there.  Emacs initializes this
+field using the variables <code>user-full-name</code> and
+<code>user-mail-address</code>; see below.
+
+     <br><dt>&lsquo;<samp><span class="samp">To</span></samp>&rsquo;<dd>The mailing address(es) to which the message is addressed.  To list
+more than one address, use commas (not spaces) to separate them.
+
+     <br><dt>&lsquo;<samp><span class="samp">Subject</span></samp>&rsquo;<dd>A piece of text saying what the message is about.  Most mail-reading
+programs can display a summary of messages, listing the subject of
+each message but not its text.
+
+     <br><dt>&lsquo;<samp><span class="samp">CC</span></samp>&rsquo;<dd>Additional mailing address(es) to send the message to.  This is like
+&lsquo;<samp><span class="samp">To</span></samp>&rsquo;, except that these readers should not regard the message as
+directed at them.
+
+     <br><dt>&lsquo;<samp><span class="samp">BCC</span></samp>&rsquo;<dd>Additional mailing address(es) to send the message to, which should
+not appear in the header of the message actually sent.  &ldquo;BCC&rdquo; stands
+for <dfn>blind carbon copies</dfn>.
+
+     <br><dt>&lsquo;<samp><span class="samp">FCC</span></samp>&rsquo;<dd>The name of one file, to which a copy of the sent message should be
+appended.  Emacs writes the message in mbox format, unless the file is
+in Babyl format (used by Rmail before Emacs 23), in which case Emacs
+writes Babyl.  If an Rmail buffer is visiting the file, Emacs updates
+it accordingly.  To specify more than one file, use several &lsquo;<samp><span class="samp">FCC</span></samp>&rsquo;
+fields, with one file name in each field.
+
+     <br><dt>&lsquo;<samp><span class="samp">Reply-to</span></samp>&rsquo;<dd>An address to which replies should be sent, instead of &lsquo;<samp><span class="samp">From</span></samp>&rsquo;. 
+You can use this header if, for some reason, your &lsquo;<samp><span class="samp">From</span></samp>&rsquo; address
+is unable to receive replies.
+
+     <br><dt>&lsquo;<samp><span class="samp">Mail-reply-to</span></samp>&rsquo;<dd>  This field takes precedence over &lsquo;<samp><span class="samp">Reply-to</span></samp>&rsquo;.  It is used because
+some mailing lists set the &lsquo;<samp><span class="samp">Reply-to</span></samp>&rsquo; field for their own purposes
+(a somewhat controversial practice).
+
+     <br><dt>&lsquo;<samp><span class="samp">Mail-followup-to</span></samp>&rsquo;<dd>  This field contains one or more addresses.  It is typically used when
+you reply to a message from a mailing list that you are subscribed to. 
+It usually indicates that you want replies to go to the list, and that
+you do not need an extra copy sent directly to you.
+
+     <!-- Message mode handles this differently... -->
+     <!-- @vindex mail-mailing-lists -->
+     <!-- The variable @code{mail-mailing-lists} holds a list of mailing list -->
+     <!-- addresses that you are subscribed to.  If it is non-@code{nil}, Emacs -->
+     <!-- inserts an appropriate @samp{Mail-followup-to} header when sending mail -->
+     <!-- to a mailing list. -->
+     <br><dt>&lsquo;<samp><span class="samp">In-reply-to</span></samp>&rsquo;<dd>A piece of text describing the message you are replying to.  Some mail
+systems can use this information to correlate related pieces of mail. 
+Normally, you never need to think about this, because it is filled in
+automatically when you reply to a message in Rmail (or any other mail
+program built into Emacs).
+
+     <br><dt>&lsquo;<samp><span class="samp">References</span></samp>&rsquo;<dd>The Message-Ids of previous related messages (a Message-Id is a unique
+identifier generated when a message is sent).  Like
+&lsquo;<samp><span class="samp">In-reply-to</span></samp>&rsquo;, this is normally set up automatically for you. 
+</dl>
+
+<p class="noindent">The &lsquo;<samp><span class="samp">To</span></samp>&rsquo;, &lsquo;<samp><span class="samp">CC</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo; fields can appear any number
+of times, and each such header field can contain multiple addresses,
+separated by commas.  This way, you can specify any number of places
+to send the message.  These fields can also have continuation lines:
+one or more lines starting with whitespace, following the starting
+line of the field, are considered part of the field.  Here's an
+example of a &lsquo;<samp><span class="samp">To</span></samp>&rsquo; field with a continuation line:
+
+<pre class="example">     To: foo@example.net, this@example.net,
+       bob@example.com
+</pre>
+   <p><a name="index-user_002dfull_002dname-2703"></a><a name="index-user_002dmail_002daddress-2704"></a>  The default contents of the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; header field are computed
+from the variables <code>user-full-name</code> and <code>user-mail-address</code>. 
+On some operating systems, Emacs initializes these two variables using
+environment variables (see <a href="General-Variables.html#General-Variables">General Variables</a>).  If this
+information is unavailable or wrong, you can customize the variables
+yourself (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
+
+   <p><a name="index-mail_002dfrom_002dstyle-2705"></a>  The value of the variable <code>mail-from-style</code> specifies how to
+format the address in the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; field:
+
+     <dl>
+<dt><code>nil</code><dd>Use just the address, as in &lsquo;<samp><span class="samp">king@grassland.com</span></samp>&rsquo;. 
+<br><dt><code>parens</code><dd>Use both address and full name, as in:<br>
+&lsquo;<samp><span class="samp">king@grassland.com (Elvis Parsley)</span></samp>&rsquo;. 
+<br><dt><code>angles</code><dd>Use both address and full name, as in:<br>
+&lsquo;<samp><span class="samp">Elvis Parsley &lt;king@grassland.com&gt;</span></samp>&rsquo;. 
+<br><dt>any other value<dd>Use <code>angles</code> for most addresses.  However, if the address must be
+&ldquo;quoted&rdquo; to remain syntactically-valid under the <code>angles</code>
+format but not under the <code>parens</code> format, use <code>parens</code>
+instead.  This is the default. 
+</dl>
+
+<!-- There is also mail-specify-envelope-from and mail-envelope-from, but -->
+<!-- these are probably not topics for the Emacs manual. -->
+   <p><a name="index-mail_002ddefault_002dheaders-2706"></a>  You can direct Emacs to insert certain default headers into the mail
+buffer by setting the variable <code>mail-default-headers</code> to a
+string.  Then <kbd>C-x m</kbd> inserts this string into the message
+headers.  For example, here is how to add a &lsquo;<samp><span class="samp">Reply-to</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">FCC</span></samp>&rsquo; header to each message:
+
+<pre class="smallexample">     (setq mail-default-headers
+           "Reply-to: foo@example.com\nFCC: ~/Mail/sent")
+</pre>
+   <p class="noindent">If the default header fields are not appropriate for a
+particular message, edit them as necessary before sending the message.
+
+   </body></html>
+

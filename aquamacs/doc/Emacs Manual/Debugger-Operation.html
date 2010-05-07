@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Debugger Operation - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Debuggers.html#Debuggers" title="Debuggers">
+<link rel="prev" href="Starting-GUD.html#Starting-GUD" title="Starting GUD">
+<link rel="next" href="Commands-of-GUD.html#Commands-of-GUD" title="Commands of GUD">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Debugger-Operation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Commands-of-GUD.html#Commands-of-GUD">Commands of GUD</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Starting-GUD.html#Starting-GUD">Starting GUD</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
+<hr>
+</div>
+
+<h4 class="subsection">31.6.2 Debugger Operation</h4>
+
+<p><a name="index-fringes_002c-and-current-execution-line-in-GUD-2309"></a>  Generally when you run a debugger with GUD, the debugger uses an Emacs
+buffer for its ordinary input and output.  This is called the GUD
+buffer.  Input and output from the program you are debugging also use
+this buffer.  We call this <dfn>text command mode</dfn>.  The GDB Graphical
+Interface can use further buffers (see <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>).
+
+   <p>The debugger displays the source files of the program by visiting
+them in Emacs buffers.  An arrow in the left fringe indicates the
+current execution line.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  Moving
+point in this buffer does not move the arrow.  The arrow is not part
+of the file's text; it appears only on the screen.
+
+   <p>You can start editing these source files at any time in the buffers
+that display them.  If you do modify a source file, keep in mind that
+inserting or deleting lines will throw off the arrow's positioning;
+GUD has no way of figuring out which line corresponded before your
+changes to the line number in a debugger message.  Also, you'll
+typically have to recompile and restart the program for your changes
+to be reflected in the debugger's tables.
+
+   <p><a name="index-tooltips-with-GUD-2310"></a><a name="index-tooltip_002dgud_002dmodes-2311"></a><a name="index-gud_002dtooltip_002dmode-2312"></a><a name="index-gud_002dtooltip_002decho_002darea-2313"></a>  The Tooltip facility (see <a href="Tooltips.html#Tooltips">Tooltips</a>) provides support for GUD. 
+You activate this feature by turning on the minor mode
+<code>gud-tooltip-mode</code>.  Then you can display a variable's value in a
+tooltip simply by pointing at it with the mouse.  This operates in the
+GUD buffer and in source buffers with major modes in the list
+<code>gud-tooltip-modes</code>.  If the variable <code>gud-tooltip-echo-area</code>
+is non-<code>nil</code> then the variable's value is displayed in the echo
+area.  When debugging a C program using the GDB Graphical Interface, you
+can also display macro definitions associated with an identifier when
+the program is not executing.
+
+   <p>GUD tooltips are disabled when you use GDB in text command mode
+(see <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>), because displaying an expression's
+value in GDB can sometimes expand a macro and result in a side effect
+that interferes with the program's operation.  The GDB graphical
+interface supports GUD tooltips and assures they will not cause side
+effects.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> On a text-only terminal, the arrow
+appears as &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; and overlays the first two text columns.</p>
+
+   <hr></div>
+
+   </body></html>
+

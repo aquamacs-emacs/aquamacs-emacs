@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Registers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Transposition.html#Transposition" title="Transposition">
+<link rel="next" href="Base-64.html#Base-64" title="Base 64">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Registers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Base-64.html#Base-64">Base 64</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Transposition.html#Transposition">Transposition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.21 Registers</h3>
+
+<p><a name="index-registers-2741"></a>
+  A register is a sort of variable used in Emacs editing that can hold a
+variety of different kinds of values.  Each register is named by a
+single character.  All <acronym>ASCII</acronym> characters and their meta variants
+(but with the exception of <kbd>C-g</kbd>) can be used to name registers. 
+Thus, there are 255 possible registers.  A register is designated in
+Emacs Lisp by the character that is its name.
+
+<div class="defun">
+&mdash; Variable: <b>register-alist</b><var><a name="index-register_002dalist-2742"></a></var><br>
+<blockquote><p>This variable is an alist of elements of the form <code>(</code><var>name</var><code> . 
+</code><var>contents</var><code>)</code>.  Normally, there is one element for each Emacs
+register that has been used.
+
+        <p>The object <var>name</var> is a character (an integer) identifying the
+register. 
+</p></blockquote></div>
+
+   <p>The <var>contents</var> of a register can have several possible types:
+
+     <dl>
+<dt>a number<dd>A number stands for itself.  If <code>insert-register</code> finds a number
+in the register, it converts the number to decimal.
+
+     <br><dt>a marker<dd>A marker represents a buffer position to jump to.
+
+     <br><dt>a string<dd>A string is text saved in the register.
+
+     <br><dt>a rectangle<dd>A rectangle is represented by a list of strings.
+
+     <br><dt><code>(</code><var>window-configuration</var> <var>position</var><code>)</code><dd>This represents a window configuration to restore in one frame, and a
+position to jump to in the current buffer.
+
+     <br><dt><code>(</code><var>frame-configuration</var> <var>position</var><code>)</code><dd>This represents a frame configuration to restore, and a position
+to jump to in the current buffer.
+
+     <br><dt>(file <var>filename</var>)<dd>This represents a file to visit; jumping to this value visits file
+<var>filename</var>.
+
+     <br><dt>(file-query <var>filename</var> <var>position</var>)<dd>This represents a file to visit and a position in it; jumping to this
+value visits file <var>filename</var> and goes to buffer position
+<var>position</var>.  Restoring this type of position asks the user for
+confirmation first. 
+</dl>
+
+   <p>The functions in this section return unpredictable values unless
+otherwise stated.
+
+<div class="defun">
+&mdash; Function: <b>get-register</b><var> reg<a name="index-get_002dregister-2743"></a></var><br>
+<blockquote><p>This function returns the contents of the register
+<var>reg</var>, or <code>nil</code> if it has no contents. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-register</b><var> reg value<a name="index-set_002dregister-2744"></a></var><br>
+<blockquote><p>This function sets the contents of register <var>reg</var> to <var>value</var>. 
+A register can be set to any value, but the other register functions
+expect only certain data types.  The return value is <var>value</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>view-register</b><var> reg<a name="index-view_002dregister-2745"></a></var><br>
+<blockquote><p>This command displays what is contained in register <var>reg</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>insert-register</b><var> reg &amp;optional beforep<a name="index-insert_002dregister-2746"></a></var><br>
+<blockquote><p>This command inserts contents of register <var>reg</var> into the current
+buffer.
+
+        <p>Normally, this command puts point before the inserted text, and the
+mark after it.  However, if the optional second argument <var>beforep</var>
+is non-<code>nil</code>, it puts the mark before and point after. 
+You can pass a non-<code>nil</code> second argument <var>beforep</var> to this
+function interactively by supplying any prefix argument.
+
+        <p>If the register contains a rectangle, then the rectangle is inserted
+with its upper left corner at point.  This means that text is inserted
+in the current line and underneath it on successive lines.
+
+        <p>If the register contains something other than saved text (a string) or
+a rectangle (a list), currently useless things happen.  This may be
+changed in the future. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -330,18 +330,18 @@ holds a keymap."
   (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
   (tool-bar-add-item-from-menu 'dired "diropen")
   (tool-bar-add-item-from-menu 'kill-this-buffer "close")
-     (tool-bar-add-item-from-menu 'save-buffer "save" nil 
-				  :label "Save"
-				  :visible '(or buffer-file-name
-						(not (eq 'special
-							 (get major-mode
-							      'mode-class)))))
-     (tool-bar-add-item-from-menu 'write-file "saveas" nil 
-				  :label "Save As"
-				  :visible '(or buffer-file-name
-						(not (eq 'special
-							 (get major-mode
-							      'mode-class)))))
+  (tool-bar-add-item-from-menu 'save-buffer "save" nil 
+			       :label "Save"
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class)))))
+  (tool-bar-add-item-from-menu 'write-file "saveas" nil 
+			       :label "Save As"
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class)))))
   (tool-bar-add-item-from-menu 'undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class))))

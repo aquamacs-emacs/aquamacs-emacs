@@ -1,0 +1,248 @@
+<html lang="en">
+<head>
+<title>Regexp Backslash - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-of-Regexps.html#Syntax-of-Regexps" title="Syntax of Regexps">
+<link rel="prev" href="Char-Classes.html#Char-Classes" title="Char Classes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Regexp-Backslash"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Char-Classes.html#Char-Classes">Char Classes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-of-Regexps.html#Syntax-of-Regexps">Syntax of Regexps</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">34.3.1.3 Backslash Constructs in Regular Expressions</h5>
+
+<p>For the most part, &lsquo;<samp><span class="samp">\</span></samp>&rsquo; followed by any character matches only
+that character.  However, there are several exceptions: certain
+two-character sequences starting with &lsquo;<samp><span class="samp">\</span></samp>&rsquo; that have special
+meanings.  (The character after the &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in such a sequence is
+always ordinary when used on its own.)  Here is a table of the special
+&lsquo;<samp><span class="samp">\</span></samp>&rsquo; constructs.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">\|</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_007c_007d-in-regexp-2976"></a><a name="index-regexp-alternative-2977"></a>specifies an alternative. 
+Two regular expressions <var>a</var> and <var>b</var> with &lsquo;<samp><span class="samp">\|</span></samp>&rsquo; in
+between form an expression that matches anything that either <var>a</var> or
+<var>b</var> matches.
+
+     <p>Thus, &lsquo;<samp><span class="samp">foo\|bar</span></samp>&rsquo; matches either &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; or &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;
+but no other string.
+
+     <p>&lsquo;<samp><span class="samp">\|</span></samp>&rsquo; applies to the largest possible surrounding expressions.  Only a
+surrounding &lsquo;<samp><span class="samp">\( ... \)</span></samp>&rsquo; grouping can limit the grouping power of
+&lsquo;<samp><span class="samp">\|</span></samp>&rsquo;.
+
+     <p>If you need full backtracking capability to handle multiple uses of
+&lsquo;<samp><span class="samp">\|</span></samp>&rsquo;, use the POSIX regular expression functions (see <a href="POSIX-Regexps.html#POSIX-Regexps">POSIX Regexps</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">\{</span><var>m</var><span class="samp">\}</span></samp>&rsquo;<dd>is a postfix operator that repeats the previous pattern exactly <var>m</var>
+times.  Thus, &lsquo;<samp><span class="samp">x\{5\}</span></samp>&rsquo; matches the string &lsquo;<samp><span class="samp">xxxxx</span></samp>&rsquo;
+and nothing else.  &lsquo;<samp><span class="samp">c[ad]\{3\}r</span></samp>&rsquo; matches string such as
+&lsquo;<samp><span class="samp">caaar</span></samp>&rsquo;, &lsquo;<samp><span class="samp">cdddr</span></samp>&rsquo;, &lsquo;<samp><span class="samp">cadar</span></samp>&rsquo;, and so on.
+
+     <br><dt>&lsquo;<samp><span class="samp">\{</span><var>m</var><span class="samp">,</span><var>n</var><span class="samp">\}</span></samp>&rsquo;<dd>is a more general postfix operator that specifies repetition with a
+minimum of <var>m</var> repeats and a maximum of <var>n</var> repeats.  If <var>m</var>
+is omitted, the minimum is 0; if <var>n</var> is omitted, there is no
+maximum.
+
+     <p>For example, &lsquo;<samp><span class="samp">c[ad]\{1,2\}r</span></samp>&rsquo; matches the strings &lsquo;<samp><span class="samp">car</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">cdr</span></samp>&rsquo;, &lsquo;<samp><span class="samp">caar</span></samp>&rsquo;, &lsquo;<samp><span class="samp">cadr</span></samp>&rsquo;, &lsquo;<samp><span class="samp">cdar</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">cddr</span></samp>&rsquo;, and
+nothing else.<br>
+&lsquo;<samp><span class="samp">\{0,1\}</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\{,1\}</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">?</span></samp>&rsquo;.	<br>
+&lsquo;<samp><span class="samp">\{0,\}</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\{,\}</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.	<br>
+&lsquo;<samp><span class="samp">\{1,\}</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">+</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">\( ... \)</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0028_007d-in-regexp-2978"></a><a name="index-g_t_0040samp_007b_0029_007d-in-regexp-2979"></a><a name="index-regexp-grouping-2980"></a>is a grouping construct that serves three purposes:
+
+          <ol type=1 start=1>
+<li>To enclose a set of &lsquo;<samp><span class="samp">\|</span></samp>&rsquo; alternatives for other operations.  Thus,
+the regular expression &lsquo;<samp><span class="samp">\(foo\|bar\)x</span></samp>&rsquo; matches either &lsquo;<samp><span class="samp">foox</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">barx</span></samp>&rsquo;.
+
+          <li>To enclose a complicated expression for the postfix operators &lsquo;<samp><span class="samp">*</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">?</span></samp>&rsquo; to operate on.  Thus, &lsquo;<samp><span class="samp">ba\(na\)*</span></samp>&rsquo; matches
+&lsquo;<samp><span class="samp">ba</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bana</span></samp>&rsquo;, &lsquo;<samp><span class="samp">banana</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bananana</span></samp>&rsquo;, etc., with any
+number (zero or more) of &lsquo;<samp><span class="samp">na</span></samp>&rsquo; strings.
+
+          <li>To record a matched substring for future reference with
+&lsquo;<samp><span class="samp">\</span><var>digit</var></samp>&rsquo; (see below).
+          </ol>
+
+     <p>This last application is not a consequence of the idea of a
+parenthetical grouping; it is a separate feature that was assigned as a
+second meaning to the same &lsquo;<samp><span class="samp">\( ... \)</span></samp>&rsquo; construct because, in
+practice, there was usually no conflict between the two meanings.  But
+occasionally there is a conflict, and that led to the introduction of
+shy groups.
+
+     <br><dt>&lsquo;<samp><span class="samp">\(?: ... \)</span></samp>&rsquo;<dd><a name="index-shy-groups-2981"></a><a name="index-non_002dcapturing-group-2982"></a><a name="index-unnumbered-group-2983"></a><a name="index-g_t_0040samp_007b_0028_003f_003a_007d-in-regexp-2984"></a>is the <dfn>shy group</dfn> construct.  A shy group serves the first two
+purposes of an ordinary group (controlling the nesting of other
+operators), but it does not get a number, so you cannot refer back to
+its value with &lsquo;<samp><span class="samp">\</span><var>digit</var></samp>&rsquo;.  Shy groups are particularly
+useful for mechanically-constructed regular expressions, because they
+can be added automatically without altering the numbering of ordinary,
+non-shy groups.
+
+     <p>Shy groups are also called <dfn>non-capturing</dfn> or <dfn>unnumbered
+groups</dfn>.
+
+     <br><dt>&lsquo;<samp><span class="samp">\(?</span><var>num</var><span class="samp">: ... \)</span></samp>&rsquo;<dd>is the <dfn>explicitly numbered group</dfn> construct.  Normal groups get
+their number implicitly, based on their position, which can be
+inconvenient.  This construct allows you to force a particular group
+number.  There is no particular restriction on the numbering,
+e.g. you can have several groups with the same number in which case
+the last one to match (i.e. the rightmost match) will win. 
+Implicitly numbered groups always get the smallest integer larger than
+the one of any previous group.
+
+     <br><dt>&lsquo;<samp><span class="samp">\</span><var>digit</var></samp>&rsquo;<dd>matches the same text that matched the <var>digit</var>th occurrence of a
+grouping (&lsquo;<samp><span class="samp">\( ... \)</span></samp>&rsquo;) construct.
+
+     <p>In other words, after the end of a group, the matcher remembers the
+beginning and end of the text matched by that group.  Later on in the
+regular expression you can use &lsquo;<samp><span class="samp">\</span></samp>&rsquo; followed by <var>digit</var> to
+match that same text, whatever it may have been.
+
+     <p>The strings matching the first nine grouping constructs appearing in
+the entire regular expression passed to a search or matching function
+are assigned numbers 1 through 9 in the order that the open
+parentheses appear in the regular expression.  So you can use
+&lsquo;<samp><span class="samp">\1</span></samp>&rsquo; through &lsquo;<samp><span class="samp">\9</span></samp>&rsquo; to refer to the text matched by the
+corresponding grouping constructs.
+
+     <p>For example, &lsquo;<samp><span class="samp">\(.*\)\1</span></samp>&rsquo; matches any newline-free string that is
+composed of two identical halves.  The &lsquo;<samp><span class="samp">\(.*\)</span></samp>&rsquo; matches the first
+half, which may be anything, but the &lsquo;<samp><span class="samp">\1</span></samp>&rsquo; that follows must match
+the same exact text.
+
+     <p>If a &lsquo;<samp><span class="samp">\( ... \)</span></samp>&rsquo; construct matches more than once (which can
+happen, for instance, if it is followed by &lsquo;<samp><span class="samp">*</span></samp>&rsquo;), only the last
+match is recorded.
+
+     <p>If a particular grouping construct in the regular expression was never
+matched&mdash;for instance, if it appears inside of an alternative that
+wasn't used, or inside of a repetition that repeated zero times&mdash;then
+the corresponding &lsquo;<samp><span class="samp">\</span><var>digit</var></samp>&rsquo; construct never matches
+anything.  To use an artificial example, &lsquo;<samp><span class="samp">\(foo\(b*\)\|lose\)\2</span></samp>&rsquo;
+cannot match &lsquo;<samp><span class="samp">lose</span></samp>&rsquo;: the second alternative inside the larger
+group matches it, but then &lsquo;<samp><span class="samp">\2</span></samp>&rsquo; is undefined and can't match
+anything.  But it can match &lsquo;<samp><span class="samp">foobb</span></samp>&rsquo;, because the first
+alternative matches &lsquo;<samp><span class="samp">foob</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\2</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">\w</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cw_007d-in-regexp-2985"></a>matches any word-constituent character.  The editor syntax table
+determines which characters these are.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">\W</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cW_007d-in-regexp-2986"></a>matches any character that is not a word constituent.
+
+     <br><dt>&lsquo;<samp><span class="samp">\s</span><var>code</var></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cs_007d-in-regexp-2987"></a>matches any character whose syntax is <var>code</var>.  Here <var>code</var> is a
+character that represents a syntax code: thus, &lsquo;<samp><span class="samp">w</span></samp>&rsquo; for word
+constituent, &lsquo;<samp><span class="samp">-</span></samp>&rsquo; for whitespace, &lsquo;<samp><span class="samp">(</span></samp>&rsquo; for open parenthesis,
+etc.  To represent whitespace syntax, use either &lsquo;<samp><span class="samp">-</span></samp>&rsquo; or a space
+character.  See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>, for a list of syntax codes and
+the characters that stand for them.
+
+     <br><dt>&lsquo;<samp><span class="samp">\S</span><var>code</var></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cS_007d-in-regexp-2988"></a>matches any character whose syntax is not <var>code</var>.
+
+     <br><dt>&lsquo;<samp><span class="samp">\c</span><var>c</var></samp>&rsquo;<dd>matches any character whose category is <var>c</var>.  Here <var>c</var> is a
+character that represents a category: thus, &lsquo;<samp><span class="samp">c</span></samp>&rsquo; for Chinese
+characters or &lsquo;<samp><span class="samp">g</span></samp>&rsquo; for Greek characters in the standard category
+table.
+
+     <br><dt>&lsquo;<samp><span class="samp">\C</span><var>c</var></samp>&rsquo;<dd>matches any character whose category is not <var>c</var>. 
+</dl>
+
+   <p>The following regular expression constructs match the empty string&mdash;that is,
+they don't use up any characters&mdash;but whether they match depends on the
+context.  For all, the beginning and end of the accessible portion of
+the buffer are treated as if they were the actual beginning and end of
+the buffer.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">\`</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_0060_007d-in-regexp-2989"></a>matches the empty string, but only at the beginning
+of the buffer or string being matched against.
+
+     <br><dt>&lsquo;<samp><span class="samp">\'</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_0027_007d-in-regexp-2990"></a>matches the empty string, but only at the end of
+the buffer or string being matched against.
+
+     <br><dt>&lsquo;<samp><span class="samp">\=</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_003d_007d-in-regexp-2991"></a>matches the empty string, but only at point. 
+(This construct is not defined when matching against a string.)
+
+     <br><dt>&lsquo;<samp><span class="samp">\b</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cb_007d-in-regexp-2992"></a>matches the empty string, but only at the beginning or
+end of a word.  Thus, &lsquo;<samp><span class="samp">\bfoo\b</span></samp>&rsquo; matches any occurrence of
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; as a separate word.  &lsquo;<samp><span class="samp">\bballs?\b</span></samp>&rsquo; matches
+&lsquo;<samp><span class="samp">ball</span></samp>&rsquo; or &lsquo;<samp><span class="samp">balls</span></samp>&rsquo; as a separate word.
+
+     <p>&lsquo;<samp><span class="samp">\b</span></samp>&rsquo; matches at the beginning or end of the buffer (or string)
+regardless of what text appears next to it.
+
+     <br><dt>&lsquo;<samp><span class="samp">\B</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005cB_007d-in-regexp-2993"></a>matches the empty string, but <em>not</em> at the beginning or
+end of a word, nor at the beginning or end of the buffer (or string).
+
+     <br><dt>&lsquo;<samp><span class="samp">\&lt;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_003c_007d-in-regexp-2994"></a>matches the empty string, but only at the beginning of a word. 
+&lsquo;<samp><span class="samp">\&lt;</span></samp>&rsquo; matches at the beginning of the buffer (or string) only if a
+word-constituent character follows.
+
+     <br><dt>&lsquo;<samp><span class="samp">\&gt;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_003e_007d-in-regexp-2995"></a>matches the empty string, but only at the end of a word.  &lsquo;<samp><span class="samp">\&gt;</span></samp>&rsquo;
+matches at the end of the buffer (or string) only if the contents end
+with a word-constituent character.
+
+     <br><dt>&lsquo;<samp><span class="samp">\_&lt;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_005f_003c_007d-in-regexp-2996"></a>matches the empty string, but only at the beginning of a symbol.  A
+symbol is a sequence of one or more word or symbol constituent
+characters.  &lsquo;<samp><span class="samp">\_&lt;</span></samp>&rsquo; matches at the beginning of the buffer (or
+string) only if a symbol-constituent character follows.
+
+     <br><dt>&lsquo;<samp><span class="samp">\_&gt;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_005f_003e_007d-in-regexp-2997"></a>matches the empty string, but only at the end of a symbol.  &lsquo;<samp><span class="samp">\_&gt;</span></samp>&rsquo;
+matches at the end of the buffer (or string) only if the contents end
+with a symbol-constituent character. 
+</dl>
+
+   <p><a name="index-invalid_002dregexp-2998"></a>  Not every string is a valid regular expression.  For example, a string
+that ends inside a character alternative without terminating &lsquo;<samp><span class="samp">]</span></samp>&rsquo;
+is invalid, and so is a string that ends with a single &lsquo;<samp><span class="samp">\</span></samp>&rsquo;.  If
+an invalid regular expression is passed to any of the search functions,
+an <code>invalid-regexp</code> error is signaled.
+
+   </body></html>
+

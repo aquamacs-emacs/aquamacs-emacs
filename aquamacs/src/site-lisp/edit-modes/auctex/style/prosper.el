@@ -62,7 +62,7 @@
 
 
 (defconst LaTeX-prosper-version
-  "$Id: prosper.el,v 1.5 2008/02/25 18:02:11 davidswelt Exp $"
+  "$Id: prosper.el,v 1.5 2008/05/25 06:50:33 angeli Exp $"
   "prosper.el version.")
 
 (defconst LaTeX-prosper-transition-styles '("Split"
@@ -83,12 +83,11 @@
 
 (defun LaTeX-prosper-insert-title (optional)
   (newline)
-  (mapcar
-   (lambda(f)
-     (TeX-insert-macro f)
-     (newline))
-   '("title" "subtitle" "author" "email" "institution" "slideCaption"
-     "Logo" "DefaultTransition"))
+  (mapc (lambda(f)
+	  (TeX-insert-macro f)
+	  (newline))
+	'("title" "subtitle" "author" "email" "institution" "slideCaption"
+	  "Logo" "DefaultTransition"))
   (LaTeX-insert-environment "document")
   (TeX-insert-macro "maketitle"))
 
@@ -122,15 +121,14 @@
 (defun LaTeX-prosper-insert-options(environment)
   (insert "[" )
   (insert (LaTeX-prosper-slide-style-prompt) " ")
-  (mapcar 
-   (lambda(f)
-     (if (y-or-n-p (car f))
-         (insert (car (cdr f)) " ")))
-   '(("Draft?" "draft")
-     ("Color Slides?" "slideColor")
-     ("Disable running total on each slide?" "nototal")
-     ("Is the final version going to be PDF?" "pdf")
-     ("Are you going to use Adobe Distiller" "distiller")))
+  (mapc (lambda(f)
+	  (if (y-or-n-p (car f))
+	      (insert (car (cdr f)) " ")))
+	'(("Draft?" "draft")
+	  ("Color Slides?" "slideColor")
+	  ("Disable running total on each slide?" "nototal")
+	  ("Is the final version going to be PDF?" "pdf")
+	  ("Are you going to use Adobe Distiller" "distiller")))
   (delete-char -1)
   (insert "]"))
 
@@ -141,7 +139,7 @@
                  (progn 
                    (goto-char (+ 1 (point))) 
                    (insert "%\n"))))) 
-  (let ((title (read-input "Title: "))) 
+  (let ((title (read-string "Title: "))) 
     (LaTeX-insert-environment "slide" (concat TeX-grop title TeX-grcl)))) 
 
 

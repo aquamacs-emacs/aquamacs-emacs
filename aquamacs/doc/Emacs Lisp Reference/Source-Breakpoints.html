@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Source Breakpoints - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Breaks.html#Breaks" title="Breaks">
+<link rel="prev" href="Global-Break-Condition.html#Global-Break-Condition" title="Global Break Condition">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Source-Breakpoints"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Breaks.html#Breaks">Breaks</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.2.6.3 Source Breakpoints</h5>
+
+<p><a name="index-edebug-969"></a><a name="index-source-breakpoints-970"></a>  All breakpoints in a definition are forgotten each time you
+reinstrument it.  If you wish to make a breakpoint that won't be
+forgotten, you can write a <dfn>source breakpoint</dfn>, which is simply a
+call to the function <code>edebug</code> in your source code.  You can, of
+course, make such a call conditional.  For example, in the <code>fac</code>
+function, you can insert the first line as shown below, to stop when the
+argument reaches zero:
+
+<pre class="example">     (defun fac (n)
+       (if (= n 0) (edebug))
+       (if (&lt; 0 n)
+           (* n (fac (1- n)))
+         1))
+</pre>
+   <p>When the <code>fac</code> definition is instrumented and the function is
+called, the call to <code>edebug</code> acts as a breakpoint.  Depending on
+the execution mode, Edebug stops or pauses there.
+
+   <p>If no instrumented code is being executed when <code>edebug</code> is called,
+that function calls <code>debug</code>. 
+<!-- This may not be a good idea anymore. -->
+
+   </body></html>
+

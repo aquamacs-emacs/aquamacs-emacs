@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Mac / GNUstep Customization - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mac-OS-_002f-GNUstep.html#Mac-OS-_002f-GNUstep" title="Mac OS / GNUstep">
+<link rel="prev" href="Mac-_002f-GNUstep-Basics.html#Mac-_002f-GNUstep-Basics" title="Mac / GNUstep Basics">
+<link rel="next" href="Mac-_002f-GNUstep-Events.html#Mac-_002f-GNUstep-Events" title="Mac / GNUstep Events">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mac-%2f-GNUstep-Customization"></a>
+<a name="Mac-_002f-GNUstep-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mac-_002f-GNUstep-Events.html#Mac-_002f-GNUstep-Events">Mac / GNUstep Events</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mac-_002f-GNUstep-Basics.html#Mac-_002f-GNUstep-Basics">Mac / GNUstep Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mac-OS-_002f-GNUstep.html#Mac-OS-_002f-GNUstep">Mac OS / GNUstep</a>
+<hr>
+</div>
+
+<h3 class="section">F.2 Mac / GNUstep Customization</h3>
+
+<p>Emacs can be customized in several ways in addition to the standard
+customization buffers and the Options menu.
+
+<h4 class="subsection">F.2.1 Font and Color Panels</h4>
+
+<p>The Font Panel may be accessed with M-x ns-popup-font-panel.  It
+will set the default font in the frame most recently used or clicked
+on.
+
+<!-- To make the setting permanent, use @samp{Save Options} in the -->
+<!-- Options menu, or run @code{menu-bar-options-save}. -->
+   <p>You can bring up a color panel with M-x ns-popup-color-panel. and
+drag the color you want over the emacs face you want to change.  Normal
+dragging will alter the foreground color.  Shift dragging will alter the
+background color.
+
+<!-- To make the changes permanent select the "Save Options" -->
+<!-- item in the "Options" menu, or run @code{menu-bar-options-save}. -->
+   <p>Useful in this context is the listing of all faces obtained by &lt;M-x&gt;
+<code>list-faces-display</code>.
+
+<h4 class="subsection">F.2.2 Open files by dragging to an Emacs window</h4>
+
+<p>The default behaviour when a user drags files from another application
+into an Emacs frame is to insert the contents of all the dragged files
+into the current buffer.  To remap the <code>ns-drag-file</code> event to
+open the dragged files in the current frame use the following line:
+
+<pre class="lisp">     (define-key global-map [ns-drag-file] 'ns-find-file)
+</pre>
+   </body></html>
+

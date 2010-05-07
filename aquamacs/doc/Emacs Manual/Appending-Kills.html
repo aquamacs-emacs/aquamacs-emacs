@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Appending Kills - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Yanking.html#Yanking" title="Yanking">
+<link rel="prev" href="Kill-Ring.html#Kill-Ring" title="Kill Ring">
+<link rel="next" href="Earlier-Kills.html#Earlier-Kills" title="Earlier Kills">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Appending-Kills"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-Ring.html#Kill-Ring">Kill Ring</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Yanking.html#Yanking">Yanking</a>
+<hr>
+</div>
+
+<h3 class="section">13.2 Appending Kills</h3>
+
+<p><a name="index-appending-kills-in-the-ring-366"></a>  Normally, each kill command pushes a new entry onto the kill ring. 
+However, two or more kill commands in a row combine their text into a
+single entry, so that a single <kbd>C-y</kbd> yanks all the text as a unit,
+just as it was before it was killed.
+
+   <p>Thus, if you want to yank text as a unit, you need not kill all of it
+with one command; you can keep killing line after line, or word after
+word, until you have killed it all, and you can still get it all back at
+once.
+
+   <p>Commands that kill forward from point add onto the end of the previous
+killed text.  Commands that kill backward from point add text onto the
+beginning.  This way, any sequence of mixed forward and backward kill
+commands puts all the killed text into one entry without rearrangement. 
+Numeric arguments do not break the sequence of appending kills.  For
+example, suppose the buffer contains this text:
+
+<pre class="example">     This is a line -!-of sample text.
+</pre>
+   <p class="noindent">with point shown by -!-.  If you type <kbd>M-d M-&lt;DEL&gt; M-d
+M-&lt;DEL&gt;</kbd>, killing alternately forward and backward, you end up with
+&lsquo;<samp><span class="samp">a line of sample</span></samp>&rsquo; as one entry in the kill ring, and &lsquo;<samp><span class="samp">This
+is  text.</span></samp>&rsquo; in the buffer.  (Note the double space between &lsquo;<samp><span class="samp">is</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">text</span></samp>&rsquo;, which you can clean up with <kbd>M-&lt;SPC&gt;</kbd> or
+<kbd>M-q</kbd>.)
+
+   <p>Another way to kill the same text is to move back two words with
+<kbd>M-b M-b</kbd>, then kill all four words forward with <kbd>C-u M-d</kbd>. 
+This produces exactly the same results in the buffer and in the kill
+ring.  <kbd>M-f M-f C-u M-&lt;DEL&gt;</kbd> kills the same text, all going
+backward; once again, the result is the same.  The text in the kill ring
+entry always has the same order that it had in the buffer before you
+killed it.
+
+   <p><a name="index-C_002dM_002dw-367"></a><a name="index-append_002dnext_002dkill-368"></a>  If a kill command is separated from the last kill command by other
+commands (not just numeric arguments), it starts a new entry on the kill
+ring.  But you can force it to append by first typing the command
+<kbd>C-M-w</kbd> (<code>append-next-kill</code>) right before it.  The <kbd>C-M-w</kbd>
+tells the following command, if it is a kill command, to append the text
+it kills to the last killed text, instead of starting a new entry.  With
+<kbd>C-M-w</kbd>, you can kill several separated pieces of text and
+accumulate them to be yanked back in one place.
+
+   <p>A kill command following <kbd>M-w</kbd> (<code>kill-ring-save</code>) does not
+append to the text that <kbd>M-w</kbd> copied into the kill ring.
+
+   </body></html>
+

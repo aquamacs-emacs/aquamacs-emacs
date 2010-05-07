@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Minibuffer Edit - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Minibuffer.html#Minibuffer" title="Minibuffer">
+<link rel="prev" href="Minibuffer-File.html#Minibuffer-File" title="Minibuffer File">
+<link rel="next" href="Completion.html#Completion" title="Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Minibuffer-Edit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion.html#Completion">Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-File.html#Minibuffer-File">Minibuffer File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer</a>
+<hr>
+</div>
+
+<h3 class="section">8.2 Editing in the Minibuffer</h3>
+
+<p>The minibuffer is an Emacs buffer, albeit a peculiar one, and the
+usual Emacs commands are available for editing the argument text. 
+(The prompt, however, is <dfn>read-only</dfn>, and cannot be changed.)
+
+   <p>Since &lt;RET&gt; in the minibuffer is defined to exit the minibuffer,
+you can't use it to insert a newline in the minibuffer.  To do that,
+type <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.  (The newline character is really the
+<acronym>ASCII</acronym> character control-J.)
+
+   <p>Inside a minibuffer, the keys <kbd>&lt;TAB&gt;</kbd>, <kbd>&lt;SPC&gt;</kbd>, and
+<kbd>&lt;?&gt;</kbd> are often bound to commands that perform
+<dfn>completion</dfn>.  See <a href="Completion.html#Completion">Completion</a>.  You can use <kbd>C-q</kbd>
+(<code>quoted-insert</code>) to insert a &lt;TAB&gt;, &lt;SPC&gt;, or &lt;?&gt;
+character.  For example, <kbd>C-q &lt;TAB&gt;</kbd> inserts a &lt;TAB&gt;
+character.  See <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>.
+
+   <p>For convenience, <kbd>C-a</kbd> (<code>move-beginning-of-line</code>) in a
+minibuffer moves point to the beginning of the argument text, not the
+beginning of the prompt.  For example, this allows you to erase the
+entire argument with <kbd>C-a C-k</kbd>.
+
+   <p><a name="index-height-of-minibuffer-157"></a><a name="index-size-of-minibuffer-158"></a><a name="index-growing-minibuffer-159"></a><a name="index-resizing-minibuffer-160"></a>  When the minibuffer is active, the echo area is treated much like an
+ordinary Emacs window.  For instance, you can switch to another window
+(with <kbd>C-x o</kbd>), edit text there, then return to the minibuffer
+window to finish the argument.  You can even kill text in another
+window, return to the minibuffer window, and yank the text into the
+argument.  There are some restrictions on the minibuffer window,
+however: for instance, you cannot split it.  See <a href="Windows.html#Windows">Windows</a>.
+
+   <p><a name="index-resize_002dmini_002dwindows-161"></a>  Normally, the minibuffer window occupies a single screen line. 
+However, if you add two or more lines' worth of text into the
+minibuffer, it expands automatically to accomodate the text.  The
+variable <code>resize-mini-windows</code> controls the resizing of the
+minibuffer.  The default value is <code>grow-only</code>, which means the
+behavior we have just described.  If the value is <code>t</code>, the
+minibuffer window will also shrink automatically if you remove some
+lines of text from the minibuffer, down to a minimum of one screen
+line.  If the value is <code>nil</code>, the minibuffer window never changes
+size automatically, but you can use the usual window-resizing commands
+on it (see <a href="Windows.html#Windows">Windows</a>).
+
+   <p><a name="index-max_002dmini_002dwindow_002dheight-162"></a>  The variable <code>max-mini-window-height</code> controls the maximum
+height for resizing the minibuffer window.  A floating-point number
+specifies a fraction of the frame's height; an integer specifies the
+maximum number of lines; <code>nil</code> means do not resize the minibuffer
+window automatically.  The default value is 0.25.
+
+   <p>The <kbd>C-M-v</kbd> command in the minibuffer scrolls the help text from
+commands that display help text of any sort in another window.  You
+can also scroll the help text with <kbd>M-&lt;prior&gt;</kbd> and
+<kbd>M-&lt;next&gt;</kbd> (or, equivalently, <kbd>M-&lt;PageUp&gt;</kbd> and
+<kbd>M-&lt;PageDown&gt;</kbd>).  This is especially useful with long lists of
+possible completions.  See <a href="Other-Window.html#Other-Window">Other Window</a>.
+
+   <p><a name="index-enable_002drecursive_002dminibuffers-163"></a>  Emacs normally disallows most commands that use the minibuffer while
+the minibuffer is active.  To allow such commands in the minibuffer,
+set the variable <code>enable-recursive-minibuffers</code> to <code>t</code>.
+
+   </body></html>
+

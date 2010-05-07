@@ -26,6 +26,11 @@ $x = join("", <E>);
 close E;
  
 
+if ($x =~ /Emacs version (2[0-9]\.[0-9]*\.[0-9]*)/is)
+  {
+    $version = $1;
+  }
+
 if ($x =~ s/(<body>)(.*?)(<div class="node">)/$1 <h1>GNU Emacs Manual<\/h1> $insert $3/is)
 {
 	$y = $2;
@@ -42,7 +47,7 @@ $x =~ s/^\s*(<ul class="menu">\s*<li>\s*<a accesskey="." href="Distrib\.html.*?A
 # ;   $x =~ s/^\s*(<p>MS-DOS and Windows)/$y$1/ism;
 # ;
 # ; }
-$x =~ s/<\/title>/<\/title>\n<META NAME="AppleTitle" content="Emacs Manual">\n<META NAME="AppleFont" content="Lucida Grande,Helvetica">\n/is;
+$x =~ s/<\/title>/<\/title>\n<META NAME="AppleTitle" content="Emacs Manual ($version)">\n<META NAME="AppleFont" content="Lucida Grande,Helvetica">\n/is;
 
 # # skip mac os x link
 # $x =~ s/^\s*<li>\s*<a accesskey="." href="Mac-OS\.html.*?<li>/<li>/ism;
@@ -53,10 +58,10 @@ $x =~ s/<\/title>/<\/title>\n<META NAME="AppleTitle" content="Emacs Manual">\n<M
 # # skip Windows section
 # $x =~ s/^\s*<p>MS-DOS and Windows.*?the ALT key does\.//ism;
  
-
-
 open E, ">".$ARGV[0]; 
 
 print E $x;
 close E;
- 
+
+# must output version
+print $version

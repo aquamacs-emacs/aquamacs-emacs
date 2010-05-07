@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+<title>Holiday Customizing - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
+<link rel="prev" href="Calendar-Customizing.html#Calendar-Customizing" title="Calendar Customizing">
+<link rel="next" href="Date-Display-Format.html#Date-Display-Format" title="Date Display Format">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Holiday-Customizing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Date-Display-Format.html#Date-Display-Format">Date Display Format</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.2 Customizing the Holidays</h4>
+
+<p><a name="index-calendar_002dholidays-3418"></a><a name="index-holiday_002doriental_002dholidays-3419"></a><a name="index-holiday_002dsolar_002dholidays-3420"></a>  Emacs knows about holidays defined by entries on one of several lists. 
+The lists of holidays that Emacs uses are for
+general holidays (<code>holiday-general-holidays</code>),
+local holidays (<code>holiday-local-holidays</code>),
+sun- and moon-related holidays (<code>holiday-solar-holidays</code>),
+Baha'i holidays (<code>holiday-bahai-holidays</code>),
+Christian holidays (<code>holiday-christian-holidays</code>),
+Hebrew (Jewish) holidays (<code>holiday-hebrew-holidays</code>),
+Islamic (Muslim) holidays (<code>holiday-islamic-holidays</code>),
+Oriental holidays (<code>holiday-oriental-holidays</code>),
+and other holidays (<code>holiday-other-holidays</code>).
+
+   <p>You can customize these lists of holidays to your own needs, deleting or
+adding holidays as described below.  Set any of them to <code>nil</code> to
+eliminate the associated holidays.
+
+   <p><a name="index-holiday_002dgeneral_002dholidays-3421"></a>  The general holidays are, by default, holidays common throughout the
+United States.
+
+   <p><a name="index-holiday_002dlocal_002dholidays-3422"></a>  There are no default local holidays, but your site may supply some.
+
+   <p><a name="index-holiday_002dbahai_002dholidays-3423"></a><a name="index-holiday_002dchristian_002dholidays-3424"></a><a name="index-holiday_002dhebrew_002dholidays-3425"></a><a name="index-holiday_002dislamic_002dholidays-3426"></a><a name="index-calendar_002dbahai_002dall_002dholidays_002dflag-3427"></a><a name="index-calendar_002dchristian_002dall_002dholidays_002dflag-3428"></a><a name="index-calendar_002dhebrew_002dall_002dholidays_002dflag-3429"></a><a name="index-calendar_002dislamic_002dall_002dholidays_002dflag-3430"></a>  By default, Emacs does not include all the holidays of the religions
+that it knows, only those commonly found in secular calendars.  For a
+more extensive collection of religious holidays, you can set any (or
+all) of the variables <code>calendar-bahai-all-holidays-flag</code>,
+<code>calendar-christian-all-holidays-flag</code>,
+<code>calendar-hebrew-all-holidays-flag</code>, or
+<code>calendar-islamic-all-holidays-flag</code> to <code>t</code>.
+
+   <p><a name="index-holiday_002dother_002dholidays-3431"></a>  You can set the variable <code>holiday-other-holidays</code> to any list of
+holidays.  This list, normally empty, is intended for individual use.
+
+   <p><a name="index-holiday-forms-3432"></a>  Each of the holiday variables is a list of <dfn>holiday forms</dfn>, each
+form describing a holiday (or sometimes a list of holidays).
+
+   <p>Here is a table of the possible kinds of holiday form.  Day numbers
+and month numbers count starting from 1, but &ldquo;dayname&rdquo; numbers
+count Sunday as 0.  The element <var>string</var> is always the
+description of the holiday, as a string.
+
+     <dl>
+<dt><code>(holiday-fixed </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Gregorian calendar.
+
+     <br><dt><code>(holiday-float </code><var>month</var> <var>dayname</var> <var>k</var> <var>string</var><dd>      &amp;optional <var>day</var>)
+The <var>k</var>th <var>dayname</var> (<var>dayname</var>=0 for Sunday, and so on)
+after or before Gregorian date <var>month</var>, <var>day</var>.  Negative <var>k</var>
+means count back from the end of the month.  Optional <var>day</var> defaults
+to 1 if <var>k</var> is positive, and the last day of <var>month</var> otherwise.
+
+     <br><dt><code>(holiday-chinese </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Chinese calendar.
+
+     <br><dt><code>(holiday-hebrew </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Hebrew calendar.
+
+     <br><dt><code>(holiday-islamic </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Islamic calendar.
+
+     <br><dt><code>(holiday-julian </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Julian calendar.
+
+     <br><dt><code>(holiday-sexp </code><var>sexp</var> <var>string</var><code>)</code><dd>A date calculated by the Lisp expression <var>sexp</var>.  The expression
+should use the variable <code>year</code> to compute and return the date of a
+holiday in the form of a list <code>(</code><var>month</var> <var>day</var> <var>year</var><code>)</code>,
+or <code>nil</code> if the holiday doesn't happen this year.
+
+     <br><dt><code>(if </code><var>condition</var> <var>holiday-form</var><code>)</code><dd>A holiday that happens only if <var>condition</var> is true.
+
+     <br><dt><code>(</code><var>function</var> <span class="roman">[</span><var>args</var><span class="roman">]</span><code>)</code><dd>A list of dates calculated by the function <var>function</var>, called with
+arguments <var>args</var>. 
+</dl>
+
+   <p>For example, suppose you want to add Bastille Day, celebrated in
+France on July 14 (i.e., the fourteenth day of the seventh month).  You
+can do this as follows:
+
+<pre class="smallexample">     (setq holiday-other-holidays '((holiday-fixed 7 14 "Bastille Day")))
+</pre>
+   <p>Many holidays occur on a specific day of the week, at a specific time
+of month.  Here is a holiday form describing Hurricane Supplication Day,
+celebrated in the Virgin Islands on the fourth Monday in August:
+
+<pre class="smallexample">     (holiday-float 8 1 4 "Hurricane Supplication Day")
+</pre>
+   <p class="noindent">Here the 8 specifies August, the 1 specifies Monday (Sunday is 0,
+Tuesday is 2, and so on), and the 4 specifies the fourth occurrence in
+the month (1 specifies the first occurrence, 2 the second occurrence,
+&minus;1 the last occurrence, &minus;2 the second-to-last occurrence, and
+so on).
+
+   <p>You can specify holidays that occur on fixed days of the Baha'i,
+Chinese, Hebrew, Islamic, and Julian calendars too.  For example,
+
+<pre class="smallexample">     (setq holiday-other-holidays
+           '((holiday-hebrew 10 2 "Last day of Hanukkah")
+             (holiday-islamic 3 12 "Mohammed's Birthday")
+             (holiday-julian 4 2 "Jefferson's Birthday")))
+</pre>
+   <p class="noindent">adds the last day of Hanukkah (since the Hebrew months are numbered with
+1 starting from Nisan), the Islamic feast celebrating Mohammed's
+birthday (since the Islamic months are numbered from 1 starting with
+Muharram), and Thomas Jefferson's birthday, which is 2 April 1743 on the
+Julian calendar.
+
+   <p>To include a holiday conditionally, use either Emacs Lisp's <code>if</code>
+or the <code>holiday-sexp</code> form.  For example, American presidential
+elections occur on the first Tuesday after the first Monday in November
+of years divisible by 4:
+
+<pre class="smallexample">     (holiday-sexp '(if (zerop (% year 4))
+                        (calendar-gregorian-from-absolute
+                         (1+ (calendar-dayname-on-or-before
+                               1 (+ 6 (calendar-absolute-from-gregorian
+                                       (list 11 1 year)))))))
+                   "US Presidential Election")
+</pre>
+   <p class="noindent">or
+
+<pre class="smallexample">     (if (zerop (% displayed-year 4))
+         (holiday-fixed 11
+                (calendar-extract-day
+                  (calendar-gregorian-from-absolute
+                    (1+ (calendar-dayname-on-or-before
+                          1 (+ 6 (calendar-absolute-from-gregorian
+                                   (list 11 1 displayed-year)))))))
+                "US Presidential Election"))
+</pre>
+   <p>Some holidays just don't fit into any of these forms because special
+calculations are involved in their determination.  In such cases you
+must write a Lisp function to do the calculation.  To include eclipses,
+for example, add <code>(eclipses)</code> to <code>holiday-other-holidays</code>
+and write an Emacs Lisp function <code>eclipses</code> that returns a
+(possibly empty) list of the relevant Gregorian dates among the range
+visible in the calendar window, with descriptive strings, like this:
+
+<pre class="smallexample">     (((6 27 1991) "Lunar Eclipse") ((7 11 1991) "Solar Eclipse") ... )
+</pre>
+   </body></html>
+

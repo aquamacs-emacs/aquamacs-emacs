@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Moving by Parens - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parentheses.html#Parentheses" title="Parentheses">
+<link rel="prev" href="Expressions.html#Expressions" title="Expressions">
+<link rel="next" href="Matching.html#Matching" title="Matching">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Moving-by-Parens"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Matching.html#Matching">Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Expressions.html#Expressions">Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parentheses.html#Parentheses">Parentheses</a>
+<hr>
+</div>
+
+<h4 class="subsection">30.4.2 Moving in the Parenthesis Structure</h4>
+
+<p><a name="index-parenthetical-groupings-2030"></a><a name="index-parentheses_002c-moving-across-2031"></a><a name="index-matching-parenthesis-and-braces_002c-moving-to-2032"></a><a name="index-braces_002c-moving-across-2033"></a><a name="index-list-commands-2034"></a>
+  The Emacs commands for handling parenthetical groupings see nothing
+except parentheses (or whatever characters must balance in the
+language you are working with).  They ignore strings and comments
+(including any parentheses within them) and ignore parentheses quoted
+by an escape character.  They are mainly intended for editing
+programs, but can be useful for editing any text that has parentheses. 
+They are sometimes called &ldquo;list&rdquo; commands because in Lisp these
+groupings are lists.
+
+   <p>These commands assume that the starting point is not inside a string
+or a comment.  Sometimes you can invoke them usefully from one of
+these places (for example, when you have a parenthesised clause in a
+comment) but this is unreliable.
+
+     <dl>
+<dt><kbd>C-M-n</kbd><dd>Move forward over a parenthetical group (<code>forward-list</code>). 
+<br><dt><kbd>C-M-p</kbd><dd>Move backward over a parenthetical group (<code>backward-list</code>). 
+<br><dt><kbd>C-M-u</kbd><dd>Move up in parenthesis structure (<code>backward-up-list</code>). 
+<br><dt><kbd>C-M-d</kbd><dd>Move down in parenthesis structure (<code>down-list</code>). 
+</dl>
+
+   <p><a name="index-C_002dM_002dn-2035"></a><a name="index-C_002dM_002dp-2036"></a><a name="index-forward_002dlist-2037"></a><a name="index-backward_002dlist-2038"></a>  The &ldquo;list&rdquo; commands <kbd>C-M-n</kbd> (<code>forward-list</code>) and
+<kbd>C-M-p</kbd> (<code>backward-list</code>) move forward or backward over one
+(or <var>n</var>) parenthetical groupings.
+
+   <p><a name="index-C_002dM_002du-2039"></a><a name="index-backward_002dup_002dlist-2040"></a>  <kbd>C-M-n</kbd> and <kbd>C-M-p</kbd> try to stay at the same level in the
+parenthesis structure.  To move <em>up</em> one (or <var>n</var>) levels, use
+<kbd>C-M-u</kbd> (<code>backward-up-list</code>).  <kbd>C-M-u</kbd> moves backward up
+past one unmatched opening delimiter.  A positive argument serves as a
+repeat count; a negative argument reverses the direction of motion, so
+that the command moves forward and up one or more levels.
+
+   <p><a name="index-C_002dM_002dd-2041"></a><a name="index-down_002dlist-2042"></a>  To move <em>down</em> in the parenthesis structure, use <kbd>C-M-d</kbd>
+(<code>down-list</code>).  In Lisp mode, where &lsquo;<samp><span class="samp">(</span></samp>&rsquo; is the only opening
+delimiter, this is nearly the same as searching for a &lsquo;<samp><span class="samp">(</span></samp>&rsquo;.  An
+argument specifies the number of levels to go down.
+
+   </body></html>
+

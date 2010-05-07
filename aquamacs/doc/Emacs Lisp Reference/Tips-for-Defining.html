@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Tips for Defining - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Defining-Variables.html#Defining-Variables" title="Defining Variables">
+<link rel="next" href="Accessing-Variables.html#Accessing-Variables" title="Accessing Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Tips-for-Defining"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Variables.html#Defining-Variables">Defining Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">11.6 Tips for Defining Variables Robustly</h3>
+
+<p>When you define a variable whose value is a function, or a list of
+functions, use a name that ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;, respectively.
+
+   <p>There are several other variable name conventions;
+here is a complete list:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">...-hook</span></samp>&rsquo;<dd>The variable is a normal hook (see <a href="Hooks.html#Hooks">Hooks</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">...-function</span></samp>&rsquo;<dd>The value is a function.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-functions</span></samp>&rsquo;<dd>The value is a list of functions.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-form</span></samp>&rsquo;<dd>The value is a form (an expression).
+
+     <br><dt>&lsquo;<samp><span class="samp">...-forms</span></samp>&rsquo;<dd>The value is a list of forms (expressions).
+
+     <br><dt>&lsquo;<samp><span class="samp">...-predicate</span></samp>&rsquo;<dd>The value is a predicate&mdash;a function of one argument that returns
+non-<code>nil</code> for &ldquo;good&rdquo; arguments and <code>nil</code> for &ldquo;bad&rdquo;
+arguments.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-flag</span></samp>&rsquo;<dd>The value is significant only as to whether it is <code>nil</code> or not. 
+Since such variables often end up acquiring more values over time,
+this convention is not strongly recommended.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-program</span></samp>&rsquo;<dd>The value is a program name.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-command</span></samp>&rsquo;<dd>The value is a whole shell command.
+
+     <br><dt>&lsquo;<samp><span class="samp">...-switches</span></samp>&rsquo;<dd>The value specifies options for a command. 
+</dl>
+
+   <p>When you define a variable, always consider whether you should mark
+it as &ldquo;safe&rdquo; or &ldquo;risky&rdquo;; see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
+
+   <p>When defining and initializing a variable that holds a complicated
+value (such as a keymap with bindings in it), it's best to put the
+entire computation of the value into the <code>defvar</code>, like this:
+
+<pre class="example">     (defvar my-mode-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map "\C-c\C-a" 'my-command)
+         ...
+         map)
+       <var>docstring</var>)
+</pre>
+   <p class="noindent">This method has several benefits.  First, if the user quits while
+loading the file, the variable is either still uninitialized or
+initialized properly, never in-between.  If it is still uninitialized,
+reloading the file will initialize it properly.  Second, reloading the
+file once the variable is initialized will not alter it; that is
+important if the user has run hooks to alter part of the contents (such
+as, to rebind keys).  Third, evaluating the <code>defvar</code> form with
+<kbd>C-M-x</kbd> <em>will</em> reinitialize the map completely.
+
+   <p>Putting so much code in the <code>defvar</code> form has one disadvantage:
+it puts the documentation string far away from the line which names the
+variable.  Here's a safe way to avoid that:
+
+<pre class="example">     (defvar my-mode-map nil
+       <var>docstring</var>)
+     (unless my-mode-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map "\C-c\C-a" 'my-command)
+         ...
+         (setq my-mode-map map)))
+</pre>
+   <p class="noindent">This has all the same advantages as putting the initialization inside
+the <code>defvar</code>, except that you must type <kbd>C-M-x</kbd> twice, once on
+each form, if you do want to reinitialize the variable.
+
+   <p>But be careful not to write the code like this:
+
+<pre class="example">     (defvar my-mode-map nil
+       <var>docstring</var>)
+     (unless my-mode-map
+       (setq my-mode-map (make-sparse-keymap))
+       (define-key my-mode-map "\C-c\C-a" 'my-command)
+       ...)
+</pre>
+   <p class="noindent">This code sets the variable, then alters it, but it does so in more than
+one step.  If the user quits just after the <code>setq</code>, that leaves the
+variable neither correctly initialized nor void nor <code>nil</code>.  Once
+that happens, reloading the file will not initialize the variable; it
+will remain incomplete.
+
+   </body></html>
+

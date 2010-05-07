@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Syntax Flags - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntax-Descriptors.html#Syntax-Descriptors" title="Syntax Descriptors">
+<link rel="prev" href="Syntax-Class-Table.html#Syntax-Class-Table" title="Syntax Class Table">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Syntax-Flags"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>
+<hr>
+</div>
+
+<h4 class="subsection">35.2.2 Syntax Flags</h4>
+
+<p><a name="index-syntax-flags-3072"></a>
+  In addition to the classes, entries for characters in a syntax table
+can specify flags.  There are seven possible flags, represented by the
+characters &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">3</span></samp>&rsquo;, &lsquo;<samp><span class="samp">4</span></samp>&rsquo;, &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, &lsquo;<samp><span class="samp">n</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">p</span></samp>&rsquo;.
+
+   <p>All the flags except &lsquo;<samp><span class="samp">n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">p</span></samp>&rsquo; are used to describe
+multi-character comment delimiters.  The digit flags indicate that a
+character can <em>also</em> be part of a comment sequence, in addition to
+the syntactic properties associated with its character class.  The flags
+are independent of the class and each other for the sake of characters
+such as &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in C mode, which is a punctuation character, <em>and</em>
+the second character of a start-of-comment sequence (&lsquo;<samp><span class="samp">/*</span></samp>&rsquo;),
+<em>and</em> the first character of an end-of-comment sequence
+(&lsquo;<samp><span class="samp">*/</span></samp>&rsquo;).
+
+   <p>Here is a table of the possible flags for a character <var>c</var>,
+and what they mean:
+
+     <ul>
+<li>&lsquo;<samp><span class="samp">1</span></samp>&rsquo; means <var>c</var> is the start of a two-character comment-start
+sequence.
+
+     <li>&lsquo;<samp><span class="samp">2</span></samp>&rsquo; means <var>c</var> is the second character of such a sequence.
+
+     <li>&lsquo;<samp><span class="samp">3</span></samp>&rsquo; means <var>c</var> is the start of a two-character comment-end
+sequence.
+
+     <li>&lsquo;<samp><span class="samp">4</span></samp>&rsquo; means <var>c</var> is the second character of such a sequence.
+
+     <li><!-- Emacs 19 feature -->
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; means that <var>c</var> as a comment delimiter belongs to the
+alternative &ldquo;b&rdquo; comment style.
+
+     <p>Emacs supports two comment styles simultaneously in any one syntax
+table.  This is for the sake of C++.  Each style of comment syntax has
+its own comment-start sequence and its own comment-end sequence.  Each
+comment must stick to one style or the other; thus, if it starts with
+the comment-start sequence of style &ldquo;b,&rdquo; it must also end with the
+comment-end sequence of style &ldquo;b.&rdquo;
+
+     <p>The two comment-start sequences must begin with the same character; only
+the second character may differ.  Mark the second character of the
+&ldquo;b&rdquo;-style comment-start sequence with the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag.
+
+     <p>A comment-end sequence (one or two characters) applies to the &ldquo;b&rdquo;
+style if its first character has the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag set; otherwise, it
+applies to the &ldquo;a&rdquo; style.
+
+     <p>The appropriate comment syntax settings for C++ are as follows:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">/</span></samp>&rsquo;<dd>&lsquo;<samp><span class="samp">124b</span></samp>&rsquo;
+<br><dt>&lsquo;<samp><span class="samp">*</span></samp>&rsquo;<dd>&lsquo;<samp><span class="samp">23</span></samp>&rsquo;
+<br><dt>newline<dd>&lsquo;<samp><span class="samp">&gt;b</span></samp>&rsquo;
+</dl>
+
+     <p>This defines four comment-delimiting sequences:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">/*</span></samp>&rsquo;<dd>This is a comment-start sequence for &ldquo;a&rdquo; style because the
+second character, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, does not have the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag.
+
+          <br><dt>&lsquo;<samp><span class="samp">//</span></samp>&rsquo;<dd>This is a comment-start sequence for &ldquo;b&rdquo; style because the second
+character, &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, does have the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag.
+
+          <br><dt>&lsquo;<samp><span class="samp">*/</span></samp>&rsquo;<dd>This is a comment-end sequence for &ldquo;a&rdquo; style because the first
+character, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, does not have the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag.
+
+          <br><dt>newline<dd>This is a comment-end sequence for &ldquo;b&rdquo; style, because the newline
+character has the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; flag. 
+</dl>
+
+     <li>&lsquo;<samp><span class="samp">n</span></samp>&rsquo; on a comment delimiter character specifies
+that this kind of comment can be nested.  For a two-character
+comment delimiter, &lsquo;<samp><span class="samp">n</span></samp>&rsquo; on either character makes it
+nestable.
+
+     <li><!-- Emacs 19 feature -->
+&lsquo;<samp><span class="samp">p</span></samp>&rsquo; identifies an additional &ldquo;prefix character&rdquo; for Lisp syntax. 
+These characters are treated as whitespace when they appear between
+expressions.  When they appear within an expression, they are handled
+according to their usual syntax classes.
+
+     <p>The function <code>backward-prefix-chars</code> moves back over these
+characters, as well as over characters whose primary syntax class is
+prefix (&lsquo;<samp><span class="samp">'</span></samp>&rsquo;).  See <a href="Motion-and-Syntax.html#Motion-and-Syntax">Motion and Syntax</a>. 
+</ul>
+
+   </body></html>
+

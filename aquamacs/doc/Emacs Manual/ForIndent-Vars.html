@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>ForIndent Vars - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Fortran-Indent.html#Fortran-Indent" title="Fortran Indent">
+<link rel="prev" href="ForIndent-Conv.html#ForIndent-Conv" title="ForIndent Conv">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="ForIndent-Vars"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ForIndent-Conv.html#ForIndent-Conv">ForIndent Conv</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran-Indent.html#Fortran-Indent">Fortran Indent</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">30.14.2.5 Variables for Fortran Indentation</h5>
+
+<p><a name="index-fortran_002ddo_002dindent-2226"></a><a name="index-fortran_002dif_002dindent-2227"></a><a name="index-fortran_002dstructure_002dindent-2228"></a><a name="index-fortran_002dcontinuation_002dindent-2229"></a><a name="index-fortran_002dcheck_002dall_002dnum_0040dots_007b_007d-2230"></a><a name="index-fortran_002dminimum_002dstatement_002dindent_0040dots_007b_007d-2231"></a>  Several additional variables control how Fortran indentation works:
+
+     <dl>
+<dt><code>fortran-do-indent</code><dd>Extra indentation within each level of &lsquo;<samp><span class="samp">do</span></samp>&rsquo; statement (default 3).
+
+     <br><dt><code>fortran-if-indent</code><dd>Extra indentation within each level of &lsquo;<samp><span class="samp">if</span></samp>&rsquo;, &lsquo;<samp><span class="samp">select case</span></samp>&rsquo;, or
+&lsquo;<samp><span class="samp">where</span></samp>&rsquo; statements (default 3).
+
+     <br><dt><code>fortran-structure-indent</code><dd>Extra indentation within each level of &lsquo;<samp><span class="samp">structure</span></samp>&rsquo;, &lsquo;<samp><span class="samp">union</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">map</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">interface</span></samp>&rsquo; statements (default 3).
+
+     <br><dt><code>fortran-continuation-indent</code><dd>Extra indentation for bodies of continuation lines (default 5).
+
+     <br><dt><code>fortran-check-all-num-for-matching-do</code><dd>In Fortran 77, a numbered &lsquo;<samp><span class="samp">do</span></samp>&rsquo; statement is ended by any statement
+with a matching line number.  It is common (but not compulsory) to use a
+&lsquo;<samp><span class="samp">continue</span></samp>&rsquo; statement for this purpose.  If this variable has a
+non-<code>nil</code> value, indenting any numbered statement must check for a
+&lsquo;<samp><span class="samp">do</span></samp>&rsquo; that ends there.  If you always end &lsquo;<samp><span class="samp">do</span></samp>&rsquo; statements with
+a &lsquo;<samp><span class="samp">continue</span></samp>&rsquo; line (or if you use the more modern &lsquo;<samp><span class="samp">enddo</span></samp>&rsquo;),
+then you can speed up indentation by setting this variable to
+<code>nil</code>.  The default is <code>nil</code>.
+
+     <br><dt><code>fortran-blink-matching-if</code><dd>If this is <code>t</code>, indenting an &lsquo;<samp><span class="samp">endif</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">enddo</span></samp>&rsquo;
+statement moves the cursor momentarily to the matching &lsquo;<samp><span class="samp">if</span></samp>&rsquo; (or
+&lsquo;<samp><span class="samp">do</span></samp>&rsquo;) statement to show where it is.  The default is <code>nil</code>.
+
+     <br><dt><code>fortran-minimum-statement-indent-fixed</code><dd>Minimum indentation for Fortran statements when using fixed form
+continuation line style.  Statement bodies are never indented less than
+this much.  The default is 6.
+
+     <br><dt><code>fortran-minimum-statement-indent-tab</code><dd>Minimum indentation for Fortran statements for tab format continuation line
+style.  Statement bodies are never indented less than this much.  The
+default is 8. 
+</dl>
+
+   <p>The variables controlling the indentation of comments are described in
+the following section.
+
+   </body></html>
+

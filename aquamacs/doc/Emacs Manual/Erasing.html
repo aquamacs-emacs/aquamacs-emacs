@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Erasing - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic.html#Basic" title="Basic">
+<link rel="prev" href="Moving-Point.html#Moving-Point" title="Moving Point">
+<link rel="next" href="Basic-Undo.html#Basic-Undo" title="Basic Undo">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.1.96.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Erasing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Undo.html#Basic-Undo">Basic Undo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-Point.html#Moving-Point">Moving Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr>
+</div>
+
+<h3 class="section">7.3 Erasing Text</h3>
+
+     <dl>
+<dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>&lt;Backspace&gt;</kbd><dd>Delete the character before point (<code>delete-backward-char</code>). 
+<br><dt><kbd>C-d</kbd><dt><kbd>&lt;Delete&gt;</kbd><dd>Delete the character after point (<code>delete-char</code>). 
+<br><dt><kbd>C-k</kbd><dd>Kill to the end of the line (<code>kill-line</code>). 
+<br><dt><kbd>M-d</kbd><dd>Kill forward to the end of the next word (<code>kill-word</code>). 
+<br><dt><kbd>M-&lt;DEL&gt;</kbd><dd>Kill back to the beginning of the previous word
+(<code>backward-kill-word</code>). 
+</dl>
+
+   <p>The key <kbd>&lt;DEL&gt;</kbd> (<code>delete-backward-char</code>) removes the
+character before point, moving the cursor and all the characters after
+it backwards.  On most keyboards, &lt;DEL&gt; is labelled
+&lt;Backspace&gt;, but we refer to it as &lt;DEL&gt; in this manual.  Do
+not confuse &lt;DEL&gt; with another key, labelled &lt;Delete&gt;, that
+exists on many keyboards; we will discuss &lt;Delete&gt; momentarily.
+
+   <p>Typing &lt;DEL&gt; when the cursor is at the beginning of a line
+deletes the preceding newline character, joining the line with the one
+before it.
+
+   <p>On some text-only terminals, Emacs may not recognize the &lt;DEL&gt;
+key properly.  If &lt;DEL&gt; does not do the right thing (e.g., if it
+deletes characters forwards), see <a href="DEL-Does-Not-Delete.html#DEL-Does-Not-Delete">DEL Does Not Delete</a>.
+
+   <p><a name="index-killing-characters-and-lines-108"></a><a name="index-deleting-characters-and-lines-109"></a><a name="index-erasing-characters-and-lines-110"></a>  The key <kbd>C-d</kbd> (<code>delete-char</code>) deletes the character after
+point, i.e., the character under the cursor.  This shifts the rest of
+the text on the line to the left.  If you type <kbd>C-d</kbd> at the end of
+a line, it joins that line with the following line.  This command is
+also bound to the key labelled &lt;Delete&gt; on many keyboards.
+
+   <p>To erase a larger amount of text, use the <kbd>C-k</kbd> key, which
+erases (kills) a line at a time.  If you type <kbd>C-k</kbd> at the
+beginning or middle of a line, it kills all the text up to the end of
+the line.  If you type <kbd>C-k</kbd> at the end of a line, it joins that
+line with the following line.
+
+   <p>To learn more about killing text, see <a href="Killing.html#Killing">Killing</a>.
+
+   </body></html>
+

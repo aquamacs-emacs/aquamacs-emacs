@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Group Definitions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Common-Keywords.html#Common-Keywords" title="Common Keywords">
+<link rel="next" href="Variable-Definitions.html#Variable-Definitions" title="Variable Definitions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.1.96.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Group-Definitions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Common-Keywords.html#Common-Keywords">Common Keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">14.2 Defining Customization Groups</h3>
+
+<p><a name="index-define-customization-group-760"></a><a name="index-customization-groups_002c-defining-761"></a>
+  Each Emacs Lisp package should have one main customization group which
+contains all the options, faces and other groups in the package.  If the
+package has a small number of options and faces, use just one group and
+put everything in it.  When there are more than twelve or so options and
+faces, then you should structure them into subgroups, and put the
+subgroups under the package's main customization group.  It is OK to
+put some of the options and faces in the package's main group alongside
+the subgroups.
+
+   <p>The package's main or only group should be a member of one or more of
+the standard customization groups.  (To display the full list of them,
+use <kbd>M-x customize</kbd>.)  Choose one or more of them (but not too
+many), and add your group to each of them using the <code>:group</code>
+keyword.
+
+   <p>The way to declare new customization groups is with <code>defgroup</code>.
+
+<div class="defun">
+&mdash; Macro: <b>defgroup</b><var> group members doc </var>[<var>keyword value</var>]<var><small class="dots">...</small><a name="index-defgroup-762"></a></var><br>
+<blockquote><p>Declare <var>group</var> as a customization group containing <var>members</var>. 
+Do not quote the symbol <var>group</var>.  The argument <var>doc</var> specifies
+the documentation string for the group.
+
+        <p>The argument <var>members</var> is a list specifying an initial set of
+customization items to be members of the group.  However, most often
+<var>members</var> is <code>nil</code>, and you specify the group's members by
+using the <code>:group</code> keyword when defining those members.
+
+        <p>If you want to specify group members through <var>members</var>, each element
+should have the form <code>(</code><var>name</var> <var>widget</var><code>)</code>.  Here <var>name</var>
+is a symbol, and <var>widget</var> is a widget type for editing that symbol. 
+Useful widgets are <code>custom-variable</code> for a variable,
+<code>custom-face</code> for a face, and <code>custom-group</code> for a group.
+
+        <p>When you introduce a new group into Emacs, use the <code>:version</code>
+keyword in the <code>defgroup</code>; then you need not use it for
+the individual members of the group.
+
+        <p>In addition to the common keywords (see <a href="Common-Keywords.html#Common-Keywords">Common Keywords</a>), you can
+also use this keyword in <code>defgroup</code>:
+
+          <dl>
+<dt><code>:prefix </code><var>prefix</var><dd><a name="index-prefix_0040r_007b_002c-_0040code_007bdefgroup_007d-keyword_007d-763"></a>If the name of an item in the group starts with <var>prefix</var>, then the
+tag for that item is constructed (by default) by omitting <var>prefix</var>.
+
+          <p>One group can have any number of prefixes. 
+</dl>
+        </p></blockquote></div>
+
+   <p>The prefix-discarding feature is currently turned off, which means
+that <code>:prefix</code> currently has no effect.  We did this because we
+found that discarding the specified prefixes often led to confusing
+names for options.  This happened because the people who wrote the
+<code>defgroup</code> definitions for various groups added <code>:prefix</code>
+keywords whenever they make logical sense&mdash;that is, whenever the
+variables in the library have a common prefix.
+
+   <p>In order to obtain good results with <code>:prefix</code>, it would be
+necessary to check the specific effects of discarding a particular
+prefix, given the specific items in a group and their names and
+documentation.  If the resulting text is not clear, then <code>:prefix</code>
+should not be used in that case.
+
+   <p>It should be possible to recheck all the customization groups, delete
+the <code>:prefix</code> specifications which give unclear results, and then
+turn this feature back on, if someone would like to do the work.
+
+   </body></html>
+
