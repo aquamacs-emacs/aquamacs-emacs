@@ -219,9 +219,6 @@ customization buffer."
   :set 'set-aquamacs-known-major-modes)
 
 
-;; compatibility (old symbol used in 0.9.6)
-(defalias 'aquamacs-menu-new-buffer-modes 'aquamacs-known-major-modes)
-
 (defvar aquamacs-menu-setup-hook nil "Hook run after updating the Aquamacs menu")
 
 
