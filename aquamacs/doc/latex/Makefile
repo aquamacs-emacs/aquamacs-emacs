@@ -57,4 +57,4 @@ html: aquamacs.tex *.pdf
 	echo "Help files copied." ; \
 # Before 10.6, use the Help Indexer application instead of hiutil:
 	(hiutil -C -g -s en -a -f $(destdir2)"/Aquamacs Help.helpindex" $(destdir2) || \
-	$(indexer) $(destdir2) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)
+	/Developer/Applications/Utilities/Help\ Indexer.app/Contents/MacOS/Help\ Indexer $(destdir2) -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1)
