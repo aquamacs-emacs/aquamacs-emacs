@@ -835,8 +835,7 @@ on the main screen, i.e. where the menu is."
     (and smart-frame-positioning-mode
 	 inside
 	 (> (frame-parameter nil 'tool-bar-lines) 0)
-	 (run-with-idle-timer 0 nil
-			      (lambda ()(smart-move-frame-inside-screen nil t))))))
+	 (smart-move-frame-inside-screen nil t))))
 
 
 (provide 'smart-frame-positioning) 
