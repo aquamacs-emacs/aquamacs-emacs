@@ -223,8 +223,13 @@ KEYS defines the elements to use for `tabbar-key-binding-keys'."
       
       (set-window-dedicated-p (selected-window) nil)
       (let ((prevtab (tabbar-get-tab (window-buffer (selected-window)) 
-				     (tabbar-tab-tabset tab))))
-	(assq-set prevtab  (point-marker) 'tab-points))
+				     (tabbar-tab-tabset tab)))
+	    (marker (cond ((bobp) (point-min-marker))
+				((eobp) (point-max-marker))
+				(t (point-marker)))))
+	(set-marker-insertion-type marker t)
+	(assq-set prevtab marker
+		  'tab-points))
       (switch-to-buffer buffer)
       (let ((new-pt (cdr (assq tab tab-points))))
 	(and new-pt 
@@ -236,6 +241,7 @@ KEYS defines the elements to use for `tabbar-key-binding-keys'."
 		 (goto-char pos))
 	       (set-marker new-pt nil) ;; delete marker 
 	       ))))))
+; (marker-insertion-type (cdr (car tab-points)))
 
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
