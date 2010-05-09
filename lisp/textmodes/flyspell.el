@@ -2027,9 +2027,14 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	    (setq beg end)
 	    (setq end old)))
       (if (string= ispell-program-name "NSSpellChecker")
-	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
-	      (ns-flyspell-large-region beg end)
-	    (ns-flyspell-region beg end))
+	  (progn
+	    (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
+		;; large; spellcheck in chunks.
+		(ns-flyspell-large-region beg end)
+	      ;; not so large; spellcheck all at once.
+	      (ns-flyspell-region beg end))
+	    ;; check for and mark consecutive repeated words
+	    (flyspell-check-region-doublons beg end))
 	(if (and flyspell-large-region (> (- end beg) flyspell-large-region))
 	    (flyspell-large-region beg end)
 	  (flyspell-small-region beg end))))
