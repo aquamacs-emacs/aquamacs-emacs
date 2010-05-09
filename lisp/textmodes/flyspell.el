@@ -517,7 +517,7 @@ on current value of `ispell-program-name'."
 	  misspelled-location
 	  misspelled-length)
       ;; remove any existing flyspell overlays before checking
-      (flyspell-delete-region-overlays progress-beg progress-end)
+      (flyspell-delete-region-overlays beg end)
       (while (< spellcheck-position end) 
 	;; report progress
  	(if flyspell-issue-message-flag
