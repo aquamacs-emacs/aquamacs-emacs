@@ -69,7 +69,7 @@ Explicity exclude tooltip buffers."
   "Return window ID as a number."
   (let ((window-string (format "%s" window)))
     (string-to-number
-     (nth 1 (split-string window-string "\\(<window \\| on \\)" )))))
+     (nth 1 (save-match-data (split-string window-string "\\(<window \\| on \\)" ))))))
 
 (defun window-number-list ()
   "Return IDs of all windows as list of numbers."
