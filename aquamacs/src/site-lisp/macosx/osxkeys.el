@@ -166,7 +166,10 @@ provided `cua-mode' and the mark are active."
 	 (call-interactively 'forward-char)))))
 
 (dolist (cmd
-	 '(aquamacs-backward-char aquamacs-forward-char))
+	 '(aquamacs-backward-char 
+	   aquamacs-forward-char
+	   aquamacs-previous-line
+	   aquamacs-previous-line))
   (put cmd 'CUA 'move))
 
 (defun aquamacs-previous-line (&optional arg try-vscroll)
@@ -260,6 +263,13 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
 	    (skip-chars-backward " \r\n" (- (point) 1))))
       (move-end-of-line arg))))
   
+;; mark functions for CUA
+(dolist (cmd
+	 '( beginning-of-visual-line
+	    end-of-visual-line
+	    aquamacs-move-beginning-of-line
+	    aquamacs-move-end-of-line))
+ (put cmd 'CUA 'move))
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
