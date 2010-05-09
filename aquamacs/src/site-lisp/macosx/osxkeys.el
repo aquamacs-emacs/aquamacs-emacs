@@ -911,6 +911,7 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'spellchecker-panel-or-ispell) 
     (define-key map `[(,osxkeys-command-key \;)] 'spellcheck-now)
+    (define-key map `[(meta ,osxkeys-command-key \;)] 'flyspell-buffer)
 
     ;; Zoom Zoom!
     (define-key map `[(meta wheel-up)] 'zoom-font)
