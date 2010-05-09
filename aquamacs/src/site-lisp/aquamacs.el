@@ -1502,7 +1502,7 @@ to write the `custom-file'.")
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
      text-mode-hook 
-     word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
+     word-wrap truncate-lines line-move-visual visual-line-mode auto-fill-function fringe-indicator-alist
      blink-cursor-mode
      aquamacs-customization-version-id
      mac-print-monochrome-mode
