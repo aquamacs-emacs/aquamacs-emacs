@@ -209,7 +209,8 @@ Returns the number of actions taken."
 			  (setq next `(lambda ()
 					(setq next ',next)
 					',elt)))
-			 ((equal def (cons 'act 'suppress)) 
+			 ((or (eq def 'automatic)
+			      (equal def (cons 'act 'suppress))) 
 			  ;; Act on this and all following objects.
 			  (if (funcall prompter elt)
 			      (progn
