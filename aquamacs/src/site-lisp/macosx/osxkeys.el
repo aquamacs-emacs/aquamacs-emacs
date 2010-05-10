@@ -306,6 +306,27 @@ With argument, do this that many times."
 (defun buffer-line-at-point ()
  (or (cdr (nth 2 (posn-at-point))) 0))
 
+;; the following functions are necessary because we want
+;; to disable cut/copy if mark is not active
+;; doing so directly in `clipboard-kill-ring-save' etc
+;; would hurt their functionality and cause bugs (e.g., mailclient)
+(defun clipboard-kill-ring-save-active-region (beg end)
+  "Like `clipboard-kill-ring-save', but only if mark is active.
+\(Or if `transient-mark-mode' is off.)"
+  (interactive "r")
+  (when (or mark-active (not transient-mark-mode))
+    (setq this-command 'clipboard-kill-ring-save)
+    (clipboard-kill-ring-save beg end)))
+
+(defun clipboard-kill-active-region (beg end)
+  "Like `clipboard-kill-region', but only if mark is active.
+\(Or if `transient-mark-mode' is off.)"
+  (interactive "r")
+  (when (or mark-active (not transient-mark-mode))
+    (setq this-command 'clipboard-kill-region)
+    (clipboard-kill-region beg end)))
+
+
 (defun aquamacs-clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
   (interactive)
@@ -697,8 +718,8 @@ but select the newly created window."
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
-    (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save))
-    (define-key map [cut] (cons "Cut" 'clipboard-kill-region))
+    (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save-active-region))
+    (define-key map [cut] (cons "Cut" 'clipboard-kill-active-region))
     (define-key map [aq-cm-sep] '(menu-item "--"))
     (define-key map [dictionary] (cons "Look Up in Dictionary" 
 				   'aquamacs-dictionary-lookup))
@@ -885,12 +906,12 @@ which key is mapped to command. The value of
 
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
-    (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
+    (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save-active-region)
     (define-key map `[(meta ,osxkeys-command-key c)] 
       'aquamacs-clipboard-kill-ring-save-secondary)
     ;; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
-    (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
+    (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-active-region)
     (define-key map `[(meta ,osxkeys-command-key x)] 
       'aquamacs-clipboard-kill-secondary)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
