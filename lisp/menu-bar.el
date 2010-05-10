@@ -663,7 +663,7 @@ by \"Save Options\" in Custom buffers.")
   (let ((need-save nil))
     ;; These are set with menu-bar-make-mm-toggle, which does not
     ;; put on a customized-value property.
-    (dolist (elt '(global-show-newlines-mode line-number-mode
+    (dolist (elt '(global-show-newlines-mode global-linum-mode
 		   column-number-mode size-indication-mode
 		   cua-mode show-paren-mode transient-mark-mode
 		   display-time-mode display-battery-mode
@@ -721,10 +721,10 @@ by \"Save Options\" in Custom buffers.")
 			   "Column Numbers"
 			   "Show the current column number in the mode line"))
 
-(define-key menu-bar-showhide-menu [line-number-mode]
-  (menu-bar-make-mm-toggle line-number-mode
+(define-key menu-bar-showhide-menu [linum-mode]
+  (menu-bar-make-mm-toggle global-linum-mode
 			   "Line Numbers"
-			   "Show the current line number in the mode line"))
+			   "Show the current line number next to each line"))
 
 (define-key menu-bar-showhide-menu [size-indication-mode]
   (menu-bar-make-mm-toggle size-indication-mode

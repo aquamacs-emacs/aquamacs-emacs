@@ -1453,7 +1453,7 @@ to write the `custom-file'.")
 			  aquamacs-customization-version-id)
   
   (defvar aquamacs-menu-bar-options-to-save
-    (append '(line-number-mode 
+    (append '(global-linum-mode 
 	      column-number-mode 
 	      size-indication-mode
 	      global-hl-line-mode
