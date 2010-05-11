@@ -8,7 +8,7 @@
 
 
 # do not use MacPorts / fink libraries
-PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386 -arch ppc' LDFLAGS='-arch i386 -arch ppc'
+PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-O2 -arch i386 -arch ppc' LDFLAGS='-O2 -arch i386 -arch ppc'
 make clean # get rid of binaries - apparently needed for universal build
 make
 # will fail
