@@ -16,8 +16,6 @@
 (load "disp-table")
 ;; (load "tool-bar")  ;; taken out while we're working on it!
 (load "tooltip")
-(load "font-lock")
-(load "jit-lock")
 (load "image") ;; path issue should be alright now
 (load "image-file")
 (load "button")
