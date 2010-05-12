@@ -5,10 +5,23 @@
 # for internal use
 
 
+MACOSX_DEPLOYMENT_TARGET="10.5"
+export MACOSX_DEPLOYMENT_TARGET
 
+# not good with 4.0 at least: -fstrict-aliasing -fstrict-overflow    -ftree-vrp 
+# not good w/ Emacs: -freorder-functions
+#
+
+#
+OPT='-fdefer-pop -fdelayed-branch -fguess-branch-probability -fcprop-registers   -fif-conversion -fif-conversion2 -ftree-ccp -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-ter    -ftree-lrs -ftree-sra -ftree-copyrename  -ftree-fre -ftree-ch  -funit-at-a-time -fmerge-constants -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fregmove  -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fexpensive-optimizations  -ftree-pre  -fschedule-insns -fcse-skip-blocks -fgcse  -fgcse-lm   -fcse-follow-jumps    -fschedule-insns2 -fsched-interblock  -fsched-spec -fdelete-null-pointer-checks -freorder-blocks  -falign-functions  -falign-jumps -falign-loops  -falign-labels -finline-functions -funswitch-loops'
+
+# we must use gcc-4.0:  
+# with 4.2, something goes wrong during dumping with pcc ("Wrong type argument: integerp, 3.0")
+# gcc-4.5 isn't accepted by the configure script
 
 # do not use MacPorts / fink libraries
-PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-O2 -arch i386 -arch ppc' LDFLAGS='-O2 -arch i386 -arch ppc'
+#
+CC="gcc-4.0" PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS="$OPT -arch i386 -arch ppc" LDFLAGS='-O0 -arch i386 -arch ppc'
 make clean # get rid of binaries - apparently needed for universal build
 make
 # will fail
