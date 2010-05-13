@@ -2291,7 +2291,6 @@ ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\|7Z\\)\\'" . archive-mode)
      ;; /tmp/Re.... or Message
      ("\\`/tmp/Re" . text-mode)
      ("/Message[0-9]*\\'" . text-mode)
-     ("\\.zone\\'" . zone-mode)
      ;; some news reader is reported to use this
      ("\\`/tmp/fol/" . text-mode)
      ("\\.oak\\'" . scheme-mode)
@@ -2326,7 +2325,6 @@ ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\|7Z\\)\\'" . archive-mode)
      ("#\\*mail\\*" . mail-mode)
      ("\\.g\\'" . antlr-mode)
      ("\\.ses\\'" . ses-mode)
-     ("\\.\\(soa\\|zone\\)\\'" . dns-mode)
      ("\\.docbook\\'" . sgml-mode)
      ("\\.com\\'" . dcl-mode)
      ("/config\\.\\(?:bat\\|log\\)\\'" . fundamental-mode)
@@ -5197,30 +5195,6 @@ The optional second argument indicates whether to kill internal buffers too."
         (kill-buffer-ask buffer)))))
 
 
-(defun auto-save-mode (arg)
-  "Toggle auto-saving of contents of current buffer.
-With prefix argument ARG, turn auto-saving on if positive, else off."
-  (interactive "P")
-  (setq buffer-auto-save-file-name
-        (and (if (null arg)
-		 (or (not buffer-auto-save-file-name)
-		     ;; If auto-save is off because buffer has shrunk,
-		     ;; then toggling should turn it on.
-		     (< buffer-saved-size 0))
-	       (or (eq arg t) (listp arg) (and (integerp arg) (> arg 0))))
-	     (if (and buffer-file-name auto-save-visited-file-name
-		      (not buffer-read-only))
-		 buffer-file-name
-	       (make-auto-save-file-name))))
-  ;; If -1 was stored here, to temporarily turn off saving,
-  ;; turn it back on.
-  (and (< buffer-saved-size 0)
-       (setq buffer-saved-size 0))
-  (if (called-interactively-p 'interactive)
-      (message "Auto-save %s (in this buffer)"
-	       (if buffer-auto-save-file-name "on" "off")))
-  buffer-auto-save-file-name)
-
 (defun rename-auto-save-file ()
   "Adjust current buffer's auto save file name for current conditions.
 Also rename any existing auto save file, if it was made in this session."

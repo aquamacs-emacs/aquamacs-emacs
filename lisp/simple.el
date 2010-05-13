@@ -2769,16 +2769,16 @@ major or minor modes can use `filter-buffer-substring-functions' to
 extract characters that are special to a buffer, and should not
 be copied into other buffers."
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
-  (cond
-   ((or delete buffer-substring-filters)
-    (save-excursion
-      (goto-char beg)
-      (let ((string (if delete (delete-and-extract-region beg end)
-		      (buffer-substring beg end))))
-	(dolist (filter buffer-substring-filters)
-	  (setq string (funcall filter string)))
-	string)))
-   (t
+    (cond
+     ((or delete buffer-substring-filters)
+      (save-excursion
+        (goto-char beg)
+        (let ((string (if delete (delete-and-extract-region beg end)
+                        (buffer-substring beg end))))
+          (dolist (filter buffer-substring-filters)
+            (setq string (funcall filter string)))
+          string)))
+     (t
       (buffer-substring beg end)))))
 
 
@@ -2908,8 +2908,8 @@ argument should still be a \"useful\" string for such uses."
       (setcar kill-ring string)
     (push string kill-ring)
     (if (> (length kill-ring) kill-ring-max)
-	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))) 
-  (setq kill-ring-yank-pointer kill-ring) 
+	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
+  (setq kill-ring-yank-pointer kill-ring)
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
 
@@ -3512,15 +3512,15 @@ START and END specify the portion of the current buffer to be copied."
 	 (region-beginning) (region-end)))
   (let* ((oldbuf (current-buffer))
          (append-to (get-buffer-create buffer))
-           (windows (get-buffer-window-list append-to t t))
-           point)
-      (save-excursion
-	(with-current-buffer append-to
-	  (setq point (point))
-	  (barf-if-buffer-read-only)
-	  (insert-buffer-substring oldbuf start end)
-	  (dolist (window windows)
-	    (when (= (window-point window) point)
+         (windows (get-buffer-window-list append-to t t))
+         point)
+    (save-excursion
+      (with-current-buffer append-to
+        (setq point (point))
+        (barf-if-buffer-read-only)
+        (insert-buffer-substring oldbuf start end)
+        (dolist (window windows)
+          (when (= (window-point window) point)
             (set-window-point window (point))))))))
 
 (defun prepend-to-buffer (buffer start end)
@@ -4787,8 +4787,8 @@ This also turns on `word-wrap' in the buffer."
 (define-globalized-minor-mode global-visual-line-mode
   visual-line-mode turn-on-visual-line-mode
   :lighter " vl")
-
 
+
 (defun transpose-chars (arg)
   "Interchange characters around point, moving forward one character.
 With prefix arg ARG, effect is to take character before point
@@ -5150,11 +5150,7 @@ Some major modes set this.")
 (put 'auto-fill-function 'safe-local-variable 'null)
 ;; FIXME: turn into a proper minor mode.
 ;; Add a global minor mode version of it.
-(defvar auto-fill-mode nil "Non-nil if auto-fill-mode is on.
-Setting this variable takes no effect.  Use `auto-fill-mode' function.")
-(make-variable-buffer-local 'auto-fill-mode)
-
-(defun auto-fill-mode (&optional arg)
+(define-minor-mode auto-fill-mode
   "Toggle Auto Fill mode.
 With ARG, turn Auto Fill mode on if and only if ARG is positive.
 In Auto Fill mode, inserting a space at a column beyond `current-fill-column'
@@ -5162,15 +5158,7 @@ automatically breaks the line at a previous space.
 
 The value of `normal-auto-fill-function' specifies the function to use
 for `auto-fill-function' when turning Auto Fill mode on."
-  (interactive "P")
-  (prog1 (setq auto-fill-mode 
-	       (setq auto-fill-function
-		     (if (if (null arg)
-			     (not auto-fill-function)
-			   (> (prefix-numeric-value arg) 0))
-			 normal-auto-fill-function
-		       nil)))
-    (force-mode-line-update)))
+  :variable (eq auto-fill-function normal-auto-fill-function))
 
 ;; This holds a document string used to document auto-fill-mode.
 (defun auto-fill-function ()
@@ -5331,7 +5319,7 @@ See `visual-line-mode'."
       (turn-off-word-wrap)
     (turn-on-word-wrap))
   (when (interactive-p)
-    (force-mode-line-update)
+  (force-mode-line-update)
     (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
 
 ;;  backward compatibility (in case users have it in their customizations)
@@ -5374,7 +5362,7 @@ To turn on the classic `longlines-mode', use `turn-on-longlines*'."
 (defvar overwrite-mode-binary (purecopy " Bin Ovwrt")
   "The string displayed in the mode line when in binary overwrite mode.")
 
-(defun overwrite-mode (arg)
+(define-minor-mode overwrite-mode
   "Toggle overwrite mode.
 With prefix argument ARG, turn overwrite mode on if ARG is positive,
 otherwise turn it off.  In overwrite mode, printing characters typed
@@ -5383,14 +5371,9 @@ it to the right.  At the end of a line, such characters extend the line.
 Before a tab, such characters insert until the tab is filled in.
 \\[quoted-insert] still inserts characters in overwrite mode; this
 is supposed to make it easier to insert characters when necessary."
-  (interactive "P")
-  (setq overwrite-mode
-	(if (if (null arg) (not overwrite-mode)
-	      (> (prefix-numeric-value arg) 0))
-	    'overwrite-mode-textual))
-  (force-mode-line-update))
+  :variable (eq overwrite-mode 'overwrite-mode-textual))
 
-(defun binary-overwrite-mode (arg)
+(define-minor-mode binary-overwrite-mode
   "Toggle binary overwrite mode.
 With prefix argument ARG, turn binary overwrite mode on if ARG is
 positive, otherwise turn it off.  In binary overwrite mode, printing
@@ -5403,13 +5386,7 @@ replaces the text at the cursor, just as ordinary typing characters do.
 Note that binary overwrite mode is not its own minor mode; it is a
 specialization of overwrite mode, entered by setting the
 `overwrite-mode' variable to `overwrite-mode-binary'."
-  (interactive "P")
-  (setq overwrite-mode
-	(if (if (null arg)
-		(not (eq overwrite-mode 'overwrite-mode-binary))
-	      (> (prefix-numeric-value arg) 0))
-	    'overwrite-mode-binary))
-  (force-mode-line-update))
+  :variable (eq overwrite-mode 'overwrite-mode-binary))
 
 (define-minor-mode line-number-mode
   "Toggle Line Number mode.
@@ -5435,6 +5412,26 @@ With ARG, turn Size Indication mode on if ARG is positive,
 otherwise turn it off.  When Size Indication mode is enabled, the
 size of the accessible part of the buffer appears in the mode line."
   :global t :group 'mode-line)
+
+(define-minor-mode auto-save-mode
+  "Toggle auto-saving of contents of current buffer.
+With prefix argument ARG, turn auto-saving on if positive, else off."
+  :variable ((and buffer-auto-save-file-name
+                  ;; If auto-save is off because buffer has shrunk,
+                  ;; then toggling should turn it on.
+                  (>= buffer-saved-size 0))
+             . (lambda (val)
+                 (setq buffer-auto-save-file-name
+                       (cond
+                        ((null val) nil)
+                        ((and buffer-file-name auto-save-visited-file-name
+                              (not buffer-read-only))
+                         buffer-file-name)
+                        (t (make-auto-save-file-name))))))
+  ;; If -1 was stored here, to temporarily turn off saving,
+  ;; turn it back on.
+  (and (< buffer-saved-size 0)
+       (setq buffer-saved-size 0)))
 
 (defgroup paren-blinking nil
   "Blinking matching of parens and expressions."
@@ -6549,7 +6546,7 @@ call `normal-erase-is-backspace-mode' (which see) instead."
              normal-erase-is-backspace)
            1 0)))))
 
-(defun normal-erase-is-backspace-mode (&optional arg)
+(define-minor-mode normal-erase-is-backspace-mode
   "Toggle the Erase and Delete mode of the Backspace and Delete keys.
 
 With numeric ARG, turn the mode on if and only if ARG is positive.
@@ -6579,13 +6576,10 @@ probably not turn on this mode on a text-only terminal if you don't
 have both Backspace, Delete and F1 keys.
 
 See also `normal-erase-is-backspace'."
-  (interactive "P")
-  (let ((enabled (or (and arg (> (prefix-numeric-value arg) 0))
-		     (not (or arg
-                              (eq 1 (terminal-parameter
-				      nil 'normal-erase-is-backspace)))))))
-    (set-terminal-parameter nil 'normal-erase-is-backspace
-			    (if enabled 1 0))
+  :variable (eq (terminal-parameter
+                 nil 'normal-erase-is-backspace) 1)
+  (let ((enabled (eq 1 (terminal-parameter
+                        nil 'normal-erase-is-backspace))))
 
     (cond ((or (memq window-system '(x w32 ns pc))
 	       (memq system-type '(ms-dos windows-nt)))
@@ -6621,7 +6615,6 @@ See also `normal-erase-is-backspace'."
 	     (keyboard-translate ?\C-h ?\C-h)
 	     (keyboard-translate ?\C-? ?\C-?))))
 
-    (run-hooks 'normal-erase-is-backspace-hook)
     (if (called-interactively-p 'interactive)
 	(message "Delete key deletes %s"
 		 (if (eq 1 (terminal-parameter nil 'normal-erase-is-backspace))
@@ -6658,7 +6651,7 @@ the first N arguments are fixed at the values with which this function
 was called."
   (lexical-let ((fun fun) (args1 args))
     (lambda (&rest args2) (apply fun (append args1 args2)))))
-
+
 ;; Minibuffer prompt stuff.
 
 ;(defun minibuffer-prompt-modification (start end)
