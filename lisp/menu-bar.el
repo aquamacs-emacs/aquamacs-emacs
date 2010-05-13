@@ -1963,10 +1963,14 @@ turn on menu bars; otherwise, turn off menu bars."
   :global t
   :group 'frames
 
+  
   ;; Make menu-bar-mode and default-frame-alist consistent.
-  (modify-all-frames-parameters (list (cons 'menu-bar-lines
-					    (if menu-bar-mode 1 0))))
-
+  (modify-all-frames-parameters 
+   (list (cons 'menu-bar-lines
+	       (if (eq initial-window-system 'ns)
+		   1
+		 (if menu-bar-mode 1 0)))))
+    
   ;; Make the message appear when Emacs is idle.  We can not call message
   ;; directly.  The minor-mode message "Menu-bar mode disabled" comes
   ;; after this function returns, overwriting any message we do here.
