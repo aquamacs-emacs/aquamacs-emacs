@@ -1395,7 +1395,9 @@ This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
 The return value depends on the value of `TeX-source-correlate-mode'.
 If this is nil, an empty string will be returned."
   (if TeX-source-correlate-mode
-      (if (eq TeX-source-correlate-method-active 'source-specials)
+      (if (not TeX-PDF-mode) 
+	  ;;   (eq TeX-source-correlate-method-active 'source-specials))
+	  ;;  on OSX, PDF mode must control this, due to unavailability of viewers.
 	  (concat TeX-source-specials-tex-flags
 		  (if TeX-source-specials-places
 		      ;; -src-specials=WHERE: insert source specials

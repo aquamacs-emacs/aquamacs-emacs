@@ -2394,8 +2394,8 @@ spaces are put between sequence elements, etc.  */)
   goto next_list;
 }
 
-
-Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value, Qnone;
+#ifdef HAVE_NS
+extern Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value, Qnone;
 extern Lisp_Object ns_alternate_modifier, ns_right_alternate_modifier, 
   ns_command_modifier, ns_right_command_modifier,
   ns_control_modifier, ns_right_control_modifier, 
@@ -2418,6 +2418,10 @@ extern Lisp_Object ns_alternate_modifier, ns_right_alternate_modifier,
                            (EQ (ns_right_command_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\x98" : \
 			    (EQ (ns_right_control_modifier, x) ? "\xe2\x87\xa2^" : \
 			     (EQ (ns_right_alternate_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\xa5" : "???"))))))
+#else 
+#define Vns_use_mac_modifier_symbols Qnil
+#define NS_KEYSYMBOL(x) ""
+#endif
 
 char *
 push_key_description (c, p, force_multibyte)
@@ -4190,17 +4194,17 @@ preferred.  */);
   Qremap = intern_c_string ("remap");
   staticpro (&Qremap);
 
-  Qmodifier_value = intern_c_string ("modifier-value");
-  Qalt = intern_c_string ("alt");
-  Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
-  Qhyper = intern_c_string ("hyper");
-  Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
-  Qmeta = intern_c_string ("meta");
-  Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
-  Qsuper = intern_c_string ("super");
-  Fput (Qsuper, Qmodifier_value, make_number (super_modifier));
-  Qcontrol = intern_c_string ("control");
-  Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier));
+  /* Qmodifier_value = intern_c_string ("modifier-value"); */
+  /* Qalt = intern_c_string ("alt"); */
+  /* Fput (Qalt, Qmodifier_value, make_number (alt_modifier)); */
+  /* Qhyper = intern_c_string ("hyper"); */
+  /* Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier)); */
+  /* Qmeta = intern_c_string ("meta"); */
+  /* Fput (Qmeta, Qmodifier_value, make_number (meta_modifier)); */
+  /* Qsuper = intern_c_string ("super"); */
+  /* Fput (Qsuper, Qmodifier_value, make_number (super_modifier)); */
+  /* Qcontrol = intern_c_string ("control"); */
+  /* Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier)); */
 
   QCadvertised_binding = intern_c_string (":advertised-binding");
   staticpro (&QCadvertised_binding);

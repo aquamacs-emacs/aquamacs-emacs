@@ -63,6 +63,7 @@
 (autoload 'epg-context-set-progress-callback "epg")
 (autoload 'epg-decrypt-string "epg")
 (autoload 'epg-encrypt-string "epg")
+(autoload 'epg-make-context "epg")
 (autoload 'imap-hash-get "imap-hash")
 (autoload 'imap-hash-make "imap-hash")
 (autoload 'imap-hash-map "imap-hash")
@@ -268,7 +269,7 @@ of `copy' and `rename'."
       (tramp-message v 0 "Transferring %s to %s...done" filename newname))
 
     (when (eq op 'rename)
-      (delete-file filename))))
+      (tramp-compat-delete-file filename 'force))))
 
 ;; TODO: revise this much
 (defun tramp-imap-handle-expand-file-name (name &optional dir)
@@ -553,7 +554,7 @@ SIZE MODE WEIRD INODE DEVICE)."
   ;; (file-exists-p (file-name-directory filename)))
   (file-directory-p (file-name-directory filename)))
 
-(defun tramp-imap-handle-delete-file (filename)
+(defun tramp-imap-handle-delete-file (filename &optional force)
   "Like `delete-file' for Tramp files."
   (cond
    ((not (file-exists-p filename)) nil)

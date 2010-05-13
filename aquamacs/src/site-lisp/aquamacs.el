@@ -393,12 +393,69 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
 ;; 
+(defvar aquamacs-backup-custom-file nil)
+; (setq aquamacs-backup-custom-file nil)
+(defun aquamacs-backup-custom-file ()
+  "Makes a backup of the customization file upon version upgrades."
+  ;; Version upgrade?
+  (when (and custom-file
+	     (file-exists-p custom-file)
+	     aquamacs-customization-version-id
+	     (numberp aquamacs-customization-version-id)
+	     (> aquamacs-customization-version-id 0) ; actually read?
+	     (> (floor (/ aquamacs-version-id 10.0))
+		(floor (/ aquamacs-customization-version-id 10.0))))
+    ;; do not delete a-b-c-f - repeated Save Options shouldn't delete it!
+    (setq aquamacs-backup-custom-file 
+	  (concat (file-name-directory custom-file)
+		  (format "customizations.%.1f.el"
+			  (/ (/ aquamacs-customization-version-id 10) 10.0))))
+    (condition-case nil
+	(progn
+	  (copy-file custom-file aquamacs-backup-custom-file
+		     'overwrite 'keep-time 'preserve)
+	  (message "Previous customization file backed up to %s" aquamacs-backup-custom-file))
+      (error (setq aquamacs-backup-custom-file nil)))))
+
+(defadvice custom-save-variables (after backwards-compatibility activate)
+  "Ensure that generated custom-files print a warning if loaded with older versions."
+ ;; we expect to be
+
+  ;; remove existing code if any
+  (goto-char (point-min))
+  (if (search-forward-regexp "\n;; Check custom-file compatibility[^!]*?;; End compatibility check\n" nil t)
+      (replace-match ""))
+  (custom-save-delete 'dummy-sym) ;; move to end of file
+
+  (when (and aquamacs-backup-custom-file  ; do not insert cruft
+	     (file-exists-p aquamacs-backup-custom-file))
+    (insert (format "
+;; Check custom-file compatibility
+\(when (and (boundp 'aquamacs-version-id)
+           (< (floor (/ aquamacs-version-id 10))
+	   (floor (/ aquamacs-customization-version-id 10))))
+  (defadvice frame-notice-user-settings (before show-version-warning activate)
+    (defvar aquamacs-backup-custom-file nil \"Backup of `custom-file', if any.\")
+    (setq aquamacs-backup-custom-file %S)
+    (let ((msg \"Aquamacs options were saved by a more recent program version.
+Errors may occur.  Save Options to overwrite the customization file. %s\"))
+      (if window-system
+	  (x-popup-dialog t (list msg '(\"OK\" . nil) 'no-cancel) \"Warning\")
+	(message msg)))))
+;; End compatibility check
+" aquamacs-backup-custom-file
+    (if aquamacs-backup-custom-file
+	(format "The original, older customization file was backed up to %s."
+		aquamacs-backup-custom-file)
+      "")))))
+
 (defvar aquamacs-faces-changed)
 (defun aquamacs-menu-bar-options-save (&optional maybe-save)
     "Save current values of Options menu items using Custom.
 Return non-nil if options where saved.
 MAYBE-SAVE t means: only save if needed"
     (interactive)
+    (aquamacs-backup-custom-file)  ; call before updating version ID
     (setq aquamacs-customization-version-id aquamacs-version-id)
     (let ((need-save nil))
       ;; These are set with menu-bar-make-mm-toggle, which does not
@@ -488,7 +545,7 @@ have changed."
 ;; 				'aquamacs-additional-fontsets
 ;; 				'initial-frame-alist
 ;; 				'transient-mark-mode))
-  (defun aquamacs-ask-to-save-options ()
+(defun aquamacs-ask-to-save-options ()
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
@@ -510,9 +567,9 @@ Returns t."
 		   (aquamacs-ask-for-confirmation "Options have changed - save them? \nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
-    (error nil) ;; in case of quit
-)
+    (error nil)) ;; in case of quit
   t)
+
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
     "Offer to save each buffer, then kill this Emacs process.
 With prefix arg, silently save all file-visiting buffers, then kill.
@@ -1387,14 +1444,16 @@ listed here."
 
   ;; this is initialized to the current version 
   ;; it'll be overwritten by whatever is in the customization file
-  (defvar aquamacs-customization-version-id 0)
+  (defvar aquamacs-customization-version-id 0 "Version number of loaded `custom-file'.
+Corresponds to the version number of Aquamacs (`aquamacs-version-id') used
+to write the `custom-file'.")
   ;; the following ensures that it gets saved
   ;; as customized variable.
   (customize-set-variable 'aquamacs-customization-version-id 
 			  aquamacs-customization-version-id)
   
   (defvar aquamacs-menu-bar-options-to-save
-    (append '(line-number-mode 
+    (append '(global-linum-mode 
 	      column-number-mode 
 	      size-indication-mode
 	      global-hl-line-mode
@@ -1443,7 +1502,7 @@ listed here."
      ;; more often.
      ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
      text-mode-hook 
-     word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode
+     word-wrap truncate-lines line-move-visual visual-line-mode auto-fill-function fringe-indicator-alist
      blink-cursor-mode
      aquamacs-customization-version-id
      mac-print-monochrome-mode

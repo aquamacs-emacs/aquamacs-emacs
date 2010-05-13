@@ -1,6 +1,6 @@
 ;;; haskell-doc.el --- show function types in echo area  -*- coding: iso-8859-1 -*-
 
-;; Copyright (C) 2004, 2005, 2006, 2007  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007, 2009  Free Software Foundation, Inc.
 ;; Copyright (C) 1997 Hans-Wolfgang Loidl
 
 ;; Author: Hans-Wolfgang Loidl <hwloidl@dcs.glasgow.ac.uk>
@@ -31,7 +31,7 @@
 ;;  ===========
 
 ;; This program shows the type of the Haskell function under the cursor in the
-;; minibuffer.  It acts as a kind of "emacs background process", by regularly
+;; minibuffer.  It acts as a kind of "Emacs background process", by regularly
 ;; checking the word under the cursor and matching it against a list of
 ;; prelude, library, local and global functions.
 
@@ -123,11 +123,15 @@
 
 ;;   - Some prelude fcts aren't displayed properly. This might be due to a
 ;;     name clash of Haskell and Elisp functions (e.g. length) which
-;;     confuses emacs when reading `haskell-doc-prelude-types'
+;;     confuses Emacs when reading `haskell-doc-prelude-types'
 
 ;;; Changelog:
 ;;  ==========
-;;  haskell-doc.el,v
+;;  $Log: haskell-doc.el,v $
+;;  Revision 1.30  2009/02/02 21:00:33  monnier
+;;  (haskell-doc-imported-list): Don't add current buffer
+;;  to the imported file list if it is not (yet?) visiting a file.
+;;
 ;;  Revision 1.29  2007-12-12 04:04:19  monnier
 ;;  (haskell-doc-in-code-p): New function.
 ;;  (haskell-doc-show-type): Use it.
@@ -371,7 +375,7 @@ If the identifier near point is a Prelude or one of the standard library
 functions and `haskell-doc-show-prelude' is non-nil show its type.
 
 If the identifier near point is local \(i.e. defined in this module\) check
-the `imenu' list of functions for the type. This obviously requires that
+the `imenu' list of functions for the type.  This obviously requires that
 your language mode uses `imenu'.
 
 If the identifier near point is global \(i.e. defined in an imported module\)
@@ -380,7 +384,7 @@ function.
 
 If the identifier near point is a standard strategy or a function, type related
 related to strategies and `haskell-doc-show-strategy' is non-nil show the type
-of the function. Strategies are special to the parallel execution of Haskell.
+of the function.  Strategies are special to the parallel execution of Haskell.
 If you're not interested in that just turn it off.
 
 If the identifier near point is a user defined function that occurs as key
@@ -395,47 +399,54 @@ This variable is buffer-local.")
 
 (defvar haskell-doc-index nil
  "Variable holding an alist matching file names to fct-type alists.
-The function `haskell-doc-make-global-fct-index' rebuilds this variables \(similar to an
-`imenu' rescan\).
+The function `haskell-doc-make-global-fct-index' rebuilds this variables
+\(similar to an `imenu' rescan\).
 This variable is buffer-local.")
 (make-variable-buffer-local 'haskell-doc-index)
 
 (defcustom haskell-doc-show-global-types nil
   "If non-nil, search for the types of global functions by loading the files.
 This variable is buffer-local."
+  :group 'haskell-doc
   :type 'boolean)
 (make-variable-buffer-local 'haskell-doc-show-global-types)
 
 (defcustom haskell-doc-show-reserved t
   "If non-nil, show a documentation string for reserved ids.
 This variable is buffer-local."
+  :group 'haskell-doc
   :type 'boolean)
 (make-variable-buffer-local 'haskell-doc-show-reserved)
 
 (defcustom haskell-doc-show-prelude t
   "If non-nil, show a documentation string for prelude functions.
 This variable is buffer-local."
+  :group 'haskell-doc
   :type 'boolean)
 (make-variable-buffer-local 'haskell-doc-show-prelude)
 
 (defcustom haskell-doc-show-strategy t
   "If non-nil, show a documentation string for strategies.
 This variable is buffer-local."
+  :group 'haskell-doc
   :type 'boolean)
 (make-variable-buffer-local 'haskell-doc-show-strategy)
 
 (defcustom haskell-doc-show-user-defined t
   "If non-nil, show a documentation string for user defined ids.
 This variable is buffer-local."
+  :group 'haskell-doc
   :type 'boolean)
 (make-variable-buffer-local 'haskell-doc-show-user-defined)
 
 (defcustom haskell-doc-chop-off-context t
  "If non-nil eliminate the context part in a Haskell type."
+  :group 'haskell-doc
  :type 'boolean)
 
 (defcustom haskell-doc-chop-off-fctname nil
   "If non-nil omit the function name and show only the type."
+  :group 'haskell-doc
   :type 'boolean)
 
 (defvar haskell-doc-search-distance 40  ; distance in characters
@@ -531,6 +542,37 @@ Each element is of the form (ID . DOC) where both ID and DOC are strings.
 DOC should be a concise single-line string describing the construct in which
 the keyword is used.")
 
+(eval-and-compile
+(defalias 'haskell-doc-split-string
+  (if (condition-case ()
+	  (split-string "" nil t)
+	(wrong-number-of-arguments nil))
+      'split-string
+    ;; copied from Emacs 22
+    (lambda (string &optional separators omit-nulls)
+      (let ((keep-nulls (not (if separators omit-nulls t)))
+	    (rexp (or separators "[ \f\t\n\r\v]+"))
+	    (start 0)
+	    notfirst
+	    (list nil))
+	(while (and (string-match rexp string
+				  (if (and notfirst
+					   (= start (match-beginning 0))
+					   (< start (length string)))
+				      (1+ start) start))
+		    (< start (length string)))
+	  (setq notfirst t)
+	  (if (or keep-nulls (< start (match-beginning 0)))
+	      (setq list
+		    (cons (substring string start (match-beginning 0))
+			  list)))
+	  (setq start (match-end 0)))
+	(if (or keep-nulls (< start (length string)))
+	    (setq list
+		  (cons (substring string start)
+			list)))
+	(nreverse list))))))
+
 ;;@cindex haskell-doc-prelude-types
 
 (defun haskell-doc-extract-types (url)
@@ -539,7 +581,7 @@ the keyword is used.")
     (goto-char (point-min))
     (while (search-forward "&nbsp;" nil t) (replace-match " " t t))
 
-    ;; First, focus on the actual code, removing the surrouding HTML text.
+    ;; First, focus on the actual code, removing the surrounding HTML text.
     (goto-char (point-min))
     (let ((last (point-min))
           (modules nil))
@@ -644,7 +686,7 @@ the keyword is used.")
                     ;;        module vars)
                     nil)
                 (setq curclass nil))
-              (dolist (var (split-string vars comma-re t))
+              (dolist (var (haskell-doc-split-string vars comma-re t))
                 (if (string-match "(.*)" var) (setq var (substring var 1 -1)))
                 (push (cons var type) elems))))
            ;; A datatype decl.
@@ -665,7 +707,7 @@ the keyword is used.")
                       (if (string-match ",\\'" type)
                           (setq type (substring type 0 -1)))
                       (setq type (concat name " -> " type))
-                      (dolist (var (split-string vars comma-re t))
+                      (dolist (var (haskell-doc-split-string vars comma-re t))
                         (if (string-match "(.*)" var)
                             (setq var (substring var 1 -1)))
                         (push (cons var type) elems))))))))
@@ -1243,10 +1285,10 @@ URL is the URL of the online doc."
   '("force"  . "(NFData a) => a -> a ")
   '("sforce"  . "(NFData a) => a -> b -> b")
   )
-"alist of strategy functions and their types as defined in Strategies.lhs.")
+ "Alist of strategy functions and their types as defined in Strategies.lhs.")
 
 (defvar haskell-doc-user-defined-ids nil
- "alist of functions and strings defined by the user.")
+ "Alist of functions and strings defined by the user.")
 
 ;;@node Test membership,  , Prelude types, Constants and Variables
 ;;@subsection Test membership
@@ -1272,7 +1314,7 @@ URL is the URL of the online doc."
 ;; get imenu
 (require 'imenu)
 
-;; a dummy definition needed for xemacs (I know, it's horrible :-(
+;; a dummy definition needed for XEmacs (I know, it's horrible :-(
 
 ;;@cindex haskell-doc-install-keymap
 
@@ -1489,7 +1531,7 @@ Meant for `eldoc-documentation-function'."
 (defun haskell-doc-ask-mouse-for-type (event)
  "Read the identifier under the mouse and echo its type.
 This uses the same underlying function `haskell-doc-show-type' as the hooked
-function. Only the user interface is different."
+function.  Only the user interface is different."
  (interactive "e")
  (save-excursion
    (select-window (posn-window (event-end event)))
@@ -1512,6 +1554,8 @@ function. Only the user interface is different."
 
 ;;@cindex haskell-doc-show-type
 
+(require 'syntax-ppss nil t)		; possible add-on in Emacs 21
+
 (defun haskell-doc-in-code-p ()
   (not (or (and (eq haskell-literate 'bird)
                 ;; Copied from haskell-indent-bolp.
@@ -1533,7 +1577,7 @@ current buffer."
   (unless (string= sym (car haskell-doc-last-data))
     (let ((doc (haskell-doc-sym-doc sym)))
       (when (and doc (haskell-doc-in-code-p))
-        ;; In emacs 19.29 and later, and XEmacs 19.13 and later, all
+        ;; In Emacs 19.29 and later, and XEmacs 19.13 and later, all
         ;; messages are recorded in a log.  Do not put haskell-doc messages
         ;; in that log since they are legion.
         (if (eval-when-compile (fboundp 'display-message))
@@ -1667,7 +1711,7 @@ Currently, only the following is checked:
 If this line ends with a `->' or the next starts with an `->' it is a
 multi-line type \(same for `=>'\).
 `--' comments are ignored.
-ToDo: Check for matching parenthesis!. "
+ToDo: Check for matching parenthesis!."
  (save-excursion
    (let ( (here (point))
 	  (lim (progn (beginning-of-line) (point)))
@@ -1717,8 +1761,8 @@ Leaves point at end of line."
 
 ;;@cindex haskell-doc-string-nub-ws
 (defun haskell-doc-string-nub-ws (str)
-  "Replace all sequences of whitespaces in STR by just one whitespace.
-ToDo: Also eliminate leading and trainling whitespace."
+  "Replace all sequences of whitespace in STR by just one space.
+ToDo: Also eliminate leading and trailing whitespace."
   (let ((i -1))
     (while (setq i (string-match " [ \t\n]+\\|[\t\n]+" str (1+ i)))
       (setq str (replace-match " " t t str)))
@@ -1743,7 +1787,7 @@ ToDo: Also eliminate leading and trainling whitespace."
 
 ;;@cindex haskell-doc-chop-off-context
 (defun haskell-doc-chop-off-context (str)
- "Eliminate the contex in a type represented by the string STR."
+ "Eliminate the context in a type represented by the string STR."
  (let ((i (string-match "=>" str)) )
    (if (null i)
        str
@@ -1751,7 +1795,7 @@ ToDo: Also eliminate leading and trainling whitespace."
 
 ;;@cindex haskell-doc-get-imenu-info
 (defun haskell-doc-get-imenu-info (obj kind)
-  "Returns a string describing OBJ of KIND \(Variables, Types, Data\)."
+  "Return a string describing OBJ of KIND \(Variables, Types, Data\)."
   (cond ((or (eq major-mode 'haskell-hugs-mode)
              ;; GEM: Haskell Mode does not work with Haskell Doc
              ;;      under XEmacs 20.x
@@ -1778,9 +1822,11 @@ ToDo: Also eliminate leading and trainling whitespace."
 ;;@cindex haskell-doc-imported-list
 
 (defun haskell-doc-imported-list ()
-  "Return a list of the imported modules in current buffer"
+  "Return a list of the imported modules in current buffer."
   (interactive "fName of outer `include' file: ") ;  (buffer-file-name))
-  (let ((imported-file-list (list buffer-file-name)))
+  ;; Don't add current buffer to the imported file list if it is not (yet?)
+  ;; visiting a file since it leads to errors further down.
+  (let ((imported-file-list (and buffer-file-name (list buffer-file-name))))
     (widen)
     (goto-char (point-min))
     (while (re-search-forward "^\\s-*import\\s-+\\([^ \t\n]+\\)" nil t)
@@ -1798,7 +1844,7 @@ ToDo: Also eliminate leading and trainling whitespace."
 ;;@cindex haskell-doc-rescan-files
 
 (defun haskell-doc-rescan-files (filelist)
- "Does an `imenu' rescan on every file in FILELIST and returns the fct-list.
+ "Do an `imenu' rescan on every file in FILELIST and return the fct-list.
 This function switches to and potentially loads many buffers."
  (save-current-buffer
    (mapcar (lambda (f)

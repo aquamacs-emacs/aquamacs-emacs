@@ -502,16 +502,14 @@ for the definition of the menu frame."
 (defun clipboard-kill-ring-save (beg end)
   "Copy region to kill ring, and save in the X clipboard."
   (interactive "r")
-  (when (or (not transient-mark-mode) mark-active)
-    (let ((x-select-enable-clipboard t))
-      (kill-ring-save beg end))))
+  (let ((x-select-enable-clipboard t))
+    (kill-ring-save beg end)))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
   (interactive "r")
-  (when (or (not transient-mark-mode) mark-active)
-    (let ((x-select-enable-clipboard t))
-      (kill-region beg end))))
+  (let ((x-select-enable-clipboard t))
+    (kill-region beg end)))
 
 (defun menu-bar-enable-clipboard ()
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
@@ -663,7 +661,7 @@ by \"Save Options\" in Custom buffers.")
   (let ((need-save nil))
     ;; These are set with menu-bar-make-mm-toggle, which does not
     ;; put on a customized-value property.
-    (dolist (elt '(global-show-newlines-mode line-number-mode
+    (dolist (elt '(global-show-newlines-mode global-linum-mode
 		   column-number-mode size-indication-mode
 		   cua-mode show-paren-mode transient-mark-mode
 		   display-time-mode display-battery-mode
@@ -721,10 +719,10 @@ by \"Save Options\" in Custom buffers.")
 			   "Column Numbers"
 			   "Show the current column number in the mode line"))
 
-(define-key menu-bar-showhide-menu [line-number-mode]
-  (menu-bar-make-mm-toggle line-number-mode
+(define-key menu-bar-showhide-menu [linum-mode]
+  (menu-bar-make-mm-toggle global-linum-mode
 			   "Line Numbers"
-			   "Show the current line number in the mode line"))
+			   "Show the current line number next to each line"))
 
 (define-key menu-bar-showhide-menu [size-indication-mode]
   (menu-bar-make-mm-toggle size-indication-mode
@@ -1965,10 +1963,14 @@ turn on menu bars; otherwise, turn off menu bars."
   :global t
   :group 'frames
 
+  
   ;; Make menu-bar-mode and default-frame-alist consistent.
-  (modify-all-frames-parameters (list (cons 'menu-bar-lines
-					    (if menu-bar-mode 1 0))))
-
+  (modify-all-frames-parameters 
+   (list (cons 'menu-bar-lines
+	       (if (eq initial-window-system 'ns)
+		   1
+		 (if menu-bar-mode 1 0)))))
+    
   ;; Make the message appear when Emacs is idle.  We can not call message
   ;; directly.  The minor-mode message "Menu-bar mode disabled" comes
   ;; after this function returns, overwriting any message we do here.

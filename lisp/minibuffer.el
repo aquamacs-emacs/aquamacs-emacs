@@ -76,6 +76,9 @@
 ;;     the provided string (as is the case in filecache.el), in which
 ;;     case partial-completion (for example) doesn't make any sense
 ;;     and neither does the completions-first-difference highlight.
+;;   - indicate how to display the completions in *Completions* (turn
+;;     \n into something else, add special boundaries between
+;;     completions).  E.g. when completing from the kill-ring.
 
 ;; - make partial-completion-mode obsolete:
 ;;   - (?) <foo.h> style completion for file names.
@@ -489,6 +492,18 @@ Moves point to the end of the new text."
   (insert newtext)
   (delete-region (point) (+ (point) (- end beg))))
 
+(defcustom completion-cycle-threshold nil
+  "Number of completion candidates below which cycling is used.
+Depending on this setting `minibuffer-complete' may use cycling,
+like `minibuffer-force-complete'.
+If nil, cycling is never used.
+If t, cycling is always used.
+If an integer, cycling is used as soon as there are fewer completion
+candidates than this number."
+  :type '(choice (const :tag "No cycling" nil)
+          (const :tag "Always cycle" t)
+          (integer :tag "Threshold")))
+
 (defun completion--do-completion (&optional try-completion-function)
   "Do the completion and return a summary of what happened.
 M = completion was performed, the text was Modified.
@@ -548,14 +563,43 @@ E = after completion we now have an Exact match.
           ;; It did find a match.  Do we match some possibility exactly now?
           (let ((exact (test-completion completion
 					minibuffer-completion-table
-					minibuffer-completion-predicate)))
-            (if completed
+					minibuffer-completion-predicate))
+                (comps
+                 ;; Check to see if we want to do cycling.  We do it
+                 ;; here, after having performed the normal completion,
+                 ;; so as to take advantage of the difference between
+                 ;; try-completion and all-completions, for things
+                 ;; like completion-ignored-extensions.
+                 (when (and completion-cycle-threshold
+                            ;; Check that the completion didn't make
+                            ;; us jump to a different boundary.
+                            (or (not completed)
+                                (< (car (completion-boundaries
+                                         (substring completion 0 comp-pos)
+                                         minibuffer-completion-table
+                                         minibuffer-completion-predicate
+                                         ""))
+                                   comp-pos)))
+                   (completion-all-sorted-completions))))
+            (setq completion-all-sorted-completions nil)
+            (cond
+             ((and (not (ignore-errors
+                          ;; This signal an (intended) error if comps is too
+                          ;; short or if completion-cycle-threshold is t.
+                          (consp (nthcdr completion-cycle-threshold comps))))
+                   ;; More than 1, so there's something to cycle.
+                   (consp (cdr comps)))
+              ;; Fewer than completion-cycle-threshold remaining
+              ;; completions: let's cycle.
+              (setq completed t exact t)
+              (setq completion-all-sorted-completions comps)
+              (minibuffer-force-complete))
+             (completed
                 ;; We could also decide to refresh the completions,
                 ;; if they're displayed (and assuming there are
                 ;; completions left).
-                (minibuffer-hide-completions)
+              (minibuffer-hide-completions))
               ;; Show the completion table, if requested.
-              (cond
                ((not exact)
                 (if (case completion-auto-help
                       (lazy (eq this-command last-command))
@@ -566,7 +610,7 @@ E = after completion we now have an Exact match.
                ;; means we've already given a "Next char not unique" message
                ;; and the user's hit TAB again, so now we give him help.
                ((eq this-command last-command)
-                (if completion-auto-help (minibuffer-completion-help)))))
+              (if completion-auto-help (minibuffer-completion-help))))
 
             (minibuffer--bitset completed t exact))))))))
 
@@ -580,21 +624,26 @@ scroll the window of possible completions."
   ;; If the previous command was not this,
   ;; mark the completion buffer obsolete.
   (unless (eq this-command last-command)
+    (setq completion-all-sorted-completions nil)
     (setq minibuffer-scroll-window nil))
 
-  (let ((window minibuffer-scroll-window))
+  (cond
     ;; If there's a fresh completion window with a live buffer,
     ;; and this command is repeated, scroll that window.
-    (if (window-live-p window)
+   ((window-live-p minibuffer-scroll-window)
+    (let ((window minibuffer-scroll-window))
         (with-current-buffer (window-buffer window)
           (if (pos-visible-in-window-p (point-max) window)
 	      ;; If end is in view, scroll up to the beginning.
 	      (set-window-start window (point-min) nil)
 	    ;; Else scroll down one screen.
 	    (scroll-other-window))
-	  nil)
-
-      (case (completion--do-completion)
+        nil)))
+   ;; If we're cycling, keep on cycling.
+   (completion-all-sorted-completions
+    (minibuffer-force-complete)
+    t)
+   (t (case (completion--do-completion)
         (#b000 nil)
         (#b001 (minibuffer-message "Sole completion")
                t)
@@ -1171,7 +1220,7 @@ Currently supported properties are:
  `:predicate'           a predicate that completion candidates need to satisfy.
  `:annotation-function' the value to use for `completion-annotate-function'.")
 
-(defun complete-symbol (&optional arg)
+(defun completion-at-point (&optional arg)
   "Perform completion on the text around point.
 The completion method is determined by `completion-at-point-functions'.
 
@@ -1181,21 +1230,21 @@ language you are using."
   (interactive "P")
   (if arg
       (info-complete-symbol)
-  (let ((res (run-hook-with-args-until-success
-              'completion-at-point-functions)))
-    (cond
-     ((functionp res) (funcall res))
-     (res
-      (let* ((plist (nthcdr 3 res))
-             (start (nth 0 res))
-             (end (nth 1 res))
-             (completion-annotate-function
-              (or (plist-get plist :annotation-function)
-                  completion-annotate-function)))
-        (completion-in-region start end (nth 2 res)
+    (let ((res (run-hook-with-args-until-success
+		'completion-at-point-functions)))
+      (cond
+       ((functionp res) (funcall res))
+       (res
+	(let* ((plist (nthcdr 3 res))
+	       (start (nth 0 res))
+	       (end (nth 1 res))
+	       (completion-annotate-function
+		(or (plist-get plist :annotation-function)
+		    completion-annotate-function)))
+	  (completion-in-region start end (nth 2 res)
 				(plist-get plist :predicate))))))))
 
-(defalias 'completion-at-point 'complete-symbol)
+(define-obsolete-function-alias 'complete-symbol 'completion-at-point "24.1")
 
 ;;; Key bindings.
 
@@ -1771,6 +1820,14 @@ expression (not containing character ranges like `a-z')."
   :group 'minibuffer
   :type 'string)
 
+(defcustom completion-pcm-complete-word-inserts-delimiters nil
+  "Treat the SPC or - inserted by `minibuffer-complete-word' as delimiters.
+Those chars are treated as delimiters iff this variable is non-nil.
+I.e. if non-nil, M-x SPC will just insert a \"-\" in the minibuffer, whereas
+if nil, it will list all possible commands in *Completions* because none of
+the commands start with a \"-\" or a SPC."
+  :type 'boolean)
+
 (defun completion-pcm--pattern-trivial-p (pattern)
   (and (stringp (car pattern))
        ;; It can be followed by `point' and "" and still be trivial.
@@ -1783,7 +1840,7 @@ expression (not containing character ranges like `a-z')."
 (defun completion-pcm--string->pattern (string &optional point)
   "Split STRING into a pattern.
 A pattern is a list where each element is either a string
-or a symbol chosen among `any', `star', `point'."
+or a symbol chosen among `any', `star', `point', `prefix'."
   (if (and point (< point (length string)))
       (let ((prefix (substring string 0 point))
             (suffix (substring string point)))
@@ -1796,11 +1853,12 @@ or a symbol chosen among `any', `star', `point'."
 
       (while (and (setq p (string-match completion-pcm--delim-wild-regex
                                         string p))
-                  ;; If the char was added by minibuffer-complete-word, then
-                  ;; don't treat it as a delimiter, otherwise "M-x SPC"
-                  ;; ends up inserting a "-" rather than listing
-                  ;; all completions.
-                  (not (get-text-property p 'completion-try-word string)))
+                  (or completion-pcm-complete-word-inserts-delimiters
+                      ;; If the char was added by minibuffer-complete-word,
+                      ;; then don't treat it as a delimiter, otherwise
+                      ;; "M-x SPC" ends up inserting a "-" rather than listing
+                      ;; all completions.
+                      (not (get-text-property p 'completion-try-word string))))
         ;; Usually, completion-pcm--delim-wild-regex matches a delimiter,
         ;; meaning that something can be added *before* it, but it can also
         ;; match a prefix and postfix, in which case something can be added
@@ -1826,11 +1884,10 @@ or a symbol chosen among `any', `star', `point'."
          (concat "\\`"
                  (mapconcat
                   (lambda (x)
-                    (case x
-                      ((star any point)
-                       (if (if (consp group) (memq x group) group)
-                           "\\(.*?\\)" ".*?"))
-                      (t (regexp-quote x))))
+                    (cond
+                     ((stringp x) (regexp-quote x))
+                     ((if (consp group) (memq x group) group) "\\(.*?\\)")
+		     (t ".*?")))
                   pattern
                   ""))))
     ;; Avoid pathological backtracking.
@@ -1985,6 +2042,17 @@ filter out additional entries (because TABLE migth not obey PRED)."
       (nconc (completion-pcm--hilit-commonality pattern all)
              (length prefix)))))
 
+(defun completion--sreverse (str)
+  "Like `reverse' but for a string STR rather than a list."
+  (apply 'string (nreverse (mapcar 'identity str))))
+
+(defun completion--common-suffix (strs)
+  "Return the common suffix of the strings STRS."
+  (completion--sreverse
+   (try-completion
+    ""
+    (mapcar 'completion--sreverse strs))))
+
 (defun completion-pcm--merge-completions (strs pattern)
   "Extract the commonality in STRS, with the help of PATTERN."
   ;; When completing while ignoring case, we want to try and avoid
@@ -2046,7 +2114,17 @@ filter out additional entries (because TABLE migth not obey PRED)."
                 ;; `any' into a `star' because the surrounding context has
                 ;; changed such that string->pattern wouldn't add an `any'
                 ;; here any more.
-                (unless unique (push elem res))
+                (unless unique
+                  (push elem res)
+                  (when (memq elem '(star point prefix))
+                    ;; Extract common suffix additionally to common prefix.
+                    ;; Only do it for `point', `star', and `prefix' since for
+                    ;; `any' it could lead to a merged completion that
+                    ;; doesn't itself match the candidates.
+                    (let ((suffix (completion--common-suffix comps)))
+                      (assert (stringp suffix))
+                      (unless (equal suffix "")
+                        (push suffix res)))))
                 (setq fixed "")))))
         ;; We return it in reverse order.
         res)))))
@@ -2055,8 +2133,7 @@ filter out additional entries (because TABLE migth not obey PRED)."
   (mapconcat (lambda (x) (cond
                      ((stringp x) x)
                      ((eq x 'star) "*")
-                     ((eq x 'any) "")
-                     ((eq x 'point) "")))
+                     (t "")))           ;any, point, prefix.
              pattern
              ""))
 
@@ -2098,6 +2175,7 @@ filter out additional entries (because TABLE migth not obey PRED)."
              (pointpat (or (memq 'point mergedpat)
                            (memq 'any   mergedpat)
                            (memq 'star  mergedpat)
+                           ;; Not `prefix'.
 			   mergedpat))
              ;; New pos from the start.
              (newpos (length (completion-pcm--pattern->string pointpat)))
@@ -2128,7 +2206,7 @@ filter out additional entries (because TABLE migth not obey PRED)."
                          beforepoint afterpoint bounds))
          (pattern (if (not (stringp (car basic-pattern)))
                       basic-pattern
-                    (cons 'any basic-pattern)))
+                    (cons 'prefix basic-pattern)))
          (all (completion-pcm--all-completions prefix pattern table pred)))
     (list all pattern prefix suffix (car bounds))))
 

@@ -30,6 +30,9 @@
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 (eval-when-compile
   (require 'cl))
+(eval-when-compile
+  (when (featurep 'xemacs)
+    (require 'easy-mmode))) ; for `define-minor-mode'
 
 (defvar tool-bar-mode)
 (defvar gnus-tmp-header)
@@ -3053,7 +3056,6 @@ The following commands are available:
   (gnus-simplify-mode-line)
   (setq major-mode 'gnus-summary-mode)
   (setq mode-name "Summary")
-  (make-local-variable 'minor-mode-alist)
   (use-local-map gnus-summary-mode-map)
   (buffer-disable-undo)
   (setq buffer-read-only t		;Disable modification
@@ -3929,7 +3931,6 @@ If NO-DISPLAY, don't generate a summary buffer."
 	  (progn
 	    (set-buffer gnus-group-buffer)
 	    (gnus-group-jump-to-group group)
-	    (gnus-group-next-unread-group 1)
 	    (gnus-configure-windows 'group 'force))
 	(gnus-handle-ephemeral-exit quit-config))
       ;; Finally signal the quit.
@@ -8182,14 +8183,15 @@ in `nnmail-extra-headers'."
       (gnus-summary-position-point))))
 
 (defun gnus-summary-limit-strange-charsets-predicate (header)
-  (let ((string (concat (mail-header-subject header)
-			(mail-header-from header)))
-	charset found)
-    (dotimes (i (1- (length string)))
-      (setq charset (format "%s" (char-charset (aref string (1+ i)))))
-      (when (string-match "unicode\\|big\\|japanese" charset)
-	(setq found t)))
-    found))
+  (when (fboundp 'char-charset)
+    (let ((string (concat (mail-header-subject header)
+			  (mail-header-from header)))
+	  charset found)
+      (dotimes (i (1- (length string)))
+	(setq charset (format "%s" (char-charset (aref string (1+ i)))))
+	(when (string-match "unicode\\|big\\|japanese" charset)
+	  (setq found t)))
+      found)))
 
 (defun gnus-summary-limit-to-predicate (predicate)
   "Limit to articles where PREDICATE returns non-nil.
@@ -11505,7 +11507,7 @@ If the prefix argument is negative, tick articles instead."
 	      ((> unmark 0)
 	       (gnus-summary-mark-article-as-unread gnus-unread-mark))
 	      ((= unmark 0)
-	       (gnus-summary-mark-article-as-unread gnus-expirable-mark))
+	       (gnus-summary-mark-article nil gnus-expirable-mark))
 	      (t
 	       (gnus-summary-mark-article-as-unread gnus-ticked-mark)))
 	(setq articles (cdr articles))))

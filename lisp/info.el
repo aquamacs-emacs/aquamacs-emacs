@@ -266,6 +266,8 @@ with wrapping around the current Info node."
   :group 'info)
 
 (defvar Info-isearch-initial-node nil)
+(defvar Info-isearch-initial-history nil)
+(defvar Info-isearch-initial-history-list nil)
 
 (defcustom Info-mode-hook
   ;; Try to obey obsolete Info-fontify settings.
@@ -1914,7 +1916,27 @@ If DIRECTION is `backward', search in the reverse direction."
   (setq Info-isearch-initial-node
 	;; Don't stop at initial node for nonincremental search.
 	;; Otherwise this variable is set after first search failure.
-	(and isearch-nonincremental Info-current-node)))
+	(and isearch-nonincremental Info-current-node))
+  (setq Info-isearch-initial-history      Info-history
+	Info-isearch-initial-history-list Info-history-list)
+  (add-hook 'isearch-mode-end-hook 'Info-isearch-end nil t))
+
+(defun Info-isearch-end ()
+  ;; Remove intermediate nodes (visited while searching)
+  ;; from the history.  Add only the last node (where Isearch ended).
+  (if (> (length Info-history)
+	 (length Info-isearch-initial-history))
+      (setq Info-history
+	    (nthcdr (- (length Info-history)
+		       (length Info-isearch-initial-history)
+		       1)
+		    Info-history)))
+  (if (> (length Info-history-list)
+	 (length Info-isearch-initial-history-list))
+      (setq Info-history-list
+	    (cons (car Info-history-list)
+		  Info-isearch-initial-history-list)))
+  (remove-hook 'isearch-mode-end-hook  'Info-isearch-end t))
 
 (defun Info-isearch-filter (beg-found found)
   "Test whether the current search hit is a visible useful text.
@@ -3104,6 +3126,7 @@ Give an empty topic name to go to the Index node itself."
 (add-to-list 'Info-virtual-nodes
 	     '("\\`\\*Index.*\\*\\'"
 	       (find-node . Info-virtual-index-find-node)
+	       (slow . t)
 	       ))
 
 (defvar Info-virtual-index-nodes nil
@@ -3193,6 +3216,7 @@ search results."
 	       (toc-nodes . Info-apropos-toc-nodes)
 	       (find-file . Info-apropos-find-file)
 	       (find-node . Info-apropos-find-node)
+	       (slow . t)
 	       ))
 
 (defvar Info-apropos-file "*Apropos*"
@@ -3348,6 +3372,7 @@ Build a menu of the possible matches."
 
 (defun Info-finder-find-node (filename nodename &optional no-going-back)
   "Finder-specific implementation of Info-find-node-2."
+  (require 'finder)
   (cond
    ((equal nodename "Top")
     ;; Display Top menu with descriptions of the keywords
@@ -4835,21 +4860,35 @@ BUFFER is the buffer speedbar is requesting buttons for."
 
 (defun Info-desktop-buffer-misc-data (desktop-dirname)
   "Auxiliary information to be saved in desktop file."
-  (unless (Info-virtual-file-p Info-current-file)
-    (list Info-current-file Info-current-node)))
+  (list Info-current-file
+	Info-current-node
+	;; Additional data as an association list.
+	(delq nil (list
+		   (and Info-history
+			(cons 'history Info-history))
+		   (and (Info-virtual-fun
+			 'slow Info-current-file Info-current-node)
+			(cons 'slow t))))))
 
 (defun Info-restore-desktop-buffer (desktop-buffer-file-name
                                     desktop-buffer-name
                                     desktop-buffer-misc)
   "Restore an Info buffer specified in a desktop file."
-  (let ((first (nth 0 desktop-buffer-misc))
-        (second (nth 1 desktop-buffer-misc)))
-  (when (and first second)
-    (when desktop-buffer-name
-      (set-buffer (get-buffer-create desktop-buffer-name))
-      (Info-mode))
-    (Info-find-node first second)
-    (current-buffer))))
+  (let* ((file (nth 0 desktop-buffer-misc))
+	 (node (nth 1 desktop-buffer-misc))
+	 (data (nth 2 desktop-buffer-misc))
+	 (hist (assq 'history data))
+	 (slow (assq 'slow data)))
+    ;; Don't restore nodes slow to regenerate.
+    (unless slow
+      (when (and file node)
+	(when desktop-buffer-name
+	  (set-buffer (get-buffer-create desktop-buffer-name))
+	  (Info-mode))
+	(Info-find-node file node)
+	(when hist
+	  (setq Info-history (cdr hist)))
+	(current-buffer)))))
 
 (add-to-list 'desktop-buffer-mode-handlers
 	     '(Info-mode . Info-restore-desktop-buffer))

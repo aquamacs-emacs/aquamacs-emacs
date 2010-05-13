@@ -1406,12 +1406,14 @@ If FRAME is omitted or nil, use the selected frame."
 		(setq file-name (find-lisp-object-file-name f 'defface))
 		(when file-name
 		  (princ "Defined in `")
-		  (princ (file-name-nondirectory file-name))
+		  (princ (if (symbolp file-name) file-name
+			   (file-name-nondirectory file-name)))
 		  (princ "'")
 		  ;; Make a hyperlink to the library.
-		  (save-excursion
-		    (re-search-backward "`\\([^`']+\\)'" nil t)
-		    (help-xref-button 1 'help-face-def f file-name))
+		  (unless (symbolp file-name)
+		    (save-excursion
+		      (re-search-backward "`\\([^`']+\\)'" nil t)
+		      (help-xref-button 1 'help-face-def f file-name)))
 		  (princ ".")
 		  (terpri)
 		  (terpri))

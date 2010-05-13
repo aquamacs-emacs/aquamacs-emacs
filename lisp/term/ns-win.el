@@ -1293,45 +1293,47 @@ the operating system.")
 
 (defvar ns-input-color)			; nsterm.m
 
-(defun ns-set-foreground-at-mouse (event)
-  "Set the foreground color at the mouse location to `ns-input-color'."
-  (interactive "e")
+
+(defun ns-set-color-at-mouse (event attribute)
+  "Set the color at the mouse location to `ns-input-color'.
+EVENT is a mouse event, and ATTRIBUTE is either
+`foreground-color' or `background-color'."
   (let ((position (event-end event)))
     (if (not (windowp (posn-window position)))
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
 	   (frame (window-frame (posn-window position))))
-      
       (cond
        ((eq face 'cursor)
 	(modify-frame-parameters frame (list (cons 'cursor-color
 						   ns-input-color))))
        ((not face)
-	(modify-frame-parameters frame (list (cons 'foreground-color
+	(modify-frame-parameters frame (list (cons attribute
 						   ns-input-color))))
        (t
-	(set-face-foreground face ns-input-color frame)))
-      (message "Foreground color set for %s." face))))
+	(if (eq attribute 'foreground-color)
+	    (set-face-foreground face ns-input-color frame)
+	  (set-face-background face ns-input-color frame))
+	(let ((spec
+	       (list (list t (face-attr-construct face)))))
+	  (put face 'customized-face spec)
+	  (put face 'saved-face spec)
+	  (custom-push-theme 'theme-face face 'user 'set spec)
+	  (put face 'face-modified nil))))
+      (message "%s set for %s." (capitalize (symbol-name attribute)) face))))
+
+
+(defun ns-set-foreground-at-mouse (event)
+  "Set the foreground color at the mouse location to `ns-input-color'."
+  (interactive "e")  
+  (ns-set-color-at-mouse event 'foreground-color))
 
 (defun ns-set-background-at-mouse (event)
   "Set the background color at the mouse location to `ns-input-color'."
    (interactive "e")
-  (let ((position (event-end event)))
-    (if (not (windowp (posn-window position)))
-	(error "Position not in text area of window"))
-    (let* ((face (ns-face-at-pos position))
-	   (frame (window-frame (posn-window position))))
-      (cond
-       ((eq face 'cursor)
-	(modify-frame-parameters frame (list (cons 'cursor-color
-						   ns-input-color))))
-       ((not face)
-	(modify-frame-parameters frame (list (cons 'background-color
-						   ns-input-color))))
-       (t
-	(set-face-background face ns-input-color frame)))
-      (message "Background color set for %s." face))))
- 
+   (ns-set-color-at-mouse event 'background-color))
+
+
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
       icon-title-format t)
