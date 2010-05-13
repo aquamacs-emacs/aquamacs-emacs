@@ -166,7 +166,10 @@ provided `cua-mode' and the mark are active."
 	 (call-interactively 'forward-char)))))
 
 (dolist (cmd
-	 '(aquamacs-backward-char aquamacs-forward-char))
+	 '(aquamacs-backward-char 
+	   aquamacs-forward-char
+	   aquamacs-previous-line
+	   aquamacs-previous-line))
   (put cmd 'CUA 'move))
 
 (defun aquamacs-previous-line (&optional arg try-vscroll)
@@ -260,6 +263,13 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
 	    (skip-chars-backward " \r\n" (- (point) 1))))
       (move-end-of-line arg))))
   
+;; mark functions for CUA
+(dolist (cmd
+	 '( beginning-of-visual-line
+	    end-of-visual-line
+	    aquamacs-move-beginning-of-line
+	    aquamacs-move-end-of-line))
+ (put cmd 'CUA 'move))
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
@@ -295,6 +305,29 @@ With argument, do this that many times."
 ;; unchecked: line-move-ignore-invisible
 (defun buffer-line-at-point ()
  (or (cdr (nth 2 (posn-at-point))) 0))
+
+;; the following functions are necessary because we want
+;; to disable cut/copy if mark is not active
+;; doing so directly in `clipboard-kill-ring-save' etc
+;; would hurt their functionality and cause bugs (e.g., mailclient)
+
+; just binding those to A-c and A-x won't work: 
+; cua binds them to cua-copy-region
+(defun clipboard-kill-ring-save-active-region (beg end)
+  "Like `clipboard-kill-ring-save', but only if mark is active.
+\(Or if `transient-mark-mode' is off.)"
+  (interactive "r")
+  (when (or mark-active (not transient-mark-mode))
+    (setq this-command 'clipboard-kill-ring-save)
+    (clipboard-kill-ring-save beg end)))
+
+(defun clipboard-kill-active-region (beg end)
+  "Like `clipboard-kill-region', but only if mark is active.
+\(Or if `transient-mark-mode' is off.)"
+  (interactive "r")
+  (when (or mark-active (not transient-mark-mode))
+    (setq this-command 'clipboard-kill-region)
+    (clipboard-kill-region beg end)))
 
 (defun aquamacs-clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
@@ -901,6 +934,7 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'spellchecker-panel-or-ispell) 
     (define-key map `[(,osxkeys-command-key \;)] 'spellcheck-now)
+    (define-key map `[(meta ,osxkeys-command-key \;)] 'flyspell-buffer)
 
     ;; Zoom Zoom!
     (define-key map `[(meta wheel-up)] 'zoom-font)

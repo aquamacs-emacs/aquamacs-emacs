@@ -2,10 +2,6 @@
 # Associate internals original text with physical files.
 
 
-$key = q/buffers.jpg/;
-$ref_files{$key} = "$dir".q|node18.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/tab:variables/;
 $ref_files{$key} = "$dir".q|node24.html|; 
 $noresave{$key} = "$nosave";
@@ -32,10 +28,6 @@ $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;
 $ref_files{$key} = "$dir".q|node6.html|; 
-$noresave{$key} = "$nosave";
-
-$key = q/theme.jpg/;
-$ref_files{$key} = "$dir".q|node17.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/frame-appearance-styles/;

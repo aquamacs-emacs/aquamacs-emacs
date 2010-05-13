@@ -833,6 +833,7 @@ modified, or in FRAME if given."
     (apply 'set-face-attribute face
 	   frame (list prop value))
     (aquamacs-autoface-mark-face-to-save face)
+    ;; FIXME: does the following duplicate some of the preceding?
     (let ((spec
     	   (list (list t (face-attr-construct face)))))
       (put face 'customized-face spec)
@@ -865,7 +866,6 @@ modified, or in FRAME if given."
   (message "Choose Font for %s face." mac-font-panel-target-face))
 
 
-
 (defun ns-respond-to-change-font ()
   "Respond to changeFont: event, expecting ns-input-font and
 ns-input-fontsize of new font."
@@ -878,6 +878,8 @@ ns-input-fontsize of new font."
     (apply 'set-face-attribute face
 	   mac-font-panel-target-frame attribute-values)
     (aquamacs-autoface-mark-face-to-save face)
+    ;; FIXME: this duplicates `aquamacs-autoface-mark-face-to-save'
+    ;; and doesn't `aquamacs-autoface-mark-face-to-save' need some of the following?
     (let ((spec
     	   (list (list t (face-attr-construct face)))))
       (put face 'customized-face spec)

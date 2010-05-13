@@ -54,7 +54,12 @@ See also `linum-before-numbering-hook'."
   :type 'sexp)
 
 (defface linum
-  '((t :inherit (shadow default)))
+  '((t :height 110 ;; must set height to same or smaller than
+       ;; height of frame default font, because width is mistakenly
+       ;; measured in frame font units, and true width depends on 
+       ;; width of (variable-width) glyphs as well as face resulting
+       ;; from remapping via `face-remapping-alist'.
+       :inherit (shadow default)))
   "Face for displaying line numbers in the display margin."
   :group 'linum)
 
@@ -138,8 +143,11 @@ and you have to scroll or press \\[recenter-top-bottom] to update the numbers."
         (limit (window-end win t))
         (fmt (cond ((stringp linum-format) linum-format)
                    ((eq linum-format 'dynamic)
-                    (let ((w (length (number-to-string
-                                      (count-lines (point-min) (point-max))))))
+                    (let ((w (1+ ;; add one because the below is imprecise 
+			      ;; (consider buffer-local face via face-remapping-alist
+			      ;; and variable-width fonts)
+			      (length (number-to-string
+				       (count-lines (point-min) (point-max)))))))
                       (concat "%" (number-to-string w) "d")))))
         (width 0))
     (run-hooks 'linum-before-numbering-hook)

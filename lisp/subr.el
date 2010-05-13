@@ -612,17 +612,20 @@ and then modifies one entry in it."
 
 (defun subr--check-key-binding (key command)
   (condition-case nil
-      (if (eq command (key-binding key t))
-	  command
-	(message "Warning: key %s already bound to %s %s.  Use `define-key' instead."
-		 key
-		 (key-binding key t)
-		 (let ((mm
-			(mapcar
-			 (lambda (x)
-			   (car x))
-			 (minor-mode-key-binding key))))
-		   (if mm (format "by minor modes %s" mm) ""))))
+      (let ((b (key-binding key t)))
+	(if (eq command b)
+	    command
+	  (message "Warning: Key %s already bound to %s %s.  Use `define-key' instead."
+		   (key-description key)
+		   (cond ((symbolp b) (format "`%s'" b))
+			 ((keymapp b) "a (prefix) keymap or menu")
+			 (t "something else"))
+		   (let ((mm
+			  (mapcar
+			   (lambda (x)
+			     (car x))
+			   (minor-mode-key-binding key))))
+		     (if mm (format "by minor modes %s" mm) "")))))
     (error nil)))
 
 (defun global-set-key (key command)

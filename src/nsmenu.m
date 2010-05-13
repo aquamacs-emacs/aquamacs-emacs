@@ -1763,8 +1763,6 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       CHECK_LIVE_WINDOW (window);
       f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
     }
-  else
-    CHECK_WINDOW (window);
 
   BLOCK_INPUT;
   dialog = [[EmacsAlertPanel alloc] init];
