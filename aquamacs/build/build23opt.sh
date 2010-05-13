@@ -6,12 +6,12 @@
 # -g slows it down (supposedly)
 # -O3 doesn't help significantly
 
-ARCH='-arch x86_64'
+ARCH='-arch x86_64 -O2 -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops'
 
-CFLAGS="$ARCH -O2 -pipe"
-CCFLAGS="$ARCH -O2 -pipe"
-CXXFLAGS="$ARCH -O2 -pipe"
-LDFLAGS="$ARCH -O2"
+CFLAGS="$ARCH -pipe"
+CCFLAGS="$ARCH -pipe"
+CXXFLAGS="$ARCH -pipe"
+LDFLAGS="$ARCH"
 
 # targeting 10.6 only doesn't help
 MACOSX_DEPLOYMENT_TARGET="10.5"
@@ -29,5 +29,5 @@ rm etc/DOC-*
 
 PATH=/bin:/sbin:/usr/bin GZIP_PROG=   ./configure --with-ns --without-x 
 make clean  
-PATH=/bin:/sbin:/usr/bin make -j3 #bootstrap
+PATH=/bin:/sbin:/usr/bin make #bootstrap
 make install
