@@ -2114,7 +2114,7 @@ get_phys_cursor_geometry (w, row, glyph, xp, yp, heightp)
     wd = min (FRAME_COLUMN_WIDTH (f), wd);
   w->phys_cursor_width = wd;
 
-  y = w->phys_cursor.y + row->ascent - glyph->ascent;
+  y = w->phys_cursor.y + row->ascent - glyph->ascent + (row->extra_line_spacing / 2);
 
   /* If y is below window bottom, ensure that we still see a cursor.  */
   h0 = min (FRAME_LINE_HEIGHT (f), row->visible_height);
