@@ -4525,8 +4525,7 @@ Both should not be used to define a buffer-local dictionary."
   ;; If there's an existing ispell process that's wrong for this use,
   ;; kill it.
   (if (and ispell-buffer-local-name
-	   (not (equal ispell-buffer-local-name (buffer-name)))
-	   (not (string= ispell-program-name "NSSpellChecker")))
+	   (not (equal ispell-buffer-local-name (buffer-name))))
       (ispell-kill-ispell t))
   ;; Actually start a new ispell process, because we need
   ;; to send commands now to specify the local words to it.

@@ -1001,7 +1001,7 @@ in your .emacs file.
 ;; Make sure we flush our caches when needed.  Do it here rather than in
 ;; flyspell-mode-on, since flyspell-region may be used without ever turning
 ;; on flyspell-mode.
-;; (add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
+(add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-mode-on ...                                             */
