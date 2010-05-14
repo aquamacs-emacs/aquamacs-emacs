@@ -2413,45 +2413,16 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
     case BAR_CURSOR:
       s = r;
       s.size.width = min (cursor_width, 2); //FIXME(see above)
-      NSRectFill (s);
-      
-      /* Workaround for Cocoa anti-aliasing issue.
-	 The presence of the cursor bar to the left causes
-	 the anti-aliasing algorithm to render the glyph's
-	 fringes darker, resulting in an undesirable 
-	 animation when the cursor is blinking or moving.
-      To Do: do this for HBAR_CURSOR as well.*/
-	 
-      struct face *face;
-      face = FACE_FROM_ID (f, phys_cursor_glyph->face_id);
-      if (face)
-	{
-	  if (!face->stipple)
-	    [(NS_FACE_BACKGROUND (face) != 0
-	      ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f)
-	      : FRAME_BACKGROUND_COLOR (f)) set];
-	  else
-	    {
-	      struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
-	      [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
-	    }
-	}
-      else
-	[FRAME_BACKGROUND_COLOR (f) set];
-      r.origin.x += s.size.width;
-      r.size.width -= s.size.width;
-      r.origin.y -= 2;
-      r.size.height += 4;
-      
-      NSRectFill (r);
-      [FRAME_CURSOR_COLOR (f) set];
 
+      NSRectFill (s);
       break;
     }
   ns_unfocus (f);
 
-  /* draw the character under the cursor */
-  if (cursor_type != NO_CURSOR)
+  /* draw the character under the cursor 
+   Doesn't look good for bar cursors - so don't do it then.*/
+  if (cursor_type != NO_CURSOR && cursor_type != BAR_CURSOR
+      && cursor_type != HOLLOW_BOX_CURSOR)
     draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
 
 #ifdef NS_IMPL_COCOA

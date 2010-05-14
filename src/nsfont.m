@@ -1177,10 +1177,13 @@ nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
          ? ns_lookup_indexed_color (NS_FACE_FOREGROUND (face), s->f)
          : FRAME_FOREGROUND_COLOR (s->f));
   /* FIXME: find another way to pass this */
-  bgCol = (ns_tmp_flags != NS_DUMPGLYPH_FOREGROUND ? nil
-           : (NS_FACE_BACKGROUND (face) != 0
-              ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f)
-              : FRAME_BACKGROUND_COLOR (s->f)));
+  bgCol = ((ns_tmp_flags != NS_DUMPGLYPH_FOREGROUND 
+	    /* must draw background when drawing text.
+	       antialiasing looks different otherwise. */
+	    && ns_tmp_flags != NS_DUMPGLYPH_CURSOR) ? nil :
+	   (NS_FACE_BACKGROUND (face) != 0
+	    ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f)
+	    : FRAME_BACKGROUND_COLOR (s->f)));
 
   /* render under GNUstep using DPS */
 #ifdef NS_IMPL_GNUSTEP
