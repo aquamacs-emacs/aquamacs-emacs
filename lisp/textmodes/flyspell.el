@@ -1945,7 +1945,12 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 ;;*---------------------------------------------------------------------*/
 (defun flyspell-large-region (beg end)
   (let* ((curbuf  (current-buffer))
-	 (buffer  (get-buffer-create "*flyspell-region*")))
+	 (buffer  (get-buffer-create "*flyspell-region*"))
+	 (current-dict-name (or ispell-local-dictionary ispell-dictionary-internal))
+	 (current-dict
+	  (if (eq ispell-use-cocoaspell-internal 'full)
+	      (aspell-dict-abbrev current-dict-name)
+	    current-dict-name)))
     (setq flyspell-external-ispell-buffer buffer)
     (setq flyspell-large-region-buffer curbuf)
     (setq flyspell-large-region-beg beg)
@@ -1958,8 +1963,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
     (set-buffer curbuf)
     (ispell-set-spellchecker-params)  ; Initialize variables and dicts alists
     ;; Local dictionary becomes the global dictionary in use.
-    (setq ispell-current-dictionary
-	  (or ispell-local-dictionary ispell-dictionary))
+    (setq ispell-current-dictionary current-dict-name)
     (setq ispell-current-personal-dictionary
 	  (or ispell-local-pdict ispell-personal-dictionary))
     (let ((args (ispell-get-ispell-args))
@@ -1968,7 +1972,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
       (if (and ispell-current-dictionary  ; use specified dictionary
 	       (not (member "-d" args)))  ; only define if not overridden
 	  (setq args
-		(append (list "-d" ispell-current-dictionary) args)))
+		(append (list "-d" current-dict) args)))
       (if ispell-current-personal-dictionary ; use specified pers dict
 	  (setq args
 		(append args
