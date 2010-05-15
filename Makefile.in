@@ -443,6 +443,10 @@ AQUAMACS_VERSION = $(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"
 
 AQUAMACS_MAIN_VERSION = $(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
 
+# monotonically increased string, period-separated integers
+HEADDATE=$(shell git log --pretty="%ct" | head -n1)# get unix timestamp of committer date for latest revision here
+AQUAMACS_APPLE_VERSION=${AQUAMACS_MAIN_VERSION}.${HEADDATE}# string with integers
+
 install-aquamacs: mkdir 
 	if test "${ns_appdir}" != ""; then \
 	( cp $(AQUAMACS_DIR)/Icons/build/*.png $(ns_appresdir)/etc/images/ ; \
@@ -465,6 +469,7 @@ install-aquamacs: mkdir
 	  ( echo "Setting Aquamacs version: $(AQUAMACS_VERSION)" ; \
 	    perl -p0777i -e 's/!EMACS_VERSION!/$(version)/sg' ${ns_appdir}/Contents/Info.plist ; \
 	    perl -p0777i -e 's/!AQUAMACS_MAIN_VERSION!/$(AQUAMACS_MAIN_VERSION)/sg' ${ns_appdir}/Contents/Info.plist ; \
+	    perl -p0777i -e 's/!AQUAMACS_APPLE_VERSION!/$(AQUAMACS_APPLE_VERSION)/sg' ${ns_appdir}/Contents/Info.plist ; \
 	    perl -p0777i -e 's/!AQUAMACS_VERSION!/$(AQUAMACS_VERSION)/sg' ${ns_appdir}/Contents/Info.plist ) ; \
 	  rm -r $(ns_appresdir)/site-lisp 2>/dev/null ; \
 	  touch $(ns_appdir) ; \
