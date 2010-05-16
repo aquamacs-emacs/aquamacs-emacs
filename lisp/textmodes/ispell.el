@@ -1215,14 +1215,12 @@ DICT-ABBREV."
        (readable (file-readable-p lang-conf)))
     (if readable
       (list (concat "--conf=" ispell-cocoaspell-prefs-dir "filters.conf")
-            (concat "--per-conf=" ispell-cocoaspell-prefs-dir dict-abbrev ".conf")
-            "--encoding=utf-8")
+            (concat "--per-conf=" ispell-cocoaspell-prefs-dir dict-abbrev ".conf"))
       (let* ((dict-abbrev-parts (split-string dict-abbrev "-"))
            (dict-abbrev-root (car dict-abbrev-parts))
            (dict-abbrev-mods (nth 1 dict-abbrev-parts))
            (dict-dir (ispell-cocoaspell-dict-dir dict-abbrev)))
       (list (concat "--dict-dir=" dict-dir)
-            "--encoding=utf-8"
             (concat "--home-dir=" ispell-cocoaspell-prefs-dir)
             (concat "--jargon=" dict-abbrev-mods)
             (concat "--lang=" dict-abbrev-root)
@@ -1535,9 +1533,8 @@ Assumes that value contains no whitespace."
                      (ispell-cocoaspell-aspell-args dict-abbrev))
                     ((eq ispell-use-cocoaspell-internal 'dicts)
                      (list "-d" dict-name
-                           "--dict-dir" dict-dir
-                           "--encoding=utf-8"))
-                    (t (list "-d" dict-name "--encoding=utf-8")))
+                           "--dict-dir" dict-dir))
+                    (t (list "-d" dict-name)))
                     nil                               ; aspell doesn't support this
 		;; Here we specify the encoding to use while communicating with
 		;; aspell.  This doesn't apply to command line arguments, so
