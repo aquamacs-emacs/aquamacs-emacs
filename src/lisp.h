@@ -2636,6 +2636,9 @@ extern int pos_visible_p P_ ((struct window *, int, int *,
 /* Defined in xsettings.c */
 extern void syms_of_xsettings P_ ((void));
 
+/* Defined in gtkutil.c */
+extern void syms_of_gtkutil P_ ((void));
+
 /* Defined in vm-limit.c.  */
 extern void memory_warnings P_ ((POINTER_TYPE *, void (*warnfun) ()));
 

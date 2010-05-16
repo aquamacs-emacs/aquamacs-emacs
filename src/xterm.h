@@ -477,6 +477,8 @@ struct x_output
   GtkWidget *vbox_widget;
   /* The notebook (i.e. tab) widget.  */
   GtkWidget *notebook_widget;
+  /* The current note book child.  */
+  GtkWidget *current_tab;
   /* The menubar in this frame.  */
   GtkWidget *menubar_widget;
   /* The tool bar in this frame  */

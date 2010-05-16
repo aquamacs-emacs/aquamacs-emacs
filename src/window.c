@@ -6066,6 +6066,8 @@ DEFUN ("change-window-configuration-frame", Fchange_window_configuration_frame,
   Vwindow_list = Qnil;
 
 #undef MAP_WINDOW
+
+  return config;
 }
 
 DEFUN ("buffers-in-window-configuration", Fbuffers_in_window_configuration,

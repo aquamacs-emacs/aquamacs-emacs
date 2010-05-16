@@ -1626,6 +1626,9 @@ main (int argc, char **argv)
       syms_of_xmenu ();
       syms_of_fontset ();
       syms_of_xsettings ();
+#ifdef USE_GTK
+      syms_of_gtkutil ();
+#endif
 #ifdef HAVE_X_SM
       syms_of_xsmfns ();
 #endif

@@ -33,7 +33,7 @@
     (define-key map "\C-x70" 'tab-delete)
     (define-key map "\C-x71" 'tab-delete-other)
     (define-key map "\C-x72" 'tab-new)
-    (define-key map "\C-x73" 'switch-to-buffer-tab)
+    (define-key map "\C-x73" 'switch-to-buffer-in-tab)
     (define-key map "\C-x7b" 'switch-to-buffer-other-tab)
     (define-key map "\C-x7f" 'find-file-new-tab)
     (define-key map "\C-x7o" 'tab-next)
@@ -58,16 +58,34 @@ Keyboard commands for tabs are:
   :keymap tab-mode-map
   (modify-all-frames-parameters (list (cons 'disable-tabs (not tab-mode)))))
 
-(declare-function tab-new "xfns.c" ())
-(declare-function tab-delete "xfns.c" ())
-(declare-function tab-delete-other "xfns.c" ())
-(declare-function tab-next "xfns.c" ())
-(declare-function tab-previous "xfns.c" ())
-(declare-function tab-nr-of-tabs "xfns.c" ())
-(declare-function tab-configuration "xfns.c" ())
-(declare-function tab-current "xfns.c" ())
-(declare-function tab-show "xfns.c" ())
-(declare-function tab-enable "xfns.c" ())
+(declare-function tab-new "xfns.c" (&optional label frame))
+(declare-function tab-delete "xfns.c" (&optional label frame))
+(declare-function tab-delete-other "xfns.c" (&optional frame))
+(declare-function tab-next "xfns.c" (&optional frame))
+(declare-function tab-previous "xfns.c" (&optional frame))
+(declare-function tab-nr-of-tabs "xfns.c" (&optional frame))
+(declare-function tab-current "xfns.c" (&optional frame))
+(declare-function tab-show "xfns.c" (key &optional frame))
+(declare-function tab-enable "xfns.c" (enable &optional frame))
+
+(defun current-tab-window-config ()
+  (list (current-window-configuration) (point-marker)))
+
+(defun window-tab-config-frame (config)
+  (if (and (consp config) (window-configuration-p (car config)))
+      (window-configuration-frame (car config))
+    nil))
+
+(defun set-tab-window-config (config)
+  (and (consp config) (window-configuration-p (car config))
+       (set-window-configuration (car config))
+       (goto-char (cadr config))))
+
+(defun change-tab-window-config-frame (config frame)
+  (if (and (consp config) (window-configuration-p (car config)))
+      (list (change-window-configuration-frame (car config) frame)
+	    (cadr config))
+    config))
 
 (defun find-file-new-tab (filename &optional wildcards)
   "Edit file FILENAME, in a new tab.
@@ -83,16 +101,20 @@ expand wildcards (if any) and visit multiple files."
   (interactive
    (find-file-read-args "Find file in new tab: "
                         (confirm-nonexistent-file-or-buffer)))
-  (let ((value (find-file-noselect filename nil nil wildcards)))
-    (if (not (null (tab-new)))
-	(progn
-	  (delete-other-windows)
-	  (if (listp value)
-	      (progn
-		(setq value (nreverse value))
-		(cons (switch-to-buffer (car value))
-		      (mapcar 'switch-to-buffer (cdr value))))
-	    (switch-to-buffer value))))))
+  (save-window-excursion
+    (let* ((value (find-file-noselect filename nil nil wildcards))
+	   (newtab (tab-new)))
+      (if newtab
+	  (progn
+	    (delete-other-windows)
+	    (if (listp value)
+		(progn
+		  (setq value (nreverse value))
+		  (cons (switch-to-buffer (car value))
+			(dolist 'switch-to-buffer (cdr value))))
+	      (switch-to-buffer value))
+	    (put newtab 'winconfig (current-tab-window-config)))))))
+
 
 (defun switch-to-buffer-other-tab (buffer-or-name &optional norecord)
   "Switch to buffer BUFFER-OR-NAME in another tab.
@@ -123,8 +145,8 @@ documentation for additional customization information."
 	  (delete-other-windows)))))
 
 
-(defun display-existing-buffer-in-tab (buffer-or-name &optional frame)
-  "Switch to a tab that shows BUFFER-OR-NAME on FRAME.
+(defun find-tab-for-existing-buffer (buffer-or-name &optional frame)
+  "Find a tab that shows BUFFER-OR-NAME on FRAME.
 FRAME nil means selected frame.
 
 Returns the key for the tab switch to, or nil if no tab displays 
@@ -136,21 +158,19 @@ BUFFER-OR-NAME."
 	 (tab-key))
     (while (and tabs (null tab-key))
       (let* ((elt (car tabs))
-	     (winconf (cadr elt))
+	     (winconf (get elt 'winconfig))
 	     (buffers (buffers-in-window-configuration winconf)))
 	(if (memq buffer buffers)
-	    (setq tab-key (car elt))
+	    (setq tab-key elt)
 	  (setq tabs (cdr tabs)))))
-    (if (and tab-key (not (equal tab-key (tab-current frame))))
-	(progn
-	  (tab-show tab-key frame)
-	  tab-key)
-      nil)))
+    tab-key))
 
-(defun switch-to-buffer-tab (buffer-or-name &optional frame)
+(defun switch-to-buffer-in-tab (buffer-or-name &optional frame)
   (interactive "BSwitch to buffer:\nP")
-  (if (not (display-existing-buffer-in-tab buffer-or-name frame))
-      (switch-to-buffer buffer-or-name)))
+  (let ((tab (find-tab-for-existing-buffer buffer-or-name frame)))
+    (if tab
+	(tab-show tab frame)
+      (switch-to-buffer buffer-or-name))))
 
 (defun handle-tab-event (event)
   "Handle tab-event to change tabs on the frame in EVENT."
@@ -161,23 +181,35 @@ BUFFER-OR-NAME."
 	 (frame (car n1))
 	 (x (car (cdr n1)))
 	 (y (cdr (cdr n1))))
-    (if (eq type 2) ;; // A tab is dropped from another frame.
-	(let ((top y)
-	      (left x)
-	      (width (frame-pixel-width frame))
-	      (height (frame-pixel-height frame))
-	      (dw (x-display-pixel-width frame))
-	      (dh (x-display-pixel-height frame)))
-	  (if (< dw (+ left width))
-	      (setq left (- dw width)))
-	  (if (< dh (+ top height))
-	      (setq top (- dh height)))
-	  (make-frame 
-	   (list (cons 'width (frame-parameter frame 'width))
-		 (cons 'height(frame-parameter frame 'height))
-		 (cons 'top top)
-		 (cons 'left left)))))))
+
+    (cond ((eq type 'tab-new-frame) ;; // A tab is dropped to the background.
+	   (let ((tab (car (cdr n2)))
+		 (top y)
+		 (left x)
+		 (width (frame-pixel-width frame))
+		 (height (frame-pixel-height frame))
+		 (dw (x-display-pixel-width frame))
+		 (dh (x-display-pixel-height frame)))
+	     (if (< dw (+ left width))
+		 (setq left (- dw width)))
+	     (if (< dh (+ top height))
+		 (setq top (- dh height)))
+	     (make-frame
+	      (list (cons 'width (frame-parameter frame 'width))
+		    (cons 'height(frame-parameter frame 'height))
+		    (cons 'top top)
+		    (cons 'left left)))))
+
+	  ((eq type 'tab-changed)
+	   (let* ((newtab (car (cdr n2)))
+		  (newcfg (get newtab 'winconfig))
+		  (oldtab (cdr (cdr n2))))
+	     (if oldtab (put oldtab 'winconfig (current-tab-window-config)))
+	     (if newcfg (set-tab-window-config
+			 (if (eq (window-tab-config-frame newcfg) frame)
+			     newcfg
+			   (put newtab 'winconfig
+				(change-tab-window-config-frame newcfg frame))))
+	       (delete-other-windows)))))))
 
 (define-key special-event-map [tab-event] 'handle-tab-event)
-
-

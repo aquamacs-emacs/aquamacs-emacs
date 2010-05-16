@@ -135,6 +135,7 @@ extern char *xg_get_file_name P_ ((FRAME_PTR f,
                                    int only_dir_p));
 
 extern char *xg_get_font_name P_ ((FRAME_PTR f, char *));
+
 extern const char *xg_add_tab P_ ((FRAME_PTR f, const char *name));
 extern void xg_delete_tab P_ ((FRAME_PTR f, const char *name));
 extern void xg_delete_all_tabs P_ ((FRAME_PTR f));
@@ -146,8 +147,6 @@ extern int xg_current_tab P_ ((FRAME_PTR f));
 extern const char *xg_get_tab_key P_ ((FRAME_PTR f, int nr));
 extern void xg_set_current_tab P_ ((FRAME_PTR f, const char *key));
 extern void xg_enable_tabs P_ ((FRAME_PTR f, int enable));
-
-extern Lisp_Object xg_tab_get_win_config P_ ((FRAME_PTR f, int nr));
 extern void xg_tabs_always_show P_ ((FRAME_PTR f, int show));
 
 

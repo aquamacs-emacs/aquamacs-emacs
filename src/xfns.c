@@ -5903,7 +5903,7 @@ DEFUN ("tab-new", Ftab_new,
 If LABEL is nil, use current buffer name.
 FRAME nil means use the selected frame.
 
-Returns the key for the tab, which can be passed to `tab-delete'.  */)
+Returns the key for the tab ( symbol), which can be passed to `tab-delete'.  */)
      (label, frame)
      Lisp_Object label, frame;
 {
@@ -5925,7 +5925,7 @@ Returns the key for the tab, which can be passed to `tab-delete'.  */)
   key = xg_add_tab (f, SDATA (label));
   UNBLOCK_INPUT;
 
-  return make_string (key, strlen (key));
+  return intern (key);
 }
 
 DEFUN ("tab-delete", Ftab_delete,
@@ -5938,11 +5938,11 @@ FRAME nil means use the selected frame.  */)
 {
   FRAME_PTR f = check_x_frame (frame);
   if (f->no_tabs) return Qnil;
-  if (!NILP (key) && !STRINGP (key))
-    error ("Key is not string or nil");
+  if (!NILP (key) && !SYMBOLP (key))
+    error ("Key is not a symbol or nil");
 
   BLOCK_INPUT;
-  xg_delete_tab (f, NILP (key) ? NULL : SDATA (key));
+  xg_delete_tab (f, NILP (key) ? NULL : SDATA (SYMBOL_NAME (key)));
   UNBLOCK_INPUT;
 
   return Qnil;
@@ -6056,9 +6056,7 @@ DEFUN ("tab-configuration", Ftab_configuration,
        Stab_configuration, 0, 1, 0,
        doc: /* Return the tab configuration on FRAME.
 FRAME nil means use the selected frame.
-Returns an alist where each element is of type (KEY  WINDOWCONFIG).
-KEY is the name of the tab as returned by `tab_new´.
-WINDOWCONFIG is the window configuration for the tab.
+Returns an list where each element is a symbol representing a tab.
 
 If FRAME is a tab-less frame, returns nil.  */)
      (frame)
@@ -6072,12 +6070,10 @@ If FRAME is a tab-less frame, returns nil.  */)
   nr = xg_tab_count (f);
   for (i = 0; i < nr; ++i) 
     {
-      Lisp_Object wc = xg_tab_get_win_config (f, i);
       const char *key = xg_get_tab_key (f, i);
 
-      cc = Fcons (Fcons (key ? make_string (key, strlen (key)) : Qnil,
-                         NILP (wc) ? wc : Fcons (wc, Qnil)),
-                  cc);
+      if (key)
+        cc = Fcons (intern (key), cc);
     }
 
   return cc;
@@ -6098,7 +6094,7 @@ If FRAME is a tab-less frame, returns nil.  */)
   if (f->no_tabs) return Qnil;
   nr = xg_current_tab (f);
   const char *key = xg_get_tab_key (f, nr);
-  return key ? make_string (key, strlen (key)) : Qnil;
+  return key ? intern (key) : Qnil;
 }
 
 DEFUN ("tab-show", Ftab_show,
@@ -6111,10 +6107,10 @@ If FRAME is a tab-less frame or the key doesn't refer to a tab, do nothing.  */)
 {
   FRAME_PTR f = check_x_frame (frame);
   if (f->no_tabs) return Qnil;
-  CHECK_STRING (key);
+  CHECK_SYMBOL (key);
 
   BLOCK_INPUT;
-  xg_set_current_tab (f, SDATA (key));
+  xg_set_current_tab (f, SDATA (SYMBOL_NAME (key)));
   UNBLOCK_INPUT;
 
   return Qnil;

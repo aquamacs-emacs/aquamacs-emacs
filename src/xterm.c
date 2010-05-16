@@ -325,9 +325,6 @@ static Lisp_Object Qlatin_1;
 #ifdef USE_GTK
 /* The name of the Emacs icon file.  */
 static Lisp_Object xg_default_icon_file;
-
-/* Used in gtkutil.c.  */
-Lisp_Object Qx_gtk_map_stock;
 #endif
 
 /* Used in x_flush.  */
@@ -9265,7 +9262,7 @@ x_make_frame_visible (f)
 	}
 #else /* not USE_X_TOOLKIT */
 #ifdef USE_GTK
-      gtk_widget_show_all (FRAME_GTK_OUTER_WIDGET (f));
+      gtk_widget_show (FRAME_GTK_OUTER_WIDGET (f));
       gtk_window_deiconify (GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
 #else
       if (FRAME_X_EMBEDDED_P (f))
@@ -10970,9 +10967,6 @@ syms_of_xterm ()
 #ifdef USE_GTK
   xg_default_icon_file = make_pure_c_string ("icons/hicolor/scalable/apps/emacs.svg");
   staticpro (&xg_default_icon_file);
-
-  Qx_gtk_map_stock = intern_c_string ("x-gtk-map-stock");
-  staticpro (&Qx_gtk_map_stock);
 #endif
 
   DEFVAR_BOOL ("x-use-underline-position-properties",
