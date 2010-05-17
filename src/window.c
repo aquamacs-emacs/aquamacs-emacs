@@ -6396,12 +6396,6 @@ set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
   if (!NILP (tem))
     *new_current_window = window;
 
-  tem = Fcdr (Fassq (intern ("next"), data));
-  if (!NILP (tem))
-    w->next = set_window_from_sexp (tem, window, parent,
-				    new_current_window,
-				    new_mini_window);
-
   tem = Fcdr (Fassq (intern ("hchild"), data));
   if (!NILP (tem))
     w->hchild = set_window_from_sexp (tem, Qnil, window,
@@ -6413,6 +6407,12 @@ set_window_from_sexp (data, prev, parent, new_current_window, new_mini_window)
     w->vchild = set_window_from_sexp (tem, Qnil, window,
 				      new_current_window,
 				      new_mini_window);
+
+  tem = Fcdr (Fassq (intern ("next"), data));
+  if (!NILP (tem))
+    w->next = set_window_from_sexp (tem, window, parent,
+				    new_current_window,
+				    new_mini_window);
 
   tem = Fassq (intern ("left-col"), data);
   if (!NILP (tem))
@@ -6525,7 +6525,7 @@ by `current-window-configuration-to-sexp' (which see).  */)
     wrong_type_argument (intern ("window-configuration"), configuration);
 
   data = Fcdr (configuration);
-  saved_windows = Fcdr (Fassq (intern ("windows"), data));
+  saved_windows = Fcdr (Fassq (intern ("root-window"), data));
 
   new_current_buffer = Fcdr (Fassq (intern ("current-buffer-name"), data));
   new_current_window = new_mini_window = Qnil;
@@ -7000,12 +7000,6 @@ save_window_save_to_sexp (window, live_p)
 
   if (!NILP (live_p))
     {
-      if (!NILP (w->next))
-	data = Fcons (Fcons (intern ("next-window"),
-			     w->next), data);
-      if (!NILP (w->prev))
-	data = Fcons (Fcons (intern ("prev-window"),
-			     w->prev), data);
       if (!NILP (w->vchild))
 	data = Fcons (Fcons (intern ("vchild-window"),
 			     w->vchild), data);
@@ -7015,17 +7009,23 @@ save_window_save_to_sexp (window, live_p)
       if (!NILP (w->parent))
 	data = Fcons (Fcons (intern ("parent-window"),
 			     w->parent), data);
+      if (!NILP (w->next))
+	data = Fcons (Fcons (intern ("next-window"),
+			     w->next), data);
+      if (!NILP (w->prev))
+	data = Fcons (Fcons (intern ("prev-window"),
+			     w->prev), data);
     }
 
-  if (!NILP (w->next))
-    data = Fcons (Fcons (intern ("next"),
-			 save_window_save_to_sexp (w->next, live_p)), data);
   if (!NILP (w->vchild))
     data = Fcons (Fcons (intern ("vchild"),
 			 save_window_save_to_sexp (w->vchild, live_p)), data);
   if (!NILP (w->hchild))
     data = Fcons (Fcons (intern ("hchild"),
 			 save_window_save_to_sexp (w->hchild, live_p)), data);
+  if (!NILP (w->next))
+    data = Fcons (Fcons (intern ("next"),
+			 save_window_save_to_sexp (w->next, live_p)), data);
 
   return (Fnreverse (data));
 }
@@ -7074,12 +7074,135 @@ and the positions of point and mark.  */)
   data = Fcons (Fcons (intern ("minibuf-selected-window"),
 		       minibuf_level > 0 ? minibuf_selected_window : Qnil), data);
 
-  data = Fcons (Fcons (intern ("windows"),
+  data = Fcons (Fcons (intern ("root-window"),
 		       save_window_save_to_sexp (FRAME_ROOT_WINDOW (f),
 						 live_p)), data);
 
   return (Fnreverse (data));
 }
+
+
+DEFUN ("window-configuration-to-sexp", Fwindow_configuration_to_sexp,
+       Swindow_configuration_to_sexp, 1, 1, 0,
+       doc: /* Convert CONFIGURATION of windows and buffers to a Lisp expression.
+CONFIGURATION must be a value previously returned
+by `current-window-configuration' (which see).
+Return a Lisp expression that describes the number of windows, their sizes
+and current buffers, and for each displayed buffer, where display starts,
+and the positions of point and mark.  */)
+     (configuration)
+     Lisp_Object configuration;
+{
+  register struct save_window_data *data;
+  struct Lisp_Vector *saved_windows;
+  Lisp_Object sexp;
+  Lisp_Object frame;
+  FRAME_PTR f;
+  int old_point = -1;
+
+  CHECK_WINDOW_CONFIGURATION (configuration);
+
+  data = (struct save_window_data *) XVECTOR (configuration);
+  saved_windows = XVECTOR (data->saved_windows);
+
+  sexp = Fcons (intern ("window-configuration"), Qnil);
+
+  sexp = Fcons (Fcons (intern ("frame-cols"),
+		       make_number (data->frame_cols)), sexp);
+  sexp = Fcons (Fcons (intern ("frame-lines"),
+		       make_number (data->frame_lines)), sexp);
+  sexp = Fcons (Fcons (intern ("frame-menu-bar-lines"),
+		       make_number (data->frame_menu_bar_lines)), sexp);
+  sexp = Fcons (Fcons (intern ("frame-tool-bar-lines"),
+		       make_number (data->frame_tool_bar_lines)), sexp);
+  sexp = Fcons (Fcons (intern ("frame-tab-bar-lines"),
+		       make_number (data->frame_tab_bar_lines)), sexp);
+  sexp = Fcons (Fcons (intern ("current-buffer"),
+		       data->current_buffer), sexp);
+
+  sexp = Fcons (Fcons (intern ("root-window"),
+		       data->root_window), sexp);
+
+  sexp = Fcons (Fcons (intern ("minibuf-scroll-window"),
+		       minibuf_level > 0 ? Vminibuf_scroll_window : Qnil), sexp);
+  sexp = Fcons (Fcons (intern ("minibuf-selected-window"),
+		       minibuf_level > 0 ? minibuf_selected_window : Qnil), sexp);
+
+  frame = XWINDOW (SAVED_WINDOW_N (saved_windows, 0)->window)->frame;
+  f = XFRAME (frame);
+
+  if (FRAME_LIVE_P (f))
+    {
+      register Lisp_Object tem;
+      register struct window *w;
+      register struct saved_window *p;
+      struct window *root_window;
+      struct window **leaf_windows;
+      int n_leaf_windows;
+      int k, i, n;
+
+      for (k = 0; k < saved_windows->size; k++)
+	{
+	  tem = Fcons (intern ("window"), Qnil);
+
+	  p = SAVED_WINDOW_N (saved_windows, k);
+
+	  if (!NILP (p->window))
+	    tem = Fcons (Fcons (intern ("window"),
+				p->window), tem);
+	  if (!NILP (p->parent))
+	    tem = Fcons (Fcons (intern ("parent"),
+				p->parent), tem);
+	  if (!NILP (p->prev))
+	    tem = Fcons (Fcons (intern ("prev"),
+				p->prev), tem);
+
+	  tem = Fcons (Fcons (intern ("left-col"),
+			      p->left_col), tem);
+	  tem = Fcons (Fcons (intern ("top-line"),
+			      p->top_line), tem);
+	  tem = Fcons (Fcons (intern ("total-cols"),
+			      p->total_cols), tem);
+	  tem = Fcons (Fcons (intern ("total-lines"),
+			      p->total_lines), tem);
+	  tem = Fcons (Fcons (intern ("hscroll"),
+			      p->hscroll), tem);
+	  tem = Fcons (Fcons (intern ("min-hscroll"),
+			      p->min_hscroll), tem);
+	  tem = Fcons (Fcons (intern ("display-table"),
+			      p->display_table), tem);
+	  tem = Fcons (Fcons (intern ("orig-top-line"),
+			      p->orig_top_line), tem);
+	  tem = Fcons (Fcons (intern ("orig-total-lines"),
+			      p->orig_total_lines), tem);
+	  tem = Fcons (Fcons (intern ("left-margin-cols"),
+			      p->left_margin_cols), tem);
+	  tem = Fcons (Fcons (intern ("right-margin-cols"),
+			      p->right_margin_cols), tem);
+	  tem = Fcons (Fcons (intern ("left-fringe-width"),
+			      p->left_fringe_width), tem);
+	  tem = Fcons (Fcons (intern ("right-fringe-width"),
+			      p->right_fringe_width), tem);
+	  tem = Fcons (Fcons (intern ("fringes-outside-margins"),
+			      p->fringes_outside_margins), tem);
+	  tem = Fcons (Fcons (intern ("scroll-bar-width"),
+			      p->scroll_bar_width), tem);
+	  tem = Fcons (Fcons (intern ("vertical-scroll-bar-type"),
+			      p->vertical_scroll_bar_type), tem);
+	  tem = Fcons (Fcons (intern ("dedicated"),
+			      p->dedicated), tem);
+	  tem = Fcons (Fcons (intern ("resize-proportionally"),
+			      p->resize_proportionally), tem);
+
+	  sexp = Fcons (Fnreverse (tem), sexp);
+	}
+    }
+
+  return (Fnreverse (sexp));
+}
+
+
+
 
 DEFUN ("save-window-excursion", Fsave_window_excursion, Ssave_window_excursion,
        0, UNEVALLED, 0,
@@ -7890,6 +8013,7 @@ frame to be redrawn only if it is a tty frame.  */);
   defsubr (&Sset_window_configuration_from_sexp);
   defsubr (&Scurrent_window_configuration);
   defsubr (&Scurrent_window_configuration_to_sexp);
+  defsubr (&Swindow_configuration_to_sexp);
   defsubr (&Ssave_window_excursion);
   defsubr (&Swindow_tree);
   defsubr (&Sset_window_margins);
