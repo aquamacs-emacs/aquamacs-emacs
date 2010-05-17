@@ -1,30 +1,29 @@
 ;; one-buffer-one-frame.el
-;; Functions to open buffers in their own frames
+;; Frame/buffer/window management in Aquamacs including `one-buffer-one-frame-mode'
 ;;
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.84 2009/03/03 18:47:09 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
-;; GNU Emacs is free software; you can redistribute it and/or modify
+;; Aquamacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Aquamacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
  
 ;; DESCRIPTION:
 ;; 
@@ -55,18 +54,12 @@
 
 
 
-;; CODE
-
 (require 'aquamacs-tools)  
 
 (defvar one-buffer-one-frame-mode-map (make-sparse-keymap))
 
 
 (defvar obof-backups-initialized nil)
-
-;; temporary definition (workaround for old defcustom in preloaded func)
-;; (defun one-buffer-one-frame-mode (&rest a))
-
 
 (define-minor-mode one-buffer-one-frame-mode
   "Always open new frames for each new buffer and switch to their frame.
@@ -631,20 +624,51 @@ even if it's the only visible frame."
 	
 	(delete-window-if-created-for-buffer))))
 
+(defvar aquamacs-last-frame-empty-buffer nil)
+(defun init-aquamacs-last-frame-empty-buffer ()
+  (unless (buffer-live-p aquamacs-last-frame-empty-buffer)
+    (setq aquamacs-last-frame-empty-buffer (generate-new-buffer " *empty*"))
+    (with-current-buffer aquamacs-last-frame-empty-buffer
+      (setq buffer-read-only t)))
+  aquamacs-last-frame-empty-buffer)
+
+(defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
-  (condition-case nil 
-      (delete-frame (or frame (selected-frame)) 'force)
-    (error   
-     (let ((f (or frame (selected-frame))))
-       (run-hook-with-args 'delete-frame-functions f)
+  ;; are we deleting a non-special frame?
+  (let ((f (or frame (selected-frame))))
+    ;; HACK: the buffer has been killed already at this point
+    ;; so we must consider the frame title instead, which has not been updated yet
+    (unless (or (special-display-p (frame-parameter f 'name))
+		(string= (substring (frame-parameter f 'name) 0 1) " "))
+      ;; store frame position for reuse
+      (setq aquamacs-deleted-frame-position
+	  `((top . ,(frame-parameter f 'top))
+	    (left . ,(frame-parameter f 'left))
+	    (width . ,(frame-parameter f 'width))
+	    (height . ,(frame-parameter f 'height)))))
+    (condition-case nil
+	;; do not delete the last visible frame if there are others hidden:
+	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
+	(delete-frame (or frame (selected-frame)))
+      (error
+       ;; we're doing delete-frame later
+       ;;(run-hook-with-args 'delete-frame-functions f)
        (let ((confirm-nonexistent-file-or-buffer)
-       	     (one-buffer-one-frame nil)
-       	     (tabbar-mode nil))
+	     (one-buffer-one-frame-mode nil)
+	     (pop-up-frames nil)
+	     (smart-frame-positioning-mode nil))
+	 (delete-other-windows)
 	 (set-window-dedicated-p (selected-window) nil)
-	 ;; select scratch in case it gets any input
-	 (if (get-buffer "*scratch*")
-	     (switch-to-buffer "*scratch*" 'norecord)))
-       (make-frame-invisible f t)))))
+	 ;; select read-only special buffer in case it gets any input
+	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
+	   (with-current-buffer hb
+	     (let ((hf (make-frame (append aquamacs-deleted-frame-position
+					   '((visibility . nil))))))
+	       (switch-to-buffer hb  'norecord)
+	       (select-frame hf)
+	       (raise-frame hf)
+	       (make-frame-invisible hf t)))))
+       (delete-frame f t)))))
 
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for
@@ -874,6 +898,25 @@ The buffer contains unsaved changes which will be lost if you discard them now."
      0 nil 
      (lambda () (setq one-buffer-one-frame-inhibit nil)))))
 
+
+(defadvice iconify-frame (after leave-hidden-frame
+				(&rest args) activate compile)
+  (when (or (null (visible-frame-list))
+	  (equal (visible-frame-list) (list (or (car args) (selected-frame)))))
+    ;; if no other frame visible, create hidden backup frame to receive keyboard input
+    (let ((bup-frame
+	   (make-frame
+	    (append
+	     (mapcar (lambda (x) (cons x (frame-parameter (car args) x)))
+		     '(top left width height))
+	     '((name . "*empty*") (visibility . nil))))))
+      (select-frame bup-frame)
+      (raise-frame bup-frame)
+      (let ((confirm-nonexistent-file-or-buffer)
+	    (one-buffer-one-frame nil)
+	    (pop-up-frames nil)
+	    (tabbar-mode nil))
+      (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))))))
 
 ;; (defadvice delete-window (before inhibit-one-buffer-one-frame 
 ;; 				(&rest args) activate compile)
