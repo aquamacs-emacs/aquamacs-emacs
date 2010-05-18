@@ -44,6 +44,7 @@
 
 (require 'ispell)
 (require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
+(require 'osxkeys) ;; flyspell inherit regular Aquamacs context menu
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Group ...                                                        */
@@ -607,6 +608,15 @@ sentence boundaries are too far between."
       ;; when done, report completion
       (if flyspell-issue-message-flag (message "Spell Checking completed."))
       ))) 
+
+;; ----------------------------------------------------------------------
+;; Flyspell context menu inherits Aquamacs's generic context menu (as
+;; a copy, so the inheritance can be disabled without affecting the
+;; original)
+(defvar aquamacs-context-menu-map-copy nil
+  "Copy of Aquamacs general context menu keymap.  Used by
+flyspell to incorporate general context menu items into menu for
+misspelled words.")
 
 ;; **********************************************************************
 ;; global-flyspell-mode and automatic text-mode flyspelling
@@ -2657,11 +2667,19 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	     (format "%s [%s]" word (or ispell-local-dictionary
 					ispell-dictionary)))))
     ;; update aquamacs-context-menu-keymap
-    (aquamacs-update-context-menus)
+    (if (eq osx-key-mode-mouse-3-behavior 'mouse-save-then-kill)
+	(setq aquamacs-context-menu-map-copy nil)
+      (aquamacs-update-context-menus)
+      (setq aquamacs-context-menu-map-copy
+    	    (copy-keymap aquamacs-context-menu-map)))
     ;; add contents of aquamacs-context-menu-keymap to flyspell-context-menu-map
-    (set-keymap-parent flyspell-context-menu-map aquamacs-context-menu-map)
+    (set-keymap-parent flyspell-context-menu-map aquamacs-context-menu-map-copy)
     
-    (define-key flyspell-context-menu-map [flyspell-corr-sep2] '(menu-item "--"))
+    (define-key flyspell-context-menu-map [flyspell-corr-sep2]
+      ;; only include this separator when we'll also have more menu below it
+      `(menu-item "--" 'ignore :visible (not (eq
+					      osx-key-mode-mouse-3-behavior
+					      'mouse-save-then-kill))))
     (define-key flyspell-context-menu-map [buffer]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
 		      "Ignore Spelling"
