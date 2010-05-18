@@ -44,6 +44,7 @@
 
 (require 'ispell)
 (require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
+(require 'osxkeys) ;; flyspell inherit regular Aquamacs context menu
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Group ...                                                        */
