@@ -1,8 +1,8 @@
-;;; fixed-width-fontset.el -*- coding: iso-2022-7bit -*-
+;; fixed-width-fontset.el -*- coding: iso-2022-7bit -*-
 
-;; Copyright (C) 2005 by T. Hiromatsu <matsuan@users.sourceforge.jp>
-;; Version 1_0_3
-;; 2005-11-17
+;; Copyright (C) 2005-2007 by T. Hiromatsu <matsuan@users.sourceforge.jp>
+;; Version 1_0_6
+;; 2007-05-20
 
 ;;; Commentary:
 
@@ -88,33 +88,32 @@
            (ecd-fml-reg (fixed-width-create-encode-family-reg-list new-list)))
       (fixed-width-set-fontset-font asc-fontset ecd-fml-reg))))
 
-;;  font-width-compensation function section
-;;  カレントフレームで使われているフォントの、リスケールファクターを、
-;;  fixed-width-scale-alist から、取得する。
+;;
+;; variables
+;;
 
-(defun fixed-width-append-factor (&optional frame init)
+(defvar fixed-width-rescale t)
+
+(defvar fixed-width-fontset-template "-*-*-medium-r-normal--%d-*-*-*-*-*-fontset-%s")
+
+;; font-width-compensation function section
+;; カレントフレームで使われているフォントの、リスケールファクターを、
+;; fixed-width-scale-alist から、取得する。
+
+(defun fixed-width-append-factor (&optional frame)
   "取得した rescale factor で、face-font-rescale-alist を書き換える。"
-  (let* ((alst (frame-parameter frame 'face-font-rescale-alist))
-         (rescale-alist (copy-alist (or alst face-font-rescale-alist)))
-         (init-font (if init (cdr (assoc 'font initial-frame-alist))))
+  (let* ((res-alist (copy-alist (frame-parameter frame 'face-font-rescale-alist)))
          (frm-font (frame-parameter frame 'font))
          (def-font (cdr (assoc 'font default-frame-alist)))
-         (fontset (or init-font frm-font def-font "fontset-default"))
-         (asc (if (fontset-name-p fontset) (fontset-font fontset ?a) fontset))
+         (fontset (or frm-font def-font "fontset-default"))
+         (asc (if (x-list-fonts fontset) fontset (fontset-font fontset ?a)))
          (size (aref (x-decompose-font-name asc) xlfd-regexp-pixelsize-subnum)))
     (dolist (elt fixed-width-get-scale-alist)
       (let* ((font (car elt))
-             (new (or (cdr (assoc size elt)) 1.0))
-             (old (assoc font rescale-alist)))
-        (if old (setcdr old new) (add-to-list 'rescale-alist (cons font new)))))
-    (setq face-font-rescale-alist rescale-alist)))
-
-(defun fixed-width-make-frame-function (frame)
-  "Initialize frame-parameter when creating new frame."
-  (let ((lst `((face-font-rescale-alist . ,(fixed-width-append-factor frame)))))
-    (modify-frame-parameters frame lst)
-    (if (frame-live-p fixed-width-initial-frame)
-        (fixed-width-append-factor fixed-width-initial-frame))))
+             (new (if fixed-width-rescale (or (cdr (assoc size elt)) 1.0) 1.0))
+             (old (assoc font res-alist)))
+        (if old (setcdr old new) (add-to-list 'res-alist (cons font new)))))
+    (setq face-font-rescale-alist res-alist)))
 
 (defun fixed-width-set-default-fontset (fontset)
   "Set default font of default-frame-alist"
@@ -122,29 +121,51 @@
     (if old (setcdr old fontset)
       (add-to-list 'default-frame-alist (cons 'font fontset)))))
 
-;;  フォントが変更された場合にフックをかけて、
-;;  fixed-width-append-factor を起動する。
+(defun fixed-width-set-fontset (fontset &optional size)
+  "Set FONTSET and SIZE to `default-frame-alist' and `frame-parameter' of
+current frame as `font'. if size is nil, default size of FONTSET will be used.
+To get available fontset, use `fontset-list'."
+  (let* ((fnt-xlfd (fontset-font (format "fontset-%s" fontset) ?a))
+         (sz-asc (aref (x-decompose-font-name fnt-xlfd) xlfd-regexp-pixelsize-subnum))
+         (sz (or size (string-to-int sz-asc)))
+         (fnt (format fixed-width-fontset-template sz fontset))
+         (old (assoc 'font default-frame-alist)))
+    (if old (setcdr old fnt)
+      (add-to-list 'default-frame-alist (cons 'font fnt)))
+    (if (current-frame-configuration) (set-frame-font fnt))))
 
-(defvar fixed-width-initial-frame nil)
-
-(make-variable-frame-local 'face-font-rescale-alist)
+(defun fixed-width-make-frame-param (frame)
+  "Add face-font-rescale-alist to frame parameters as frame local"
+  (modify-frame-parameters frame
+                           `((face-font-rescale-alist . ,face-font-rescale-alist))))
+  
+;; add hook section
+;; フォントが変更された場合にフックをかけて、
+;; fixed-width-append-factor を起動する。
 
 (add-hook 'after-make-frame-functions
-          '(lambda (frame) (fixed-width-make-frame-function frame)))
+          '(lambda (frame)
+             (fixed-width-make-frame-param frame)
+             (make-variable-frame-local 'face-font-rescale-alist)
+             (fixed-width-append-factor frame)))
 
-(add-hook 'before-make-frame-hook
+(add-hook 'after-setting-font-hook '(lambda () (fixed-width-append-factor nil)))
+
+(add-hook 'emacs-startup-hook
           '(lambda ()
-             (or fixed-width-initial-frame
-                 (setq fixed-width-initial-frame (selected-frame)))))
+             (set-frame-font (or (cdr (assoc 'font initial-frame-alist))
+                                 (cdr (assoc 'font default-frame-alist))
+                                 (frame-parameter nil 'font)
+                                 "fontset-default"))))
 
-(add-hook 'after-setting-font-hook
-          '(lambda ()
-             (fixed-width-append-factor nil)
-             (if (frame-live-p fixed-width-initial-frame)
-                 (progn (select-frame fixed-width-initial-frame)
-                        (fixed-width-append-factor fixed-width-initial-frame)))))
+;; 初期化処理
+;; fixed-width-fontset を load した時に、既に存在している frame の処理。
+;; 先に、face-font-rescale-alist を、frame-parameter に設定した後に、
+;; make-valiable-rame-local で、各 frame に束縛する
 
-(add-hook 'emacs-startup-hook '(lambda () (fixed-width-append-factor nil t)))
+(dolist (elt (frame-list)) (fixed-width-make-frame-param elt))
+
+(make-variable-frame-local 'face-font-rescale-alist)
 
 (provide 'fixed-width-fontset)
 
