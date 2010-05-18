@@ -168,13 +168,13 @@ Press \\[aquamacs-download-release] to download it.") "")
 
 
 (defun aquamacs-ask-donate ()
-  (if (and (fboundp 'mac-dialog-y-or-n-p)
-	   (mac-dialog-y-or-n-p "Welcome to the new Aquamacs."
-				"The Aquamacs Project depends on your support.
-Please consider to help us by donating at http://aquamacs.org. 
-Only your continued support keeps the project alive.
+  (if (and (fboundp 'x-popup-dialog)
+	   (x-popup-dialog nil '("Welcome to the new Aquamacs.
+The Aquamacs Project depends on your support. Please consider to help us by donating at http://aquamacs.org. Only your continued support keeps the project alive.
+
 Would you like to see the donations site now?
-(This reminder won't be displayed again in this version.)"))
+
+\(This reminder won't be displayed again in this version.)" ("Yes, Donate" . t) no-cancel ("No" . nil))))
       (aquamacs-donate)))
 
 (defun aquamacs-welcome-notify ()
