@@ -932,26 +932,6 @@ unless the current buffer is a scratch buffer."
   (interactive)
   (other-frame -1))
 
-;; If no position specified, make new frame offset by 25 from current.
-(defvar parameters)		     ; dynamically bound in make-frame
-(add-hook 'before-make-frame-hook
-          (lambda ()
-            (let ((left (cdr (assq 'left (frame-parameters))))
-                  (top (cdr (assq 'top (frame-parameters)))))
-              (if (consp left) (setq left (cadr left)))
-              (if (consp top) (setq top (cadr top)))
-              (cond
-               ((or (assq 'top parameters) (assq 'left parameters)))
-               ((or (not left) (not top)))
-               (t
-                (setq parameters (cons (cons 'left (+ left 25))
-                                       (cons (cons 'top (+ top 25))
-                                             parameters))))))))
-
-;; frame will be focused anyway, so select it
-;; (if this is not done, modeline is dimmed until first interaction)
-(add-hook 'after-make-frame-functions 'select-frame)
-
 (defvar tool-bar-mode)
 (declare-function tool-bar-mode "tool-bar" (&optional arg))
 

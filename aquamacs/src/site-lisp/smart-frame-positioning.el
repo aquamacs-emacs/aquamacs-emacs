@@ -131,21 +131,7 @@ should be used as the interface to this function."
 	 (oldframe (selected-frame))
  	 ;; create the frame
 	 (f (funcall smart-frame-positioning-old-frame-creation-function
-		     (append parameters '((visibility . nil) (left . 1))))))
-    ;; left  . 1: frame creation bug workaround: bug #166
-
-    (if (< emacs-major-version 23)
-	(if parameters
-	    ;; the frame creation function doesn't set all parameters
-	    ;; set the remaining ones manually
-	    ;; bug reported to pretest bug list 13/Jan/2006
-	    ;; was this ever fixe?
-	    ;; set remaining parameters
-	    (modify-frame-parameters f parameters))
-      ;; Emacs 23 seems to tell us where to show the frame
-      (setq parameters (assq-delete-all 'left parameters))
-      (setq parameters (assq-delete-all 'top parameters)))
-    
+		     (append parameters '((visibility . nil))))))
     (run-hook-with-args 'smart-frame-positioning-hook f)
     (setq newpos (find-good-frame-position oldframe f))  
     (let ((overriding-parms (append parameters default-frame-alist)))
