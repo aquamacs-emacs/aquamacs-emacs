@@ -6871,14 +6871,12 @@ the point is when the command is called.")
     string))
 
 (defun smart-delete-region (from to)
-  (if (and smart-spacing-mode (memq this-command '(cua-delete-region mouse-save-then-kill)))
-      (let* ((from (min from to)) 
-	     (to (max from to))
-	     ;; (move-point (memq (point) (list beg end))) 
-	     (point-at-end (eq (point) to))) 
-	     
-	     (delete-region from to)
-	     (smart-remove-remaining-spaces from point-at-end))
+  (if (and smart-spacing-mode 
+	   (memq this-command '(cua-delete-region mouse-save-then-kill)))
+      (progn
+	(delete-region from to)
+	(smart-remove-remaining-spaces (min from to)
+				       (eq (point) (max from to))))
     (delete-region from to)))
 
 (defun smart-remove-remaining-spaces (pos point-at-end)

@@ -806,36 +806,32 @@ behavior)."
 (defun osx-key-mode-mouse-3 (event &optional prefix)
   "Run command specified in `osx-key-mode-mouse-3-behavior'."
   (interactive "@e \nP")
-  ;; we need to bind last-command to the target command
-  ;; so mouse-save-then-kill is not confused and recognizes
-  ;; a double click.
-  (let ((cmd #'mouse-save-then-kill))
-    (unless (or (null osx-key-mode-mouse-3-behavior)
-		(eq osx-key-mode-mouse-3-behavior 'aquamacs-popup-context-menu))
-      (let ((last-command (if (or (eq last-command 'osx-key-mode-mouse-3)
-				  (eq last-command 'osx-key-mode-down-mouse-3))
-			      osx-key-mode-mouse-3-behavior
-			    last-command)))
-	(apply osx-key-mode-mouse-3-behavior 
-	       event prefix)))))
+  (unless (or (null osx-key-mode-mouse-3-behavior)
+	      (eq osx-key-mode-mouse-3-behavior 'aquamacs-popup-context-menu))
+    (setq this-command osx-key-mode-mouse-3-behavior) ;; this will set last-command
+    ;; mouse-save-then-kill requires last-command:
+    (apply osx-key-mode-mouse-3-behavior
+	   event prefix))
+  )
 
 (defun osx-key-mode-down-mouse-3 (event &optional prefix)
   "Activate context menu, when `osx-key-mode-mouse-3-behavior' is
 set to `aquamacs-popup-context-menu' or nil"
   (interactive "@e \nP")
-  (if (or
-	 (eq osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu)
-	 (not osx-key-mode-mouse-3-behavior))
-    (aquamacs-popup-context-menu event prefix)))
+  (if (or (eq osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu)
+	  (not osx-key-mode-mouse-3-behavior))
+      (aquamacs-popup-context-menu event prefix)
+    ;; else: pretend this command never happened
+    ;; (for the benefit of mouse-save-then-kill)
+    (setq this-command last-command
+	  last-command nil)))
 
 (defun make-osx-key-low-priority-map (&optional command-key)
 
   (if command-key
       (setq osxkeys-command-key command-key)
     (if ns-command-modifier
-	(setq osxkeys-command-key ns-command-modifier)
-      )
-    )
+	(setq osxkeys-command-key ns-command-modifier)))
   (let ((map (make-sparse-keymap)))
 
     (define-key map `[(,osxkeys-command-key meta 49)] 'aquamacs-delete-other-windows) ; 49='1'
