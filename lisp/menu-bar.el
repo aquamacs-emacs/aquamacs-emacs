@@ -502,14 +502,22 @@ for the definition of the menu frame."
 (defun clipboard-kill-ring-save (beg end)
   "Copy region to kill ring, and save in the X clipboard."
   (interactive "r")
-  (let ((x-select-enable-clipboard t))
-    (kill-ring-save beg end)))
+  ;; when called with arguments, always execute
+  (if (or (not (eq this-original-command 'clipboard-kill-ring-save))
+	  mark-active (not transient-mark-mode))
+      (let ((x-select-enable-clipboard t))
+	(kill-ring-save beg end))
+    (error "Region is not active.")))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
   (interactive "r")
-  (let ((x-select-enable-clipboard t))
-    (kill-region beg end)))
+  ;; when called with arguments, always execute
+  (if (or (not (eq this-original-command 'clipboard-kill-region))
+	  mark-active (not transient-mark-mode))
+      (let ((x-select-enable-clipboard t))
+	(kill-region beg end))
+    (error "Region is not active.")))
 
 (defun menu-bar-enable-clipboard ()
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
