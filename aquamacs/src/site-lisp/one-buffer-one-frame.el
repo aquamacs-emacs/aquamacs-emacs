@@ -661,13 +661,16 @@ even if it's the only visible frame."
 	 (set-window-dedicated-p (selected-window) nil)
 	 ;; select read-only special buffer in case it gets any input
 	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
+
 	   (with-current-buffer hb
 	     (let ((hf (make-frame (append aquamacs-deleted-frame-position
 					   '((visibility . nil))))))
-	       (switch-to-buffer hb  'norecord)
 	       (select-frame hf)
 	       (raise-frame hf)
-	       (make-frame-invisible hf t)))))
+	       (select-window (frame-first-window hf))
+	       (switch-to-buffer hb  'norecord)
+	       (make-frame-invisible hf t)
+	       ))))
        (delete-frame f t)))))
 
 ;; delete window when buffer is killed

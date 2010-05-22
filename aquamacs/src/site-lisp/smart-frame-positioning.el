@@ -147,6 +147,7 @@ should be used as the interface to this function."
       (setq parameters (assq-delete-all 'top parameters)))
     
     (run-hook-with-args 'smart-frame-positioning-hook f)
+
     (setq newpos (or (smart-fp--get-frame-position-assigned-to-buffer-name (current-buffer))
 		     (if oldframe (find-good-frame-position oldframe f))
 		     (smart-fp--get-frame-position-assigned-to-buffer-type (current-buffer))))
@@ -157,7 +158,6 @@ should be used as the interface to this function."
 			    (cdr-safe (assq key overriding-parms))
 			    'newpos)))
 	    '(left top width height)))
-   
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
@@ -688,7 +688,7 @@ The file is specified in `smart-frame-position-file'."
 	 (pp smart-frame-prior-positions))
      (while (not (eq type (special-display-p (caar pp))))
        (set pp (cdr pp)))
-     (cdr pp))))
+     (cdr (car pp)))))
 
 (defun smart-fp--convert-negative-ordinates (parms)
   "Converts screen ordinates of the form -x to a list (+ -x).
