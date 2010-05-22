@@ -5830,11 +5830,13 @@ ns_term_shutdown (int sig)
 #endif
   FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
 
+  /* the following would be nonstandard on OSX */
+#ifdef NS_IMPL_GNUSTEP
   tem = f->icon_name;
   if (!NILP (tem))
     [win setMiniwindowTitle:
            [NSString stringWithUTF8String: SDATA (tem)]];
-
+#endif NS_IMPL_GNUSTEP
   {
     NSScreen *screen = [win screen];
 
