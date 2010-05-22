@@ -26,7 +26,9 @@
 
 ;;; Commentary:
 
-;; This file provides basic functions used by the AUCTeX modes.
+;; This file provides AUCTeX support for plain TeX as well as basic
+;; functions used by other AUCTeX modes (e.g. for LaTeX, Texinfo and
+;; ConTeXt).
 
 ;;; Code:
 
@@ -171,7 +173,7 @@ the printer has no corresponding command."
      (context-mode) :help "Run ConTeXt until completion")
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ,(if (or window-system (getenv "DISPLAY"))
-	 '("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
+	'("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
 	 :help "Run Text viewer"))
     ("Print" "%p" TeX-run-command t t :help "Print the file")
@@ -445,7 +447,6 @@ string."
     ("%(execopts)" ConTeXt-expand-options)
     ("%S" TeX-source-correlate-expand-options)
     ("%dS" TeX-source-specials-view-expand-options)
-    ("%(Ad)" aquamacs-directory)
     ("%cS" TeX-source-specials-view-expand-client)
     ("%(outpage)" (lambda ()
 		    (if TeX-source-correlate-output-page-function
@@ -1005,21 +1006,11 @@ The following built-in predicates are available:
       ("start" "start \"\" %o")))
 ;; XXX: We need the advice of a Mac OS X user to configure this
 ;; correctly and test it.
-    ((eq system-type 'darwin)
-     '(("xdvi" ("%(o?)xdvi -sourceposition 0none"
-	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
-	       ((paper-a4 paper-portrait) " -paper a4")
-	       ((paper-a4 paper-landscape) " -paper a4r")
-	       ((paper-a5 paper-portrait) " -paper a5")
-	       ((paper-a5 paper-landscape) " -paper a5r")
-	       (paper-b5 " -paper b5")
-	       (paper-letter " -paper us")
-	       (paper-legal " -paper legal")
-	       (paper-executive " -paper 7.25x10.5in")
-	       " %d"))
-       ("open" "open %o")
-       )
-      )
+;;    ((eq system-type 'darwin)
+;;     '(("Preview.app" "open -a Preview.app %o")
+;;       ("Skim" "open -a Skim.app %o")
+;;       ("displayline" "displayline %n %o %b")
+;;       ("open" "open %o")))
    (t
     '(("xdvi" ("%(o?)xdvi"
 	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
@@ -1119,10 +1110,10 @@ restarting Emacs."
       (output-html "start")))
 ;; XXX: We need the advice of a Mac OS X user to configure this
 ;; correctly and test it.
-   ((eq system-type 'darwin)
-    '((output-dvi "open")
-      (output-pdf "open")
-      (output-html "open")))
+;;    ((eq system-type 'darwin)
+;;     '((output-dvi "open")
+;;       (output-pdf "open")
+;;       (output-html "open")))
    (t
     '(((output-dvi style-pstricks) "dvips and gv")
       (output-dvi "xdvi")
@@ -1135,9 +1126,6 @@ defined in `TeX-view-predicate-list' or
 `TeX-view-predicate-list-builtin'.  The second element is a
 string referring to the name of a viewer as defined in
 `TeX-view-program-list' or `TeX-view-program-list-builtin'.
-\(Note: Viewers added to `TeX-view-program-list' in the current
-Emacs session will not show up in the customization interface of
-`TeX-view-program-selection' until you restart Emacs.)
 
 When a viewer is called for, the entries are evaluated in turn
 and the viewer related to the first entry all predicates of which
@@ -1395,9 +1383,7 @@ This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
 The return value depends on the value of `TeX-source-correlate-mode'.
 If this is nil, an empty string will be returned."
   (if TeX-source-correlate-mode
-      (if (not TeX-PDF-mode) 
-	  ;;   (eq TeX-source-correlate-method-active 'source-specials))
-	  ;;  on OSX, PDF mode must control this, due to unavailability of viewers.
+      (if (eq TeX-source-correlate-method-active 'source-specials)
 	  (concat TeX-source-specials-tex-flags
 		  (if TeX-source-specials-places
 		      ;; -src-specials=WHERE: insert source specials
@@ -1525,10 +1511,7 @@ Return the full path to the executable if possible."
 		    TeX-source-specials-view-emacsclient-flags)))
     (if (and client-full (file-executable-p client-full))
 	(concat client-full " " options)
-   (concat "\\\"" aquamacs-mac-application-bundle-directory "/Contents/MacOS/bin/" client-base "\\\" " options))))
-
-(defun aquamacs-directory ()
-  aquamacs-mac-application-bundle-directory)
+      (concat client-base " " options))))
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.
@@ -1737,7 +1720,7 @@ output files."
 	 (master (TeX-active-master))
 	 (master-dir (file-name-directory master))
 	 (regexp (concat "\\("
-			 (regexp-quote (file-name-nondirectory master)) "\\|"
+			 (file-name-nondirectory master) "\\|"
 			 (TeX-region-file nil t)
 			 "\\)"
 			 "\\("
@@ -2372,6 +2355,18 @@ FORCE is not nil."
 (defvar TeX-grcl "}" "The TeX group closing character.")
  (make-variable-buffer-local 'TeX-grcl)
 
+(defcustom plain-TeX-enable-toolbar t
+  "Enable TeX tool bar in plain TeX mode."
+  :group 'TeX-tool-bar
+  :type 'boolean)
+
+(defun plain-TeX-maybe-install-toolbar ()
+  "Conditionally install tool bar buttons for plain TeX mode.
+Install tool bar if `plain-TeX-enable-toolbar' is non-nil."
+  (when plain-TeX-enable-toolbar
+    ;; Defined in `tex-bar.el':
+    (TeX-install-toolbar)))
+
 ;;; Symbols
 
 ;; Must be before keymaps.
@@ -2933,6 +2928,95 @@ The algorithm is as follows:
 		(TeX-master-file nil nil t))
 	      (TeX-update-style t)) nil t))
 
+;;; Plain TeX mode
+
+(defcustom plain-TeX-clean-intermediate-suffixes
+  TeX-clean-default-intermediate-suffixes
+  "List of regexps matching suffixes of intermediate files to be deleted.
+The regexps will be anchored at the end of the file name to be matched,
+i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
+  :type '(repeat regexp)
+  :group 'TeX-command)
+
+(defcustom plain-TeX-clean-output-suffixes TeX-clean-default-output-suffixes
+  "List of regexps matching suffixes of output files to be deleted.
+The regexps will be anchored at the end of the file name to be matched,
+i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
+  :type '(repeat regexp)
+  :group 'TeX-command)
+
+(defcustom plain-TeX-mode-hook nil
+  "A hook run in plain TeX mode buffers."
+  :type 'hook
+  :group 'TeX-misc)
+
+;;;###autoload
+(defun TeX-plain-tex-mode ()
+  "Major mode in AUCTeX for editing plain TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{plain-TeX-mode-map}
+
+Entering `plain-tex-mode' calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of plain-TeX-mode-hook."
+  (interactive)
+  (plain-TeX-common-initialization)
+  (setq major-mode 'plain-tex-mode)
+  (use-local-map plain-TeX-mode-map)
+  (easy-menu-add plain-TeX-mode-menu plain-TeX-mode-map)
+  (easy-menu-add plain-TeX-mode-command-menu plain-TeX-mode-map)
+  (setq TeX-base-mode-name "TeX")
+  (setq TeX-command-default "TeX")
+  (setq TeX-sentinel-default-function 'TeX-TeX-sentinel)
+  (add-hook 'tool-bar-mode-on-hook 'plain-TeX-maybe-install-toolbar nil t)
+  (when (if (featurep 'xemacs)
+	    (featurep 'toolbar)
+	  (and (boundp 'tool-bar-mode) tool-bar-mode))
+    (plain-TeX-maybe-install-toolbar))
+  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'plain-TeX-mode-hook)
+  (TeX-set-mode-name))
+
+(defun plain-TeX-common-initialization ()
+  "Common initialization for plain TeX like modes."
+  (VirTeX-common-initialization)
+  (set-syntax-table TeX-mode-syntax-table)
+  (setq paragraph-start
+	(concat
+	 "\\(^[ \t]*$"
+	 "\\|" (regexp-quote TeX-esc) "par\\|"
+	 "^[ \t]*"
+	 (regexp-quote TeX-esc)
+	 "\\("
+	 "begin\\|end\\|part\\|chapter\\|"
+	 "section\\|subsection\\|subsubsection\\|"
+	 "paragraph\\|include\\|includeonly\\|"
+	 "tableofcontents\\|appendix\\|label\\|caption\\|"
+	 "\\[\\|\\]"			; display math delimitors
+	 "\\)"
+	 "\\|"
+	 "^[ \t]*\\$\\$"		; display math delimitor
+	 "\\)" ))
+  (setq paragraph-separate
+	(concat
+	 "[ \t]*"
+	 "\\("
+	 (regexp-quote TeX-esc) "par\\|"
+	 "%\\|"
+	 "$\\|"
+	 "\\$\\$\\|"
+	 (regexp-quote TeX-esc)
+	 "\\("
+	 "begin\\|end\\|label\\|caption\\|part\\|chapter\\|"
+	 "section\\|subsection\\|subsubsection\\|"
+	 "paragraph\\|include\\|includeonly\\|"
+	 "tableofcontents\\|appendix\\|" (regexp-quote TeX-esc)
+	 "\\)"
+	 "\\)"))
+  (setq TeX-header-end (regexp-quote "%**end of header"))
+  (setq TeX-trailer-start (regexp-quote (concat TeX-esc "bye")))
+  (TeX-run-style-hooks "TEX"))
 
 ;;; Hilighting
 
@@ -3248,21 +3332,17 @@ alter the numbering of any ordinary, non-shy groups.")
 
 (defvar plain-TeX-auto-regexp-list
   (let ((token TeX-token-char))
-    `((,(concat "\\\\def\\\\\\(" token "+\\)[^a-zA-Z@]")
-       1 TeX-auto-symbol-check)
-      (,(concat "\\\\let\\\\\\(" token "+\\)[^a-zA-Z@]")
-       1 TeX-auto-symbol-check)
+    `((,(concat "\\\\def\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
+      (,(concat "\\\\let\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
       (,(concat "\\\\font\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
       (,(concat "\\\\chardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
-      (,(concat "\\\\new\\(?:count\\|dimen\\|muskip\\|skip\\)\\\\\\(" token
-		"+\\)[^a-zA-Z@]")
+      (,(concat "\\\\new\\(?:count\\|dimen\\|muskip\\|skip\\)\\\\\\(" token "+\\)[^a-zA-Z@]")
        1 TeX-auto-symbol)
       (,(concat "\\\\newfont{?\\\\\\(" token "+\\)}?") 1 TeX-auto-symbol)
       (,(concat "\\\\typein\\[\\\\\\(" token "+\\)\\]") 1 TeX-auto-symbol)
       ("\\\\input +\\(\\.*[^#%\\\\\\.\n\r]+\\)\\(\\.[^#%\\\\\\.\n\r]+\\)?"
        1 TeX-auto-file)
-      (,(concat "\\\\mathchardef\\\\\\(" token "+\\)[^a-zA-Z@]")
-       1 TeX-auto-symbol)))
+      (,(concat "\\\\mathchardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)))
   "List of regular expression matching common LaTeX macro definitions.")
 
 (defvar TeX-auto-full-regexp-list plain-TeX-auto-regexp-list
@@ -3989,6 +4069,12 @@ Brace insertion is only done if point is in a math construct and
     map)
   "Keymap for common TeX and LaTeX commands.")
 
+(defvar plain-TeX-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map TeX-mode-map)
+    map)
+  "Keymap used in plain TeX mode.")
+
 (defun TeX-mode-specific-command-menu (mode)
   "Return a Command menu specific to the major MODE."
   ;; COMPATIBILITY for Emacs < 21
@@ -4128,6 +4214,13 @@ Brace insertion is only done if point is in a math construct and
       :help "Hide or show the item containing point"]))
    "Menu definition for commands from tex-fold.el.")
 
+
+;;; Menus for plain TeX mode
+(easy-menu-define plain-TeX-mode-command-menu
+    plain-TeX-mode-map
+    "Command menu used in TeX mode."
+    (TeX-mode-specific-command-menu 'plain-tex-mode))
+
 (defvar TeX-customization-menu nil)
 
 (defvar TeX-common-menu-entries
@@ -4165,6 +4258,91 @@ Brace insertion is only done if point is in a math construct and
      ["Report AUCTeX Bug" TeX-submit-bug-report
       :help ,(format "Problems with AUCTeX %s? Mail us!"
 		     AUCTeX-version)])))
+
+(defvar plain-TeX-menu-entries
+  (TeX-menu-with-help
+   `(["Macro..." TeX-insert-macro
+      :help "Insert a macro and possibly arguments"]
+     ["Complete" TeX-complete-symbol
+      :help "Complete the current macro"]
+     "-"
+     ("Insert Font"
+      ["Emphasize"  (TeX-font nil ?\C-e) :keys "C-c C-f C-e"]
+      ["Bold"       (TeX-font nil ?\C-b) :keys "C-c C-f C-b"]
+      ["Typewriter" (TeX-font nil ?\C-t) :keys "C-c C-f C-t"]
+      ["Small Caps" (TeX-font nil ?\C-c) :keys "C-c C-f C-c"]
+      ["Sans Serif" (TeX-font nil ?\C-f) :keys "C-c C-f C-f"]
+      ["Italic"     (TeX-font nil ?\C-i) :keys "C-c C-f C-i"]
+      ["Slanted"    (TeX-font nil ?\C-s) :keys "C-c C-f C-s"]
+      ["Roman"      (TeX-font nil ?\C-r) :keys "C-c C-f C-r"]
+      ["Calligraphic" (TeX-font nil ?\C-a) :keys "C-c C-f C-a"])
+     ("Replace Font"
+      ["Emphasize"  (TeX-font t ?\C-e) :keys "C-u C-c C-f C-e"]
+      ["Bold"       (TeX-font t ?\C-b) :keys "C-u C-c C-f C-b"]
+      ["Typewriter" (TeX-font t ?\C-t) :keys "C-u C-c C-f C-t"]
+      ["Small Caps" (TeX-font t ?\C-c) :keys "C-u C-c C-f C-c"]
+      ["Sans Serif" (TeX-font t ?\C-f) :keys "C-u C-c C-f C-f"]
+      ["Italic"     (TeX-font t ?\C-i) :keys "C-u C-c C-f C-i"]
+      ["Slanted"    (TeX-font t ?\C-s) :keys "C-u C-c C-f C-s"]
+      ["Roman"      (TeX-font t ?\C-r) :keys "C-u C-c C-f C-r"]
+      ["Calligraphic" (TeX-font t ?\C-a) :keys "C-u C-c C-f C-a"])
+     ["Delete Font" (TeX-font t ?\C-d) :keys "C-c C-f C-d"]
+     "-"
+     ["Comment or Uncomment Region" TeX-comment-or-uncomment-region
+      :help "Comment or uncomment the currently selected region"]
+     ["Comment or Uncomment Paragraph" TeX-comment-or-uncomment-paragraph
+      :help "Comment or uncomment the paragraph containing point"]
+     ,TeX-fold-menu
+     "-" . ,TeX-common-menu-entries)))
+
+(easy-menu-define plain-TeX-mode-menu
+    plain-TeX-mode-map
+    "Menu used in plain TeX mode."
+    (cons "TeX" plain-TeX-menu-entries))
+
+;;; AmSTeX
+
+(defvar AmSTeX-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map TeX-mode-map)
+    map)
+  "Keymap used in `AmSTeX-mode'.")
+
+;; Menu for AmSTeX mode
+(easy-menu-define AmSTeX-mode-command-menu
+    AmSTeX-mode-map
+    "Command menu used in AmsTeX mode."
+    (TeX-mode-specific-command-menu 'ams-tex-mode))
+
+(easy-menu-define AmSTeX-mode-menu
+  AmSTeX-mode-map
+  "Menu used in AMS-TeX mode."
+  (cons "AmS-TeX" plain-TeX-menu-entries))
+
+;;;###autoload
+(defun ams-tex-mode ()
+  "Major mode in AUCTeX for editing AmS-TeX files.
+See info under AUCTeX for documentation.
+
+Special commands:
+\\{AmSTeX-mode-map}
+
+Entering AmS-tex-mode calls the value of `text-mode-hook',
+then the value of `TeX-mode-hook', and then the value
+of `AmS-TeX-mode-hook'."
+  (interactive)
+  (plain-TeX-common-initialization)
+  (setq major-mode 'ams-tex-mode)
+  (use-local-map AmSTeX-mode-map)
+
+  ;; Menu
+  (easy-menu-add AmSTeX-mode-menu AmSTeX-mode-map)
+  (easy-menu-add AmSTeX-mode-command-menu AmSTeX-mode-map)
+
+  (setq TeX-base-mode-name "AmS-TeX")
+  (setq TeX-command-default "AmSTeX")
+  (TeX-run-mode-hooks 'text-mode-hook 'TeX-mode-hook 'AmS-TeX-mode-hook)
+  (TeX-set-mode-name))
 
 
 ;;; Verbatim constructs

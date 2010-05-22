@@ -125,7 +125,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images/")))
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -147,15 +147,13 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator)
-      "--"
   (let* ((str (upcase-initials (symbol-name symbol)))
 	 (str2))
     (dolist (i (append str nil))
       (if (eq i 45)			; if dash, push space
 	  (push 32 str2)
 	(push i str2)))			; else push identical
-      (concat (nreverse str2)))))
+    (concat (nreverse str2))))
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -505,10 +503,10 @@ documentation of function `toolbarx-process-symbol')."
 					    ; (defined with `defimage')
 			      (consp (eval val))
 			      (eq (car (eval val)) 'image))
-			 (and (sequencep val) ; or list or vector with 4 strings or
+			 (and (listp val) ; or list with 4 strings or
 					  ; image descriptors
 			      (= (length val) 4)
-			      (dolist (i (append val nil) all-obj-ok)
+			      (dolist (i val all-obj-ok)
 				(setq all-obj-ok
 				      (and all-obj-ok
 					   (or (stringp i)
@@ -631,7 +629,6 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-	    (:title	      toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
 	    (:help	      toolbarx-test-string-or-nil)
@@ -1123,15 +1120,14 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
   ;; following should hopefully get us to all images ultimately.
 
   (let ((file))
-    (dolist (i '("" ".png" ".xpm" ".xbm" ".pbm"))
+    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type png :file ,(concat image ".png"))
-		      (:type xpm :file ,(concat image ".xpm"))
+	(find-image `((:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
 
@@ -1242,8 +1238,7 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-				(or (cadr (memq :title filtered-props)) 
-				    (toolbarx-make-string-from-symbol symbol))
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)

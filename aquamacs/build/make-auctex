@@ -1,16 +1,16 @@
 #!/bin/sh
 
-echo "Call this with the auctex source distribution as current directory."
+echo "Call this from within the auctex source distribution."
 
-AQUAMACS_ROOT=~/Projects/Aquamacs/aquamacs
-EMACS=/Applications/Aquamacs\ Emacs.app/Contents/MacOS/Aquamacs\ Emacs
+AQUAMACS_ROOT=~/ae.git/aquamacs
+EMACS=/Applications/Aquamacs.app/Contents/MacOS/Aquamacs
 
 # this assumes an Aquamacs install in /Applications
 
 # curl -O http://ftp.gnu.org/pub/gnu/auctex/auctex-11.84.tar.gz
 # cd ../../auctex*
-tar xzf auctex*.tar.gz
-cd auctex-*
+# tar xzf auctex*.tar.gz
+# cd auctex-*
 ./configure --prefix="${AQUAMACS_ROOT}/site-lisp/edit-modes/" --with-emacs="${EMACS}" --with-lispdir="${AQUAMACS_ROOT}/src/site-lisp/edit-modes" --without-texmf-dir
 
 make
@@ -21,3 +21,6 @@ cp doc/preview-latex.info "${AQUAMACS_ROOT}/src/site-lisp/edit-modes/info/"
 
 make install
 
+# manual fixes:
+# set TeX-auto-global to nil in tex-site.
+# add aquamacs-specific patches

@@ -779,14 +779,10 @@ Parameters NAME and FILE are ignored."
 (defun TeX-run-discard-or-function (name command file)
   "Start COMMAND as process or execute it as a Lisp function.
 If run as a process, the output is discarded.  COMMAND is
-expected to be a string.  NAME and FILE are ignored.
-COMMAND may be a string containing a lisp expression
-to be evaluated."
-  (let ((expr (car (read-from-string command))))
-    (if (or (functionp expr) 
-	    (and (listp expr) (functionp (car expr))))
+expected to be a string.  NAME and FILE are ignored."
+  (if (functionp (car (read-from-string command)))
       (TeX-run-function name command file)
-    (TeX-run-discard name command file))))
+    (TeX-run-discard name command file)))
 
 (defun TeX-run-ispell-on-document (command ignored name)
   "Run ispell on all open files belonging to the current document.
