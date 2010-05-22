@@ -634,6 +634,10 @@ even if it's the only visible frame."
 
 (defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
+  ;; this function takes are to create a hidden frame that can receive
+  ;; keyboard input while all other frames are iconified or deleted
+  ;; The hidden frame shows a special, read-only *empty* buffer.
+
   ;; are we deleting a non-special frame?
   (let ((f (or frame (selected-frame))))
     ;; HACK: the buffer has been killed already at this point
@@ -649,7 +653,9 @@ even if it's the only visible frame."
     (condition-case nil
 	;; do not delete the last visible frame if there are others hidden:
 	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
-	(delete-frame (or frame (selected-frame)))
+	(progn (delete-frame (or frame (selected-frame)))
+	       (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
+		 (error)))
       (error
        ;; we're doing delete-frame later
        ;;(run-hook-with-args 'delete-frame-functions f)
@@ -663,6 +669,7 @@ even if it's the only visible frame."
 	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
 
 	   (with-current-buffer hb
+	     ;; to do: we should re-use a hidden frame if it exists.
 	     (let ((hf (make-frame (append aquamacs-deleted-frame-position
 					   '((visibility . nil))))))
 	       (select-frame hf)
@@ -671,7 +678,8 @@ even if it's the only visible frame."
 	       (switch-to-buffer hb  'norecord)
 	       (make-frame-invisible hf t)
 	       ))))
-       (delete-frame f t)))))
+       (if (frame-live-p f)
+	   (delete-frame f t))))))
 
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for
@@ -902,15 +910,15 @@ The buffer contains unsaved changes which will be lost if you discard them now."
      (lambda () (setq one-buffer-one-frame-inhibit nil)))))
 
 
-(defadvice iconify-frame (after leave-hidden-frame
-				(&rest args) activate compile)
+(defun aquamacs-handle-frame-iconified (&optional frame)
+  (interactive)
   (when (or (null (visible-frame-list))
-	  (equal (visible-frame-list) (list (or (car args) (selected-frame)))))
+	  (equal (visible-frame-list) (list (or frame (selected-frame)))))
     ;; if no other frame visible, create hidden backup frame to receive keyboard input
     (let ((bup-frame
 	   (make-frame
 	    (append
-	     (mapcar (lambda (x) (cons x (frame-parameter (car args) x)))
+	     (mapcar (lambda (x) (cons x (frame-parameter frame x)))
 		     '(top left width height))
 	     '((name . "*empty*") (visibility . nil))))))
       (select-frame bup-frame)
@@ -919,7 +927,19 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 	    (one-buffer-one-frame nil)
 	    (pop-up-frames nil)
 	    (tabbar-mode nil))
-      (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))))))
+      (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))
+      (make-frame-invisible (selected-frame))))))
+
+;; usually, iconify-frame is bound to 'ignore
+(define-key special-event-map [iconify-frame] 'aquamacs-handle-frame-iconified)
+
+;; other Lisp code doesn't cause iconify-frame to be sent:
+
+(defadvice iconify-frame (after leave-hidden-frame
+				(&rest args) activate compile)
+  (aquamacs-handle-frame-iconified (car args)))
+
+
 
 ;; (defadvice delete-window (before inhibit-one-buffer-one-frame 
 ;; 				(&rest args) activate compile)
