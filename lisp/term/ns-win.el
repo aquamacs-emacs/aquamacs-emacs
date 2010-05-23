@@ -942,13 +942,14 @@ unless the current buffer is a scratch buffer."
  If FRAME is nil, the change applies to the selected frame."
   (interactive)
   (when (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
-      (tool-bar-setup (or frame (selected-frame)))
-      (redisplay t))
+      (tool-bar-setup (or frame (selected-frame))))
   (modify-frame-parameters
    (or frame (selected-frame))
    (list (cons 'tool-bar-lines
 	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-		   0 1)) )))
+		   0 1)) ))
+  ;; trigger update of toolbar
+  (force-mode-line-update))
 
 
 ;;;; Dialog-related functions.
