@@ -1331,7 +1331,13 @@ Items in this list are always Lisp symbols.*/)
   NSToolbarItem *item = nil;
   while (item = [itemEnum nextObject])
     item_identifiers = Fcons (([item itemIdentifier] == NSToolbarFlexibleSpaceItemIdentifier)
-			      ? Qnil : intern ([[item itemIdentifier] UTF8String]),
+			      ? Qnil :
+			      /* Lisp symbol extracted from identifier string.
+				 ID string contains image hash as well.*/
+			      intern ([([[item itemIdentifier] hasPrefix: @"0x"] == YES ?
+					[[item itemIdentifier] substringFromIndex:10] :
+					[item itemIdentifier])
+					UTF8String]),
 			      item_identifiers);
   UNBLOCK_INPUT;
   return item_identifiers;
@@ -1459,8 +1465,15 @@ Items in this list are always Lisp symbols.*/)
 			     key: (char *)key
 		       labelText: (char *)label;
 {
-  /* 1) come up w/identifier */
-  NSString *identifier = [NSString stringWithCString: key];
+  /* 1) come up w/identifier:
+     The identifier consists of 8 chars of hash plus the Lisp key
+     so that the Lisp key can be easiliy extracted.
+     We must include the image and text hashes so that the toolbar will pick up changes.
+  */
+  NSString *label_str = [NSString stringWithCString: label];
+  NSString *help_str = [NSString stringWithCString: help];
+  NSString *identifier = [NSString stringWithFormat: @"0x%08lX%s",
+				   ([img hash] + [label_str hash] + [help_str hash]) & 0xFFFFFFFF, key];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1473,9 +1486,9 @@ Items in this list are always Lisp symbols.*/)
 	 or in Emacs' image cache. Use (clear-image-cache t) to reproduce. */
       [item setImage: [[img copy] autorelease]];
       //img->refCount++; /* maybe better to copy the image? */
-      [item setToolTip: [NSString stringWithCString: help]];
-      [item setLabel: [NSString stringWithCString: label]];
-      [item setPaletteLabel: [NSString stringWithCString: label]];
+      [item setToolTip: help_str];
+      [item setLabel: label_str];
+      [item setPaletteLabel: label_str];
       [item setTarget: emacsView];
       [item setAction: @selector (toolbarClicked:)];
     }
