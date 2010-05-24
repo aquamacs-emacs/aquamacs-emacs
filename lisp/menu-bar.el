@@ -1825,26 +1825,29 @@ Buffers menu is regenerated."
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.
-	 (when (cdr frames)
-	   (let* ((frames-vec (make-vector (length frames) nil))
-                  (frames-menu
-                   (cons 'keymap
-                         (list "Select Frame" frames-vec)))
-                  (i 0))
-             (dolist (frame frames)
-               (aset frames-vec i
-                     (nconc
-                      (list
-                       (frame-parameter frame 'name)
-                       (cons nil nil))
-                      `(lambda ()
-                         (interactive) (menu-bar-select-frame ,frame))))
-               (setq i (1+ i)))
-	     ;; Put it after the normal buffers
-	     (setq buffers-menu
-		   (nconc buffers-menu
-			  `((frames-separator "--")
-			    (frames menu-item "Frames" ,frames-menu))))))
+	 (let* ((frames-vec (make-vector (length frames) nil))
+		(frames-menu
+		 (cons 'keymap
+		       (list "Select Frame" frames-vec)))
+		(i 0))
+	   (dolist (frame frames)
+	     (let ((name (frame-parameter frame 'name)))
+	       (when (or (frame-visible-p frame)
+			 (not (and (> (length name) 0)
+				   (string= (substring name 0 1) " "))))
+		 (aset frames-vec i
+		       (nconc
+			(list
+			 (frame-parameter frame 'name)
+			 (cons nil nil))
+			`(lambda ()
+			   (interactive) (menu-bar-select-frame ,frame))))
+		 (setq i (1+ i)))))
+	   ;; Put it after the normal buffers
+	   (setq buffers-menu
+		 (nconc buffers-menu
+			`((frames-separator "--")
+			  (frames menu-item "Frames" ,frames-menu :enable ,(> i 1) )))))
 
 	 ;; Add in some normal commands at the end of the menu.  We use
 	 ;; the copy cached in `menu-bar-buffers-menu-command-entries'
