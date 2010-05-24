@@ -8194,7 +8194,10 @@ parse_menu_item (item, inmenubar)
 	if (NILP (keys))
 	  keys = Fwhere_is_internal (def, Qnil, Qt, Qnil, Qnil);
 
-	if (!NILP (keys))
+	if (!NILP (keys)
+	    && !(VECTORP (keys)
+		 && SYMBOLP (AREF (keys, 0))))
+	  /* do not show event symbols in menu */
 	  {
 	    tem = Fkey_description (keys, Qnil);
 	    if (CONSP (prefix))
