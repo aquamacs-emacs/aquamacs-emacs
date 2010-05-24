@@ -629,7 +629,8 @@ even if it's the only visible frame."
   (unless (buffer-live-p aquamacs-last-frame-empty-buffer)
     (setq aquamacs-last-frame-empty-buffer (generate-new-buffer " *empty*"))
     (with-current-buffer aquamacs-last-frame-empty-buffer
-      (setq buffer-read-only t)))
+      (setq buffer-read-only t)
+      (setq header-line-format nil)))
   aquamacs-last-frame-empty-buffer)
 
 (defvar aquamacs-last-frame-empty-frame nil)
