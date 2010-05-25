@@ -291,7 +291,7 @@ Otherwise, leave it to Skim.")
   "Display current output file as PDF at LINE (as in file SOURCE).
 Calls `aquamacs-tex-pdf-viewer' to display the PDF file using the
 Skim AppleScript protocol."
-  (let ((full-file-name 
+  (let* ((full-file-name 
 	 (expand-file-name
 	  ;; as in TeX-view
 	  ;; C-c C-c view uses %o (from TeX-expand-list), which
@@ -300,11 +300,11 @@ Skim AppleScript protocol."
 	  default-directory))
 	(full-source-name
 	 (expand-file-name 
-	  source 
-	  default-directory)))
-  (do-applescript
-  (format 
- "
+	  source ;; this is relative to the master 
+	  (file-name-directory full-file-name))))
+    (do-applescript
+     (format 
+      "
  set theSink to POSIX file \"%s\" 
  set theSource to POSIX file \"%s\" 
  tell application \"%s\" 
@@ -312,13 +312,14 @@ Skim AppleScript protocol."
      open theSink 
      tell front document to go to TeX line %d from theSource%s
   end tell
-" full-file-name full-source-name aquamacs-tex-pdf-viewer line
-;; do not say "showing reading bar false" so users can override in future
-(cond ((eq t aquamacs-skim-show-reading-bar)
-       " showing reading bar true")
-      ((eq nil aquamacs-skim-show-reading-bar)
-       " showing reading bar false")
-      (t ""))))))
+" 
+      full-file-name full-source-name aquamacs-tex-pdf-viewer line
+      ;; do not say "showing reading bar false" so users can override in future
+      (cond ((eq t aquamacs-skim-show-reading-bar)
+	     " showing reading bar true")
+	    ((eq nil aquamacs-skim-show-reading-bar)
+	     " showing reading bar false")
+	    (t ""))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
