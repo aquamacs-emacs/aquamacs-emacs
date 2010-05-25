@@ -1123,14 +1123,15 @@ The following commands are accepted by the client:
     (delete-process proc)))
 
 (defun server-goto-line-column (line-col)
-  "Move point to the position indicated in LINE-COL.
+"Move point to the position indicated in LINE-COL.
 LINE-COL should be a pair (LINE . COL)."
-  (when line-col
-    (goto-char (point-min))
-    (forward-line (1- (car line-col)))
-    (let ((column-number (cdr line-col)))
-      (when (> column-number 0)
-        (move-to-column (1- column-number))))))
+(when line-col
+  (deactivate-mark)
+  (goto-char (point-min))
+  (forward-line (1- (car line-col)))
+  (let ((column-number (cdr line-col)))
+    (when (> column-number 0)
+      (move-to-column (1- column-number))))))
 
 (defun server-visit-files (files proc &optional nowait)
   "Find FILES and return a list of buffers created.
