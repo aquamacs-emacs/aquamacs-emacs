@@ -1655,7 +1655,7 @@ capitalized in the same way. */)
   NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
   int arrayCount = [guesses count];
   int i;
-  for (i = 0; i < arrayCount; i++) {
+  for (i = arrayCount-1; i >= 0; i--) {
     // build Lisp list of strings
     retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
 		    retval);
