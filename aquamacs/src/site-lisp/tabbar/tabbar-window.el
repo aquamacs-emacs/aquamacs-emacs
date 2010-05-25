@@ -117,9 +117,10 @@ displayed buffer.  Result is an alist of alists."
     window-id))
 
 
-(defvar tabbar-display-bug-workaround t
+(defvar tabbar-display-bug-workaround nil
 "Should tabbar work around a display bug?
-The bug leaves horizontal lines when the window is split.")
+The bug leaves horizontal lines when the window is split.
+Comes with side-effects (e.g., tabbar blinking in edebug).")
 ; (setq tabbar-display-bug-workaround nil)
 
 (defun tabbar-window-alist-cleanup ()
