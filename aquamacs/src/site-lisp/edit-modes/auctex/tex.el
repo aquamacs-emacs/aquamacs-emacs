@@ -1008,8 +1008,8 @@ The following built-in predicates are available:
 ;; XXX: We need the advice of a Mac OS X user to configure this
 ;; correctly and test it.
     ((eq system-type 'darwin)
-     '(("xdvi" ("%(o?)xdvi -sourceposition 0none"
-	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
+     '(("xdvi" ("%(o?)xdvi -editor \"%cS\" -sourceposition 0none"
+	       (mode-io-correlate " -sourceposition \"%n %b\"")
 	       ((paper-a4 paper-portrait) " -paper a4")
 	       ((paper-a4 paper-landscape) " -paper a4r")
 	       ((paper-a5 paper-portrait) " -paper a5")
