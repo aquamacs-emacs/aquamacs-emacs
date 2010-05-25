@@ -438,7 +438,9 @@ the current window is switched to the new buffer."
    	(setq ad-return-value 
 	      ad-do-it)
 	(unless (frame-visible-p (selected-frame))
-	  (make-frame-visible (selected-frame))))))
+	  ;; make sure we don't make *empty* visible
+	  (if (not (string= (substring (get-bufname (car args)) 0 1) " "))
+	      (make-frame-visible (selected-frame)))))))
 
 ;; (select-window wts)
 
@@ -688,11 +690,13 @@ even if it's the only visible frame."
 	   (with-current-buffer hb
 	     ;; to do: we should re-use a hidden frame if it exists.
 	     (let ((hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+	       (if (and (not (eq f hf)) (frame-live-p f))
+		   (delete-frame f t))
 	       (select-window (frame-first-window hf))
 	       (switch-to-buffer hb  'norecord)
+	       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
 	       (make-frame-invisible hf t)))))
-       (if (frame-live-p f)
-	   (delete-frame f t))))))
+       ))))
 
 
 (defun aquamacs-handle-frame-iconified (&optional frame)
@@ -896,7 +900,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 	      (select-window wind)
 	      (aquamacs-delete-window wind) ) ) ) ) ) ) ) )   
 
-(if (running-on-a-mac-p)
+(when (running-on-a-mac-p)
 (defun handle-delete-frame (event)
   "Handle delete-frame events from the X server."
   (interactive "e")
@@ -922,7 +926,22 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 		       (eq (window-buffer) delb)))))) 
   ;; needed due to bug in main event loop (first mouse event
   ;; is interpreted with wrong current buffer)
-  (set-buffer (window-buffer (selected-window)))))
+  (set-buffer (window-buffer (selected-window))))
+
+;; To Do: 
+(defun handle-ns-application-activated ()
+  (interactive)
+  (unless (visible-frame-list)
+    (let ((list (frame-list))) 
+      (while list      
+	(when (frame-iconified-p (car list))
+	  (make-frame-visible (car list))
+	  (select-frame-set-input-focus (car list))
+	  (setq list))
+	(setq list (cdr list))))))
+(define-key special-event-map [ns-application-activated] 'handle-ns-application-activated)
+)
+
 
   
 

@@ -686,8 +686,8 @@ The file is specified in `smart-frame-position-file'."
 	  (if (equal " *empty*" (buffer-name buffer)) nil
 	    (special-display-p (buffer-name buffer))))
 	 (pp smart-frame-prior-positions))
-     (while (not (eq type (special-display-p (caar pp))))
-       (set pp (cdr pp)))
+     (while (and pp (not (eq type (special-display-p (caar pp)))))
+       (setq pp (cdr pp)))
      (cdr (car pp)))))
 
 (defun smart-fp--convert-negative-ordinates (parms)
