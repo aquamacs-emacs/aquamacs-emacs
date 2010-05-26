@@ -372,6 +372,7 @@ typedef unsigned int NSUInteger;
 #define KEY_NS_SPELLING_CHANGE         ((1<<28)|(0<<16)|21)
 #define KEY_NS_APPLICATION_ACTIVATED   ((1<<28)|(0<<16)|90)
 #define KEY_NS_APPLICATION_OPEN_UNTITLED ((1<<28)|(0<<16)|91)
+#define KEY_NS_APPLICATION_REOPEN   ((1<<28)|(0<<16)|92)
 #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
 #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
 #define KEY_NS_TOOLBAR_CUSTOMIZED      ((1<<28)|(0<<16)|132)

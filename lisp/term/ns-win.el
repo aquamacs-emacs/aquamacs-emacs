@@ -316,6 +316,7 @@ The properties returned may include `top', `left', `height', and `width'."
 	     (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
 	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
 	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
+	     (cons (logior (lsh 0 16)  92) 'ns-application-reopen)
 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only

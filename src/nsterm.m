@@ -4550,10 +4550,10 @@ ns_term_shutdown (int sig)
   if (!emacs_event)
     return;
   emacs_event->kind = NS_NONKEY_EVENT;
-  emacs_event->code = KEY_NS_APPLICATION_ACTIVATED;
+  emacs_event->code = KEY_NS_APPLICATION_REOPEN;
   EV_TRAILER ((id)nil);
 
-  return NO;
+  return YES;
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification

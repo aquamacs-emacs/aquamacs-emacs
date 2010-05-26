@@ -713,6 +713,7 @@ even if it's the only visible frame."
 	    (pop-up-frames nil)
 	    (tabbar-mode nil))
       (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))
+      (make-frame-visible (selected-frame)) ; HACK: must do this first, presumably to convince NS to make it key.
       (make-frame-invisible (selected-frame))))))
 
 ;; usually, iconify-frame is bound to 'ignore
@@ -929,7 +930,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
   (set-buffer (window-buffer (selected-window))))
 
 ;; To Do: 
-(defun handle-ns-application-activated ()
+(defun handle-ns-application-reopen ()
   (interactive)
   (unless (visible-frame-list)
     (let ((list (frame-list))) 
@@ -939,7 +940,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 	  (select-frame-set-input-focus (car list))
 	  (setq list))
 	(setq list (cdr list))))))
-(define-key special-event-map [ns-application-activated] 'handle-ns-application-activated)
+(define-key special-event-map [ns-application-reopen] 'handle-ns-application-reopen)
 )
 
 
