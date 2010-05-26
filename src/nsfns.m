@@ -1654,12 +1654,10 @@ capitalized in the same way. */)
   Lisp_Object retval = Qnil;
   NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
   int arrayCount = [guesses count];
-  int i;
-  for (i = arrayCount-1; i >= 0; i--) {
-    // build Lisp list of strings
+  int i = arrayCount;
+  while (--i >= 0)
     retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
 		    retval);
-  }
   UNBLOCK_INPUT;
   return retval;
 }
