@@ -542,9 +542,41 @@ Note that AUCTeX, as it comes with Aquamacs, is configured to compile documents 
 
 When editing \LaTeX files, you will often need to view the compiled results. Apple's Preview.app can view PDF files. But for regular use you may prefer a program like \emph{Skim} which has features specifically supporting \LaTeX editing.  Skim is available here:  \url{http://skim-app.sourceforge.net/} .  Skim can automatically reload PDFs after every they are recompiled. It also includes a configuration preset to allow it to jump back and forth between Aquamacs and Skim, showing the documents at the corrsponding locations.  An up-to-date LaTeX distribution such as MacTeX 2009 is required to use the ``SyncTeX'' feature.  
 
-Clicking on a position in the PDF file in Skim while holding the Command and Shift keys causes Aquamacs to move your cursor to the corresponding point in the underlying source file, opening it if necessary. To enable Skim with SyncTeX, enable Aquamacs in Skim's Preferences dialog.  Aquamacs does not need to be configured further -- it should recognize Skim when it is running (you need to start it yourself).
+Clicking on a position in the PDF file in Skim while holding the
+Command and Shift keys causes Aquamacs to move your cursor to the
+corresponding point in the underlying source file, opening it if
+necessary. To enable Skim with SyncTeX, enable Aquamacs in Skim's
+Preferences dialog.  Aquamacs does not need to be configured further
+-- it should recognize Skim when it is running (you need to start it
+yourself).
 
-Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box with Aquamacs. Using the ``Pdfsync'' package works.
+If you want to be able to  start Skim  from inside Aquamacs, do the following.
+
+  Having opened a Latex buffer in Aquamacs, go
+  ``Menu$>$Latex$>$Customize Auctex'' and then click on "Extend this Menu."
+  Then, once more, go ``Menu$>$Latex$>$Cust\-omize Auctex.'' In the list of
+  items you see now, drag the mouse to "Tex Command," in the list you
+  see then, drag it to "Tex View", and in the list which finally
+  opens, click on "Tex View Program Selection." You now have a
+  customization buffer opened. There, you see a line which contains
+  the words "output-pdf." In the line below that line, you see the
+  word "Viewer." To the right of it, there is a button "Value Menu."
+  Click on it, and choose "Skim" in the list that pops up.
+
+Finally, before you close the customization buffer, do not forget to click on the button "State" and, in the list then popping up, to click on "Save for Further Sessions". That's all.
+
+Now you can use the view icon in the toolbar, or the key combination
+C-c C-v, or ``Menu$>$Command$>$View'' to open Skim with your pdf-output file. 
+
+Furthermore, things are configured so that these three ways to call
+Skim also yield syncing from source to pdf-output. Syncing from source
+to pdf-output can also be obtained by clicking on a position in
+your source-file while holding the Command and Shift keys.
+
+(If you had not rejected Apple's default in the installation of Leopard or Snow Leopard to put X11 on your system, you may also consider to choose xdvi for "output-dvi.")
+
+
+% Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box with Aquamacs. Using the ``Pdfsync'' package works.
 
 
 \subsection{Lisp Support}
