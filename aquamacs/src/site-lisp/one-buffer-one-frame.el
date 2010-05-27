@@ -5,26 +5,25 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.84 2009/03/03 18:47:09 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
-;; GNU Emacs is free software; you can redistribute it and/or modify
+;; Aquamacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Aquamacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
  
 ;; DESCRIPTION:
 ;; 
@@ -891,5 +890,41 @@ The buffer contains unsaved changes which will be lost if you discard them now."
     ad-do-it))
 
 
+;; Commands
+
+(defun aquamacs-join-windows ()
+  "Join windows in selected or all frames.
+If selected frame contains more than one window, join the windows together.
+Otherwise, combine all other frames into selected frame."
+  (interactive)
+  (if tabbar-mode
+      (tabbar-window-merge-windows-in-frame)
+    (delete-other-windows)))
+
+(defun aquamacs-split-window-vertically ()
+  "Split window, select new window.
+Like `split-window-vertically' without further arguments, 
+but select the newly created window."
+  (interactive)
+  (select-window (split-window-vertically)))
+
+(defun raise-next-frame ()
+"Raise the next frame.
+See also `raise-previous-frame' and `other-frame'.
+An Aquamacs-only function."
+  (interactive)
+  (other-frame 1))
+
+(defun raise-previous-frame ()
+"Raise the previous frame.
+See also `raise-next-frame' and `other-frame'.
+An Aquamacs-only function."
+  (interactive)
+  (other-frame -1))
+
+(defun other-previous-window ()
+  "Like `next-window', but in the opposite direction."
+  (interactive)
+  (other-window -1))
 
 (provide 'one-buffer-one-frame)

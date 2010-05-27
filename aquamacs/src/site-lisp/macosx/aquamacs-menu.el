@@ -1099,12 +1099,12 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
     `(menu-item "Zoom" ,menu-bar-zoom-menu))
 
 (define-key menu-bar-window-extras-menu [one-window]
-  `(menu-item "Remove Splits" 
-	      aquamacs-delete-other-windows
+  `(menu-item "Join Windwos"
+	      aquamacs-join-windows
 	      :key-sequence [(,osxkeys-command-key 1)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p)
-			   (not (one-window-p t nil)))
+			   (not (one-window-p t 'visible)))
 	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-window-extras-menu [split-window]
   `(menu-item "Split Window" 

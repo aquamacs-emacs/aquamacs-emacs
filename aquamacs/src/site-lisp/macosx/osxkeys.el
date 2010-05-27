@@ -684,39 +684,6 @@ Defaults to nil if the major mode doesn't define a menu."
     newmap))
 
 
-(defun raise-next-frame ()
-"Raise the next frame.
-See also `raise-previous-frame' and `other-frame'.
-An Aquamacs-only function."
-  (interactive)
-  (other-frame 1))
-
-(defun raise-previous-frame ()
-"Raise the previous frame.
-See also `raise-next-frame' and `other-frame'.
-An Aquamacs-only function."
-  (interactive)
-  (other-frame -1))
-
-(defun other-previous-window ()
-  "Like `next-window', but in the opposite direction."
-  (interactive)
-  (other-window -1))
-
-(defun aquamacs-split-window-vertically ()
-  "Split window, select new window.
-Like `split-window-vertically' without further arguments, 
-but select the newly created window."
-  (interactive)
-  (select-window (split-window-vertically)))
-
-(defun aquamacs-delete-other-windows ()
-  "Delete other windows in the selected frame."
-  (interactive)
-  (if tabbar-mode
-      (tabbar-window-merge-windows-in-frame)
-    (delete-other-windows)))
-
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
