@@ -1298,7 +1298,7 @@ If there are no buffers left to create, kill the timer."
         (setq desktop-save-mode nil)))
     (when desktop-save-mode
       (desktop-read)
-      (setq inhibit-startup-screen t))))
+      (setq inhibit-startup-screen t))) t)
 
 (provide 'desktop)
 
