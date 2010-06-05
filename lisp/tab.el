@@ -99,8 +99,14 @@ Return a newly created frame displaying the current buffer."
                 ;; set-window-configuration does not restore the value
                 ;; of point in the current buffer, so record that separately.
                 (point-marker)
-                nil         ;; tab-history-back
-                nil         ;; tab-history-forward
+                nil ;; tab-history-back
+                nil ;; tab-history-forward
+                (delq nil (mapcar
+                           (lambda (b) (and (buffer-live-p b) b))
+                           (frame-parameter frame 'buffer-list)))
+                (delq nil (mapcar
+                           (lambda (b) (and (buffer-live-p b) b))
+                           (frame-parameter frame 'buried-buffer-list)))
                 )))
     ;; FIXME: use `AFTER'.  When nil, use default of custom `tab-after'.
     (modify-frame-parameters
@@ -149,10 +155,16 @@ This function returns TAB, or nil if TAB has been deleted."
          (tab-name (assq 'name (nth 1 tab-param)))
          (tab-new-param (assq tab tab-list)))
     (when tab-param
-      (setcar (cddr tab-param) (current-window-configuration frame))
-      (setcar (cdr (cddr tab-param)) (point-marker))
-      (setcar (cddr (cddr tab-param)) tab-history-back)
-      (setcar (cdr (cddr (cddr tab-param))) tab-history-forward)
+      (setcar (nthcdr 2 tab-param) (current-window-configuration frame))
+      (setcar (nthcdr 3 tab-param) (point-marker))
+      (setcar (nthcdr 4 tab-param) tab-history-back)
+      (setcar (nthcdr 5 tab-param) tab-history-forward)
+      (setcar (nthcdr 6 tab-param)
+              (delq nil (mapcar (lambda (b) (and (buffer-live-p b) b))
+                                (frame-parameter frame 'buffer-list))))
+      (setcar (nthcdr 7 tab-param)
+              (delq nil (mapcar (lambda (b) (and (buffer-live-p b) b))
+                                (frame-parameter frame 'buried-buffer-list))))
       (if tab-name (setcdr tab-name (tab-name frame))))
     (modify-frame-parameters frame (list (cons 'selected-tab tab)))
     (set-window-configuration (nth 2 tab-new-param))
@@ -163,6 +175,14 @@ This function returns TAB, or nil if TAB has been deleted."
       (goto-char (nth 3 tab-new-param)))
     (setq tab-history-back (nth 4 tab-new-param))
     (setq tab-history-forward (nth 5 tab-new-param))
+    (modify-frame-parameters
+     frame (list (cons 'buffer-list
+                       (delq nil (mapcar (lambda (b) (and (buffer-live-p b) b))
+                                         (nth 6 tab-new-param))))))
+    (modify-frame-parameters
+     frame (list (cons 'buried-buffer-list
+                       (delq nil (mapcar (lambda (b) (and (buffer-live-p b) b))
+                                         (nth 7 tab-new-param))))))
     (tab-bar-setup frame)))
 
 (defun delete-tab (&optional tab frame)
