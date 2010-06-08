@@ -8,6 +8,7 @@
 ;;	Scott Bender
 ;;	Christophe de Dinechin
 ;;	Adrian Robert
+;;      David Reitter
 ;; Keywords: terminals
 
 ;; This file is part of GNU Emacs.
@@ -254,7 +255,7 @@ The properties returned may include `top', `left', `height', and `width'."
 ;; Special Nextstep-generated events are converted to function keys.  Here
 ;; are the bindings for them.
 (define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
-(define-key global-map [ns-open-file] 'ns-find-file)
+(define-key global-map [ns-open-file] 'ns-handle-open-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
 (define-key global-map [ns-drag-file] 'ns-handle-drag-file)
 (define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
@@ -751,22 +752,36 @@ prompting.  If file is a directory perform a `find-file' on it."
         (find-file f)
       (push-mark (+ (point) (car (cdr (insert-file-contents f))))))))
 
-(defun ns-handle-drag-file ()
+(defun ns-handle-drag-file (&optional reuse-windows)
+  "Handle one or more dragged files.
+If REUSE-WINDOWS is non-nil, attempt to select existing
+buffers visiting the file in question with `menu-bar-select-buffer'."
   (interactive)
-  (require 'dnd)
   (while (car ns-input-file) 
-    (let* ((event last-input-event)
-	   (window (or (posn-window (event-start event))
-		       (selected-window)))
-	   action)
-      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
-      ;; 	(setq action 'copy))
-      (when (windowp window) (select-window window))
+    (let ((buf (and reuse-windows (find-buffer-visiting (car ns-input-file)))))
       (unwind-protect
-	  (dnd-handle-one-url window action
-			      (concat "file://"
-				      (car ns-input-file)))
+	  (if buf
+	      (menu-bar-select-buffer buf)
+	    (require 'dnd)
+	    (let* ((event last-input-event)
+		   (window (or (posn-window (event-start event))
+			       (selected-window)))
+		   action)
+	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+	      ;; 	(setq action 'copy))
+	      (when (windowp window) (select-window window))
+	      
+	      (dnd-handle-one-url window action
+				  (concat "file://"
+					  (car ns-input-file)))))
 	(setq ns-input-file (cdr ns-input-file))))))
+
+(defun ns-handle-open-file ()
+  "Handle one or more files to be opened.
+Like `ns-handle-drag-file', but reuse windows unless
+`dnd-open-file-other-window' is non-nil."
+  (interactive)
+  (ns-handle-drag-file (not dnd-open-file-other-window)))
 
 (defvar ns-select-overlay nil
   "Overlay used to highlight areas in files requested by Nextstep apps.")
@@ -778,7 +793,7 @@ prompting.  If file is a directory perform a `find-file' on it."
   "Open a buffer containing the file `ns-input-file'.
 Lines are highlighted according to `ns-input-line'."
   (interactive)
-  (ns-find-file)
+  (ns-handle-open-file)
   (cond
    ((and ns-input-line (buffer-modified-p))
     (if ns-select-overlay
@@ -831,71 +846,6 @@ Lines are highlighted according to `ns-input-line'."
      ((string-equal (upcase res) "YES") t)
      ((string-equal (upcase res) "NO")  nil)
      (t (read res)))))
-
-;; nsterm.m
-
-(declare-function ns-read-file-name "nsfns.m"
-		  (prompt &optional dir isLoad init))
-
-;;;; File handling.
-
-(defun ns-open-file-using-panel ()
-  "Pop up open-file panel, and load the result in a buffer."
-  (interactive)
-  ;; Prompt dir defaultName isLoad initial.
-  (setq ns-input-file (ns-read-file-name "Select File to Load" nil t nil))
-  (if ns-input-file
-      (and (setq ns-input-file (list ns-input-file)) (ns-find-file))))
-
-(defun ns-write-file-using-panel ()
-  "Pop up save-file panel, and save buffer in resulting name."
-  (interactive)
-  (let (ns-output-file)
-    ;; Prompt dir defaultName isLoad initial.
-    (setq ns-output-file (ns-read-file-name "Save As" nil nil nil))
-    (message ns-output-file)
-    (if ns-output-file (write-file ns-output-file))))
-
-(defcustom ns-pop-up-frames 'fresh
-  "Non-nil means open files upon request from the Workspace in a new frame.
-If t, always do so.  Any other non-nil value means open a new frame
-unless the current buffer is a scratch buffer."
-  :type '(choice (const :tag "Never" nil)
-                 (const :tag "Always" t)
-                 (other :tag "Except for scratch buffer" fresh))
-  :version "23.1"
-  :group 'ns)
-
-(declare-function ns-hide-emacs "nsfns.m" (on))
-
-(defun ns-find-file ()
-  "Do a `find-file' with the `ns-input-file' as argument."
-  (interactive)
-  (while (car ns-input-file) 
-  (let ((f) (file) (bufwin1) (bufwin2))
-    (setq f (file-truename (car ns-input-file)))
-    (setq ns-input-file (cdr ns-input-file))
-    (setq file (find-file-noselect f))
-    (setq bufwin1 (get-buffer-window file 'visible))
-    (setq bufwin2 (get-buffer-window "*scratch*" 'visibile))
-    (cond
-     (bufwin1
-      (select-frame (window-frame bufwin1))
-      (raise-frame (window-frame bufwin1))
-      (select-window bufwin1))
-     ((and (eq ns-pop-up-frames 'fresh) bufwin2)
-      (ns-hide-emacs 'activate)
-      (select-frame (window-frame bufwin2))
-      (raise-frame (window-frame bufwin2))
-      (select-window bufwin2)
-      (find-file f))
-     (ns-pop-up-frames
-      (ns-hide-emacs 'activate)
-      (let ((pop-up-frames t)) (pop-to-buffer file nil)))
-     (t
-      (ns-hide-emacs 'activate)
-      (find-file f))))))
-
 
 
 ;;;; Frame-related functions.
@@ -1124,7 +1074,7 @@ panel immediately after correcting a word in a buffer."
   "Returns the value of the pasteboard."
   (ns-get-cut-buffer-internal 'PRIMARY))
 
-(declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string))
+(declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string &optional type))
 
 (defun ns-set-pasteboard (string &optional type)
   "Store STRING into the pasteboard of the Nextstep display server.

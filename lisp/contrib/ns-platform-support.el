@@ -36,6 +36,27 @@
 
 ;; Code by Adrian Robert and others.
 
+(declare-function ns-read-file-name "nsfns.m"
+		  (prompt &optional dir isLoad init))
+
+;;;; File handling.
+
+(defun ns-open-file-using-panel ()
+  "Pop up open-file panel, and load the result in a buffer."
+  (interactive)
+  ;; Prompt dir defaultName isLoad initial.
+  (setq ns-input-file (ns-read-file-name "Select File to Load" nil t nil))
+  (if ns-input-file
+      (and (setq ns-input-file (list ns-input-file)) (ns-handle-drag-file))))
+
+(defun ns-write-file-using-panel ()
+  "Pop up save-file panel, and save buffer in resulting name."
+  (interactive)
+  (let (ns-output-file)
+    ;; Prompt dir defaultName isLoad initial.
+    (setq ns-output-file (ns-read-file-name "Save As" nil nil nil))
+    (message ns-output-file)
+    (if ns-output-file
 
 ;; ns-arrange functions contributed
 ;; by Eberhard Mandler <mandler@dbag.ulm.DaimlerBenz.COM>
