@@ -640,12 +640,14 @@ shown in DEST-WINDOW."
 						    (buffer-name buffer)
 						  nil)))))
 				tabset))))
-	   tabs-reordered)))
+	   tabs-reordered))
   ;; remove nils left behind for unsaved buffers
-  (setq tabset-save-list (remove nil tabbar-desktop-saved-tabsets))
-  ;; store list of tab names to restore in desktop's list of global variables
-  (add-to-list 'desktop-globals-to-save 'tabbar-desktop-saved-tabsets)
-  tabbar-desktop-saved-tabsets)
+  (setq tabset-save-list (remove nil tabset-save-list))))
+
+(defvar tabbar-desktop-saved-tabsets nil
+  "List of tabsets, each a list of buffer names represented by tabs in
+one Aquamacs window.  This variable is saved by desktop-save-mode
+for restoration of tab and windows combinations upon relaunch.")
 
 (defun tabbar-desktop-save-tabset-list ()
   (setq tabbar-desktop-saved-tabsets (tabbar-desktop-list-tabsets-to-save))
@@ -653,41 +655,24 @@ shown in DEST-WINDOW."
 
 (defun tabbar-desktop-restore-saved-tabsets ()
   (or tabbar-mode (tabbar-mode 1))
-;;   (tabbar-window-update-tabsets)  ;; taken care of by tabbar-current-tabset
   (when (and (boundp 'tabbar-desktop-saved-tabsets) tabbar-desktop-saved-tabsets)
-  (let* ((tabsets tabbar-desktop-saved-tabsets)
-	 (thiswin-tabs (car tabsets))
-	 (otherwin-tabs (cdr tabsets))
-	 (bname (buffer-name (current-buffer)))
-	 (after-tabs (or (cdr (member bname thiswin-tabs)) thiswin-tabs))
-	 (before-tabs (cdr (member bname (reverse thiswin-tabs)))))
-    ;; for the current window, where current buffer already has a tab,
-    ;;  generate tabs before this one for before-tabs, and after for after-tabs
-    (dolist (bufname before-tabs)
-      (let ((buffer (get-buffer bufname))
-	    (tabset (tabbar-current-tabset t)))
-	;; add at beginning of tabset (in rev. order)
-	(tabbar-window-add-tab tabset buffer)))
-    (dolist (bufname after-tabs)
-      (let ((buffer (get-buffer bufname))
-	    (tabset (tabbar-current-tabset)))
-	(tabbar-window-add-tab tabset buffer t)));;append to end of tabset
-
-    ;; now go through any remaining tabsets; for each, create a new frame;
-    ;;   add tabs in order to end of tabset; remove initial tab
-    (save-selected-window
-      (dolist (tablist otherwin-tabs)
+    (let* ((tabsets (reverse tabbar-desktop-saved-tabsets))
+	   ;; reverse tabset order, so first saved ends up selected
+	   (starting-window (selected-window)))
+      (dolist (tablist tabsets)
 	;; create new frame with blank buffer
 	(new-frame-with-new-scratch t)
-;; 	(tabbar-window-update-tabsets)  ;; taken care of by tabbar-current-tabset
+	;; updating tabsets is taken care of by tabbar-current-tabset
 	(let ((temp-tab (car (tabbar-tabs (tabbar-current-tabset t)))))
 	  ;; create new tabs corresponding to buffer-names in saved list
 	  (dolist (bufname tablist)
 	    (let ((buffer (get-buffer bufname))
 		  (tabset (tabbar-current-tabset)))
 	      (tabbar-window-add-tab tabset buffer t)))
-	  ;; delete tab from blank buffer
-	  (tabbar-close-tab temp-tab)))))))
+	  ;; close blank buffer and its tab
+	  (tabbar-close-tab temp-tab)))
+      ;; delete initial window -- usually *scratch* after startup
+      (delete-window starting-window))))
 
 (defun tabbar-desktop-restore-tabsets-when-idle ()
   (run-with-idle-timer 0 nil 'tabbar-desktop-restore-saved-tabsets)) 
