@@ -12792,7 +12792,8 @@ try_scrolling (window, just_this_one_p, scroll_conservatively,
 	{
 	  clear_glyph_matrix (w->desired_matrix);
 	  ++extra_scroll_margin_lines;
-	  goto too_near_end;
+	  if (extra_scroll_margin_lines < 1000) // workaround bug GH-36
+	    goto too_near_end;
 	}
       rc = SCROLLING_SUCCESS;
     }
