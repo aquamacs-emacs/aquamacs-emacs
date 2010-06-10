@@ -56,7 +56,7 @@
     ;; Prompt dir defaultName isLoad initial.
     (setq ns-output-file (ns-read-file-name "Save As" nil nil nil))
     (message ns-output-file)
-    (if ns-output-file
+    (if ns-output-file (write-file ns-output-file))))
 
 ;; ns-arrange functions contributed
 ;; by Eberhard Mandler <mandler@dbag.ulm.DaimlerBenz.COM>
