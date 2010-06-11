@@ -770,6 +770,19 @@ affects all frames on the same terminal device.  */)
   return frame;
 }
 
+DEFUN ("set-latest-frame", Fset_latest_frame, Sset_latest_frame, 1, 1, 0,
+       doc: /* Make FRAME the last frame in the frame list. */)
+     (frame)
+     Lisp_Object frame;
+{
+  if (NILP (frame))
+    frame = selected_frame;
+  if (!FRAMEP (frame))
+    return Qnil;
+  Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
+  return Qnil;  /* don't return the new frame-list - see Fframe_list */
+}
+
 
 /* Perform the switch to frame FRAME.
 
@@ -869,7 +882,7 @@ do_switch_frame (frame, track, for_deletion, norecord)
 
   selected_frame = frame;
   if (! FRAME_MINIBUF_ONLY_P (XFRAME (selected_frame)))
-    last_nonminibuf_frame = XFRAME (selected_frame);
+    last_nonminibuf_frame = XFRAME (selected_frame);    
 
   Fselect_window (XFRAME (frame)->selected_window, norecord);
 
@@ -4673,6 +4686,7 @@ automatically.  See also `mouse-autoselect-window'.  */);
 
   staticpro (&Vframe_list);
 
+  defsubr (&Sset_latest_frame);
   defsubr (&Sactive_minibuffer_window);
   defsubr (&Sframep);
   defsubr (&Sframe_live_p);
