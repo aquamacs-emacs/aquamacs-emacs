@@ -662,7 +662,7 @@ even if it's the only visible frame."
     ;; HACK: the buffer has been killed already at this point
     ;; so we must consider the frame title instead, which has not been updated yet
     (unless (or (special-display-p (frame-parameter f 'name))
-		(string= (substring (frame-parameter f 'name) 0 1) " "))
+		(if (> (length (frame-parameter f 'name)) 0) (string= (substring (frame-parameter f 'name) 0 1) " ")))
       ;; store frame position for reuse
       (setq aquamacs-deleted-frame-position
 	  `((top . ,(frame-parameter f 'top))
@@ -931,7 +931,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 
 ;; To Do: 
 (defun handle-ns-application-reopen ()
-  (interactive)
+  (interactive) (message "reopen")
   (unless (visible-frame-list)
     (let ((list (frame-list))) 
       (while list      
@@ -941,6 +941,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 	  (setq list))
 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'handle-ns-application-reopen)
+(define-key special-event-map [ns-application-activated] 'ignore)
 )
 
 
