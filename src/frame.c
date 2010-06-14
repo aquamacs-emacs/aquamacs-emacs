@@ -770,19 +770,6 @@ affects all frames on the same terminal device.  */)
   return frame;
 }
 
-DEFUN ("set-latest-frame", Fset_latest_frame, Sset_latest_frame, 1, 1, 0,
-       doc: /* Make FRAME the last frame in the frame list. */)
-     (frame)
-     Lisp_Object frame;
-{
-  if (NILP (frame))
-    frame = selected_frame;
-  if (!FRAMEP (frame))
-    return Qnil;
-  Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
-  return Qnil;  /* don't return the new frame-list - see Fframe_list */
-}
-
 
 /* Perform the switch to frame FRAME.
 
@@ -894,6 +881,13 @@ do_switch_frame (frame, track, for_deletion, norecord)
      the one you're actually typing in.  */
   internal_last_event_frame = Qnil;
 
+  if (NILP (norecord))
+    {
+      BLOCK_INPUT;
+      Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
+      UNBLOCK_INPUT;
+    }
+
   return frame;
 }
 
@@ -915,7 +909,8 @@ This function returns FRAME, or nil if FRAME has been deleted.  */)
      (frame, norecord)
      Lisp_Object frame, norecord;
 {
-  return do_switch_frame (frame, 1, 0, norecord);
+  Lisp_Object retval = do_switch_frame (frame, 1, 0, norecord);
+  return retval;
 }
 
 
@@ -3329,7 +3324,7 @@ x_set_line_spacing (f, new_value, old_value)
   if (NILP (new_value))
     f->extra_line_spacing = 0;
   else if (NATNUMP (new_value))
-    f->extra_line_spacing = XFASTINT (new_value);
+    f->extra_line_spacing = XINT (new_value);
   else
     signal_error ("Invalid line-spacing", new_value);
   if (FRAME_VISIBLE_P (f))
@@ -4686,7 +4681,6 @@ automatically.  See also `mouse-autoselect-window'.  */);
 
   staticpro (&Vframe_list);
 
-  defsubr (&Sset_latest_frame);
   defsubr (&Sactive_minibuffer_window);
   defsubr (&Sframep);
   defsubr (&Sframe_live_p);

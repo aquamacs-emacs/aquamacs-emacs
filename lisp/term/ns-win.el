@@ -232,18 +232,6 @@ The properties returned may include `top', `left', `height', and `width'."
 	 (if (match-string 7 geom)
 	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
-;;; frame switch handling
-
-(defun aquamacs-handle-switch-frame (event)
-  "Handle frame switch.
-Like `handle-switch-frame', but ensure we note the order of frames."
-  (interactive "e")
-  (prog1 (handle-switch-frame event)
-    (set-latest-frame (selected-frame))))
-  
-(define-key global-map [switch-frame] 'aquamacs-handle-switch-frame)
-
-
 ;;;; Keyboard mapping.
 
 ;; These tell read-char how to convert these special chars to ASCII.
