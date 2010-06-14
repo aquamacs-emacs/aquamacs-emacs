@@ -27,7 +27,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
  
 
 (require 'easymenu)
@@ -1099,7 +1099,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
     `(menu-item "Zoom" ,menu-bar-zoom-menu))
 
 (define-key menu-bar-window-extras-menu [one-window]
-  `(menu-item "Join Windwos"
+  `(menu-item "Join Windows"
 	      aquamacs-join-windows
 	      :key-sequence [(,osxkeys-command-key 1)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
