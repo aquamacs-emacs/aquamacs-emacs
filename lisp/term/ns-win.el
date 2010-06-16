@@ -752,36 +752,35 @@ prompting.  If file is a directory perform a `find-file' on it."
         (find-file f)
       (push-mark (+ (point) (car (cdr (insert-file-contents f))))))))
 
-(defun ns-handle-drag-file (&optional reuse-windows)
+(defun ns-handle-drag-file (&optional open-file)
   "Handle one or more dragged files.
-If REUSE-WINDOWS is non-nil, attempt to select existing
-buffers visiting the file in question with `menu-bar-select-buffer'."
+If OPEN-FILE is non-nil, always open the file."
   (interactive)
   (while (car ns-input-file) 
-    (let ((buf (and reuse-windows (find-buffer-visiting (car ns-input-file)))))
+    (let ((uri (concat "file://" (car ns-input-file))))
       (unwind-protect
-	  (if buf
-	      (menu-bar-select-buffer buf)
-	    (require 'dnd)
-	    (let* ((event last-input-event)
-		   (window (or (posn-window (event-start event))
-			       (selected-window)))
-		   action)
-	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
-	      ;; 	(setq action 'copy))
-	      (when (windowp window) (select-window window))
-	      
-	      (dnd-handle-one-url window action
-				  (concat "file://"
-					  (car ns-input-file)))))
-	(setq ns-input-file (cdr ns-input-file))))))
+	  ;; we should really leave it to dnd to 
+	  ;; decide what to do with the file
+	  (require 'dnd)
+	(let* ((event last-input-event)
+	       (window (or (posn-window (event-start event))
+			   (selected-window)))
+	       action)
+	  ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+	  ;; 	(setq action 'copy))
+	  (when (windowp window) (select-window window))
+	  (if open-file
+	      (dnd-open-local-file uri nil)
+	    (dnd-handle-one-url window action
+				uri))))
+      (setq ns-input-file (cdr ns-input-file)))))
 
 (defun ns-handle-open-file ()
   "Handle one or more files to be opened.
 Like `ns-handle-drag-file', but reuse windows unless
 `dnd-open-file-other-window' is non-nil."
   (interactive)
-  (ns-handle-drag-file (not dnd-open-file-other-window)))
+  (ns-handle-drag-file t))
 
 (defvar ns-select-overlay nil
   "Overlay used to highlight areas in files requested by Nextstep apps.")
