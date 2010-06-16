@@ -779,6 +779,8 @@ extern unsigned long ns_get_rgb_color (struct frame *f,
                                        float r, float g, float b, float a);
 extern NSPoint last_mouse_motion_position;
 
+extern Lisp_Object ns_frame_list (void);  /* needed by frame.c */
+
 #ifdef NS_IMPL_GNUSTEP
 extern char gnustep_base_version[];  /* version tracking */
 #endif

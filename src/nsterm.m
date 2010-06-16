@@ -911,6 +911,32 @@ ns_set_terminal_modes (struct terminal *terminal)
    ========================================================================== */
 
 
+Lisp_Object
+ns_frame_list ()
+{
+  Lisp_Object frame_list = Qnil;
+
+  NSEnumerator *e = [[NSApp orderedWindows] reverseObjectEnumerator];
+  NSWindow *win;
+  Lisp_Object frame;
+  struct frame *f;
+
+  while (win = [e nextObject]) {
+    if (! [win isKindOfClass:[EmacsWindow class]])
+      continue;
+
+    f = ((EmacsView *) [((EmacsWindow *) win) delegate])->emacsframe;
+
+    XSETFRAME (frame, f);
+
+    if (!FRAMEP (frame))
+      abort ();
+    frame_list = Fcons (frame, frame_list);
+  }
+  return frame_list;
+}
+
+
 static void
 ns_raise_frame (struct frame *f)
 /* --------------------------------------------------------------------------
@@ -4272,7 +4298,6 @@ ns_term_shutdown (int sig)
       && !strstr (name, "WindowNumber"))
     NSLog (@"notification: '%@'", [notification name]);
 }
-
 
 - (void)sendEvent: (NSEvent *)theEvent
 /* --------------------------------------------------------------------------
