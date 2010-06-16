@@ -1069,6 +1069,7 @@ next_frame (frame, minibuf)
      Lisp_Object frame;
      Lisp_Object minibuf;
 {
+  Lisp_Object frame_list;
   Lisp_Object tail;
   int passed = 0;
 
@@ -1080,8 +1081,15 @@ next_frame (frame, minibuf)
      forever.  Forestall that.  */
   CHECK_LIVE_FRAME (frame);
 
+#if HAVE_NS
+    frame_list = ns_frame_list();
+#else
+    frame_list = Vframe_list;
+#endif
+
   while (1)
-    for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+
+    for (tail = frame_list; CONSP (tail); tail = XCDR (tail))
       {
 	Lisp_Object f;
 
@@ -1157,11 +1165,18 @@ prev_frame (frame, minibuf)
     abort ();
 
   prev = Qnil;
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+
+#if HAVE_NS
+  tail = ns_frame_list();
+#else
+  tail = Vframe_list;
+#endif
+  for (;CONSP (tail); tail = XCDR (tail))
     {
       Lisp_Object f;
 
       f = XCAR (tail);
+
       if (!FRAMEP (f))
 	abort ();
 
@@ -1404,7 +1419,6 @@ delete_frame (frame, force)
 
   minibuffer_selected = EQ (minibuf_window, selected_window);
   BLOCK_INPUT;
-
   /* Don't let the frame remain selected.  */
   if (f == sf)
     {
@@ -1431,7 +1445,6 @@ delete_frame (frame, force)
 	   purpose is really to transfer focus.  */
 	Fraise_frame (frame1);
 #endif
-
       do_switch_frame (frame1, 0, 1, Qnil);
       sf = SELECTED_FRAME ();
     }

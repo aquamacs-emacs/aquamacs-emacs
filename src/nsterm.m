@@ -911,6 +911,40 @@ ns_set_terminal_modes (struct terminal *terminal)
    ========================================================================== */
 
 
+Lisp_Object
+ns_frame_list ()
+{
+  Lisp_Object frame, tail, frame_list = Qnil;
+
+  NSEnumerator *e = [[NSApp orderedWindows] reverseObjectEnumerator];
+  NSWindow *win;
+  struct frame *f;
+
+  while (win = [e nextObject]) {
+    if (! [win isKindOfClass:[EmacsWindow class]])
+      continue;
+
+    f = ((EmacsView *) [((EmacsWindow *) win) delegate])->emacsframe;
+
+    XSETFRAME (frame, f);
+
+    if (!FRAMEP (frame))
+      abort ();
+    frame_list = Fcons (frame, frame_list);
+  }
+  /* go through Vframe_list and add any missing frames */
+  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+    {
+      frame = XCAR (tail);
+      if (! FRAMEP (frame))
+	continue;
+      if (NILP (Fmemq (frame, frame_list)))
+	frame_list = Fcons (frame, frame_list);
+    }
+  return frame_list;
+}
+
+
 static void
 ns_raise_frame (struct frame *f)
 /* --------------------------------------------------------------------------
@@ -4273,7 +4307,6 @@ ns_term_shutdown (int sig)
     NSLog (@"notification: '%@'", [notification name]);
 }
 
-
 - (void)sendEvent: (NSEvent *)theEvent
 /* --------------------------------------------------------------------------
      Called when NSApp is running for each event received.  Used to stop
@@ -6359,8 +6392,6 @@ ns_term_shutdown (int sig)
     [super mouseDragged: theEvent];
 }
 
-
-@end
 
 @end /* EmacsWindow */
 
