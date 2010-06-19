@@ -1,5 +1,5 @@
 ;; one-buffer-one-frame.el
-;; Functions to open buffers in their own frames
+;; Frame/buffer/window management in Aquamacs including `one-buffer-one-frame-mode'
 ;;
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
@@ -54,18 +54,12 @@
 
 
 
-;; CODE
-
 (require 'aquamacs-tools)  
 
 (defvar one-buffer-one-frame-mode-map (make-sparse-keymap))
 
 
 (defvar obof-backups-initialized nil)
-
-;; temporary definition (workaround for old defcustom in preloaded func)
-;; (defun one-buffer-one-frame-mode (&rest a))
-
 
 (define-minor-mode one-buffer-one-frame-mode
   "Always open new frames for each new buffer and switch to their frame.
@@ -444,7 +438,9 @@ the current window is switched to the new buffer."
    	(setq ad-return-value 
 	      ad-do-it)
 	(unless (frame-visible-p (selected-frame))
-	  (make-frame-visible (selected-frame))))))
+	  ;; make sure we don't make *empty* visible
+	  (if (not (string= (substring (get-bufname (car args)) 0 1) " "))
+	      (make-frame-visible (selected-frame)))))))
 
 ;; (select-window wts)
 
@@ -630,20 +626,108 @@ even if it's the only visible frame."
 	
 	(delete-window-if-created-for-buffer))))
 
+(defvar aquamacs-last-frame-empty-buffer nil)
+(defun init-aquamacs-last-frame-empty-buffer ()
+  (unless (buffer-live-p aquamacs-last-frame-empty-buffer)
+    (setq aquamacs-last-frame-empty-buffer (generate-new-buffer " *empty*"))
+    (with-current-buffer aquamacs-last-frame-empty-buffer
+      (setq buffer-read-only t)
+      (setq header-line-format nil)))
+  aquamacs-last-frame-empty-buffer)
+
+(defvar aquamacs-last-frame-empty-frame nil)
+(defun aquamacs-make-empty-frame (parms)
+  (let ((all-parms
+	 (append
+	  '((visibility . nil))
+	  parms)))
+    (if (and aquamacs-last-frame-empty-frame
+	     (frame-live-p aquamacs-last-frame-empty-frame)
+	     (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
+	(modify-frame-parameters aquamacs-last-frame-empty-frame
+				 parms)
+      (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
+  (select-frame aquamacs-last-frame-empty-frame)
+  (raise-frame aquamacs-last-frame-empty-frame)
+  aquamacs-last-frame-empty-frame)    
+
+(defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
-  (condition-case nil 
-      (delete-frame (or frame (selected-frame)) 'force)
-    (error   
-     (let ((f (or frame (selected-frame))))
-       (run-hook-with-args 'delete-frame-functions f)
+  ;; this function takes are to create a hidden frame that can receive
+  ;; keyboard input while all other frames are iconified or deleted
+  ;; The hidden frame shows a special, read-only *empty* buffer.
+
+  ;; are we deleting a non-special frame?
+  (let ((f (or frame (selected-frame))))
+    ;; HACK: the buffer has been killed already at this point
+    ;; so we must consider the frame title instead, which has not been updated yet
+    (unless (or (special-display-p (frame-parameter f 'name))
+		(if (> (length (frame-parameter f 'name)) 0) (string= (substring (frame-parameter f 'name) 0 1) " ")))
+      ;; store frame position for reuse
+      (setq aquamacs-deleted-frame-position
+	  `((top . ,(frame-parameter f 'top))
+	    (left . ,(frame-parameter f 'left))
+	    (width . ,(frame-parameter f 'width))
+	    (height . ,(frame-parameter f 'height)))))
+    (condition-case nil
+	;; do not delete the last visible frame if there are others hidden:
+	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
+	(progn (delete-frame (or frame (selected-frame)))
+	       (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
+		 (error)))
+      (error
+       ;; we're doing delete-frame later
+       ;;(run-hook-with-args 'delete-frame-functions f)
        (let ((confirm-nonexistent-file-or-buffer)
-       	     (one-buffer-one-frame nil)
-       	     (tabbar-mode nil))
+	     (one-buffer-one-frame-mode nil)
+	     (pop-up-frames nil)
+	     (smart-frame-positioning-mode nil))
+	 (delete-other-windows)
 	 (set-window-dedicated-p (selected-window) nil)
-	 ;; select scratch in case it gets any input
-	 (if (get-buffer "*scratch*")
-	     (switch-to-buffer "*scratch*" 'norecord)))
-       (make-frame-invisible f t)))))
+	 ;; select read-only special buffer in case it gets any input
+	 (let ((hb (init-aquamacs-last-frame-empty-buffer)))
+
+	   (with-current-buffer hb
+	     ;; to do: we should re-use a hidden frame if it exists.
+	     (let ((hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+	       (if (and (not (eq f hf)) (frame-live-p f))
+		   (delete-frame f t))
+	       (select-window (frame-first-window hf))
+	       (switch-to-buffer hb  'norecord)
+	       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+	       (make-frame-invisible hf t)))))
+       ))))
+
+
+(defun aquamacs-handle-frame-iconified (&optional frame)
+  (interactive)
+  (when (or (null (visible-frame-list))
+	  (equal (visible-frame-list) (list (or frame (selected-frame)))))
+    ;; if no other frame visible, create hidden backup frame to receive keyboard input
+    (let ((bup-frame (aquamacs-make-empty-frame 
+		      (mapcar (lambda (x) (cons x (frame-parameter frame x)))
+			      '(top left width height)) 
+		      )))
+      (let ((confirm-nonexistent-file-or-buffer)
+	    (one-buffer-one-frame nil)
+	    (pop-up-frames nil)
+	    (tabbar-mode nil))
+      (switch-to-buffer (init-aquamacs-last-frame-empty-buffer))
+      (make-frame-visible (selected-frame)) ; HACK: must do this first, presumably to convince NS to make it key.
+      (make-frame-invisible (selected-frame))))))
+
+;; usually, iconify-frame is bound to 'ignore
+(define-key special-event-map [iconify-frame] 'aquamacs-handle-frame-iconified)
+
+;; other Lisp code doesn't cause iconify-frame to be sent:
+
+(defadvice iconify-frame (after leave-hidden-frame
+				(&rest args) activate compile)
+  (aquamacs-handle-frame-iconified (car args)))
+
+
+
+
 
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for
@@ -817,7 +901,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 	      (select-window wind)
 	      (aquamacs-delete-window wind) ) ) ) ) ) ) ) )   
 
-(if (running-on-a-mac-p)
+(when (running-on-a-mac-p)
 (defun handle-delete-frame (event)
   "Handle delete-frame events from the X server."
   (interactive "e")
@@ -843,7 +927,23 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 		       (eq (window-buffer) delb)))))) 
   ;; needed due to bug in main event loop (first mouse event
   ;; is interpreted with wrong current buffer)
-  (set-buffer (window-buffer (selected-window)))))
+  (set-buffer (window-buffer (selected-window))))
+
+;; To Do: 
+(defun handle-ns-application-reopen ()
+  (interactive) (message "reopen")
+  (unless (visible-frame-list)
+    (let ((list (frame-list))) 
+      (while list      
+	(when (frame-iconified-p (car list))
+	  (make-frame-visible (car list))
+	  (select-frame-set-input-focus (car list))
+	  (setq list))
+	(setq list (cdr list))))))
+(define-key special-event-map [ns-application-reopen] 'handle-ns-application-reopen)
+(define-key special-event-map [ns-application-activated] 'ignore)
+)
+
 
   
 

@@ -881,6 +881,13 @@ do_switch_frame (frame, track, for_deletion, norecord)
      the one you're actually typing in.  */
   internal_last_event_frame = Qnil;
 
+  if (NILP (norecord))
+    {
+      BLOCK_INPUT;
+      Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
+      UNBLOCK_INPUT;
+    }
+
   return frame;
 }
 

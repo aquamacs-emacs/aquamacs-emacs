@@ -4570,8 +4570,29 @@ ns_term_shutdown (int sig)
     return NSTerminateNow;  /* just in case */
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+  /* We will always handle re-open events outselves.
+   Otherwise, hidden windows will be made key (and visible). 
+   We need to send Lisp an event, because applicationDidBecomeActive is not received
+   when application was already active.
+  */
+
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_REOPEN;
+  EV_TRAILER ((id)nil);
+
+  return YES;
+}
+
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
 {
+  /* The Activated event is actually "reopen" 
+   So the following seems questionable. */
   struct frame *emacsframe = SELECTED_FRAME ();
   
   if (!emacs_event)
@@ -5710,6 +5731,13 @@ ns_term_shutdown (int sig)
   ns_send_appdefined (-1);
 }
 
+/* we allow a hidden window to become key only if there aren't others that
+   could become key. */
+// - (BOOL)canBecomeKeyWindow
+// {
+//   return FRAME_VISIBLE_P (emacsframe) ? YES
+//     : (NILP (Fvisible_frame_list ()) ? YES : NO);
+// }
 
 - (void)windowDidBecomeKey: (NSNotification *)notification
 /* cf. x_detect_focus_change(), x_focus_changed(), x_new_focus_frame() */
@@ -5727,6 +5755,8 @@ ns_term_shutdown (int sig)
   else
     [NSApp setMainMenu: mainMenu];
 
+  /* frame was iconified or is not otherwise visible (to emacs)
+   yet, but is being made visible*/
   if (! FRAME_VISIBLE_P (emacsframe))
     {
       emacsframe->async_iconified = 0;
@@ -5734,6 +5764,8 @@ ns_term_shutdown (int sig)
       windows_or_buffers_changed++;
       SET_FRAME_GARBAGED (emacsframe);
       ns_raise_frame (emacsframe);
+      // hide again:  (don't)
+      //[[FRAME_NS_VIEW (emacsframe) window] orderOut: NSApp];
     }
   ns_frame_rehighlight (emacsframe);
   if (emacs_event)
@@ -5863,11 +5895,13 @@ ns_term_shutdown (int sig)
 #endif
   FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
 
+  /* the following would be nonstandard on OSX */
+#ifdef NS_IMPL_GNUSTEP
   tem = f->icon_name;
   if (!NILP (tem))
     [win setMiniwindowTitle:
            [NSString stringWithUTF8String: SDATA (tem)]];
-
+#endif NS_IMPL_GNUSTEP
   {
     NSScreen *screen = [win screen];
 

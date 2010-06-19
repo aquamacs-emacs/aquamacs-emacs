@@ -56,14 +56,15 @@ current cached copy."
 
 (defun tabbar-window-buffer-list ()
   "Return the list of buffers to show in tabs.
-Explicity exclude tooltip buffers."
-  (delq nil
-        (mapcar #'(lambda (b)
-                    (cond
-		     ((equal (buffer-name b) " *tip*") nil)
-;;                      ((char-equal ?\ (aref (buffer-name b) 0)) nil)
-                     ((buffer-live-p b) b)))
-                (buffer-list))))
+Exclude internal buffers."
+  (apply #'nconc 
+	 (mapcar
+	  (lambda (b)
+	    (cond
+	     ((string= (substring (buffer-name b) 0 1) " ")  ; and (null buffer-file-name)
+	      nil)
+	     ((buffer-live-p b) (list b))))
+	  (buffer-list))))
 
 (defun window-number (window)
   "Return window ID as a number."
@@ -701,8 +702,9 @@ for restoration of tab and windows combinations upon relaunch.")
   "Return the header line templates that represent the tab bar.
 Update the templates if tabbar-template is currently nil."
   (tabbar-current-tabset t)
-  (or (tabbar-template tabbar-current-tabset)
-      (tabbar-line-format tabbar-current-tabset)))
+  (if tabbar-current-tabset
+      (or (tabbar-template tabbar-current-tabset)
+	  (tabbar-line-format tabbar-current-tabset))))
 
 (defun tabbar-window-current-tabset (&optional window)
   ;; ensure we don't count minibuffer as selected window - causes infinite loop
@@ -712,7 +714,8 @@ Update the templates if tabbar-template is currently nil."
     ;;  properly initialize all tabsets by running tabbar-window-update-tabsets
     (unless tabset 
       (setq tabset (tabbar-window-update-tabsets)))
-    (tabbar-select-tab-value (window-buffer window) tabset)
+    (if tabset ; update may say: display no tabs at all.
+      (tabbar-select-tab-value (window-buffer window) tabset))
     tabset))
 
 (defun tabbar-window-track-killed ()
