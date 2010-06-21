@@ -5,8 +5,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.34 2009/03/21 02:33:24 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -26,7 +24,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
 
 (require 'smart-dnd) ;; Smart Drag&Drop
 
@@ -48,7 +46,9 @@
       ("\\.jpg\\'" . "\\includegraphics[]{%r}\n")
       ("\\.png\\'" . "\\includegraphics[]{%r}\n")
       )))
+;; non-AUCTeX mode:
 (add-hook 'latex-mode-hook 'smart-dnd-latex)
+;; AUCTeX:
 (defvar LaTeX-mode-hook nil)
 (add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
 

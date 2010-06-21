@@ -27,7 +27,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
  
 
 (require 'easymenu)
@@ -1099,12 +1099,12 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
     `(menu-item "Zoom" ,menu-bar-zoom-menu))
 
 (define-key menu-bar-window-extras-menu [one-window]
-  `(menu-item "Remove Splits" 
-	      aquamacs-delete-other-windows
+  `(menu-item "Join Windows"
+	      aquamacs-join-windows
 	      :key-sequence [(,osxkeys-command-key 1)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p)
-			   (not (one-window-p t nil)))
+			   (not (one-window-p t 'visible)))
 	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-window-extras-menu [split-window]
   `(menu-item "Split Window" 

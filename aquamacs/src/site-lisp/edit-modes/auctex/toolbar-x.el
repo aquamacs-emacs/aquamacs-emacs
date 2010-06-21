@@ -125,7 +125,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images/")))
+   (list (concat data-directory "images")))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

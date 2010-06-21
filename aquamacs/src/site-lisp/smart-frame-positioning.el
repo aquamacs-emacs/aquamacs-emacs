@@ -127,27 +127,17 @@ by any of the hook functions, will normally be preserved."
 May be used in `frame-creation-function' or 
 `frame-creation-function-alist'. `smart-frame-positioning-mode' 
 should be used as the interface to this function."
+ (if smart-frame-positioning-mode
   (let* ((newpos)
-	 (oldframe (selected-frame))
+	 (oldframe (if (frame-visible-p (selected-frame)) (selected-frame)))
  	 ;; create the frame
 	 (f (funcall smart-frame-positioning-old-frame-creation-function
-		     (append parameters '((visibility . nil) (left . 1))))))
-    ;; left  . 1: frame creation bug workaround: bug #166
-
-    (if (< emacs-major-version 23)
-	(if parameters
-	    ;; the frame creation function doesn't set all parameters
-	    ;; set the remaining ones manually
-	    ;; bug reported to pretest bug list 13/Jan/2006
-	    ;; was this ever fixe?
-	    ;; set remaining parameters
-	    (modify-frame-parameters f parameters))
-      ;; Emacs 23 seems to tell us where to show the frame
-      (setq parameters (assq-delete-all 'left parameters))
-      (setq parameters (assq-delete-all 'top parameters)))
-    
+		     (append parameters '((visibility . nil))))))
     (run-hook-with-args 'smart-frame-positioning-hook f)
-    (setq newpos (find-good-frame-position oldframe f))  
+
+    (setq newpos (or (smart-fp--get-frame-position-assigned-to-buffer-name (current-buffer))
+		     (if oldframe (find-good-frame-position oldframe f))
+		     (smart-fp--get-frame-position-assigned-to-buffer-type (current-buffer))))
     (let ((overriding-parms (append parameters default-frame-alist)))
       (mapc (lambda (key)
 	      (if (assq key overriding-parms)
@@ -155,7 +145,6 @@ should be used as the interface to this function."
 			    (cdr-safe (assq key overriding-parms))
 			    'newpos)))
 	    '(left top width height)))
-   
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
@@ -180,7 +169,11 @@ should be used as the interface to this function."
     (unless  (and (assq 'visibility parameters)
 		  (eq (cdr (assq 'visibility parameters)) nil))
       (make-frame-visible f))
-    f))	; return the frame
+    f)	; return the frame
+  ;; not in s-m-p-mode
+  (funcall smart-frame-positioning-old-frame-creation-function
+	   parameters)))
+
 
  
 (defcustom smart-frame-positioning-enforce nil
@@ -241,7 +234,7 @@ pixels apart if possible."
  
 (defvar smart-fp--current-direction nil)
 
-(defun find-good-frame-position ( old-frame new-frame )
+(defun find-good-frame-position (old-frame new-frame)
   "Finds a good frame position for a new frame based on the old one's position."
  
   (let ((new-frame-parameters))
@@ -258,11 +251,8 @@ pixels apart if possible."
 	     (min-x (+ 5 (nth 0 rect)))
 	     (min-y (+ 5 (nth 1 rect)))
 	     (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
-	     (max-y (- (+ (nth 1 rect) (nth 3 rect)) 5))
-	     (preassigned 
-	      (smart-fp--get-frame-position-assigned-to-buffer-name)))
-	(smart-fp--convert-negative-ordinates 
-	 (or preassigned	;; if preassigned, return that.
+	     (max-y (- (+ (nth 1 rect) (nth 3 rect)) 5)))
+	(smart-fp--convert-negative-ordinates
 	    (let* ( ;; eval is necessary, because left can be (+ -1000)
 		  ;; which is not an integer!
 		  ( y (eval (frame-parameter old-frame 'top)) )
@@ -415,7 +405,7 @@ pixels apart if possible."
 				   new-frame 'round-to-lower)
 			  'new-frame-parameters)
 		;; return this 
-		new-frame-parameters))))))))
+		new-frame-parameters)))))))
 
 (defvar smart-frame-positioning-old-frame-creation-function 
 	(smart-fp--get-frame-creation-function))
@@ -673,11 +663,23 @@ The file is specified in `smart-frame-position-file'."
     nil ;; not found
     ))
 
-(defun smart-fp--get-frame-position-assigned-to-buffer-name ()
-  (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
+(defun smart-fp--get-frame-position-assigned-to-buffer-name (&optional buffer)
+  (smart-fp--convert-negative-ordinates
+   (cdr (assq-string-equal (buffer-name buffer) smart-frame-prior-positions))))
+
+(defun smart-fp--get-frame-position-assigned-to-buffer-type (&optional buffer)
+  (smart-fp--convert-negative-ordinates
+   (let ((type
+	  (if (equal " *empty*" (buffer-name buffer)) nil
+	    (special-display-p (buffer-name buffer))))
+	 (pp smart-frame-prior-positions))
+     (while (and pp (not (eq type (special-display-p (caar pp)))))
+       (setq pp (cdr pp)))
+     (cdr (car pp)))))
 
 (defun smart-fp--convert-negative-ordinates (parms)
-  "Converts screen ordinates of the form -x to a list (+ -x)."
+  "Converts screen ordinates of the form -x to a list (+ -x).
+Returns nil of parms is nil."
   (mapcar (lambda (o)
 	    (if (and (integerp (cdr-safe o))
 		     (< (cdr o) 0))
@@ -801,29 +803,23 @@ on the main screen, i.e. where the menu is."
 (defun scatter-frames ()
   (interactive)
   (let ((frames (visible-frame-list)))
-    
-;;     (dolist (frame frames)
-;;       (hide-frame frame t))
-
-  (dolist (frame frames)
-    (let ((smart-frame-positioning-enforce t)
-	  (smart-frame-prior-positions) (newpos)
-	  (fit-frame-max-width-percent (if (> (length frames) 1) 45 90)))
-      (fit-frame frame )
-      (setq newpos (find-good-frame-position (selected-frame) frame))  
-      (when (frame-parameter frame 'fit-frame)
-	;; delete height and width - these parameters
-	;; are preserved and will stay untouched
-	;; in case the hook changed them.
-	;; (unless exceeding screen dimensions)
-	(setq newpos 
+    (dolist (frame frames)
+      (let ((smart-frame-positioning-enforce t) (newpos)
+	    (fit-frame-max-width-percent (if (> (length frames) 1) 45 90)))
+	(fit-frame frame )
+	(setq newpos (find-good-frame-position (selected-frame) frame))
+	(when (frame-parameter frame 'fit-frame)
+	  ;; delete height and width - these parameters
+	  ;; are preserved and will stay untouched
+	  ;; in case the hook changed them.
+	  ;; (unless exceeding screen dimensions)
+	  (setq newpos
 		(assq-delete-all 
 		 'height 
 		 (assq-delete-all 'width newpos))))
-      (modify-frame-parameters frame newpos)
-      (smart-move-frame-inside-screen frame))
-;    (make-frame-visible frame)
-    (select-frame frame))))
+	(modify-frame-parameters frame newpos)
+	(smart-move-frame-inside-screen frame))
+      (select-frame frame))))
 
 ;; bug workaround:
 ;; if the toolbar hasn't been filled,

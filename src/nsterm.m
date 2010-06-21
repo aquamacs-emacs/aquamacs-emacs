@@ -911,6 +911,40 @@ ns_set_terminal_modes (struct terminal *terminal)
    ========================================================================== */
 
 
+Lisp_Object
+ns_frame_list ()
+{
+  Lisp_Object frame, tail, frame_list = Qnil;
+
+  NSEnumerator *e = [[NSApp orderedWindows] reverseObjectEnumerator];
+  NSWindow *win;
+  struct frame *f;
+
+  while (win = [e nextObject]) {
+    if (! [win isKindOfClass:[EmacsWindow class]])
+      continue;
+
+    f = ((EmacsView *) [((EmacsWindow *) win) delegate])->emacsframe;
+
+    XSETFRAME (frame, f);
+
+    if (!FRAMEP (frame))
+      abort ();
+    frame_list = Fcons (frame, frame_list);
+  }
+  /* go through Vframe_list and add any missing frames */
+  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+    {
+      frame = XCAR (tail);
+      if (! FRAMEP (frame))
+	continue;
+      if (NILP (Fmemq (frame, frame_list)))
+	frame_list = Fcons (frame, frame_list);
+    }
+  return frame_list;
+}
+
+
 static void
 ns_raise_frame (struct frame *f)
 /* --------------------------------------------------------------------------
@@ -2413,45 +2447,16 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
     case BAR_CURSOR:
       s = r;
       s.size.width = min (cursor_width, 2); //FIXME(see above)
-      NSRectFill (s);
-      
-      /* Workaround for Cocoa anti-aliasing issue.
-	 The presence of the cursor bar to the left causes
-	 the anti-aliasing algorithm to render the glyph's
-	 fringes darker, resulting in an undesirable 
-	 animation when the cursor is blinking or moving.
-      To Do: do this for HBAR_CURSOR as well.*/
-	 
-      struct face *face;
-      face = FACE_FROM_ID (f, phys_cursor_glyph->face_id);
-      if (face)
-	{
-	  if (!face->stipple)
-	    [(NS_FACE_BACKGROUND (face) != 0
-	      ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f)
-	      : FRAME_BACKGROUND_COLOR (f)) set];
-	  else
-	    {
-	      struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
-	      [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
-	    }
-	}
-      else
-	[FRAME_BACKGROUND_COLOR (f) set];
-      r.origin.x += s.size.width;
-      r.size.width -= s.size.width;
-      r.origin.y -= 2;
-      r.size.height += 4;
-      
-      NSRectFill (r);
-      [FRAME_CURSOR_COLOR (f) set];
 
+      NSRectFill (s);
       break;
     }
   ns_unfocus (f);
 
-  /* draw the character under the cursor */
-  if (cursor_type != NO_CURSOR)
+  /* draw the character under the cursor 
+   Doesn't look good for bar cursors - so don't do it then.*/
+  if (cursor_type != NO_CURSOR && cursor_type != BAR_CURSOR
+      && cursor_type != HOLLOW_BOX_CURSOR)
     draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
 
 #ifdef NS_IMPL_COCOA
@@ -4302,7 +4307,6 @@ ns_term_shutdown (int sig)
     NSLog (@"notification: '%@'", [notification name]);
 }
 
-
 - (void)sendEvent: (NSEvent *)theEvent
 /* --------------------------------------------------------------------------
      Called when NSApp is running for each event received.  Used to stop
@@ -4566,8 +4570,29 @@ ns_term_shutdown (int sig)
     return NSTerminateNow;  /* just in case */
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+  /* We will always handle re-open events outselves.
+   Otherwise, hidden windows will be made key (and visible). 
+   We need to send Lisp an event, because applicationDidBecomeActive is not received
+   when application was already active.
+  */
+
+  struct frame *emacsframe = SELECTED_FRAME ();
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_REOPEN;
+  EV_TRAILER ((id)nil);
+
+  return YES;
+}
+
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
 {
+  /* The Activated event is actually "reopen" 
+   So the following seems questionable. */
   struct frame *emacsframe = SELECTED_FRAME ();
   
   if (!emacs_event)
@@ -5706,6 +5731,13 @@ ns_term_shutdown (int sig)
   ns_send_appdefined (-1);
 }
 
+/* we allow a hidden window to become key only if there aren't others that
+   could become key. */
+// - (BOOL)canBecomeKeyWindow
+// {
+//   return FRAME_VISIBLE_P (emacsframe) ? YES
+//     : (NILP (Fvisible_frame_list ()) ? YES : NO);
+// }
 
 - (void)windowDidBecomeKey: (NSNotification *)notification
 /* cf. x_detect_focus_change(), x_focus_changed(), x_new_focus_frame() */
@@ -5723,6 +5755,8 @@ ns_term_shutdown (int sig)
   else
     [NSApp setMainMenu: mainMenu];
 
+  /* frame was iconified or is not otherwise visible (to emacs)
+   yet, but is being made visible*/
   if (! FRAME_VISIBLE_P (emacsframe))
     {
       emacsframe->async_iconified = 0;
@@ -5730,6 +5764,8 @@ ns_term_shutdown (int sig)
       windows_or_buffers_changed++;
       SET_FRAME_GARBAGED (emacsframe);
       ns_raise_frame (emacsframe);
+      // hide again:  (don't)
+      //[[FRAME_NS_VIEW (emacsframe) window] orderOut: NSApp];
     }
   ns_frame_rehighlight (emacsframe);
   if (emacs_event)
@@ -5859,11 +5895,13 @@ ns_term_shutdown (int sig)
 #endif
   FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
 
+  /* the following would be nonstandard on OSX */
+#ifdef NS_IMPL_GNUSTEP
   tem = f->icon_name;
   if (!NILP (tem))
     [win setMiniwindowTitle:
            [NSString stringWithUTF8String: SDATA (tem)]];
-
+#endif NS_IMPL_GNUSTEP
   {
     NSScreen *screen = [win screen];
 
@@ -6388,8 +6426,6 @@ ns_term_shutdown (int sig)
     [super mouseDragged: theEvent];
 }
 
-
-@end
 
 @end /* EmacsWindow */
 
