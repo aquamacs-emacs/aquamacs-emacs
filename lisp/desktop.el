@@ -303,10 +303,12 @@ to the value obtained by evaluating FORM."
   :version "22.1")
 
 (defcustom desktop-clear-preserve-buffers
-  '("\\*scratch\\*" "\\*Messages\\*" "\\*server\\*" "\\*tramp/.+\\*")
+  '("\\*scratch\\*" "\\*Messages\\*" "\\*server\\*" "\\*tramp/.+\\*"
+    "\\*Warnings\\*")
   "List of buffers that `desktop-clear' should not delete.
 Each element is a regular expression.  Buffers with a name matched by any of
 these won't be deleted."
+  :version "23.3"                       ; added Warnings - bug#6336
   :type '(repeat string)
   :group 'desktop)
 
@@ -1306,7 +1308,7 @@ If there are no buffers left to create, kill the timer."
         (setq desktop-save-mode nil)))
     (when desktop-save-mode
       (desktop-read)
-      (setq inhibit-startup-screen t))))
+      (setq inhibit-startup-screen t))) t)
 
 (provide 'desktop)
 

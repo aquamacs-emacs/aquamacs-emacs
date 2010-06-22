@@ -103,14 +103,14 @@ for f in `find lib-src -type f -perm +ugo+x`; do
 	  lipo -create $f.arch.* -o $f
 	   # prevent make from thinking this is a new file:
 	  # choose the latest build for the time stamp
-	  touch -r `ls -to $f.arch.* | head -n1` $f  
+	  /usr/bin/touch -r `/bin/ls -t $f.arch.* | head -n1` $f  
       fi
 	  # get rid of architecture-specific files
 	  #rm $f.arch.*
    fi
 done
 lipo -create src/emacs.arch.* -o src/emacs
-touch src/emacs # ensure latest time stamp (otherwise, install(blessmail) will force re-dumping)
+/usr/bin/touch src/emacs # ensure latest time stamp (otherwise, install(blessmail) will force re-dumping)
 #the following are not needed (the src/make all will copy it over for us)
 #cp -p src/emacs `ls src/emacs-2* | head -n1`
 #cp -p src/emacs nextstep/Aquamacs.app/Contents/MacOS/Aquamacs

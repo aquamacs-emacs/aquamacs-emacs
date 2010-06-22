@@ -44,6 +44,7 @@
 
 (require 'ispell)
 (require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
+(require 'osxkeys) ;; flyspell inherit regular Aquamacs context menu
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Group ...                                                        */
@@ -608,6 +609,15 @@ sentence boundaries are too far between."
       (if flyspell-issue-message-flag (message "Spell Checking completed."))
       ))) 
 
+;; ----------------------------------------------------------------------
+;; Flyspell context menu inherits Aquamacs's generic context menu (as
+;; a copy, so the inheritance can be disabled without affecting the
+;; original)
+(defvar aquamacs-context-menu-map-copy nil
+  "Copy of Aquamacs general context menu keymap.  Used by
+flyspell to incorporate general context menu items into menu for
+misspelled words.")
+
 ;; **********************************************************************
 ;; global-flyspell-mode and automatic text-mode flyspelling
 
@@ -1001,7 +1011,7 @@ in your .emacs file.
 ;; Make sure we flush our caches when needed.  Do it here rather than in
 ;; flyspell-mode-on, since flyspell-region may be used without ever turning
 ;; on flyspell-mode.
-;; (add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
+(add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-mode-on ...                                             */
@@ -1945,7 +1955,12 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 ;;*---------------------------------------------------------------------*/
 (defun flyspell-large-region (beg end)
   (let* ((curbuf  (current-buffer))
-	 (buffer  (get-buffer-create "*flyspell-region*")))
+	 (buffer  (get-buffer-create "*flyspell-region*"))
+	 (current-dict-name (or ispell-local-dictionary ispell-dictionary-internal))
+	 (current-dict
+	  (if (eq ispell-use-cocoaspell-internal 'full)
+	      (aspell-dict-abbrev current-dict-name)
+	    current-dict-name)))
     (setq flyspell-external-ispell-buffer buffer)
     (setq flyspell-large-region-buffer curbuf)
     (setq flyspell-large-region-beg beg)
@@ -1958,8 +1973,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
     (set-buffer curbuf)
     (ispell-set-spellchecker-params)  ; Initialize variables and dicts alists
     ;; Local dictionary becomes the global dictionary in use.
-    (setq ispell-current-dictionary
-	  (or ispell-local-dictionary ispell-dictionary))
+    (setq ispell-current-dictionary current-dict-name)
     (setq ispell-current-personal-dictionary
 	  (or ispell-local-pdict ispell-personal-dictionary))
     (let ((args (ispell-get-ispell-args))
@@ -1968,7 +1982,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
       (if (and ispell-current-dictionary  ; use specified dictionary
 	       (not (member "-d" args)))  ; only define if not overridden
 	  (setq args
-		(append (list "-d" ispell-current-dictionary) args)))
+		(append (list "-d" current-dict) args)))
       (if ispell-current-personal-dictionary ; use specified pers dict
 	  (setq args
 		(append args
@@ -2653,11 +2667,19 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	     (format "%s [%s]" word (or ispell-local-dictionary
 					ispell-dictionary)))))
     ;; update aquamacs-context-menu-keymap
-    (aquamacs-update-context-menus)
+    (if (eq osx-key-mode-mouse-3-behavior 'mouse-save-then-kill)
+	(setq aquamacs-context-menu-map-copy nil)
+      (aquamacs-update-context-menus)
+      (setq aquamacs-context-menu-map-copy
+    	    (copy-keymap aquamacs-context-menu-map)))
     ;; add contents of aquamacs-context-menu-keymap to flyspell-context-menu-map
-    (set-keymap-parent flyspell-context-menu-map aquamacs-context-menu-map)
+    (set-keymap-parent flyspell-context-menu-map aquamacs-context-menu-map-copy)
     
-    (define-key flyspell-context-menu-map [flyspell-corr-sep2] '(menu-item "--"))
+    (define-key flyspell-context-menu-map [flyspell-corr-sep2]
+      ;; only include this separator when we'll also have more menu below it
+      `(menu-item "--" 'ignore :visible (not (eq
+					      osx-key-mode-mouse-3-behavior
+					      'mouse-save-then-kill))))
     (define-key flyspell-context-menu-map [buffer]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
 		      "Ignore Spelling"

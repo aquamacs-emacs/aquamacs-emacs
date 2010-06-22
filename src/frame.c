@@ -869,7 +869,7 @@ do_switch_frame (frame, track, for_deletion, norecord)
 
   selected_frame = frame;
   if (! FRAME_MINIBUF_ONLY_P (XFRAME (selected_frame)))
-    last_nonminibuf_frame = XFRAME (selected_frame);
+    last_nonminibuf_frame = XFRAME (selected_frame);    
 
   Fselect_window (XFRAME (frame)->selected_window, norecord);
 
@@ -880,6 +880,13 @@ do_switch_frame (frame, track, for_deletion, norecord)
      with your typing being interpreted in the new frame instead of
      the one you're actually typing in.  */
   internal_last_event_frame = Qnil;
+
+  if (NILP (norecord))
+    {
+      BLOCK_INPUT;
+      Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
+      UNBLOCK_INPUT;
+    }
 
   return frame;
 }
@@ -902,7 +909,8 @@ This function returns FRAME, or nil if FRAME has been deleted.  */)
      (frame, norecord)
      Lisp_Object frame, norecord;
 {
-  return do_switch_frame (frame, 1, 0, norecord);
+  Lisp_Object retval = do_switch_frame (frame, 1, 0, norecord);
+  return retval;
 }
 
 
@@ -1068,6 +1076,7 @@ next_frame (frame, minibuf)
      Lisp_Object frame;
      Lisp_Object minibuf;
 {
+  Lisp_Object frame_list;
   Lisp_Object tail;
   int passed = 0;
 
@@ -1079,8 +1088,15 @@ next_frame (frame, minibuf)
      forever.  Forestall that.  */
   CHECK_LIVE_FRAME (frame);
 
+#if HAVE_NS
+    frame_list = ns_frame_list();
+#else
+    frame_list = Vframe_list;
+#endif
+
   while (1)
-    for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+
+    for (tail = frame_list; CONSP (tail); tail = XCDR (tail))
       {
 	Lisp_Object f;
 
@@ -1156,11 +1172,18 @@ prev_frame (frame, minibuf)
     abort ();
 
   prev = Qnil;
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+
+#if HAVE_NS
+  tail = ns_frame_list();
+#else
+  tail = Vframe_list;
+#endif
+  for (;CONSP (tail); tail = XCDR (tail))
     {
       Lisp_Object f;
 
       f = XCAR (tail);
+
       if (!FRAMEP (f))
 	abort ();
 
@@ -1403,7 +1426,6 @@ delete_frame (frame, force)
 
   minibuffer_selected = EQ (minibuf_window, selected_window);
   BLOCK_INPUT;
-
   /* Don't let the frame remain selected.  */
   if (f == sf)
     {
@@ -1430,7 +1452,6 @@ delete_frame (frame, force)
 	   purpose is really to transfer focus.  */
 	Fraise_frame (frame1);
 #endif
-
       do_switch_frame (frame1, 0, 1, Qnil);
       sf = SELECTED_FRAME ();
     }
@@ -3325,7 +3346,7 @@ x_set_line_spacing (f, new_value, old_value)
   if (NILP (new_value))
     f->extra_line_spacing = 0;
   else if (NATNUMP (new_value))
-    f->extra_line_spacing = XFASTINT (new_value);
+    f->extra_line_spacing = XINT (new_value);
   else
     signal_error ("Invalid line-spacing", new_value);
   if (FRAME_VISIBLE_P (f))

@@ -4746,6 +4746,11 @@ other purposes."
 			    (copy-tree fringe-indicator-alist)))))))
 	 (set-default symbol value)))
 
+(defun visual-line-line-range ()
+  (save-excursion
+    (cons (progn (vertical-motion 0) (point))
+	  (progn (vertical-motion 1) (point)))))
+
 (defvar visual-line--saved-state nil)
 
 (define-minor-mode visual-line-mode
@@ -4761,7 +4766,8 @@ This also turns on `word-wrap' in the buffer."
 	;; visual-line-mode is turned off.
 	(dolist (var '(line-move-visual truncate-lines
 		       truncate-partial-width-windows
-		       word-wrap fringe-indicator-alist))
+		       word-wrap fringe-indicator-alist
+		       hl-line-range-function))
 	  (if (local-variable-p var)
 	      (push (cons var (symbol-value var))
 		    visual-line--saved-state)))
@@ -4771,12 +4777,14 @@ This also turns on `word-wrap' in the buffer."
 	      word-wrap t
 	      fringe-indicator-alist
 	      (cons (cons 'continuation visual-line-fringe-indicators)
-		    fringe-indicator-alist)))
+		    fringe-indicator-alist))
+	(set (make-local-variable 'hl-line-range-function) #'visual-line-line-range))
     (kill-local-variable 'line-move-visual)
     (kill-local-variable 'word-wrap)
     (kill-local-variable 'truncate-lines)
     (kill-local-variable 'truncate-partial-width-windows)
     (kill-local-variable 'fringe-indicator-alist)
+    (kill-local-variable 'hl-line-range-function)
     (dolist (saved visual-line--saved-state)
       (set (make-local-variable (car saved)) (cdr saved)))
     (kill-local-variable 'visual-line--saved-state)))
@@ -6822,14 +6830,12 @@ the point is when the command is called.")
     string))
 
 (defun smart-delete-region (from to)
-  (if (and smart-spacing-mode (memq this-command '(cua-delete-region mouse-save-then-kill)))
-      (let* ((from (min from to)) 
-	     (to (max from to))
-	     ;; (move-point (memq (point) (list beg end))) 
-	     (point-at-end (eq (point) to))) 
-	     
-	     (delete-region from to)
-	     (smart-remove-remaining-spaces from point-at-end))
+  (if (and smart-spacing-mode 
+	   (memq this-command '(cua-delete-region mouse-save-then-kill)))
+      (progn
+	(delete-region from to)
+	(smart-remove-remaining-spaces (min from to)
+				       (eq (point) (max from to))))
     (delete-region from to)))
 
 (defun smart-remove-remaining-spaces (pos point-at-end)

@@ -501,7 +501,8 @@ ns_set_name_iconic (struct frame *f, Lisp_Object name, int explicit)
     name = f->icon_name;
 
   if (NILP (name))
-    name = build_string([ns_app_name UTF8String]);
+    // do not change name
+    return;
   else
     CHECK_STRING (name);
 
@@ -570,8 +571,8 @@ static void
 x_explicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
 {
   NSTRACE (x_explicitly_set_name);
-  ns_set_name_iconic (f, arg, 1);
   ns_set_name (f, arg, 1);
+  ns_set_name_iconic (f, Qnil, 1); /* same name - leave it: Qnil */
 }
 
 
@@ -583,7 +584,7 @@ x_implicitly_set_name (FRAME_PTR f, Lisp_Object arg, Lisp_Object oldval)
 {
   NSTRACE (x_implicitly_set_name);
   if (FRAME_ICONIFIED_P (f))
-    ns_set_name_iconic (f, arg, 0);
+    ns_set_name_iconic (f, Qnil, 0); /* same- leave it unless frame parm */
   else if (FRAME_NS_P (f) && EQ (Vframe_title_format, Qt))
     ns_set_name_as_filename (f);
   else
@@ -653,8 +654,6 @@ ns_set_name_as_filename (struct frame *f)
       return;
     }
 
-  if (! FRAME_ICONIFIED_P (f))
-    {
 #ifdef NS_IMPL_COCOA
       /* work around a bug observed on 10.3 where
          setTitleWithRepresentedFilename does not clear out previous state
@@ -674,12 +673,7 @@ ns_set_name_as_filename (struct frame *f)
                          [NSString stringWithUTF8String: SDATA (name)]];
 #endif
       f->name = name;
-    }
-  else
-    {
-      [[view window] setMiniwindowTitle:
-            [NSString stringWithUTF8String: SDATA (name)]];
-    }
+
   [pool release];
   UNBLOCK_INPUT;
 }
@@ -1654,12 +1648,10 @@ capitalized in the same way. */)
   Lisp_Object retval = Qnil;
   NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
   int arrayCount = [guesses count];
-  int i;
-  for (i = 0; i < arrayCount; i++) {
-    // build Lisp list of strings
+  int i = arrayCount;
+  while (--i >= 0)
     retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
 		    retval);
-  }
   UNBLOCK_INPUT;
   return retval;
 }

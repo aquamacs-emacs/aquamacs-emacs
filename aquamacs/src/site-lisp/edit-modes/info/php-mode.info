@@ -1,0 +1,1614 @@
+This is php-mode.info, produced by makeinfo version 4.13 from
+php-mode.texi.
+
+This manual documents PHP mode version 1.5.0 for use with GNU Emacs.
+
+   Copyright (C) 2008  Aaron S. Hawley
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, and no Cover Texts.  A
+     copy of the license is included in the section entitled "Copying
+     This Manual."
+
+     A copy of the license is also available from the Free Software
+     Foundation Web site at `http://www.gnu.org/licenses/fdl.html'.
+
+
+   The document was typeset with GNU Texinfo (http://www.texinfo.org/).
+
+   $Date: 2008-11-04 11:51:51 -0500 (Tue, 04 Nov 2008) $
+
+   $Revision: 90 $
+
+
+File: php-mode.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+PHP Mode Manual
+***************
+
+This manual documents PHP mode version 1.5.0 for use with GNU Emacs.
+
+   Copyright (C) 2008  Aaron S. Hawley
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.2 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, and no Cover Texts.  A
+     copy of the license is included in the section entitled "Copying
+     This Manual."
+
+     A copy of the license is also available from the Free Software
+     Foundation Web site at `http://www.gnu.org/licenses/fdl.html'.
+
+
+   The document was typeset with GNU Texinfo (http://www.texinfo.org/).
+
+   $Date: 2008-11-04 11:51:51 -0500 (Tue, 04 Nov 2008) $
+
+   $Revision: 90 $
+
+* Menu:
+
+* Introduction::
+* Installation::
+* Electricity::
+* Motion::
+* Indentation::
+* Editing::
+* Completion::
+* PHP Comments::
+* PHP Documentation::
+* Index Menu::
+* Change Logs::
+* Speedbar::
+* Customization::
+* Embedded HTML::
+* Contributors::
+* Copying This Manual::
+* Concept Index::
+* Function Index::
+* Keyboard Index::
+* Variable Index::
+
+
+File: php-mode.info,  Node: Introduction,  Next: Installation,  Prev: Top,  Up: Top
+
+1 Introduction
+**************
+
+PHP mode is a major mode for editing PHP source code in Emacs.  As an
+extension of Emacs's C mode, it inherits all C mode's navigation and
+editing functionality.  Syntax elements of PHP source code is colored
+according to the grammar of PHP versions 3, 4 and 5.  By default, the
+indent rules follow the PHP PEAR coding guidelines.  Additional aids
+for developing in PHP include documentation search of the PHP manual,
+code completion and a class browser.
+
+   To find out what version of PHP mode you have installed run `M-x
+php-mode-version'.
+
+   PHP mode was first released in 1999 and was written by Turadg
+Aleahmad.  At the time of PHP mode's initial release, version 2 of PHP
+(PHP/FI) was only 2 years old and the release of PHP 3 had happened the
+year before.  In May of 2000, PHP 4 was released.  Subsequent versions
+of PHP mode scurried to support the quickly evolving syntax of this
+emerging programming language.
+
+   In 2001, PHP mode became a SourceForge project and version 1.0 was
+released later that year.  Further refinements of the Emacs library
+included improvements to the syntax coloring rules, portability between
+XEmacs and GNU Emacs, integration of various development tools
+available in various Emacsen.
+
+   PHP mode's support for PHP 5 first appeared in 2004, the same year
+PHP 5 was released.  2004 was the last year Aleahmad made a release.
+In 2005, Lennart Borgman combined a forked version of PHP mode with his
+"new XML mode for Emacs" (nXhtml).  The stalled development of PHP
+resulted in people sharing various patches and improvements to PHP mode
+over the Internet.
+
+   The 1.4 release in 2008 represented a renewed commitment to the
+Emacs Lisp library with the addition of considerable updates and
+improvements - the first in over 2 years.
+
+   This manual describes PHP mode for practiced Emacs users especially
+those who have read or can refer to the Emacs manual.  The reader
+should already know how to program in PHP, although one could easily
+learn how to program PHP using PHP mode and Emacs.  There are no
+explanations of PHP programming in this manual.
+
+
+File: php-mode.info,  Node: Installation,  Next: Electricity,  Prev: Introduction,  Up: Top
+
+2 Installation
+**************
+
+PHP mode can be installed like any Emacs Lisp library.
+
+   Download a source archive of the file.  It is available from PHP
+mode's Web site.
+
+   `http://php-mode.sourceforge.net/'
+
+   Download either the file `php-mode-1.5.0.tar.gz' or
+`php-mode-1.5.0.zip'.  Both source files have a respective GnuPG(1)
+signature file with a .SIG file name extension.
+
+   To verify the source archive you need the key of the maintainer.
+The public key can be downloaded from the Web site and imported, or
+imported from a key server.
+
+     $ gpg --recv-keys 8E372922
+     gpg: requesting key 8E372922 from hkp server keys.gnupg.net
+     gpg: key 8E372922: public key
+     "Aaron S. Hawley (SourceForge) <ashawley@users.sourceforge.net>"
+     imported
+
+   The public key can also be imported from a file.
+
+     $ gpg --import ashawley-sf-pubkey.asc
+     gpg: key 8E372922: public key
+     "Aaron S. Hawley (SourceForge) <ashawley@users.sourceforge.net>"
+     imported
+     gpg: Total number processed: 1
+     gpg:               imported: 1
+
+   Assign the trust for the maintainer key.
+
+     $ gpg --edit-key 8E372922
+     Command> trust
+     pub  1024D/8E372922  created: 2008-01-25  expires: 2010-01-01  usage: SC
+                          trust: unknown       validity: unknown
+     sub  2048g/A4B44512  created: 2008-01-25  expires: 2010-01-01  usage: E
+     [ unknown] (1). Aaron S. Hawley (SourceForge)
+                     <ashawley@users.sourceforge.net>
+
+     Please decide how far you trust this user to correctly
+     verify other users' keys (by looking at passports, checking
+     fingerprints from different sources, etc.)
+
+       1 = I don't know or won't say
+       2 = I do NOT trust
+       3 = I trust marginally
+       4 = I trust fully
+       5 = I trust ultimately
+       m = back to the main menu
+
+     Your decision? 1
+
+     pub  1024D/8E372922  created: 2008-01-25  expires: 2010-01-01  usage: SC
+                          trust: undefined     validity: unknown
+     sub  2048g/A4B44512  created: 2008-01-25  expires: 2010-01-01  usage: E
+     [ unknown] (1). Aaron S. Hawley (SourceForge)
+                     <ashawley@users.sourceforge.net>
+     Command> quit
+
+   Verify a source package by using the GPG verify command on the
+signature file with the source file located in the same directory.
+
+     $ gpg --verify php-mode-1.4.0.tar.gz.sig
+     gpg: Signature made Fri 25 Jan 2008 01:30:24 PM EST
+     gpg: using DSA key ID 8E372922
+     gpg: Good signature from
+     "Aaron S. Hawley (SourceForge) <ashawley@users.sourceforge.net>"
+     Primary key fingerprint: B425 30C2 4F72 D4F1 FD01
+                              D07D 7087 6760 8E37 2922
+
+   After the source package is verified, unpack the source archive.
+
+     $ tar zxf php php-mode-1.5.0.tar.gz
+
+   The files are extracted to the directory `php-mode-1.5.0'.  Run
+`make' in the directory to build all the formats of the documentation -
+Info, HTML, PostScript and PDF.  Read the notes in the `Makefile' to
+learn how to run `make' to compile the manual into a single particular
+format.
+
+   If you have a local directory where Emacs Lisp libraries are stored,
+for example `~/elisp', then put the following in your `.emacs' file if
+you haven't already
+
+     (add-to-list 'load-path "~/elisp")
+
+   Then, put the file `php-model.el' into your Emacs `load-path',
+`~/elisp', and add `php-mode' to your `.emacs' file.
+
+     (load "php-mode")
+
+   From inside Emacs, run `M-x customize-variable RET php-file-patterns
+RET'.  This variable instructs Emacs what file names should be opened
+in PHP mode.  If the defaults are fine, then click or hit `RET' on
+`Save for Future Sessions'.
+
+   Alternatively, put these lines in your `.emacs' file.
+
+     (add-to-list 'auto-mode-alist
+     	     '("\\.php[34]?\\'\\|\\.phtml\\'" . php-mode))
+
+   If you work on projects, like Drupal, that use other extension for
+PHP source file, you may need to add this to your `.emacs'.
+
+     (add-to-list 'auto-mode-alist '("\\.module\\'" . php-mode))
+     (add-to-list 'auto-mode-alist '("\\.inc\\'" . php-mode))
+
+   ---------- Footnotes ----------
+
+   (1) More information on GPG and OpenPGP at `http://www.gnupg.org/'
+
+
+File: php-mode.info,  Node: Electricity,  Next: Motion,  Prev: Installation,  Up: Top
+
+3 Electricity
+*************
+
+Certain characters when inserted in Emacs have "electricity".  Emacs
+recognizes them as "electric" and automatically reacts in some way to
+their insertion.  This is unlike the `self-insert-command' - the
+conventional manner Emacs inserts most characters into the buffer and
+without side-effect.
+
+   For example, the indent commands for programming language modes -
+including PHP mode - are electric.  Hitting `TAB' (or `C-i') typically
+indents the line to the correct column based on the nested declaration
+blocks or conditional (control) syntax statements.  Other examples of
+electric characters include braces ({ and }), characters related to
+comments (#, / and *), and semicolons.  Inserting "electric" characters
+causes the line to be automatically be indented appropriately by PHP
+mode.
+
+   Should PHP mode ever do something you wish it didn't, like indenting
+incorrectly after inserting a character when you wish it didn't, then
+you've been "electrocuted".  To avoid this, use `quoted-insert' by
+prefixing the character with `C-q'.  For example, `C-q TAB' for a tab.
+Alternatively, disable the electric effect of PHP mode with `C-c C-l'.
+Issue `C-c C-l' again to activate the electric effect again.
+
+
+File: php-mode.info,  Node: Motion,  Next: Indentation,  Prev: Electricity,  Up: Top
+
+4 Motion
+********
+
+The traditional point movement commands for Emacs(1) and Emacs's C
+mode(2) are supported in PHP mode.  The following are noteworthy
+commands for working on PHP code or are extensions expressly provided
+by PHP mode.
+
+`C-M-f'
+     Move forward past the current syntax (`forward-sexp').  If point
+     is in a string literal, move to the end of the string.  If point
+     is at the beginning of a parenthetical expression, move to the end
+     of it.  If at the beginning of statement block that is surrounded
+     by braces, move to the end of the block.  If point is at an
+     identifier, skip to the end of it.  
+
+`C-M-b'
+     Same as `C-M-f', except a syntactic element move to its beginning
+     (`backward-sexp').  
+
+`C-M-a'
+     Move point to the beginning of the top-level function definition
+     (`c-beginning-of-defun').  
+
+`C-M-e'
+     Move point to the end of the top-level function definition
+     (`c-end-of-defun').  
+
+`C-M-<HOME>'
+     Move point to the beginning of the current function
+     (`beginning-of-defun').  
+
+`C-M-<END>'
+     Move point to the end of the current function (`end-of-defun').  
+
+`M-m'
+     Move to the indentation at the beginning of the line
+     (`back-to-indentation').  
+
+`C-c C-w'
+     Enable word motion across mixed case identifiers with
+     `forward-word' and `backward-word' commands (`c-subword-mode').
+   Most movement commands support prefixing the command with a "numeric
+argument" by using Emacs's "universal argument" command.  Type `C-u N',
+where N is the number of times to repeat a command.  If no number N is
+provided, Emacs will repeat the command 4 times by default.  *Note
+Numeric Arguments: (emacs)Arguments.
+
+   ---------- Footnotes ----------
+
+   (1) *Note Changing the Location of Point: (emacs)Moving Point.
+
+   (2) *Note Movement Commands: (ccmode)Movement Commands.
+
+
+File: php-mode.info,  Node: Indentation,  Next: Editing,  Prev: Motion,  Up: Top
+
+5 Indentation
+*************
+
+PHP mode's indentation settings inherit the defaults set by Emacs C
+mode, or the rules customized for C mode.(1)
+
+   PHP mode provides indentation settings that follow the PHP PEAR
+"Coding Standards"(2).  It has the consequence in PHP mode of making
+the indentation commands use four spaces, and not tabs.  This setting is
+turned on whenever the file name associated with a buffer includes the
+string "PEAR", case insensitive and the file ends in ".php".
+
+   You can force the use of this setting for all files edited with PHP
+mode by setting `php-mode-force-pear' to non-nil.  Configure the
+variable with either `M-x customize-variable RET php-mode-force-pear
+RET', or by setting its value in your Emacs initialization file
+(`~/.emacs').
+
+   PHP does not appropriately indent HTML tags.  *Note Embedded HTML::.
+
+   To customize PHP mode's indentation rules, change the following
+variables.
+
+`c-basic-offset'
+     This style variable of C mode controls how many columns in the
+     level of indentation.  By default this is 4 spaces in PHP mode
+     (and in C mode).  
+
+`indent-tabs-mode'
+     Variable of Emacs that determines whether indentation commands
+     should insert the tab character or insert the equivalent number of
+     space characters.  In PHP mode, this is set to to nil by default.  
+
+`tab-width'
+     This variable of Emacs determines how "wide" a tab in the buffer
+     should be considered.  This is also traditionally described as
+     setting the distance between "tab stops".  By default, PHP mode
+     does not insert tabs for indentation.
+
+`php-mode-force-pear'
+     Use the indentation rules of PHP PEAR for all files opened in PHP
+     mode.  See above.
+
+
+   The usual commands for indenting in Emacs(3) and Emacs's C mode(4):
+are supported in PHP mode, following the indentation rules of PHP.
+
+`TAB'
+     Properly indent current line, even from the middle of the line
+     (`c-indent-command').  
+
+`C-j'
+     Insert text after point to a newline, and properly indent the
+     newline (`c-indent-command').  
+
+`C-M-\'
+     Properly indent each line of region (`indent-region').  
+
+`C-c C-q'
+     Properly indent each line of current top-level function or
+     top-level class (`c-indent-defun').
+
+   ---------- Footnotes ----------
+
+   (1) *Note Customizing Indentation: (ccmode)Customizing Indentation.
+
+   (2) `http://pear.php.net/manual/en/standards.php'
+
+   (3) *Note Indentation Commands: (emacs)Indentation Commands.
+
+   (4) *Note Indentation Commands: (ccmode)Indentation Commands.
+
+
+File: php-mode.info,  Node: Editing,  Next: Completion,  Prev: Indentation,  Up: Top
+
+6 Editing
+*********
+
+`M-q'
+     Fill the paragraph to current value of `fill-column'.  The command
+     does the right thing for indented code and PHP comments including
+     Docblock comments.  
+
+`C-u N C-x f'
+     Set the `fill-column' to N when using the `M-q' command
+     (`fill-paragraph').  
+
+`C-M-h'
+     Mark the current function (`c-mark-function').  Puts the mark at
+     the end and of the function and the point at the beginning.
+     Useful if you want to kill the region with `C-w' or `M-w', or
+     indent the region with `C-M-\' or `C-x TAB' (*Note Indentation::.).  
+
+`M-x mark-defun'
+     Like `C-M-h' (`c-mark-function'), except place the mark at the end
+     of the function even if it's not at the top-level.  With functions
+     that are methods defined in a class, they may be indented and not
+     top-level functions, however this command will only mark the
+     current function.
+
+
+   The traditional commands for narrowing to a region in Emacs(1) are
+supported in PHP mode.  The following commands are notable to mention
+for working with PHP or are extensions expressly provided PHP mode.
+
+`C-x n d'
+     Narrow the buffer to the contents of the current function
+     (`narrow-to-defun').  This will narrow to the function as
+     identified to the current function, even if it is nested in an
+     object or another function.  The logic to narrow the function is
+     the same as the `beginning-of-defun' and `end-of-defun' commands -
+     see *note Motion::, and the `mark-defun' command - see above.  
+
+`C-x n w'
+     Undo any narrowing by widening the buffer again by making the rest
+     of the buffer available (`widen').
+
+   ---------- Footnotes ----------
+
+   (1) *Note Narrowing: (emacs)Narrowing.
+
+
+File: php-mode.info,  Node: Completion,  Next: PHP Comments,  Prev: Editing,  Up: Top
+
+7 Completion
+************
+
+Completing function names, identifiers and PHP keywords is possible in
+PHP mode.  In PHP mode, it is possible to complete identifiers defined
+by the PHP programming language, and to complete functions defined by
+you.
+
+   For PHP mode to know the functions of keywords of PHP, it must have
+access to the PHP manual.  Download the HTML archive of the manual made
+of separate files for each function.(1) Unpack the files to a
+directory, and define the variable `php-manual-path' to the location of
+these files.  Configure this setting with either `M-x
+customize-variable RET php-manual-path RET', or by setting its value in
+your Emacs initialization file (`~/.emacs').
+
+   For functions and classes you define, you'll need to provide them to
+Emacs as a "tag file".(2) Creating a tag file (`TAGS') from a PHP
+source code file is done by running the `etags' command on the file.(3)
+The `etags' command can even generate tag files for providing
+completion across multiple files.  For larger projects and PHP coded
+libraries, use a system like a Makefile to generate and maintain the
+tag tables.
+
+   Run,
+
+     etags FILE
+
+   to create a `TAGS' file for FILE.
+
+   To generate a `TAGS' file for all the PHP files in the current
+directory, run
+
+     etags *.php
+
+   To enable a tags file you need to use the following command.
+
+`C-u M-x visit-tags-table'
+     Specify the `TAGS' file that PHP mode should use to find
+     completion candidates for the current buffer.
+
+`M-x visit-tags-table'
+     Specify the `TAGS' file that PHP mode should use to find
+     completion candidates for all buffers, and even other modes other
+     than PHP mode.
+
+
+   If you are interested in any one or more of the following consider
+using the variable `php-completion-file'.
+
+  1. avoid regenerating the completion table from the PHP manual every
+     Emacs session,
+
+  2. generating a completion file from a facility external to Emacs
+     tags,
+
+  3. or provide more granular control over the completion rules for
+     files;
+
+
+   Configure this setting with either `M-x customize-variable RET
+php-completion-file RET', or by setting its value in your Emacs
+initialization file (`~/.emacs').
+
+   To create a file that can be set for `php-completion-file', create
+with the following shell commands with the HTML version of the PHP
+manual installed at `/usr/share/doc/php-manual/en/html'.
+
+     $ cd /usr/share/doc/php-manual/en/html
+     $ ls -1 function*.html \
+       | sed -e 's/^function\.\([-a-zA-Z_0-9]*\)\.html/\1/' \
+       | tr - _ \
+       > ~/.emacs.d/php/php-completion-file
+
+   In larger projects or with other specific needs, conventional
+methods of setting these and other variables may be inadequate.  As of
+2008, third-party packages do exist for Emacs to configure Emacs
+settings on groups of files or for directory trees, including
+`dirvars.el'.
+
+`M-TAB'
+
+`ESC TAB'
+
+`C-[ TAB'
+     Complete function name at point (`php-complete-function').  
+
+`C-.'
+     Show in the minibuffer the argument list for the current function
+     at point (`php-show-arglist').  The argument list is generated by
+     finding and jumping to the respective function's location
+     specified in the tag file (see above).  The argument list is then
+     read and printed to the minibuffer.
+
+   ---------- Footnotes ----------
+
+   (1) `http://www.php.net/download-docs.php'
+
+   (2) *Note Tags Tables: (emacs)Tags.
+
+   (3) *Note Creating Tags Tables: (emacs)Create Tags Table.
+
+
+File: php-mode.info,  Node: PHP Comments,  Next: PHP Documentation,  Prev: Completion,  Up: Top
+
+8 PHP Comments
+**************
+
+The usual commands for inserting, managing and editing source code
+comments in Emacs(1) and Emacs's C mode(2) are supported in PHP mode.
+The following noteworthy commands are useful for working with PHP or are
+extensions expressly provided by PHP mode.
+
+`M-;'
+     Insert comment at point (`comment-dwim').  If comment already
+     exist, indent comment (`comment-indent').  
+
+`M-j'
+     Insert a newline in a comment on the next line with the comment
+     starting at the same column as the current line
+     (`c-indent-new-comment-line').  
+
+`C-x ;'
+     Set the current column as the column to start comments from in the
+     buffer (`comment-set-column').  This affects the variable
+     `comment-column'.  
+
+`C-c C-c'
+     Comment out the current region (`comment-region').  If region is
+     already commented, the region is uncommented.  
+
+`M-- C-x ;'
+
+`C-u M-;'
+     Kill the comment on the current line (`comment-kill' called by
+     `comment-set-column' or `comment-dwim').
+
+`C-u N M-;'
+     Kill the next N comments (`comment-dwim').  
+
+`M-x comment-box'
+     Surround region with comment characters.
+
+
+   ---------- Footnotes ----------
+
+   (1) *Note Manipulating Comments: (emacs)Comments.
+
+   (2) *Note Comment Commands: (ccmode)Comment Commands.
+
+
+File: php-mode.info,  Node: PHP Documentation,  Next: Index Menu,  Prev: PHP Comments,  Up: Top
+
+9 PHP Documentation
+*******************
+
+PHP mode supports the online documentation available from
+`http://www.php.net/'.  The `browse-url' system of Emacs supports these
+commands.  Run the Emacs command `M-x customize-group RET browse-url
+RET' to configure how `browse-url' behaves.  For example, you may want
+to change the Web browser Emacs uses for visiting a page of the manual
+for PHP.
+
+`C-c C-m'
+
+`C-c RET'
+     Browse PHP manual in a Web browser.  
+
+`C-c C-f'
+     Search PHP manual using identifier at point.
+
+
+
+File: php-mode.info,  Node: Index Menu,  Next: Change Logs,  Prev: PHP Documentation,  Up: Top
+
+10 Index Menu
+*************
+
+PHP mode provides a menu of the functions and classes defined in the
+current buffer.  The menu is pretty simple, but is helpful when
+navigating large files.  The contents of the menu also provide a good
+overview to the user about the file's contents.
+
+   To enable this menu, run the following command.
+
+`M-x imenu-add-menubar-index'
+     Scan the file for functions and class declarations, then add a
+     menu item called "Index" to the menu bar.
+
+
+   In the menu will be any one or more of the following menu items.
+
+`All Functions'
+     A sub-menu containing the names of functions defined in the
+     current buffer.  Clicking on a function name will visit the
+     location of the function's definition.  
+
+`Classes'
+     A sub-menu containing the names of classes defined in the current
+     buffer.  Clicking on a class name will visit the location of the
+     class's definition.
+
+`Public Methods, Private Methods, Protected Methods'
+     Each of these three "method" sub-menus list the names of objects
+     methods defined as "public", "private" or "protected".  Clicking
+     on a method name will visit the location of the function's
+     definition.  
+
+`*Rescan*'
+     Rescan the contents of the current buffer, and update both the
+     indexes the entries in the menu.
+
+
+   To have Emacs automatically rescan the current buffer, change the
+setting for `imenu-auto-rescan' to non-nil with either `M-x
+customize-variable RET php-completion-file RET', or by setting its
+value in your Emacs initialization file (`~/.emacs').
+
+
+File: php-mode.info,  Node: Change Logs,  Next: Speedbar,  Prev: Index Menu,  Up: Top
+
+11 Change Logs
+**************
+
+PHP mode can help generate `ChangeLog' files, a widely-adopted format
+for documenting the changes made to source code-especially software.
+PHP mode and Emacs will determine the current function, file name,
+author information and date and use it all to prepare a properly
+formatted `ChangeLog' entry in the file.
+
+   The `add-change-log-entry' commands can be run from within a buffer
+containing a PHP buffer, or from a buffer in Diff mode with a revision
+patch to a PHP source file.  *Note Diff Mode: (emacs)Diff Mode.
+
+`C-x 4 a'
+     Add an entry in a `ChangeLog' file opened in another window, or
+     add a new line to the already begun entry
+     (`add-change-log-entry-other-window').  Provides the file name and
+     the respective function name, when applicable, for the current
+     point.  The point can be in a PHP source file, or in the hunk of a
+     diff file.(1)  This command will also add the current author and
+     date to the entry.
+
+
+   ---------- Footnotes ----------
+
+   (1) *Note Diff Mode: (emacs)Diff Mode.
+
+
+File: php-mode.info,  Node: Speedbar,  Next: Customization,  Prev: Change Logs,  Up: Top
+
+12 Speedbar
+***********
+
+FIXME: Document speedbar support for PHP mode.
+
+
+File: php-mode.info,  Node: Customization,  Next: Embedded HTML,  Prev: Speedbar,  Up: Top
+
+13 Customization
+****************
+
+Customization for PHP mode can be done using Emacs's "Customize"
+feature(1), or by adding bits of Emacs Lisp to your Emacs initialization
+file (`~/.emacs').
+
+`M-x customize-group RET php RET'
+     Start a `*Customize*' buffer with the customizable settings for
+     PHP mode.
+
+
+   ---------- Footnotes ----------
+
+   (1) *Note Customization: (emacs)Customization.
+
+
+File: php-mode.info,  Node: Embedded HTML,  Next: Contributors,  Prev: Customization,  Up: Top
+
+Appendix A Embedded HTML
+************************
+
+The PHP programming language is commonly embedded with HTML but also
+with other markup formats.  Unfortunately, PHP mode is currently unable
+to recognize these other bits and provide commands that behave
+appropriately.  Other Emacs modes for properly indenting HTML include
+HTML mode, SGML mode and XML mode.
+
+   For example, when editing the HTML sections found in a PHP file,
+consider turning on HTML mode with `M-x html-mode'.  Use the the
+mode-specific commands for manipulating the HTML.  When finished, turn
+back on PHP mode with `M-x php-mode' to return working on the PHP
+sections of the file.
+
+   Alternatively, consider using a "multiple major mode" like mumamo,
+mmm-mode or multi-mode.  These modes allow a single buffer to appoint
+different major modes to respective portions of the buffer.
+
+
+File: php-mode.info,  Node: Contributors,  Next: Copying This Manual,  Prev: Embedded HTML,  Up: Top
+
+Appendix B Contributors
+***********************
+
+   * Juanjo
+
+   * Torsten Martinsen
+
+   * Vinai Kopp
+
+   * Sean Champ
+
+   * Doug Marcey
+
+   * Kevin Blake
+
+   * Rex McMaster
+
+   * Mathias Meyer
+
+   * Boris Folgmann
+
+   * Roland Rosenfeld
+
+   * Fred Yankowski
+
+   * Craig Andrews
+
+   * John Keller
+
+   * Ryan Sammartino
+
+   * ppercot
+
+   * Valentin Funk
+
+   * Stig Bakken
+
+   * Gregory Stark
+
+   * Chris Morris
+
+   * Nils Rennebarth
+
+   * Gerrit Riessen
+
+   * Eric Mc Sween
+
+   * Ville Skytta
+
+   * Giacomo Tesio
+
+   * Lennart Borgman
+
+   * Stefan Monnier
+
+   * Aaron S. Hawley
+
+   * Aaron Iba
+
+   * Dias Badekas
+
+
+File: php-mode.info,  Node: Copying This Manual,  Next: Concept Index,  Prev: Contributors,  Up: Top
+
+Appendix C Copying This Manual
+******************************
+
+                      Version 1.2, November 2002
+
+     Copyright (C) 2000,2001,2002 Free Software Foundation, Inc.
+     51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
+
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+
+  0. PREAMBLE
+
+     The purpose of this License is to make a manual, textbook, or other
+     functional and useful document "free" in the sense of freedom: to
+     assure everyone the effective freedom to copy and redistribute it,
+     with or without modifying it, either commercially or
+     noncommercially.  Secondarily, this License preserves for the
+     author and publisher a way to get credit for their work, while not
+     being considered responsible for modifications made by others.
+
+     This License is a kind of "copyleft", which means that derivative
+     works of the document must themselves be free in the same sense.
+     It complements the GNU General Public License, which is a copyleft
+     license designed for free software.
+
+     We have designed this License in order to use it for manuals for
+     free software, because free software needs free documentation: a
+     free program should come with manuals providing the same freedoms
+     that the software does.  But this License is not limited to
+     software manuals; it can be used for any textual work, regardless
+     of subject matter or whether it is published as a printed book.
+     We recommend this License principally for works whose purpose is
+     instruction or reference.
+
+  1. APPLICABILITY AND DEFINITIONS
+
+     This License applies to any manual or other work, in any medium,
+     that contains a notice placed by the copyright holder saying it
+     can be distributed under the terms of this License.  Such a notice
+     grants a world-wide, royalty-free license, unlimited in duration,
+     to use that work under the conditions stated herein.  The
+     "Document", below, refers to any such manual or work.  Any member
+     of the public is a licensee, and is addressed as "you".  You
+     accept the license if you copy, modify or distribute the work in a
+     way requiring permission under copyright law.
+
+     A "Modified Version" of the Document means any work containing the
+     Document or a portion of it, either copied verbatim, or with
+     modifications and/or translated into another language.
+
+     A "Secondary Section" is a named appendix or a front-matter section
+     of the Document that deals exclusively with the relationship of the
+     publishers or authors of the Document to the Document's overall
+     subject (or to related matters) and contains nothing that could
+     fall directly within that overall subject.  (Thus, if the Document
+     is in part a textbook of mathematics, a Secondary Section may not
+     explain any mathematics.)  The relationship could be a matter of
+     historical connection with the subject or with related matters, or
+     of legal, commercial, philosophical, ethical or political position
+     regarding them.
+
+     The "Invariant Sections" are certain Secondary Sections whose
+     titles are designated, as being those of Invariant Sections, in
+     the notice that says that the Document is released under this
+     License.  If a section does not fit the above definition of
+     Secondary then it is not allowed to be designated as Invariant.
+     The Document may contain zero Invariant Sections.  If the Document
+     does not identify any Invariant Sections then there are none.
+
+     The "Cover Texts" are certain short passages of text that are
+     listed, as Front-Cover Texts or Back-Cover Texts, in the notice
+     that says that the Document is released under this License.  A
+     Front-Cover Text may be at most 5 words, and a Back-Cover Text may
+     be at most 25 words.
+
+     A "Transparent" copy of the Document means a machine-readable copy,
+     represented in a format whose specification is available to the
+     general public, that is suitable for revising the document
+     straightforwardly with generic text editors or (for images
+     composed of pixels) generic paint programs or (for drawings) some
+     widely available drawing editor, and that is suitable for input to
+     text formatters or for automatic translation to a variety of
+     formats suitable for input to text formatters.  A copy made in an
+     otherwise Transparent file format whose markup, or absence of
+     markup, has been arranged to thwart or discourage subsequent
+     modification by readers is not Transparent.  An image format is
+     not Transparent if used for any substantial amount of text.  A
+     copy that is not "Transparent" is called "Opaque".
+
+     Examples of suitable formats for Transparent copies include plain
+     ASCII without markup, Texinfo input format, LaTeX input format,
+     SGML or XML using a publicly available DTD, and
+     standard-conforming simple HTML, PostScript or PDF designed for
+     human modification.  Examples of transparent image formats include
+     PNG, XCF and JPG.  Opaque formats include proprietary formats that
+     can be read and edited only by proprietary word processors, SGML or
+     XML for which the DTD and/or processing tools are not generally
+     available, and the machine-generated HTML, PostScript or PDF
+     produced by some word processors for output purposes only.
+
+     The "Title Page" means, for a printed book, the title page itself,
+     plus such following pages as are needed to hold, legibly, the
+     material this License requires to appear in the title page.  For
+     works in formats which do not have any title page as such, "Title
+     Page" means the text near the most prominent appearance of the
+     work's title, preceding the beginning of the body of the text.
+
+     A section "Entitled XYZ" means a named subunit of the Document
+     whose title either is precisely XYZ or contains XYZ in parentheses
+     following text that translates XYZ in another language.  (Here XYZ
+     stands for a specific section name mentioned below, such as
+     "Acknowledgements", "Dedications", "Endorsements", or "History".)
+     To "Preserve the Title" of such a section when you modify the
+     Document means that it remains a section "Entitled XYZ" according
+     to this definition.
+
+     The Document may include Warranty Disclaimers next to the notice
+     which states that this License applies to the Document.  These
+     Warranty Disclaimers are considered to be included by reference in
+     this License, but only as regards disclaiming warranties: any other
+     implication that these Warranty Disclaimers may have is void and
+     has no effect on the meaning of this License.
+
+  2. VERBATIM COPYING
+
+     You may copy and distribute the Document in any medium, either
+     commercially or noncommercially, provided that this License, the
+     copyright notices, and the license notice saying this License
+     applies to the Document are reproduced in all copies, and that you
+     add no other conditions whatsoever to those of this License.  You
+     may not use technical measures to obstruct or control the reading
+     or further copying of the copies you make or distribute.  However,
+     you may accept compensation in exchange for copies.  If you
+     distribute a large enough number of copies you must also follow
+     the conditions in section 3.
+
+     You may also lend copies, under the same conditions stated above,
+     and you may publicly display copies.
+
+  3. COPYING IN QUANTITY
+
+     If you publish printed copies (or copies in media that commonly
+     have printed covers) of the Document, numbering more than 100, and
+     the Document's license notice requires Cover Texts, you must
+     enclose the copies in covers that carry, clearly and legibly, all
+     these Cover Texts: Front-Cover Texts on the front cover, and
+     Back-Cover Texts on the back cover.  Both covers must also clearly
+     and legibly identify you as the publisher of these copies.  The
+     front cover must present the full title with all words of the
+     title equally prominent and visible.  You may add other material
+     on the covers in addition.  Copying with changes limited to the
+     covers, as long as they preserve the title of the Document and
+     satisfy these conditions, can be treated as verbatim copying in
+     other respects.
+
+     If the required texts for either cover are too voluminous to fit
+     legibly, you should put the first ones listed (as many as fit
+     reasonably) on the actual cover, and continue the rest onto
+     adjacent pages.
+
+     If you publish or distribute Opaque copies of the Document
+     numbering more than 100, you must either include a
+     machine-readable Transparent copy along with each Opaque copy, or
+     state in or with each Opaque copy a computer-network location from
+     which the general network-using public has access to download
+     using public-standard network protocols a complete Transparent
+     copy of the Document, free of added material.  If you use the
+     latter option, you must take reasonably prudent steps, when you
+     begin distribution of Opaque copies in quantity, to ensure that
+     this Transparent copy will remain thus accessible at the stated
+     location until at least one year after the last time you
+     distribute an Opaque copy (directly or through your agents or
+     retailers) of that edition to the public.
+
+     It is requested, but not required, that you contact the authors of
+     the Document well before redistributing any large number of
+     copies, to give them a chance to provide you with an updated
+     version of the Document.
+
+  4. MODIFICATIONS
+
+     You may copy and distribute a Modified Version of the Document
+     under the conditions of sections 2 and 3 above, provided that you
+     release the Modified Version under precisely this License, with
+     the Modified Version filling the role of the Document, thus
+     licensing distribution and modification of the Modified Version to
+     whoever possesses a copy of it.  In addition, you must do these
+     things in the Modified Version:
+
+       A. Use in the Title Page (and on the covers, if any) a title
+          distinct from that of the Document, and from those of
+          previous versions (which should, if there were any, be listed
+          in the History section of the Document).  You may use the
+          same title as a previous version if the original publisher of
+          that version gives permission.
+
+       B. List on the Title Page, as authors, one or more persons or
+          entities responsible for authorship of the modifications in
+          the Modified Version, together with at least five of the
+          principal authors of the Document (all of its principal
+          authors, if it has fewer than five), unless they release you
+          from this requirement.
+
+       C. State on the Title page the name of the publisher of the
+          Modified Version, as the publisher.
+
+       D. Preserve all the copyright notices of the Document.
+
+       E. Add an appropriate copyright notice for your modifications
+          adjacent to the other copyright notices.
+
+       F. Include, immediately after the copyright notices, a license
+          notice giving the public permission to use the Modified
+          Version under the terms of this License, in the form shown in
+          the Addendum below.
+
+       G. Preserve in that license notice the full lists of Invariant
+          Sections and required Cover Texts given in the Document's
+          license notice.
+
+       H. Include an unaltered copy of this License.
+
+       I. Preserve the section Entitled "History", Preserve its Title,
+          and add to it an item stating at least the title, year, new
+          authors, and publisher of the Modified Version as given on
+          the Title Page.  If there is no section Entitled "History" in
+          the Document, create one stating the title, year, authors,
+          and publisher of the Document as given on its Title Page,
+          then add an item describing the Modified Version as stated in
+          the previous sentence.
+
+       J. Preserve the network location, if any, given in the Document
+          for public access to a Transparent copy of the Document, and
+          likewise the network locations given in the Document for
+          previous versions it was based on.  These may be placed in
+          the "History" section.  You may omit a network location for a
+          work that was published at least four years before the
+          Document itself, or if the original publisher of the version
+          it refers to gives permission.
+
+       K. For any section Entitled "Acknowledgements" or "Dedications",
+          Preserve the Title of the section, and preserve in the
+          section all the substance and tone of each of the contributor
+          acknowledgements and/or dedications given therein.
+
+       L. Preserve all the Invariant Sections of the Document,
+          unaltered in their text and in their titles.  Section numbers
+          or the equivalent are not considered part of the section
+          titles.
+
+       M. Delete any section Entitled "Endorsements".  Such a section
+          may not be included in the Modified Version.
+
+       N. Do not retitle any existing section to be Entitled
+          "Endorsements" or to conflict in title with any Invariant
+          Section.
+
+       O. Preserve any Warranty Disclaimers.
+
+     If the Modified Version includes new front-matter sections or
+     appendices that qualify as Secondary Sections and contain no
+     material copied from the Document, you may at your option
+     designate some or all of these sections as invariant.  To do this,
+     add their titles to the list of Invariant Sections in the Modified
+     Version's license notice.  These titles must be distinct from any
+     other section titles.
+
+     You may add a section Entitled "Endorsements", provided it contains
+     nothing but endorsements of your Modified Version by various
+     parties--for example, statements of peer review or that the text
+     has been approved by an organization as the authoritative
+     definition of a standard.
+
+     You may add a passage of up to five words as a Front-Cover Text,
+     and a passage of up to 25 words as a Back-Cover Text, to the end
+     of the list of Cover Texts in the Modified Version.  Only one
+     passage of Front-Cover Text and one of Back-Cover Text may be
+     added by (or through arrangements made by) any one entity.  If the
+     Document already includes a cover text for the same cover,
+     previously added by you or by arrangement made by the same entity
+     you are acting on behalf of, you may not add another; but you may
+     replace the old one, on explicit permission from the previous
+     publisher that added the old one.
+
+     The author(s) and publisher(s) of the Document do not by this
+     License give permission to use their names for publicity for or to
+     assert or imply endorsement of any Modified Version.
+
+  5. COMBINING DOCUMENTS
+
+     You may combine the Document with other documents released under
+     this License, under the terms defined in section 4 above for
+     modified versions, provided that you include in the combination
+     all of the Invariant Sections of all of the original documents,
+     unmodified, and list them all as Invariant Sections of your
+     combined work in its license notice, and that you preserve all
+     their Warranty Disclaimers.
+
+     The combined work need only contain one copy of this License, and
+     multiple identical Invariant Sections may be replaced with a single
+     copy.  If there are multiple Invariant Sections with the same name
+     but different contents, make the title of each such section unique
+     by adding at the end of it, in parentheses, the name of the
+     original author or publisher of that section if known, or else a
+     unique number.  Make the same adjustment to the section titles in
+     the list of Invariant Sections in the license notice of the
+     combined work.
+
+     In the combination, you must combine any sections Entitled
+     "History" in the various original documents, forming one section
+     Entitled "History"; likewise combine any sections Entitled
+     "Acknowledgements", and any sections Entitled "Dedications".  You
+     must delete all sections Entitled "Endorsements."
+
+  6. COLLECTIONS OF DOCUMENTS
+
+     You may make a collection consisting of the Document and other
+     documents released under this License, and replace the individual
+     copies of this License in the various documents with a single copy
+     that is included in the collection, provided that you follow the
+     rules of this License for verbatim copying of each of the
+     documents in all other respects.
+
+     You may extract a single document from such a collection, and
+     distribute it individually under this License, provided you insert
+     a copy of this License into the extracted document, and follow
+     this License in all other respects regarding verbatim copying of
+     that document.
+
+  7. AGGREGATION WITH INDEPENDENT WORKS
+
+     A compilation of the Document or its derivatives with other
+     separate and independent documents or works, in or on a volume of
+     a storage or distribution medium, is called an "aggregate" if the
+     copyright resulting from the compilation is not used to limit the
+     legal rights of the compilation's users beyond what the individual
+     works permit.  When the Document is included in an aggregate, this
+     License does not apply to the other works in the aggregate which
+     are not themselves derivative works of the Document.
+
+     If the Cover Text requirement of section 3 is applicable to these
+     copies of the Document, then if the Document is less than one half
+     of the entire aggregate, the Document's Cover Texts may be placed
+     on covers that bracket the Document within the aggregate, or the
+     electronic equivalent of covers if the Document is in electronic
+     form.  Otherwise they must appear on printed covers that bracket
+     the whole aggregate.
+
+  8. TRANSLATION
+
+     Translation is considered a kind of modification, so you may
+     distribute translations of the Document under the terms of section
+     4.  Replacing Invariant Sections with translations requires special
+     permission from their copyright holders, but you may include
+     translations of some or all Invariant Sections in addition to the
+     original versions of these Invariant Sections.  You may include a
+     translation of this License, and all the license notices in the
+     Document, and any Warranty Disclaimers, provided that you also
+     include the original English version of this License and the
+     original versions of those notices and disclaimers.  In case of a
+     disagreement between the translation and the original version of
+     this License or a notice or disclaimer, the original version will
+     prevail.
+
+     If a section in the Document is Entitled "Acknowledgements",
+     "Dedications", or "History", the requirement (section 4) to
+     Preserve its Title (section 1) will typically require changing the
+     actual title.
+
+  9. TERMINATION
+
+     You may not copy, modify, sublicense, or distribute the Document
+     except as expressly provided for under this License.  Any other
+     attempt to copy, modify, sublicense or distribute the Document is
+     void, and will automatically terminate your rights under this
+     License.  However, parties who have received copies, or rights,
+     from you under this License will not have their licenses
+     terminated so long as such parties remain in full compliance.
+
+ 10. FUTURE REVISIONS OF THIS LICENSE
+
+     The Free Software Foundation may publish new, revised versions of
+     the GNU Free Documentation License from time to time.  Such new
+     versions will be similar in spirit to the present version, but may
+     differ in detail to address new problems or concerns.  See
+     `http://www.gnu.org/copyleft/'.
+
+     Each version of the License is given a distinguishing version
+     number.  If the Document specifies that a particular numbered
+     version of this License "or any later version" applies to it, you
+     have the option of following the terms and conditions either of
+     that specified version or of any later version that has been
+     published (not as a draft) by the Free Software Foundation.  If
+     the Document does not specify a version number of this License,
+     you may choose any version ever published (not as a draft) by the
+     Free Software Foundation.
+
+ADDENDUM: How to use this License for your documents
+====================================================
+
+To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and license
+notices just after the title page:
+
+       Copyright (C)  YEAR  YOUR NAME.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.2
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+
+   If you have Invariant Sections, Front-Cover Texts and Back-Cover
+Texts, replace the "with...Texts." line with this:
+
+         with the Invariant Sections being LIST THEIR TITLES, with
+         the Front-Cover Texts being LIST, and with the Back-Cover Texts
+         being LIST.
+
+   If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License, to
+permit their use in free software.
+
+
+File: php-mode.info,  Node: Concept Index,  Next: Function Index,  Prev: Copying This Manual,  Up: Top
+
+Concept Index
+*************
+
+ [index ]
+* Menu:
+
+* .emacs:                                Customization.       (line   6)
+* .emacs, auto-mode-alist:               Installation.        (line 103)
+* .emacs, Drupal:                        Installation.        (line 108)
+* .emacs, imenu-auto-rescan:             Index Menu.          (line  41)
+* .emacs, load-path:                     Installation.        (line  87)
+* .emacs, php-completion-file:           Completion.          (line  50)
+* .emacs, php-manual-path:               Completion.          (line  11)
+* .emacs, php-mode-force-pear:           Indentation.         (line  15)
+* add ChangeLog entry:                   Change Logs.         (line  16)
+* argument list, function:               Completion.          (line  88)
+* beginning of function:                 Motion.              (line  21)
+* block:                                 Motion.              (line  11)
+* braces <1>:                            Electricity.         (line  12)
+* braces:                                Motion.              (line  11)
+* browse PHP manual:                     PHP Documentation.   (line  13)
+* bumpy case:                            Motion.              (line  40)
+* C mode:                                Introduction.        (line   6)
+* C mode, indentation commands:          Indentation.         (line  47)
+* C mode, indentation rules:             Indentation.         (line   6)
+* C mode, movement:                      Motion.              (line   6)
+* camel case:                            Motion.              (line  40)
+* case, mixed:                           Motion.              (line  40)
+* ChangeLog:                             Change Logs.         (line   6)
+* ChangeLog entry:                       Change Logs.         (line  16)
+* class index:                           Index Menu.          (line   6)
+* class, indent:                         Indentation.         (line  59)
+* column, comment:                       PHP Comments.        (line  18)
+* column, fill:                          Editing.             (line   9)
+* comment:                               PHP Comments.        (line   6)
+* comment box:                           PHP Comments.        (line  36)
+* comment column:                        PHP Comments.        (line  18)
+* comment newline:                       PHP Comments.        (line  13)
+* comment region:                        PHP Comments.        (line  23)
+* comment, Docblock:                     Editing.             (line   6)
+* comment, filling:                      Editing.             (line   6)
+* comment, indent:                       PHP Comments.        (line  11)
+* comment, insert:                       PHP Comments.        (line  11)
+* comment, kill:                         PHP Comments.        (line  27)
+* comments:                              Electricity.         (line  12)
+* complete function:                     Completion.          (line  83)
+* completion:                            Completion.          (line   6)
+* conditional statements:                Electricity.         (line  12)
+* customization:                         Customization.       (line   6)
+* customization, browse-url:             PHP Documentation.   (line   6)
+* customization, Imenu auto rescan:      Index Menu.          (line  41)
+* customization, PHP completion file:    Completion.          (line  50)
+* customization, PHP manual path:        Completion.          (line  11)
+* declaration blocks:                    Electricity.         (line  12)
+* defun, mark:                           Editing.             (line  19)
+* diff file:                             Change Logs.         (line  12)
+* Diff mode:                             Change Logs.         (line  12)
+* Docblock comment:                      Editing.             (line   6)
+* documentatino, PHP mode:               Installation.        (line  81)
+* documentation, PHP:                    PHP Documentation.   (line   6)
+* downloading PHP mode:                  Installation.        (line   8)
+* Drupal:                                Installation.        (line 108)
+* electric indentation:                  Electricity.         (line  12)
+* electricity:                           Electricity.         (line   6)
+* embedded code:                         Embedded HTML.       (line   6)
+* end of function:                       Motion.              (line  29)
+* etags:                                 Completion.          (line  19)
+* etags, running:                        Completion.          (line  27)
+* extension, PHP file name:              Installation.        (line  98)
+* extracting PHP mode:                   Installation.        (line  77)
+* features:                              Introduction.        (line   6)
+* file name extension, PHP:              Installation.        (line  98)
+* file, ChangeLog:                       Change Logs.         (line   6)
+* file, diff:                            Change Logs.         (line  12)
+* file, patch:                           Change Logs.         (line  12)
+* fill column:                           Editing.             (line   9)
+* filling:                               Editing.             (line   6)
+* filling comment:                       Editing.             (line   6)
+* filling indentation:                   Editing.             (line   6)
+* function argument list:                Completion.          (line  88)
+* function index:                        Index Menu.          (line   6)
+* function narrowing:                    Editing.             (line  33)
+* function, beginning of:                Motion.              (line  21)
+* function, complete:                    Completion.          (line  83)
+* function, end of:                      Motion.              (line  40)
+* function, indent:                      Indentation.         (line  59)
+* function, mark:                        Editing.             (line  13)
+* function, narrow:                      Editing.             (line  33)
+* GnuPG:                                 Installation.        (line  13)
+* GPG signature:                         Installation.        (line  13)
+* HTML <1>:                              Embedded HTML.       (line   6)
+* HTML:                                  Indentation.         (line  21)
+* indent class:                          Indentation.         (line  59)
+* indent comment:                        PHP Comments.        (line  11)
+* indent function:                       Indentation.         (line  59)
+* indent line:                           Indentation.         (line  50)
+* indent newline:                        Indentation.         (line  52)
+* indent region:                         Indentation.         (line  56)
+* indentation, commands for:             Indentation.         (line  47)
+* indentation, electric:                 Electricity.         (line  12)
+* indentation, filling:                  Editing.             (line   6)
+* indentation, force PEAR rules:         Indentation.         (line  15)
+* indentation, level of:                 Indentation.         (line  26)
+* indentation, markup:                   Embedded HTML.       (line   6)
+* indentation, move to:                  Motion.              (line  36)
+* indentation, rules for:                Indentation.         (line   6)
+* index menu:                            Index Menu.          (line   6)
+* index, class:                          Index Menu.          (line   6)
+* index, function:                       Index Menu.          (line   6)
+* initialization file:                   Customization.       (line   6)
+* insert comment:                        PHP Comments.        (line  11)
+* installing PHP mode:                   Installation.        (line   6)
+* installing php-mode.el:                Installation.        (line  93)
+* kill comment:                          PHP Comments.        (line  27)
+* line, indent:                          Indentation.         (line  50)
+* loading php-mode.el:                   Installation.        (line  93)
+* Makefile:                              Completion.          (line  19)
+* markup formats:                        Embedded HTML.       (line   6)
+* menu bar:                              Index Menu.          (line  13)
+* menu, index:                           Index Menu.          (line   6)
+* minibuffer:                            Completion.          (line  88)
+* mixed case:                            Motion.              (line  40)
+* mmm-mode:                              Embedded HTML.       (line  18)
+* motion:                                Motion.              (line   6)
+* movement:                              Motion.              (line   6)
+* multi-mode:                            Embedded HTML.       (line  18)
+* multiple major mode:                   Embedded HTML.       (line  18)
+* mumamo:                                Embedded HTML.       (line  18)
+* narrowing:                             Editing.             (line  29)
+* newline:                               Indentation.         (line  52)
+* newline, comment:                      PHP Comments.        (line  13)
+* numeric argument:                      Motion.              (line  45)
+* OpenPGP:                               Installation.        (line  13)
+* paragraph, fill:                       Editing.             (line   6)
+* parentheses:                           Motion.              (line  11)
+* patch file:                            Change Logs.         (line  12)
+* PEAR:                                  Introduction.        (line   6)
+* PEAR, indentation:                     Indentation.         (line   9)
+* PHP completion file:                   Completion.          (line  50)
+* PHP documentation:                     PHP Documentation.   (line   6)
+* PHP file name extension:               Installation.        (line  98)
+* PHP manual path:                       Completion.          (line  11)
+* PHP mode documentation:                Installation.        (line  81)
+* PHP mode Web site:                     Installation.        (line  11)
+* PHP mode, downloading:                 Installation.        (line   8)
+* PHP mode, installing:                  Installation.        (line   6)
+* PHP mode, unpacking:                   Installation.        (line  77)
+* PHP versions:                          Introduction.        (line   6)
+* php-mode.el, installing:               Installation.        (line  93)
+* php-mode.el, loading:                  Installation.        (line  93)
+* point:                                 Motion.              (line   6)
+* region, comment:                       PHP Comments.        (line  23)
+* region, comment box:                   PHP Comments.        (line  36)
+* region, indent:                        Indentation.         (line  56)
+* rescan:                                Index Menu.          (line  34)
+* rescan, automatically:                 Index Menu.          (line  41)
+* search PHP manual:                     PHP Documentation.   (line  16)
+* SGML:                                  Embedded HTML.       (line   6)
+* spaces:                                Indentation.         (line   9)
+* statements:                            Motion.              (line  11)
+* string:                                Motion.              (line  11)
+* syntax highlighting:                   Introduction.        (line   6)
+* syntax, backward:                      Motion.              (line  17)
+* syntax, forward:                       Motion.              (line  11)
+* tab:                                   Indentation.         (line  50)
+* tabs:                                  Indentation.         (line   9)
+* tag:                                   Completion.          (line  40)
+* tag file:                              Completion.          (line  19)
+* universal argument:                    Motion.              (line  45)
+* unpacking PHP mode:                    Installation.        (line  77)
+* verifiy PHP mode with GPG:             Installation.        (line  13)
+* version, PHP:                          Introduction.        (line   6)
+* version, PHP mode:                     Introduction.        (line  14)
+* Web site, PHP mode:                    Installation.        (line  11)
+* widening:                              Editing.             (line  39)
+* XML:                                   Embedded HTML.       (line   6)
+
+
+File: php-mode.info,  Node: Function Index,  Next: Keyboard Index,  Prev: Concept Index,  Up: Top
+
+Function Index
+**************
+
+ [index ]
+* Menu:
+
+* add-change-log-entry:                  Change Logs.          (line 12)
+* add-change-log-entry-other-window:     Change Logs.          (line 16)
+* back-to-indentation:                   Motion.               (line 36)
+* backward-sexp:                         Motion.               (line 17)
+* backward-word:                         Motion.               (line 40)
+* beginning-of-defun:                    Motion.               (line 29)
+* browse-url:                            PHP Documentation.    (line  6)
+* c-beginning-of-defun:                  Motion.               (line 21)
+* c-end-of-defun:                        Motion.               (line 25)
+* c-fill-paragraph:                      Editing.              (line  6)
+* c-indent-command:                      Indentation.          (line 50)
+* c-indent-defun:                        Indentation.          (line 59)
+* c-indent-new-comment-line:             PHP Comments.         (line 13)
+* c-mark-function:                       Editing.              (line 13)
+* c-subword-mode:                        Motion.               (line 40)
+* c-toggle-electric-state:               Electricity.          (line 21)
+* comment-box:                           PHP Comments.         (line 36)
+* comment-dwim:                          PHP Comments.         (line 11)
+* comment-indent:                        PHP Comments.         (line 11)
+* comment-kill:                          PHP Comments.         (line 27)
+* comment-region:                        PHP Comments.         (line 23)
+* comment-set-column:                    PHP Comments.         (line 27)
+* customize-group <1>:                   PHP Documentation.    (line  6)
+* customize-group:                       Customization.        (line 10)
+* customize-variable <1>:                Installation.         (line 98)
+* customize-variable <2>:                Index Menu.           (line 41)
+* customize-variable <3>:                Indentation.          (line 15)
+* customize-variable:                    Completion.           (line 63)
+* end-of-defun:                          Motion.               (line 33)
+* fill-paragraph:                        Editing.              (line  9)
+* forward-sexp:                          Motion.               (line 11)
+* forward-word:                          Motion.               (line 40)
+* html-mode:                             Embedded HTML.        (line 12)
+* imenu:                                 Index Menu.           (line 23)
+* imenu-add-menubar-index:               Index Menu.           (line 13)
+* imenu-update-menubar:                  Index Menu.           (line 34)
+* indent-region <1>:                     Editing.              (line 13)
+* indent-region:                         Indentation.          (line 56)
+* indent-rigidly:                        Editing.              (line 13)
+* kill-region:                           Editing.              (line 13)
+* kill-ring-save:                        Editing.              (line 13)
+* mark-defun:                            Editing.              (line 19)
+* narrow-to-defun:                       Editing.              (line 33)
+* newline-and-indent:                    Indentation.          (line 52)
+* php-browse-manual:                     PHP Documentation.    (line 13)
+* php-complete-function:                 Completion.           (line 83)
+* php-mode <1>:                          Embedded HTML.        (line 12)
+* php-mode:                              Installation.         (line 93)
+* php-mode-version:                      Introduction.         (line 14)
+* php-search-documentation:              PHP Documentation.    (line 16)
+* php-show-arglist:                      Completion.           (line 88)
+* quoted-insert:                         Electricity.          (line 21)
+* self-insert-command:                   Electricity.          (line  6)
+* set-fill-column:                       Editing.              (line  9)
+* universal-argument:                    Motion.               (line 45)
+* visit-tags-table:                      Completion.           (line 40)
+* widen:                                 Editing.              (line 39)
+
+
+File: php-mode.info,  Node: Keyboard Index,  Next: Variable Index,  Prev: Function Index,  Up: Top
+
+Keyboard Index
+**************
+
+ [index ]
+* Menu:
+
+* C-.:                                   Completion.           (line 88)
+* C-[ TAB:                               Completion.           (line 83)
+* C-c C-c:                               PHP Comments.         (line 23)
+* C-c C-f:                               PHP Documentation.    (line 16)
+* C-c C-l:                               Electricity.          (line 21)
+* C-c C-m:                               PHP Documentation.    (line 13)
+* C-c C-q:                               Indentation.          (line 59)
+* C-c C-w:                               Motion.               (line 40)
+* C-c RET:                               PHP Documentation.    (line 13)
+* C-j:                                   Indentation.          (line 52)
+* C-M-<END>:                             Motion.               (line 33)
+* C-M-<HOME>:                            Motion.               (line 29)
+* C-M-\ <1>:                             Indentation.          (line 56)
+* C-M-\:                                 Editing.              (line 13)
+* C-M-a:                                 Motion.               (line 21)
+* C-M-b:                                 Motion.               (line 17)
+* C-M-e:                                 Motion.               (line 25)
+* C-M-f:                                 Motion.               (line 11)
+* C-M-h:                                 Editing.              (line 13)
+* C-q:                                   Electricity.          (line 21)
+* C-u:                                   Motion.               (line 45)
+* C-w:                                   Editing.              (line 13)
+* C-x 4 a:                               Change Logs.          (line 16)
+* C-x ;:                                 PHP Comments.         (line 18)
+* C-x f:                                 Editing.              (line  9)
+* C-x n d:                               Editing.              (line 33)
+* C-x n w:                               Editing.              (line 39)
+* ESC TAB:                               Completion.           (line 83)
+* M-- C-x ;:                             PHP Comments.         (line 27)
+* M-;:                                   PHP Comments.         (line 11)
+* M-j:                                   PHP Comments.         (line 13)
+* M-m:                                   Motion.               (line 36)
+* M-q:                                   Editing.              (line  6)
+* M-TAB:                                 Completion.           (line 83)
+* M-w:                                   Editing.              (line 13)
+* M-x comment-box:                       PHP Comments.         (line 36)
+* M-x comment-indent:                    PHP Comments.         (line 13)
+* M-x customize-group:                   Customization.        (line 10)
+* M-x customize-variable <1>:            Completion.           (line 11)
+* M-x customize-variable <2>:            Indentation.          (line 15)
+* M-x customize-variable <3>:            Index Menu.           (line 41)
+* M-x customize-variable <4>:            Completion.           (line 63)
+* M-x customize-variable:                Installation.         (line 98)
+* M-x html-mode:                         Embedded HTML.        (line 12)
+* M-x mark-defun:                        Editing.              (line 19)
+* M-x php-mode:                          Embedded HTML.        (line 12)
+* M-x php-mode-version:                  Introduction.         (line 14)
+* M-x visit-tags-table:                  Completion.           (line 40)
+* TAB <1>:                               Indentation.          (line 50)
+* TAB:                                   Electricity.          (line 12)
+
+
+File: php-mode.info,  Node: Variable Index,  Prev: Keyboard Index,  Up: Top
+
+Variable Index
+**************
+
+ [index ]
+* Menu:
+
+* add-log-current-defun-header-regexp:   Change Logs.          (line  6)
+* c-basic-offset:                        Indentation.          (line 26)
+* comment-column:                        PHP Comments.         (line 18)
+* fill-column:                           Editing.              (line  9)
+* imenu-auto-rescan:                     Index Menu.           (line 41)
+* indent-tabs-mode:                      Indentation.          (line 29)
+* load-path:                             Installation.         (line 93)
+* php-beginning-of-defun-regexp:         Change Logs.          (line  6)
+* php-completion-file:                   Completion.           (line 50)
+* php-manual-path:                       Completion.           (line 11)
+* php-mode-force-pear:                   Indentation.          (line 15)
+* tab-width:                             Indentation.          (line 34)
+
+
+
+Tag Table:
+Node: Top839
+Node: Introduction2050
+Node: Installation4260
+Ref: Installation-Footnote-18471
+Node: Electricity8542
+Node: Motion9866
+Ref: Motion-Footnote-111683
+Ref: Motion-Footnote-211750
+Node: Indentation11810
+Ref: Indentation-Footnote-114184
+Ref: Indentation-Footnote-214256
+Ref: Indentation-Footnote-314310
+Ref: Indentation-Footnote-414375
+Node: Editing14441
+Ref: Editing-Footnote-116222
+Node: Completion16265
+Ref: Completion-Footnote-119680
+Ref: Completion-Footnote-219727
+Ref: Completion-Footnote-319767
+Node: PHP Comments19829
+Ref: PHP Comments-Footnote-121109
+Ref: PHP Comments-Footnote-221163
+Node: PHP Documentation21221
+Node: Index Menu21839
+Node: Change Logs23503
+Ref: Change Logs-Footnote-124613
+Node: Speedbar24656
+Node: Customization24821
+Ref: Customization-Footnote-125264
+Node: Embedded HTML25315
+Node: Contributors26268
+Node: Copying This Manual26985
+Node: Concept Index49393
+Node: Function Index61960
+Node: Keyboard Index66275
+Node: Variable Index70080
+
+End Tag Table

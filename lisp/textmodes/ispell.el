@@ -1218,14 +1218,12 @@ DICT-ABBREV."
        (readable (file-readable-p lang-conf)))
     (if readable
       (list (concat "--conf=" ispell-cocoaspell-prefs-dir "filters.conf")
-            (concat "--per-conf=" ispell-cocoaspell-prefs-dir dict-abbrev ".conf")
-            "--encoding=utf-8")
+            (concat "--per-conf=" ispell-cocoaspell-prefs-dir dict-abbrev ".conf"))
       (let* ((dict-abbrev-parts (split-string dict-abbrev "-"))
            (dict-abbrev-root (car dict-abbrev-parts))
            (dict-abbrev-mods (nth 1 dict-abbrev-parts))
            (dict-dir (ispell-cocoaspell-dict-dir dict-abbrev)))
       (list (concat "--dict-dir=" dict-dir)
-            "--encoding=utf-8"
             (concat "--home-dir=" ispell-cocoaspell-prefs-dir)
             (concat "--jargon=" dict-abbrev-mods)
             (concat "--lang=" dict-abbrev-root)
@@ -1538,10 +1536,9 @@ Assumes that value contains no whitespace."
                      (ispell-cocoaspell-aspell-args dict-abbrev))
                     ((eq ispell-use-cocoaspell-internal 'dicts)
                      (list "-d" dict-name
-                           "--dict-dir" dict-dir
-                           "--encoding=utf-8"))
-                    (t (list "-d" dict-name "--encoding=utf-8")))
-		nil				; aspell doesn't support this
+                           "--dict-dir" dict-dir))
+                    (t (list "-d" dict-name)))
+                    nil                               ; aspell doesn't support this
 		;; Here we specify the encoding to use while communicating with
 		;; aspell.  This doesn't apply to command line arguments, so
 		;; just don't pass words to spellcheck as arguments...
@@ -4540,8 +4537,7 @@ Both should not be used to define a buffer-local dictionary."
   ;; If there's an existing ispell process that's wrong for this use,
   ;; kill it.
   (if (and ispell-buffer-local-name
-	   (not (equal ispell-buffer-local-name (buffer-name)))
-	   (not (string= ispell-program-name "NSSpellChecker")))
+	   (not (equal ispell-buffer-local-name (buffer-name))))
       (ispell-kill-ispell t))
   ;; Actually start a new ispell process, because we need
   ;; to send commands now to specify the local words to it.

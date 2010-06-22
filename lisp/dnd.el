@@ -172,24 +172,29 @@ An alternative for systems that do not support unc file names is
   (let* ((f (dnd-get-local-file-name uri t)))
     (if (and f (file-readable-p f))
 	(progn
-	  (if dnd-open-file-other-window
-	      (find-file-other-window f)
-	    (find-file f))
+	  (if (fboundp 'aquamacs-find-file)
+	      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))
+		(aquamacs-find-file f))
+	    (if dnd-open-file-other-window
+		(find-file-other-window f)
+	      (find-file f)))
 	  'private)
-      (error "Can not read %s" uri))))
+      (error "Cannot read %s" uri))))
 
 (defun dnd-open-remote-url (uri action)
   "Open a remote file with `find-file' and `url-handler-mode'.
 Turns `url-handler-mode' on if not on before.  The file is opened in the
 current window, or a new window if `dnd-open-file-other-window' is set.
 URI is the url for the file.  ACTION is ignored."
-  (progn
-    (require 'url-handlers)
-    (or url-handler-mode (url-handler-mode))
+  (require 'url-handlers)
+  (or url-handler-mode (url-handler-mode))
+  (if (fboundp 'aquamacs-find-file)
+      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))
+	(aquamacs-find-file uri))
     (if dnd-open-file-other-window
 	(find-file-other-window uri)
-      (find-file uri))
-    'private))
+      (find-file uri)))
+  'private)
 
 
 (defun dnd-open-file (uri action)
