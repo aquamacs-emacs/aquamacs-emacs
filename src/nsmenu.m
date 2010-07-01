@@ -627,14 +627,18 @@ static int trackingMenu = 0;
 
 - (BOOL)performKeyEquivalent: (NSEvent *)event
  {
-  // i
-  //   [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
-  // else
    if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
       && FRAME_NS_VIEW (SELECTED_FRAME ())
-      /* must check if EmacsWindow.  Could be sheet/NSPanel */
-      && [[event window] isKindOfClass: [EmacsWindow class]])
-    [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+      /* must check if EmacsWindow.  Could be sheet/NSPanel.
+         If on space without a window, [event window] is nil. */
+       && (! [event window] || [[event window] isKindOfClass: [EmacsWindow class]]))
+     {
+       /* if we don't have a frame as key,
+	  then the selected frame/window and current buffer will be used.
+	  To Do: prevent changes to that buffer. 
+       (setting read-only here doesn't help - the event is processed later.)*/
+       [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+     }
   else
     {
       /* open panels (text fields, etc.) require a 
