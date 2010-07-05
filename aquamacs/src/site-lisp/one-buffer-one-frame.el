@@ -669,12 +669,16 @@ even if it's the only visible frame."
 	    (left . ,(frame-parameter f 'left))
 	    (width . ,(frame-parameter f 'width))
 	    (height . ,(frame-parameter f 'height)))))
-    (condition-case nil
+
+    (with-current-buffer (current-buffer) ; delete-frame changes current buffer
+      ;; current buffer must be preserved (e.g., for other kill-buffer-hook functions)
+      (condition-case nil
 	;; do not delete the last visible frame if there are others hidden:
 	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
-	(progn (delete-frame (or frame (selected-frame)))
-	       (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
-		 (error)))
+	(progn 
+	  (delete-frame (or frame (selected-frame)))
+	  (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
+	    (error)))
       (error
        ;; we're doing delete-frame later
        ;;(run-hook-with-args 'delete-frame-functions f)
@@ -695,8 +699,7 @@ even if it's the only visible frame."
 	       (select-window (frame-first-window hf))
 	       (switch-to-buffer hb  'norecord)
 	       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
-	       (make-frame-invisible hf t)))))
-       ))))
+	       (make-frame-invisible hf t))))))))))
 
 
 (defun aquamacs-handle-frame-iconified (&optional frame)
