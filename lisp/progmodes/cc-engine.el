@@ -2245,50 +2245,50 @@ comment at the start of cc-engine.el for more info."
 	    (setq cnt (1- cnt)))))
     (point)))
 
-(defun c-state-balance-parens-backwards (here top)
-  ;; Return the position of the opening paren/brace/bracket before HERE which
-  ;; matches the outermost close p/b/b between HERE and TOP, like this:
+(defun c-state-balance-parens-backwards (here- here+ top)
+  ;; Return the position of the opening paren/brace/bracket before HERE- which
+  ;; matches the outermost close p/b/b between HERE+ and TOP.  Except when
+  ;; there's a macro, HERE- and HERE+ are the same.  Like this:
   ;;
-  ;;      ......................................
-  ;;      |                                    |
-  ;;      (    [ ( ...........  )      ( )  ]  )
-  ;;      ^                 ^                       ^
-  ;;      |                 |                       |
-  ;;   return             HERE                     TOP
+  ;;	  ............................................
+  ;;	  |				             |
+  ;;	  (    [ ( .........#macro.. )      ( )  ]  )
+  ;;	  ^		    ^	  ^			    ^
+  ;;	  |		    |	  |			    |
+  ;;   return		  HERE- HERE+			   TOP
   ;;
   ;; If there aren't enough opening paren/brace/brackets, return the position
-  ;; of the outermost one found, or HERE it there are none.  If there are no
-  ;; closeing p/b/bs between HERE and TOP, return HERE.  HERE and TOP must not
-  ;; be inside literals.  Only the accessible portion of the buffer will be
-  ;; scanned.
+  ;; of the outermost one found, or HERE- if there are none.  If there are no
+  ;; closeing p/b/bs between HERE+ and TOP, return HERE-.  HERE-/+ and TOP
+  ;; must not be inside literals.  Only the accessible portion of the buffer
+  ;; will be scanned.
 
-  ;; PART 1: scan from `here' up to `top', accumulating ")"s which enclose
-  ;; `here'.  Go round the next loop each time we pass over such a ")".  These
-  ;; probably match "("s before `here'.
+  ;; PART 1: scan from `here+' up to `top', accumulating ")"s which enclose
+  ;; `here'.  Go round the next loop each time we pass over such a ")".	 These
+  ;; probably match "("s before `here-'.
   (let (pos pa ren+1 lonely-rens)
     (save-excursion
       (save-restriction
 	(narrow-to-region (point-min) top) ; This can move point, sometimes.
-	(setq pos here)
+	(setq pos here+)
 	(c-safe
 	  (while
 	      (setq ren+1 (scan-lists pos 1 1)) ; might signal
 	    (setq lonely-rens (cons ren+1 lonely-rens)
 		  pos ren+1)))))
 
-      ;; PART 2: Scan back before `here' searching for the "("s
+      ;; PART 2: Scan back before `here-' searching for the "("s
       ;; matching/mismatching the ")"s found above. We only need to direct the
       ;; caller to scan when we've encountered unmatched right parens.
-      (when lonely-rens
-	(setq pos here)
-	(c-safe
-	  (while
-	      (and lonely-rens		; actual values aren't used.
-		   (setq pa (scan-lists pos -1 1)))
-	    (setq pos pa)
-	    (setq lonely-rens (cdr lonely-rens)))) ;)
-	)
-      pos))
+    (setq pos here-)
+    (when lonely-rens
+      (c-safe
+	(while
+	    (and lonely-rens		; actual values aren't used.
+		 (setq pa (scan-lists pos -1 1)))
+	  (setq pos pa)
+	  (setq lonely-rens (cdr lonely-rens)))))
+    pos))
 
 (defun c-parse-state-get-strategy (here good-pos)
   ;; Determine the scanning strategy for adjusting `c-parse-state', attempting
@@ -2746,6 +2746,7 @@ comment at the start of cc-engine.el for more info."
 	lit	    ; (START . END) of a literal containing some point.
 	here-lit-start here-lit-end	; bounds of literal containing `here'
 					; or `here' itself.
+	here- here+		     ; start/end of macro around HERE, or HERE
 	(here-bol (c-point 'bol here))
 	(too-far-back (max (- here c-state-cache-too-far) 1)))
 
@@ -2758,57 +2759,73 @@ comment at the start of cc-engine.el for more info."
     ;; At this stage, (> pos here);
     ;; (< (c-state-cache-top-lparen) here)  (or is nil).
 
-    ;; CASE 1: The top of the cache is a brace pair which now encloses `here'.
-    ;; As good-pos, return the address. of the "{".
-    (if (and (consp (car c-state-cache))
-	     (> (cdar c-state-cache) here))
-	;; Since we've no knowledge of what's inside these braces, we have no
-	;; alternative but to direct the caller to scan the buffer from the
-	;; opening brace.
-	(progn
-	  (setq pos (caar c-state-cache))
-	  (setcar c-state-cache pos)
-	  (list (1+ pos) pos t)) ; return value.  We've just converted a brace
-			         ; pair entry into a { entry, so the caller
-			         ; needs to search for a brace pair before the
-			         ; {.
+    (cond
+     ((and (consp (car c-state-cache))
+	   (> (cdar c-state-cache) here))
+      ;; CASE 1: The top of the cache is a brace pair which now encloses
+      ;; `here'.  As good-pos, return the address. of the "{".  Since we've no
+      ;; knowledge of what's inside these braces, we have no alternative but
+      ;; to direct the caller to scan the buffer from the opening brace.
+      (setq pos (caar c-state-cache))
+      (setcar c-state-cache pos)
+      (list (1+ pos) pos t)) ; return value.  We've just converted a brace pair
+			     ; entry into a { entry, so the caller needs to
+			     ; search for a brace pair before the {.
 
-      ;; ;; `here' might be inside a literal.  Check for this.
-      (setq lit (c-state-literal-at here)
-	    here-lit-start (or (car lit) here)
-	    here-lit-end (or (cdr lit) here))
+     ;; `here' might be inside a literal.  Check for this.
+     ((progn
+	(setq lit (c-state-literal-at here)
+	      here-lit-start (or (car lit) here)
+	      here-lit-end (or (cdr lit) here))
+	;; Has `here' just "newly entered" a macro?
+	(save-excursion
+	  (goto-char here-lit-start)
+	  (if (and (c-beginning-of-macro)
+		   (or (null c-state-old-cpp-beg)
+		       (not (= (point) c-state-old-cpp-beg))))
+	      (progn
+		(setq here- (point))
+		(c-end-of-macro)
+		(setq here+ (point)))
+	    (setq here- here-lit-start
+		  here+ here-lit-end)))
 
-      ;; `here' might be nested inside any depth of parens (or brackets but
-      ;; not braces).  Scan backwards to find the outermost such opening
-      ;; paren, if there is one.  This will be the scan position to return.
-      (save-restriction
-	(narrow-to-region cache-pos (point-max))
-	(setq pos (c-state-balance-parens-backwards here-lit-end pos)))
+	;; `here' might be nested inside any depth of parens (or brackets but
+	;; not braces).  Scan backwards to find the outermost such opening
+	;; paren, if there is one.  This will be the scan position to return.
+	(save-restriction
+	  (narrow-to-region cache-pos (point-max))
+	  (setq pos (c-state-balance-parens-backwards here- here+ pos)))
+	nil))				; for the cond
 
-      (if (< pos here-lit-start)
-	  ;; CASE 2: Address of outermost ( or [ which now encloses `here',
-	  ;; but didn't enclose the (previous) `c-state-cache-good-pos'.  If
-	  ;; there is a brace pair preceding this, it will already be in
-	  ;; `c-state-cache', unless there was a brace pair after it,
-	  ;; i.e. there'll only be one to scan for if we've just deleted one.
-	  (list pos (and dropped-cons pos) t) ; Return value.
+     ((< pos here-lit-start)
+      ;; CASE 2: Address of outermost ( or [ which now encloses `here', but
+      ;; didn't enclose the (previous) `c-state-cache-good-pos'.  If there is
+      ;; a brace pair preceding this, it will already be in `c-state-cache',
+      ;; unless there was a brace pair after it, i.e. there'll only be one to
+      ;; scan for if we've just deleted one.
+      (list pos (and dropped-cons pos) t)) ; Return value.
 
-	;; `here' isn't enclosed in a (previously unrecorded) bracket/paren.
-	;; Further forward scanning isn't needed, but we still need to find a
-	;; GOOD-POS.  Step out of all enclosing "("s on HERE's line.
+      ;; `here' isn't enclosed in a (previously unrecorded) bracket/paren.
+      ;; Further forward scanning isn't needed, but we still need to find a
+      ;; GOOD-POS.  Step out of all enclosing "("s on HERE's line.
+     ((progn
 	(save-restriction
 	  (narrow-to-region here-bol (point-max))
 	  (setq pos here-lit-start)
 	  (c-safe (while (setq pa (scan-lists pos -1 1))
 		    (setq pos pa))))	; might signal
-	(if (setq ren (c-safe-scan-lists pos -1 -1 too-far-back))
-	    ;; CASE 3: After a }/)/] before `here''s BOL.
-	    (list (1+ ren) (and dropped-cons pos) nil) ; Return value
+	nil))				; for the cond
 
-	  ;; CASE 4; Best of a bad job: BOL before `here-bol', or beginning of
-	  ;; literal containing it.
-	  (setq good-pos (c-state-lit-beg (c-point 'bopl here-bol)))
-	  (list good-pos (and dropped-cons good-pos) nil))))))
+     ((setq ren (c-safe-scan-lists pos -1 -1 too-far-back))
+       ;; CASE 3: After a }/)/] before `here''s BOL.
+      (list (1+ ren) (and dropped-cons pos) nil)) ; Return value
+
+     (t
+      ;; CASE 4; Best of a bad job: BOL before `here-bol', or beginning of
+      ;; literal containing it.
+      (setq good-pos (c-state-lit-beg (c-point 'bopl here-bol)))
+      (list good-pos (and dropped-cons good-pos) nil)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -4968,7 +4985,8 @@ comment at the start of cc-engine.el for more info."
   ;; POS (default point) is at a < character.  If it is both marked
   ;; with open/close paren syntax-table property, and has a matching >
   ;; (also marked) which is after LIM, remove the property both from
-  ;; the current > and its partner.
+  ;; the current > and its partner.  Return t when this happens, nil
+  ;; when it doesn't.
   (save-excursion
     (if pos
 	(goto-char pos)
@@ -4981,13 +4999,15 @@ comment at the start of cc-engine.el for more info."
 		 (equal (c-get-char-property (1- (point)) 'syntax-table)
 			c->-as-paren-syntax)) ; should always be true.
 	(c-unmark-<->-as-paren (1- (point)))
-	(c-unmark-<->-as-paren pos)))))
+	(c-unmark-<->-as-paren pos))
+      t)))
 
 (defun c-clear->-pair-props-if-match-before (lim &optional pos)
   ;; POS (default point) is at a > character.  If it is both marked
   ;; with open/close paren syntax-table property, and has a matching <
   ;; (also marked) which is before LIM, remove the property both from
-  ;; the current < and its partner.
+  ;; the current < and its partner.  Return t when this happens, nil
+  ;; when it doesn't.
   (save-excursion
     (if pos
 	(goto-char pos)
@@ -5000,7 +5020,8 @@ comment at the start of cc-engine.el for more info."
 		 (equal (c-get-char-property (point) 'syntax-table)
 			c-<-as-paren-syntax)) ; should always be true.
 	(c-unmark-<->-as-paren (point))
-	(c-unmark-<->-as-paren pos)))))
+	(c-unmark-<->-as-paren pos))
+      t)))
 
 (defun c-before-change-check-<>-operators (beg end)
   ;; Unmark certain pairs of "< .... >" which are currently marked as
@@ -5023,25 +5044,39 @@ comment at the start of cc-engine.el for more info."
   ;; 2010-01-29.
   (save-excursion
     (let ((beg-lit-limits (progn (goto-char beg) (c-literal-limits)))
-	  (end-lit-limits (progn (goto-char end) (c-literal-limits))))
+	  (end-lit-limits (progn (goto-char end) (c-literal-limits)))
+	  new-beg new-end need-new-beg need-new-end)
       ;; Locate the barrier before the changed region
       (goto-char  (if beg-lit-limits (car beg-lit-limits) beg))
       (c-syntactic-skip-backward "^;{}" (max (- beg 2048) (point-min)))
+      (setq new-beg (point))
 
       ;; Remove the syntax-table properties from each pertinent <...> pair.
       ;; Firsly, the ones with the < before beg and > after beg.
       (while (c-search-forward-char-property 'category 'c-<-as-paren-syntax beg)
-	(c-clear-<-pair-props-if-match-after beg (1- (point))))
+	(if (c-clear-<-pair-props-if-match-after beg (1- (point)))
+	    (setq need-new-beg t)))
 
       ;; Locate the barrier after END.
       (goto-char (if end-lit-limits (cdr end-lit-limits) end))
       (c-syntactic-re-search-forward "[;{}]"
 				     (min (+ end 2048) (point-max)) 'end)
+      (setq new-end (point))
 
       ;; Remove syntax-table properties from the remaining pertinent <...>
       ;; pairs, those with a > after end and < before end.
       (while (c-search-backward-char-property 'category 'c->-as-paren-syntax end)
-	(c-clear->-pair-props-if-match-before end)))))
+	(if (c-clear->-pair-props-if-match-before end)
+	    (setq need-new-end t)))
+
+      ;; Extend the fontification region, if needed.
+      (when need-new-beg
+	(goto-char new-beg)
+	(c-forward-syntactic-ws)
+	(and (< (point) c-new-BEG) (setq c-new-BEG (point))))
+
+      (when need-new-end
+	(and (> new-end c-new-END) (setq c-new-END new-end))))))
 
 
 

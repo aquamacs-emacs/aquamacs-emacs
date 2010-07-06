@@ -897,8 +897,25 @@ opening the first frame (e.g. open a connection to an X server).")
  ;				       (left . 99)) ;; bug #166 workaround
 				     initial-frame-alist)))
     ;; Under X Window, this creates the X frame and deletes the terminal frame.
-    (unless (daemonp)
-       (frame-initialize))
+  (unless (daemonp)
+    ;; Enable or disable the tool-bar and menu-bar.
+    ;; While we're at it, set `no-blinking-cursor' too.
+    (cond
+     ((or noninteractive emacs-basic-display)
+      (setq menu-bar-mode nil
+	    tool-bar-mode nil
+	    no-blinking-cursor t))
+     ;; Check X resources if available.
+     ((memq initial-window-system '(x w32 ns))
+      (let ((no-vals  '("no" "off" "false" "0")))
+	(if (member (x-get-resource "menuBar" "MenuBar") no-vals)
+	    (setq menu-bar-mode nil))
+	(if (member (x-get-resource "toolBar" "ToolBar") no-vals)
+	    (setq tool-bar-mode nil))
+	(if (member (x-get-resource "cursorBlink" "CursorBlink")
+		    no-vals)
+	    (setq no-blinking-cursor t)))))
+    (frame-initialize))
 
     ;; allow frame-notice-user-settings to override
     (setq frame-initial-geometry-arguments
@@ -908,6 +925,12 @@ opening the first frame (e.g. open a connection to an X server).")
 
 	     
   
+  (when (fboundp 'x-create-frame)
+    ;; Set up the tool-bar (even in tty frames, since Emacs might open a
+    ;; graphical frame later).
+    (unless noninteractive
+      (tool-bar-setup)))
+
   ;; Turn off blinking cursor if so specified in X resources.  This is here
   ;; only because all other settings of no-blinking-cursor are here.
   (unless (or noninteractive
@@ -917,13 +940,6 @@ opening the first frame (e.g. open a connection to an X server).")
 				'("off" "false")))))
     (setq no-blinking-cursor t))
 
-  ;; If frame was created with a menu bar, set menu-bar-mode on.
-  (unless (or noninteractive
-	      emacs-basic-display
-              (and (memq initial-window-system '(x w32))
-                   (<= (frame-parameter nil 'menu-bar-lines) 0)))
-    (menu-bar-mode 1))
-
   ;; Re-evaluate predefined variables whose initial value depends on
   ;; the runtime context.
   (mapc 'custom-reevaluate-setting
@@ -931,21 +947,6 @@ opening the first frame (e.g. open a connection to an X server).")
         ;; are dependencies between them.
         (prog1 (nreverse custom-delayed-init-variables)
           (setq custom-delayed-init-variables nil)))
-
-  ;; In Aquamacs, images are loaded when setting up tool-bar
-  ;; which requires image-load-path to be defined, which is a
-  ;; custom variable with delayed initialization.
-  (unless (or noninteractive (not (fboundp 'tool-bar-mode)))
-    ;; Set up the tool-bar.  Do this even in tty frames, so that there
-    ;; is a tool-bar if Emacs later opens a graphical frame.
-    (if (or emacs-basic-display
-	    (and (numberp (frame-parameter nil 'tool-bar-lines))
-		 (<= (frame-parameter nil 'tool-bar-lines) 0)))
-	;; On a graphical display with the toolbar disabled via X
-	;; resources, set up the toolbar without enabling it.
-	(tool-bar-setup)
-      ;; Otherwise, enable tool-bar-mode.
-      (tool-bar-mode 1)))
 
   (normal-erase-is-backspace-setup-frame)
 
@@ -1188,6 +1189,9 @@ the `--debug-init' option to view a complete error backtrace."
 		 (eq face-ignored-fonts old-face-ignored-fonts))
       (clear-face-cache)))
 
+  ;; Load ELPA packages.
+  (and user-init-file package-enable-at-startup (package-initialize))
+
   (setq after-init-time (current-time))
   (run-hooks 'after-init-hook)
 
@@ -1345,7 +1349,7 @@ Each element in the list should be a list of strings or pairs
 	 '("GNU" (lambda (button) (describe-gnu-project))
 	   "Display info on the GNU project")))
      " operating system.\n\n"
-       :face (lambda ()
+     :face (lambda ()
 	     (list 'variable-pitch
 		   (list :foreground
 			 (if (eq (frame-parameter nil 'background-mode) 'dark)
@@ -1384,7 +1388,7 @@ Each element in the list should be a list of strings or pairs
      "\tBuying printed manuals from the FSF\n"
      "\n"
      :link ("Emacs Tutorial" (lambda (button) (help-with-tutorial)))
-     "            \tLearn basic Emacs keystroke commands"
+     "\tLearn basic Emacs keystroke commands"
      (lambda ()
        (let* ((en "TUTORIAL")
 	      (tut (or (get-language-info current-language-environment

@@ -6,7 +6,7 @@
 
 ;; Author:     FSF (see below for full credits)
 ;; Maintainer: Andre Spiegel <spiegel@gnu.org>
-;; Keywords: tools
+;; Keywords: vc tools
 
 ;; This file is part of GNU Emacs.
 
@@ -580,9 +580,6 @@
 ;;   display the branch name in the mode-line. Replace
 ;;   vc-cvs-sticky-tag with that.
 ;;
-;; - vc-create-tag and vc-retrieve-tag should update the
-;;   buffers that might be visiting the affected files.
-;;
 ;;;; Internal cleanups:
 ;;
 ;; - backends that care about vc-stay-local should try to take it into
@@ -916,6 +913,16 @@ Within directories, only files already under version control are noticed."
     (nreverse flattened)))
 
 (defvar vc-dir-backend)
+(defvar log-view-vc-backend)
+(defvar diff-vc-backend)
+
+(defun vc-deduce-backend ()
+  (cond ((derived-mode-p 'vc-dir-mode)   vc-dir-backend)
+	((derived-mode-p 'log-view-mode) log-view-vc-backend)
+	((derived-mode-p 'diff-mode)     diff-vc-backend)
+	((derived-mode-p 'dired-mode)
+	 (vc-responsible-backend default-directory))
+	(vc-mode (vc-backend buffer-file-name))))
 
 (declare-function vc-dir-current-file "vc-dir" ())
 (declare-function vc-dir-deduce-fileset "vc-dir" (&optional state-model-only-files))
@@ -1550,6 +1557,10 @@ returns t if the buffer had changes, nil otherwise."
           (message "%s" (cdr messages))
           nil)
       (diff-mode)
+      (set (make-local-variable 'diff-vc-backend) (car vc-fileset))
+      (set (make-local-variable 'revert-buffer-function)
+	   `(lambda (ignore-auto noconfirm)
+	      (vc-diff-internal ,async ',vc-fileset ,rev1 ,rev2 ,verbose)))
       ;; Make the *vc-diff* buffer read only, the diff-mode key
       ;; bindings are nicer for read only buffers. pcl-cvs does the
       ;; same thing.
@@ -1656,10 +1667,7 @@ saving the buffer."
       ;; that's not what we want here, we want the diff for the VC root dir.
       (call-interactively 'vc-version-diff)
     (when buffer-file-name (vc-buffer-sync not-urgent))
-    (let ((backend
-	   (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
-		 ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
-		 (vc-mode (vc-backend buffer-file-name))))
+    (let ((backend (vc-deduce-backend))
 	  rootdir working-revision)
       (unless backend
 	(error "Buffer is not version controlled"))
@@ -1896,13 +1904,22 @@ the named configuration.  If the prefix argument BRANCHP is
 given, the tag is made as a new branch and the files are
 checked out in that new branch."
   (interactive
-   (list (read-file-name "Directory: " default-directory default-directory t)
-         (read-string "New tag name: ")
-	 current-prefix-arg))
+   (let ((granularity
+	  (vc-call-backend (vc-responsible-backend default-directory)
+			   'revision-granularity)))
+     (list
+      (if (eq granularity 'repository)
+	  ;; For VC's that do not work at file level, it's pointless
+	  ;; to ask for a directory, branches are created at repository level.
+	  default-directory
+	(read-file-name "Directory: " default-directory default-directory t))
+      (read-string (if current-prefix-arg "New branch name: " "New tag name: "))
+      current-prefix-arg)))
   (message "Making %s... " (if branchp "branch" "tag"))
   (when (file-directory-p dir) (setq dir (file-name-as-directory dir)))
   (vc-call-backend (vc-responsible-backend dir)
 		   'create-tag dir name branchp)
+  (vc-resynch-buffer dir t t t)
   (message "Making %s... done" (if branchp "branch" "tag")))
 
 ;;;###autoload
@@ -1913,8 +1930,16 @@ If locking is used for the files in DIR, then there must not be any
 locked files at or below DIR (but if NAME is empty, locked files are
 allowed and simply skipped)."
   (interactive
-   (list (read-file-name "Directory: " default-directory default-directory t)
-         (read-string "Tag name to retrieve (default latest revisions): ")))
+   (let ((granularity
+	  (vc-call-backend (vc-responsible-backend default-directory)
+			   'revision-granularity)))
+     (list
+      (if (eq granularity 'repository)
+	  ;; For VC's that do not work at file level, it's pointless
+	  ;; to ask for a directory, branches are created at repository level.
+	  default-directory
+	(read-file-name "Directory: " default-directory default-directory t))
+      (read-string "Tag name to retrieve (default latest revisions): "))))
   (let ((update (yes-or-no-p "Update any affected buffers? "))
 	(msg (if (or (not name) (string= name ""))
 		 (format "Updating %s... " (abbreviate-file-name dir))
@@ -1923,7 +1948,9 @@ allowed and simply skipped)."
     (message "%s" msg)
     (vc-call-backend (vc-responsible-backend dir)
 		     'retrieve-tag dir name update)
+    (vc-resynch-buffer dir t t t)
     (message "%s" (concat msg "done"))))
+
 
 ;; Miscellaneous other entry points
 
@@ -1937,7 +1964,6 @@ If it contains `directory' then if the fileset contains a directory show a short
 If it contains `file' then show short logs for files.
 Not all VC backends support short logs!")
 
-(defvar log-view-vc-backend)
 (defvar log-view-vc-fileset)
 
 (defun vc-print-log-setup-buttons (working-revision is-start-revision limit pl-return)
@@ -2086,10 +2112,7 @@ When called interactively with a prefix argument, prompt for LIMIT."
        (list lim)))
     (t
      (list (when (> vc-log-show-limit 0) vc-log-show-limit)))))
-  (let ((backend
-	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
-	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
-	       (vc-mode (vc-backend buffer-file-name))))
+  (let ((backend (vc-deduce-backend))
 	rootdir working-revision)
     (unless backend
       (error "Buffer is not version controlled"))
@@ -2101,10 +2124,7 @@ When called interactively with a prefix argument, prompt for LIMIT."
 (defun vc-log-incoming (&optional remote-location)
   "Show a log of changes that will be received with a pull operation from REMOTE-LOCATION."
   (interactive "sRemote location (empty for default): ")
-  (let ((backend
-	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
-	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
-	       (vc-mode (vc-backend buffer-file-name))))
+  (let ((backend (vc-deduce-backend))
 	rootdir working-revision)
     (unless backend
       (error "Buffer is not version controlled"))
@@ -2114,10 +2134,7 @@ When called interactively with a prefix argument, prompt for LIMIT."
 (defun vc-log-outgoing (&optional remote-location)
   "Show a log of changes that will be sent with a push operation to REMOTE-LOCATION."
   (interactive "sRemote location (empty for default): ")
-  (let ((backend
-	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
-	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
-	       (vc-mode (vc-backend buffer-file-name))))
+  (let ((backend (vc-deduce-backend))
 	rootdir working-revision)
     (unless backend
       (error "Buffer is not version controlled"))

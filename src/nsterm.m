@@ -27,7 +27,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
-#include "config.h"
+#include <config.h>
 
 #include <math.h>
 #include <sys/types.h>
@@ -258,7 +258,7 @@ static BOOL inNsSelect = 0;
 #define NSRightAlternateKeyMask (0x000040 )
 
 #define EV_MODIFIERS(e)                               \
-  ((([e modifierFlags] & NSHelpKeyMask) ?	      \
+    ((([e modifierFlags] & NSHelpKeyMask) ?           \
            hyper_modifier : 0)                        \
      | (([e modifierFlags] & NSShiftKeyMask) ?        \
            shift_modifier : 0)                        \
@@ -1229,15 +1229,15 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
     /* NOTE: previously this would generate wrong result if toolbar not
              yet displayed and fixing toolbar_height=32 helped, but
              now (200903) seems no longer needed */
-    FRAME_NS_TOOLBAR_HEIGHT (f) =
+    FRAME_TOOLBAR_HEIGHT (f) =
       NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
         - FRAME_NS_TITLEBAR_HEIGHT (f);
   else
-    FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
+    FRAME_TOOLBAR_HEIGHT (f) = 0;
 
   wr.size.width = pixelwidth + f->border_width;
   wr.size.height = pixelheight + FRAME_NS_TITLEBAR_HEIGHT (f) 
-                  + FRAME_NS_TOOLBAR_HEIGHT (f);
+                  + FRAME_TOOLBAR_HEIGHT (f);
 
   /* constrain to screen if we can */
   if (screen)
@@ -1316,8 +1316,8 @@ ns_lookup_indexed_color (unsigned long idx, struct frame *f)
       && ![color_table->empty_indices containsObject: [NSNumber numberWithUnsignedInt: idx]])
     {
       /* fprintf(stderr, "lookup color %d\n", idx); */
-      return color_table->colors[idx];
-    }
+  return color_table->colors[idx];
+}
   /* fprintf(stderr, "DISCARDING lookup color %d\n", idx); */
   return nil;  // mark undefined color
 }
@@ -1757,10 +1757,10 @@ note_mouse_movement (struct frame *frame, float x, float y)
     {
       if (ns_update_begin(frame))
 	{
-	  frame->mouse_moved = 1;
-	  note_mouse_highlight (frame, x, y);
-	  remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
-	  ns_update_end(frame);
+      frame->mouse_moved = 1;
+      note_mouse_highlight (frame, x, y);
+      remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
+      ns_update_end(frame);
 	}
       return 1;
     }
@@ -1865,12 +1865,12 @@ ns_frame_up_to_date (struct frame *f)
           BLOCK_INPUT;
 	  if (ns_update_begin(f))
 	    {
-	      if (dpyinfo->mouse_face_mouse_frame)
-		note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
-				      dpyinfo->mouse_face_mouse_x,
-				      dpyinfo->mouse_face_mouse_y);
-	      dpyinfo->mouse_face_deferred_gc = 0;
-	      ns_update_end(f);
+          if (dpyinfo->mouse_face_mouse_frame)
+            note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
+                                  dpyinfo->mouse_face_mouse_x,
+                                  dpyinfo->mouse_face_mouse_y);
+          dpyinfo->mouse_face_deferred_gc = 0;
+         ns_update_end(f);
 	    }
           UNBLOCK_INPUT;
         }
@@ -1987,10 +1987,10 @@ ns_clear_frame (struct frame *f)
   BLOCK_INPUT;
   if ([FRAME_NS_VIEW (f) canDraw])
     {
-      ns_focus (f, &r, 1);
-      [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
-      NSRectFill (r);
-      ns_unfocus (f);
+  ns_focus (f, &r, 1);
+  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
+  NSRectFill (r);
+  ns_unfocus (f);
     }
 #ifdef NS_IMPL_COCOA
   [[view window] display];  /* redraw resize handle */
@@ -2850,9 +2850,9 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   if (s->hl == DRAW_MOUSE_FACE)
     {
       face = FACE_FROM_ID
-	(s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+       (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
       if (!face)
-	face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+       face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
     }
   else
     face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
@@ -2973,15 +2973,15 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
       ns_focus (s->f, r, n);
 
       if (s->hl == DRAW_MOUSE_FACE)
-	{
-	  face = FACE_FROM_ID
-	    (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
-	  if (!face)
-	    face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
-	}
+       {
+         face = FACE_FROM_ID
+           (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+         if (!face)
+           face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+       }
       else
-	face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
-      
+       face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
+
       [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
       NSRectFill (r[0]);
@@ -3297,7 +3297,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                          selector: @selector (timeout_handler:)
                                          userInfo: 0
                                           repeats: YES] /* for safe removal */
-							retain];
+                                                         retain];
 
   /* set a periodic task to try the select () again */
   fd_entry = [[NSTimer scheduledTimerWithTimeInterval: 0.1
@@ -3305,7 +3305,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                              selector: @selector (fd_handler:)
                                              userInfo: 0
                                               repeats: YES]
-							retain];
+               retain];
 
   /* Let Application dispatch events until it receives an event of the type
      NX_APPDEFINED, which should only be sent by timeout_handler.
@@ -4802,7 +4802,7 @@ ns_term_shutdown (int sig)
     return;
 
   if (newFont = [sender convertFont:
-			  ((struct nsfont_info *)face->font)->nsfont])
+                           ((struct nsfont_info *)face->font)->nsfont])
     {
       SET_FRAME_GARBAGED (emacsframe); /* now needed as of 2008/10 */
 
@@ -5060,7 +5060,7 @@ ns_term_shutdown (int sig)
 	  /* Some events may have neither side-bit set (e.g. coming from keyboard macro tools) */
 	  if (flags & NSLeftCommandKeyMask || ! (flags & NSRightCommandKeyMask))
 	    {
-	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
+          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
 	    }
 	  if (flags & NSRightCommandKeyMask)
 	    {
@@ -5104,8 +5104,8 @@ ns_term_shutdown (int sig)
       if (flags & NSControlKeyMask)
 	{
 	  if (flags & NSLeftControlKeyMask || ! (flags & NSRightControlKeyMask))
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_control_modifier);
+          emacs_event->modifiers |=
+            parse_solitary_modifier (ns_control_modifier);
 	  if (flags & NSRightControlKeyMask)
 	    emacs_event->modifiers |=
 	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qnone) ? 
@@ -5113,11 +5113,11 @@ ns_term_shutdown (int sig)
 	}
 
       if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
-	emacs_event->modifiers |=
-	  parse_solitary_modifier (ns_function_modifier);
+          emacs_event->modifiers |=
+            parse_solitary_modifier (ns_function_modifier);
 
       if (flags & NSRightAlternateKeyMask) /* default = meta */
-	{
+        {
 	  if ((NILP (ns_right_alternate_modifier)
 	       || (EQ (ns_right_alternate_modifier, Qnone)
 		   && (NILP (ns_alternate_modifier) 
@@ -5129,18 +5129,18 @@ ns_term_shutdown (int sig)
 		   if (!fnKeysym)
 		    {
 		  /* accept pre-interp alt comb */
-		  if ([[theEvent characters] length] > 0)
-		    code = [[theEvent characters] characterAtIndex: 0];
-		  /*HACK: clear lone shift modifier to stop next if from firing */
-		  if (emacs_event->modifiers == shift_modifier)
-		    emacs_event->modifiers = 0;
-		    }
+              if ([[theEvent characters] length] > 0)
+                code = [[theEvent characters] characterAtIndex: 0];
+              /*HACK: clear lone shift modifier to stop next if from firing */
+              if (emacs_event->modifiers == shift_modifier)
+                emacs_event->modifiers = 0;
+            }
 		} 
-	      else
+          else
 		emacs_event->modifiers |= meta_modifier;
 	    }
 	  else
-	    emacs_event->modifiers |=
+              emacs_event->modifiers |=
 	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
 				       ns_alternate_modifier
 				       : ns_right_alternate_modifier);
@@ -5173,8 +5173,8 @@ ns_term_shutdown (int sig)
 	    }
 	  else
 	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_alternate_modifier);
-	}
+                parse_solitary_modifier (ns_alternate_modifier);
+        }
 
   if (NS_KEYLOG)
     fprintf (stderr, "keyDown: code =%x\tfnKey =%x\tflags = %x\tmods = %x\n",
@@ -5478,7 +5478,7 @@ ns_term_shutdown (int sig)
 		    } else 
 		    {
 		      emacs_event->code = 2;
-		    }
+    }
 		} else if (emacs_event->modifiers & alt_modifier)
 		{
 		  emacs_event->code = 1;
@@ -5642,10 +5642,10 @@ ns_term_shutdown (int sig)
   rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (emacsframe, frameSize.height
 #ifdef NS_IMPL_GNUSTEP
       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe) + 3
-        - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
+        - FRAME_TOOLBAR_HEIGHT (emacsframe));
 #else
       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
-        - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
+        - FRAME_TOOLBAR_HEIGHT (emacsframe));
 #endif
   if (rows < MINHEIGHT)
     rows = MINHEIGHT;
@@ -5746,7 +5746,7 @@ ns_term_shutdown (int sig)
   struct frame *old_focus = dpyinfo->x_focus_frame;
 
   NSTRACE (windowDidBecomeKey);
- 
+
   if (emacsframe != old_focus)
     dpyinfo->x_focus_frame = emacsframe;
 
@@ -5893,7 +5893,7 @@ ns_term_shutdown (int sig)
   [toggleButton setTarget: self];
   [toggleButton setAction: @selector (toggleToolbar: )];
 #endif
-  FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
+  FRAME_TOOLBAR_HEIGHT (f) = 0;
 
   /* the following would be nonstandard on OSX */
 #ifdef NS_IMPL_GNUSTEP
