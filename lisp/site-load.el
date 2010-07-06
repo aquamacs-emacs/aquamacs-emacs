@@ -1,7 +1,7 @@
 ;; Aquamacs core files
 ;; to be loaded and included in dumped state at compile time
 ;; test
- 
+
 (defvar aq-compile-path "aquamacs/")
 
 (defvar aq-preloaded nil
@@ -12,6 +12,13 @@
 (defmacro aq-preload (f)
   `(load (concat aq-compile-path ,f)))
 
+
+;; this will only work if files have been byte-compiled.
+
+(when (file-exists-p (concat (file-name-directory (or load-file-name default-directory)) 
+			     "emacs-lisp/easy-mmode.elc"))
+
+(load "emacs-lisp/easy-mmode")
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
 ;; (load "tool-bar")  ;; taken out while we're working on it!
@@ -48,7 +55,7 @@
    )
 (load "delsel")
 (load "paren")
-(load "calendar/time-date")
+;;(load "calendar/time-date")
 (load "timezone")
 (load "calendar/parse-time")
  
@@ -139,6 +146,7 @@
 ;(aq-preload "ruby-mode.el")
 ; (aq-preload "site-start.el")
 
+) ; file-exists-p *.elc
 
 
 (mapc (lambda (e)
