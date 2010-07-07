@@ -3643,7 +3643,7 @@ FRAME_PTR f;
   if (FRAME_EXTERNAL_TOOL_BAR (f))
     {
     
-    FRAME_NS_TOOLBAR_HEIGHT (f) =
+    FRAME_TOOLBAR_HEIGHT (f) =
       /* XXX: GNUstep has not yet implemented the first method below, added
 	 in Panther, however the second is incorrect under Cocoa. */
 #ifdef NS_IMPL_COCOA
@@ -3658,7 +3658,7 @@ FRAME_PTR f;
             - FRAME_NS_TITLEBAR_HEIGHT (f);
     }
   else
-    FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
+    FRAME_TOOLBAR_HEIGHT (f) = 0;
 
 
 
@@ -3673,10 +3673,10 @@ FRAME_PTR f;
 	  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, height
 #ifdef NS_IMPL_GNUSTEP
 					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
-					       - FRAME_NS_TOOLBAR_HEIGHT (f));
+					       - FRAME_TOOLBAR_HEIGHT (f));
 #else
 	  - FRAME_NS_TITLEBAR_HEIGHT (f)
-          - FRAME_NS_TOOLBAR_HEIGHT (f));
+          - FRAME_TOOLBAR_HEIGHT (f));
 #endif
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
@@ -5651,7 +5651,7 @@ ns_term_shutdown (int sig)
     rows = MINHEIGHT;
   frameSize.height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (emacsframe, rows)
                        + FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
-                       + FRAME_NS_TOOLBAR_HEIGHT (emacsframe);
+                       + FRAME_TOOLBAR_HEIGHT (emacsframe);
 #ifdef AQUAMACS_RESIZING_HINT /* do not do this in Aquamacs */
 #ifdef NS_IMPL_COCOA
   {

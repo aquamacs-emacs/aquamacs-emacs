@@ -923,13 +923,6 @@ opening the first frame (e.g. open a connection to an X server).")
 		  frame-initial-geometry-arguments)))
 ;		     (delete '(left . 99) frame-initial-geometry-arguments)))
 
-	     
-  
-  (when (fboundp 'x-create-frame)
-    ;; Set up the tool-bar (even in tty frames, since Emacs might open a
-    ;; graphical frame later).
-    (unless noninteractive
-      (tool-bar-setup)))
 
   ;; Turn off blinking cursor if so specified in X resources.  This is here
   ;; only because all other settings of no-blinking-cursor are here.
@@ -947,6 +940,21 @@ opening the first frame (e.g. open a connection to an X server).")
         ;; are dependencies between them.
         (prog1 (nreverse custom-delayed-init-variables)
           (setq custom-delayed-init-variables nil)))
+
+  ;; In Aquamacs, images are loaded when setting up tool-bar
+  ;; which requires image-load-path to be defined, which is a
+  ;; custom variable with delayed initialization.
+  (unless (or noninteractive (not (fboundp 'tool-bar-mode)))
+    ;; Set up the tool-bar.  Do this even in tty frames, so that there
+    ;; is a tool-bar if Emacs later opens a graphical frame.
+    (if (or emacs-basic-display
+	    (and (numberp (frame-parameter nil 'tool-bar-lines))
+		 (<= (frame-parameter nil 'tool-bar-lines) 0)))
+	;; On a graphical display with the toolbar disabled via X
+	;; resources, set up the toolbar without enabling it.
+	(tool-bar-setup)
+      ;; Otherwise, enable tool-bar-mode.
+      (tool-bar-mode 1)))
 
   (normal-erase-is-backspace-setup-frame)
 
