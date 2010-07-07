@@ -78,9 +78,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define HAVE_PTYS if the system supports pty devices.  */
 #define HAVE_PTYS
 
-/* Define this symbol if your system has the functions bcopy, etc.  */
-#define BSTRING
-
 /* subprocesses should be undefined if you do NOT want to
    have code for asynchronous subprocesses
    (as used in M-x compile and M-x shell).
@@ -111,9 +108,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    is not ':', #define this to be the appropriate character constant.  */
 /* #define SEPCHAR ':' */
 
-/* Define this if the system can use mmap for buffer text allocation.  */
-/* #define USE_MMAP_FOR_BUFFERS 1 */
-
 /* ============================================================ */
 
 /* Here, add any special hacks needed to make Emacs work on this
@@ -133,9 +127,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* ============================================================ */
 
 /* After adding support for a new system, modify the large case
-   statement in the `configure' script to recognize reasonable
+   statement in configure.in to recognize reasonable
    configuration names, and add a description of the system to
    `etc/MACHINES'.
+
+   Check for any tests of $opsys in configure.in, and add an entry
+   for the new system if needed.
 
    If you've just fixed a problem in an existing configuration file,
    you should also check `etc/MACHINES' to make sure its descriptions

@@ -49,15 +49,7 @@ extern int etext, __data_start; weak_extern (__data_start)
 #define BSD4_2
 #endif
 
-#ifndef BSD4_2
-#ifndef USG
-#ifndef MSDOS
-#ifndef WINDOWSNT
-#include <sys/vlimit.h>
-#endif /* not WINDOWSNT */
-#endif /* not MSDOS */
-#endif /* not USG */
-#else /* if BSD4_2 */
+#ifdef BSD4_2
 #include <sys/time.h>
 #include <sys/resource.h>
 #endif /* BSD4_2 */
@@ -75,7 +67,7 @@ typedef unsigned long SIZE;
 #endif
 #define NULL ((POINTER) 0)
 
-extern POINTER start_of_data ();
+extern POINTER start_of_data (void);
 #if defined USE_LSB_TAG
 #define EXCEEDS_LISP_PTR(ptr) 0
 #elif defined DATA_SEG_BITS

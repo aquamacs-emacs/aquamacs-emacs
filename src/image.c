@@ -127,16 +127,16 @@ typedef struct ns_bitmap_record Bitmap_Record;
 Lisp_Object Vx_bitmap_file_path;
 
 
-static void x_disable_image P_ ((struct frame *, struct image *));
-static void x_edge_detection P_ ((struct frame *, struct image *, Lisp_Object,
-				  Lisp_Object));
+static void x_disable_image (struct frame *, struct image *);
+static void x_edge_detection (struct frame *, struct image *, Lisp_Object,
+                              Lisp_Object);
 
-static void init_color_table P_ ((void));
-static unsigned long lookup_rgb_color P_ ((struct frame *f, int r, int g, int b));
+static void init_color_table (void);
+static unsigned long lookup_rgb_color (struct frame *f, int r, int g, int b);
 #ifdef COLOR_TABLE_SUPPORT
-static void free_color_table P_ ((void));
-static unsigned long *colors_in_color_table P_ ((int *n));
-static unsigned long lookup_pixel_color P_ ((struct frame *f, unsigned long p));
+static void free_color_table (void);
+static unsigned long *colors_in_color_table (int *n);
+static unsigned long lookup_pixel_color (struct frame *f, unsigned long p);
 #endif
 
 /* Code to deal with bitmaps.  Bitmaps are referenced by their bitmap
@@ -181,26 +181,20 @@ XPutPixel (XImagePtr ximage, int x, int y, unsigned long pixel)
 /* Functions to access the contents of a bitmap, given an id.  */
 
 int
-x_bitmap_height (f, id)
-     FRAME_PTR f;
-     int id;
+x_bitmap_height (FRAME_PTR f, int id)
 {
   return FRAME_X_DISPLAY_INFO (f)->bitmaps[id - 1].height;
 }
 
 int
-x_bitmap_width (f, id)
-     FRAME_PTR f;
-     int id;
+x_bitmap_width (FRAME_PTR f, int id)
 {
   return FRAME_X_DISPLAY_INFO (f)->bitmaps[id - 1].width;
 }
 
 #if defined (HAVE_X_WINDOWS) || defined (HAVE_NTGUI)
 int
-x_bitmap_pixmap (f, id)
-     FRAME_PTR f;
-     int id;
+x_bitmap_pixmap (FRAME_PTR f, int id)
 {
   return (int) FRAME_X_DISPLAY_INFO (f)->bitmaps[id - 1].pixmap;
 }
@@ -208,9 +202,7 @@ x_bitmap_pixmap (f, id)
 
 #ifdef HAVE_X_WINDOWS
 int
-x_bitmap_mask (f, id)
-     FRAME_PTR f;
-     int id;
+x_bitmap_mask (FRAME_PTR f, int id)
 {
   return FRAME_X_DISPLAY_INFO (f)->bitmaps[id - 1].mask;
 }
@@ -219,8 +211,7 @@ x_bitmap_mask (f, id)
 /* Allocate a new bitmap record.  Returns index of new record.  */
 
 static int
-x_allocate_bitmap_record (f)
-     FRAME_PTR f;
+x_allocate_bitmap_record (FRAME_PTR f)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   int i;
@@ -251,9 +242,7 @@ x_allocate_bitmap_record (f)
 /* Add one reference to the reference count of the bitmap with id ID.  */
 
 void
-x_reference_bitmap (f, id)
-     FRAME_PTR f;
-     int id;
+x_reference_bitmap (FRAME_PTR f, int id)
 {
   ++FRAME_X_DISPLAY_INFO (f)->bitmaps[id - 1].refcount;
 }
@@ -261,10 +250,7 @@ x_reference_bitmap (f, id)
 /* Create a bitmap for frame F from a HEIGHT x WIDTH array of bits at BITS.  */
 
 int
-x_create_bitmap_from_data (f, bits, width, height)
-     struct frame *f;
-     char *bits;
-     unsigned int width, height;
+x_create_bitmap_from_data (struct frame *f, char *bits, unsigned int width, unsigned int height)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   int id;
@@ -323,9 +309,7 @@ x_create_bitmap_from_data (f, bits, width, height)
 /* Create bitmap from file FILE for frame F.  */
 
 int
-x_create_bitmap_from_file (f, file)
-     struct frame *f;
-     Lisp_Object file;
+x_create_bitmap_from_file (struct frame *f, Lisp_Object file)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
 
@@ -402,9 +386,7 @@ x_create_bitmap_from_file (f, file)
 /* Free bitmap B.  */
 
 static void
-free_bitmap_record (dpyinfo, bm)
-     Display_Info *dpyinfo;
-     Bitmap_Record *bm;
+free_bitmap_record (Display_Info *dpyinfo, Bitmap_Record *bm)
 {
 #ifdef HAVE_X_WINDOWS
   XFreePixmap (dpyinfo->display, bm->pixmap);
@@ -430,9 +412,7 @@ free_bitmap_record (dpyinfo, bm)
 /* Remove reference to bitmap with id number ID.  */
 
 void
-x_destroy_bitmap (f, id)
-     FRAME_PTR f;
-     int id;
+x_destroy_bitmap (FRAME_PTR f, int id)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
 
@@ -452,8 +432,7 @@ x_destroy_bitmap (f, id)
 /* Free all the bitmaps for the display specified by DPYINFO.  */
 
 void
-x_destroy_all_bitmaps (dpyinfo)
-     Display_Info *dpyinfo;
+x_destroy_all_bitmaps (Display_Info *dpyinfo)
 {
   int i;
   Bitmap_Record *bm = dpyinfo->bitmaps;
@@ -471,25 +450,23 @@ x_destroy_all_bitmaps (dpyinfo)
 /* Useful functions defined in the section
    `Image type independent image structures' below. */
 
-static unsigned long four_corners_best P_ ((XImagePtr ximg,
-					    int *corners,
-					    unsigned long width,
-					    unsigned long height));
+static unsigned long four_corners_best (XImagePtr ximg,
+                                        int *corners,
+                                        unsigned long width,
+                                        unsigned long height);
 
-static int x_create_x_image_and_pixmap P_ ((struct frame *f, int width, int height,
-					    int depth, XImagePtr *ximg,
-					    Pixmap *pixmap));
+static int x_create_x_image_and_pixmap (struct frame *f, int width, int height,
+                                        int depth, XImagePtr *ximg,
+                                        Pixmap *pixmap);
 
-static void x_destroy_x_image P_ ((XImagePtr ximg));
+static void x_destroy_x_image (XImagePtr ximg);
 
 
 /* Create a mask of a bitmap. Note is this not a perfect mask.
    It's nicer with some borders in this context */
 
 int
-x_create_bitmap_mask (f, id)
-     struct frame *f;
-     int id;
+x_create_bitmap_mask (struct frame *f, int id)
 {
   Pixmap pixmap, mask;
   XImagePtr ximg, mask_img;
@@ -619,13 +596,13 @@ Lisp_Object Vimage_cache_eviction_delay;
 
 /* Function prototypes.  */
 
-static Lisp_Object define_image_type P_ ((struct image_type *type, int loaded));
-static struct image_type *lookup_image_type P_ ((Lisp_Object symbol));
-static void image_error P_ ((char *format, Lisp_Object, Lisp_Object));
-static void x_laplace P_ ((struct frame *, struct image *));
-static void x_emboss P_ ((struct frame *, struct image *));
-static int x_build_heuristic_mask P_ ((struct frame *, struct image *,
-				       Lisp_Object));
+static Lisp_Object define_image_type (struct image_type *type, int loaded);
+static struct image_type *lookup_image_type (Lisp_Object symbol);
+static void image_error (char *format, Lisp_Object, Lisp_Object);
+static void x_laplace (struct frame *, struct image *);
+static void x_emboss (struct frame *, struct image *);
+static int x_build_heuristic_mask (struct frame *, struct image *,
+                                   Lisp_Object);
 
 #define CACHE_IMAGE_TYPE(type, status) \
   do { Vimage_type_cache = Fcons (Fcons (type, status), Vimage_type_cache); } while (0)
@@ -637,9 +614,7 @@ static int x_build_heuristic_mask P_ ((struct frame *, struct image *,
    image_types and caches the loading status of TYPE.  */
 
 static Lisp_Object
-define_image_type (type, loaded)
-     struct image_type *type;
-     int loaded;
+define_image_type (struct image_type *type, int loaded)
 {
   Lisp_Object success;
 
@@ -665,8 +640,7 @@ define_image_type (type, loaded)
    structure.  Value is null if SYMBOL is not a known image type.  */
 
 static INLINE struct image_type *
-lookup_image_type (symbol)
-     Lisp_Object symbol;
+lookup_image_type (Lisp_Object symbol)
 {
   struct image_type *type;
 
@@ -690,8 +664,7 @@ lookup_image_type (symbol)
    image type.  */
 
 int
-valid_image_p (object)
-     Lisp_Object object;
+valid_image_p (Lisp_Object object)
 {
   int valid_p = 0;
 
@@ -726,9 +699,7 @@ valid_image_p (object)
    therefore simply displays a message.  */
 
 static void
-image_error (format, arg1, arg2)
-     char *format;
-     Lisp_Object arg1, arg2;
+image_error (char *format, Lisp_Object arg1, Lisp_Object arg2)
 {
   add_to_log (format, arg1, arg2);
 }
@@ -776,9 +747,9 @@ struct image_keyword
 };
 
 
-static int parse_image_spec P_ ((Lisp_Object, struct image_keyword *,
-				 int, Lisp_Object));
-static Lisp_Object image_spec_value P_ ((Lisp_Object, Lisp_Object, int *));
+static int parse_image_spec (Lisp_Object, struct image_keyword *,
+                             int, Lisp_Object);
+static Lisp_Object image_spec_value (Lisp_Object, Lisp_Object, int *);
 
 
 /* Parse image spec SPEC according to KEYWORDS.  A valid image spec
@@ -788,11 +759,8 @@ static Lisp_Object image_spec_value P_ ((Lisp_Object, Lisp_Object, int *));
    allowed keyword/value pairs.  Value is non-zero if SPEC is valid.  */
 
 static int
-parse_image_spec (spec, keywords, nkeywords, type)
-     Lisp_Object spec;
-     struct image_keyword *keywords;
-     int nkeywords;
-     Lisp_Object type;
+parse_image_spec (Lisp_Object spec, struct image_keyword *keywords,
+		  int nkeywords, Lisp_Object type)
 {
   int i;
   Lisp_Object plist;
@@ -928,9 +896,7 @@ parse_image_spec (spec, keywords, nkeywords, type)
    to 1 if KEY was found in SPEC, set it to 0 otherwise.  */
 
 static Lisp_Object
-image_spec_value (spec, key, found)
-     Lisp_Object spec, key;
-     int *found;
+image_spec_value (Lisp_Object spec, Lisp_Object key, int *found)
 {
   Lisp_Object tail;
 
@@ -1037,9 +1003,9 @@ or omitted means use the selected frame.  */)
 		 Image type independent image structures
  ***********************************************************************/
 
-static struct image *make_image P_ ((Lisp_Object spec, unsigned hash));
-static void free_image P_ ((struct frame *f, struct image *img));
-static int check_image_size P_ ((struct frame *f, int width, int height));
+static struct image *make_image (Lisp_Object spec, unsigned hash);
+static void free_image (struct frame *f, struct image *img);
+static int check_image_size (struct frame *f, int width, int height);
 
 #define MAX_IMAGE_SIZE 6.0
 Lisp_Object Vmax_image_size;
@@ -1048,9 +1014,7 @@ Lisp_Object Vmax_image_size;
    SPEC.  SPEC has a hash value of HASH.  */
 
 static struct image *
-make_image (spec, hash)
-     Lisp_Object spec;
-     unsigned hash;
+make_image (Lisp_Object spec, unsigned int hash)
 {
   struct image *img = (struct image *) xmalloc (sizeof *img);
   Lisp_Object file = image_spec_value (spec, QCfile, NULL);
@@ -1072,9 +1036,7 @@ make_image (spec, hash)
 /* Free image IMG which was used on frame F, including its resources.  */
 
 static void
-free_image (f, img)
-     struct frame *f;
-     struct image *img;
+free_image (struct frame *f, struct image *img)
 {
   if (img)
     {
@@ -1101,10 +1063,7 @@ free_image (f, img)
    otherwise, return 0. */
 
 int
-check_image_size (f, width, height)
-     struct frame *f;
-     int width;
-     int height;
+check_image_size (struct frame *f, int width, int height)
 {
   int w, h;
 
@@ -1135,9 +1094,7 @@ check_image_size (f, width, height)
    drawing an image.  */
 
 void
-prepare_image_for_display (f, img)
-     struct frame *f;
-     struct image *img;
+prepare_image_for_display (struct frame *f, struct image *img)
 {
   EMACS_TIME t;
 
@@ -1157,10 +1114,7 @@ prepare_image_for_display (f, img)
    drawn in face FACE.  */
 
 int
-image_ascent (img, face, slice)
-     struct image *img;
-     struct face *face;
-     struct glyph_slice *slice;
+image_ascent (struct image *img, struct face *face, struct glyph_slice *slice)
 {
   int height;
   int ascent;
@@ -1206,10 +1160,8 @@ image_ascent (img, face, slice)
    On W32, XIMG is assumed to a device context with the bitmap selected.  */
 
 static RGB_PIXEL_COLOR
-four_corners_best (ximg, corners, width, height)
-     XImagePtr_or_DC ximg;
-     int *corners;
-     unsigned long width, height;
+four_corners_best (XImagePtr_or_DC ximg, int *corners,
+		   unsigned long width, unsigned long height)
 {
   RGB_PIXEL_COLOR corner_pixels[4], best;
   int i, best_count;
@@ -1281,10 +1233,7 @@ four_corners_best (ximg, corners, width, height)
    use for the heuristic.  */
 
 RGB_PIXEL_COLOR
-image_background (img, f, ximg)
-     struct image *img;
-     struct frame *f;
-     XImagePtr_or_DC ximg;
+image_background (struct image *img, struct frame *f, XImagePtr_or_DC ximg)
 {
   if (! img->background_valid)
     /* IMG doesn't have a background yet, try to guess a reasonable value.  */
@@ -1323,10 +1272,7 @@ image_background (img, f, ximg)
    existing XImage object to use for the heuristic.  */
 
 int
-image_background_transparent (img, f, mask)
-     struct image *img;
-     struct frame *f;
-     XImagePtr_or_DC mask;
+image_background_transparent (struct image *img, struct frame *f, XImagePtr_or_DC mask)
 {
   if (! img->background_transparent_valid)
     /* IMG doesn't have a background yet, try to guess a reasonable value.  */
@@ -1371,13 +1317,13 @@ image_background_transparent (img, f, mask)
 		  Helper functions for X image types
  ***********************************************************************/
 
-static void x_clear_image_1 P_ ((struct frame *, struct image *, int,
-				 int, int));
-static void x_clear_image P_ ((struct frame *f, struct image *img));
-static unsigned long x_alloc_image_color P_ ((struct frame *f,
-					      struct image *img,
-					      Lisp_Object color_name,
-					      unsigned long dflt));
+static void x_clear_image_1 (struct frame *, struct image *, int,
+                             int, int);
+static void x_clear_image (struct frame *f, struct image *img);
+static unsigned long x_alloc_image_color (struct frame *f,
+                                          struct image *img,
+                                          Lisp_Object color_name,
+                                          unsigned long dflt);
 
 
 /* Clear X resources of image IMG on frame F.  PIXMAP_P non-zero means
@@ -1386,10 +1332,8 @@ static unsigned long x_alloc_image_color P_ ((struct frame *f,
    the image, if any.  */
 
 static void
-x_clear_image_1 (f, img, pixmap_p, mask_p, colors_p)
-     struct frame *f;
-     struct image *img;
-     int pixmap_p, mask_p, colors_p;
+x_clear_image_1 (struct frame *f, struct image *img, int pixmap_p, int mask_p,
+		 int colors_p)
 {
   if (pixmap_p && img->pixmap)
     {
@@ -1422,9 +1366,7 @@ x_clear_image_1 (f, img, pixmap_p, mask_p, colors_p)
 /* Free X resources of image IMG which is used on frame F.  */
 
 static void
-x_clear_image (f, img)
-     struct frame *f;
-     struct image *img;
+x_clear_image (struct frame *f, struct image *img)
 {
   BLOCK_INPUT;
   x_clear_image_1 (f, img, 1, 1, 1);
@@ -1438,11 +1380,8 @@ x_clear_image (f, img)
    color.  */
 
 static unsigned long
-x_alloc_image_color (f, img, color_name, dflt)
-     struct frame *f;
-     struct image *img;
-     Lisp_Object color_name;
-     unsigned long dflt;
+x_alloc_image_color (struct frame *f, struct image *img, Lisp_Object color_name,
+		     unsigned long dflt)
 {
   XColor color;
   unsigned long result;
@@ -1472,15 +1411,15 @@ x_alloc_image_color (f, img, color_name, dflt)
 			     Image Cache
  ***********************************************************************/
 
-static struct image *search_image_cache P_ ((struct frame *, Lisp_Object, unsigned));
-static void cache_image P_ ((struct frame *f, struct image *img));
-static void postprocess_image P_ ((struct frame *, struct image *));
+static struct image *search_image_cache (struct frame *, Lisp_Object, unsigned);
+static void cache_image (struct frame *f, struct image *img);
+static void postprocess_image (struct frame *, struct image *);
 
 /* Return a new, initialized image cache that is allocated from the
    heap.  Call free_image_cache to free an image cache.  */
 
 struct image_cache *
-make_image_cache ()
+make_image_cache (void)
 {
   struct image_cache *c = (struct image_cache *) xmalloc (sizeof *c);
   int size;
@@ -1498,10 +1437,7 @@ make_image_cache ()
 /* Find an image matching SPEC in the cache, and return it.  If no
    image is found, return NULL.  */
 static struct image *
-search_image_cache (f, spec, hash)
-     struct frame *f;
-     Lisp_Object spec;
-     unsigned hash;
+search_image_cache (struct frame *f, Lisp_Object spec, unsigned int hash)
 {
   struct image *img;
   struct image_cache *c = FRAME_IMAGE_CACHE (f);
@@ -1534,9 +1470,7 @@ search_image_cache (f, spec, hash)
 /* Search frame F for an image with spec SPEC, and free it.  */
 
 static void
-uncache_image (f, spec)
-     struct frame *f;
-     Lisp_Object spec;
+uncache_image (struct frame *f, Lisp_Object spec)
 {
   struct image *img = search_image_cache (f, spec, sxhash (spec, 0));
   if (img)
@@ -1548,8 +1482,7 @@ uncache_image (f, spec)
    caches.  */
 
 void
-free_image_cache (f)
-     struct frame *f;
+free_image_cache (struct frame *f)
 {
   struct image_cache *c = FRAME_IMAGE_CACHE (f);
   if (c)
@@ -1582,29 +1515,56 @@ clear_image_cache (struct frame *f, Lisp_Object filter)
 {
   struct image_cache *c = FRAME_IMAGE_CACHE (f);
 
-  if (c && (!NILP (filter) || INTEGERP (Vimage_cache_eviction_delay)))
+  if (c)
     {
-      EMACS_TIME t;
-      unsigned long old;
-      int i, nfreed;
-
-      EMACS_GET_TIME (t);
-      old = EMACS_SECS (t) - XFASTINT (Vimage_cache_eviction_delay);
+      int i, nfreed = 0;
 
       /* Block input so that we won't be interrupted by a SIGIO
 	 while being in an inconsistent state.  */
       BLOCK_INPUT;
 
-      for (i = nfreed = 0; i < c->used; ++i)
+      if (!NILP (filter))
 	{
-	  struct image *img = c->images[i];
-	  if (img != NULL
-	      && (NILP (filter) ? img->timestamp < old
-		  : (EQ (Qt, filter)
-		     || !NILP (Fmember (filter, img->dependencies)))))
+	  /* Filter image cache.  */
+	  for (i = 0; i < c->used; ++i)
 	    {
-	      free_image (f, img);
-	      ++nfreed;
+	      struct image *img = c->images[i];
+	      if (img && (EQ (Qt, filter)
+			  || !NILP (Fmember (filter, img->dependencies))))
+		{
+		  free_image (f, img);
+		  ++nfreed;
+		}
+	    }
+	}
+      else if (INTEGERP (Vimage_cache_eviction_delay))
+	{
+	  /* Free cache based on timestamp.  */
+	  EMACS_TIME t;
+	  unsigned long old;
+	  int delay, nimages = 0;
+
+	  for (i = 0; i < c->used; ++i)
+	    if (c->images[i])
+	      nimages++;
+
+	  /* If the number of cached images has grown unusually large,
+	     decrease the cache eviction delay (Bug#6230).  */
+	  delay = XFASTINT (Vimage_cache_eviction_delay);
+	  if (nimages > 40)
+	    delay = max (1, 1600 * delay / (nimages*nimages));
+
+	  EMACS_GET_TIME (t);
+	  old = EMACS_SECS (t) - delay;
+
+	  for (i = 0; i < c->used; ++i)
+	    {
+	      struct image *img = c->images[i];
+	      if (img && img->timestamp < old)
+		{
+		  free_image (f, img);
+		  ++nfreed;
+		}
 	    }
 	}
 
@@ -1662,11 +1622,13 @@ which is then usually a filename.  */)
 }
 
 
-DEFUN ("image-refresh", Fimage_refresh, Simage_refresh,
+DEFUN ("image-flush", Fimage_flush, Simage_flush,
        1, 2, 0,
-       doc: /* Refresh the image with specification SPEC on frame FRAME.
-If SPEC specifies an image file, the displayed image is updated with
-the current contents of that file.
+       doc: /* Fush the image with specification SPEC on frame FRAME.
+This removes the image from the Emacs image cache.  If SPEC specifies
+an image file, the next redisplay of this image will read from the
+current contents of that file.
+
 FRAME nil or omitted means use the selected frame.
 FRAME t means refresh the image on all frames.  */)
      (spec, frame)
@@ -1696,9 +1658,7 @@ FRAME t means refresh the image on all frames.  */)
    by the image's specification,  */
 
 static void
-postprocess_image (f, img)
-     struct frame *f;
-     struct image *img;
+postprocess_image (struct frame *f, struct image *img)
 {
   /* Manipulation of the image's mask.  */
   if (img->pixmap)
@@ -1771,9 +1731,7 @@ postprocess_image (f, img)
    SPEC must be a valid Lisp image specification (see valid_image_p).  */
 
 int
-lookup_image (f, spec)
-     struct frame *f;
-     Lisp_Object spec;
+lookup_image (struct frame *f, Lisp_Object spec)
 {
   struct image_cache *c;
   struct image *img;
@@ -1893,9 +1851,7 @@ lookup_image (f, spec)
 /* Cache image IMG in the image cache of frame F.  */
 
 static void
-cache_image (f, img)
-     struct frame *f;
-     struct image *img;
+cache_image (struct frame *f, struct image *img)
 {
   struct image_cache *c = FRAME_IMAGE_CACHE (f);
   int i;
@@ -1935,8 +1891,7 @@ cache_image (f, img)
 /* Mark Lisp objects in image IMG.  */
 
 static void
-mark_image (img)
-     struct image *img;
+mark_image (struct image *img)
 {
   mark_object (img->spec);
   mark_object (img->dependencies);
@@ -2004,10 +1959,10 @@ w32_delayed_load (Lisp_Object libraries, Lisp_Object type)
 
 #endif /* HAVE_NTGUI */
 
-static int x_create_x_image_and_pixmap P_ ((struct frame *, int, int, int,
-					    XImagePtr *, Pixmap *));
-static void x_destroy_x_image P_ ((XImagePtr));
-static void x_put_x_image P_ ((struct frame *, XImagePtr, Pixmap, int, int));
+static int x_create_x_image_and_pixmap (struct frame *, int, int, int,
+                                        XImagePtr *, Pixmap *);
+static void x_destroy_x_image (XImagePtr);
+static void x_put_x_image (struct frame *, XImagePtr, Pixmap, int, int);
 
 
 /* Create an XImage and a pixmap of size WIDTH x HEIGHT for use on
@@ -2020,11 +1975,8 @@ static void x_put_x_image P_ ((struct frame *, XImagePtr, Pixmap, int, int));
    should indicate the bit depth of the image.  */
 
 static int
-x_create_x_image_and_pixmap (f, width, height, depth, ximg, pixmap)
-     struct frame *f;
-     int width, height, depth;
-     XImagePtr *ximg;
-     Pixmap *pixmap;
+x_create_x_image_and_pixmap (struct frame *f, int width, int height, int depth,
+			     XImagePtr *ximg, Pixmap *pixmap)
 {
 #ifdef HAVE_X_WINDOWS
   Display *display = FRAME_X_DISPLAY (f);
@@ -2163,8 +2115,7 @@ x_create_x_image_and_pixmap (f, width, height, depth, ximg, pixmap)
 /* Destroy XImage XIMG.  Free XIMG->data.  */
 
 static void
-x_destroy_x_image (ximg)
-     XImagePtr ximg;
+x_destroy_x_image (XImagePtr ximg)
 {
   xassert (interrupt_input_blocked);
   if (ximg)
@@ -2190,11 +2141,7 @@ x_destroy_x_image (ximg)
    are width and height of both the image and pixmap.  */
 
 static void
-x_put_x_image (f, ximg, pixmap, width, height)
-     struct frame *f;
-     XImagePtr ximg;
-     Pixmap pixmap;
-     int width, height;
+x_put_x_image (struct frame *f, XImagePtr ximg, Pixmap pixmap, int width, int height)
 {
 #ifdef HAVE_X_WINDOWS
   GC gc;
@@ -2224,7 +2171,7 @@ x_put_x_image (f, ximg, pixmap, width, height)
 			      File Handling
  ***********************************************************************/
 
-static unsigned char *slurp_file P_ ((char *, int *));
+static unsigned char *slurp_file (char *, int *);
 
 
 /* Find image file FILE.  Look in data-directory/images, then
@@ -2232,8 +2179,7 @@ static unsigned char *slurp_file P_ ((char *, int *));
    found, or nil if not found.  */
 
 Lisp_Object
-x_find_image_file (file)
-     Lisp_Object file;
+x_find_image_file (Lisp_Object file)
 {
   Lisp_Object file_found, search_path;
   struct gcpro gcpro1, gcpro2;
@@ -2268,9 +2214,7 @@ x_find_image_file (file)
    occurred.  *SIZE is set to the size of the file.  */
 
 static unsigned char *
-slurp_file (file, size)
-     char *file;
-     int *size;
+slurp_file (char *file, int *size)
 {
   FILE *fp = NULL;
   unsigned char *buf = NULL;
@@ -2304,15 +2248,15 @@ slurp_file (file, size)
 			      XBM images
  ***********************************************************************/
 
-static int xbm_scan P_ ((unsigned char **, unsigned char *, char *, int *));
-static int xbm_load P_ ((struct frame *f, struct image *img));
-static int xbm_load_image P_ ((struct frame *f, struct image *img,
-			       unsigned char *, unsigned char *));
-static int xbm_image_p P_ ((Lisp_Object object));
-static int xbm_read_bitmap_data P_ ((struct frame *f,
-				     unsigned char *, unsigned char *,
-				     int *, int *, unsigned char **, int));
-static int xbm_file_p P_ ((Lisp_Object));
+static int xbm_scan (unsigned char **, unsigned char *, char *, int *);
+static int xbm_load (struct frame *f, struct image *img);
+static int xbm_load_image (struct frame *f, struct image *img,
+                           unsigned char *, unsigned char *);
+static int xbm_image_p (Lisp_Object object);
+static int xbm_read_bitmap_data (struct frame *f,
+                                 unsigned char *, unsigned char *,
+                                 int *, int *, unsigned char **, int);
+static int xbm_file_p (Lisp_Object);
 
 
 /* Indices of image specification fields in xbm_format, below.  */
@@ -2405,8 +2349,7 @@ enum xbm_token
    displayed is used.  */
 
 static int
-xbm_image_p (object)
-     Lisp_Object object;
+xbm_image_p (Lisp_Object object)
 {
   struct image_keyword kw[XBM_LAST];
 
@@ -2499,10 +2442,7 @@ xbm_image_p (object)
    scanning a number, store its value in *IVAL.  */
 
 static int
-xbm_scan (s, end, sval, ival)
-     unsigned char **s, *end;
-     char *sval;
-     int *ival;
+xbm_scan (unsigned char **s, unsigned char *end, char *sval, int *ival)
 {
   unsigned int c;
 
@@ -2666,12 +2606,9 @@ convert_mono_to_color_image (f, img, foreground, background)
 
 
 static void
-Create_Pixmap_From_Bitmap_Data (f, img, data, fg, bg, non_default_colors)
-     struct frame *f;
-     struct image *img;
-     char *data;
-     RGB_PIXEL_COLOR fg, bg;
-     int non_default_colors;
+Create_Pixmap_From_Bitmap_Data (struct frame *f, struct image *img, char *data,
+				RGB_PIXEL_COLOR fg, RGB_PIXEL_COLOR bg,
+				int non_default_colors)
 {
 #ifdef HAVE_NTGUI
   img->pixmap
@@ -2707,12 +2644,9 @@ Create_Pixmap_From_Bitmap_Data (f, img, data, fg, bg, non_default_colors)
    invalid (the bitmap remains unread).  */
 
 static int
-xbm_read_bitmap_data (f, contents, end, width, height, data, inhibit_image_error)
-     struct frame *f;
-     unsigned char *contents, *end;
-     int *width, *height;
-     unsigned char **data;
-     int inhibit_image_error;
+xbm_read_bitmap_data (struct frame *f, unsigned char *contents, unsigned char *end,
+		      int *width, int *height, unsigned char **data,
+		      int inhibit_image_error)
 {
   unsigned char *s = contents;
   char buffer[BUFSIZ];
@@ -2861,10 +2795,8 @@ xbm_read_bitmap_data (f, contents, end, width, height, data, inhibit_image_error
    successful.  */
 
 static int
-xbm_load_image (f, img, contents, end)
-     struct frame *f;
-     struct image *img;
-     unsigned char *contents, *end;
+xbm_load_image (struct frame *f, struct image *img, unsigned char *contents,
+		unsigned char *end)
 {
   int rc;
   unsigned char *data;
@@ -2920,8 +2852,7 @@ xbm_load_image (f, img, contents, end)
 /* Value is non-zero if DATA looks like an in-memory XBM file.  */
 
 static int
-xbm_file_p (data)
-     Lisp_Object data;
+xbm_file_p (Lisp_Object data)
 {
   int w, h;
   return (STRINGP (data)
@@ -2935,9 +2866,7 @@ xbm_file_p (data)
    non-zero if successful.  */
 
 static int
-xbm_load (f, img)
-     struct frame *f;
-     struct image *img;
+xbm_load (struct frame *f, struct image *img)
 {
   int success_p = 0;
   Lisp_Object file_name;
@@ -3085,9 +3014,9 @@ xbm_load (f, img)
 
 #if defined (HAVE_XPM) || defined (HAVE_NS)
 
-static int xpm_image_p P_ ((Lisp_Object object));
-static int xpm_load P_ ((struct frame *f, struct image *img));
-static int xpm_valid_color_symbols_p P_ ((Lisp_Object));
+static int xpm_image_p (Lisp_Object object);
+static int xpm_load (struct frame *f, struct image *img);
+static int xpm_valid_color_symbols_p (Lisp_Object);
 
 #endif /* HAVE_XPM || HAVE_NS */
 
@@ -3178,12 +3107,12 @@ static struct image_type xpm_type =
 
 #ifdef ALLOC_XPM_COLORS
 
-static void xpm_init_color_cache P_ ((struct frame *, XpmAttributes *));
-static void xpm_free_color_cache P_ ((void));
-static int xpm_lookup_color P_ ((struct frame *, char *, XColor *));
-static int xpm_color_bucket P_ ((char *));
-static struct xpm_cached_color *xpm_cache_color P_ ((struct frame *, char *,
-						     XColor *, int));
+static void xpm_init_color_cache (struct frame *, XpmAttributes *);
+static void xpm_free_color_cache (void);
+static int xpm_lookup_color (struct frame *, char *, XColor *);
+static int xpm_color_bucket (char *);
+static struct xpm_cached_color *xpm_cache_color (struct frame *, char *,
+                                                 XColor *, int);
 
 /* An entry in a hash table used to cache color definitions of named
    colors.  This cache is necessary to speed up XPM image loading in
@@ -3211,9 +3140,7 @@ struct xpm_cached_color **xpm_color_cache;
 /* Initialize the color cache.  */
 
 static void
-xpm_init_color_cache (f, attrs)
-     struct frame *f;
-     XpmAttributes *attrs;
+xpm_init_color_cache (struct frame *f, XpmAttributes *attrs)
 {
   size_t nbytes = XPM_COLOR_CACHE_BUCKETS * sizeof *xpm_color_cache;
   xpm_color_cache = (struct xpm_cached_color **) xmalloc (nbytes);
@@ -3239,7 +3166,7 @@ xpm_init_color_cache (f, attrs)
 /* Free the color cache.  */
 
 static void
-xpm_free_color_cache ()
+xpm_free_color_cache (void)
 {
   struct xpm_cached_color *p, *next;
   int i;
@@ -3260,8 +3187,7 @@ xpm_free_color_cache ()
    cache.  */
 
 static int
-xpm_color_bucket (color_name)
-     char *color_name;
+xpm_color_bucket (char *color_name)
 {
   unsigned h = 0;
   char *s;
@@ -3277,11 +3203,7 @@ xpm_color_bucket (color_name)
    entry added.  */
 
 static struct xpm_cached_color *
-xpm_cache_color (f, color_name, color, bucket)
-     struct frame *f;
-     char *color_name;
-     XColor *color;
-     int bucket;
+xpm_cache_color (struct frame *f, char *color_name, XColor *color, int bucket)
 {
   size_t nbytes;
   struct xpm_cached_color *p;
@@ -3304,10 +3226,7 @@ xpm_cache_color (f, color_name, color, bucket)
    allocation failed.  */
 
 static int
-xpm_lookup_color (f, color_name, color)
-     struct frame *f;
-     char *color_name;
-     XColor *color;
+xpm_lookup_color (struct frame *f, char *color_name, XColor *color)
 {
   struct xpm_cached_color *p;
   int h = xpm_color_bucket (color_name);
@@ -3344,12 +3263,8 @@ xpm_lookup_color (f, color_name, color)
    if successful.  */
 
 static int
-xpm_alloc_color (dpy, cmap, color_name, color, closure)
-     Display *dpy;
-     Colormap cmap;
-     char *color_name;
-     XColor *color;
-     void *closure;
+xpm_alloc_color (Display *dpy, Colormap cmap, char *color_name, XColor *color,
+		 void *closure)
 {
   return xpm_lookup_color ((struct frame *) closure, color_name, color);
 }
@@ -3360,12 +3275,7 @@ xpm_alloc_color (dpy, cmap, color_name, color, closure)
    non-zero if successful.  */
 
 static int
-xpm_free_colors (dpy, cmap, pixels, npixels, closure)
-     Display *dpy;
-     Colormap cmap;
-     Pixel *pixels;
-     int npixels;
-     void *closure;
+xpm_free_colors (Display *dpy, Colormap cmap, Pixel *pixels, int npixels, void *closure)
 {
   return 1;
 }
@@ -3405,8 +3315,7 @@ init_xpm_functions (Lisp_Object libraries)
    cdr are strings.  */
 
 static int
-xpm_valid_color_symbols_p (color_symbols)
-     Lisp_Object color_symbols;
+xpm_valid_color_symbols_p (Lisp_Object color_symbols)
 {
   while (CONSP (color_symbols))
     {
@@ -3425,8 +3334,7 @@ xpm_valid_color_symbols_p (color_symbols)
 /* Value is non-zero if OBJECT is a valid XPM image specification.  */
 
 static int
-xpm_image_p (object)
-     Lisp_Object object;
+xpm_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[XPM_LAST];
   bcopy (xpm_format, fmt, sizeof fmt);
@@ -3443,9 +3351,7 @@ xpm_image_p (object)
 
 #if defined (HAVE_XPM) && defined (HAVE_X_WINDOWS)
 int
-x_create_bitmap_from_xpm_data (f, bits)
-     struct frame *f;
-     char **bits;
+x_create_bitmap_from_xpm_data (struct frame *f, char **bits)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   int id, rc;
@@ -3488,9 +3394,7 @@ x_create_bitmap_from_xpm_data (f, bits)
 #ifdef HAVE_XPM
 
 static int
-xpm_load (f, img)
-     struct frame *f;
-     struct image *img;
+xpm_load (struct frame *f, struct image *img)
 {
   int rc;
   XpmAttributes attrs;
@@ -3723,25 +3627,25 @@ xpm_load (f, img)
 /* XPM support functions for NS where libxpm is not available.
    Only XPM version 3 (without any extensions) is supported.  */
 
-static int xpm_scan P_ ((const unsigned char **, const unsigned char *,
-			 const unsigned char **, int *));
+static int xpm_scan (const unsigned char **, const unsigned char *,
+                     const unsigned char **, int *);
 static Lisp_Object xpm_make_color_table_v
-  P_ ((void (**) (Lisp_Object, const unsigned char *, int, Lisp_Object),
-       Lisp_Object (**) (Lisp_Object, const unsigned char *, int)));
-static void xpm_put_color_table_v P_ ((Lisp_Object, const unsigned char *,
-				       int, Lisp_Object));
-static Lisp_Object xpm_get_color_table_v P_ ((Lisp_Object,
-					      const unsigned char *, int));
+  (void (**) (Lisp_Object, const unsigned char *, int, Lisp_Object),
+   Lisp_Object (**) (Lisp_Object, const unsigned char *, int));
+static void xpm_put_color_table_v (Lisp_Object, const unsigned char *,
+                                   int, Lisp_Object);
+static Lisp_Object xpm_get_color_table_v (Lisp_Object,
+                                          const unsigned char *, int);
 static Lisp_Object xpm_make_color_table_h
-  P_ ((void (**) (Lisp_Object, const unsigned char *, int, Lisp_Object),
-       Lisp_Object (**) (Lisp_Object, const unsigned char *, int)));
-static void xpm_put_color_table_h P_ ((Lisp_Object, const unsigned char *,
-				       int, Lisp_Object));
-static Lisp_Object xpm_get_color_table_h P_ ((Lisp_Object,
-					      const unsigned char *, int));
-static int xpm_str_to_color_key P_ ((const char *));
-static int xpm_load_image P_ ((struct frame *, struct image *,
-			       const unsigned char *, const unsigned char *));
+  (void (**) (Lisp_Object, const unsigned char *, int, Lisp_Object),
+   Lisp_Object (**) (Lisp_Object, const unsigned char *, int));
+static void xpm_put_color_table_h (Lisp_Object, const unsigned char *,
+                                   int, Lisp_Object);
+static Lisp_Object xpm_get_color_table_h (Lisp_Object,
+                                          const unsigned char *, int);
+static int xpm_str_to_color_key (const char *);
+static int xpm_load_image (struct frame *, struct image *,
+                           const unsigned char *, const unsigned char *);
 
 /* Tokens returned from xpm_scan.  */
 
@@ -4244,7 +4148,7 @@ int ct_colors_allocated;
 /* Initialize the color table.  */
 
 static void
-init_color_table ()
+init_color_table (void)
 {
   int size = CT_SIZE * sizeof (*ct_table);
   ct_table = (struct ct_color **) xmalloc (size);
@@ -4256,7 +4160,7 @@ init_color_table ()
 /* Free memory associated with the color table.  */
 
 static void
-free_color_table ()
+free_color_table (void)
 {
   int i;
   struct ct_color *p, *next;
@@ -4279,9 +4183,7 @@ free_color_table ()
    G, B, and make an entry in the color table.  */
 
 static unsigned long
-lookup_rgb_color (f, r, g, b)
-     struct frame *f;
-     int r, g, b;
+lookup_rgb_color (struct frame *f, int r, int g, int b)
 {
   unsigned hash = CT_HASH_RGB (r, g, b);
   int i = hash % CT_SIZE;
@@ -4376,9 +4278,7 @@ lookup_rgb_color (f, r, g, b)
    table.  If not already present, allocate it.  Value is PIXEL.  */
 
 static unsigned long
-lookup_pixel_color (f, pixel)
-     struct frame *f;
-     unsigned long pixel;
+lookup_pixel_color (struct frame *f, unsigned long pixel)
 {
   int i = pixel % CT_SIZE;
   struct ct_color *p;
@@ -4430,8 +4330,7 @@ lookup_pixel_color (f, pixel)
    allocated via xmalloc.  Set *N to the number of colors.  */
 
 static unsigned long *
-colors_in_color_table (n)
-     int *n;
+colors_in_color_table (int *n)
 {
   int i, j;
   struct ct_color *p;
@@ -4486,9 +4385,9 @@ init_color_table ()
 			      Algorithms
  ***********************************************************************/
 
-static XColor *x_to_xcolors P_ ((struct frame *, struct image *, int));
-static void x_from_xcolors P_ ((struct frame *, struct image *, XColor *));
-static void x_detect_edges P_ ((struct frame *, struct image *, int[9], int));
+static XColor *x_to_xcolors (struct frame *, struct image *, int);
+static void x_from_xcolors (struct frame *, struct image *, XColor *);
+static void x_detect_edges (struct frame *, struct image *, int[9], int);
 
 #ifdef HAVE_NTGUI
 static void XPutPixel (XImagePtr , int, int, COLORREF);
@@ -4529,10 +4428,7 @@ static int laplace_matrix[9] = {
    allocated with xmalloc; it must be freed by the caller.  */
 
 static XColor *
-x_to_xcolors (f, img, rgb_p)
-     struct frame *f;
-     struct image *img;
-     int rgb_p;
+x_to_xcolors (struct frame *f, struct image *img, int rgb_p)
 {
   int x, y;
   XColor *colors, *p;
@@ -4645,10 +4541,7 @@ XPutPixel (ximg, x, y, color)
    COLORS will be freed; an existing IMG->pixmap will be freed, too.  */
 
 static void
-x_from_xcolors (f, img, colors)
-     struct frame *f;
-     struct image *img;
-     XColor *colors;
+x_from_xcolors (struct frame *f, struct image *img, XColor *colors)
 {
   int x, y;
   XImagePtr oimg = NULL;
@@ -4690,10 +4583,7 @@ x_from_xcolors (f, img, colors)
    outgoing image.  */
 
 static void
-x_detect_edges (f, img, matrix, color_adjust)
-     struct frame *f;
-     struct image *img;
-     int matrix[9], color_adjust;
+x_detect_edges (struct frame *f, struct image *img, int *matrix, int color_adjust)
 {
   XColor *colors = x_to_xcolors (f, img, 1);
   XColor *new, *p;
@@ -4759,9 +4649,7 @@ x_detect_edges (f, img, matrix, color_adjust)
    on frame F.  */
 
 static void
-x_emboss (f, img)
-     struct frame *f;
-     struct image *img;
+x_emboss (struct frame *f, struct image *img)
 {
   x_detect_edges (f, img, emboss_matrix, 0xffff / 2);
 }
@@ -4772,9 +4660,7 @@ x_emboss (f, img)
    to draw disabled buttons, for example.  */
 
 static void
-x_laplace (f, img)
-     struct frame *f;
-     struct image *img;
+x_laplace (struct frame *f, struct image *img)
 {
   x_detect_edges (f, img, laplace_matrix, 45000);
 }
@@ -4792,10 +4678,8 @@ x_laplace (f, img)
    number.  */
 
 static void
-x_edge_detection (f, img, matrix, color_adjust)
-     struct frame *f;
-     struct image *img;
-     Lisp_Object matrix, color_adjust;
+x_edge_detection (struct frame *f, struct image *img, Lisp_Object matrix,
+		  Lisp_Object color_adjust)
 {
   int i = 0;
   int trans[9];
@@ -4824,9 +4708,7 @@ x_edge_detection (f, img, matrix, color_adjust)
 /* Transform image IMG on frame F so that it looks disabled.  */
 
 static void
-x_disable_image (f, img)
-     struct frame *f;
-     struct image *img;
+x_disable_image (struct frame *f, struct image *img)
 {
   Display_Info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
 #ifdef HAVE_NTGUI
@@ -4928,10 +4810,7 @@ x_disable_image (f, img)
    heuristically.  Value is non-zero if successful. */
 
 static int
-x_build_heuristic_mask (f, img, how)
-     struct frame *f;
-     struct image *img;
-     Lisp_Object how;
+x_build_heuristic_mask (struct frame *f, struct image *img, Lisp_Object how)
 {
   XImagePtr_or_DC ximg;
 #ifndef HAVE_NTGUI
@@ -5058,9 +4937,9 @@ x_build_heuristic_mask (f, img, how)
 		       PBM (mono, gray, color)
  ***********************************************************************/
 
-static int pbm_image_p P_ ((Lisp_Object object));
-static int pbm_load P_ ((struct frame *f, struct image *img));
-static int pbm_scan_number P_ ((unsigned char **, unsigned char *));
+static int pbm_image_p (Lisp_Object object);
+static int pbm_load (struct frame *f, struct image *img);
+static int pbm_scan_number (unsigned char **, unsigned char *);
 
 /* The symbol `pbm' identifying images of this type.  */
 
@@ -5117,8 +4996,7 @@ static struct image_type pbm_type =
 /* Return non-zero if OBJECT is a valid PBM image specification.  */
 
 static int
-pbm_image_p (object)
-     Lisp_Object object;
+pbm_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[PBM_LAST];
 
@@ -5137,8 +5015,7 @@ pbm_image_p (object)
    end of input.  */
 
 static int
-pbm_scan_number (s, end)
-     unsigned char **s, *end;
+pbm_scan_number (unsigned char **s, unsigned char *end)
 {
   int c = 0, val = -1;
 
@@ -5213,9 +5090,7 @@ pbm_read_file (file, size)
 /* Load PBM image IMG for use on frame F.  */
 
 static int
-pbm_load (f, img)
-     struct frame *f;
-     struct image *img;
+pbm_load (struct frame *f, struct image *img)
 {
   int raw_p, x, y;
   int width, height, max_color_idx = 0;
@@ -5482,8 +5357,8 @@ pbm_load (f, img)
 
 /* Function prototypes.  */
 
-static int png_image_p P_ ((Lisp_Object object));
-static int png_load P_ ((struct frame *f, struct image *img));
+static int png_image_p (Lisp_Object object);
+static int png_load (struct frame *f, struct image *img);
 
 /* The symbol `png' identifying images of this type.  */
 
@@ -5537,8 +5412,7 @@ static struct image_type png_type =
 /* Return non-zero if OBJECT is a valid PNG image specification.  */
 
 static int
-png_image_p (object)
-     Lisp_Object object;
+png_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[PNG_LAST];
   bcopy (png_format, fmt, sizeof fmt);
@@ -5642,9 +5516,7 @@ init_png_functions (Lisp_Object libraries)
    is initialized.  */
 
 static void
-my_png_error (png_ptr, msg)
-     png_struct *png_ptr;
-     char *msg;
+my_png_error (png_struct *png_ptr, const char *msg)
 {
   xassert (png_ptr != NULL);
   image_error ("PNG error: %s", build_string (msg), Qnil);
@@ -5653,9 +5525,7 @@ my_png_error (png_ptr, msg)
 
 
 static void
-my_png_warning (png_ptr, msg)
-     png_struct *png_ptr;
-     char *msg;
+my_png_warning (png_struct *png_ptr, const char *msg)
 {
   xassert (png_ptr != NULL);
   image_error ("PNG warning: %s", build_string (msg), Qnil);
@@ -5676,10 +5546,7 @@ struct png_memory_storage
    bytes from the input to DATA.  */
 
 static void
-png_read_from_memory (png_ptr, data, length)
-     png_structp png_ptr;
-     png_bytep data;
-     png_size_t length;
+png_read_from_memory (png_structp png_ptr, png_bytep data, png_size_t length)
 {
   struct png_memory_storage *tbr
     = (struct png_memory_storage *) fn_png_get_io_ptr (png_ptr);
@@ -5697,10 +5564,7 @@ png_read_from_memory (png_ptr, data, length)
    bytes from the input to DATA.  */
 
 static void
-png_read_from_file (png_ptr, data, length)
-     png_structp png_ptr;
-     png_bytep data;
-     png_size_t length;
+png_read_from_file (png_structp png_ptr, png_bytep data, png_size_t length)
 {
   FILE *fp = (FILE *) fn_png_get_io_ptr (png_ptr);
 
@@ -5713,9 +5577,7 @@ png_read_from_file (png_ptr, data, length)
    successful.  */
 
 static int
-png_load (f, img)
-     struct frame *f;
-     struct image *img;
+png_load (struct frame *f, struct image *img)
 {
   Lisp_Object file, specified_file;
   Lisp_Object specified_data;
@@ -6084,8 +5946,8 @@ png_load (struct frame *f, struct image *img)
 
 #if defined (HAVE_JPEG) || defined (HAVE_NS)
 
-static int jpeg_image_p P_ ((Lisp_Object object));
-static int jpeg_load P_ ((struct frame *f, struct image *img));
+static int jpeg_image_p (Lisp_Object object);
+static int jpeg_load (struct frame *f, struct image *img);
 
 /* The symbol `jpeg' identifying images of this type.  */
 
@@ -6139,8 +6001,7 @@ static struct image_type jpeg_type =
 /* Return non-zero if OBJECT is a valid JPEG image specification.  */
 
 static int
-jpeg_image_p (object)
-     Lisp_Object object;
+jpeg_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[JPEG_LAST];
 
@@ -6239,8 +6100,7 @@ struct my_jpeg_error_mgr
 
 
 static void
-my_error_exit (cinfo)
-     j_common_ptr cinfo;
+my_error_exit (j_common_ptr cinfo)
 {
   struct my_jpeg_error_mgr *mgr = (struct my_jpeg_error_mgr *) cinfo->err;
   longjmp (mgr->setjmp_buffer, 1);
@@ -6252,8 +6112,7 @@ my_error_exit (cinfo)
    libjpeg.doc from the JPEG lib distribution.  */
 
 static void
-our_common_init_source (cinfo)
-     j_decompress_ptr cinfo;
+our_common_init_source (j_decompress_ptr cinfo)
 {
 }
 
@@ -6262,8 +6121,7 @@ our_common_init_source (cinfo)
    jpeg_finish_decompress() after all data has been processed.  */
 
 static void
-our_common_term_source (cinfo)
-     j_decompress_ptr cinfo;
+our_common_term_source (j_decompress_ptr cinfo)
 {
 }
 
@@ -6275,8 +6133,7 @@ our_common_term_source (cinfo)
 static JOCTET our_memory_buffer[2];
 
 static boolean
-our_memory_fill_input_buffer (cinfo)
-     j_decompress_ptr cinfo;
+our_memory_fill_input_buffer (j_decompress_ptr cinfo)
 {
   /* Insert a fake EOI marker.  */
   struct jpeg_source_mgr *src = cinfo->src;
@@ -6294,9 +6151,7 @@ our_memory_fill_input_buffer (cinfo)
    is the JPEG data source manager.  */
 
 static void
-our_memory_skip_input_data (cinfo, num_bytes)
-     j_decompress_ptr cinfo;
-     long num_bytes;
+our_memory_skip_input_data (j_decompress_ptr cinfo, long int num_bytes)
 {
   struct jpeg_source_mgr *src = (struct jpeg_source_mgr *) cinfo->src;
 
@@ -6316,10 +6171,7 @@ our_memory_skip_input_data (cinfo, num_bytes)
    reading the image.  */
 
 static void
-jpeg_memory_src (cinfo, data, len)
-     j_decompress_ptr cinfo;
-     JOCTET *data;
-     unsigned int len;
+jpeg_memory_src (j_decompress_ptr cinfo, JOCTET *data, unsigned int len)
 {
   struct jpeg_source_mgr *src;
 
@@ -6362,8 +6214,7 @@ struct jpeg_stdio_mgr
    whenever more data is needed.  The data is read from a FILE *.  */
 
 static boolean
-our_stdio_fill_input_buffer (cinfo)
-     j_decompress_ptr cinfo;
+our_stdio_fill_input_buffer (j_decompress_ptr cinfo)
 {
   struct jpeg_stdio_mgr *src;
 
@@ -6394,9 +6245,7 @@ our_stdio_fill_input_buffer (cinfo)
    is the JPEG data source manager.  */
 
 static void
-our_stdio_skip_input_data (cinfo, num_bytes)
-     j_decompress_ptr cinfo;
-     long num_bytes;
+our_stdio_skip_input_data (j_decompress_ptr cinfo, long int num_bytes)
 {
   struct jpeg_stdio_mgr *src;
   src = (struct jpeg_stdio_mgr *) cinfo->src;
@@ -6426,9 +6275,7 @@ our_stdio_skip_input_data (cinfo, num_bytes)
    reading the image.  */
 
 static void
-jpeg_file_src (cinfo, fp)
-     j_decompress_ptr cinfo;
-     FILE *fp;
+jpeg_file_src (j_decompress_ptr cinfo, FILE *fp)
 {
   struct jpeg_stdio_mgr *src;
 
@@ -6462,9 +6309,7 @@ jpeg_file_src (cinfo, fp)
    from the JPEG lib.  */
 
 static int
-jpeg_load (f, img)
-     struct frame *f;
-     struct image *img;
+jpeg_load (struct frame *f, struct image *img)
 {
   struct jpeg_decompress_struct cinfo;
   struct my_jpeg_error_mgr mgr;
@@ -6656,8 +6501,8 @@ jpeg_load (struct frame *f, struct image *img)
 
 #if defined (HAVE_TIFF) || defined (HAVE_NS)
 
-static int tiff_image_p P_ ((Lisp_Object object));
-static int tiff_load P_ ((struct frame *f, struct image *img));
+static int tiff_image_p (Lisp_Object object);
+static int tiff_load (struct frame *f, struct image *img);
 
 /* The symbol `tiff' identifying images of this type.  */
 
@@ -6713,8 +6558,7 @@ static struct image_type tiff_type =
 /* Return non-zero if OBJECT is a valid TIFF image specification.  */
 
 static int
-tiff_image_p (object)
-     Lisp_Object object;
+tiff_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[TIFF_LAST];
   bcopy (tiff_format, fmt, sizeof fmt);
@@ -6794,10 +6638,7 @@ typedef struct
 tiff_memory_source;
 
 static size_t
-tiff_read_from_memory (data, buf, size)
-     thandle_t data;
-     tdata_t buf;
-     tsize_t size;
+tiff_read_from_memory (thandle_t data, tdata_t buf, tsize_t size)
 {
   tiff_memory_source *src = (tiff_memory_source *) data;
 
@@ -6809,19 +6650,13 @@ tiff_read_from_memory (data, buf, size)
 }
 
 static size_t
-tiff_write_from_memory (data, buf, size)
-     thandle_t data;
-     tdata_t buf;
-     tsize_t size;
+tiff_write_from_memory (thandle_t data, tdata_t buf, tsize_t size)
 {
   return (size_t) -1;
 }
 
 static toff_t
-tiff_seek_in_memory (data, off, whence)
-     thandle_t data;
-     toff_t off;
-     int whence;
+tiff_seek_in_memory (thandle_t data, toff_t off, int whence)
 {
   tiff_memory_source *src = (tiff_memory_source *) data;
   int idx;
@@ -6852,44 +6687,34 @@ tiff_seek_in_memory (data, off, whence)
 }
 
 static int
-tiff_close_memory (data)
-     thandle_t data;
+tiff_close_memory (thandle_t data)
 {
   /* NOOP */
   return 0;
 }
 
 static int
-tiff_mmap_memory (data, pbase, psize)
-     thandle_t data;
-     tdata_t *pbase;
-     toff_t *psize;
+tiff_mmap_memory (thandle_t data, tdata_t *pbase, toff_t *psize)
 {
   /* It is already _IN_ memory. */
   return 0;
 }
 
 static void
-tiff_unmap_memory (data, base, size)
-     thandle_t data;
-     tdata_t base;
-     toff_t size;
+tiff_unmap_memory (thandle_t data, tdata_t base, toff_t size)
 {
   /* We don't need to do this. */
 }
 
 static toff_t
-tiff_size_of_memory (data)
-     thandle_t data;
+tiff_size_of_memory (thandle_t data)
 {
   return ((tiff_memory_source *) data)->len;
 }
 
 
 static void
-tiff_error_handler (title, format, ap)
-     const char *title, *format;
-     va_list ap;
+tiff_error_handler (const char *title, const char *format, va_list ap)
 {
   char buf[512];
   int len;
@@ -6901,9 +6726,7 @@ tiff_error_handler (title, format, ap)
 
 
 static void
-tiff_warning_handler (title, format, ap)
-     const char *title, *format;
-     va_list ap;
+tiff_warning_handler (const char *title, const char *format, va_list ap)
 {
   char buf[512];
   int len;
@@ -6918,9 +6741,7 @@ tiff_warning_handler (title, format, ap)
    successful.  */
 
 static int
-tiff_load (f, img)
-     struct frame *f;
-     struct image *img;
+tiff_load (struct frame *f, struct image *img)
 {
   Lisp_Object file, specified_file;
   Lisp_Object specified_data;
@@ -7107,9 +6928,9 @@ tiff_load (struct frame *f, struct image *img)
 
 #if defined (HAVE_GIF) || defined (HAVE_NS)
 
-static int gif_image_p P_ ((Lisp_Object object));
-static int gif_load P_ ((struct frame *f, struct image *img));
-static void gif_clear_image P_ ((struct frame *f, struct image *img));
+static int gif_image_p (Lisp_Object object);
+static int gif_load (struct frame *f, struct image *img);
+static void gif_clear_image (struct frame *f, struct image *img);
 
 /* The symbol `gif' identifying images of this type.  */
 
@@ -7165,9 +6986,7 @@ static struct image_type gif_type =
 /* Free X resources of GIF image IMG which is used on frame F.  */
 
 static void
-gif_clear_image (f, img)
-     struct frame *f;
-     struct image *img;
+gif_clear_image (struct frame *f, struct image *img)
 {
   /* IMG->data.ptr_val may contain metadata with extension data.  */
   img->data.lisp_val = Qnil;
@@ -7177,8 +6996,7 @@ gif_clear_image (f, img)
 /* Return non-zero if OBJECT is a valid GIF image specification.  */
 
 static int
-gif_image_p (object)
-     Lisp_Object object;
+gif_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[GIF_LAST];
   bcopy (gif_format, fmt, sizeof fmt);
@@ -7261,10 +7079,7 @@ gif_memory_source;
 static gif_memory_source *current_gif_memory_src;
 
 static int
-gif_read_from_memory (file, buf, len)
-     GifFileType *file;
-     GifByteType *buf;
-     int len;
+gif_read_from_memory (GifFileType *file, GifByteType *buf, int len)
 {
   gif_memory_source *src = current_gif_memory_src;
 
@@ -7284,9 +7099,7 @@ static const int interlace_start[] = {0, 4, 2, 1};
 static const int interlace_increment[] = {8, 8, 4, 2};
 
 static int
-gif_load (f, img)
-     struct frame *f;
-     struct image *img;
+gif_load (struct frame *f, struct image *img)
 {
   Lisp_Object file, specified_file;
   Lisp_Object specified_data;
@@ -7547,11 +7360,11 @@ gif_load (struct frame *f, struct image *img)
 
 /* Function prototypes.  */
 
-static int svg_image_p P_ ((Lisp_Object object));
-static int svg_load P_ ((struct frame *f, struct image *img));
+static int svg_image_p (Lisp_Object object);
+static int svg_load (struct frame *f, struct image *img);
 
-static int svg_load_image P_ ((struct frame *, struct image *,
-			       unsigned char *, unsigned int));
+static int svg_load_image (struct frame *, struct image *,
+                           unsigned char *, unsigned int);
 
 /* The symbol `svg' identifying images of this type. */
 
@@ -7616,8 +7429,7 @@ static struct image_type svg_type =
    identify the SVG format.   */
 
 static int
-svg_image_p (object)
-     Lisp_Object object;
+svg_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[SVG_LAST];
   bcopy (svg_format, fmt, sizeof fmt);
@@ -7719,9 +7531,7 @@ init_svg_functions (Lisp_Object libraries)
    the prototype thus needs to be compatible with that structure.  */
 
 static int
-svg_load (f, img)
-     struct frame *f;
-     struct image *img;
+svg_load (struct frame *f, struct image *img)
 {
   int success_p = 0;
   Lisp_Object file_name;
@@ -7778,15 +7588,10 @@ svg_load (f, img)
 
    Returns non-zero when successful.  */
 static int
-svg_load_image (f, img, contents, size)
-    /* Pointer to emacs frame structure.  */
-     struct frame *f;
-     /* Pointer to emacs image structure.  */
-     struct image *img;
-     /* String containing the SVG XML data to be parsed.  */
-     unsigned char *contents;
-     /* Size of data in bytes.  */
-     unsigned int size;
+svg_load_image (struct frame *f,         /* Pointer to emacs frame structure.  */
+		struct image *img,       /* Pointer to emacs image structure.  */
+		unsigned char *contents, /* String containing the SVG XML data to be parsed.  */
+		unsigned int size)       /* Size of data in bytes.  */
 {
   RsvgHandle *rsvg_handle;
   RsvgDimensionData dimension_data;
@@ -7953,9 +7758,9 @@ Lisp_Object Qpostscript;
 
 #ifdef HAVE_GHOSTSCRIPT
 
-static int gs_image_p P_ ((Lisp_Object object));
-static int gs_load P_ ((struct frame *f, struct image *img));
-static void gs_clear_image P_ ((struct frame *f, struct image *img));
+static int gs_image_p (Lisp_Object object);
+static int gs_load (struct frame *f, struct image *img);
+static void gs_clear_image (struct frame *f, struct image *img);
 
 /* Keyword symbols.  */
 
@@ -8016,9 +7821,7 @@ static struct image_type gs_type =
 /* Free X resources of Ghostscript image IMG which is used on frame F.  */
 
 static void
-gs_clear_image (f, img)
-     struct frame *f;
-     struct image *img;
+gs_clear_image (struct frame *f, struct image *img)
 {
   /* IMG->data.ptr_val may contain a recorded colormap.  */
   xfree (img->data.ptr_val);
@@ -8030,8 +7833,7 @@ gs_clear_image (f, img)
    specification.  */
 
 static int
-gs_image_p (object)
-     Lisp_Object object;
+gs_image_p (Lisp_Object object)
 {
   struct image_keyword fmt[GS_LAST];
   Lisp_Object tem;
@@ -8071,9 +7873,7 @@ gs_image_p (object)
    if successful.  */
 
 static int
-gs_load (f, img)
-     struct frame *f;
-     struct image *img;
+gs_load (struct frame *f, struct image *img)
 {
   char buffer[100];
   Lisp_Object window_and_pixmap_id = Qnil, loader, pt_height, pt_width;
@@ -8151,9 +7951,7 @@ gs_load (f, img)
    telling Emacs that Ghostscript has finished drawing.  */
 
 void
-x_kill_gs_process (pixmap, f)
-     Pixmap pixmap;
-     struct frame *f;
+x_kill_gs_process (Pixmap pixmap, struct frame *f)
 {
   struct image_cache *c = FRAME_IMAGE_CACHE (f);
   int class, i;
@@ -8346,7 +8144,7 @@ of `image-library-alist', which see).  */)
 }
 
 void
-syms_of_image ()
+syms_of_image (void)
 {
   extern Lisp_Object Qrisky_local_variable;   /* Syms_of_xdisp has already run.  */
 
@@ -8499,7 +8297,7 @@ non-numeric, there is no explicit limit on the size of images.  */);
 
   defsubr (&Sinit_image_library);
   defsubr (&Sclear_image_cache);
-  defsubr (&Simage_refresh);
+  defsubr (&Simage_flush);
   defsubr (&Simage_size);
   defsubr (&Simage_mask_p);
   defsubr (&Simage_metadata);
@@ -8520,15 +8318,18 @@ A cross is always drawn on black & white displays.  */);
   Vx_bitmap_file_path = decode_env_path ((char *) 0, PATH_BITMAPS);
 
   DEFVAR_LISP ("image-cache-eviction-delay", &Vimage_cache_eviction_delay,
-    doc: /* Time after which cached images are removed from the cache.
-When an image has not been displayed this many seconds, remove it
-from the image cache.  Value must be an integer or nil with nil
-meaning don't clear the cache.  */);
-  Vimage_cache_eviction_delay = make_number (30 * 60);
+    doc: /* Maximum time after which images are removed from the cache.
+When an image has not been displayed this many seconds, Emacs
+automatically removes it from the image cache.  If the cache contains
+a large number of images, the actual eviction time may be shorter.
+The value can also be nil, meaning the cache is never cleared.
+
+The function `clear-image-cache' disregards this variable.  */);
+  Vimage_cache_eviction_delay = make_number (300);
 }
 
 void
-init_image ()
+init_image (void)
 {
 }
 

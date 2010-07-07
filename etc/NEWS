@@ -24,6 +24,13 @@ so we will look at it and add it to the manual.
 
 * Installation Changes in Emacs 24.1
 
+** Configure links against libselinux if it is found.
+You can disable this by using --without-selinux.
+
+---
+** By default, the installed Info and man pages are compressed.
+You can disable this by configuring --without-compress-info.
+
 ---
 ** There are new configure options:
 --with-mmdf, --with-mail-unlink, --with-mailhost.
@@ -34,14 +41,25 @@ lib-src/Makefile by hand in order to use the associated features.
 ** There is a new configure option --with-crt-dir.
 This is only useful if your crt*.o files are in a non-standard location.
 
-** Configure links against libselinux if it is found.
-You can disable this by using --without-selinux.
+---
+** Emacs can be compiled against Gtk+ 3.0 if you pass --with-x-toolkit=gtk3 
+to configure.  Note that other libraries used by Emacs, RSVG and GConf,
+also depend on Gtk+.  You can disable them with --without-rsvg and
+--without-gconf.
+
+** There is a new configure option --enable-use-lisp-union-type.
+This is only useful for Emacs developers to debug certain types of bugs.
+These is not a new feature; only the configure flag is new.
 
 
 * Startup Changes in Emacs 24.1
 
 
 * Changes in Emacs 24.1
+
+** New emacsclient argument --parent-id ID can be used to open a
+client frame in parent X window ID, via XEmbed.  This works like the
+--parent-id argument to Emacs.
 
 ** Completion can cycle, depending on completion-cycle-threshold.
 
@@ -62,6 +80,9 @@ according to the value of this variable.  Possible values are
 `right-to-left' and `left-to-right'.  If the value is nil (the
 default), Emacs determines the base direction of each paragraph from
 its text, as specified by the Unicode Bidirectional Algorithm.
+
+The function `current-bidi-paragraph-direction' returns the actual
+value of paragraph base direction at point.
 
 Reordering of bidirectional text for display in Emacs is a "Full
 bidirectionality" class implementation of the Unicode Bidirectional
@@ -106,6 +127,27 @@ scroll a line instead of full screen.
 ** New property `scroll-command' should be set on a command's symbol to
 define it as a scroll command affected by `scroll-preserve-screen-position.
 
+** Trash changes
+
+*** `delete-by-moving-to-trash' now only affects commands that specify
+trashing.  This avoids inadvertently trashing temporary files.
+
+*** Calling `delete-file' or `delete-directory' with a prefix argument
+now forces true deletion, regardless of `delete-by-moving-to-trash'.
+
+** New option `list-colors-sort' defines the color sort order
+for `list-colors-display'.
+
+** An Emacs Lisp package manager is now included.
+This is a convenient way to download and install additional packages,
+from elpa.gnu.org.  `M-x package-list-packages' shows a list of
+packages, which can be selected for installation.
+
+*** By default, all installed packages are loaded and activated
+automatically when Emacs starts up.  To disable this, set
+`package-enable-at-startup' to nil.  To change which packages are
+loaded, customize `package-load-list'.
+
 
 * Editing Changes in Emacs 24.1
 
@@ -113,8 +155,23 @@ define it as a scroll command affected by `scroll-preserve-screen-position.
 
 ** mouse-region-delete-keys has been deleted.
 
-** If delete-file is called with a prefix argument, it really deletes,
-regardless of the value of `delete-by-moving-to-trash'.
+** Deletion changes
+
+*** New option `delete-active-region'.
+If non-nil, C-d, [delete], and DEL delete the region if it is active
+and no prefix argument is given.  If set to `kill', these commands
+kill instead.
+
+*** New command `delete-forward-char', bound to C-d and [delete].
+This is meant for interactive use, and obeys `delete-active-region';
+delete-char, meant for Lisp, does not obey `delete-active-region'.
+
+*** `delete-backward-char' is now a Lisp function.
+Apart from obeying `delete-active-region', its behavior is unchanged.
+However, the byte compiler now warns if it is called from Lisp; you
+should use delete-char with a negative argument instead.
+
+*** The option `mouse-region-delete-keys' has been deleted.
 
 
 * Changes in Specialized Modes and Packages in Emacs 24.1
@@ -144,9 +201,22 @@ Use the arrow to the left of the option name to toggle visibility.
 *** The color widget now has a "Choose" button, which allows you to
 choose a color via list-colors-display.
 
+** Dired-x
+
+*** dired-jump and dired-jump-other-window called with a prefix argument
+read a file name from the minibuffer instead of using buffer-file-name.
+
 ** VC and related modes
 
 *** New VC commands: vc-log-incoming, vc-log-outgoing, vc-find-conflicted-file.
+
+**** vc-log-incoming for Git runs "git fetch" so that the necessary
+data is available locally.
+
+**** vc-log-incoming and vc-log-outgoing for Git require version 1.7 (or newer).
+
+*** New key bindings: C-x v I and C-x v O bound to vc-log-incoming and
+vc-log-outgoing, respectively.
 
 *** vc-dir for Bzr supports viewing shelve contents and shelving snapshots.
 
@@ -158,6 +228,11 @@ with headers of the form:
   Fixes: <reference to the bug fixed by this change>
 Some backends handle some of those headers specially, but any unknown header
 is just left as is in the message, so it is not lost.
+
+**** vc-git handles Author: and Date:
+**** vc-hg handles  Author: and Date:
+**** vc-bzr handles Author:, Date: and Fixes:
+**** vc-mtn handles Author: and Date:
 
 ** Directory local variables can apply to file-less buffers.
 For example, adding "(diff-mode . ((mode . whitespace)))" to your
@@ -207,24 +282,53 @@ threads simultaneously.
 
 * New Modes and Packages in Emacs 24.1
 
+** smie.el is a package providing a simple generic indentation engine.
+
 ** secrets.el is an implementation of the Secret Service API, an
 interface to password managers like GNOME Keyring or KDE Wallet.  The
-Secret Service API requires D-Bus for communication.
+Secret Service API requires D-Bus for communication.  The command
+`secrets-show-secrets' offers a buffer with a visualization of the
+secrets.
+
+** notifications.el provides an implementation of the Desktop
+Notifications API.  It requires D-Bus for communication.
 
 
 * Incompatible Lisp Changes in Emacs 24.1
 
+** A backquote not followed by a space is now always treated as new-style.
+
 ** Test for special mode-class was moved from view-file to view-buffer.
+FIXME: This only says what was changed, but not what are the
+programmer-visible consequences.
 
 ** Passing a nil argument to a minor mode function now turns the mode
    ON unconditionally.
+
+** During startup, Emacs no longer adds entries for `menu-bar-lines'
+and `tool-bar-lines' to `default-frame-alist' and
+`initial-frame-alist'.  With these alist entries omitted, `make-frame'
+checks the value of the variable `menu-bar-mode'/`tool-bar-mode' to
+determine whether to create a menu-bar or tool-bar, respectively.
+If the alist entries are added, they override the value of
+`menu-bar-mode'/`tool-bar-mode'.
+
+** Regions created by mouse dragging are now normal active regions,
+similar to the ones created by shift-selection.  In previous Emacs
+versions, these regions were delineated by `mouse-drag-overlay', which
+has now been removed.
+
 
 * Lisp changes in Emacs 24.1
 
+** frame-local variables cannot be let-bound any more.
+** prog-mode is a new major-mode meant to be the parent of programming mode.
 ** define-minor-mode accepts a new keyword :variable.
 
-** delete-file now accepts an optional second arg, FORCE, which says
-to always delete and ignore the value of delete-by-moving-to-trash.
+** `delete-file' and `delete-directory now accept optional arg TRASH.
+Trashing is performed if TRASH and `delete-by-moving-to-trash' are
+both non-nil.  Interactively, TRASH defaults to t, unless a prefix
+argument is supplied (see Trash changes, above).
 
 ** buffer-substring-filters is obsoleted by filter-buffer-substring-functions.
 
@@ -240,6 +344,10 @@ sub-images are displayed successively with the duration defined by
 by the Graphic Control Extension of the image.
 
 *** `image-extension-data' is renamed to `image-metadata'.
+
+** Isearch
+
+*** New hook `isearch-update-post-hook' that runs in `isearch-update'.
 
 ** Progress reporters can now "spin".
 The MIN-VALUE and MAX-VALUE arguments of `make-progress-reporter' can

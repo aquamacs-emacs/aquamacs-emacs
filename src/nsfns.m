@@ -27,7 +27,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
-#include "config.h"
+#include <config.h>
 
 #include <signal.h>
 #include <math.h>
@@ -82,6 +82,10 @@ extern Lisp_Object Qheight, Qminibuffer, Qname, Qonly, Qwidth;
 extern Lisp_Object Qunsplittable, Qmenu_bar_lines, Qbuffer_predicate, Qtitle;
 extern Lisp_Object Qnone;
 extern Lisp_Object Vframe_title_format;
+
+/* The below are defined in frame.c.  */
+
+extern Lisp_Object Vmenu_bar_mode, Vtool_bar_mode;
 
 Lisp_Object Qbuffered;
 Lisp_Object Qfontsize;
@@ -224,7 +228,8 @@ ns_get_screen (Lisp_Object screen)
   else
     {
       struct ns_display_info *dpyinfo = terminal->display_info.ns;
-      f = (dpyinfo->x_focus_frame || dpyinfo->x_highlight_frame);
+      f = dpyinfo->x_focus_frame
+        ? dpyinfo->x_focus_frame : dpyinfo->x_highlight_frame;
     }
 
   return ((f && FRAME_NS_P (f)) ? [[FRAME_NS_VIEW (f) window] screen]
@@ -1227,10 +1232,18 @@ be shared by the new frame.  */)
 
   init_frame_faces (f);
 
-  x_default_parameter (f, parms, Qmenu_bar_lines, make_number (0), "menuBar",
-                      "menuBar", RES_TYPE_NUMBER);
-  x_default_parameter (f, parms, Qtool_bar_lines, make_number (0), "toolBar",
-                      "toolBar", RES_TYPE_NUMBER);
+  /* The X resources controlling the menu-bar and tool-bar are
+     processed specially at startup, and reflected in the mode
+     variables; ignore them here.  */
+  x_default_parameter (f, parms, Qmenu_bar_lines,
+		       NILP (Vmenu_bar_mode)
+		       ? make_number (0) : make_number (1),
+		       NULL, NULL, RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qtool_bar_lines,
+		       NILP (Vtool_bar_mode)
+		       ? make_number (0) : make_number (1),
+		       NULL, NULL, RES_TYPE_NUMBER);
+
   x_default_parameter (f, parms, Qbuffer_predicate, Qnil, "bufferPredicate",
                        "BufferPredicate", RES_TYPE_SYMBOL);
   x_default_parameter (f, parms, Qtitle, Qnil, "title", "Title",
@@ -1764,8 +1777,8 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
 	}
     } 
   else
-    [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
-	     isMultiple: NO];
+  [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
+           isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
 
   UNBLOCK_INPUT;
@@ -2672,7 +2685,7 @@ Lisp_Object URLstring;
 		error ("URL is nil.");
 		return Qnil;
     }
-	
+
 	BLOCK_INPUT;
 	// get default browser
 	
@@ -3028,9 +3041,10 @@ If omitted or nil, that stands for the selected frame's display.  */)
      (display)
      Lisp_Object display;
 {
+  struct ns_display_info *dpyinfo;
   check_ns ();
-  struct ns_display_info *dpyinfo = check_ns_display_info (display);
-
+  
+  dpyinfo = check_ns_display_info (display);
   /* We force 24+ bit depths to 24-bit to prevent an overflow.  */
   return make_number (1 << min (dpyinfo->n_planes, 24));
 }
@@ -3054,20 +3068,23 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
 
   /* Start with user-specified or mouse position.  */
   left = Fcdr (Fassq (Qleft, parms));
-  if (INTEGERP (left))
-    pt.x = XINT (left);
-  else
-    pt.x = last_mouse_motion_position.x;
   top = Fcdr (Fassq (Qtop, parms));
-  if (INTEGERP (top))
-    pt.y = XINT (top);
+
+  if (!INTEGERP (left) || !INTEGERP (top))
+    {
+      pt = last_mouse_motion_position;
+      /* Convert to screen coordinates */
+      pt = [view convertPoint: pt toView: nil];
+      pt = [[view window] convertBaseToScreen: pt];
+    }
   else
-    pt.y = last_mouse_motion_position.y;
-
-  /* Convert to screen coordinates */
-  pt = [view convertPoint: pt toView: nil];
-  pt = [[view window] convertBaseToScreen: pt];
-
+    {
+      /* Absolute coordinates.  */
+      pt.x = XINT (left);
+      pt.y = x_display_pixel_height (FRAME_NS_DISPLAY_INFO (f)) - XINT (top)
+        - height;
+    }
+  
   vScreen = [[[view window] screen] visibleFrame];
 
   /* Ensure in bounds.  (Note, screen origin = lower left.) */
@@ -3158,7 +3175,7 @@ Text larger than the specified size is clipped.  */)
 
   /* must initialize every time in order to keep tooltip on
      the screen with key focus. */
-  ns_tooltip = [[EmacsTooltip alloc] init];
+    ns_tooltip = [[EmacsTooltip alloc] init];
   [ns_tooltip setText: str];
   size = [ns_tooltip frame].size;
 

@@ -613,19 +613,20 @@ and then modifies one entry in it."
 (defun subr--check-key-binding (key command)
   (condition-case nil
       (let ((b (key-binding key t)))
-	(if (eq command b)
-	    command
-	  (message "Warning: Key %s already bound to %s %s.  Use `define-key' instead."
-		   (key-description key)
-		   (cond ((symbolp b) (format "`%s'" b))
-			 ((keymapp b) "a (prefix) keymap or menu")
-			 (t "something else"))
-		   (let ((mm
-			  (mapcar
-			   (lambda (x)
-			     (car x))
-			   (minor-mode-key-binding key))))
-		     (if mm (format "by minor modes %s" mm) "")))))
+	(and b
+	     (if (eq command b)
+		 command
+	       (message "Warning: Key %s already bound to %s %s.  Use `define-key' instead."
+			(key-description key)
+			(cond ((symbolp b) (format "`%s'" b))
+			      ((keymapp b) "a (prefix) keymap or menu")
+			      (t "something else"))
+			(let ((mm
+			       (mapcar
+				(lambda (x)
+				  (car x))
+				(minor-mode-key-binding key))))
+			  (if mm (format "by minor modes %s" mm) ""))))))
     (error nil)))
 
 (defun global-set-key (key command)
@@ -1110,7 +1111,11 @@ is converted into a string by expressing it in decimal."
 (make-obsolete 'process-filter-multibyte-p nil "23.1")
 (make-obsolete 'set-process-filter-multibyte nil "23.1")
 
-(make-obsolete-variable 'directory-sep-char "do not use it." "21.1")
+(defconst directory-sep-char ?/
+  "Directory separator character for built-in functions that return file names.
+The value is always ?/.")
+(make-obsolete-variable 'directory-sep-char "do not use it, just use `/'." "21.1")
+
 (make-obsolete-variable
  'mode-line-inverse-video
  "use the appropriate faces instead."

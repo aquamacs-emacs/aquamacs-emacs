@@ -87,10 +87,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 #endif
 
-extern void malloc_warning P_ ((char *));
-extern void set_time_zone_rule P_ ((char *));
+const char emacs_copyright[] = "Copyright (C) 2010 Free Software Foundation, Inc.";
+const char emacs_version[] = "24.0.50";
+
+extern void malloc_warning (char *);
+extern void set_time_zone_rule (char *);
 #ifdef HAVE_INDEX
-extern char *index P_ ((const char *, int));
+extern char *index (const char *, int);
 #endif
 
 /* Make these values available in GDB, which doesn't see macros.  */
@@ -154,9 +157,9 @@ int initialized;
    static data inside glibc's malloc.  */
 void *malloc_state_ptr;
 /* From glibc, a routine that returns a copy of the malloc internal state.  */
-extern void *malloc_get_state ();
+extern void *malloc_get_state (void);
 /* From glibc, a routine that overwrites the malloc internal state.  */
-extern int malloc_set_state ();
+extern int malloc_set_state (void*);
 /* Non-zero if the MALLOC_CHECK_ environment variable was set while
    dumping.  Used to work around a bug in glibc's malloc.  */
 int malloc_using_checking;
@@ -179,6 +182,10 @@ Lisp_Object Vsystem_messages_locale;
 Lisp_Object Vprevious_system_messages_locale;
 Lisp_Object Vsystem_time_locale;
 Lisp_Object Vprevious_system_time_locale;
+
+/* Copyright and version info.  The version number may be updated by
+   Lisp code.  */
+Lisp_Object Vemacs_copyright, Vemacs_version;
 
 /* If non-zero, emacs should not attempt to use a window-specific code,
    but instead should use the virtual terminal under which it was started.  */
@@ -245,8 +252,8 @@ int daemon_pipe[2];
 char **initial_argv;
 int initial_argc;
 
-static void sort_args ();
-void syms_of_emacs ();
+static void sort_args (int argc, char **argv);
+void syms_of_emacs (void);
 
 /* MSVC needs each string be shorter than 2048 bytes, so the usage
    strings below are split to not overflow this limit.  */
@@ -354,7 +361,7 @@ int fatal_error_in_progress;
 /* If non-null, call this function from fatal_error_signal before
    committing suicide.  */
 
-void (*fatal_error_signal_hook) P_ ((void));
+void (*fatal_error_signal_hook) (void);
 
 #ifdef FORWARD_SIGNAL_TO_MAIN_THREAD
 /* When compiled with GTK and running under Gnome,
@@ -367,8 +374,7 @@ pthread_t main_thread;
 
 /* Handle bus errors, invalid instruction, etc.  */
 SIGTYPE
-fatal_error_signal (sig)
-     int sig;
+fatal_error_signal (int sig)
 {
   SIGNAL_THREAD_CHECK (sig);
   fatal_error_code = sig;
@@ -437,10 +443,7 @@ abort ()
 /* Code for dealing with Lisp access to the Unix command line.  */
 
 static void
-init_cmdargs (argc, argv, skip_args)
-     int argc;
-     char **argv;
-     int skip_args;
+init_cmdargs (int argc, char **argv, int skip_args)
 {
   register int i;
   Lisp_Object name, dir, tem;
@@ -637,14 +640,7 @@ void __main ()
    enough information to do it right.  */
 
 static int
-argmatch (argv, argc, sstr, lstr, minlen, valptr, skipptr)
-     char **argv;
-     int argc;
-     char *sstr;
-     char *lstr;
-     int minlen;
-     char **valptr;
-     int *skipptr;
+argmatch (char **argv, int argc, char *sstr, char *lstr, int minlen, char **valptr, int *skipptr)
 {
   char *p = NULL;
   int arglen;
@@ -702,7 +698,7 @@ argmatch (argv, argc, sstr, lstr, minlen, valptr, skipptr)
    possible using this special hook.  */
 
 static void
-malloc_initialize_hook ()
+malloc_initialize_hook (void)
 {
 #ifndef USE_CRT_DLL
   extern char **environ;
@@ -740,7 +736,7 @@ malloc_initialize_hook ()
     }
 }
 
-void (*__malloc_initialize_hook) () = malloc_initialize_hook;
+void (*__malloc_initialize_hook) (void) = malloc_initialize_hook;
 
 #endif /* DOUG_LEA_MALLOC */
 
@@ -802,35 +798,43 @@ main (int argc, char **argv)
   argc = 0;
   while (argv[argc]) argc++;
 
-  if (argmatch (argv, argc, "-version", "--version", 3, NULL, &skip_args)
-      /* We don't know the version number unless this is a dumped Emacs.
-         So ignore --version otherwise.  */
-      && initialized)
+  if (argmatch (argv, argc, "-version", "--version", 3, NULL, &skip_args))
     {
-      Lisp_Object tem, tem2;
-      tem = Fsymbol_value (intern_c_string ("emacs-version"));
-      tem2 = Fsymbol_value (intern_c_string ("emacs-copyright"));
-      if (!STRINGP (tem))
+      const char *version, *copyright;
+      if (initialized)
 	{
-	  fprintf (stderr, "Invalid value of `emacs-version'\n");
-	  exit (1);
-	}
-      if (!STRINGP (tem2))
-	{
-	  fprintf (stderr, "Invalid value of `emacs-copyright'\n");
-	  exit (1);
+	  Lisp_Object tem, tem2;
+	  tem = Fsymbol_value (intern_c_string ("emacs-version"));
+	  tem2 = Fsymbol_value (intern_c_string ("emacs-copyright"));
+	  if (!STRINGP (tem))
+	    {
+	      fprintf (stderr, "Invalid value of `emacs-version'\n");
+	      exit (1);
+	    }
+	  if (!STRINGP (tem2))
+	    {
+	      fprintf (stderr, "Invalid value of `emacs-copyright'\n");
+	      exit (1);
+	    }
+	  else
+	    {
+	      version = SDATA (tem);
+	      copyright = SDATA (tem2);
+	    }
 	}
       else
 	{
-	  printf ("GNU Emacs %s\n", SDATA (tem));
-	  printf ("%s\n", SDATA(tem2));
-	  printf ("GNU Emacs comes with ABSOLUTELY NO WARRANTY.\n");
-	  printf ("You may redistribute copies of Emacs\n");
-	  printf ("under the terms of the GNU General Public License.\n");
-	  printf ("For more information about these matters, ");
-	  printf ("see the file named COPYING.\n");
-	  exit (0);
+	  version = emacs_version;
+	  copyright = emacs_copyright;
 	}
+      printf ("GNU Emacs %s\n", version);
+      printf ("%s\n", copyright);
+      printf ("GNU Emacs comes with ABSOLUTELY NO WARRANTY.\n");
+      printf ("You may redistribute copies of Emacs\n");
+      printf ("under the terms of the GNU General Public License.\n");
+      printf ("For more information about these matters, ");
+      printf ("see the file named COPYING.\n");
+      exit (0);
     }
   if (argmatch (argv, argc, "-chdir", "--chdir", 2, &ch_to_dir, &skip_args))
       if (chdir (ch_to_dir) == -1)
@@ -1187,7 +1191,7 @@ main (int argc, char **argv)
 #endif
 #if defined (HAVE_GTK_AND_PTHREAD) && !defined (SYSTEM_MALLOC) && !defined (DOUG_LEA_MALLOC)
       {
-	extern void malloc_enable_thread P_ ((void));
+        extern void malloc_enable_thread (void);
 
 	malloc_enable_thread ();
       }
@@ -1528,6 +1532,11 @@ main (int argc, char **argv)
     ns_init_paths ();
 #endif
 
+  /* Initialize and GC-protect Vinitial_environment and
+     Vprocess_environment before set_initial_environment fills them
+     in.  */
+  if (!initialized)
+    syms_of_callproc ();
   /* egetenv is a pretty low-level facility, which may get called in
      many circumstances; it seems flimsy to put off initializing it
      until calling init_callproc.  */
@@ -1577,7 +1586,6 @@ main (int argc, char **argv)
       syms_of_callint ();
       syms_of_casefiddle ();
       syms_of_casetab ();
-      syms_of_callproc ();
       syms_of_category ();
       syms_of_ccl ();
       syms_of_character ();
@@ -1704,7 +1712,7 @@ main (int argc, char **argv)
 #endif
   init_window ();
   init_font ();
-  
+
   if (!initialized)
     {
       char *file;
@@ -1909,9 +1917,7 @@ const struct standard_args standard_args[] =
    than once, eliminate all but one copy of it.  */
 
 static void
-sort_args (argc, argv)
-     int argc;
-     char **argv;
+sort_args (int argc, char **argv)
 {
   char **new = (char **) xmalloc (sizeof (char *) * argc);
   /* For each element of argv,
@@ -2303,10 +2309,7 @@ fixup_locale ()
 /* Set system locale CATEGORY, with previous locale *PLOCALE, to
    DESIRED_LOCALE.  */
 static void
-synchronize_locale (category, plocale, desired_locale)
-     int category;
-     Lisp_Object *plocale;
-     Lisp_Object desired_locale;
+synchronize_locale (int category, Lisp_Object *plocale, Lisp_Object desired_locale)
 {
   if (! EQ (*plocale, desired_locale))
     {
@@ -2365,10 +2368,7 @@ decode_env_path (evarname, defalt)
       strcpy (p, path);
       path = p;
 
-      if ('/' == DIRECTORY_SEP)
-	dostounix_filename (path);
-      else
-	unixtodos_filename (path);
+      dostounix_filename (path);
     }
 #endif
   lpath = Qnil;
@@ -2576,6 +2576,14 @@ This is nil during initialization.  */);
   DEFVAR_BOOL ("inhibit-x-resources", &inhibit_x_resources,
 	       doc: /* If non-nil, X resources, Windows Registry settings, and NS defaults are not used.  */);
   inhibit_x_resources = 0;
+
+  DEFVAR_LISP ("emacs-copyright", &Vemacs_copyright,
+	       doc: /* Short copyright string for this version of Emacs.  */);
+  Vemacs_copyright = build_string (emacs_copyright);
+
+  DEFVAR_LISP ("emacs-version", &Vemacs_version,
+	       doc: /* Version numbers of this version of Emacs.  */);
+  Vemacs_version = build_string (emacs_version);
 
   /* Make sure IS_DAEMON starts up as false.  */
   daemon_pipe[1] = 0;

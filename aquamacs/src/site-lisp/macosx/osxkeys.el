@@ -801,7 +801,7 @@ set to `aquamacs-popup-context-menu' or nil"
 	(setq osxkeys-command-key ns-command-modifier)))
   (let ((map (make-sparse-keymap)))
 
-    (define-key map `[(,osxkeys-command-key meta 49)] 'aquamacs-delete-other-windows) ; 49='1'
+    (define-key map `[(,osxkeys-command-key meta 49)] 'aquamacs-join-windows) ; 49='1'
     (define-key map `[(,osxkeys-command-key meta 50)] 'aquamacs-split-window-vertically) ; 50='2'
 
     (define-key map `[(meta q)] 'fill-paragraph-or-region)

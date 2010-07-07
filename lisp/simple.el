@@ -423,6 +423,13 @@ Other major modes are defined by comparison with this one."
   "Parent major mode from which special major modes should inherit."
   (setq buffer-read-only t))
 
+;; Major mode meant to be the parent of programming modes.
+
+(define-derived-mode prog-mode fundamental-mode "Prog"
+  "Major mode for editing programming language source code."
+  (set (make-local-variable 'require-final-newline) mode-require-final-newline)
+  (set (make-local-variable 'parse-sexp-ignore-comments) t))
+
 ;; Making and deleting lines.
 
 (defvar hard-newline (propertize "\n" 'hard t 'rear-nonsticky '(hard))
@@ -837,6 +844,78 @@ Don't use this command in Lisp programs!
 	 ;; then scroll specially to put it near, but not at, the bottom.
 	 (overlay-recenter (point))
 	 (recenter -3))))
+
+(defcustom delete-active-region t
+  "Whether single-char deletion commands delete an active region.
+This has an effect only if Transient Mark mode is enabled, and
+affects `delete-forward-char' and `delete-backward-char', though
+not `delete-char'.
+
+If the value is the symbol `kill', the active region is killed
+instead of deleted."
+  :type '(choice (const :tag "Delete active region" t)
+                 (const :tag "Kill active region" kill)
+                 (const :tag "Do ordinary deletion" nil))
+  :group 'editing
+  :version "24.1")
+
+(defun delete-backward-char (n &optional killflag)
+  "Delete the previous N characters (following if N is negative).
+If Transient Mark mode is enabled, the mark is active, and N is 1,
+delete the text in the region and deactivate the mark instead.
+To disable this, set `delete-active-region' to nil.
+
+Optional second arg KILLFLAG, if non-nil, means to kill (save in
+kill ring) instead of delete.  Interactively, N is the prefix
+arg, and KILLFLAG is set if N is explicitly specified.
+
+In Overwrite mode, single character backward deletion may replace
+tabs with spaces so as to back over columns, unless point is at
+the end of the line."
+  (interactive "p\nP")
+  (unless (integerp n)
+    (signal 'wrong-type-argument (list 'integerp n)))
+  (cond ((and (use-region-p)
+	      delete-active-region
+	      (= n 1))
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; In Overwrite mode, maybe untabify while deleting
+	((null (or (null overwrite-mode)
+		   (<= n 0)
+		   (memq (char-before) '(?\t ?\n))
+		   (eobp)
+		   (eq (char-after) ?\n)))
+	 (let* ((ocol (current-column))
+		(val (delete-char (- n) killflag)))
+	   (save-excursion
+	     (insert-char ?\s (- ocol (current-column)) nil))))
+	;; Otherwise, do simple deletion.
+	(t (delete-char (- n) killflag))))
+
+(defun delete-forward-char (n &optional killflag)
+  "Delete the previous N characters (following if N is negative).
+If Transient Mark mode is enabled, the mark is active, and N is 1,
+delete the text in the region and deactivate the mark instead.
+To disable this, set `delete-active-region' to nil.
+
+Optional second arg KILLFLAG non-nil means to kill (save in kill
+ring) instead of delete.  Interactively, N is the prefix arg, and
+KILLFLAG is set if N was explicitly specified."
+  (interactive "p\nP")
+  (unless (integerp n)
+    (signal 'wrong-type-argument (list 'integerp n)))
+  (cond ((and (use-region-p)
+	      delete-active-region
+	      (= n 1))
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; Otherwise, do simple deletion.
+	(t (delete-char n killflag))))
 
 (defun mark-whole-buffer ()
   "Put point at beginning and mark at end of buffer.
@@ -2071,7 +2150,11 @@ to `shell-command-history'."
 
 Like `shell-command' but if COMMAND doesn't end in ampersand, adds `&'
 surrounded by whitespace and executes the command asynchronously.
-The output appears in the buffer `*Async Shell Command*'."
+The output appears in the buffer `*Async Shell Command*'.
+
+In Elisp, you will often be better served by calling `start-process'
+directly, since it offers more control and does not impose the use of a
+shell (with its need to quote arguments)."
   (interactive
    (list
     (read-shell-command "Async shell command: " nil nil
@@ -2132,7 +2215,11 @@ If the optional third argument ERROR-BUFFER is non-nil, it is a buffer
 or buffer name to which to direct the command's standard error output.
 If it is nil, error output is mingled with regular output.
 In an interactive call, the variable `shell-command-default-error-buffer'
-specifies the value of ERROR-BUFFER."
+specifies the value of ERROR-BUFFER.
+
+In Elisp, you will often be better served by calling `call-process' or
+`start-process' directly, since it offers more control and does not impose
+the use of a shell (with its need to quote arguments)."
 
   (interactive
    (list
@@ -2891,24 +2978,27 @@ argument should still be a \"useful\" string for such uses."
     (if yank-handler
 	(signal 'args-out-of-range
 		(list string "yank-handler specified for empty string"))))
-  (when (and kill-do-not-save-duplicates
-             (equal string (car kill-ring)))
-    (setq replace t))
-  (if (fboundp 'menu-bar-update-yank-menu)
-      (menu-bar-update-yank-menu string (and replace (car kill-ring))))
+  (unless (and kill-do-not-save-duplicates
+	       (equal string (car kill-ring)))
+    (if (fboundp 'menu-bar-update-yank-menu)
+	(menu-bar-update-yank-menu string (and replace (car kill-ring)))))
   (when save-interprogram-paste-before-kill
     (let ((interprogram-paste (and interprogram-paste-function
                                    (funcall interprogram-paste-function))))
       (when interprogram-paste
-        (if (listp interprogram-paste)
-            (dolist (s (nreverse interprogram-paste))
-              (push s kill-ring))
-            (push interprogram-paste kill-ring)))))
-  (if (and replace kill-ring)
-      (setcar kill-ring string)
-    (push string kill-ring)
-    (if (> (length kill-ring) kill-ring-max)
-	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
+        (dolist (s (if (listp interprogram-paste)
+		       (nreverse interprogram-paste)
+		     (list interprogram-paste)))
+	  (unless (and kill-do-not-save-duplicates
+		       (equal s (car kill-ring)))
+	    (push s kill-ring))))))
+  (unless (and kill-do-not-save-duplicates
+	       (equal string (car kill-ring)))
+    (if (and replace kill-ring)
+	(setcar kill-ring string)
+      (push string kill-ring)
+      (if (> (length kill-ring) kill-ring-max)
+	  (setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))))
   (setq kill-ring-yank-pointer kill-ring)
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
@@ -4525,6 +4615,9 @@ rests."
 	       (let ((goal-column 0)
 		     (line-move-visual nil))
 		 (and (line-move arg t)
+		      ;; With bidi reordering, we may not be at bol,
+		      ;; so make sure we are.
+		      (skip-chars-backward "^\n")
 		      (not (bobp))
 		      (progn
 			(while (and (not (bobp)) (invisible-p (1- (point))))
@@ -5791,7 +5884,7 @@ Each action has the form (FUNCTION . ARGS)."
 The default mail mode is now Message mode.
 You have the following Mail mode variable%s customized:
 \n  %s\n\nTo use Mail mode, set `mail-user-agent' to sendmail-user-agent.
-To disable this warning, set `compose-mail-check-user-agent' to nil."
+To disable this warning, set `compose-mail-user-agent-warnings' to nil."
 				    (if (> (length warn-vars) 1) "s" "")
 				    (mapconcat 'symbol-name
 					       warn-vars " "))))))

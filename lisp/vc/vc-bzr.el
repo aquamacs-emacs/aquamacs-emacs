@@ -4,7 +4,7 @@
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; 	   Riccardo Murri <riccardo.murri@gmail.com>
-;; Keywords: tools
+;; Keywords: vc tools
 ;; Created: Sept 2006
 ;; Version: 2008-01-04 (Bzr revno 25)
 ;; URL: http://launchpad.net/vc-bzr
@@ -459,6 +459,7 @@ REV non-nil gets an error."
   (if rev (error "Can't check in a specific revision with bzr"))
   (apply 'vc-bzr-command "commit" nil 0
          files (cons "-m" (log-edit-extract-headers '(("Author" . "--author")
+						      ("Date" . "--commit-time")
                                                       ("Fixes" . "--fixes"))
                                                     comment))))
 

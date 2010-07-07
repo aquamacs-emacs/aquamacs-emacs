@@ -51,7 +51,7 @@ static void adjust_markers_for_replace (EMACS_INT, EMACS_INT, EMACS_INT,
 					EMACS_INT, EMACS_INT, EMACS_INT);
 static void adjust_point (EMACS_INT nchars, EMACS_INT nbytes);
 
-Lisp_Object Fcombine_after_change_execute ();
+Lisp_Object Fcombine_after_change_execute (void);
 
 /* Non-nil means don't call the after-change-functions right away,
    just record an element in combine_after_change_list.  */
@@ -85,7 +85,7 @@ static int check_markers_debug_flag;
   else
 
 void
-check_markers ()
+check_markers (void)
 {
   register struct Lisp_Marker *tail;
   int multibyte = ! NILP (current_buffer->enable_multibyte_characters);
@@ -437,7 +437,7 @@ adjust_markers_for_insert (EMACS_INT from, EMACS_INT from_byte,
     }
 
   /* Adjusting only markers whose insertion-type is t may result in
-     - disordered start and end in overlays, and 
+     - disordered start and end in overlays, and
      - disordered overlays in the slot `overlays_before' of current_buffer.  */
   if (adjusted)
     {
@@ -843,7 +843,7 @@ count_combining_before (const unsigned char *string, EMACS_INT length,
   len = 1;
   p = BYTE_POS_ADDR (pos_byte - 1);
   while (! CHAR_HEAD_P (*p)) p--, len++;
-  if (! BASE_LEADING_CODE_P (*p)) /* case (3) */
+  if (! LEADING_CODE_P (*p)) /* case (3) */
     return 0;
 
   combining_bytes = BYTES_BY_CHAR_HEAD (*p) - len;
@@ -906,7 +906,7 @@ count_combining_after (const unsigned char *string,
       i = pos_byte - 2;
       while (i >= 0 && ! CHAR_HEAD_P (p[i]))
 	i--;
-      if (i < 0 || !BASE_LEADING_CODE_P (p[i]))
+      if (i < 0 || !LEADING_CODE_P (p[i]))
 	return 0;
 
       bytes = BYTES_BY_CHAR_HEAD (p[i]);
@@ -914,7 +914,7 @@ count_combining_after (const unsigned char *string,
 	      ? 0
 	      : bytes - (pos_byte - 1 - i + length));
     }
-  if (!BASE_LEADING_CODE_P (string[i]))
+  if (!LEADING_CODE_P (string[i]))
     return 0;
 
   bytes = BYTES_BY_CHAR_HEAD (string[i]) - (length - i);
@@ -2132,8 +2132,7 @@ prepare_to_modify_buffer (EMACS_INT start, EMACS_INT end,
    NO-ERROR-FLAG is nil if there was an error,
    anything else meaning no error (so this function does nothing).  */
 Lisp_Object
-reset_var_on_error (val)
-     Lisp_Object val;
+reset_var_on_error (Lisp_Object val)
 {
   if (NILP (XCDR (val)))
     Fset (XCAR (val), Qnil);
@@ -2297,8 +2296,7 @@ signal_after_change (EMACS_INT charpos, EMACS_INT lendel, EMACS_INT lenins)
 }
 
 Lisp_Object
-Fcombine_after_change_execute_1 (val)
-     Lisp_Object val;
+Fcombine_after_change_execute_1 (Lisp_Object val)
 {
   Vcombine_after_change_calls = val;
   return val;
@@ -2390,7 +2388,7 @@ DEFUN ("combine-after-change-execute", Fcombine_after_change_execute,
 }
 
 void
-syms_of_insdel ()
+syms_of_insdel (void)
 {
   staticpro (&combine_after_change_list);
   staticpro (&combine_after_change_buffer);

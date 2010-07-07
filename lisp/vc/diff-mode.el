@@ -4,7 +4,7 @@
 ;;   2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
-;; Keywords: convenience patch diff
+;; Keywords: convenience patch diff vc
 
 ;; This file is part of GNU Emacs.
 
@@ -96,6 +96,9 @@ when editing big diffs)."
   :type 'hook
   :options '(diff-delete-empty-files diff-make-unified)
   :group 'diff-mode)
+
+(defvar diff-vc-backend nil
+  "The VC backend that created the current Diff buffer, if any.")
 
 (defvar diff-outline-regexp
   "\\([*+][*+][*+] [^0-9]\\|@@ ...\\|\\*\\*\\* [0-9].\\|--- [0-9]..\\)")

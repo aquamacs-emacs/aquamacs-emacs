@@ -8,7 +8,10 @@ EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
 
 rm aquamacs-build.log
+echo "Begin building Aquamacs." >>aquamacs-build.log
 date >>aquamacs-build.log
+
+echo "Updating working directory from Git repository." >>aquamacs-build.log
 
 # make doc often creates stuff, which subsequent "git-pull" refuses to overwrite
 git clean -f aquamacs/doc/  >>aquamacs-build.log  2>>aquamacs-build.log
@@ -16,14 +19,20 @@ git clean -f aquamacs/doc/  >>aquamacs-build.log  2>>aquamacs-build.log
 git checkout -f master >>aquamacs-build.log  2>>aquamacs-build.log
 git pull origin master  >>aquamacs-build.log  2>>aquamacs-build.log
 
+echo "Building Aquamacs documentation." >>aquamacs-build.log
+
 # update documentation: requires latex (tetex with nonfreefonts package)
 cd aquamacs/doc/latex
-make 
+make 2>>aquamacs-build.log
 cd -
+
+echo "Building Aquamacs (incremental build)." >>aquamacs-build.log
 
 aquamacs/build/build23ub.sh >>aquamacs-build.log 2>>aquamacs-build.log
 
 date >>aquamacs-build.log
+
+echo "Packaging Aquamacs." >>aquamacs-build.log
 
 # now we have 
 

@@ -671,8 +671,8 @@ re-start Emacs."
      "[^A-Za-z\241\243\246\254\257\261\263\266\274\277\306\312\321\323\346\352\361\363]"
      "[.]" nil nil nil iso-8859-2)
     ("portugues"                        ; Portuguese mode
-     "[a-zA-Z\301\302\311\323\340\341\342\351\352\355\363\343\372]"
-     "[^a-zA-Z\301\302\311\323\340\341\342\351\352\355\363\343\372]"
+     "[a-zA-Z\301\302\307\311\323\340\341\342\351\352\355\363\343\347\372]"
+     "[^a-zA-Z\301\302\307\311\323\340\341\342\351\352\355\363\343\347\372]"
      "[']" t ("-C") "~latin1" iso-8859-1)
     ("russian"				; Russian.aff (KOI8-R charset)
      "[\341\342\367\347\344\345\263\366\372\351\352\353\354\355\356\357\360\362\363\364\365\346\350\343\376\373\375\370\371\377\374\340\361\301\302\327\307\304\305\243\326\332\311\312\313\314\315\316\317\320\322\323\324\325\306\310\303\336\333\335\330\331\337\334\300\321]"
@@ -1538,7 +1538,7 @@ Assumes that value contains no whitespace."
                      (list "-d" dict-name
                            "--dict-dir" dict-dir))
                     (t (list "-d" dict-name)))
-                    nil                               ; aspell doesn't support this
+		nil				; aspell doesn't support this
 		;; Here we specify the encoding to use while communicating with
 		;; aspell.  This doesn't apply to command line arguments, so
 		;; just don't pass words to spellcheck as arguments...
@@ -3305,7 +3305,7 @@ Keeps argument list for future ispell invocations for no async support."
 	   ;; Restart check for personal dictionary is done in
 	   ;; `ispell-internal-change-dictionary', called from `ispell-buffer-local-dict'
 	   (or (or ispell-local-pdict ispell-personal-dictionary)
-	       (equal ispell-process-directory default-directory)))
+	       (equal ispell-process-directory (expand-file-name default-directory))))
       (setq ispell-filter nil ispell-filter-continue nil)
     ;; may need to restart to select new personal dictionary.
     (ispell-kill-ispell t)
@@ -3313,11 +3313,22 @@ Keeps argument list for future ispell invocations for no async support."
 	       (or ispell-local-dictionary ispell-dictionary-internal "default"))
     (sit-for 0)
     (setq ispell-library-directory (ispell-check-version)
-	  ispell-process-directory default-directory
 	  ispell-process (ispell-start-process)
 	  ispell-filter nil
-	  ispell-filter-continue nil
-	  ispell-process-buffer-name (buffer-name))
+	  ispell-filter-continue nil)
+    ;; When spellchecking minibuffer contents, make sure ispell process
+    ;; is not restarted every time the minibuffer is killed.
+    (if (window-minibuffer-p)
+	(if (fboundp 'minibuffer-selected-window)
+	    ;; Assign ispell process to parent buffer
+	    (setq ispell-process-directory (expand-file-name default-directory)
+		  ispell-process-buffer-name (window-buffer (minibuffer-selected-window)))
+	  ;; Force `ispell-process-directory' to $HOME and use a dummy name
+	  (setq ispell-process-directory (expand-file-name "~/")
+		ispell-process-buffer-name " * Minibuffer-has-spellcheck-enabled"))
+      ;; Not in a minibuffer
+      (setq ispell-process-directory (expand-file-name default-directory)
+	    ispell-process-buffer-name (buffer-name)))
     (if ispell-async-processp
 	(set-process-filter ispell-process 'ispell-filter))
     ;; protect against bogus binding of `enable-multibyte-characters' in XEmacs
