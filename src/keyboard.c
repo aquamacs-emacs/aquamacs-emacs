@@ -3972,7 +3972,7 @@ kbd_buffer_get_event (KBOARD **kbp, int *used_mouse_menu, struct timeval *end_ti
       if (event->kind == SELECTION_REQUEST_EVENT
 	  || event->kind == SELECTION_CLEAR_EVENT)
 	{
-#ifdef HAVE_X11
+#ifdef HAVE_X_WINDOWS
 	  struct input_event copy;
 
 	  /* Remove it from the buffer before processing it,
@@ -6599,7 +6599,7 @@ modify_event_symbol (int symbol_num, unsigned int modifiers, Lisp_Object symbol_
       else if (name_table != 0 && name_table[symbol_num])
 	value = intern (name_table[symbol_num]);
 
-#ifdef HAVE_WINDOW_SYSTEM
+#ifdef HAVE_X11
       if (NILP (value))
 	{
 	  extern char *x_get_keysym_name (KeySym keysym);
