@@ -1,6 +1,29 @@
 ;; Aquamacs core files
 ;; to be loaded and included in dumped state at compile time
-;; test
+
+
+
+;; If you add/remove Lisp files to be loaded here, consider the
+;; following issues:
+
+;; i) Any file loaded on all platforms should appear in $lisp
+;; and $shortlisp in src/Makefile.in.  Use the .el or .elc version as
+;; appropriate.
+
+;; ii) Any file that is only loaded on some platforms should appear
+;; in the version of $lisp in the generated Makefile on that platform.
+;; At the present time, this is achieved by use of #ifdefs.
+;; It should also appear in $SOME_MACHINE_LISP on all platforms.
+
+;; The above steps ensure both that the Lisp files are compiled (if
+;; necessary) before the emacs executable is dumped, and that they are
+;; passed to make-docfile.  (Any that are not processed for DOC will
+;; not have doc strings in the dumped Emacs.)  Because of this:
+
+;; iii) If the file is loaded uncompiled, it should (where possible)
+;; obey the doc-string conventions expected by make-docfile.
+
+
 
 (defvar aq-compile-path "aquamacs/")
 
@@ -14,9 +37,6 @@
 
 
 ;; this will only work if files have been byte-compiled.
-
-(when (file-exists-p (concat (file-name-directory (or load-file-name default-directory)) 
-			     "emacs-lisp/easy-mmode.elc"))
 
 (load "emacs-lisp/easy-mmode")
 ;(load "mwheel") ;; wants to be loaded at runtime
@@ -145,8 +165,6 @@
 
 ;(aq-preload "ruby-mode.el")
 ; (aq-preload "site-start.el")
-
-) ; file-exists-p *.elc
 
 
 (mapc (lambda (e)
