@@ -366,48 +366,7 @@ POST_ALLOC_OBJ=@POST_ALLOC_OBJ@
 otherobj= $(TERMCAP_OBJ) $(PRE_ALLOC_OBJ) $(GMALLOC_OBJ) $(RALLOC_OBJ) \
   $(POST_ALLOC_OBJ) $(VMLIMIT_OBJ) $(WIDGET_OBJ) $(LIBOBJS)
 
-#ifdef HAVE_MOUSE
-#define MOUSE_SUPPORT ${lispsource}mouse.elc \
-  ${lispsource}select.elc ${lispsource}scroll-bar.elc
-#else
-#define MOUSE_SUPPORT $(GPM_MOUSE_SUPPORT)
-#endif
-
-#ifdef MSDOS
-#define MSDOS_SUPPORT ${lispsource}ls-lisp.elc ${lispsource}disp-table.elc \
- ${lispsource}dos-fns.elc ${lispsource}dos-w32.elc ${lispsource}dos-vars.elc \
- ${lispsource}term/internal.elc ${lispsource}term/pc-win.elc
-
-#else
-#define MSDOS_SUPPORT
-#endif
-
-#ifdef HAVE_WINDOW_SYSTEM
-#ifdef HAVE_X_WINDOWS
-#define WINDOW_SUPPORT $(BASE_WINDOW_SUPPORT) $(X_WINDOW_SUPPORT)
-#else
-#define WINDOW_SUPPORT $(BASE_WINDOW_SUPPORT)
-#endif
-#else
-#define WINDOW_SUPPORT
-#endif
-
-#ifdef WINDOWSNT
-#define WINNT_SUPPORT ${lispsource}ls-lisp.elc ${lispsource}disp-table.elc \
-  ${lispsource}dos-w32.elc ${lispsource}w32-vars.elc \
-  ${lispsource}w32-fns.elc ${lispsource}term/common-win.elc \
-  ${lispsource}term/w32-win.elc
-#else
-#define WINNT_SUPPORT
-#endif
-
-#ifdef HAVE_WINDOW_SYSTEM
-#define TOOLTIP_SUPPORT ${lispsource}tooltip.elc
-#else
-#define TOOLTIP_SUPPORT
-#endif
-
-#define AQUAMACS_SUPPORT ${lispsource}image-file.elc \
+AQUAMACS_SUPPORT= ${lispsource}image-file.elc \
 ${lispsource}emacs-lisp/regexp-opt.elc \
 ${lispsource}emulation/cua-base.elc \
 ${lispsource}emulation/pc-select.elc \
@@ -415,14 +374,8 @@ ${lispsource}delsel.elc \
 ${lispsource}paren.elc \
 ${lispsource}calendar/time-date.elc \
 ${lispsource}calendar/parse-time.elc \
+${lispsource}emacs-lisp/easy-mmode.elc \
 ${lispsource}aquamacs/aquamacs-autoface-mode.elc
-
-#ifdef HAVE_NS
-#define NS_SUPPORT ${lispsource}emacs-lisp/easymenu.elc \
-  ${lispsource}term/ns-win.elc
-#else
-#define NS_SUPPORT
-#endif
 
 ## This is the platform-specific list of Lisp files loaded into the
 ## dumped Emacs.  It is arranged like this because it is easier to generate
@@ -617,7 +570,8 @@ shortlisp= \
 	../lisp/epa-hook.elc \
 	../lisp/widget.elc \
 	../lisp/window.elc \
-	../lisp/version.el
+	../lisp/version.el \
+	${AQUAMACS_SUPPORT}
 
 ## Like $shortlisp, but includes only those files from $lisp that are loaded
 ## conditionally (i.e., only on some platforms).
