@@ -2598,10 +2598,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	   (if (null ispell-pdict-modified-p)
 	       (setq ispell-pdict-modified-p
 		     (list ispell-pdict-modified-p)))
-	   (goto-char save)
-	   (if (eq replace 'buffer)
-	       (ispell-add-per-file-word-list word)
-	     ))
+	   (goto-char save))
+	 (if (eq replace 'buffer)
+	     (ispell-add-per-file-word-list word))
 	 (flyspell-unhighlight-at cursor-location)
 	 )
 	(replace
@@ -2692,7 +2691,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 					      'mouse-save-then-kill))))
     (define-key flyspell-context-menu-map [buffer]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
-		      "Ignore Spelling"
+		      "Ignore Spelling & Comment Buffer"
 		    "Accept (buffer)")
 		  (lambda () (interactive)
 		    (flyspell-do-correct
@@ -2703,9 +2702,11 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,start
 		     ,end
 		     ,save))
-		  :help "Consider spelling as correct in this buffer"))
+		  :help "Always consider spelling as correct in this buffer"))
     (define-key flyspell-context-menu-map [session]
-      `(menu-item "Accept (session)"
+      `(menu-item (if (string= ispell-program-name "NSSpellChecker")
+		      "Ignore Spelling"
+		    "Accept (session)")
 		  (lambda () (interactive)
 		    (flyspell-do-correct
 		     'session
@@ -2715,8 +2716,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,start
 		     ,end
 		     ,save)) 
-		  :help "Consider spelling correct for buffers in current session"
-		  :visible (not (string= ispell-program-name "NSSpellChecker"))))
+		  :help (if (string= ispell-program-name "NSSpellChecker")
+			    "Consider spelling as correct in this buffer and session"
+			  "Consider spelling correct for buffers in current session")))
     (define-key flyspell-context-menu-map [save]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
 		      "Learn Spelling"
