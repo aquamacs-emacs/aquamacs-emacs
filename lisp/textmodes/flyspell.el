@@ -281,6 +281,12 @@ If this variable is nil, all regions are treated as small."
   "The key binding for flyspell auto correction."
   :group 'flyspell)
 
+(defcustom flyspell-mode-auto-on t
+  "Non-nil means that executing `flyspell-region' or `flyspell-buffer'
+will automatically turn on `flyspell-mode' for that buffer."
+  :group 'flyspell
+  :type 'boolean)
+
 ;; **********************************************************************
 ;; functions that use NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
@@ -454,7 +460,9 @@ NOSKIP is non-nil, don't skip the current highlighted word (if any)."
       (goto-char misspell-end)
       (push-mark misspell-beg 'no-msg 'activate)
       (setq word (buffer-substring misspell-beg misspell-end))
-      (ns-spellchecker-show-word word))))  
+      (ns-spellchecker-show-word word)))
+  (if (and flyspell-mode-auto-on (not flyspell-mode))
+      (turn-on-flyspell)))
 
 (defun ns-start-spellchecker ()
   "Show NSSpellChecker spellingPanel, and call
@@ -2052,6 +2060,8 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	(if (and flyspell-large-region (> (- end beg) flyspell-large-region))
 	    (flyspell-large-region beg end)
 	  (flyspell-small-region beg end))))
+    (if (and flyspell-mode-auto-on (not flyspell-mode))
+	(turn-on-flyspell))
     ))
 
 ;;*---------------------------------------------------------------------*/
