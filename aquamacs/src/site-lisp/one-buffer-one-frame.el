@@ -934,7 +934,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 
 ;; To Do: 
 (defun handle-ns-application-reopen ()
-  (interactive) (message "reopen")
+  (interactive)
   (unless (visible-frame-list)
     (let ((list (frame-list))) 
       (while list      
