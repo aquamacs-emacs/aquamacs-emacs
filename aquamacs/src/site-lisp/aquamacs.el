@@ -521,6 +521,7 @@ have changed."
 			  (get (indirect-variable symbol) 'saved-value))))
 
 	   (standard (get symbol 'standard-value))
+	   (standard2 (get symbol 'alternative-standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
       (if (or (eq customized-value value) ;; otherwise it's rogue
@@ -529,10 +530,15 @@ have changed."
 	  (let ((cmp (or saved
 			 (condition-case nil
 			     (eval (car standard))
-			   (error nil)))))
-	    (not (or (equal cmp (list (custom-quote value)))
+			   (error nil))))
+		(cmp2 (condition-case nil
+			  (eval (car standard2))
+			(error nil))))
+	    (not (or (equal cmp (list (custom-quote value))) 
+		     (equal cmp2 (list (custom-quote value)))
 		     ;; not quite clear why this is doubled
 		    (equal (custom-quote cmp) (custom-quote value))
+		    (equal (custom-quote cmp2) (custom-quote value))
 		    (and (listp value) (string-match "-alist$" (symbol-name symbol)) ;; heuristic...
 			 (condition-case nil
 			     (equal (sort (copy-alist (eval (car cmp))) (lambda (x y) (string< (car x) (car y))))
@@ -1485,6 +1491,8 @@ to write the `custom-file'.")
 		      (emkm-name (car x))) 
 		    (and (boundp 'emulate-mac-keyboard-mode-maps)
 			 emulate-mac-keyboard-mode-maps))))
+  (put 'ns-tool-bar-display-mode 'alternative-standard-value '((quote both)))   ; default is nil, but that means C code sets it to system's default.
+  (put 'ns-tool-bar-size-mode 'alternative-standard-value '((quote regular)))   ; default is nil, but that means C code sets it to system's default.
 
   (defvar aquamacs-menu-bar-customize-options-to-save
     '(scroll-bar-mode
