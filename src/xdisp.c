@@ -6432,6 +6432,7 @@ next_element_from_image (it)
      struct it *it;
 {
   it->what = IT_IMAGE;
+  it->ignore_overlay_strings_at_pos_p = 0;
   return 1;
 }
 

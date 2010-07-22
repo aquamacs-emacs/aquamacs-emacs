@@ -288,9 +288,13 @@ unsigned int msh_mousewheel = 0;
 #define MENU_FREE_DELAY 1000
 static unsigned menu_free_timer = 0;
 
-/* The below are defined in frame.c.  */
+/* In dispnew.c */
 
 extern Lisp_Object Vwindow_system_version;
+
+/* The below are defined in frame.c.  */
+
+extern Lisp_Object Qtooltip;
 
 #ifdef GLYPH_DEBUG
 int image_cache_refcount, dpyinfo_refcount;
@@ -1349,7 +1353,10 @@ x_set_foreground_color (f, arg, oldval)
   if (FRAME_W32_WINDOW (f) != 0)
     {
       if (x->cursor_pixel == old_fg)
-	x->cursor_pixel = fg;
+	{
+	  x->cursor_pixel = fg;
+	  x->cursor_gc->background = fg;
+	}
 
       update_face_from_frame_parameter (f, Qforeground_color, arg);
       if (FRAME_VISIBLE_P (f))
@@ -5584,9 +5591,8 @@ x_create_tip_frame (dpyinfo, parms, text)
   change_frame_size (f, height, width, 1, 0, 0);
 
   /* Add `tooltip' frame parameter's default value. */
-  if (NILP (Fframe_parameter (frame, intern ("tooltip"))))
-    Fmodify_frame_parameters (frame, Fcons (Fcons (intern ("tooltip"), Qt),
-					    Qnil));
+  if (NILP (Fframe_parameter (frame, Qtooltip)))
+    Fmodify_frame_parameters (frame, Fcons (Fcons (Qtooltip, Qt), Qnil));
 
   /* Set up faces after all frame parameters are known.  This call
      also merges in face attributes specified for new frames.
