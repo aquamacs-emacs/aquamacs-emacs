@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,13 +44,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Readi
 
 <h4 class="subsection">21.8.1 Key Sequence Input</h4>
 
-<p><a name="index-key-sequence-input-1329"></a>
+<p><a name="index-key-sequence-input-1330"></a>
   The command loop reads input a key sequence at a time, by calling
 <code>read-key-sequence</code>.  Lisp programs can also call this function;
 for example, <code>describe-key</code> uses it to read the key to describe.
 
 <div class="defun">
-&mdash; Function: <b>read-key-sequence</b><var> prompt &amp;optional continue-echo dont-downcase-last switch-frame-ok command-loop<a name="index-read_002dkey_002dsequence-1330"></a></var><br>
+&mdash; Function: <b>read-key-sequence</b><var> prompt &amp;optional continue-echo dont-downcase-last switch-frame-ok command-loop<a name="index-read_002dkey_002dsequence-1331"></a></var><br>
 <blockquote><p>This function reads a key sequence and returns it as a string or
 vector.  It keeps reading events until it has accumulated a complete key
 sequence; that is, enough to specify a non-prefix command using the
@@ -107,18 +107,18 @@ and does not set <code>quit-flag</code>.  See <a href="Quitting.html#Quitting">Q
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-key-sequence-vector</b><var> prompt &amp;optional continue-echo dont-downcase-last switch-frame-ok command-loop<a name="index-read_002dkey_002dsequence_002dvector-1331"></a></var><br>
+&mdash; Function: <b>read-key-sequence-vector</b><var> prompt &amp;optional continue-echo dont-downcase-last switch-frame-ok command-loop<a name="index-read_002dkey_002dsequence_002dvector-1332"></a></var><br>
 <blockquote><p>This is like <code>read-key-sequence</code> except that it always
 returns the key sequence as a vector, never as a string. 
 See <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>. 
 </p></blockquote></div>
 
-   <p><a name="index-upper-case-key-sequence-1332"></a><a name="index-downcasing-in-_0040code_007blookup_002dkey_007d-1333"></a><a name="index-shift_002dtranslation-1334"></a>If an input character is upper-case (or has the shift modifier) and
+   <p><a name="index-upper-case-key-sequence-1333"></a><a name="index-downcasing-in-_0040code_007blookup_002dkey_007d-1334"></a><a name="index-shift_002dtranslation-1335"></a>If an input character is upper-case (or has the shift modifier) and
 has no key binding, but its lower-case equivalent has one, then
 <code>read-key-sequence</code> converts the character to lower case.  Note
 that <code>lookup-key</code> does not perform case conversion in this way.
 
-   <p><a name="index-this_002dcommand_002dkeys_002dshift_002dtranslated-1335"></a>When reading input results in such a <dfn>shift-translation</dfn>, Emacs
+   <p><a name="index-this_002dcommand_002dkeys_002dshift_002dtranslated-1336"></a>When reading input results in such a <dfn>shift-translation</dfn>, Emacs
 sets the variable <code>this-command-keys-shift-translated</code> to a
 non-<code>nil</code> value.  Lisp programs can examine this variable if they
 need to modify their behavior when invoked by shift-translated keys. 
@@ -132,7 +132,7 @@ button-down events entirely.  It also reshuffles focus events and
 miscellaneous window events so that they never appear in a key sequence
 with any other events.
 
-   <p><a name="index-g_t_0040code_007bheader_002dline_007d-prefix-key-1336"></a><a name="index-g_t_0040code_007bmode_002dline_007d-prefix-key-1337"></a><a name="index-g_t_0040code_007bvertical_002dline_007d-prefix-key-1338"></a><a name="index-g_t_0040code_007bhorizontal_002dscroll_002dbar_007d-prefix-key-1339"></a><a name="index-g_t_0040code_007bvertical_002dscroll_002dbar_007d-prefix-key-1340"></a><a name="index-g_t_0040code_007bmenu_002dbar_007d-prefix-key-1341"></a><a name="index-mouse-events_002c-in-special-parts-of-frame-1342"></a>When mouse events occur in special parts of a window, such as a mode
+   <p><a name="index-g_t_0040code_007bheader_002dline_007d-prefix-key-1337"></a><a name="index-g_t_0040code_007bmode_002dline_007d-prefix-key-1338"></a><a name="index-g_t_0040code_007bvertical_002dline_007d-prefix-key-1339"></a><a name="index-g_t_0040code_007bhorizontal_002dscroll_002dbar_007d-prefix-key-1340"></a><a name="index-g_t_0040code_007bvertical_002dscroll_002dbar_007d-prefix-key-1341"></a><a name="index-g_t_0040code_007bmenu_002dbar_007d-prefix-key-1342"></a><a name="index-mouse-events_002c-in-special-parts-of-frame-1343"></a>When mouse events occur in special parts of a window, such as a mode
 line or a scroll bar, the event type shows nothing special&mdash;it is the
 same symbol that would normally represent that combination of mouse
 button and modifier keys.  The information about the window part is kept
@@ -154,7 +154,7 @@ mouse on the window's mode line, you get two events, like this:
                 (40 . 63) 5959987))]
 </pre>
    <div class="defun">
-&mdash; Variable: <b>num-input-keys</b><var><a name="index-num_002dinput_002dkeys-1343"></a></var><br>
+&mdash; Variable: <b>num-input-keys</b><var><a name="index-num_002dinput_002dkeys-1344"></a></var><br>
 <blockquote><!-- Emacs 19 feature -->
         <p>This variable's value is the number of key sequences processed so far in
 this Emacs session.  This includes key sequences read from the terminal

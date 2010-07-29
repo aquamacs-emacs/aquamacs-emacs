@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -56,7 +56,7 @@ reading the arguments for a command, in the <code>interactive</code>
 specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
 
 <div class="defun">
-&mdash; Function: <b>read-buffer</b><var> prompt &amp;optional default require-match<a name="index-read_002dbuffer-1138"></a></var><br>
+&mdash; Function: <b>read-buffer</b><var> prompt &amp;optional default require-match<a name="index-read_002dbuffer-1139"></a></var><br>
 <blockquote><p>This function reads the name of a buffer and returns it as a string. 
 The argument <var>default</var> is the default name to use, the value to
 return if the user exits with an empty minibuffer.  If non-<code>nil</code>,
@@ -93,21 +93,22 @@ and the only buffer name starting with the given input is
         </blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>read-buffer-function</b><var><a name="index-read_002dbuffer_002dfunction-1139"></a></var><br>
-<blockquote><p>This variable specifies how to read buffer names.  For example, if you
-set this variable to <code>iswitchb-read-buffer</code>, all Emacs commands
-that call <code>read-buffer</code> to read a buffer name will actually use the
-<code>iswitchb</code> package to read it. 
+&mdash; User Option: <b>read-buffer-function</b><var><a name="index-read_002dbuffer_002dfunction-1140"></a></var><br>
+<blockquote><p>This variable specifies how to read buffer names.  The function is
+called with the arguments passed to <code>read-buffer</code>.  For example,
+if you set this variable to <code>iswitchb-read-buffer</code>, all Emacs
+commands that call <code>read-buffer</code> to read a buffer name will
+actually use the <code>iswitchb</code> package to read it. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>read-buffer-completion-ignore-case</b><var><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase-1140"></a></var><br>
+&mdash; User Option: <b>read-buffer-completion-ignore-case</b><var><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase-1141"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, <code>read-buffer</code> ignores case
 when performing completion. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-command</b><var> prompt &amp;optional default<a name="index-read_002dcommand-1141"></a></var><br>
+&mdash; Function: <b>read-command</b><var> prompt &amp;optional default<a name="index-read_002dcommand-1142"></a></var><br>
 <blockquote><p>This function reads the name of a command and returns it as a Lisp
 symbol.  The argument <var>prompt</var> is used as in
 <code>read-from-minibuffer</code>.  Recall that a command is anything for
@@ -139,7 +140,7 @@ specified; then if the user enters null input, the return value is
 complete in the set of extant Lisp symbols, and it uses the
 <code>commandp</code> predicate so as to accept only command names:
 
-        <p><a name="index-g_t_0040code_007bcommandp_007d-example-1142"></a>
+        <p><a name="index-g_t_0040code_007bcommandp_007d-example-1143"></a>
      <pre class="example">          (read-command <var>prompt</var>)
           ==
           (intern (completing-read <var>prompt</var> obarray
@@ -148,7 +149,7 @@ complete in the set of extant Lisp symbols, and it uses the
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-variable</b><var> prompt &amp;optional default<a name="index-read_002dvariable-1143"></a></var><br>
+&mdash; Function: <b>read-variable</b><var> prompt &amp;optional default<a name="index-read_002dvariable-1144"></a></var><br>
 <blockquote><p><a name="Definition-of-read_002dvariable"></a>This function reads the name of a user variable and returns it as a
 symbol.
 
@@ -177,7 +178,7 @@ returns <code>fill-prefix</code>.
 but uses the predicate <code>user-variable-p</code> instead of
 <code>commandp</code>:
 
-        <p><a name="index-g_t_0040code_007buser_002dvariable_002dp_007d-example-1144"></a>
+        <p><a name="index-g_t_0040code_007buser_002dvariable_002dp_007d-example-1145"></a>
      <pre class="example">          (read-variable <var>prompt</var>)
           ==
           (intern
@@ -187,7 +188,7 @@ but uses the predicate <code>user-variable-p</code> instead of
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>read-color</b><var> &amp;optional prompt convert allow-empty display<a name="index-read_002dcolor-1145"></a></var><br>
+&mdash; Command: <b>read-color</b><var> &amp;optional prompt convert allow-empty display<a name="index-read_002dcolor-1146"></a></var><br>
 <blockquote><p>This function reads a string that is a color specification, either the
 color's name or an RGB hex value such as <code>#RRRGGGBBB</code>.  It
 prompts with <var>prompt</var> (default: <code>"Color (name or #R+G+B+):"</code>)

@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command
 
 <h3 class="section">21.13 Recursive Editing</h3>
 
-<p><a name="index-recursive-command-loop-1398"></a><a name="index-recursive-editing-level-1399"></a><a name="index-command-loop_002c-recursive-1400"></a>
+<p><a name="index-recursive-command-loop-1399"></a><a name="index-recursive-editing-level-1400"></a><a name="index-command-loop_002c-recursive-1401"></a>
   The Emacs command loop is entered automatically when Emacs starts up. 
 This top-level invocation of the command loop never exits; it keeps
 running as long as Emacs does.  Lisp programs can also invoke the
@@ -66,14 +66,14 @@ recursive editing is not in progress.)
 handlers so that an error in a command run from the command loop will
 not exit the loop.
 
-   <p><a name="index-minibuffer-input-1401"></a>  Minibuffer input is a special kind of recursive editing.  It has a few
+   <p><a name="index-minibuffer-input-1402"></a>  Minibuffer input is a special kind of recursive editing.  It has a few
 special wrinkles, such as enabling display of the minibuffer and the
 minibuffer window, but fewer than you might suppose.  Certain keys
 behave differently in the minibuffer, but that is only because of the
 minibuffer's local map; if you switch windows, you get the usual Emacs
 commands.
 
-   <p><a name="index-g_t_0040code_007bthrow_007d-example-1402"></a><a name="index-exit-1403"></a><a name="index-exit-recursive-editing-1404"></a><a name="index-aborting-1405"></a>  To invoke a recursive editing level, call the function
+   <p><a name="index-g_t_0040code_007bthrow_007d-example-1403"></a><a name="index-exit-1404"></a><a name="index-exit-recursive-editing-1405"></a><a name="index-aborting-1406"></a>  To invoke a recursive editing level, call the function
 <code>recursive-edit</code>.  This function contains the command loop; it also
 contains a call to <code>catch</code> with tag <code>exit</code>, which makes it
 possible to exit the recursive editing level by throwing to <code>exit</code>
@@ -103,8 +103,8 @@ a recursive edit but also provides the other features of the debugger.
 <code>query-replace</code> or use <kbd>C-x q</kbd> (<code>kbd-macro-query</code>).
 
 <div class="defun">
-&mdash; Function: <b>recursive-edit</b><var><a name="index-recursive_002dedit-1406"></a></var><br>
-<blockquote><p><a name="index-suspend-evaluation-1407"></a>This function invokes the editor command loop.  It is called
+&mdash; Function: <b>recursive-edit</b><var><a name="index-recursive_002dedit-1407"></a></var><br>
+<blockquote><p><a name="index-suspend-evaluation-1408"></a>This function invokes the editor command loop.  It is called
 automatically by the initialization of Emacs, to let the user begin
 editing.  When called from a Lisp program, it enters a recursive editing
 level.
@@ -131,14 +131,14 @@ then type <kbd>C-M-c</kbd> to exit and continue executing <code>simple-rec</code
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>exit-recursive-edit</b><var><a name="index-exit_002drecursive_002dedit-1408"></a></var><br>
+&mdash; Command: <b>exit-recursive-edit</b><var><a name="index-exit_002drecursive_002dedit-1409"></a></var><br>
 <blockquote><p>This function exits from the innermost recursive edit (including
 minibuffer input).  Its definition is effectively <code>(throw 'exit
 nil)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>abort-recursive-edit</b><var><a name="index-abort_002drecursive_002dedit-1409"></a></var><br>
+&mdash; Command: <b>abort-recursive-edit</b><var><a name="index-abort_002drecursive_002dedit-1410"></a></var><br>
 <blockquote><p>This function aborts the command that requested the innermost recursive
 edit (including minibuffer input), by signaling <code>quit</code>
 after exiting the recursive edit.  Its definition is effectively
@@ -146,14 +146,14 @@ after exiting the recursive edit.  Its definition is effectively
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>top-level</b><var><a name="index-top_002dlevel-1410"></a></var><br>
+&mdash; Command: <b>top-level</b><var><a name="index-top_002dlevel-1411"></a></var><br>
 <blockquote><p>This function exits all recursive editing levels; it does not return a
 value, as it jumps completely out of any computation directly back to
 the main command loop. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>recursion-depth</b><var><a name="index-recursion_002ddepth-1411"></a></var><br>
+&mdash; Function: <b>recursion-depth</b><var><a name="index-recursion_002ddepth-1412"></a></var><br>
 <blockquote><p>This function returns the current depth of recursive edits.  When no
 recursive edit is active, it returns 0. 
 </p></blockquote></div>

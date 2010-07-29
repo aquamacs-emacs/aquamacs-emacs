@@ -37,7 +37,7 @@
 
 ;; Version information
 
-(defvar aquamacs-version "2.1dev"
+(defvar aquamacs-version "2.1"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")

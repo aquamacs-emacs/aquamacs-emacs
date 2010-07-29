@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.11 Making Certain File Names &ldquo;Magic&rdquo;</h3>
 
-<p><a name="index-magic-file-names-1886"></a>
+<p><a name="index-magic-file-names-1887"></a>
 <!-- Emacs 19 feature -->
   You can implement special handling for certain file names.  This is
 called making those names <dfn>magic</dfn>.  The principal use for this
@@ -57,7 +57,7 @@ expression to define the class of names (all those that match the
 regular expression), plus a handler that implements all the primitive
 Emacs file operations for file names that do match.
 
-   <p><a name="index-file_002dname_002dhandler_002dalist-1887"></a>  The variable <code>file-name-handler-alist</code> holds a list of handlers,
+   <p><a name="index-file_002dname_002dhandler_002dalist-1888"></a>  The variable <code>file-name-handler-alist</code> holds a list of handlers,
 together with regular expressions that determine when to apply each
 handler.  Each element has this form:
 
@@ -182,7 +182,7 @@ shown above; the details are crucial for proper behavior in the case of
 multiple handlers, and for operations that have two file names that may
 each have handlers.
 
-   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-1888"></a>  Handlers that don't really do anything special for actual access to the
+   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-1889"></a>  Handlers that don't really do anything special for actual access to the
 file&mdash;such as the ones that implement completion of host names for
 remote file names&mdash;should have a non-<code>nil</code> <code>safe-magic</code>
 property.  For instance, Emacs normally &ldquo;protects&rdquo; directory names
@@ -191,7 +191,7 @@ file names, by prefixing them with &lsquo;<samp><span class="samp">/:</span></sa
 would be used for them has a non-<code>nil</code> <code>safe-magic</code>
 property, the &lsquo;<samp><span class="samp">/:</span></samp>&rsquo; is not added.
 
-   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-1889"></a>  A file name handler can have an <code>operations</code> property to
+   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-1890"></a>  A file name handler can have an <code>operations</code> property to
 declare which operations it handles in a nontrivial way.  If this
 property has a non-<code>nil</code> value, it should be a list of
 operations; then only those operations will call the handler.  This
@@ -208,18 +208,18 @@ handle <code>file-exists-p</code>, then it need not handle <code>load</code>
 nontrivially.
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-1890"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-1891"></a></var><br>
 <blockquote><p>This variable holds a list of handlers whose use is presently inhibited
 for a certain operation. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-1891"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-1892"></a></var><br>
 <blockquote><p>The operation for which certain handlers are presently inhibited. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-1892"></a></var><br>
+&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-1893"></a></var><br>
 <blockquote><p>This function returns the handler function for file name <var>file</var>,
 or <code>nil</code> if there is none.  The argument <var>operation</var> should
 be the operation to be performed on the file&mdash;the value you will pass
@@ -230,7 +230,7 @@ function returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-1893"></a></var><br>
+&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-1894"></a></var><br>
 <blockquote><p>This function copies file <var>filename</var> to an ordinary non-magic file
 on the local machine, if it isn't on the local machine already.  Magic
 file names should handle the <code>file-local-copy</code> operation if they
@@ -245,7 +245,7 @@ of the local copy file.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-remote-p</b><var> filename &amp;optional identification connected<a name="index-file_002dremote_002dp-1894"></a></var><br>
+&mdash; Function: <b>file-remote-p</b><var> filename &amp;optional identification connected<a name="index-file_002dremote_002dp-1895"></a></var><br>
 <blockquote><p>This function tests whether <var>filename</var> is a remote file.  If
 <var>filename</var> is local (not remote), the return value is <code>nil</code>. 
 If <var>filename</var> is indeed remote, the return value is a string that
@@ -277,7 +277,7 @@ making connections when they don't exist.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-1895"></a></var><br>
+&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-1896"></a></var><br>
 <blockquote><p>This function returns the name of a directory that is not magic.  It
 uses the directory part of <var>filename</var> if that is not magic.  For a
 magic file name, it invokes the file name handler, which therefore

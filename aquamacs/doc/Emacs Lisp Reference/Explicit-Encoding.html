@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Cod
 
 <h4 class="subsection">33.9.7 Explicit Encoding and Decoding</h4>
 
-<p><a name="index-encoding-in-coding-systems-2913"></a><a name="index-decoding-in-coding-systems-2914"></a>
+<p><a name="index-encoding-in-coding-systems-2914"></a><a name="index-decoding-in-coding-systems-2915"></a>
   All the operations that transfer text in and out of Emacs have the
 ability to use a coding system to encode or decode the text. 
 You can also explicitly encode and decode text using the functions
@@ -80,7 +80,7 @@ discard text properties.  They also set <code>last-coding-system-used</code>
 to the precise coding system they used.
 
 <div class="defun">
-&mdash; Command: <b>encode-coding-region</b><var> start end coding-system &amp;optional destination<a name="index-encode_002dcoding_002dregion-2915"></a></var><br>
+&mdash; Command: <b>encode-coding-region</b><var> start end coding-system &amp;optional destination<a name="index-encode_002dcoding_002dregion-2916"></a></var><br>
 <blockquote><p>This command encodes the text from <var>start</var> to <var>end</var> according
 to coding system <var>coding-system</var>.  Normally, the encoded text
 replaces the original text in the buffer, but the optional argument
@@ -96,14 +96,14 @@ length of the encoded text.
 buffer remains multibyte if it was multibyte before, and any 8-bit
 bytes are converted to their multibyte representation (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
 
-        <p><a name="index-g_t_0040code_007bundecided_007d-coding_002dsystem_002c-when-encoding-2916"></a>Do <em>not</em> use <code>undecided</code> for <var>coding-system</var> when
+        <p><a name="index-g_t_0040code_007bundecided_007d-coding_002dsystem_002c-when-encoding-2917"></a>Do <em>not</em> use <code>undecided</code> for <var>coding-system</var> when
 encoding text, since that may lead to unexpected results.  Instead,
 use <code>select-safe-coding-system</code> (see <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">select-safe-coding-system</a>) to suggest a suitable encoding,
 if there's no obvious pertinent value for <var>coding-system</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>encode-coding-string</b><var> string coding-system &amp;optional nocopy buffer<a name="index-encode_002dcoding_002dstring-2917"></a></var><br>
+&mdash; Function: <b>encode-coding-string</b><var> string coding-system &amp;optional nocopy buffer<a name="index-encode_002dcoding_002dstring-2918"></a></var><br>
 <blockquote><p>This function encodes the text in <var>string</var> according to coding
 system <var>coding-system</var>.  It returns a new string containing the
 encoded text, except when <var>nocopy</var> is non-<code>nil</code>, in which
@@ -112,7 +112,7 @@ operation is trivial.  The result of encoding is a unibyte string.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>decode-coding-region</b><var> start end coding-system &amp;optional destination<a name="index-decode_002dcoding_002dregion-2918"></a></var><br>
+&mdash; Command: <b>decode-coding-region</b><var> start end coding-system &amp;optional destination<a name="index-decode_002dcoding_002dregion-2919"></a></var><br>
 <blockquote><p>This command decodes the text from <var>start</var> to <var>end</var> according
 to coding system <var>coding-system</var>.  To make explicit decoding
 useful, the text before decoding ought to be a sequence of byte
@@ -134,7 +134,7 @@ original text.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>decode-coding-string</b><var> string coding-system &amp;optional nocopy buffer<a name="index-decode_002dcoding_002dstring-2919"></a></var><br>
+&mdash; Function: <b>decode-coding-string</b><var> string coding-system &amp;optional nocopy buffer<a name="index-decode_002dcoding_002dstring-2920"></a></var><br>
 <blockquote><p>This function decodes the text in <var>string</var> according to
 <var>coding-system</var>.  It returns a new string containing the decoded
 text, except when <var>nocopy</var> is non-<code>nil</code>, in which case the
@@ -148,7 +148,7 @@ contains 8-bit bytes in their multibyte form).
 is inserted in that buffer after point (point does not move).  In this
 case, the return value is the length of the decoded text.
 
-        <p><a name="index-g_t_0040code_007bcharset_007d_002c-text-property-2920"></a>This function puts a <code>charset</code> text property on the decoded text. 
+        <p><a name="index-g_t_0040code_007bcharset_007d_002c-text-property-2921"></a>This function puts a <code>charset</code> text property on the decoded text. 
 The value of the property states the character set used to decode the
 original text:
 
@@ -158,7 +158,7 @@ original text:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>decode-coding-inserted-region</b><var> from to filename &amp;optional visit beg end replace<a name="index-decode_002dcoding_002dinserted_002dregion-2921"></a></var><br>
+&mdash; Function: <b>decode-coding-inserted-region</b><var> from to filename &amp;optional visit beg end replace<a name="index-decode_002dcoding_002dinserted_002dregion-2922"></a></var><br>
 <blockquote><p>This function decodes the text from <var>from</var> to <var>to</var> as if
 it were being read from file <var>filename</var> using <code>insert-file-contents</code>
 using the rest of the arguments provided.

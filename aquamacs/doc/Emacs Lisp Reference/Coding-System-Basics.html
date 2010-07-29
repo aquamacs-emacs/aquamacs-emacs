@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Cod
 
 <h4 class="subsection">33.9.1 Basic Concepts of Coding Systems</h4>
 
-<p><a name="index-character-code-conversion-2836"></a>  <dfn>Character code conversion</dfn> involves conversion between the
+<p><a name="index-character-code-conversion-2837"></a>  <dfn>Character code conversion</dfn> involves conversion between the
 internal representation of characters used inside Emacs and some other
 encoding.  Emacs supports many different encodings, in that it can
 convert to and from them.  For example, it can convert text to or from
@@ -77,7 +77,7 @@ is unpredictable, and thus decoding it using the same coding system
 may produce a different text.  Currently, Emacs can't report errors
 that result from encoding unsupported characters.
 
-   <p><a name="index-EOL-conversion-2837"></a><a name="index-end_002dof_002dline-conversion-2838"></a><a name="index-line-end-conversion-2839"></a>  <dfn>End of line conversion</dfn> handles three different conventions
+   <p><a name="index-EOL-conversion-2838"></a><a name="index-end_002dof_002dline-conversion-2839"></a><a name="index-line-end-conversion-2840"></a>  <dfn>End of line conversion</dfn> handles three different conventions
 used on various systems for representing end of line in files.  The
 Unix convention, used on GNU and Unix systems, is to use the linefeed
 character (also called newline).  The DOS convention, used on
@@ -85,14 +85,14 @@ MS-Windows and MS-DOS systems, is to use a carriage-return and a
 linefeed at the end of a line.  The Mac convention is to use just
 carriage-return.
 
-   <p><a name="index-base-coding-system-2840"></a><a name="index-variant-coding-system-2841"></a>  <dfn>Base coding systems</dfn> such as <code>latin-1</code> leave the end-of-line
+   <p><a name="index-base-coding-system-2841"></a><a name="index-variant-coding-system-2842"></a>  <dfn>Base coding systems</dfn> such as <code>latin-1</code> leave the end-of-line
 conversion unspecified, to be chosen based on the data.  <dfn>Variant
 coding systems</dfn> such as <code>latin-1-unix</code>, <code>latin-1-dos</code> and
 <code>latin-1-mac</code> specify the end-of-line conversion explicitly as
 well.  Most base coding systems have three corresponding variants whose
 names are formed by adding &lsquo;<samp><span class="samp">-unix</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-dos</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-mac</span></samp>&rsquo;.
 
-   <p><a name="index-raw_002dtext_0040r_007b-coding-system_007d-2842"></a>  The coding system <code>raw-text</code> is special in that it prevents
+   <p><a name="index-raw_002dtext_0040r_007b-coding-system_007d-2843"></a>  The coding system <code>raw-text</code> is special in that it prevents
 character code conversion, and causes the buffer visited with this
 coding system to be a unibyte buffer.  For historical reasons, you can
 save both unibyte and multibyte text with this coding system.  When
@@ -103,18 +103,18 @@ the end-of-line conversion, allowing that to be determined as usual by
 the data, and has the usual three variants which specify the
 end-of-line conversion.
 
-   <p><a name="index-no_002dconversion_0040r_007b-coding-system_007d-2843"></a><a name="index-binary_0040r_007b-coding-system_007d-2844"></a>  <code>no-conversion</code> (and its alias <code>binary</code>) is equivalent to
+   <p><a name="index-no_002dconversion_0040r_007b-coding-system_007d-2844"></a><a name="index-binary_0040r_007b-coding-system_007d-2845"></a>  <code>no-conversion</code> (and its alias <code>binary</code>) is equivalent to
 <code>raw-text-unix</code>: it specifies no conversion of either character
 codes or end-of-line.
 
-   <p><a name="index-emacs_002dinternal_0040r_007b-coding-system_007d-2845"></a><a name="index-utf_002d8_002demacs_0040r_007b-coding-system_007d-2846"></a>  The coding system <code>utf-8-emacs</code> specifies that the data is
+   <p><a name="index-emacs_002dinternal_0040r_007b-coding-system_007d-2846"></a><a name="index-utf_002d8_002demacs_0040r_007b-coding-system_007d-2847"></a>  The coding system <code>utf-8-emacs</code> specifies that the data is
 represented in the internal Emacs encoding (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).  This is like <code>raw-text</code> in that no code
 conversion happens, but different in that the result is multibyte
 data.  The name <code>emacs-internal</code> is an alias for
 <code>utf-8-emacs</code>.
 
 <div class="defun">
-&mdash; Function: <b>coding-system-get</b><var> coding-system property<a name="index-coding_002dsystem_002dget-2847"></a></var><br>
+&mdash; Function: <b>coding-system-get</b><var> coding-system property<a name="index-coding_002dsystem_002dget-2848"></a></var><br>
 <blockquote><p>This function returns the specified property of the coding system
 <var>coding-system</var>.  Most coding system properties exist for internal
 purposes, but one that you might find useful is <code>:mime-charset</code>. 
@@ -133,7 +133,7 @@ as an alias for the coding system.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>coding-system-aliases</b><var> coding-system<a name="index-coding_002dsystem_002daliases-2848"></a></var><br>
+&mdash; Function: <b>coding-system-aliases</b><var> coding-system<a name="index-coding_002dsystem_002daliases-2849"></a></var><br>
 <blockquote><p>This function returns the list of aliases of <var>coding-system</var>. 
 </p></blockquote></div>
 
