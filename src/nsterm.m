@@ -951,6 +951,8 @@ ns_raise_frame (struct frame *f)
      Bring window to foreground and make it active
    -------------------------------------------------------------------------- */
 {
+
+  NSLog(@"ns_raise_fr\n");
   NSView *view = FRAME_NS_VIEW (f);
   check_ns ();
   BLOCK_INPUT;
@@ -959,6 +961,7 @@ ns_raise_frame (struct frame *f)
     {
       [[view window] makeKeyAndOrderFront: NSApp];
     }
+
   UNBLOCK_INPUT;
 }
 
@@ -1032,7 +1035,6 @@ ns_frame_rehighlight (struct frame *frame)
 	}
     }
 }
-
 
 void
 x_make_frame_visible (struct frame *f)
@@ -4355,7 +4357,6 @@ ns_term_shutdown (int sig)
           send_appdefined = YES;
         }
     }
-
   [super sendEvent: theEvent];
 }
 
@@ -4649,10 +4650,32 @@ ns_term_shutdown (int sig)
 /* TODO: these may help w/IO switching btwn terminal and NSApp */
 - (void)applicationWillBecomeActive: (NSNotification *)notification
 {
+  /* When re-activating the application, a selected (key) frame hidden
+     with orderOut is brought to the front and made visible.  It's
+     unclear why this happens with the NS port (and not in other applications,
+     including the AppKit port). */
+
+  /* Keep hidden frames hidden.  This works OK as a workaround. */
+  if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
+    x_make_frame_invisible (SELECTED_FRAME ());
+
   //ns_app_active=YES;
 }
+- (void)applicationWillResignActive: (NSNotification *)notification
+{
+  NSLog(@"notification\n");
+  /* Keep hidden frames hidden.  This works OK as a workaround. */
+  if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
+    x_make_frame_invisible (SELECTED_FRAME ());
+
+}
+
 - (void)applicationDidResignActive: (NSNotification *)notification
 {
+  /* Keep hidden frames hidden.  This works OK as a workaround. */
+  if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
+    x_make_frame_invisible (SELECTED_FRAME ());
+
   //ns_app_active=NO;
   ns_send_appdefined (-1);
 }
@@ -5744,7 +5767,7 @@ ns_term_shutdown (int sig)
 
   /* frame was iconified or is not otherwise visible (to emacs)
    yet, but is being made visible*/
-  if (! FRAME_VISIBLE_P (emacsframe))
+  if (0 && ! FRAME_VISIBLE_P (emacsframe))
     {
       emacsframe->async_iconified = 0;
       emacsframe->async_visible   = 1;
