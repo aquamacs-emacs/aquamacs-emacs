@@ -244,10 +244,11 @@ pixels apart if possible."
       
       (let* (
 	     ;; on some systems, we can retrieve the available pixel width.
-	     (rect (if (fboundp 'display-available-pixel-bounds)
-		       (display-available-pixel-bounds old-frame)
-		     (list 0 0 
-			   (display-pixel-width) (display-pixel-height))))
+	     (rect (or (if (fboundp 'display-available-pixel-bounds)
+			   ;; may return nil:
+			   (display-available-pixel-bounds old-frame))
+		       (list 0 0 
+			     (display-pixel-width) (display-pixel-height))))
 	     (min-x (+ 5 (nth 0 rect)))
 	     (min-y (+ 5 (nth 1 rect)))
 	     (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
@@ -710,11 +711,13 @@ Returns nil of parms is nil."
 	       (bounds  (display-available-pixel-bounds frame)))
 	  ;; is the area visible? 
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
-	  (and  (>= left (- (nth 0 bounds) 4))
-		(>= top (nth 1 bounds))
-		(<= right (+ (nth 0 bounds) (nth 2 bounds)))
-		(<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
+	  (and bounds
+	       (>= left (- (nth 0 bounds) 4))
+	       (>= top (nth 1 bounds))
+	       (<= right (+ (nth 0 bounds) (nth 2 bounds)))
+	       (<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
 
+; (display-available-pixel-bounds nil)
 ; (setq frame (selected-frame))
 ; (smart-move-minibuffer-inside-screen)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
