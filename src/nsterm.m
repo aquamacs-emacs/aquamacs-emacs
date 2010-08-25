@@ -2425,10 +2425,7 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       NSRectFill (r);
       break;
     case HOLLOW_BOX_CURSOR:
-      NSRectFill (r);
-      [FRAME_BACKGROUND_COLOR (f) set];
-      NSRectFill (NSInsetRect (r, 1, 1));
-      [FRAME_CURSOR_COLOR (f) set];
+      NSFrameRect (r);
       break;
     case HBAR_CURSOR:
       s = r;
@@ -2443,14 +2440,15 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       NSRectFill (s);
       break;
     }
-  ns_unfocus (f);
 
   /* draw the character under the cursor 
    Doesn't look good for bar cursors - so don't do it then.*/
   if (cursor_type != NO_CURSOR && cursor_type != BAR_CURSOR
       && cursor_type != HOLLOW_BOX_CURSOR)
-    draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
-
+    {
+      draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
+    }
+  ns_unfocus (f);
 #ifdef NS_IMPL_COCOA
   NSEnableScreenUpdates ();
 #endif
