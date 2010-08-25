@@ -4666,7 +4666,6 @@ ns_term_shutdown (int sig)
 }
 - (void)applicationWillResignActive: (NSNotification *)notification
 {
-  NSLog(@"notification\n");
   /* Keep hidden frames hidden.  This works OK as a workaround. */
   if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
     x_make_frame_invisible (SELECTED_FRAME ());
