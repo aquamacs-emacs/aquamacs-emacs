@@ -952,7 +952,6 @@ ns_raise_frame (struct frame *f)
    -------------------------------------------------------------------------- */
 {
 
-  NSLog(@"ns_raise_fr\n");
   NSView *view = FRAME_NS_VIEW (f);
   check_ns ();
   BLOCK_INPUT;
