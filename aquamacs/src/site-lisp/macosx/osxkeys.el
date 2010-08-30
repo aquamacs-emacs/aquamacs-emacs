@@ -951,12 +951,14 @@ which key is mapped to command. The value of
     (define-key map '[(kp-delete)] 'delete-char) 
 
     ;; handle transient-mark-mode better
-    (define-key map '[(meta delete)] 'aquamacs-kill-word) 
-    (define-key map '[(meta kp-delete)] 'aquamacs-kill-word) 
-    (define-key map '[(control delete)] 'aquamacs-kill-word) 
-    (define-key map '[(control kp-delete)] 'aquamacs-kill-word) 
-    (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
-    (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
+    (define-key map '[(meta delete)] 'kill-word)
+    (define-key map '[(meta kp-delete)] 'kill-word)
+    (define-key map '[(control delete)] 'kill-word)
+    (define-key map '[(control kp-delete)] 'kill-word)
+    (define-key map '[(meta backspace)] 'backward-kill-word)
+    (define-key map '[(control backspace)] 'backward-kill-word)
+    (define-key map '[remap kill-word] 'aquamacs-kill-word)
+    (define-key map '[remap backward-kill-word] 'aquamacs-backward-kill-word)
 
     ;; some modes attempt to override them
     ;; so we'll define these here.
