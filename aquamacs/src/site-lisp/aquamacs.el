@@ -86,7 +86,9 @@ automatically choosing a major mode, use \\[find-file-literally]."
 	    ;; frame, because the buffer shown is empty.
 	    (call-interactively 'aquamacs-find-file-2)
 	    (unless (eq (current-buffer) buf) ; get rid of old buffer
-	      (kill-buffer buf)))
+	      (with-current-buffer (current-buffer)
+		(with-selected-window (selected-window)
+		  (kill-buffer buf)))))
 	    ;;(setq one-buffer-one-frame t))	
 	(progn 
 	   (when (eq major-mode 'dired-mode)
@@ -98,7 +100,9 @@ automatically choosing a major mode, use \\[find-file-literally]."
 	     (set (make-local-variable 'one-buffer-one-frame-inhibit) t))
 	(when (and (buffer-live-p buf)
 		 (< (buffer-size) 2))		; for safety
-	    (kill-buffer buf)))))))
+	    (with-current-buffer (current-buffer)
+		(with-selected-window (selected-window)
+		  (kill-buffer buf)))))))))
 
 (defun aquamacs-find-file-2 (filename &optional wildcards)
   "Edit file FILENAME."
