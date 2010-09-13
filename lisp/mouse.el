@@ -1389,7 +1389,8 @@ if `mouse-drag-copy-region' is non-nil)"
       (if mouse-drag-copy-region
           ;; Region already saved in the previous click;
           ;; don't make a duplicate entry, just delete.
-          (delete-region (mark t) (point))
+          (smart-delete-region (mark t) (point))
+	;; to do: the following should be "smart"
         (kill-region (mark t) (point)))
       (setq mouse-selection-click-count 0)
       (setq mouse-save-then-kill-posn nil))
@@ -1415,7 +1416,7 @@ if `mouse-drag-copy-region' is non-nil)"
 	(mouse-set-region-1)
         (when mouse-drag-copy-region
           ;; Region already copied to kill-ring once, so replace.
-          (kill-new (filter-buffer-substring (mark t) (point)) t))
+          (kill-new (smart-spacing-filter-buffer-substring (mark t) (point)) t))
 	;; Arrange for a repeated mouse-3 to kill the region.
 	(setq mouse-save-then-kill-posn click-pt)))
 
@@ -1428,7 +1429,7 @@ if `mouse-drag-copy-region' is non-nil)"
       (exchange-point-and-mark)
       (mouse-set-region-1)
       (when mouse-drag-copy-region
-        (kill-new (filter-buffer-substring (mark t) (point))))
+        (kill-new (smart-spacing-filter-buffer-substring (mark t) (point))))
       (setq mouse-save-then-kill-posn click-pt)))))
 
 
