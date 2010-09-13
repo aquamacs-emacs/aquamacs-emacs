@@ -2031,7 +2031,7 @@ detect_coding_emacs_mule (coding, detect_info)
 	}
       else
 	{
-	  int more_bytes = emacs_mule_bytes[*src_base] - 1;
+	  int more_bytes = emacs_mule_bytes[c] - 1;
 
 	  while (more_bytes > 0)
 	    {
@@ -4528,7 +4528,10 @@ encode_coding_iso_2022 (coding)
   charset_list = CODING_ATTR_CHARSET_LIST (attrs);
   coding->safe_charsets = SDATA (CODING_ATTR_SAFE_CHARSETS (attrs));
 
-  ascii_compatible = ! NILP (CODING_ATTR_ASCII_COMPAT (attrs));
+  ascii_compatible
+    = (! NILP (CODING_ATTR_ASCII_COMPAT (attrs))
+       && ! (CODING_ISO_FLAGS (coding) & (CODING_ISO_FLAG_DESIGNATION
+					  | CODING_ISO_FLAG_LOCKING_SHIFT)));
 
   while (charbuf < charbuf_end)
     {

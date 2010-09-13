@@ -505,7 +505,7 @@ for the definition of the menu frame."
   ;; when called with arguments, always execute
   (if (or (not (eq this-original-command 'clipboard-kill-ring-save))
 	  mark-active (not transient-mark-mode))
-      (let ((x-select-enable-clipboard t))
+  (let ((x-select-enable-clipboard t))
 	(kill-ring-save beg end))
     (error "Region is not active.")))
 
@@ -515,7 +515,7 @@ for the definition of the menu frame."
   ;; when called with arguments, always execute
   (if (or (not (eq this-original-command 'clipboard-kill-region))
 	  mark-active (not transient-mark-mode))
-      (let ((x-select-enable-clipboard t))
+  (let ((x-select-enable-clipboard t))
 	(kill-region beg end))
     (error "Region is not active.")))
 
@@ -679,8 +679,9 @@ by \"Save Options\" in Custom buffers.")
     ;; These are set with `customize-set-variable'.
     (dolist (elt '(scroll-bar-mode
 		   debug-on-quit debug-on-error
-		   tooltip-mode menu-bar-mode tool-bar-mode
-		   save-place fringe-mode
+		   ;; Somehow this works, when tool-bar and menu-bar don't.
+		   tooltip-mode
+		   save-place uniquify-buffer-name-style fringe-mode
 		   indicate-empty-lines indicate-buffer-boundaries
 		   case-fold-search font-use-system-font
 		   current-language-environment default-input-method
@@ -1068,7 +1069,7 @@ for future buffers."
 
     (let ((vlf (member (cons 'continuation visual-line-fringe-indicators)
 		       fringe-indicator-alist)))
-      
+
       (unless (eq (if vlf t nil)
 		  (if (member (cons 'continuation visual-line-fringe-indicators)
 			      (default-value 'fringe-indicator-alist)) t nil))
@@ -1230,6 +1231,9 @@ for future buffers."
 (define-key menu-bar-games-menu [life]
   `(menu-item ,(purecopy "Life")  life
 	      :help ,(purecopy "Watch how John Conway's cellular automaton evolves")))
+(define-key menu-bar-games-menu [land]
+  `(menu-item ,(purecopy "Landmark") landmark
+	      :help ,(purecopy "Watch a neural-network robot learn landmarks")))
 (define-key menu-bar-games-menu [hanoi]
   `(menu-item ,(purecopy "Towers of Hanoi") hanoi
 	      :help ,(purecopy "Watch Towers-of-Hanoi puzzle solved by Emacs")))
@@ -1624,7 +1628,7 @@ using `abort-recursive-edit'."
       (setq buffers (cdr buffers)))
     (and 
      (menu-bar-menu-frame-live-and-visible-p)
-     (or (not (menu-bar-non-minibuffer-window-p))
+    (or (not (menu-bar-non-minibuffer-window-p))
 	 (> count 1)))))
 
 (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
@@ -1779,7 +1783,7 @@ Buffers menu is regenerated."
 ;; Used to cache the menu entries for commands in the Buffers menu
 (defvar menu-bar-buffers-menu-command-entries nil)
 
-(defun menu-bar-update-buffers (&optional force) 
+(defun menu-bar-update-buffers (&optional force)
   ;; If user discards the Buffers item, play along.
   (and (lookup-key (current-global-map) [menu-bar buffer])
        (or force (frame-or-buffer-changed-p))
@@ -1824,8 +1828,8 @@ Buffers menu is regenerated."
 			   (cons 'menu-item
 				 (nconc (list
 					 (car pair)
-					 `(lambda ()
-					    (interactive)
+				  `(lambda ()
+                                     (interactive)
 					    (menu-bar-select-buffer ,(cdr pair))))
 					(if (eq (window-buffer) (cdr pair)) ;  menu-updating-frame is incorrect
 					    (list :button '(:toggle . t)))
@@ -1833,28 +1837,28 @@ Buffers menu is regenerated."
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.
-	 (let* ((frames-vec (make-vector (length frames) nil))
-		(frames-menu
-		 (cons 'keymap
-		       (list "Select Frame" frames-vec)))
-		(i 0))
-	   (dolist (frame frames)
+	   (let* ((frames-vec (make-vector (length frames) nil))
+                  (frames-menu
+                   (cons 'keymap
+                         (list "Select Frame" frames-vec)))
+                  (i 0))
+             (dolist (frame frames)
 	     (let ((name (frame-parameter frame 'name)))
 	       (when (or (frame-visible-p frame)
 			 (not (and (> (length name) 0)
 				   (string= (substring name 0 1) " "))))
-		 (aset frames-vec i
-		       (nconc
-			(list
-			 (frame-parameter frame 'name)
-			 (cons nil nil))
-			`(lambda ()
-			   (interactive) (menu-bar-select-frame ,frame))))
+               (aset frames-vec i
+                     (nconc
+                      (list
+                       (frame-parameter frame 'name)
+                       (cons nil nil))
+                      `(lambda ()
+                         (interactive) (menu-bar-select-frame ,frame))))
 		 (setq i (1+ i)))))
-	   ;; Put it after the normal buffers
-	   (setq buffers-menu
-		 (nconc buffers-menu
-			`((frames-separator "--")
+	     ;; Put it after the normal buffers
+	     (setq buffers-menu
+		   (nconc buffers-menu
+			  `((frames-separator "--")
 			  (frames menu-item "Frames" ,frames-menu :enable ,(> i 1) )))))
 
 	 ;; Add in some normal commands at the end of the menu.  We use
@@ -1955,15 +1959,6 @@ Buffers menu is regenerated."
     `(menu-item ,(purecopy "Previous History Item") previous-history-element
 		:help ,(purecopy "Put previous minibuffer history element in the minibuffer"))))
 
-;;;###autoload
-;; This comment is taken from tool-bar.el near
-;; (put 'tool-bar-mode ...)
-;; We want to pretend the menu bar by standard is on, as this will make
-;; customize consider disabling the menu bar a customization, and save
-;; that.  We could do this for real by setting :init-value below, but
-;; that would overwrite disabling the tool bar from X resources.
-(put 'menu-bar-mode 'standard-value '(t))
-
 (define-minor-mode menu-bar-mode
   "Toggle display of a menu bar on each frame.
 This command applies to all frames that exist and frames to be
@@ -1981,7 +1976,7 @@ turn on menu bars; otherwise, turn off menu bars."
 	       (if (eq initial-window-system 'ns)
 		   1
 		 (if menu-bar-mode 1 0)))))
-    
+
   ;; Make the message appear when Emacs is idle.  We can not call message
   ;; directly.  The minor-mode message "Menu-bar mode disabled" comes
   ;; after this function returns, overwriting any message we do here.
@@ -1989,6 +1984,16 @@ turn on menu bars; otherwise, turn off menu bars."
     (run-with-idle-timer 0 nil 'message
 			 "Menu-bar mode disabled.  Use M-x menu-bar-mode to make the menu bar appear."))
   menu-bar-mode)
+
+;;;###autoload
+;; (This does not work right unless it comes after the above definition.)
+;; This comment is taken from tool-bar.el near
+;; (put 'tool-bar-mode ...)
+;; We want to pretend the menu bar by standard is on, as this will make
+;; customize consider disabling the menu bar a customization, and save
+;; that.  We could do this for real by setting :init-value above, but
+;; that would overwrite disabling the menu bar from X resources.
+(put 'menu-bar-mode 'standard-value '(t))
 
 (defun toggle-menu-bar-mode-from-frame (&optional arg)
   "Toggle menu bar on or off, based on the status of the current frame.
