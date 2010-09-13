@@ -903,7 +903,7 @@ Otherwise, that variable should be nil."
 	  (setq arg (1- arg)))
 	(while (< arg 0)
 	  (ns-cycle-frame -1)
-	  (setq arg (1- arg))))
+	  (setq arg (1+ arg))))
     (let ((frame (selected-frame)))
       (while (> arg 0)
 	(setq frame (next-frame frame))
