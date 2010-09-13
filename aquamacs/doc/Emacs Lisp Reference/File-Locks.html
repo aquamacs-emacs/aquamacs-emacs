@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.5 File Locks</h3>
 
-<p><a name="index-file-locks-1777"></a><a name="index-lock-file-1778"></a>
+<p><a name="index-file-locks-1778"></a><a name="index-lock-file-1779"></a>
   When two users edit the same file at the same time, they are likely
 to interfere with each other.  Emacs tries to prevent this situation
 from arising by recording a <dfn>file lock</dfn> when a file is being
@@ -65,7 +65,7 @@ on disk catches some cases of simultaneous editing; see
 <a href="Modification-Time.html#Modification-Time">Modification Time</a>.
 
 <div class="defun">
-&mdash; Function: <b>file-locked-p</b><var> filename<a name="index-file_002dlocked_002dp-1779"></a></var><br>
+&mdash; Function: <b>file-locked-p</b><var> filename<a name="index-file_002dlocked_002dp-1780"></a></var><br>
 <blockquote><p>This function returns <code>nil</code> if the file <var>filename</var> is not
 locked.  It returns <code>t</code> if it is locked by this Emacs process, and
 it returns the name of the user who has locked it if it is locked by
@@ -77,7 +77,7 @@ some other job.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>lock-buffer</b><var> &amp;optional filename<a name="index-lock_002dbuffer-1780"></a></var><br>
+&mdash; Function: <b>lock-buffer</b><var> &amp;optional filename<a name="index-lock_002dbuffer-1781"></a></var><br>
 <blockquote><p>This function locks the file <var>filename</var>, if the current buffer is
 modified.  The argument <var>filename</var> defaults to the current buffer's
 visited file.  Nothing is done if the current buffer is not visiting a
@@ -85,7 +85,7 @@ file, or is not modified, or if the system does not support locking.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>unlock-buffer</b><var><a name="index-unlock_002dbuffer-1781"></a></var><br>
+&mdash; Function: <b>unlock-buffer</b><var><a name="index-unlock_002dbuffer-1782"></a></var><br>
 <blockquote><p>This function unlocks the file being visited in the current buffer,
 if the buffer is modified.  If the buffer is not modified, then
 the file should not be locked, so this function does nothing.  It also
@@ -98,7 +98,7 @@ support it, the functions <code>lock-buffer</code>, <code>unlock-buffer</code> a
 <code>file-locked-p</code> do nothing and return <code>nil</code>.
 
 <div class="defun">
-&mdash; Function: <b>ask-user-about-lock</b><var> file other-user<a name="index-ask_002duser_002dabout_002dlock-1782"></a></var><br>
+&mdash; Function: <b>ask-user-about-lock</b><var> file other-user<a name="index-ask_002duser_002dabout_002dlock-1783"></a></var><br>
 <blockquote><p>This function is called when the user tries to modify <var>file</var>, but it
 is locked by another user named <var>other-user</var>.  The default
 definition of this function asks the user to say what to do.  The value
@@ -111,7 +111,7 @@ this user may edit the file and <var>other-user</var> loses the lock.
           <li>A value of <code>nil</code> says to ignore the lock and let this
 user edit the file anyway.
 
-          <li><a name="index-file_002dlocked-1783"></a>This function may instead signal a <code>file-locked</code> error, in which
+          <li><a name="index-file_002dlocked-1784"></a>This function may instead signal a <code>file-locked</code> error, in which
 case the change that the user was about to make does not take place.
 
           <p>The error message for this error looks like this:

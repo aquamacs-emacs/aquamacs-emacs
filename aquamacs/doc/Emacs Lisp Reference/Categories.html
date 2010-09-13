@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,14 +44,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Synta
 
 <h3 class="section">35.9 Categories</h3>
 
-<p><a name="index-categories-of-characters-3112"></a><a name="index-character-categories-3113"></a>
+<p><a name="index-categories-of-characters-3113"></a><a name="index-character-categories-3114"></a>
   <dfn>Categories</dfn> provide an alternate way of classifying characters
 syntactically.  You can define several categories as needed, then
 independently assign each character to one or more categories.  Unlike
 syntax classes, categories are not mutually exclusive; it is normal for
 one character to belong to several categories.
 
-   <p><a name="index-category-table-3114"></a>  Each buffer has a <dfn>category table</dfn> which records which categories
+   <p><a name="index-category-table-3115"></a>  Each buffer has a <dfn>category table</dfn> which records which categories
 are defined and also which characters belong to each category.  Each
 category table defines its own categories, but normally these are
 initialized by copying from the standard categories table, so that the
@@ -72,13 +72,13 @@ character <var>c</var> belongs to category <var>cat</var>.
 defaults to the current buffer's category table.
 
 <div class="defun">
-&mdash; Function: <b>define-category</b><var> char docstring &amp;optional table<a name="index-define_002dcategory-3115"></a></var><br>
+&mdash; Function: <b>define-category</b><var> char docstring &amp;optional table<a name="index-define_002dcategory-3116"></a></var><br>
 <blockquote><p>This function defines a new category, with name <var>char</var> and
 documentation <var>docstring</var>, for the category table <var>table</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>category-docstring</b><var> category &amp;optional table<a name="index-category_002ddocstring-3116"></a></var><br>
+&mdash; Function: <b>category-docstring</b><var> category &amp;optional table<a name="index-category_002ddocstring-3117"></a></var><br>
 <blockquote><p>This function returns the documentation string of category <var>category</var>
 in category table <var>table</var>.
 
@@ -90,30 +90,30 @@ in category table <var>table</var>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-unused-category</b><var> &amp;optional table<a name="index-get_002dunused_002dcategory-3117"></a></var><br>
+&mdash; Function: <b>get-unused-category</b><var> &amp;optional table<a name="index-get_002dunused_002dcategory-3118"></a></var><br>
 <blockquote><p>This function returns a category name (a character) which is not
 currently defined in <var>table</var>.  If all possible categories are in use
 in <var>table</var>, it returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>category-table</b><var><a name="index-category_002dtable-3118"></a></var><br>
+&mdash; Function: <b>category-table</b><var><a name="index-category_002dtable-3119"></a></var><br>
 <blockquote><p>This function returns the current buffer's category table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>category-table-p</b><var> object<a name="index-category_002dtable_002dp-3119"></a></var><br>
+&mdash; Function: <b>category-table-p</b><var> object<a name="index-category_002dtable_002dp-3120"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a category table,
 otherwise <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>standard-category-table</b><var><a name="index-standard_002dcategory_002dtable-3120"></a></var><br>
+&mdash; Function: <b>standard-category-table</b><var><a name="index-standard_002dcategory_002dtable-3121"></a></var><br>
 <blockquote><p>This function returns the standard category table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>copy-category-table</b><var> &amp;optional table<a name="index-copy_002dcategory_002dtable-3121"></a></var><br>
+&mdash; Function: <b>copy-category-table</b><var> &amp;optional table<a name="index-copy_002dcategory_002dtable-3122"></a></var><br>
 <blockquote><p>This function constructs a copy of <var>table</var> and returns it.  If
 <var>table</var> is not supplied (or is <code>nil</code>), it returns a copy of the
 standard category table.  Otherwise, an error is signaled if <var>table</var>
@@ -121,20 +121,20 @@ is not a category table.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-category-table</b><var> table<a name="index-set_002dcategory_002dtable-3122"></a></var><br>
+&mdash; Function: <b>set-category-table</b><var> table<a name="index-set_002dcategory_002dtable-3123"></a></var><br>
 <blockquote><p>This function makes <var>table</var> the category table for the current
 buffer.  It returns <var>table</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-category-table</b><var><a name="index-make_002dcategory_002dtable-3123"></a></var><br>
+&mdash; Function: <b>make-category-table</b><var><a name="index-make_002dcategory_002dtable-3124"></a></var><br>
 <blockquote><p>This creates and returns an empty category table.  In an empty category
 table, no categories have been allocated, and no characters belong to
 any categories. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-category-set</b><var> categories<a name="index-make_002dcategory_002dset-3124"></a></var><br>
+&mdash; Function: <b>make-category-set</b><var> categories<a name="index-make_002dcategory_002dset-3125"></a></var><br>
 <blockquote><p>This function returns a new category set&mdash;a bool-vector&mdash;whose initial
 contents are the categories listed in the string <var>categories</var>.  The
 elements of <var>categories</var> should be category names; the new category
@@ -147,7 +147,7 @@ other categories.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-category-set</b><var> char<a name="index-char_002dcategory_002dset-3125"></a></var><br>
+&mdash; Function: <b>char-category-set</b><var> char<a name="index-char_002dcategory_002dset-3126"></a></var><br>
 <blockquote><p>This function returns the category set for character <var>char</var> in the
 current buffer's category table.  This is the bool-vector which
 records which categories the character <var>char</var> belongs to.  The
@@ -160,7 +160,7 @@ it returns the same bool-vector that exists in the category table.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>category-set-mnemonics</b><var> category-set<a name="index-category_002dset_002dmnemonics-3126"></a></var><br>
+&mdash; Function: <b>category-set-mnemonics</b><var> category-set<a name="index-category_002dset_002dmnemonics-3127"></a></var><br>
 <blockquote><p>This function converts the category set <var>category-set</var> into a string
 containing the characters that designate the categories that are members
 of the set.
@@ -171,7 +171,7 @@ of the set.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>modify-category-entry</b><var> char category &amp;optional table reset<a name="index-modify_002dcategory_002dentry-3127"></a></var><br>
+&mdash; Function: <b>modify-category-entry</b><var> char category &amp;optional table reset<a name="index-modify_002dcategory_002dentry-3128"></a></var><br>
 <blockquote><p>This function modifies the category set of <var>char</var> in category
 table <var>table</var> (which defaults to the current buffer's category
 table).  <var>char</var> can be a character, or a cons cell of the form
@@ -185,7 +185,7 @@ instead.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>describe-categories</b><var> &amp;optional buffer-or-name<a name="index-describe_002dcategories-3128"></a></var><br>
+&mdash; Command: <b>describe-categories</b><var> &amp;optional buffer-or-name<a name="index-describe_002dcategories-3129"></a></var><br>
 <blockquote><p>This function describes the category specifications in the current
 category table.  It inserts the descriptions in a buffer, and then
 displays that buffer.  If <var>buffer-or-name</var> is non-<code>nil</code>, it

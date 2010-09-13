@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,18 +44,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion<
 
 <h4 class="subsection">20.6.7 Programmed Completion</h4>
 
-<p><a name="index-programmed-completion-1158"></a>
+<p><a name="index-programmed-completion-1159"></a>
   Sometimes it is not possible to create an alist or an obarray
 containing all the intended possible completions.  In such a case, you
 can supply your own function to compute the completion of a given
 string.  This is called <dfn>programmed completion</dfn>.  Emacs uses
-programmed completion when completing file names (see <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>).
+programmed completion when completing file names (see <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>), among many other cases.
 
-   <p>To use this feature, pass a symbol with a function definition as the
-<var>collection</var> argument to <code>completing-read</code>.  The function
+   <p>To use this feature, pass a function as the <var>collection</var>
+argument to <code>completing-read</code>.  The function
 <code>completing-read</code> arranges to pass your completion function along
-to <code>try-completion</code> and <code>all-completions</code>, which will then let
-your function do all the work.
+to <code>try-completion</code>, <code>all-completions</code>, and other basic
+completion functions, which will then let your function do all
+the work.
 
    <p>The completion function should accept three arguments:
 
@@ -66,10 +67,14 @@ your function do all the work.
 none.  Your function should call the predicate for each possible match,
 and ignore the possible match if the predicate returns <code>nil</code>.
 
-     <li>A flag specifying the type of operation. 
+     <li>A flag specifying the type of operation.  The best way to think about
+it is that the function stands for an object (in the
+&ldquo;object-oriented&rdquo; sense of the word), and this third argument
+specifies which method to run. 
 </ul>
 
-   <p>There are three flag values for three operations:
+   <p>There are currently four methods, i.e. four flag values, one for
+  each of the four different basic operations:
 
      <ul>
 <li><code>nil</code> specifies <code>try-completion</code>.  The completion function
@@ -87,7 +92,13 @@ string.
 
      <li><code>lambda</code> specifies <code>test-completion</code>.  The completion
 function should return <code>t</code> if the specified string is an exact
-match for some possibility; <code>nil</code> otherwise. 
+match for some possibility; <code>nil</code> otherwise.
+
+     <li><code>(boundaries . SUFFIX)</code> specifies <code>completion-boundaries</code>. 
+The function should return a value of the form <code>(boundaries
+START . END)</code> where START is the position of the beginning boundary in
+in the string to complete, and END is the position of the end boundary
+in SUFFIX. 
 </ul>
 
    <p>It would be consistent and clean for completion functions to allow
@@ -99,7 +110,7 @@ function.  So you must arrange for any function you wish to use for
 completion to be encapsulated in a symbol.
 
 <div class="defun">
-&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1159"></a></var><br>
+&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1160"></a></var><br>
 <blockquote><p>This function is a convenient way to write a function that can act as
 programmed completion function.  The argument <var>function</var> should be
 a function that takes one argument, a string, and returns an alist of
@@ -109,7 +120,7 @@ and the interface for programmed completion functions.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>completion-annotate-function</b><var><a name="index-completion_002dannotate_002dfunction-1160"></a></var><br>
+&mdash; Variable: <b>completion-annotate-function</b><var><a name="index-completion_002dannotate_002dfunction-1161"></a></var><br>
 <blockquote><p>The value of this variable, if non-<code>nil</code>, should be a function
 for &ldquo;annotating&rdquo; the entries in the &lsquo;<samp><span class="samp">*Completions*</span></samp>&rsquo; buffer. 
 The function should accept a single argument, the completion string

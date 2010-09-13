@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,13 +44,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Commands.html#Defining-Command
 
 <h4 class="subsection">21.2.1 Using <code>interactive</code></h4>
 
-<p><a name="index-arguments_002c-interactive-entry-1208"></a>
+<p><a name="index-arguments_002c-interactive-entry-1209"></a>
   This section describes how to write the <code>interactive</code> form that
 makes a Lisp function an interactively-callable command, and how to
 examine a command's <code>interactive</code> form.
 
 <div class="defun">
-&mdash; Special Form: <b>interactive</b><var> arg-descriptor<a name="index-interactive-1209"></a></var><br>
+&mdash; Special Form: <b>interactive</b><var> arg-descriptor<a name="index-interactive-1210"></a></var><br>
 <blockquote><p>This special form declares that a function is a command, and that it
 may therefore be called interactively (via <kbd>M-x</kbd> or by entering a
 key sequence bound to it).  The argument <var>arg-descriptor</var> declares
@@ -61,7 +61,7 @@ interactively.
 then the caller supplies the arguments and <var>arg-descriptor</var> has no
 effect.
 
-        <p><a name="index-g_t_0040code_007binteractive_002dform_007d_002c-function-property-1210"></a>The <code>interactive</code> form must be located at top-level in the
+        <p><a name="index-g_t_0040code_007binteractive_002dform_007d_002c-function-property-1211"></a>The <code>interactive</code> form must be located at top-level in the
 function body, or in the function symbol's <code>interactive-form</code>
 property (see <a href="Symbol-Plists.html#Symbol-Plists">Symbol Plists</a>).  It has its effect because the
 command loop looks for it before calling the function
@@ -108,16 +108,16 @@ give to that buffer:
 
      <pre class="smallexample">          (interactive "bBuffer to rename: \nsRename buffer %s to: ")
 </pre>
-     <p><a name="index-g_t_0040samp_007b_002a_007d-in-_0040code_007binteractive_007d-1211"></a><a name="index-read_002donly-buffers-in-interactive-1212"></a>If &lsquo;<samp><span class="samp">*</span></samp>&rsquo; appears at the beginning of the string, then an error is
+     <p><a name="index-g_t_0040samp_007b_002a_007d-in-_0040code_007binteractive_007d-1212"></a><a name="index-read_002donly-buffers-in-interactive-1213"></a>If &lsquo;<samp><span class="samp">*</span></samp>&rsquo; appears at the beginning of the string, then an error is
 signaled if the buffer is read-only.
 
-     <p><a name="index-g_t_0040samp_007b_0040_0040_007d-in-_0040code_007binteractive_007d-1213"></a><!-- Emacs 19 feature -->
+     <p><a name="index-g_t_0040samp_007b_0040_0040_007d-in-_0040code_007binteractive_007d-1214"></a><!-- Emacs 19 feature -->
 If &lsquo;<samp><span class="samp">@</span></samp>&rsquo; appears at the beginning of the string, and if the key
 sequence used to invoke the command includes any mouse events, then
 the window associated with the first of those events is selected
 before the command is run.
 
-     <p><a name="index-g_t_0040samp_007b_005e_007d-in-_0040code_007binteractive_007d-1214"></a><a name="index-shift_002dselection_002c-and-_0040code_007binteractive_007d-spec-1215"></a>If &lsquo;<samp><span class="samp">^</span></samp>&rsquo; appears at the beginning of the string, and if the command
+     <p><a name="index-g_t_0040samp_007b_005e_007d-in-_0040code_007binteractive_007d-1215"></a><a name="index-shift_002dselection_002c-and-_0040code_007binteractive_007d-spec-1216"></a>If &lsquo;<samp><span class="samp">^</span></samp>&rsquo; appears at the beginning of the string, and if the command
 was invoked through <dfn>shift-translation</dfn>, set the mark and activate
 the region temporarily, or extend an already active region, before the
 command is run.  If the command was invoked without shift-translation,
@@ -171,10 +171,10 @@ wrote is one of these exceptions, run the command, then examine
 <code>(car command-history)</code>. 
 </ul>
 
-   <p><a name="index-examining-the-_0040code_007binteractive_007d-form-1216"></a>
+   <p><a name="index-examining-the-_0040code_007binteractive_007d-form-1217"></a>
 
 <div class="defun">
-&mdash; Function: <b>interactive-form</b><var> function<a name="index-interactive_002dform-1217"></a></var><br>
+&mdash; Function: <b>interactive-form</b><var> function<a name="index-interactive_002dform-1218"></a></var><br>
 <blockquote><p>This function returns the <code>interactive</code> form of <var>function</var>. 
 If <var>function</var> is an interactively callable function
 (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>), the value is the command's

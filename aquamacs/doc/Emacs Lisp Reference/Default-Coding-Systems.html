@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Cod
 
 <h4 class="subsection">33.9.5 Default Coding Systems</h4>
 
-<p><a name="index-default-coding-system-2887"></a><a name="index-coding-system_002c-automatically-determined-2888"></a>
+<p><a name="index-default-coding-system-2888"></a><a name="index-coding-system_002c-automatically-determined-2889"></a>
   This section describes variables that specify the default coding
 system for certain files or when running certain subprograms, and the
 function that I/O operations use to access them.
@@ -58,10 +58,10 @@ don't change these variables; instead, override them using
 <code>coding-system-for-read</code> and <code>coding-system-for-write</code>
 (see <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>).
 
-   <p><a name="index-file-contents_002c-and-default-coding-system-2889"></a>
+   <p><a name="index-file-contents_002c-and-default-coding-system-2890"></a>
 
 <div class="defun">
-&mdash; User Option: <b>auto-coding-regexp-alist</b><var><a name="index-auto_002dcoding_002dregexp_002dalist-2890"></a></var><br>
+&mdash; User Option: <b>auto-coding-regexp-alist</b><var><a name="index-auto_002dcoding_002dregexp_002dalist-2891"></a></var><br>
 <blockquote><p>This variable is an alist of text patterns and corresponding coding
 systems. Each element has the form <code>(</code><var>regexp</var><code>
 . </code><var>coding-system</var><code>)</code>; a file whose first few kilobytes match
@@ -73,10 +73,10 @@ so that Emacs automatically recognizes mail files in Babyl format and
 reads them with no code conversions. 
 </p></blockquote></div>
 
-   <p><a name="index-file-name_002c-and-default-coding-system-2891"></a>
+   <p><a name="index-file-name_002c-and-default-coding-system-2892"></a>
 
 <div class="defun">
-&mdash; User Option: <b>file-coding-system-alist</b><var><a name="index-file_002dcoding_002dsystem_002dalist-2892"></a></var><br>
+&mdash; User Option: <b>file-coding-system-alist</b><var><a name="index-file_002dcoding_002dsystem_002dalist-2893"></a></var><br>
 <blockquote><p>This variable is an alist that specifies the coding systems to use for
 reading and writing particular files.  Each element has the form
 <code>(</code><var>pattern</var><code> . </code><var>coding</var><code>)</code>, where <var>pattern</var> is a regular
@@ -102,17 +102,17 @@ meaning as described above.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>auto-coding-alist</b><var><a name="index-auto_002dcoding_002dalist-2893"></a></var><br>
+&mdash; User Option: <b>auto-coding-alist</b><var><a name="index-auto_002dcoding_002dalist-2894"></a></var><br>
 <blockquote><p>This variable is an alist that specifies the coding systems to use for
 reading and writing particular files.  Its form is like that of
 <code>file-coding-system-alist</code>, but, unlike the latter, this variable
 takes priority over any <code>coding:</code> tags in the file. 
 </p></blockquote></div>
 
-   <p><a name="index-program-name_002c-and-default-coding-system-2894"></a>
+   <p><a name="index-program-name_002c-and-default-coding-system-2895"></a>
 
 <div class="defun">
-&mdash; Variable: <b>process-coding-system-alist</b><var><a name="index-process_002dcoding_002dsystem_002dalist-2895"></a></var><br>
+&mdash; Variable: <b>process-coding-system-alist</b><var><a name="index-process_002dcoding_002dsystem_002dalist-2896"></a></var><br>
 <blockquote><p>This variable is an alist specifying which coding systems to use for a
 subprocess, depending on which program is running in the subprocess.  It
 works like <code>file-coding-system-alist</code>, except that <var>pattern</var> is
@@ -135,10 +135,10 @@ coding system which determines both the character code conversion and
 the end of line conversion&mdash;that is, one like <code>latin-1-unix</code>,
 rather than <code>undecided</code> or <code>latin-1</code>.
 
-   <p><a name="index-port-number_002c-and-default-coding-system-2896"></a><a name="index-network-service-name_002c-and-default-coding-system-2897"></a>
+   <p><a name="index-port-number_002c-and-default-coding-system-2897"></a><a name="index-network-service-name_002c-and-default-coding-system-2898"></a>
 
 <div class="defun">
-&mdash; Variable: <b>network-coding-system-alist</b><var><a name="index-network_002dcoding_002dsystem_002dalist-2898"></a></var><br>
+&mdash; Variable: <b>network-coding-system-alist</b><var><a name="index-network_002dcoding_002dsystem_002dalist-2899"></a></var><br>
 <blockquote><p>This variable is an alist that specifies the coding system to use for
 network streams.  It works much like <code>file-coding-system-alist</code>,
 with the difference that the <var>pattern</var> in an element may be either a
@@ -148,7 +148,7 @@ stream.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>default-process-coding-system</b><var><a name="index-default_002dprocess_002dcoding_002dsystem-2899"></a></var><br>
+&mdash; Variable: <b>default-process-coding-system</b><var><a name="index-default_002dprocess_002dcoding_002dsystem-2900"></a></var><br>
 <blockquote><p>This variable specifies the coding systems to use for subprocess (and
 network stream) input and output, when nothing else specifies what to
 do.
@@ -158,10 +158,10 @@ do.
 the subprocess, and <var>output-coding</var> applies to output to it. 
 </p></blockquote></div>
 
-   <p><a name="index-default-coding-system_002c-functions-to-determine-2900"></a>
+   <p><a name="index-default-coding-system_002c-functions-to-determine-2901"></a>
 
 <div class="defun">
-&mdash; User Option: <b>auto-coding-functions</b><var><a name="index-auto_002dcoding_002dfunctions-2901"></a></var><br>
+&mdash; User Option: <b>auto-coding-functions</b><var><a name="index-auto_002dcoding_002dfunctions-2902"></a></var><br>
 <blockquote><p>This variable holds a list of functions that try to determine a
 coding system for a file based on its undecoded contents.
 
@@ -178,7 +178,7 @@ functions won't be called.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-auto-coding</b><var> filename size<a name="index-find_002dauto_002dcoding-2902"></a></var><br>
+&mdash; Function: <b>find-auto-coding</b><var> filename size<a name="index-find_002dauto_002dcoding-2903"></a></var><br>
 <blockquote><p>This function tries to determine a suitable coding system for
 <var>filename</var>.  It examines the buffer visiting the named file, using
 the variables documented above in sequence, until it finds a match for
@@ -204,7 +204,7 @@ in that case, <var>size</var> should be the size of the buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-auto-coding</b><var> filename size<a name="index-set_002dauto_002dcoding-2903"></a></var><br>
+&mdash; Function: <b>set-auto-coding</b><var> filename size<a name="index-set_002dauto_002dcoding-2904"></a></var><br>
 <blockquote><p>This function returns a suitable coding system for file
 <var>filename</var>.  It uses <code>find-auto-coding</code> to find the coding
 system.  If no coding system could be determined, the function returns
@@ -213,7 +213,7 @@ system.  If no coding system could be determined, the function returns
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-operation-coding-system</b><var> operation &amp;rest arguments<a name="index-find_002doperation_002dcoding_002dsystem-2904"></a></var><br>
+&mdash; Function: <b>find-operation-coding-system</b><var> operation &amp;rest arguments<a name="index-find_002doperation_002dcoding_002dsystem-2905"></a></var><br>
 <blockquote><p>This function returns the coding system to use (by default) for
 performing <var>operation</var> with <var>arguments</var>.  The value has this
 form:

@@ -836,6 +836,8 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map `[(control left)] 'beginning-of-visual-line)
     (define-key map `[(control right)] 'end-of-visual-line)
 
+    (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
+
     map))
 
 (defvar osx-key-low-priority-key-map
@@ -889,7 +891,6 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-window)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
-    (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     ;; workaround for bug in menu key description
     (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
@@ -950,12 +951,14 @@ which key is mapped to command. The value of
     (define-key map '[(kp-delete)] 'delete-char) 
 
     ;; handle transient-mark-mode better
-    (define-key map '[(meta delete)] 'aquamacs-kill-word) 
-    (define-key map '[(meta kp-delete)] 'aquamacs-kill-word) 
-    (define-key map '[(control delete)] 'aquamacs-kill-word) 
-    (define-key map '[(control kp-delete)] 'aquamacs-kill-word) 
-    (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
-    (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
+    (define-key map '[(meta delete)] 'kill-word)
+    (define-key map '[(meta kp-delete)] 'kill-word)
+    (define-key map '[(control delete)] 'kill-word)
+    (define-key map '[(control kp-delete)] 'kill-word)
+    (define-key map '[(meta backspace)] 'backward-kill-word)
+    (define-key map '[(control backspace)] 'backward-kill-word)
+    (define-key map '[remap kill-word] 'aquamacs-kill-word)
+    (define-key map '[remap backward-kill-word] 'aquamacs-backward-kill-word)
 
     ;; some modes attempt to override them
     ;; so we'll define these here.
@@ -1040,7 +1043,7 @@ the `osx-key-mode' function to switch mode on or off.
 keymaps used by this mode. They may be modified where necessary."
   :global t
   :group 'osx-key-mode 
-  :keymap 'osx-key-mode-map  
+  :keymap osx-key-mode-map  
 
   (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
 					   nil))

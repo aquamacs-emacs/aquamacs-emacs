@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.2 Saving Buffers</h3>
 
-<p><a name="index-saving-buffers-1760"></a>
+<p><a name="index-saving-buffers-1761"></a>
   When you edit a file in Emacs, you are actually working on a buffer
 that is visiting that file&mdash;that is, the contents of the file are
 copied into the buffer and the copy is what you edit.  Changes to the
@@ -54,7 +54,7 @@ buffer do not change the file until you <dfn>save</dfn> the buffer, which
 means copying the contents of the buffer into the file.
 
 <div class="defun">
-&mdash; Command: <b>save-buffer</b><var> &amp;optional backup-option<a name="index-save_002dbuffer-1761"></a></var><br>
+&mdash; Command: <b>save-buffer</b><var> &amp;optional backup-option<a name="index-save_002dbuffer-1762"></a></var><br>
 <blockquote><p>This function saves the contents of the current buffer in its visited
 file if the buffer has been modified since it was last visited or saved. 
 Otherwise it does nothing.
@@ -79,7 +79,7 @@ version of the file before saving it.
         </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>save-some-buffers</b><var> &amp;optional save-silently-p pred<a name="index-save_002dsome_002dbuffers-1762"></a></var><br>
+&mdash; Command: <b>save-some-buffers</b><var> &amp;optional save-silently-p pred<a name="index-save_002dsome_002dbuffers-1763"></a></var><br>
 <blockquote><p><a name="Definition-of-save_002dsome_002dbuffers"></a>This command saves some modified file-visiting buffers.  Normally it
 asks the user about each buffer.  But if <var>save-silently-p</var> is
 non-<code>nil</code>, it saves all the file-visiting buffers without querying
@@ -102,7 +102,7 @@ value in a certain buffer, that means do offer to save that buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>write-file</b><var> filename &amp;optional confirm<a name="index-write_002dfile-1763"></a></var><br>
+&mdash; Command: <b>write-file</b><var> filename &amp;optional confirm<a name="index-write_002dfile-1764"></a></var><br>
 <blockquote><p><a name="Definition-of-write_002dfile"></a>This function writes the current buffer into file <var>filename</var>, makes
 the buffer visit that file, and marks it not modified.  Then it renames
 the buffer based on <var>filename</var>, appending a string like &lsquo;<samp><span class="samp">&lt;2&gt;</span></samp>&rsquo;
@@ -124,7 +124,7 @@ buffer name instead.
 conversion (see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>).
 
 <div class="defun">
-&mdash; Variable: <b>write-file-functions</b><var><a name="index-write_002dfile_002dfunctions-1764"></a></var><br>
+&mdash; Variable: <b>write-file-functions</b><var><a name="index-write_002dfile_002dfunctions-1765"></a></var><br>
 <blockquote><p>The value of this variable is a list of functions to be called before
 writing out a buffer to its visited file.  If one of them returns
 non-<code>nil</code>, the file is considered already written and the rest of
@@ -163,7 +163,7 @@ If this is not what you want, you might like to use
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Variable: <b>write-contents-functions</b><var><a name="index-write_002dcontents_002dfunctions-1765"></a></var><br>
+&mdash; Variable: <b>write-contents-functions</b><var><a name="index-write_002dcontents_002dfunctions-1766"></a></var><br>
 <blockquote><p>This works just like <code>write-file-functions</code>, but it is intended
 for hooks that pertain to the buffer's contents, not to the particular
 visited file or its location.  Such hooks are usually set up by major
@@ -178,7 +178,7 @@ are the functions in <code>write-file-functions</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>before-save-hook</b><var><a name="index-before_002dsave_002dhook-1766"></a></var><br>
+&mdash; User Option: <b>before-save-hook</b><var><a name="index-before_002dsave_002dhook-1767"></a></var><br>
 <blockquote><p>This normal hook runs before a buffer is saved in its visited file,
 regardless of whether that is done normally or by one of the hooks
 described above.  For instance, the <samp><span class="file">copyright.el</span></samp> program uses
@@ -188,14 +188,14 @@ its copyright notice.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; User Option: <b>after-save-hook</b><var><a name="index-after_002dsave_002dhook-1767"></a></var><br>
+&mdash; User Option: <b>after-save-hook</b><var><a name="index-after_002dsave_002dhook-1768"></a></var><br>
 <blockquote><p>This normal hook runs after a buffer has been saved in its visited file. 
 One use of this hook is in Fast Lock mode; it uses this hook to save the
 highlighting information in a cache file. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>file-precious-flag</b><var><a name="index-file_002dprecious_002dflag-1768"></a></var><br>
+&mdash; User Option: <b>file-precious-flag</b><var><a name="index-file_002dprecious_002dflag-1769"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, then <code>save-buffer</code> protects
 against I/O errors while saving by writing the new file to a temporary
 name instead of the name it is supposed to have, and then renaming it to
@@ -211,7 +211,7 @@ in particular buffers.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>require-final-newline</b><var><a name="index-require_002dfinal_002dnewline-1769"></a></var><br>
+&mdash; User Option: <b>require-final-newline</b><var><a name="index-require_002dfinal_002dnewline-1770"></a></var><br>
 <blockquote><p>This variable determines whether files may be written out that do
 <em>not</em> end with a newline.  If the value of the variable is
 <code>t</code>, then <code>save-buffer</code> silently adds a newline at the end of

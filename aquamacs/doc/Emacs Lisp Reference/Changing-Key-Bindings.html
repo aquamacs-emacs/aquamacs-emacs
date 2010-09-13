@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.12 Changing Key Bindings</h3>
 
-<p><a name="index-changing-key-bindings-1519"></a><a name="index-rebinding-1520"></a>
+<p><a name="index-changing-key-bindings-1520"></a><a name="index-rebinding-1521"></a>
   The way to rebind a key is to change its entry in a keymap.  If you
 change a binding in the global keymap, the change is effective in all
 buffers (though it has no direct effect in buffers that shadow the
@@ -59,7 +59,7 @@ function; then you must specify explicitly the map to change.
    <p>When choosing the key sequences for Lisp programs to rebind, please
 follow the Emacs conventions for use of various keys (see <a href="Key-Binding-Conventions.html#Key-Binding-Conventions">Key Binding Conventions</a>).
 
-   <p><a name="index-meta-character-key-constants-1521"></a><a name="index-control-character-key-constants-1522"></a>  In writing the key sequence to rebind, it is good to use the special
+   <p><a name="index-meta-character-key-constants-1522"></a><a name="index-control-character-key-constants-1523"></a>  In writing the key sequence to rebind, it is good to use the special
 escape sequences for control and meta characters (see <a href="String-Type.html#String-Type">String Type</a>). 
 The syntax &lsquo;<samp><span class="samp">\C-</span></samp>&rsquo; means that the following character is a control
 character and &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; means that the following character is a meta
@@ -85,7 +85,7 @@ lists.  The <code>kbd</code> macro (see <a href="Key-Sequences.html#Key-Sequence
 way to specify the key sequence.
 
 <div class="defun">
-&mdash; Function: <b>define-key</b><var> keymap key binding<a name="index-define_002dkey-1523"></a></var><br>
+&mdash; Function: <b>define-key</b><var> keymap key binding<a name="index-define_002dkey-1524"></a></var><br>
 <blockquote><p>This function sets the binding for <var>key</var> in <var>keymap</var>.  (If
 <var>key</var> is more than one event long, the change is actually made
 in another keymap reached from <var>keymap</var>.)  The argument
@@ -97,7 +97,7 @@ The value returned by <code>define-key</code> is <var>binding</var>.
 <var>keymap</var>.  When an event has no binding of its own, the Emacs
 command loop uses the keymap's default binding, if there is one.
 
-        <p><a name="index-invalid-prefix-key-error-1524"></a><a name="index-key-sequence-error-1525"></a>Every prefix of <var>key</var> must be a prefix key (i.e., bound to a keymap)
+        <p><a name="index-invalid-prefix-key-error-1525"></a><a name="index-key-sequence-error-1526"></a>Every prefix of <var>key</var> must be a prefix key (i.e., bound to a keymap)
 or undefined; otherwise an error is signaled.  If some prefix of
 <var>key</var> is undefined, then <code>define-key</code> defines it as a prefix
 key so that the rest of <var>key</var> can be defined as specified.
@@ -153,8 +153,8 @@ binding.  Another feature which is cleaner and can often produce the
 same results to remap one command into another (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).
 
 <div class="defun">
-&mdash; Function: <b>substitute-key-definition</b><var> olddef newdef keymap &amp;optional oldmap<a name="index-substitute_002dkey_002ddefinition-1526"></a></var><br>
-<blockquote><p><a name="index-replace-bindings-1527"></a>This function replaces <var>olddef</var> with <var>newdef</var> for any keys in
+&mdash; Function: <b>substitute-key-definition</b><var> olddef newdef keymap &amp;optional oldmap<a name="index-substitute_002dkey_002ddefinition-1527"></a></var><br>
+<blockquote><p><a name="index-replace-bindings-1528"></a>This function replaces <var>olddef</var> with <var>newdef</var> for any keys in
 <var>keymap</var> that were bound to <var>olddef</var>.  In other words,
 <var>olddef</var> is replaced with <var>newdef</var> wherever it appears.  The
 function returns <code>nil</code>.
@@ -195,8 +195,8 @@ are globally bound to the standard deletion command.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>suppress-keymap</b><var> keymap &amp;optional nodigits<a name="index-suppress_002dkeymap-1528"></a></var><br>
-<blockquote><p><a name="index-g_t_0040code_007bself_002dinsert_002dcommand_007d-override-1529"></a>This function changes the contents of the full keymap <var>keymap</var> by
+&mdash; Function: <b>suppress-keymap</b><var> keymap &amp;optional nodigits<a name="index-suppress_002dkeymap-1529"></a></var><br>
+<blockquote><p><a name="index-g_t_0040code_007bself_002dinsert_002dcommand_007d-override-1530"></a>This function changes the contents of the full keymap <var>keymap</var> by
 remapping <code>self-insert-command</code> to the command <code>undefined</code>
 (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  This has the effect of undefining all
 printing characters, thus making ordinary insertion of text impossible. 
@@ -207,7 +207,7 @@ digits to run <code>digit-argument</code>, and <kbd>-</kbd> to run
 <code>negative-argument</code>.  Otherwise it makes them undefined like the
 rest of the printing characters.
 
-        <p><a name="index-yank-suppression-1530"></a><a name="index-g_t_0040code_007bquoted_002dinsert_007d-suppression-1531"></a>The <code>suppress-keymap</code> function does not make it impossible to
+        <p><a name="index-yank-suppression-1531"></a><a name="index-g_t_0040code_007bquoted_002dinsert_007d-suppression-1532"></a>The <code>suppress-keymap</code> function does not make it impossible to
 modify a buffer, as it does not suppress commands such as <code>yank</code>
 and <code>quoted-insert</code>.  To prevent any modification of a buffer, make
 it read-only (see <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>).

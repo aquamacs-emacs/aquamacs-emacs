@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -47,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <!-- node-name,  next,  previous,  up -->
 <h3 class="section">32.9 Undo</h3>
 
-<p><a name="index-redo-2568"></a>
+<p><a name="index-redo-2569"></a>
   Most buffers have an <dfn>undo list</dfn>, which records all changes made
 to the buffer's text so that they can be undone.  (The buffers that
 don't have one are usually special-purpose buffers for which Emacs
@@ -58,7 +58,7 @@ text in the buffer automatically add elements to the front of the undo
 list, which is in the variable <code>buffer-undo-list</code>.
 
 <div class="defun">
-&mdash; Variable: <b>buffer-undo-list</b><var><a name="index-buffer_002dundo_002dlist-2569"></a></var><br>
+&mdash; Variable: <b>buffer-undo-list</b><var><a name="index-buffer_002dundo_002dlist-2570"></a></var><br>
 <blockquote><p>This buffer-local variable's value is the undo list of the current
 buffer. A value of <code>t</code> disables the recording of undo information. 
 </p></blockquote></div>
@@ -116,18 +116,21 @@ a unit.
 </dl>
 
 <div class="defun">
-&mdash; Function: <b>undo-boundary</b><var><a name="index-undo_002dboundary-2570"></a></var><br>
+&mdash; Function: <b>undo-boundary</b><var><a name="index-undo_002dboundary-2571"></a></var><br>
 <blockquote><p>This function places a boundary element in the undo list.  The undo
 command stops at such a boundary, and successive undo commands undo
 to earlier and earlier boundaries.  This function returns <code>nil</code>.
 
-        <p>The editor command loop automatically creates an undo boundary before
-each key sequence is executed.  Thus, each undo normally undoes the
-effects of one command.  Self-inserting input characters are an
-exception.  The command loop makes a boundary for the first such
-character; the next 19 consecutive self-inserting input characters do
-not make boundaries, and then the 20th does, and so on as long as
-self-inserting characters continue.
+        <p>The editor command loop automatically calls <code>undo-boundary</code> just
+before executing each key sequence, so that each undo normally undoes
+the effects of one command.  As an exception, the command
+<code>self-insert-command</code>, which produces self-inserting input
+characters (see <a href="Commands-for-Insertion.html#Commands-for-Insertion">Commands for Insertion</a>), may remove the boundary
+inserted by the command loop: a boundary is accepted for the first
+such character, the next 19 consecutive self-inserting input
+characters do not have boundaries, and then the 20th does; and so on
+as long as the self-inserting characters continue.  Hence, sequences
+of consecutive character insertions can be undone as a group.
 
         <p>All buffer modifications add a boundary whenever the previous undoable
 change was made in some other buffer.  This is to ensure that
@@ -140,14 +143,14 @@ undo individual replacements one by one.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>undo-in-progress</b><var><a name="index-undo_002din_002dprogress-2571"></a></var><br>
+&mdash; Variable: <b>undo-in-progress</b><var><a name="index-undo_002din_002dprogress-2572"></a></var><br>
 <blockquote><p>This variable is normally <code>nil</code>, but the undo commands bind it to
 <code>t</code>.  This is so that various kinds of change hooks can tell when
 they're being called for the sake of undoing. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>primitive-undo</b><var> count list<a name="index-primitive_002dundo-2572"></a></var><br>
+&mdash; Function: <b>primitive-undo</b><var> count list<a name="index-primitive_002dundo-2573"></a></var><br>
 <blockquote><p>This is the basic function for undoing elements of an undo list. 
 It undoes the first <var>count</var> elements of <var>list</var>, returning
 the rest of <var>list</var>.
