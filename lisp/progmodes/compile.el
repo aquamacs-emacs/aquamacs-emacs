@@ -47,7 +47,7 @@
 ;; using the same *compilation* buffer. this necessitates re-parsing markers.
 
 ;;   FILE-STRUCTURE is a list of
-;;   ((FILENAME . DIRECTORY) FORMATS (LINE LOC ...) ...)
+;;   ((FILENAME DIRECTORY) FORMATS (LINE LOC ...) ...)
 
 ;; FILENAME is a string parsed from an error message.  DIRECTORY is a string
 ;; obtained by following directory change messages.  DIRECTORY will be nil for
@@ -164,7 +164,7 @@ and a string describing how the process finished.")
 
 (defvar compilation-num-errors-found)
 
-(defconst compilation-error-regexp-alist-alist
+(defvar compilation-error-regexp-alist-alist
   '((absoft
      "^\\(?:[Ee]rror on \\|[Ww]arning on\\( \\)\\)?[Ll]ine[ \t]+\\([0-9]+\\)[ \t]+\
 of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
@@ -195,6 +195,10 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
     (comma
      "^\"\\([^,\" \n\t]+\\)\", line \\([0-9]+\\)\
 \\(?:[(. pos]+\\([0-9]+\\))?\\)?[:.,; (-]\\( warning:\\|[-0-9 ]*(W)\\)?" 1 2 3 (4))
+
+    (cucumber
+     "\\(?:^cucumber\\(?: -p [^[:space:]]+\\)?\\|#\\)\
+\\(?: \\)\\([^\(].*\\):\\([1-9][0-9]*\\)" 1 2)
 
     (edg-1
      "^\\([^ \n]+\\)(\\([0-9]+\\)): \\(?:error\\|warnin\\(g\\)\\|remar\\(k\\)\\)"
@@ -233,6 +237,10 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
      nil 1 nil 2 0
      (2 (compilation-face '(3))))
 
+    (gcc-include
+     "^\\(?:In file included \\|                 \\|\t\\)from \
+\\(.+\\):\\([0-9]+\\)\\(?:\\(:\\)\\|\\(,\\|$\\)\\)?" 1 2 nil (3 . 4))
+
     (gnu
      ;; The first line matches the program name for
 
@@ -255,21 +263,17 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
      ;; The core of the regexp is the one with *?.  It says that a file name
      ;; can be composed of any non-newline char, but it also rules out some
      ;; valid but unlikely cases, such as a trailing space or a space
-     ;; followed by a -.
-     "^\\(?:[[:alpha:]][-[:alnum:].]+: ?\\)?\
-\\([0-9]*[^0-9\n]\\(?:[^\n ]\\| [^-/\n]\\)*?\\): ?\
+     ;; followed by a -, or a colon followed by a space.
+
+     ;; The "in \\|from " exception was added to handle messages from Ruby.
+     "^\\(?:[[:alpha:]][-[:alnum:].]+: ?\\|[ \t]+\\(?:in \\|from \\)\\)?\
+\\([0-9]*[^0-9\n]\\(?:[^\n :]\\| [^-/\n]\\|:[^ \n]\\)*?\\): ?\
 \\([0-9]+\\)\\(?:\\([.:]\\)\\([0-9]+\\)\\)?\
 \\(?:-\\([0-9]+\\)?\\(?:\\.\\([0-9]+\\)\\)?\\)?:\
 \\(?: *\\(\\(?:Future\\|Runtime\\)?[Ww]arning\\|W:\\)\\|\
  *\\([Ii]nfo\\(?:\\>\\|rmationa?l?\\)\\|I:\\|instantiated from\\|[Nn]ote\\)\\|\
 \[0-9]?\\(?:[^0-9\n]\\|$\\)\\|[0-9][0-9][0-9]\\)"
      1 (2 . 5) (4 . 6) (7 . 8))
-
-    ;; The `gnu' style above can incorrectly match gcc's "In file
-    ;; included from" message, so we process that first. -- cyd
-    (gcc-include
-     "^\\(?:In file included\\|                \\) from \
-\\(.+\\):\\([0-9]+\\)\\(?:\\(:\\)\\|\\(,\\)\\)?" 1 2 nil (3 . 4))
 
     (lcc
      "^\\(?:E\\|\\(W\\)\\), \\([^(\n]+\\)(\\([0-9]+\\),[ \t]*\\([0-9]+\\)"
@@ -324,6 +328,9 @@ during global destruction\\.$\\)" 1 2)
     (php
      "\\(?:Parse\\|Fatal\\) error: \\(.*\\) in \\(.*\\) on line \\([0-9]+\\)"
      2 3 nil nil)
+
+    (ruby-Test::Unit
+     "[\t ]*\\[\\([^\(].*\\):\\([1-9][0-9]*\\)\\(\\]\\)?:$" 1 2)
 
     (rxp
      "^\\(?:Error\\|Warnin\\(g\\)\\):.*\n.* line \\([0-9]+\\) char\
@@ -761,11 +768,26 @@ The value can be either 2 -- skip anything less than error, 1 --
 skip anything less than warning or 0 -- don't skip any messages.
 Note that all messages not positively identified as warning or
 info, are considered errors."
-  :type '(choice (const :tag "Warnings and info" 2)
-		 (const :tag "Info" 1)
-		 (const :tag "None" 0))
+  :type '(choice (const :tag "Skip warnings and info" 2)
+		 (const :tag "Skip info" 1)
+		 (const :tag "No skip" 0))
   :group 'compilation
   :version "22.1")
+
+(defun compilation-set-skip-threshold (level)
+  "Switch the `compilation-skip-threshold' level."
+  (interactive
+   (list
+    (mod (if current-prefix-arg
+             (prefix-numeric-value current-prefix-arg)
+           (1+ compilation-skip-threshold))
+         3)))
+  (setq compilation-skip-threshold level)
+  (message "Skipping %s"
+           (case compilation-skip-threshold
+             (0 "Nothing")
+             (1 "Info messages")
+             (2 "Warnings and info"))))
 
 (defcustom compilation-skip-visited nil
   "Compilation motion commands skip visited messages if this is t.
@@ -1207,7 +1229,7 @@ Returns the compilation buffer created."
   (let* ((name-of-mode
 	  (if (eq mode t)
 	      "compilation"
-	    (replace-regexp-in-string "-mode$" "" (symbol-name mode))))
+	    (replace-regexp-in-string "-mode\\'" "" (symbol-name mode))))
 	 (thisdir default-directory)
 	 outwin outbuf)
     (with-current-buffer
@@ -2083,7 +2105,7 @@ and overlay is highlighted between MK and END-MK."
                 pre-existing
               (let ((display-buffer-reuse-frames t)
                     (pop-up-windows t))
-	        ;; Pop up a window.
+		;; Pop up a window.
                 (display-buffer (marker-buffer msg)))))
 	 (highlight-regexp (with-current-buffer (marker-buffer msg)
 			     ;; also do this while we change buffer
@@ -2372,7 +2394,7 @@ The file-structure looks like this:
 (defun compilation-forget-errors ()
   ;; In case we hit the same file/line specs, we want to recompute a new
   ;; marker for them, so flush our cache.
-  (setq compilation-locs (make-hash-table :test 'equal :weakness 'value))
+  (clrhash compilation-locs)
   (setq compilation-gcpro nil)
   ;; FIXME: the old code reset the directory-stack, so maybe we should
   ;; put a `directory change' marker of some sort, but where?  -stef

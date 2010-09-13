@@ -96,11 +96,11 @@ Lisp_Object ftfont_font_format (FcPattern *, Lisp_Object);
 static struct
 {
   /* registry name */
-  char *name;
+  const char *name;
   /* characters to distinguish the charset from the others */
   int uniquifier[6];
   /* additional constraint by language */
-  char *lang;
+  const char *lang;
   /* set on demand */
   FcCharSet *fc_charset;
 } fc_charset_table[] =
@@ -143,8 +143,6 @@ static struct
     { "unicode-sip", { 0x20000 }},
     { NULL }
   };
-
-extern Lisp_Object Qc, Qm, Qp, Qd;
 
 /* Dirty hack for handing ADSTYLE property.
 
@@ -457,8 +455,7 @@ ftfont_get_fc_charset (Lisp_Object entity)
 
 #ifdef HAVE_LIBOTF
 static OTF *
-ftfont_get_otf (ftfont_info)
-     struct ftfont_info *ftfont_info;
+ftfont_get_otf (struct ftfont_info *ftfont_info)
 {
   OTF *otf;
 
@@ -548,8 +545,6 @@ struct font_driver ftfont_driver =
 
     ftfont_filter_properties, /* filter_properties */
   };
-
-extern Lisp_Object QCname;
 
 static Lisp_Object
 ftfont_get_cache (FRAME_PTR f)
@@ -696,12 +691,8 @@ ftfont_get_open_type_spec (Lisp_Object otf_spec)
   return spec;
 }
 
-static FcPattern *ftfont_spec_pattern (Lisp_Object, char *,
-                                       struct OpenTypeSpec **,
-                                       char **langname);
-
 static FcPattern *
-ftfont_spec_pattern (Lisp_Object spec, char *otlayout, struct OpenTypeSpec **otspec, char **langname)
+ftfont_spec_pattern (Lisp_Object spec, char *otlayout, struct OpenTypeSpec **otspec, const char **langname)
 {
   Lisp_Object tmp, extra;
   FcPattern *pattern = NULL;
@@ -871,7 +862,7 @@ ftfont_list (Lisp_Object frame, Lisp_Object spec)
   char otlayout[15];		/* For "otlayout:XXXX" */
   struct OpenTypeSpec *otspec = NULL;
   int spacing = -1;
-  char *langname = NULL;
+  const char *langname = NULL;
 
   if (! fc_initialized)
     {
@@ -1062,7 +1053,7 @@ ftfont_match (Lisp_Object frame, Lisp_Object spec)
   FcResult result;
   char otlayout[15];		/* For "otlayout:XXXX" */
   struct OpenTypeSpec *otspec = NULL;
-  char *langname = NULL;
+  const char *langname = NULL;
 
   if (! fc_initialized)
     {
@@ -1365,7 +1356,7 @@ ftfont_text_extents (struct font *font, unsigned int *code, int nglyphs, struct 
   if (ftfont_info->ft_size != ft_face->size)
     FT_Activate_Size (ftfont_info->ft_size);
   if (metrics)
-    bzero (metrics, sizeof (struct font_metrics));
+    memset (metrics, 0, sizeof (struct font_metrics));
   for (i = 0, first = 1; i < nglyphs; i++)
     {
       if (FT_Load_Glyph (ft_face, code[i], FT_LOAD_DEFAULT) == 0)
@@ -1475,8 +1466,7 @@ ftfont_anchor_point (struct font *font, unsigned int code, int index, int *x, in
 #ifdef HAVE_LIBOTF
 
 static Lisp_Object
-ftfont_otf_features (gsub_gpos)
-     OTF_GSUB_GPOS *gsub_gpos;
+ftfont_otf_features (OTF_GSUB_GPOS *gsub_gpos)
 {
   Lisp_Object scripts, langsyses, features, sym;
   int i, j, k, l;
@@ -1520,8 +1510,7 @@ ftfont_otf_features (gsub_gpos)
 
 
 static Lisp_Object
-ftfont_otf_capability (font)
-     struct font *font;
+ftfont_otf_capability (struct font *font)
 {
   struct ftfont_info *ftfont_info = (struct ftfont_info *) font;
   OTF *otf = ftfont_get_otf (ftfont_info);
@@ -1559,10 +1548,8 @@ struct MFLTFontFT
 };
 
 static int
-ftfont_get_glyph_id (font, gstring, from, to)
-     MFLTFont *font;
-     MFLTGlyphString *gstring;
-     int from, to;
+ftfont_get_glyph_id (MFLTFont *font, MFLTGlyphString *gstring,
+		     int from, int to)
 {
   struct MFLTFontFT *flt_font_ft = (struct MFLTFontFT *) font;
   FT_Face ft_face = flt_font_ft->ft_face;
@@ -1586,10 +1573,8 @@ ftfont_get_glyph_id (font, gstring, from, to)
 #define ROUND(x)    (((x)+32) & -64)
 
 static int
-ftfont_get_metrics (font, gstring, from, to)
-     MFLTFont *font;
-     MFLTGlyphString *gstring;
-     int from, to;
+ftfont_get_metrics (MFLTFont *font, MFLTGlyphString *gstring,
+		    int from, int to)
 {
   struct MFLTFontFT *flt_font_ft = (struct MFLTFontFT *) font;
   FT_Face ft_face = flt_font_ft->ft_face;
@@ -2086,13 +2071,9 @@ ftfont_try_otf (MFLTFont *font, MFLTOtfSpec *spec,
 #else  /* not M17N_FLT_USE_NEW_FEATURE */
 
 static int
-ftfont_drive_otf (font, spec, in, from, to, out, adjustment)
-     MFLTFont *font;
-     MFLTOtfSpec *spec;
-     MFLTGlyphString *in;
-     int from, to;
-     MFLTGlyphString *out;
-     MFLTGlyphAdjustment *adjustment;
+ftfont_drive_otf (MFLTFont *font, MFLTOtfSpec *spec, MFLTGlyphString *in,
+		  int from, int to,
+		  MFLTGlyphString *out, MFLTGlyphAdjustment *adjustment)
 {
   struct MFLTFontFT *flt_font_ft = (struct MFLTFontFT *) font;
   FT_Face ft_face = flt_font_ft->ft_face;
@@ -2344,15 +2325,9 @@ static MFLTGlyphString gstring;
 
 static int m17n_flt_initialized;
 
-extern Lisp_Object QCfamily;
-
 static Lisp_Object
-ftfont_shape_by_flt (lgstring, font, ft_face, otf, matrix)
-     Lisp_Object lgstring;
-     struct font *font;
-     FT_Face ft_face;
-     OTF *otf;
-     FT_Matrix *matrix;
+ftfont_shape_by_flt (Lisp_Object lgstring, struct font *font,
+		     FT_Face ft_face, OTF *otf, FT_Matrix *matrix)
 {
   EMACS_UINT len = LGSTRING_GLYPH_LEN (lgstring);
   EMACS_UINT i;
@@ -2518,8 +2493,7 @@ ftfont_shape_by_flt (lgstring, font, ft_face, otf, matrix)
 }
 
 Lisp_Object
-ftfont_shape (lgstring)
-     Lisp_Object lgstring;
+ftfont_shape (Lisp_Object lgstring)
 {
   struct font *font;
   struct ftfont_info *ftfont_info;
@@ -2539,10 +2513,7 @@ ftfont_shape (lgstring)
 #ifdef HAVE_OTF_GET_VARIATION_GLYPHS
 
 static int
-ftfont_variation_glyphs (font, c, variations)
-     struct font *font;
-     int c;
-     unsigned variations[256];
+ftfont_variation_glyphs (struct font *font, int c, unsigned variations[256])
 {
   struct ftfont_info *ftfont_info = (struct ftfont_info *) font;
   OTF *otf = ftfont_get_otf (ftfont_info);
@@ -2655,7 +2626,7 @@ ftfont_filter_properties (Lisp_Object font, Lisp_Object alist)
 
         if (strcmp (ftfont_booleans[i], keystr) == 0)
           {
-            char *str = SYMBOLP (val) ? SDATA (SYMBOL_NAME (val)) : NULL;
+            const char *str = SYMBOLP (val) ? SDATA (SYMBOL_NAME (val)) : NULL;
             if (INTEGERP (val)) str = XINT (val) != 0 ? "true" : "false";
             if (str == NULL) str = "true";
 

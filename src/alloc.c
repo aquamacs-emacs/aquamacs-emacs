@@ -23,10 +23,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <limits.h>		/* For CHAR_BIT.  */
 #include <setjmp.h>
 
-#ifdef STDC_HEADERS
-#include <stddef.h>		/* For offsetof, used by PSEUDOVECSIZE. */
-#endif
-
 #ifdef ALLOC_DEBUG
 #undef INLINE
 #endif
@@ -218,16 +214,6 @@ int abort_on_gc;
 
 int garbage_collection_messages;
 
-#ifndef VIRT_ADDR_VARIES
-extern
-#endif /* VIRT_ADDR_VARIES */
-int malloc_sbrk_used;
-
-#ifndef VIRT_ADDR_VARIES
-extern
-#endif /* VIRT_ADDR_VARIES */
-int malloc_sbrk_unused;
-
 /* Number of live and free conses etc.  */
 
 static int total_conses, total_markers, total_symbols, total_vector_size;
@@ -298,7 +284,7 @@ static EMACS_INT pure_bytes_used_non_lisp;
 /* If nonzero, this is a warning delivered by malloc and not yet
    displayed.  */
 
-char *pending_malloc_warning;
+const char *pending_malloc_warning;
 
 /* Pre-computed signal argument for use when memory is exhausted.  */
 
@@ -452,7 +438,6 @@ static void *min_heap_address, *max_heap_address;
 static struct mem_node mem_z;
 #define MEM_NIL &mem_z
 
-static POINTER_TYPE *lisp_malloc (size_t, enum mem_type);
 static struct Lisp_Vector *allocate_vectorlike (EMACS_INT);
 static void lisp_free (POINTER_TYPE *);
 static void mark_stack (void);
@@ -514,7 +499,7 @@ static POINTER_TYPE *pure_alloc (size_t, int);
 /* Function malloc calls this if it finds we are near exhausting storage.  */
 
 void
-malloc_warning (char *str)
+malloc_warning (const char *str)
 {
   pending_malloc_warning = str;
 }
@@ -636,10 +621,12 @@ overrun_check_malloc (size)
   val = (unsigned char *) malloc (size + overhead);
   if (val && check_depth == 1)
     {
-      bcopy (xmalloc_overrun_check_header, val, XMALLOC_OVERRUN_CHECK_SIZE - 4);
+      memcpy (val, xmalloc_overrun_check_header,
+	      XMALLOC_OVERRUN_CHECK_SIZE - 4);
       val += XMALLOC_OVERRUN_CHECK_SIZE;
       XMALLOC_PUT_SIZE(val, size);
-      bcopy (xmalloc_overrun_check_trailer, val + size, XMALLOC_OVERRUN_CHECK_SIZE);
+      memcpy (val + size, xmalloc_overrun_check_trailer,
+	      XMALLOC_OVERRUN_CHECK_SIZE);
     }
   --check_depth;
   return (POINTER_TYPE *)val;
@@ -659,28 +646,29 @@ overrun_check_realloc (block, size)
 
   if (val
       && check_depth == 1
-      && bcmp (xmalloc_overrun_check_header,
-	       val - XMALLOC_OVERRUN_CHECK_SIZE,
-	       XMALLOC_OVERRUN_CHECK_SIZE - 4) == 0)
+      && memcmp (xmalloc_overrun_check_header,
+		 val - XMALLOC_OVERRUN_CHECK_SIZE,
+		 XMALLOC_OVERRUN_CHECK_SIZE - 4) == 0)
     {
       size_t osize = XMALLOC_GET_SIZE (val);
-      if (bcmp (xmalloc_overrun_check_trailer,
-		val + osize,
-		XMALLOC_OVERRUN_CHECK_SIZE))
+      if (memcmp (xmalloc_overrun_check_trailer, val + osize,
+		  XMALLOC_OVERRUN_CHECK_SIZE))
 	abort ();
-      bzero (val + osize, XMALLOC_OVERRUN_CHECK_SIZE);
+      memset (val + osize, 0, XMALLOC_OVERRUN_CHECK_SIZE);
       val -= XMALLOC_OVERRUN_CHECK_SIZE;
-      bzero (val, XMALLOC_OVERRUN_CHECK_SIZE);
+      memset (val, 0, XMALLOC_OVERRUN_CHECK_SIZE);
     }
 
   val = (unsigned char *) realloc ((POINTER_TYPE *)val, size + overhead);
 
   if (val && check_depth == 1)
     {
-      bcopy (xmalloc_overrun_check_header, val, XMALLOC_OVERRUN_CHECK_SIZE - 4);
+      memcpy (val, xmalloc_overrun_check_header,
+	      XMALLOC_OVERRUN_CHECK_SIZE - 4);
       val += XMALLOC_OVERRUN_CHECK_SIZE;
       XMALLOC_PUT_SIZE(val, size);
-      bcopy (xmalloc_overrun_check_trailer, val + size, XMALLOC_OVERRUN_CHECK_SIZE);
+      memcpy (val + size, xmalloc_overrun_check_trailer,
+	      XMALLOC_OVERRUN_CHECK_SIZE);
     }
   --check_depth;
   return (POINTER_TYPE *)val;
@@ -697,22 +685,21 @@ overrun_check_free (block)
   ++check_depth;
   if (val
       && check_depth == 1
-      && bcmp (xmalloc_overrun_check_header,
-	       val - XMALLOC_OVERRUN_CHECK_SIZE,
-	       XMALLOC_OVERRUN_CHECK_SIZE - 4) == 0)
+      && memcmp (xmalloc_overrun_check_header,
+		 val - XMALLOC_OVERRUN_CHECK_SIZE,
+		 XMALLOC_OVERRUN_CHECK_SIZE - 4) == 0)
     {
       size_t osize = XMALLOC_GET_SIZE (val);
-      if (bcmp (xmalloc_overrun_check_trailer,
-		val + osize,
-		XMALLOC_OVERRUN_CHECK_SIZE))
+      if (memcmp (xmalloc_overrun_check_trailer, val + osize,
+		  XMALLOC_OVERRUN_CHECK_SIZE))
 	abort ();
 #ifdef XMALLOC_CLEAR_FREE_MEMORY
       val -= XMALLOC_OVERRUN_CHECK_SIZE;
       memset (val, 0xff, osize + XMALLOC_OVERRUN_CHECK_SIZE*2);
 #else
-      bzero (val + osize, XMALLOC_OVERRUN_CHECK_SIZE);
+      memset (val + osize, 0, XMALLOC_OVERRUN_CHECK_SIZE);
       val -= XMALLOC_OVERRUN_CHECK_SIZE;
-      bzero (val, XMALLOC_OVERRUN_CHECK_SIZE);
+      memset (val, 0, XMALLOC_OVERRUN_CHECK_SIZE);
 #endif
     }
 
@@ -799,7 +786,7 @@ xstrdup (const char *s)
 {
   size_t len = strlen (s) + 1;
   char *p = (char *) xmalloc (len);
-  bcopy (s, p, len);
+  memcpy (p, s, len);
   return p;
 }
 
@@ -1163,9 +1150,7 @@ static void (*old_free_hook) (void*, const void*);
 /* This function is used as the hook for free to call.  */
 
 static void
-emacs_blocked_free (ptr, ptr2)
-     void *ptr;
-     const void *ptr2;
+emacs_blocked_free (void *ptr, const void *ptr2)
 {
   BLOCK_INPUT_ALLOC;
 
@@ -1213,9 +1198,7 @@ emacs_blocked_free (ptr, ptr2)
 /* This function is the malloc hook that Emacs uses.  */
 
 static void *
-emacs_blocked_malloc (size, ptr)
-     size_t size;
-     const void *ptr;
+emacs_blocked_malloc (size_t size, const void *ptr)
 {
   void *value;
 
@@ -1262,10 +1245,7 @@ emacs_blocked_malloc (size, ptr)
 /* This function is the realloc hook that Emacs uses.  */
 
 static void *
-emacs_blocked_realloc (ptr, size, ptr2)
-     void *ptr;
-     size_t size;
-     const void *ptr2;
+emacs_blocked_realloc (void *ptr, size_t size, const void *ptr2)
 {
   void *value;
 
@@ -1339,7 +1319,7 @@ reset_malloc_hooks ()
 /* Called from main to set up malloc to use our hooks.  */
 
 void
-uninterrupt_malloc ()
+uninterrupt_malloc (void)
 {
 #ifdef HAVE_GTK_AND_PTHREAD
 #ifdef DOUG_LEA_MALLOC
@@ -1873,7 +1853,7 @@ allocate_string (void)
       int i;
 
       b = (struct string_block *) lisp_malloc (sizeof *b, MEM_TYPE_STRING);
-      bzero (b, sizeof *b);
+      memset (b, 0, sizeof *b);
       b->next = string_blocks;
       string_blocks = b;
       ++n_string_blocks;
@@ -1897,7 +1877,7 @@ allocate_string (void)
   MALLOC_UNBLOCK_INPUT;
 
   /* Probably not strictly necessary, but play it safe.  */
-  bzero (s, sizeof *s);
+  memset (s, 0, sizeof *s);
 
   --total_free_strings;
   ++total_strings;
@@ -2005,8 +1985,7 @@ allocate_string_data (struct Lisp_String *s, int nchars, int nbytes)
   s->size_byte = nbytes;
   s->data[nbytes] = '\0';
 #ifdef GC_CHECK_STRING_OVERRUN
-  bcopy (string_overrun_cookie, (char *) data + needed,
-	 GC_STRING_OVERRUN_COOKIE_SIZE);
+  memcpy (data + needed, string_overrun_cookie, GC_STRING_OVERRUN_COOKIE_SIZE);
 #endif
 
   /* If S had already data assigned, mark that as free by setting its
@@ -2197,9 +2176,9 @@ compact_small_strings (void)
 	  from_end = (struct sdata *) ((char *) from + nbytes + GC_STRING_EXTRA);
 
 #ifdef GC_CHECK_STRING_OVERRUN
-	  if (bcmp (string_overrun_cookie,
-		    ((char *) from_end) - GC_STRING_OVERRUN_COOKIE_SIZE,
-		    GC_STRING_OVERRUN_COOKIE_SIZE))
+	  if (memcmp (string_overrun_cookie,
+		      (char *) from_end - GC_STRING_OVERRUN_COOKIE_SIZE,
+		      GC_STRING_OVERRUN_COOKIE_SIZE))
 	    abort ();
 #endif
 
@@ -2221,7 +2200,7 @@ compact_small_strings (void)
 	      if (from != to)
 		{
 		  xassert (tb != b || to <= from);
-		  safe_bcopy ((char *) from, (char *) to, nbytes + GC_STRING_EXTRA);
+		  memmove (to, from, nbytes + GC_STRING_EXTRA);
 		  to->string->data = SDATA_DATA (to);
 		}
 
@@ -2249,8 +2228,7 @@ DEFUN ("make-string", Fmake_string, Smake_string, 2, 2, 0,
        doc: /* Return a newly created string of length LENGTH, with INIT in each element.
 LENGTH must be an integer.
 INIT must be an integer that represents a character.  */)
-     (length, init)
-     Lisp_Object length, init;
+  (Lisp_Object length, Lisp_Object init)
 {
   register Lisp_Object val;
   register unsigned char *p, *end;
@@ -2280,7 +2258,7 @@ INIT must be an integer that represents a character.  */)
       end = p + nbytes;
       while (p != end)
 	{
-	  bcopy (str, p, len);
+	  memcpy (p, str, len);
 	  p += len;
 	}
     }
@@ -2293,8 +2271,7 @@ INIT must be an integer that represents a character.  */)
 DEFUN ("make-bool-vector", Fmake_bool_vector, Smake_bool_vector, 2, 2, 0,
        doc: /* Return a new bool-vector of length LENGTH, using INIT for each element.
 LENGTH must be a number.  INIT matters only in whether it is t or nil.  */)
-     (length, init)
-     Lisp_Object length, init;
+  (Lisp_Object length, Lisp_Object init)
 {
   register Lisp_Object val;
   struct Lisp_Bool_Vector *p;
@@ -2362,7 +2339,7 @@ make_unibyte_string (const char *contents, int length)
 {
   register Lisp_Object val;
   val = make_uninit_string (length);
-  bcopy (contents, SDATA (val), length);
+  memcpy (SDATA (val), contents, length);
   STRING_SET_UNIBYTE (val);
   return val;
 }
@@ -2376,7 +2353,7 @@ make_multibyte_string (const char *contents, int nchars, int nbytes)
 {
   register Lisp_Object val;
   val = make_uninit_multibyte_string (nchars, nbytes);
-  bcopy (contents, SDATA (val), nbytes);
+  memcpy (SDATA (val), contents, nbytes);
   return val;
 }
 
@@ -2389,7 +2366,7 @@ make_string_from_bytes (const char *contents, int nchars, int nbytes)
 {
   register Lisp_Object val;
   val = make_uninit_multibyte_string (nchars, nbytes);
-  bcopy (contents, SDATA (val), nbytes);
+  memcpy (SDATA (val), contents, nbytes);
   if (SBYTES (val) == SCHARS (val))
     STRING_SET_UNIBYTE (val);
   return val;
@@ -2414,7 +2391,7 @@ make_specified_string (const char *contents, int nchars, int nbytes, int multiby
 	nchars = nbytes;
     }
   val = make_uninit_multibyte_string (nchars, nbytes);
-  bcopy (contents, SDATA (val), nbytes);
+  memcpy (SDATA (val), contents, nbytes);
   if (!multibyte)
     STRING_SET_UNIBYTE (val);
   return val;
@@ -2550,16 +2527,6 @@ init_float (void)
 }
 
 
-/* Explicitly free a float cell by putting it on the free-list.  */
-
-static void
-free_float (struct Lisp_Float *ptr)
-{
-  ptr->u.chain = float_free_list;
-  float_free_list = ptr;
-}
-
-
 /* Return a new float object with value FLOAT_VALUE.  */
 
 Lisp_Object
@@ -2587,7 +2554,7 @@ make_float (double float_value)
 	  new = (struct float_block *) lisp_align_malloc (sizeof *new,
 							  MEM_TYPE_FLOAT);
 	  new->next = float_block;
-	  bzero ((char *) new->gcmarkbits, sizeof new->gcmarkbits);
+	  memset (new->gcmarkbits, 0, sizeof new->gcmarkbits);
 	  float_block = new;
 	  float_block_index = 0;
 	  n_float_blocks++;
@@ -2686,8 +2653,7 @@ free_cons (struct Lisp_Cons *ptr)
 
 DEFUN ("cons", Fcons, Scons, 2, 2, 0,
        doc: /* Create a new cons, give it CAR and CDR as components, and return it.  */)
-     (car, cdr)
-     Lisp_Object car, cdr;
+  (Lisp_Object car, Lisp_Object cdr)
 {
   register Lisp_Object val;
 
@@ -2709,7 +2675,7 @@ DEFUN ("cons", Fcons, Scons, 2, 2, 0,
 	  register struct cons_block *new;
 	  new = (struct cons_block *) lisp_align_malloc (sizeof *new,
 							 MEM_TYPE_CONS);
-	  bzero ((char *) new->gcmarkbits, sizeof new->gcmarkbits);
+	  memset (new->gcmarkbits, 0, sizeof new->gcmarkbits);
 	  new->next = cons_block;
 	  cons_block = new;
 	  cons_block_index = 0;
@@ -2782,9 +2748,7 @@ DEFUN ("list", Flist, Slist, 0, MANY, 0,
        doc: /* Return a newly created list with specified arguments as elements.
 Any number of arguments, even zero arguments, are allowed.
 usage: (list &rest OBJECTS)  */)
-     (nargs, args)
-     int nargs;
-     register Lisp_Object *args;
+  (int nargs, register Lisp_Object *args)
 {
   register Lisp_Object val;
   val = Qnil;
@@ -2800,8 +2764,7 @@ usage: (list &rest OBJECTS)  */)
 
 DEFUN ("make-list", Fmake_list, Smake_list, 2, 2, 0,
        doc: /* Return a newly created list of length LENGTH, with each element being INIT.  */)
-     (length, init)
-     register Lisp_Object length, init;
+  (register Lisp_Object length, Lisp_Object init)
 {
   register Lisp_Object val;
   register int size;
@@ -2950,8 +2913,8 @@ allocate_terminal (void)
   struct terminal *t = ALLOCATE_PSEUDOVECTOR (struct terminal,
 					      next_terminal, PVEC_TERMINAL);
   /* Zero out the non-GC'd fields.  FIXME: This should be made unnecessary.  */
-  bzero (&(t->next_terminal),
-	 ((char*)(t+1)) - ((char*)&(t->next_terminal)));
+  memset (&t->next_terminal, 0,
+	  (char*) (t + 1) - (char*) &t->next_terminal);
 
   return t;
 }
@@ -2962,8 +2925,8 @@ allocate_frame (void)
   struct frame *f = ALLOCATE_PSEUDOVECTOR (struct frame,
 					   face_cache, PVEC_FRAME);
   /* Zero out the non-GC'd fields.  FIXME: This should be made unnecessary.  */
-  bzero (&(f->face_cache),
-	 ((char*)(f+1)) - ((char*)&(f->face_cache)));
+  memset (&f->face_cache, 0,
+	  (char *) (f + 1) - (char *) &f->face_cache);
   return f;
 }
 
@@ -2978,8 +2941,7 @@ allocate_process (void)
 DEFUN ("make-vector", Fmake_vector, Smake_vector, 2, 2, 0,
        doc: /* Return a newly created vector of length LENGTH, with each element being INIT.
 See also the function `vector'.  */)
-     (length, init)
-     register Lisp_Object length, init;
+  (register Lisp_Object length, Lisp_Object init)
 {
   Lisp_Object vector;
   register EMACS_INT sizei;
@@ -3002,9 +2964,7 @@ DEFUN ("vector", Fvector, Svector, 0, MANY, 0,
        doc: /* Return a newly created vector with specified arguments as elements.
 Any number of arguments, even zero arguments, are allowed.
 usage: (vector &rest OBJECTS)  */)
-     (nargs, args)
-     register int nargs;
-     Lisp_Object *args;
+  (register int nargs, Lisp_Object *args)
 {
   register Lisp_Object len, val;
   register int index;
@@ -3026,9 +2986,7 @@ stack size, (optional) doc string, and (optional) interactive spec.
 The first four arguments are required; at most six have any
 significance.
 usage: (make-byte-code ARGLIST BYTE-CODE CONSTANTS DEPTH &optional DOCSTRING INTERACTIVE-SPEC &rest ELEMENTS)  */)
-     (nargs, args)
-     register int nargs;
-     Lisp_Object *args;
+  (register int nargs, Lisp_Object *args)
 {
   register Lisp_Object len, val;
   register int index;
@@ -3040,7 +2998,7 @@ usage: (make-byte-code ARGLIST BYTE-CODE CONSTANTS DEPTH &optional DOCSTRING INT
   else
     val = Fmake_vector (len, Qnil);
 
-  if (STRINGP (args[1]) && STRING_MULTIBYTE (args[1]))
+  if (nargs > 1 && STRINGP (args[1]) && STRING_MULTIBYTE (args[1]))
     /* BYTECODE-STRING must have been produced by Emacs 20.2 or the
        earlier because they produced a raw 8-bit string for byte-code
        and now such a byte-code string is loaded as multibyte while
@@ -3110,8 +3068,7 @@ init_symbol (void)
 DEFUN ("make-symbol", Fmake_symbol, Smake_symbol, 1, 1, 0,
        doc: /* Return a newly allocated uninterned symbol whose name is NAME.
 Its value and function definition are void, and its property list is nil.  */)
-     (name)
-     Lisp_Object name;
+  (Lisp_Object name)
 {
   register Lisp_Object val;
   register struct Lisp_Symbol *p;
@@ -3272,7 +3229,7 @@ make_save_value (void *pointer, int integer)
 
 DEFUN ("make-marker", Fmake_marker, Smake_marker, 0, 0, 0,
        doc: /* Return a newly allocated marker which does not point at any place.  */)
-     ()
+  (void)
 {
   register Lisp_Object val;
   register struct Lisp_Marker *p;
@@ -4001,7 +3958,7 @@ static double avg_live;
 
 DEFUN ("gc-status", Fgc_status, Sgc_status, 0, 0, "",
        doc: /* Show information about live and zombie objects.  */)
-     ()
+  (void)
 {
   Lisp_Object args[8], zombie_list = Qnil;
   int i;
@@ -4713,7 +4670,7 @@ make_pure_string (const char *data, int nchars, int nbytes, int multibyte)
   if (s->data == NULL)
     {
       s->data = (unsigned char *) pure_alloc (nbytes + 1, -1);
-      bcopy (data, s->data, nbytes);
+      memcpy (s->data, data, nbytes);
       s->data[nbytes] = '\0';
     }
   s->size = nchars;
@@ -4795,8 +4752,7 @@ DEFUN ("purecopy", Fpurecopy, Spurecopy, 1, 1, 0,
        doc: /* Make a copy of object OBJ in pure storage.
 Recursively copies contents of vectors and cons cells.
 Does not copy symbols.  Copies strings without text properties.  */)
-     (obj)
-     register Lisp_Object obj;
+  (register Lisp_Object obj)
 {
   if (NILP (Vpurify_flag))
     return obj;
@@ -4897,7 +4853,7 @@ Garbage collection happens automatically if you cons more than
   (USED-STRINGS . FREE-STRINGS))
 However, if there was overflow in pure space, `garbage-collect'
 returns nil, because real GC can't be done.  */)
-     ()
+  (void)
 {
   register struct specbinding *bind;
   struct catchtag *catch;
@@ -4980,9 +4936,9 @@ returns nil, because real GC can't be done.  */)
 	  if (stack_copy)
 	    {
 	      if ((EMACS_INT) (&stack_top_variable - stack_bottom) > 0)
-		bcopy (stack_bottom, stack_copy, i);
+		memcpy (stack_copy, stack_bottom, i);
 	      else
-		bcopy (&stack_top_variable, stack_copy, i);
+		memcpy (stack_copy, &stack_top_variable, i);
 	    }
 	}
     }
@@ -6114,7 +6070,7 @@ DEFUN ("memory-limit", Fmemory_limit, Smemory_limit, 0, 0, 0,
        doc: /* Return the address of the last byte Emacs has allocated, divided by 1024.
 This may be helpful in debugging Emacs's memory usage.
 We divide the value by 1024 to make sure it fits in a Lisp integer.  */)
-     ()
+  (void)
 {
   Lisp_Object end;
 
@@ -6136,7 +6092,7 @@ objects consed.
 MISCS include overlays, markers, and some internal types.
 Frames, windows, buffers, and subprocesses count as vectors
   (but the contents of a buffer's text do not count here).  */)
-     ()
+  (void)
 {
   Lisp_Object consed[8];
 
@@ -6212,11 +6168,6 @@ init_alloc_once (void)
   consing_since_gc = 0;
   gc_cons_threshold = 100000 * sizeof (Lisp_Object);
   gc_relative_threshold = 0;
-
-#ifdef VIRT_ADDR_VARIES
-  malloc_sbrk_unused = 1<<22;	/* A large number */
-  malloc_sbrk_used = 100000;	/* as reasonable as any number */
-#endif /* VIRT_ADDR_VARIES */
 }
 
 void

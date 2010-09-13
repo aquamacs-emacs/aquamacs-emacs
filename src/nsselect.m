@@ -33,10 +33,11 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "lisp.h"
 #include "nsterm.h"
 #include "termhooks.h"
+#include "keyboard.h"
 
 #define CUT_BUFFER_SUPPORT
 
-Lisp_Object QPRIMARY, QSECONDARY, QTEXT, QFILE_NAME;
+Lisp_Object QCLIPBOARD, QSECONDARY, QTEXT, QFILE_NAME;
 
 static Lisp_Object Vns_sent_selection_hooks;
 static Lisp_Object Vns_lost_selection_hooks;
@@ -45,6 +46,8 @@ static Lisp_Object Vselection_converter_alist;
 
 static Lisp_Object Qforeign_selection;
 
+/* NSGeneralPboard is pretty much analogous to X11 CLIPBOARD */
+NSString *NXPrimaryPboard;
 NSString *NXSecondaryPboard;
 
 
@@ -60,7 +63,8 @@ static NSString *
 symbol_to_nsstring (Lisp_Object sym)
 {
   CHECK_SYMBOL (sym);
-  if (EQ (sym, QPRIMARY))     return NSGeneralPboard;
+  if (EQ (sym, QCLIPBOARD))     return NSGeneralPboard;
+  if (EQ (sym, QPRIMARY))     return NXPrimaryPboard;
   if (EQ (sym, QSECONDARY))   return NXSecondaryPboard;
   if (EQ (sym, QTEXT))        return NSStringPboardType;
   if (EQ (sym, intern ("html")))    return NSHTMLPboardType;
@@ -75,6 +79,8 @@ static Lisp_Object
 ns_string_to_symbol (NSString *t)
 {
   if ([t isEqualToString: NSGeneralPboard])
+    return QCLIPBOARD;
+  if ([t isEqualToString: NXPrimaryPboard])
     return QPRIMARY;
   if ([t isEqualToString: NXSecondaryPboard])
     return QSECONDARY;
@@ -393,8 +399,7 @@ DEFUN ("x-own-selection-internal", Fx_own_selection_internal,
 SELECTION-NAME is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 VALUE is typically a string, or a cons of two markers, but may be
 anything that the functions on `selection-converter-alist' know about.  */)
-     (selection_name, selection_value)
-     Lisp_Object selection_name, selection_value;
+     (Lisp_Object selection_name, Lisp_Object selection_value)
 {
   id pb;
   Lisp_Object old_value, new_value;
@@ -428,8 +433,7 @@ anything that the functions on `selection-converter-alist' know about.  */)
 DEFUN ("x-disown-selection-internal", Fx_disown_selection_internal,
        Sx_disown_selection_internal, 1, 2, 0,
        doc: /* If we own the selection SELECTION, disown it.  */)
-     (selection_name, time)
-     Lisp_Object selection_name, time;
+     (Lisp_Object selection_name, Lisp_Object time)
 {
   id pb;
   check_ns ();
@@ -449,8 +453,7 @@ the symbols `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names.)
 For convenience, the symbol nil is the same as `PRIMARY',
 and t is the same as `SECONDARY'.)  */)
-     (selection)
-     Lisp_Object selection;
+     (Lisp_Object selection)
 {
   id pb;
   NSArray *types;
@@ -473,8 +476,7 @@ the symbols `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names.)
 For convenience, the symbol nil is the same as `PRIMARY',
 and t is the same as `SECONDARY'.)  */)
-     (selection)
-     Lisp_Object selection;
+     (Lisp_Object selection)
 {
   check_ns ();
   CHECK_SYMBOL (selection);
@@ -490,8 +492,7 @@ DEFUN ("x-get-selection-internal", Fx_get_selection_internal,
 SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names.)
 TYPE is the type of data desired, typically `STRING'.  */)
-     (selection_name, target_type)
-     Lisp_Object selection_name, target_type;
+     (Lisp_Object selection_name, Lisp_Object target_type)
 {
   Lisp_Object val;
 
@@ -516,8 +517,7 @@ TYPE is the type of data desired, typically `STRING'.  */)
 DEFUN ("ns-get-cut-buffer-internal", Fns_get_cut_buffer_internal,
        Sns_get_cut_buffer_internal, 1, 1, 0,
        doc: /* Returns the value of the named cut buffer.  */)
-     (buffer)
-     Lisp_Object buffer;
+     (Lisp_Object buffer)
 {
   id pb;
   check_ns ();
@@ -531,8 +531,7 @@ DEFUN ("ns-rotate-cut-buffers-internal", Fns_rotate_cut_buffers_internal,
        doc: /* Rotate the values of the cut buffers by N steps.
 Positive N means move values forward, negative means
 backward. CURRENTLY NOT IMPLEMENTED UNDER NEXTSTEP. */ )
-     (n)
-     Lisp_Object n;
+     (Lisp_Object n)
 {
   /* XXX This function is unimplemented under NeXTstep XXX */
   Fsignal (Qquit, Fcons (build_string (
@@ -551,7 +550,7 @@ DEFUN ("ns-store-cut-buffer-internal", Fns_store_cut_buffer_internal,
   check_ns ();
   pb =[NSPasteboard pasteboardWithName: symbol_to_nsstring (buffer)];
   if (NILP (type))
-    ns_string_to_pasteboard (pb, string);
+  ns_string_to_pasteboard (pb, string);
   else
     {
       ns_string_to_pasteboard_with_type (pb, string, type);
@@ -564,13 +563,14 @@ DEFUN ("ns-store-cut-buffer-internal", Fns_store_cut_buffer_internal,
 void
 nxatoms_of_nsselect (void)
 {
-  NXSecondaryPboard = @"Selection";
+  NXPrimaryPboard = @"Selection";
+  NXSecondaryPboard = @"Secondary";
 }
 
 void
 syms_of_nsselect (void)
 {
-  QPRIMARY   = intern ("PRIMARY");	staticpro (&QPRIMARY);
+  QCLIPBOARD = intern ("CLIPBOARD");	staticpro (&QCLIPBOARD);
   QSECONDARY = intern ("SECONDARY");	staticpro (&QSECONDARY);
   QTEXT      = intern ("TEXT"); 	staticpro (&QTEXT);
   QFILE_NAME = intern ("FILE_NAME"); 	staticpro (&QFILE_NAME);

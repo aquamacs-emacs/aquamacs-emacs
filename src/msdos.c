@@ -35,7 +35,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/time.h>
 #include <dos.h>
 #include <errno.h>
-#include <string.h>	 /* for bzero and string functions */
+#include <string.h>	 /* for memset and string functions */
 #include <sys/stat.h>    /* for _fixpath */
 #include <unistd.h>	 /* for chdir, dup, dup2, etc. */
 #include <dir.h>	 /* for getdisk */
@@ -68,8 +68,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <pc.h>
 #include <ctype.h>
 /* #include <process.h> */
-/* Damn that local process.h!  Instead we can define P_WAIT ourselves.  */
+/* Damn that local process.h!  Instead we can define P_WAIT and
+   spawnve ourselves.  */
 #define P_WAIT 1
+extern int spawnve (int, const char *, char *const [], char *const []);
 
 #ifndef _USE_LFN
 #define _USE_LFN 0
@@ -102,7 +104,7 @@ int _crt0_startup_flags = (_CRT0_FLAG_UNIX_SBRK | _CRT0_FLAG_FILL_SBRK_MEMORY);
 #endif /* not SYSTEM_MALLOC */
 
 static unsigned long
-event_timestamp ()
+event_timestamp (void)
 {
   struct time t;
   unsigned long s;
@@ -138,7 +140,7 @@ static int mouse_button_translate[NUM_MOUSE_BUTTONS];
 static int mouse_button_count;
 
 void
-mouse_on ()
+mouse_on (void)
 {
   union REGS regs;
 
@@ -155,7 +157,7 @@ mouse_on ()
 }
 
 void
-mouse_off ()
+mouse_off (void)
 {
   union REGS regs;
 
@@ -195,8 +197,7 @@ DEFUN ("msdos-set-mouse-buttons", Fmsdos_set_mouse_buttons, Smsdos_set_mouse_but
 This is useful with mice that report the number of buttons inconsistently,
 e.g., if the number of buttons is reported as 3, but Emacs only sees 2 of
 them.  This happens with wheeled mice on Windows 9X, for example.  */)
-     (nbuttons)
-     Lisp_Object nbuttons;
+  (Lisp_Object nbuttons)
 {
   int n;
 
@@ -222,8 +223,7 @@ mouse_get_xy (int *x, int *y)
 }
 
 void
-mouse_moveto (x, y)
-     int x, y;
+mouse_moveto (int x, int y)
 {
   union REGS regs;
   struct tty_display_info *tty = CURTTY ();
@@ -237,8 +237,7 @@ mouse_moveto (x, y)
 }
 
 static int
-mouse_pressed (b, xp, yp)
-     int b, *xp, *yp;
+mouse_pressed (int b, int *xp, int *yp)
 {
   union REGS regs;
 
@@ -253,8 +252,7 @@ mouse_pressed (b, xp, yp)
 }
 
 static int
-mouse_released (b, xp, yp)
-     int b, *xp, *yp;
+mouse_released (int b, int *xp, int *yp)
 {
   union REGS regs;
 
@@ -269,8 +267,7 @@ mouse_released (b, xp, yp)
 }
 
 static int
-mouse_button_depressed (b, xp, yp)
-     int b, *xp, *yp;
+mouse_button_depressed (int b, int *xp, int *yp)
 {
   union REGS regs;
 
@@ -288,12 +285,9 @@ mouse_button_depressed (b, xp, yp)
 }
 
 void
-mouse_get_pos (f, insist, bar_window, part, x, y, time)
-     FRAME_PTR *f;
-     int insist;
-     Lisp_Object *bar_window, *x, *y;
-     enum scroll_bar_part *part;
-     unsigned long *time;
+mouse_get_pos (FRAME_PTR *f, int insist, Lisp_Object *bar_window,
+	       enum scroll_bar_part *part, Lisp_Object *x, Lisp_Object *y,
+	       unsigned long *time)
 {
   int ix, iy;
   Lisp_Object frame, tail;
@@ -311,7 +305,7 @@ mouse_get_pos (f, insist, bar_window, part, x, y, time)
 }
 
 static void
-mouse_check_moved ()
+mouse_check_moved (void)
 {
   int x, y;
 
@@ -338,7 +332,7 @@ mouse_clear_clicks (void)
 }
 
 void
-mouse_init ()
+mouse_init (void)
 {
   union REGS regs;
   struct tty_display_info *tty = CURTTY ();
@@ -440,10 +434,7 @@ dosv_refresh_virtual_screen (int offset, int count)
 }
 
 static void
-dos_direct_output (y, x, buf, len)
-     int x, y;
-     char *buf;
-     int len;
+dos_direct_output (int y, int x, char *buf, int len)
 {
   int t0 = 2 * (x + y * screen_size_X);
   int t = t0 + (int) ScreenPrimary;
@@ -510,8 +501,7 @@ vga_installed (void)
    ROWS x COLS frame.  */
 
 void
-dos_set_window_size (rows, cols)
-     int *rows, *cols;
+dos_set_window_size (int *rows, int *cols)
 {
   char video_name[30];
   union REGS regs;
@@ -620,7 +610,7 @@ dos_set_window_size (rows, cols)
    the mouse cursor may need to be refreshed.  */
 
 static void
-mouse_off_maybe ()
+mouse_off_maybe (void)
 {
   int x, y;
 
@@ -839,7 +829,7 @@ IT_set_face (int face)
       bg = tem2;
     }
   if (tty->termscript)
-    fprintf (tty->termscript, "<FACE %d: %d/%d[FG:%d/BG:%d]>", face,
+    fprintf (tty->termscript, "<FACE %d: %lu/%lu[FG:%lu/BG:%lu]>", face,
 	     fp->foreground, fp->background, fg, bg);
   if (fg >= 0 && fg < 16)
     {
@@ -870,12 +860,6 @@ IT_write_glyphs (struct frame *f, struct glyph *str, int str_len)
   struct tty_display_info *tty = FRAME_TTY (f);
   struct frame *sf;
   unsigned char *conversion_buffer;
-
-  /* Do we need to consider conversion of unibyte characters to
-     multibyte?  */
-  int convert_unibyte_characters
-    = (NILP (current_buffer->enable_multibyte_characters)
-       && unibyte_display_via_language_environment);
 
   /* If terminal_coding does any conversion, use it, otherwise use
      safe_terminal_coding.  We can't use CODING_REQUIRE_ENCODING here
@@ -1192,8 +1176,6 @@ fast_find_position (struct window *w, int pos, int *hpos, int *vpos)
 static void
 IT_note_mode_line_highlight (struct window *w, int x, int mode_line_p)
 {
-  struct frame *f = XFRAME (w->frame);
-  struct tty_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   struct glyph_row *row;
 
   if (mode_line_p)
@@ -1203,9 +1185,8 @@ IT_note_mode_line_highlight (struct window *w, int x, int mode_line_p)
 
   if (row->enabled_p)
     {
-      extern Lisp_Object Qhelp_echo;
       struct glyph *glyph, *end;
-      Lisp_Object help, map;
+      Lisp_Object help;
 
       /* Find the glyph under X.  */
       glyph = (row->glyphs[TEXT_AREA]
@@ -1342,7 +1323,6 @@ IT_note_mouse_highlight (struct frame *f, int x, int y)
 
       /* Check for mouse-face and help-echo.  */
       {
-	extern Lisp_Object Qmouse_face;
 	Lisp_Object mouse_face, overlay, position, *overlay_vec;
 	int noverlays, obegv, ozv;
 	struct buffer *obuf;
@@ -1467,7 +1447,6 @@ IT_note_mouse_highlight (struct frame *f, int x, int y)
 	/* Look for a `help-echo' property.  */
 	{
 	  Lisp_Object help;
-	  extern Lisp_Object Qhelp_echo;
 
 	  /* Check overlays first.  */
 	  help = Qnil;
@@ -1607,14 +1586,16 @@ IT_display_cursor (int on)
       ScreenSetCursor (current_pos_Y, current_pos_X);
       cursor_cleared = 0;
       if (tty->termscript)
-	fprintf (tty->termscript, "\nCURSOR ON");
+	fprintf (tty->termscript, "\nCURSOR ON (%dx%d)",
+		 current_pos_Y, current_pos_X);
     }
   else if (!on && !cursor_cleared)
     {
       ScreenSetCursor (-1, -1);
       cursor_cleared = 1;
       if (tty->termscript)
-	fprintf (tty->termscript, "\nCURSOR OFF");
+	fprintf (tty->termscript, "\nCURSOR OFF (%dx%d)",
+		 current_pos_Y, current_pos_X);
     }
 }
 
@@ -1864,10 +1845,7 @@ IT_copy_glyphs (int xfrom, int xto, size_t len, int ypos)
 
 /* Insert and delete glyphs.  */
 static void
-IT_insert_glyphs (f, start, len)
-     struct frame *f;
-     register struct glyph *start;
-     register int len;
+IT_insert_glyphs (struct frame *f, struct glyph *start, int len)
 {
   int shift_by_width = screen_size_X - (new_pos_X + len);
 
@@ -1880,19 +1858,17 @@ IT_insert_glyphs (f, start, len)
 }
 
 static void
-IT_delete_glyphs (f, n)
-     struct frame *f;
-     register int n;
+IT_delete_glyphs (struct frame *f, int n)
 {
   abort ();
 }
 
 /* set-window-configuration on window.c needs this.  */
 void
-x_set_menu_bar_lines (f, value, oldval)
-     struct frame *f;
-     Lisp_Object value, oldval;
+x_set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 {
+  extern void set_menu_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
+
   set_menu_bar_lines (f, value, oldval);
 }
 
@@ -1959,7 +1935,7 @@ IT_set_terminal_modes (struct terminal *term)
 	   already point to the relocated buffer address returned by
 	   the Int 10h/AX=FEh call above.  DJGPP v2.02 and later sets
 	   ScreenPrimary to that address at startup under DOS/V.  */
-	if (regs.x.es != (ScreenPrimary >> 4) & 0xffff)
+	if (regs.x.es != ((ScreenPrimary >> 4) & 0xffff))
 	  screen_old_address = ScreenPrimary;
 	screen_virtual_segment = regs.x.es;
 	screen_virtual_offset  = regs.x.di;
@@ -2063,8 +2039,7 @@ IT_set_terminal_window (struct frame *f, int foo)
 DEFUN ("msdos-remember-default-colors", Fmsdos_remember_default_colors,
        Smsdos_remember_default_colors, 1, 1, 0,
        doc: /* Remember the screen colors of the current frame.  */)
-     (frame)
-     Lisp_Object frame;
+  (Lisp_Object frame)
 {
   struct frame *f;
 
@@ -2077,12 +2052,12 @@ DEFUN ("msdos-remember-default-colors", Fmsdos_remember_default_colors,
      frame colors are reversed.  */
   initial_screen_colors[0] = FRAME_FOREGROUND_PIXEL (f);
   initial_screen_colors[1] = FRAME_BACKGROUND_PIXEL (f);
+
+  return Qnil;
 }
 
 void
-IT_set_frame_parameters (f, alist)
-     struct frame *f;
-     Lisp_Object alist;
+IT_set_frame_parameters (struct frame *f, Lisp_Object alist)
 {
   Lisp_Object tail;
   int i, j, length = XINT (Flength (alist));
@@ -2094,12 +2069,7 @@ IT_set_frame_parameters (f, alist)
   int reverse = EQ (Fcdr (Fassq (Qreverse, f->param_alist)), Qt);
   int redraw = 0, fg_set = 0, bg_set = 0;
   unsigned long orig_fg, orig_bg;
-  Lisp_Object frame_bg, frame_fg;
   struct tty_display_info *tty = FRAME_TTY (f);
-  extern Lisp_Object Qmenu_bar_lines;
-  extern Lisp_Object Vmenu_bar_mode;
-  int menu_bar_lines_defined =
-    !NILP (Fassq (Qmenu_bar_lines, Vdefault_frame_alist));
 
   /* If we are creating a new frame, begin with the original screen colors
      used for the initial frame.  */
@@ -2138,8 +2108,6 @@ IT_set_frame_parameters (f, alist)
 
       if (EQ (prop, Qreverse))
 	reverse = EQ (val, Qt);
-      else if (!menu_bar_lines_defined && EQ (prop, Qmenu_bar_lines))
-	menu_bar_lines_defined = 1;
     }
 
   if (tty->termscript && reverse)
@@ -2224,9 +2192,10 @@ IT_set_frame_parameters (f, alist)
 	  IT_set_cursor_type (f, val);
 	  if (tty->termscript)
 	    fprintf (tty->termscript, "<CTYPE: %s>\n",
-		     EQ (val, Qbar) || EQ (val, Qhbar)
-		     || CONSP (val) && (EQ (XCAR (val), Qbar)
-					|| EQ (XCAR (val), Qhbar))
+		     EQ (val, Qbar)
+		     || EQ (val, Qhbar)
+		     || (CONSP (val) && (EQ (XCAR (val), Qbar)
+					 || EQ (XCAR (val), Qhbar)))
 		     ? "bar" : "box");
 	}
       else if (EQ (prop, Qtty_type))
@@ -2239,24 +2208,10 @@ IT_set_frame_parameters (f, alist)
       store_frame_param (f, prop, val);
     }
 
-  /* If menu-bar-lines is neither in the frame parameters nor in
-     default-frame-alist, set it according to menu-bar-mode.  */
-  if (!menu_bar_lines_defined)
-    {
-      store_frame_param (f, Qmenu_bar_lines,
-			 NILP (Vmenu_bar_mode)
-			 ? make_number (0) : make_number (1));
-      if (tty->termscript)
-	fprintf (tty->termscript, "<MENU BAR LINES DEFAULTED: %d\n",
-		 !NILP (Vmenu_bar_mode));
-    }
-
   /* If they specified "reverse", but not the colors, we need to swap
      the current frame colors.  */
   if (reverse)
     {
-      Lisp_Object frame;
-
       if (!fg_set)
 	{
 	  FRAME_FOREGROUND_PIXEL (f) = orig_bg;
@@ -2289,7 +2244,7 @@ extern void init_frame_faces (FRAME_PTR);
 /* Do we need the internal terminal?  */
 
 void
-internal_terminal_init ()
+internal_terminal_init (void)
 {
   static int init_needed = 1;
   char *term = getenv ("TERM"), *colors;
@@ -2425,10 +2380,8 @@ initialize_msdos_display (struct terminal *term)
   term->read_socket_hook = &tty_read_avail_input; /* from keyboard.c */
 }
 
-dos_get_saved_screen (screen, rows, cols)
-     char **screen;
-     int *rows;
-     int *cols;
+int
+dos_get_saved_screen (char **screen, int *rows, int *cols)
 {
 #ifndef HAVE_X_WINDOWS
   *screen = startup_screen_buffer;
@@ -2575,11 +2528,11 @@ static struct keyboard_layout_list
   struct dos_keyboard_map *keyboard_map;
 } keyboard_layout_list[] =
 {
-  1, &us_keyboard,
-  33, &fr_keyboard,
-  39, &it_keyboard,
-  45, &dk_keyboard,
-  81, &jp_keyboard
+  { 1, &us_keyboard },
+  { 33, &fr_keyboard },
+  { 39, &it_keyboard },
+  { 45, &dk_keyboard },
+  { 81, &jp_keyboard }
 };
 
 static struct dos_keyboard_map *keyboard;
@@ -2587,9 +2540,7 @@ static int keyboard_map_all;
 static int international_keyboard;
 
 int
-dos_set_keyboard (code, always)
-     int code;
-     int always;
+dos_set_keyboard (int code, int always)
 {
   int i;
   _go32_dpmi_registers regs;
@@ -2626,17 +2577,17 @@ static struct
   unsigned char keypad_code;	/* keypad code	*/
   unsigned char editkey_code;	/* edit key	*/
 } keypad_translate_map[] = {
-  '0',  '0',  0xb0, /* kp-0 */		0x63, /* insert */
-  '1',  '1',  0xb1, /* kp-1 */		0x57, /* end */
-  '2',  '2',  0xb2, /* kp-2 */		0x54, /* down */
-  '3',  '3',  0xb3, /* kp-3 */		0x56, /* next */
-  '4',  '4',  0xb4, /* kp-4 */		0x51, /* left */
-  '5',  '5',  0xb5, /* kp-5 */		0xb5, /* kp-5 */
-  '6',  '6',  0xb6, /* kp-6 */		0x53, /* right */
-  '7',  '7',  0xb7, /* kp-7 */		0x50, /* home */
-  '8',  '8',  0xb8, /* kp-8 */		0x52, /* up */
-  '9',  '9',  0xb9, /* kp-9 */		0x55, /* prior */
-  '.',  '-',  0xae, /* kp-decimal */	0xff  /* delete */
+  { '0',  '0',  0xb0, /* kp-0 */		0x63 /* insert */ },
+  { '1',  '1',  0xb1, /* kp-1 */		0x57 /* end */    },
+  { '2',  '2',  0xb2, /* kp-2 */		0x54 /* down */   },
+  { '3',  '3',  0xb3, /* kp-3 */		0x56 /* next */   },
+  { '4',  '4',  0xb4, /* kp-4 */		0x51 /* left */   },
+  { '5',  '5',  0xb5, /* kp-5 */		0xb5 /* kp-5 */   },
+  { '6',  '6',  0xb6, /* kp-6 */		0x53 /* right */  },
+  { '7',  '7',  0xb7, /* kp-7 */		0x50 /* home */   },
+  { '8',  '8',  0xb8, /* kp-8 */		0x52 /* up */     },
+  { '9',  '9',  0xb9, /* kp-9 */		0x55 /* prior */  },
+  { '.',  '-',  0xae, /* kp-decimal */		0xff  /* delete */}
 };
 
 static struct
@@ -2644,11 +2595,11 @@ static struct
   unsigned char char_code;	/* normal code	*/
   unsigned char keypad_code;	/* keypad code	*/
 } grey_key_translate_map[] = {
-  '/',  0xaf, /* kp-decimal */
-  '*',  0xaa, /* kp-multiply */
-  '-',  0xad, /* kp-subtract */
-  '+',  0xab, /* kp-add */
-  '\r', 0x8d  /* kp-enter */
+  { '/',  0xaf /* kp-decimal */  },
+  { '*',  0xaa /* kp-multiply */ },
+  { '-',  0xad /* kp-subtract */ },
+  { '+',  0xab /* kp-add */      },
+  { '\r', 0x8d  /* kp-enter */   }
 };
 
 static unsigned short
@@ -2856,8 +2807,7 @@ ibmpc_translate_map[] =
 #define HYPER_P		0x8000	/* pseudo */
 
 static int
-dos_get_modifiers (keymask)
-     int *keymask;
+dos_get_modifiers (int *keymask)
 {
   union REGS regs;
   int mask, modifiers = 0;
@@ -2939,13 +2889,13 @@ dos_get_modifiers (keymask)
 #define NUM_RECENT_DOSKEYS (100)
 int recent_doskeys_index;	/* Index for storing next element into recent_doskeys */
 int total_doskeys;		/* Total number of elements stored into recent_doskeys */
-Lisp_Object recent_doskeys; /* A vector, holding the last 100 keystrokes */
+Lisp_Object recent_doskeys;	/* A vector, holding the last 100 keystrokes */
 
 DEFUN ("recent-doskeys", Frecent_doskeys, Srecent_doskeys, 0, 0, 0,
        doc: /* Return vector of last 100 keyboard input values seen in dos_rawgetc.
 Each input key receives two values in this vector: first the ASCII code,
 and then the scan code.  */)
-     ()
+  (void)
 {
   Lisp_Object val, *keys = XVECTOR (recent_doskeys)->contents;
 
@@ -2954,19 +2904,17 @@ and then the scan code.  */)
   else
     {
       val = Fvector (NUM_RECENT_DOSKEYS, keys);
-      bcopy (keys + recent_doskeys_index,
-	     XVECTOR (val)->contents,
-	     (NUM_RECENT_DOSKEYS - recent_doskeys_index) * sizeof (Lisp_Object));
-      bcopy (keys,
-	     XVECTOR (val)->contents + NUM_RECENT_DOSKEYS - recent_doskeys_index,
-	     recent_doskeys_index * sizeof (Lisp_Object));
+      memcpy (XVECTOR (val)->contents, keys + recent_doskeys_index,
+	      (NUM_RECENT_DOSKEYS - recent_doskeys_index) * sizeof (Lisp_Object));
+      memcpy (XVECTOR (val)->contents + NUM_RECENT_DOSKEYS - recent_doskeys_index,
+	      keys, recent_doskeys_index * sizeof (Lisp_Object));
       return val;
     }
 }
 
 /* Get a char from keyboard.  Function keys are put into the event queue.  */
 static int
-dos_rawgetc ()
+dos_rawgetc (void)
 {
   struct input_event event;
   union REGS regs;
@@ -3177,7 +3125,6 @@ dos_rawgetc ()
 	  break;
 	}
 
-    make_event:
       if (code == 0)
 	continue;
 
@@ -3285,14 +3232,14 @@ dos_rawgetc ()
 		    /* If only one button is pressed, wait 100 msec and
 		       check again.  This way, Speedy Gonzales isn't
 		       punished, while the slow get their chance.  */
-		    if (press && mouse_pressed (1-but, &x2, &y2)
-			|| !press && mouse_released (1-but, &x2, &y2))
+		    if ((press && mouse_pressed (1-but, &x2, &y2))
+			|| (!press && mouse_released (1-but, &x2, &y2)))
 		      button_num = 2;
 		    else
 		      {
 			delay (100);
-			if (press && mouse_pressed (1-but, &x2, &y2)
-			    || !press && mouse_released (1-but, &x2, &y2))
+			if ((press && mouse_pressed (1-but, &x2, &y2))
+			    || (!press && mouse_released (1-but, &x2, &y2)))
 			  button_num = 2;
 		      }
 		  }
@@ -3317,8 +3264,8 @@ dos_rawgetc ()
 static int prev_get_char = -1;
 
 /* Return 1 if a key is ready to be read without suspending execution.  */
-
-dos_keysns ()
+int
+dos_keysns (void)
 {
   if (prev_get_char != -1)
     return 1;
@@ -3327,8 +3274,8 @@ dos_keysns ()
 }
 
 /* Read a key.  Return -1 if no key is ready.  */
-
-dos_keyread ()
+int
+dos_keyread (void)
 {
   if (prev_get_char != -1)
     {
@@ -3357,7 +3304,7 @@ static char *menu_help_message, *prev_menu_help_message;
 static int menu_help_paneno, menu_help_itemno;
 
 static XMenu *
-IT_menu_create ()
+IT_menu_create (void)
 {
   XMenu *menu;
 
@@ -3526,7 +3473,7 @@ IT_menu_display (XMenu *menu, int y, int x, int pn, int *faces, int disp_help)
 /* Report availability of menus.  */
 
 int
-have_menus_p () {  return 1; }
+have_menus_p (void) {  return 1; }
 
 /* Create a brand new menu structure.  */
 
@@ -3728,10 +3675,12 @@ XMenuActivate (Display *foo, XMenu *menu, int *pane, int *selidx,
 		if (0 <= dy && dy < state[i].menu->count)
 		  {
 		    if (!state[i].menu->submenu[dy])
-		      if (state[i].menu->panenumber[dy])
-			result = XM_SUCCESS;
-		      else
-			result = XM_IA_SELECT;
+		      {
+			if (state[i].menu->panenumber[dy])
+			  result = XM_SUCCESS;
+			else
+			  result = XM_IA_SELECT;
+		      }
 		    *pane = state[i].pane - 1;
 		    *selidx = dy;
 		    /* We hit some part of a menu, so drop extra menus that
@@ -3884,8 +3833,7 @@ void msdos_downcase_filename (unsigned char *);
 /* Destructively turn backslashes into slashes.  */
 
 void
-dostounix_filename (p)
-     register char *p;
+dostounix_filename (char *p)
 {
   msdos_downcase_filename (p);
 
@@ -3900,8 +3848,7 @@ dostounix_filename (p)
 /* Destructively turn slashes into backslashes.  */
 
 void
-unixtodos_filename (p)
-     register char *p;
+unixtodos_filename (char *p)
 {
   if (p[1] == ':' && *p >= 'A' && *p <= 'Z')
     {
@@ -3920,9 +3867,7 @@ unixtodos_filename (p)
 /* Get the default directory for a given drive.  0=def, 1=A, 2=B, ...  */
 
 int
-getdefdir (drive, dst)
-     int drive;
-     char *dst;
+getdefdir (int drive, char *dst)
 {
   char in_path[4], *p = in_path, e = errno;
 
@@ -3961,9 +3906,7 @@ emacs_root_dir (void)
 /* Remove all CR's that are followed by a LF.  */
 
 int
-crlf_to_lf (n, buf)
-     register int n;
-     register unsigned char *buf;
+crlf_to_lf (int n, unsigned char *buf)
 {
   unsigned char *np = buf, *startp = buf, *endp = buf + n;
 
@@ -3987,7 +3930,7 @@ crlf_to_lf (n, buf)
 DEFUN ("msdos-long-file-names", Fmsdos_long_file_names, Smsdos_long_file_names,
        0, 0, 0,
        doc: /* Return non-nil if long file names are supported on MS-DOS.  */)
-     ()
+  (void)
 {
   return (_USE_LFN ? Qt : Qnil);
 }
@@ -3995,8 +3938,7 @@ DEFUN ("msdos-long-file-names", Fmsdos_long_file_names, Smsdos_long_file_names,
 /* Convert alphabetic characters in a filename to lower-case.  */
 
 void
-msdos_downcase_filename (p)
-     register unsigned char *p;
+msdos_downcase_filename (unsigned char *p)
 {
   /* Always lower-case drive letters a-z, even if the filesystem
      preserves case in filenames.
@@ -4022,8 +3964,7 @@ DEFUN ("msdos-downcase-filename", Fmsdos_downcase_filename, Smsdos_downcase_file
 When long filenames are supported, doesn't change FILENAME.
 If FILENAME is not a string, returns nil.
 The argument object is never altered--the value is a copy.  */)
-     (filename)
-     Lisp_Object filename;
+  (Lisp_Object filename)
 {
   Lisp_Object tem;
 
@@ -4040,8 +3981,7 @@ The argument object is never altered--the value is a copy.  */)
 static char emacsroot[MAXPATHLEN];
 
 char *
-rootrelativepath (rel)
-     char *rel;
+rootrelativepath (char *rel)
 {
   static char result[MAXPATHLEN + 10];
 
@@ -4056,10 +3996,7 @@ rootrelativepath (rel)
    break if one or more of these are missing.  */
 
 void
-init_environment (argc, argv, skip_args)
-     int argc;
-     char **argv;
-     int skip_args;
+init_environment (int argc, char **argv, int skip_args)
 {
   char *s, *t, *root;
   int len, i;
@@ -4241,7 +4178,7 @@ dos_ttraw (struct tty_display_info *tty)
   /* If we are called for the initial terminal, it's too early to do
      anything, and termscript isn't set up.  */
   if (tty->terminal->type == output_initial)
-    return;
+    return 2;
 
   break_stat = getcbrk ();
   setcbrk (0);
@@ -4293,7 +4230,7 @@ dos_ttraw (struct tty_display_info *tty)
 /*  Restore status of standard input and Ctrl-C checking.  */
 
 int
-dos_ttcooked ()
+dos_ttcooked (void)
 {
   union REGS inregs, outregs;
 
@@ -4319,11 +4256,8 @@ dos_ttcooked ()
    file TEMPOUT and stderr to TEMPERR.  */
 
 int
-run_msdos_command (argv, working_dir, tempin, tempout, temperr, envv)
-     unsigned char **argv;
-     const char *working_dir;
-     int tempin, tempout, temperr;
-     char **envv;
+run_msdos_command (unsigned char **argv, const char *working_dir,
+		   int tempin, int tempout, int temperr, char **envv)
 {
   char *saveargv1, *saveargv2, *lowcase_argv0, *pa, *pl;
   char oldwd[MAXPATHLEN + 1]; /* Fixed size is safe on MSDOS.  */
@@ -4430,7 +4364,7 @@ run_msdos_command (argv, working_dir, tempin, tempout, temperr, envv)
 	result = 0;	/* emulate Unixy shell behavior with empty cmd line */
     }
   else
-    result = spawnve (P_WAIT, argv[0], argv, envv);
+    result = spawnve (P_WAIT, argv[0], (char **)argv, envv);
 
   dup2 (inbak, 0);
   dup2 (outbak, 1);
@@ -4464,8 +4398,7 @@ run_msdos_command (argv, working_dir, tempin, tempout, temperr, envv)
 }
 
 void
-croak (badfunc)
-     char *badfunc;
+croak (char *badfunc)
 {
   fprintf (stderr, "%s not yet implemented\r\n", badfunc);
   reset_all_sys_modes ();
@@ -4475,8 +4408,8 @@ croak (badfunc)
 /*
  * A few unimplemented functions that we silently ignore.
  */
-setpgrp () {return 0; }
-setpriority (x,y,z) int x,y,z; { return 0; }
+int setpgrp (void) {return 0; }
+int setpriority (int x, int y, int z) { return 0; }
 
 #if __DJGPP__ == 2 && __DJGPP_MINOR__ < 2
 
@@ -4501,17 +4434,13 @@ static sighandler_t prev_handlers[320];
 /* A signal handler which just records that a signal occurred
    (it will be raised later, if and when the signal is unblocked).  */
 static void
-sig_suspender (signo)
-     int signo;
+sig_suspender (int signo)
 {
   sigaddset (&msdos_pending_signals, signo);
 }
 
 int
-sigprocmask (how, new_set, old_set)
-     int how;
-     const sigset_t *new_set;
-     sigset_t *old_set;
+sigprocmask (int how, const sigset_t *new_set, sigset_t *old_set)
 {
   int signo;
   sigset_t new_mask;
@@ -4613,10 +4542,8 @@ dos_yield_time_slice (void)
 /* We don't have to call timer_check here
    because wait_reading_process_output takes care of that.  */
 int
-sys_select (nfds, rfds, wfds, efds, timeout)
-     int nfds;
-     SELECT_TYPE *rfds, *wfds, *efds;
-     EMACS_TIME *timeout;
+sys_select (int nfds, SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
+	    EMACS_TIME *timeout)
 {
   int check_input;
   struct time t;
@@ -4686,11 +4613,10 @@ sys_select (nfds, rfds, wfds, efds, timeout)
 
 #ifdef chdir
 #undef chdir
-extern int chdir ();
+extern int chdir (const char *);
 
 int
-sys_chdir (path)
-     const char* path;
+sys_chdir (const char *path)
 {
   int len = strlen (path);
   char *tmp = (char *)path;
@@ -4719,7 +4645,7 @@ sys_chdir (path)
 extern void tzset (void);
 
 void
-init_gettimeofday ()
+init_gettimeofday (void)
 {
   time_t ltm, gtm;
   struct tm *lstm;
@@ -4737,9 +4663,7 @@ init_gettimeofday ()
 #ifdef abort
 #undef abort
 void
-dos_abort (file, line)
-     char *file;
-     int  line;
+dos_abort (char *file, int line)
 {
   char buffer1[200], buffer2[400];
   int i, j;
@@ -4755,7 +4679,7 @@ dos_abort (file, line)
 }
 #else
 void
-abort ()
+abort (void)
 {
   dos_ttcooked ();
   ScreenSetCursor (10, 0);
@@ -4773,14 +4697,8 @@ abort ()
 }
 #endif
 
-/* The following variables are required so that cus-start.el won't
-   complain about unbound variables.  */
-#ifndef subprocesses
-/* Nonzero means delete a process right away if it exits (process.c).  */
-static int delete_exited_processes;
-#endif
-
-syms_of_msdos ()
+void
+syms_of_msdos (void)
 {
   recent_doskeys = Fmake_vector (make_number (NUM_RECENT_DOSKEYS), Qnil);
   staticpro (&recent_doskeys);
@@ -4796,12 +4714,6 @@ syms_of_msdos ()
 This variable is used only by MS-DOS terminals.  */);
   Vdos_unsupported_char_glyph = make_number ('\177');
 
-#endif
-#ifndef subprocesses
-  DEFVAR_BOOL ("delete-exited-processes", &delete_exited_processes,
-	       doc: /* *Non-nil means delete processes immediately when they exit.
-A value of nil means don't delete them until `list-processes' is run.  */);
-  delete_exited_processes = 0;
 #endif
 
   defsubr (&Srecent_doskeys);

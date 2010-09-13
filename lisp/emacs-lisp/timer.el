@@ -4,6 +4,7 @@
 ;;   2009, 2010  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -321,7 +322,11 @@ This function is called, by name, directly by the C code."
 	  ;; We do this after rescheduling so that the handler function
 	  ;; can cancel its own timer successfully with cancel-timer.
 	  (condition-case nil
-	      (apply (timer--function timer) (timer--args timer))
+              ;; Timer functions should not change the current buffer.
+              ;; If they do, all kinds of nasty surprises can happen,
+              ;; and it can be hellish to track down their source.
+              (save-current-buffer
+                (apply (timer--function timer) (timer--args timer)))
 	    (error nil))
 	  (if retrigger
 	      (setf (timer--triggered timer) nil)))
@@ -438,8 +443,6 @@ This function returns a timer object which you can use in `cancel-timer'."
   "This is the timer function used for the timer made by `with-timeout'."
   (throw tag 'timeout))
 
-(put 'with-timeout 'lisp-indent-function 1)
-
 (defvar with-timeout-timers nil
   "List of all timers used by currently pending `with-timeout' calls.")
 
@@ -451,6 +454,7 @@ event (such as keyboard input, input from subprocesses, or a certain time);
 if the program loops without waiting in any way, the timeout will not
 be detected.
 \n(fn (SECONDS TIMEOUT-FORMS...) BODY)"
+  (declare (indent 1))
   (let ((seconds (car list))
 	(timeout-forms (cdr list)))
     `(let ((with-timeout-tag (cons nil nil))

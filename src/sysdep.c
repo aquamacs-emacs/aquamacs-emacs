@@ -18,10 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
 #include <ctype.h>
 #include <signal.h>
 #include <stdio.h>
@@ -38,15 +35,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #include "lisp.h"
-/* Including stdlib.h isn't necessarily enough to get srandom
-   declared, e.g. without __USE_XOPEN_EXTENDED with glibc 2.  */
-
-/* The w32 build defines select stuff in w32.h, which is included by
-   sys/select.h (included below).   */
-#ifndef WINDOWSNT
 #include "sysselect.h"
-#endif
-
 #include "blockinput.h"
 
 #ifdef WINDOWSNT
@@ -79,9 +68,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "dosfns.h"
 #include "msdos.h"
 #include <sys/param.h>
-
-extern int etext;
-extern unsigned start __asm__ ("start");
 #endif
 
 #include <sys/file.h>
@@ -90,19 +76,13 @@ extern unsigned start __asm__ ("start");
 #include <fcntl.h>
 #endif
 
-#ifndef MSDOS
-#include <sys/ioctl.h>
-#endif
-
 #include "systty.h"
 #include "syswait.h"
 
-#if defined (USG)
+#ifdef HAVE_SYS_UTSNAME_H
 #include <sys/utsname.h>
 #include <memory.h>
-#endif /* USG */
-
-extern int quit_char;
+#endif /* HAVE_SYS_UTSNAME_H */
 
 #include "keyboard.h"
 #include "frame.h"
@@ -113,11 +93,12 @@ extern int quit_char;
 #include "dispextern.h"
 #include "process.h"
 #include "cm.h"  /* for reset_sys_modes */
-
-/* For serial_configure and serial_open.  */
-extern Lisp_Object QCport, QCspeed, QCprocess;
-extern Lisp_Object QCbytesize, QCstopbits, QCparity, Qodd, Qeven;
-extern Lisp_Object QCflowcontrol, Qhw, Qsw, QCsummary;
+#ifdef HAVE_TERM_H
+/* Include this last.  If it is ncurses header file, it adds a lot of
+   defines that interfere with stuff in other headers.  Someone responsible
+   for ncurses messed up bigtime.  See bug#6812.  */
+#include <term.h>
+#endif
 
 #ifdef WINDOWSNT
 #include <direct.h>
@@ -156,17 +137,6 @@ static const int baud_convert[] =
     1800, 2400, 4800, 9600, 19200, 38400
   };
 
-#ifdef HAVE_SPEED_T
-#include <termios.h>
-#else
-#if defined (HAVE_LIBNCURSES) && ! defined (NCURSES_OSPEED_T)
-#else
-#if defined (HAVE_TERMIOS_H) && defined (GNU_LINUX)
-#include <termios.h>
-#endif
-#endif
-#endif
-
 int emacs_ospeed;
 
 void croak (char *) NO_RETURN;
@@ -182,7 +152,7 @@ SIGMASKTYPE sigprocmask_set;
    Any other returned value must be freed with free. This is used
    only when get_current_dir_name is not defined on the system.  */
 char*
-get_current_dir_name ()
+get_current_dir_name (void)
 {
   char *buf;
   char *pwd;
@@ -315,32 +285,11 @@ init_baud_rate (int fd)
 #ifdef DOS_NT
     emacs_ospeed = 15;
 #else  /* not DOS_NT */
-#ifdef HAVE_TERMIOS
       struct termios sg;
 
       sg.c_cflag = B9600;
       tcgetattr (fd, &sg);
       emacs_ospeed = cfgetospeed (&sg);
-#else /* not TERMIOS */
-#ifdef HAVE_TERMIO
-      struct termio sg;
-
-      sg.c_cflag = B9600;
-#ifdef HAVE_TCATTR
-      tcgetattr (fd, &sg);
-#else
-      ioctl (fd, TCGETA, &sg);
-#endif
-      emacs_ospeed = sg.c_cflag & CBAUD;
-#else /* neither TERMIOS nor TERMIO */
-      struct sgttyb sg;
-
-      sg.sg_ospeed = B9600;
-      if (ioctl (fd, TIOCGETP, &sg) < 0)
-	abort ();
-      emacs_ospeed = sg.sg_ospeed;
-#endif /* not HAVE_TERMIO */
-#endif /* not HAVE_TERMIOS */
 #endif /* not DOS_NT */
     }
 
@@ -361,15 +310,6 @@ set_exclusive_use (int fd)
   /* Ok to do nothing if this feature does not exist */
 }
 
-#ifndef subprocesses
-
-wait_without_blocking ()
-{
-  croak ("wait_without_blocking");
-  synch_process_alive = 0;
-}
-
-#endif /* not subprocesses */
 
 int wait_debugging;   /* Set nonzero to make following function work under dbx
 			 (at least for bsd).  */
@@ -378,6 +318,7 @@ SIGTYPE
 wait_for_termination_signal (void)
 {}
 
+#ifndef MSDOS
 /* Wait for subprocess with process id `pid' to terminate and
    make sure it will get eliminated (not remain forever as a zombie) */
 
@@ -386,7 +327,6 @@ wait_for_termination (int pid)
 {
   while (1)
     {
-#ifdef subprocesses
 #if defined (BSD_SYSTEM) || defined (HPUX)
       /* Note that kill returns -1 even if the process is just a zombie now.
 	 But inevitably a SIGCHLD interrupt should be generated
@@ -422,13 +362,8 @@ wait_for_termination (int pid)
       sigsuspend (&empty_mask);
 #endif /* not WINDOWSNT */
 #endif /* not BSD_SYSTEM, and not HPUX version >= 6 */
-#else /* not subprocesses */
-      break;
-#endif /* not subprocesses */
     }
 }
-
-#ifdef subprocesses
 
 /*
  *	flush any pending output
@@ -438,7 +373,7 @@ wait_for_termination (int pid)
 void
 flush_pending_output (int channel)
 {
-#ifdef HAVE_TERMIOS
+#ifndef DOS_NT
   /* If we try this, we get hit with SIGTTIN, because
      the child's tty belongs to the child's pgrp. */
 #else
@@ -464,12 +399,10 @@ flush_pending_output (int channel)
 void
 child_setup_tty (int out)
 {
-#ifndef DOS_NT
+#ifndef WINDOWSNT
   struct emacs_tty s;
 
   EMACS_GET_TTY (out, &s);
-
-#if defined (HAVE_TERMIO) || defined (HAVE_TERMIOS)
   s.main.c_oflag |= OPOST;	/* Enable output postprocessing */
   s.main.c_oflag &= ~ONLCR;	/* Disable map of NL to CR-NL on output */
 #ifdef NLDLY
@@ -523,35 +456,35 @@ child_setup_tty (int out)
   s.main.c_cflag = (s.main.c_cflag & ~CBAUD) | B9600; /* baud rate sanity */
 #endif /* AIX */
 
-  /* We used to enable ICANON (and set VEOF to 04), but this leads to
-     problems where process.c wants to send EOFs every once in a while
-     to force the output, which leads to weird effects when the
+  /* We originally enabled ICANON (and set VEOF to 04), and then had
+     proces.c send additional EOF chars to flush the output when faced
+     with long lines, but this leads to weird effects when the
      subprocess has disabled ICANON and ends up seeing those spurious
      extra EOFs.  So we don't send EOFs any more in
-     process.c:send_process, and instead we disable ICANON by default,
-     so if a subsprocess sets up ICANON, it's his problem (or the Elisp
-     package that talks to it) to deal with lines that are too long.  */
-  s.main.c_lflag &= ~ICANON;	/* Disable line editing and eof processing */
+     process.c:send_process.  First we tried to disable ICANON by
+     default, so if a subsprocess sets up ICANON, it's his problem (or
+     the Elisp package that talks to it) to deal with lines that are
+     too long.  But this disables some features, such as the ability
+     to send EOF signals.  So we re-enabled ICANON but there is no
+     more "send eof to flush" going on (which is wrong and unportable
+     in itself).  The correct way to handle too much output is to
+     buffer what could not be written and then write it again when
+     select returns ok for writing.  This has it own set of
+     problems.  Write is now asynchronous, is that a problem?  How much
+     do we buffer, and what do we do when that limit is reached?  */
+
+  s.main.c_lflag |= ICANON;	/* Enable line editing and eof processing */
+  s.main.c_cc[VEOF] = 'D'&037;	/* Control-D */
+#if 0	    /* These settings only apply to non-ICANON mode. */
   s.main.c_cc[VMIN] = 1;
   s.main.c_cc[VTIME] = 0;
-
-#else /* not HAVE_TERMIO */
-
-  s.main.sg_flags &= ~(ECHO | CRMOD | ANYP | ALLDELAY | RAW | LCASE
-		       | CBREAK | TANDEM);
-  s.main.sg_flags |= LPASS8;
-  s.main.sg_erase = 0377;
-  s.main.sg_kill = 0377;
-  s.lmode = LLITOUT | s.lmode;        /* Don't strip 8th bit */
-
-#endif /* not HAVE_TERMIO */
+#endif
 
   EMACS_SET_TTY (out, &s, 0);
-
-#endif /* not DOS_NT */
+#endif /* not WINDOWSNT */
 }
+#endif	/* MSDOS */
 
-#endif /* subprocesses */
 
 /* Record a signal code and the handler for it.  */
 struct save_signal
@@ -622,7 +555,7 @@ sys_subshell (void)
   dir = expand_and_dir_to_file (Funhandled_file_name_directory (dir), Qnil);
   str = (unsigned char *) alloca (SCHARS (dir) + 2);
   len = SCHARS (dir);
-  bcopy (SDATA (dir), str, len);
+  memcpy (str, SDATA (dir), len);
   if (str[len - 1] != '/') str[len++] = '/';
   str[len] = 0;
  xyzzy:
@@ -639,7 +572,7 @@ sys_subshell (void)
 
   if (pid == 0)
     {
-      char *sh = 0;
+      const char *sh = 0;
 
 #ifdef DOS_NT    /* MW, Aug 1993 */
       getwd (oldwd);
@@ -655,9 +588,7 @@ sys_subshell (void)
       if (str)
 	chdir ((char *) str);
 
-#ifdef subprocesses
       close_process_descs ();	/* Close Emacs's pipes/ptys */
-#endif
 
 #ifdef SET_EMACS_PRIORITY
       {
@@ -800,7 +731,7 @@ request_sigio (void)
 
 void
 unrequest_sigio (void)
-{ 
+{
   if (noninteractive)
     return;
 
@@ -820,7 +751,7 @@ unrequest_sigio (void)
 #ifndef MSDOS
 
 void
-request_sigio ()
+request_sigio (void)
 {
   if (noninteractive || read_socket_hook)
     return;
@@ -829,7 +760,7 @@ request_sigio ()
 }
 
 void
-unrequest_sigio ()
+unrequest_sigio (void)
 {
   if (noninteractive || read_socket_hook)
     return;
@@ -852,37 +783,10 @@ int
 emacs_get_tty (int fd, struct emacs_tty *settings)
 {
   /* Retrieve the primary parameters - baud rate, character size, etcetera.  */
-#ifdef HAVE_TCATTR
-  /* We have those nifty POSIX tcmumbleattr functions.  */
-  bzero (&settings->main, sizeof (settings->main));
-  if (tcgetattr (fd, &settings->main) < 0)
-    return -1;
-
-#else
-#ifdef HAVE_TERMIO
-  /* The SYSV-style interface?  */
-  if (ioctl (fd, TCGETA, &settings->main) < 0)
-    return -1;
-
-#else
 #ifndef DOS_NT
-  /* I give up - I hope you have the BSD ioctls.  */
-  if (ioctl (fd, TIOCGETP, &settings->main) < 0)
-    return -1;
-#endif /* not DOS_NT */
-#endif
-#endif
-
-  /* Suivant - Do we have to get struct ltchars data?  */
-#ifdef HAVE_LTCHARS
-  if (ioctl (fd, TIOCGLTC, &settings->ltchars) < 0)
-    return -1;
-#endif
-
-  /* How about a struct tchars and a wordful of lmode bits?  */
-#ifdef HAVE_TCHARS
-  if (ioctl (fd, TIOCGETC, &settings->tchars) < 0
-      || ioctl (fd, TIOCLGET, &settings->lmode) < 0)
+  /* We have those nifty POSIX tcmumbleattr functions.  */
+  memset (&settings->main, 0, sizeof (settings->main));
+  if (tcgetattr (fd, &settings->main) < 0)
     return -1;
 #endif
 
@@ -899,7 +803,7 @@ int
 emacs_set_tty (int fd, struct emacs_tty *settings, int flushp)
 {
   /* Set the primary parameters - baud rate, character size, etcetera.  */
-#ifdef HAVE_TCATTR
+#ifndef DOS_NT
   int i;
   /* We have those nifty POSIX tcmumbleattr functions.
      William J. Smith <wjs@wiis.wang.com> writes:
@@ -921,7 +825,7 @@ emacs_set_tty (int fd, struct emacs_tty *settings, int flushp)
       {
 	struct termios new;
 
-	bzero (&new, sizeof (new));
+	memset (&new, 0, sizeof (new));
 	/* Get the current settings, and see if they're what we asked for.  */
 	tcgetattr (fd, &new);
 	/* We cannot use memcmp on the whole structure here because under
@@ -937,34 +841,6 @@ emacs_set_tty (int fd, struct emacs_tty *settings, int flushp)
 	else
 	  continue;
       }
-
-#else
-#ifdef HAVE_TERMIO
-  /* The SYSV-style interface?  */
-  if (ioctl (fd, flushp ? TCSETAF : TCSETAW, &settings->main) < 0)
-    return -1;
-
-#else
-#ifndef DOS_NT
-  /* I give up - I hope you have the BSD ioctls.  */
-  if (ioctl (fd, (flushp) ? TIOCSETP : TIOCSETN, &settings->main) < 0)
-    return -1;
-#endif /* not DOS_NT */
-
-#endif
-#endif
-
-  /* Suivant - Do we have to get struct ltchars data?  */
-#ifdef HAVE_LTCHARS
-  if (ioctl (fd, TIOCSLTC, &settings->ltchars) < 0)
-    return -1;
-#endif
-
-  /* How about a struct tchars and a wordful of lmode bits?  */
-#ifdef HAVE_TCHARS
-  if (ioctl (fd, TIOCSETC, &settings->tchars) < 0
-      || ioctl (fd, TIOCLSET, &settings->lmode) < 0)
-    return -1;
 #endif
 
   /* We have survived the tempest.  */
@@ -985,13 +861,6 @@ int old_fcntl_owner[MAXDESC];
 unsigned char _sobuf[BUFSIZ+8];
 #else
 char _sobuf[BUFSIZ];
-#endif
-
-#ifdef HAVE_LTCHARS
-static struct ltchars new_ltchars = {-1,-1,-1,-1,-1,-1};
-#endif
-#ifdef HAVE_TCHARS
-static struct tchars new_tchars = {-1,-1,-1,-1,-1,-1};
 #endif
 
 /* Initialize the terminal mode on all tty devices that are currently
@@ -1019,15 +888,15 @@ init_sys_modes (struct tty_display_info *tty_out)
 
   if (!tty_out->output)
     return;                     /* The tty is suspended. */
-  
+
   if (! tty_out->old_tty)
     tty_out->old_tty = (struct emacs_tty *) xmalloc (sizeof (struct emacs_tty));
-      
+
   EMACS_GET_TTY (fileno (tty_out->input), tty_out->old_tty);
 
   tty = *tty_out->old_tty;
 
-#if defined (HAVE_TERMIO) || defined (HAVE_TERMIOS)
+#if !defined (DOS_NT)
   XSETINT (Vtty_erase_char, tty.main.c_cc[VERASE]);
 
   tty.main.c_iflag |= (IGNBRK);	/* Ignore break condition */
@@ -1080,7 +949,7 @@ init_sys_modes (struct tty_display_info *tty_out)
          means that the interrupt and quit feature must be
          disabled on secondary ttys, or we would not even see the
          keypress.
-         
+
          Note that even though emacsclient could have special code
          to pass SIGINT to Emacs, we should _not_ enable
          interrupt/quit keys for emacsclient frames.  This means
@@ -1098,13 +967,12 @@ init_sys_modes (struct tty_display_info *tty_out)
   tty.main.c_cc[VSWTCH] = CDISABLE;	/* Turn off shell layering use
 					   of C-z */
 #endif /* VSWTCH */
-  
-#if defined (__mips__) || defined (HAVE_TCATTR)
+
 #ifdef VSUSP
-  tty.main.c_cc[VSUSP] = CDISABLE;	/* Turn off mips handling of C-z.  */
+  tty.main.c_cc[VSUSP] = CDISABLE;	/* Turn off handling of C-z.  */
 #endif /* VSUSP */
 #ifdef V_DSUSP
-  tty.main.c_cc[V_DSUSP] = CDISABLE; /* Turn off mips handling of C-y.  */
+  tty.main.c_cc[V_DSUSP] = CDISABLE; /* Turn off handling of C-y.  */
 #endif /* V_DSUSP */
 #ifdef VDSUSP /* Some systems have VDSUSP, some have V_DSUSP.  */
   tty.main.c_cc[VDSUSP] = CDISABLE;
@@ -1140,7 +1008,6 @@ init_sys_modes (struct tty_display_info *tty_out)
       tty.main.c_cc[VSTOP] = CDISABLE;
 #endif /* VSTOP */
     }
-#endif /* mips or HAVE_TCATTR */
 
 #ifdef AIX
   tty.main.c_cc[VSTRT] = CDISABLE;
@@ -1163,41 +1030,8 @@ init_sys_modes (struct tty_display_info *tty_out)
   tty.main.c_iflag &= ~IGNBRK;
   tty.main.c_iflag &= ~BRKINT;
 #endif
-#else /* if not HAVE_TERMIO */
-#ifndef DOS_NT
-  XSETINT (Vtty_erase_char, tty.main.sg_erase);
-  tty.main.sg_flags &= ~(ECHO | CRMOD | XTABS);
-  if (meta_key)
-    tty.main.sg_flags |= ANYP;
-  tty.main.sg_flags |= interrupt_input ? RAW : CBREAK;
 #endif /* not DOS_NT */
-#endif /* not HAVE_TERMIO */
 
-  /* If going to use CBREAK mode, we must request C-g to interrupt
-     and turn off start and stop chars, etc.  If not going to use
-     CBREAK mode, do this anyway so as to turn off local flow
-     control for user coming over network on 4.2; in this case,
-     only t_stopc and t_startc really matter.  */
-#ifndef HAVE_TERMIO
-#ifdef HAVE_TCHARS
-  /* Note: if not using CBREAK mode, it makes no difference how we
-     set this */
-  tty.tchars = new_tchars;
-  tty.tchars.t_intrc = quit_char;
-  if (tty_out->flow_control)
-    {
-      tty.tchars.t_startc = '\021';
-      tty.tchars.t_stopc = '\023';
-    }
-  
-  tty.lmode = LDECCTQ | LLITOUT | LPASS8 | LNOFLSH | tty_out->old_tty.lmode;
-  
-#endif /* HAVE_TCHARS */
-#endif /* not HAVE_TERMIO */
-
-#ifdef HAVE_LTCHARS
-  tty.ltchars = new_ltchars;
-#endif /* HAVE_LTCHARS */
 #ifdef MSDOS	/* Demacs 1.1.2 91/10/20 Manabu Higashida, MW Aug 1993 */
   if (!tty_out->term_initted)
     internal_terminal_init ();
@@ -1216,7 +1050,7 @@ init_sys_modes (struct tty_display_info *tty_out)
   if (!tty_out->flow_control) ioctl (fileno (tty_out->input), TIOCSTART, 0);
 #endif
 
-#if defined (HAVE_TERMIOS) || defined (HPUX)
+#if !defined (DOS_NT)
 #ifdef TCOON
   if (!tty_out->flow_control) tcflow (fileno (tty_out->input), TCOON);
 #endif
@@ -1411,11 +1245,11 @@ reset_sys_modes (struct tty_display_info *tty_out)
 
   if (!tty_out->output)
     return;                     /* The tty is suspended. */
-  
+
   /* Go to and clear the last line of the terminal. */
 
   cmgoto (tty_out, FrameRows (tty_out) - 1, 0);
-  
+
   /* Code adapted from tty_clear_end_of_line. */
   if (tty_out->TS_clr_line)
     {
@@ -1425,16 +1259,16 @@ reset_sys_modes (struct tty_display_info *tty_out)
     {			/* have to do it the hard way */
       int i;
       tty_turn_off_insert (tty_out);
-      
+
       for (i = curX (tty_out); i < FrameCols (tty_out) - 1; i++)
         {
           fputc (' ', tty_out->output);
         }
     }
-  
+
   cmgoto (tty_out, FrameRows (tty_out) - 1, 0);
   fflush (tty_out->output);
-  
+
   if (tty_out->terminal->reset_terminal_modes_hook)
     tty_out->terminal->reset_terminal_modes_hook (tty_out->terminal);
 
@@ -1510,83 +1344,6 @@ setup_pty (int fd)
 }
 #endif /* HAVE_PTYS */
 
-#if !defined(CANNOT_DUMP) || !defined(SYSTEM_MALLOC)
-/* Some systems that cannot dump also cannot implement these.  */
-
-/*
- *	Return the address of the start of the text segment prior to
- *	doing an unexec.  After unexec the return value is undefined.
- *	See crt0.c for further explanation and _start.
- *
- */
-
-#if !(defined (__NetBSD__) && defined (__ELF__))
-#ifndef HAVE_TEXT_START
-char *
-start_of_text (void)
-{
-#ifdef TEXT_START
-  return ((char *) TEXT_START);
-#else
-  extern int _start ();
-  return ((char *) _start);
-#endif /* TEXT_START */
-}
-#endif /* not HAVE_TEXT_START */
-#endif
-
-/*
- *	Return the address of the start of the data segment prior to
- *	doing an unexec.  After unexec the return value is undefined.
- *	See crt0.c for further information and definition of data_start.
- *
- *	Apparently, on BSD systems this is etext at startup.  On
- *	USG systems (swapping) this is highly mmu dependent and
- *	is also dependent on whether or not the program is running
- *	with shared text.  Generally there is a (possibly large)
- *	gap between end of text and start of data with shared text.
- *
- *	On Uniplus+ systems with shared text, data starts at a
- *	fixed address.  Each port (from a given oem) is generally
- *	different, and the specific value of the start of data can
- *	be obtained via the UniPlus+ specific "uvar" system call,
- *	however the method outlined in crt0.c seems to be more portable.
- *
- *	Probably what will have to happen when a USG unexec is available,
- *	at least on UniPlus, is temacs will have to be made unshared so
- *	that text and data are contiguous.  Then once loadup is complete,
- *	unexec will produce a shared executable where the data can be
- *	at the normal shared text boundary and the startofdata variable
- *	will be patched by unexec to the correct value.
- *
- */
-
-#ifndef start_of_data
-char *
-start_of_data (void)
-{
-#ifdef DATA_START
-  return ((char *) DATA_START);
-#else
-#ifdef ORDINARY_LINK
-  /*
-   * This is a hack.  Since we're not linking crt0.c or pre_crt0.c,
-   * data_start isn't defined.  We take the address of environ, which
-   * is known to live at or near the start of the system crt0.c, and
-   * we don't sweat the handful of bytes that might lose.
-   */
-  extern char **environ;
-
-  return ((char *) &environ);
-#else
-  extern int data_start;
-  return ((char *) &data_start);
-#endif /* ORDINARY_LINK */
-#endif /* DATA_START */
-}
-#endif /* start_of_data */
-#endif /* NEED_STARTS (not CANNOT_DUMP or not SYSTEM_MALLOC) */
-
 /* init_system_name sets up the string for the Lisp function
    system-name to return. */
 
@@ -1637,7 +1394,7 @@ init_system_name (void)
 #ifndef CANNOT_DUMP
   if (initialized)
 #endif /* not CANNOT_DUMP */
-    if (! index (hostname, '.'))
+    if (! strchr (hostname, '.'))
       {
 	int count;
 #ifdef HAVE_GETADDRINFO
@@ -1645,7 +1402,7 @@ init_system_name (void)
         struct addrinfo hints;
         int ret;
 
-        memset (&hints, 0, sizeof(hints));
+        memset (&hints, 0, sizeof (hints));
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_flags = AI_CANONNAME;
 
@@ -1666,7 +1423,7 @@ init_system_name (void)
             while (it)
               {
                 char *fqdn = it->ai_canonname;
-                if (fqdn && index (fqdn, '.')
+                if (fqdn && strchr (fqdn, '.')
                     && strcmp (fqdn, "localhost.localdomain") != 0)
                   break;
                 it = it->ai_next;
@@ -1702,13 +1459,13 @@ init_system_name (void)
 	  {
 	    char *fqdn = (char *) hp->h_name;
 
-	    if (!index (fqdn, '.'))
+	    if (!strchr (fqdn, '.'))
 	      {
 		/* We still don't have a fully qualified domain name.
 		   Try to find one in the list of alternate names */
 		char **alias = hp->h_aliases;
 		while (*alias
-		       && (!index (*alias, '.')
+		       && (!strchr (*alias, '.')
 			   || !strcmp (*alias, "localhost.localdomain")))
 		  alias++;
 		if (*alias)
@@ -1757,8 +1514,8 @@ jmp_buf read_alarm_throw;
 
 int read_alarm_should_throw;
 
-SIGTYPE
-select_alarm ()
+void
+select_alarm (int ignore)
 {
   select_alarmed = 1;
   signal (SIGALRM, SIG_IGN);
@@ -1770,23 +1527,18 @@ select_alarm ()
 #ifndef WINDOWSNT
 /* Only rfds are checked.  */
 int
-sys_select (nfds, rfds, wfds, efds, timeout)
-     int nfds;
-     SELECT_TYPE *rfds, *wfds, *efds;
-     EMACS_TIME *timeout;
+sys_select (int nfds,
+	    SELECT_TYPE *rfds, SELECT_TYPE *wfds, SELECT_TYPE *efds,
+	    EMACS_TIME *timeout)
 {
   /* XXX This needs to be updated for multi-tty support.  Is there
-     anybody who needs to emulate select these days?  */ 
+     anybody who needs to emulate select these days?  */
  int ravail = 0;
   SELECT_TYPE orfds;
   int timeoutval;
   int *local_timeout;
   extern int proc_buffered_char[];
-#ifndef subprocesses
-  int process_tick = 0, update_tick = 0;
-#else
   extern int process_tick, update_tick;
-#endif
   unsigned char buf;
 
 #if defined (HAVE_SELECT) && defined (HAVE_X_WINDOWS)
@@ -1907,12 +1659,11 @@ sys_select (nfds, rfds, wfds, efds, timeout)
    waiting for at least one character.  */
 
 void
-read_input_waiting ()
+read_input_waiting (void)
 {
   /* XXX This needs to be updated for multi-tty support.  Is there
      anybody who needs to emulate select these days?  */
   int nread, i;
-  extern int quit_char;
 
   if (read_socket_hook)
     {
@@ -2421,11 +2172,10 @@ emacs_write (int fildes, const char *buf, unsigned int nbyte)
 #ifndef HAVE_GETWD
 
 char *
-getwd (pathname)
-     char *pathname;
+getwd (char *pathname)
 {
   char *npath, *spath;
-  extern char *getcwd ();
+  extern char *getcwd (char *, size_t);
 
   BLOCK_INPUT;			/* getcwd uses malloc */
   spath = npath = getcwd ((char *) 0, MAXPATHLEN);
@@ -2454,9 +2204,8 @@ getwd (pathname)
 
 #ifndef HAVE_RENAME
 
-rename (from, to)
-     const char *from;
-     const char *to;
+int
+rename (const char *from, const char *to)
 {
   if (access (from, 0) == 0)
     {
@@ -2476,7 +2225,8 @@ rename (from, to)
 /* HPUX curses library references perror, but as far as we know
    it won't be called.  Anyway this definition will do for now.  */
 
-perror ()
+void
+perror (void)
 {
 }
 #endif /* HPUX and not HAVE_PERROR */
@@ -2489,9 +2239,8 @@ perror ()
  *	until we are, then close the unsuccessful ones.
  */
 
-dup2 (oldd, newd)
-     int oldd;
-     int newd;
+int
+dup2 (int oldd, int newd)
 {
   register int fd, ret;
 
@@ -2519,17 +2268,14 @@ dup2 (oldd, newd)
  *	Only needed when subprocesses are defined.
  */
 
-#ifdef subprocesses
 #ifndef HAVE_GETTIMEOFDAY
 #ifdef HAVE_TIMEVAL
 
 /* ARGSUSED */
 int
-gettimeofday (tp, tzp)
-     struct timeval *tp;
-     struct timezone *tzp;
+gettimeofday (struct timeval *tp, struct timezone *tzp)
 {
-  extern long time ();
+  extern long time (long);
 
   tp->tv_sec = time ((long *)0);
   tp->tv_usec = 0;
@@ -2539,8 +2285,7 @@ gettimeofday (tp, tzp)
 }
 
 #endif
-#endif
-#endif /* subprocess && !HAVE_GETTIMEOFDAY && HAVE_TIMEVAL */
+#endif /* !HAVE_GETTIMEOFDAY && HAVE_TIMEVAL */
 
 /*
  *	This function will go away as soon as all the stubs fixed. (fnf)
@@ -2558,7 +2303,7 @@ croak (char *badfunc)
 
 /* Directory routines for systems that don't have them. */
 
-#ifdef SYSV_SYSTEM_DIR
+#ifdef HAVE_DIRENT_H
 
 #include <dirent.h>
 
@@ -2575,7 +2320,7 @@ closedir (DIR *dirp /* stream from opendir */)
   return rtnval;
 }
 #endif /* not HAVE_CLOSEDIR */
-#endif /* SYSV_SYSTEM_DIR */
+#endif /* HAVE_DIRENT_H */
 
 
 int
@@ -2616,9 +2361,7 @@ set_file_times (const char *filename, EMACS_TIME atime, EMACS_TIME mtime)
  * Make a directory.
  */
 int
-mkdir (dpath, dmode)
-     char *dpath;
-     int dmode;
+mkdir (char *dpath, int dmode)
 {
   int cpid, status, fd;
   struct stat statbuf;
@@ -2676,8 +2419,7 @@ mkdir (dpath, dmode)
 
 #ifndef HAVE_RMDIR
 int
-rmdir (dpath)
-     char *dpath;
+rmdir (char *dpath)
 {
   int cpid, status, fd;
   struct stat statbuf;
@@ -2722,10 +2464,62 @@ rmdir (dpath)
 #endif /* !HAVE_RMDIR */
 
 
+#ifndef HAVE_MEMSET
+void *
+memset (void *b, int n, size_t length)
+{
+  unsigned char *p = b;
+  while (length-- > 0)
+    *p++ = n;
+  return b;
+}
+#endif /* !HAVE_MEMSET */
+
+#ifndef HAVE_MEMCPY
+void *
+memcpy (void *b1, void *b2, size_t length)
+{
+  unsigned char *p1 = b1, *p2 = b2;
+  while (length-- > 0)
+    *p1++ = *p2++;
+  return b1;
+}
+#endif /* !HAVE_MEMCPY */
+
+#ifndef HAVE_MEMMOVE
+void *
+memmove (void *b1, void *b2, size_t length)
+{
+  unsigned char *p1 = b1, *p2 = b2;
+  if (p1 < p2 || p1 >= p2 + length)
+    while (length-- > 0)
+      *p1++ = *p2++;
+  else
+    {
+      p1 += length;
+      p2 += length;
+      while (length-- > 0)
+	*--p1 = *--p2;
+    }
+  return b1;
+}
+#endif /* !HAVE_MEMCPY */
+
+#ifndef HAVE_MEMCMP
+int
+memcmp (void *b1, void *b2, size_t length)
+{
+  unsigned char *p1 = b1, *p2 = b2;
+  while (length-- > 0)
+    if (*p1++ != *p2++)
+      return p1[-1] < p2[-1] ? -1 : 1;
+  return 0;
+}
+#endif /* !HAVE_MEMCMP */
+
 #ifndef HAVE_STRSIGNAL
 char *
-strsignal (code)
-     int code;
+strsignal (int code)
 {
   char *signame = 0;
 
@@ -2739,9 +2533,10 @@ strsignal (code)
 }
 #endif /* HAVE_STRSIGNAL */
 
-#ifdef HAVE_TERMIOS
+#ifndef DOS_NT
 /* For make-serial-process  */
-int serial_open (char *port)
+int
+serial_open (char *port)
 {
   int fd = -1;
 
@@ -2767,14 +2562,12 @@ int serial_open (char *port)
 
   return fd;
 }
-#endif /* TERMIOS  */
-
-#ifdef HAVE_TERMIOS
 
 #if !defined (HAVE_CFMAKERAW)
 /* Workaround for targets which are missing cfmakeraw.  */
 /* Pasted from man page.  */
-static void cfmakeraw (struct termios *termios_p)
+static void
+cfmakeraw (struct termios *termios_p)
 {
     termios_p->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
     termios_p->c_oflag &= ~OPOST;
@@ -2786,7 +2579,8 @@ static void cfmakeraw (struct termios *termios_p)
 
 #if !defined (HAVE_CFSETSPEED)
 /* Workaround for targets which are missing cfsetspeed.  */
-static int cfsetspeed (struct termios *termios_p, speed_t vitesse)
+static int
+cfsetspeed (struct termios *termios_p, speed_t vitesse)
 {
   return (cfsetispeed (termios_p, vitesse)
 	  + cfsetospeed (termios_p, vitesse));
@@ -2796,7 +2590,7 @@ static int cfsetspeed (struct termios *termios_p, speed_t vitesse)
 /* For serial-process-configure  */
 void
 serial_configure (struct Lisp_Process *p,
-		      Lisp_Object contact)
+		  Lisp_Object contact)
 {
   Lisp_Object childp2 = Qnil;
   Lisp_Object tem = Qnil;
@@ -2839,7 +2633,7 @@ serial_configure (struct Lisp_Process *p,
   CHECK_NUMBER (tem);
   if (XINT (tem) != 7 && XINT (tem) != 8)
     error (":bytesize must be nil (8), 7, or 8");
-  summary[0] = XINT(tem) + '0';
+  summary[0] = XINT (tem) + '0';
 #if defined (CSIZE) && defined (CS7) && defined (CS8)
   attr.c_cflag &= ~CSIZE;
   attr.c_cflag |= ((XINT (tem) == 7) ? CS7 : CS8);
@@ -2954,7 +2748,7 @@ serial_configure (struct Lisp_Process *p,
   p->childp = childp2;
 
 }
-#endif /* TERMIOS  */
+#endif /* not DOS_NT  */
 
 /* System depended enumeration of and access to system processes a-la ps(1).  */
 
@@ -2997,7 +2791,7 @@ list_system_processes (void)
 #elif !defined (WINDOWSNT) && !defined (MSDOS)
 
 Lisp_Object
-list_system_processes ()
+list_system_processes (void)
 {
   return Qnil;
 }
@@ -3196,7 +2990,7 @@ system_process_attributes (Lisp_Object pid)
   procfn_end = fn + strlen (fn);
   strcpy (procfn_end, "/stat");
   fd = emacs_open (fn, O_RDONLY, 0);
-  if (fd >= 0 && (nread = emacs_read (fd, procbuf, sizeof(procbuf) - 1)) > 0)
+  if (fd >= 0 && (nread = emacs_read (fd, procbuf, sizeof (procbuf) - 1)) > 0)
     {
       procbuf[nread] = '\0';
       p = procbuf;
@@ -3457,7 +3251,7 @@ system_process_attributes (Lisp_Object pid)
   strcpy (procfn_end, "/psinfo");
   fd = emacs_open (fn, O_RDONLY, 0);
   if (fd >= 0
-      && (nread = read (fd, (char*)&pinfo, sizeof(struct psinfo)) > 0))
+      && (nread = read (fd, (char*)&pinfo, sizeof (struct psinfo)) > 0))
     {
           attrs = Fcons (Fcons (Qppid, make_fixnum_or_float (pinfo.pr_ppid)), attrs);
 	  attrs = Fcons (Fcons (Qpgrp, make_fixnum_or_float (pinfo.pr_pgid)), attrs);

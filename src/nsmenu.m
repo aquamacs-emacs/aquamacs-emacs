@@ -111,7 +111,7 @@ free_frame_menubar (struct frame *f)
 
 
 int
-popup_activated ()
+popup_activated (void)
 {
   return popup_activated_flag;
 }
@@ -239,8 +239,8 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
       /* Save the frame's previous menu bar contents data */
       if (previous_menu_items_used)
-	bcopy (XVECTOR (f->menu_bar_vector)->contents, previous_items,
-	       previous_menu_items_used * sizeof (Lisp_Object));
+	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->contents,
+		previous_menu_items_used * sizeof (Lisp_Object));
 
       /* parse stage 1: extract from lisp */
       save_menu_items ();
@@ -529,8 +529,7 @@ set_frame_menubar (struct frame *f, int first_time, int deep_p)
 
 /* Utility (from macmenu.c): is this item a separator? */
 static int
-name_is_separator (name)
-     const char *name;
+name_is_separator ( const char *name)
 {
   const char *start = name;
 
@@ -661,9 +660,9 @@ static int trackingMenu = 0;
    NSMenuItem get ignored.  For now we try to display a super-single letter
    combo, and return the others as strings to be appended to the item title.
    (This is signaled by setting keyEquivModMask to 0 for now.) */
--(NSString *)parseKeyEquiv: (char *)key
+-(NSString *)parseKeyEquiv: (const char *)key
 {
-  char *tpos = key;
+  const char *tpos = key;
   keyEquivModMask = NSCommandKeyMask;
 
   if (!key || !strlen (key))
@@ -822,7 +821,7 @@ static int trackingMenu = 0;
 
 
 /* adds an empty submenu and returns it */
-- (EmacsMenu *)addSubmenuWithTitle: (char *)title forFrame: (struct frame *)f
+- (EmacsMenu *)addSubmenuWithTitle: (const char *)title forFrame: (struct frame *)f
 {
   if (! title) return nil;
   NSString *titleStr = [NSString stringWithUTF8String: title];
@@ -841,19 +840,21 @@ static int trackingMenu = 0;
                  keymaps: (int)keymaps
 {
   EmacsView *view = FRAME_NS_VIEW (f);
+  NSEvent *e, *event;
+  long retVal;
+
 /*   p = [view convertPoint:p fromView: nil]; */
   p.y = NSHeight ([view frame]) - p.y;
-  NSEvent *e = [[view window] currentEvent];
-  NSEvent *event = [NSEvent mouseEventWithType: NSRightMouseDown
-                                      location: p
-                                 modifierFlags: 0
-                                     timestamp: [e timestamp]
-                                  windowNumber: [[view window] windowNumber]
-                                       context: [e context]
-                                   eventNumber: 0/*[e eventNumber] */
-                                    clickCount: 1
-                                      pressure: 0];
-  long retVal;
+  e = [[view window] currentEvent];
+   event = [NSEvent mouseEventWithType: NSRightMouseDown
+                              location: p
+                         modifierFlags: 0
+                             timestamp: [e timestamp]
+                          windowNumber: [[view window] windowNumber]
+                               context: [e context]
+                           eventNumber: 0/*[e eventNumber] */
+                            clickCount: 1
+                              pressure: 0];
 
   context_menu_value = -1;
   [NSMenu popUpContextMenu: self withEvent: event forView: view];
@@ -876,7 +877,7 @@ static int trackingMenu = 0;
 
 Lisp_Object
 ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
-	      Lisp_Object title, char **error)
+	      Lisp_Object title, const char **error)
 {
   EmacsMenu *pmenu;
   NSPoint p;
@@ -939,7 +940,7 @@ ns_menu_show (FRAME_PTR f, int x, int y, int for_click, int keymaps,
 	{
 	  /* Create a new pane.  */
 	  Lisp_Object pane_name, prefix;
-	  char *pane_string;
+	  const char *pane_string;
 
 	  pane_name = AREF (menu_items, i + MENU_ITEMS_PANE_NAME);
 	  prefix = AREF (menu_items, i + MENU_ITEMS_PANE_PREFIX);
@@ -2021,7 +2022,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
 DEFUN ("ns-reset-menu", Fns_reset_menu, Sns_reset_menu, 0, 0, 0,
        doc: /* Cause the NS menu to be re-calculated.  */)
-     ()
+     (void)
 {
   set_frame_menubar (SELECTED_FRAME (), 1, 0);
   return Qnil;
@@ -2075,7 +2076,7 @@ then this produces a quit and `x-popup-dialog' does not return.  */)
 
 DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_p, 0, 0, 0,
        doc: /* Return t if a menu or popup dialog is active.  */)
-     ()
+     (void)
 {
   return popup_activated () ? Qt : Qnil;
 }
@@ -2087,7 +2088,7 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
    ========================================================================== */
 
 void
-syms_of_nsmenu ()
+syms_of_nsmenu (void)
 {
   DEFVAR_LISP ("ns-tool-bar-size-mode", &Vns_tool_bar_size_mode,
 	       doc: /* *Specify the size of the tool bar items.

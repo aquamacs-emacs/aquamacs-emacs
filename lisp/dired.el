@@ -7,6 +7,7 @@
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
 ;; Maintainer: FSF
 ;; Keywords: files
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -1380,10 +1381,8 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
     (define-key map ">" 'dired-next-dirline)
     (define-key map "^" 'dired-up-directory)
     (define-key map " "  'dired-next-line)
-    (define-key map "\C-n" 'dired-next-line)
-    (define-key map "\C-p" 'dired-previous-line)
-    (define-key map [down] 'dired-next-line)
-    (define-key map [up] 'dired-previous-line)
+    (define-key map [remap next-line] 'dired-next-line)
+    (define-key map [remap previous-line] 'dired-previous-line)
     ;; hiding
     (define-key map "$" 'dired-hide-subdir)
     (define-key map "\M-$" 'dired-hide-all)
@@ -1393,7 +1392,7 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
     (define-key map (kbd "M-s f C-s")   'dired-isearch-filenames)
     (define-key map (kbd "M-s f M-C-s") 'dired-isearch-filenames-regexp)
     ;; misc
-    (define-key map "\C-x\C-q" 'dired-toggle-read-only)
+    (define-key map [remap toggle-read-only] 'dired-toggle-read-only)
     (define-key map "?" 'dired-summary)
     (define-key map "\177" 'dired-unmark-backward)
     (define-key map [remap undo] 'dired-undo)
@@ -2227,31 +2226,33 @@ You can then feed the file name(s) to other commands with \\[yank]."
 ;; Keeping Dired buffers in sync with the filesystem and with each other
 
 (defun dired-buffers-for-dir (dir &optional file)
-;; Return a list of buffers that dired DIR (top level or in-situ subdir).
+;; Return a list of buffers for DIR (top level or in-situ subdir).
 ;; If FILE is non-nil, include only those whose wildcard pattern (if any)
 ;; matches FILE.
 ;; The list is in reverse order of buffer creation, most recent last.
 ;; As a side effect, killed dired buffers for DIR are removed from
 ;; dired-buffers.
   (setq dir (file-name-as-directory dir))
-  (let ((alist dired-buffers) result elt buf)
-    (while alist
-      (setq elt (car alist)
-	    buf (cdr elt))
-      (if (buffer-name buf)
-	  (if (dired-in-this-tree dir (car elt))
-	      (with-current-buffer buf
-		(and (assoc dir dired-subdir-alist)
-		     (or (null file)
-			 (let ((wildcards
-				(file-name-nondirectory dired-directory)))
-			   (or (= 0 (length wildcards))
-			       (string-match (dired-glob-regexp wildcards)
-					     file))))
-		     (setq result (cons buf result)))))
-	;; else buffer is killed - clean up:
+  (let (result buf)
+    (dolist (elt dired-buffers)
+      (setq buf (cdr elt))
+      (cond
+       ((null (buffer-name buf))
+	;; Buffer is killed - clean up:
 	(setq dired-buffers (delq elt dired-buffers)))
-      (setq alist (cdr alist)))
+       ((dired-in-this-tree dir (car elt))
+	(with-current-buffer buf
+	  (and (assoc dir dired-subdir-alist)
+	       (or (null file)
+		   (if (stringp dired-directory)
+		       (let ((wildcards (file-name-nondirectory
+					 dired-directory)))
+			 (or (= 0 (length wildcards))
+			     (string-match (dired-glob-regexp wildcards)
+					   file)))
+		     (member (expand-file-name file dir)
+			     (cdr dired-directory))))
+	       (setq result (cons buf result)))))))
     result))
 
 (defun dired-glob-regexp (pattern)
@@ -2765,17 +2766,19 @@ name, or the marker and a count of marked files."
     (fit-window-to-buffer (get-buffer-window buf) nil 1)))
 
 (defcustom dired-no-confirm nil
-  "A list of symbols for commands Dired should not confirm.
+  "A list of symbols for commands Dired should not confirm, or t.
 Command symbols are `byte-compile', `chgrp', `chmod', `chown', `compress',
 `copy', `delete', `hardlink', `load', `move', `print', `shell', `symlink',
-`touch' and `uncompress'."
+`touch' and `uncompress'.
+If t, confirmation is never needed."
   :group 'dired
-  :type '(set (const byte-compile) (const chgrp)
-	      (const chmod) (const chown) (const compress)
-	      (const copy) (const delete) (const hardlink)
-	      (const load) (const move) (const print)
-	      (const shell) (const symlink) (const touch)
-	      (const uncompress)))
+  :type '(choice (const :tag "Confirmation never needed" t)
+		 (set (const byte-compile) (const chgrp)
+		      (const chmod) (const chown) (const compress)
+		      (const copy) (const delete) (const hardlink)
+		      (const load) (const move) (const print)
+		      (const shell) (const symlink) (const touch)
+		      (const uncompress))))
 
 (defun dired-mark-pop-up (bufname op-symbol files function &rest args)
   "Return FUNCTION's result on ARGS after showing which files are marked.
@@ -3246,12 +3249,16 @@ variable `dired-listing-switches'.  To temporarily override the listing
 format, use `\\[universal-argument] \\[dired]'.")
 
 (defvar dired-sort-by-date-regexp
-  (concat "^-[^" dired-ls-sorting-switches
-	  "]*t[^" dired-ls-sorting-switches "]*$")
+  (concat "\\(\\`\\| \\)-[^- ]*t"
+	  ;; `dired-ls-sorting-switches' after -t overrides -t.
+	  "[^ " dired-ls-sorting-switches "]*"
+	  "\\(\\(\\`\\| +\\)\\(--[^ ]+\\|-[^- t"
+	  dired-ls-sorting-switches "]+\\)\\)* *$")
   "Regexp recognized by Dired to set `by date' mode.")
 
 (defvar dired-sort-by-name-regexp
-  (concat "^-[^t" dired-ls-sorting-switches "]+$")
+  (concat "\\`\\(\\(\\`\\| +\\)\\(--[^ ]+\\|"
+	  "-[^- t" dired-ls-sorting-switches "]+\\)\\)* *$")
   "Regexp recognized by Dired to set `by name' mode.")
 
 (defvar dired-sort-inhibit nil
@@ -3277,8 +3284,8 @@ The idea is to set this buffer-locally in special dired buffers.")
     (force-mode-line-update)))
 
 (defun dired-sort-toggle-or-edit (&optional arg)
-  "Toggle between sort by date/name and refresh the dired buffer.
-With a prefix argument you can edit the current listing switches instead."
+  "Toggle sorting by date, and refresh the Dired buffer.
+With a prefix argument, edit the current listing switches instead."
   (interactive "P")
   (when dired-sort-inhibit
     (error "Cannot sort this dired buffer"))
@@ -3289,24 +3296,24 @@ With a prefix argument you can edit the current listing switches instead."
 
 (defun dired-sort-toggle ()
   ;; Toggle between sort by date/name.  Reverts the buffer.
-  (setq dired-actual-switches
-	(let (case-fold-search)
-	  (if (string-match " " dired-actual-switches)
-	      ;; New toggle scheme: add/remove a trailing " -t"
-	      (if (string-match " -t\\'" dired-actual-switches)
-		  (substring dired-actual-switches 0 (match-beginning 0))
-		(concat dired-actual-switches " -t"))
-	    ;; old toggle scheme: look for some 't' switch and add/remove it
-	    (concat
-	     "-l"
-	     (dired-replace-in-string (concat "[-lt"
-					      dired-ls-sorting-switches "]")
-				      ""
-				      dired-actual-switches)
-	     (if (string-match (concat "[t" dired-ls-sorting-switches "]")
-			       dired-actual-switches)
-		 ""
-	       "t")))))
+  (let ((sorting-by-date (string-match dired-sort-by-date-regexp
+				       dired-actual-switches))
+	;; Regexp for finding (possibly embedded) -t switches.
+	(switch-regexp "\\(\\`\\| \\)-\\([a-su-zA-Z]*\\)\\(t\\)\\([^ ]*\\)")
+	case-fold-search)
+    ;; Remove the -t switch.
+    (while (string-match switch-regexp dired-actual-switches)
+      (if (and (equal (match-string 2 dired-actual-switches) "")
+	       (equal (match-string 4 dired-actual-switches) ""))
+	  ;; Remove a stand-alone -t switch.
+	  (setq dired-actual-switches
+		(replace-match "" t t dired-actual-switches))
+	;; Remove a switch of the form -XtY for some X and Y.
+	(setq dired-actual-switches
+	      (replace-match "" t t dired-actual-switches 3))))
+    ;; Now, if we weren't sorting by date before, add the -t switch.
+    (unless sorting-by-date
+      (setq dired-actual-switches (concat dired-actual-switches " -t"))))
   (dired-sort-set-modeline)
   (revert-buffer))
 
@@ -3532,7 +3539,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "07676ea25af17f5d50cc5db4f53bddc0")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "416d272299fd4774c47c2f677ee640a4")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -3985,7 +3992,7 @@ true then the type of the file linked to by FILE is printed instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump) "dired-x" "dired-x.el"
-;;;;;;  "6c492aba3ca0d36a4cd7b02fb9c1cc10")
+;;;;;;  "27c312d6d5d40d8cb4ef8d62e30d5f4a")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

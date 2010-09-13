@@ -318,10 +318,7 @@ extern Lisp_Object unuse_menu_items (Lisp_Object dummy);
 #define ENCODE_MENU_STRING(str) (str)
 #endif
 
-#if defined (HAVE_NS) || defined (HAVE_NTGUI)
-
-typedef void * XtPointer;
-typedef unsigned char Boolean;
+#if defined (HAVE_NS) || defined (HAVE_NTGUI) || defined (USE_GTK)
 
 /* Definitions copied from lwlib.h */
 
@@ -338,36 +335,37 @@ typedef struct _widget_value
 {
   /* name of widget */
   Lisp_Object   lname;
-  char*		name;
+  const char*	name;
   /* value (meaning depend on widget type) */
-  char*		value;
+  const char*	value;
   /* keyboard equivalent. no implications for XtTranslations */
   Lisp_Object   lkey;
-  char*		key;
+  const char*	key;
   /* Help string or nil if none.
      GC finds this string through the frame's menu_bar_vector
      or through menu_items.  */
   Lisp_Object	help;
   /* true if enabled */
-  Boolean	enabled;
+  unsigned char	enabled;
   /* true if selected */
-  Boolean	selected;
+  unsigned char selected;
   /* The type of a button.  */
   enum button_type button_type;
 #if defined (HAVE_NTGUI)
   /* true if menu title */
-  Boolean       title;
+  unsigned char title;
 #endif
   /* Contents of the sub-widgets, also selected slot for checkbox */
   struct _widget_value*	contents;
   /* data passed to callback */
-  XtPointer	call_data;
+  void	*call_data;
   /* next one in the list */
   struct _widget_value*	next;
+#ifdef USE_GTK
+  struct _widget_value *free_list;
+#endif
 } widget_value;
 
-extern widget_value *xmalloc_widget_value (void);
-extern widget_value *digest_single_submenu (int, int, int);
 #endif /* HAVE_NS || HAVE_NTGUI */
 
 
@@ -406,6 +404,8 @@ extern widget_value *digest_single_submenu (int, int, int);
 #define POSN_INBUFFER_P(posn) (NILP (POSN_STRING (posn)))
 #define POSN_BUFFER_POSN(posn) (Fnth (make_number (5), (posn)))
 
+extern Lisp_Object do_mouse_tracking;
+
 /* Some of the event heads.  */
 extern Lisp_Object Qswitch_frame;
 
@@ -420,12 +420,28 @@ extern Lisp_Object Qevent_kind, Qevent_symbol_elements;
 extern Lisp_Object Qfunction_key, Qmouse_click, Qmouse_movement;
 extern Lisp_Object Qscroll_bar_movement;
 
+extern Lisp_Object Qhelp_echo;
+
 /* Getting the kind of an event head.  */
 #define EVENT_HEAD_KIND(event_head) \
   (Fget ((event_head), Qevent_kind))
 
 /* Symbols to use for non-text mouse positions.  */
 extern Lisp_Object Qmode_line, Qvertical_line, Qheader_line;
+
+/* True while doing kbd input.  */
+extern int waiting_for_input;
+
+/* Address (if not 0) of EMACS_TIME to zero out if a SIGIO interrupt
+   happens.  */
+extern EMACS_TIME *input_available_clear_time;
+
+extern int ignore_mouse_drag_p;
+
+extern Lisp_Object Vdouble_click_time;
+
+/* The primary selection.  */
+extern Lisp_Object QPRIMARY;
 
 /* Forward declaration for prototypes.  */
 struct input_event;
@@ -442,6 +458,37 @@ extern Lisp_Object Vfunction_key_map;
 
 /* Keymap of key translations that can override keymaps.  */
 extern Lisp_Object Vkey_translation_map;
+
+/* This is like Vthis_command, except that commands never set it.  */
+extern Lisp_Object real_this_command;
+
+/* If the lookup of the command returns a binding, the original
+   command is stored in this-original-command.  It is nil otherwise.  */
+extern Lisp_Object Vthis_original_command;
+
+/* Non-nil disable property on a command means
+   do not execute it; call disabled-command-function's value instead.  */
+extern Lisp_Object QCbutton, QCtoggle, QCradio, QClabel;
+
+/* A mask of extra modifier bits to put into every keyboard char.  */
+extern EMACS_INT extra_keyboard_modifiers;
+
+/* If non-nil, this implements the current input method.  */
+extern Lisp_Object Vinput_method_function;
+extern Lisp_Object Qinput_method_function;
+
+/* An event header symbol HEAD may have a property named
+   Qevent_symbol_element_mask, which is of the form (BASE MODIFIERS);
+   BASE is the base, unmodified version of HEAD, and MODIFIERS is the
+   mask of modifiers applied to it.  If present, this is used to help
+   speed up parse_modifiers.  */
+extern Lisp_Object Qevent_symbol_element_mask;
+
+/* The timestamp of the last input event we received from the X server.
+   X Windows wants this for selection ownership.  */
+extern unsigned long last_event_timestamp;
+
+extern int quit_char;
 
 extern int parse_menu_item (Lisp_Object, int);
 
@@ -468,15 +515,12 @@ extern void clear_waiting_for_input (void);
 extern void swallow_events (int);
 extern int help_char_p (Lisp_Object);
 extern void quit_throw_to_read_char (void) NO_RETURN;
-extern void cmd_error_internal (Lisp_Object, char *);
 extern int lucid_event_type_list_p (Lisp_Object);
 extern void kbd_buffer_store_event (struct input_event *);
 extern void kbd_buffer_store_event_hold (struct input_event *,
                                          struct input_event *);
 extern void kbd_buffer_unget_event (struct input_event *);
-#ifdef POLL_FOR_INPUT
 extern void poll_for_input_1 (void);
-#endif
 extern void show_help_echo (Lisp_Object, Lisp_Object, Lisp_Object,
                             Lisp_Object, int);
 extern void gen_help_event (Lisp_Object, Lisp_Object, Lisp_Object,

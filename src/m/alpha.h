@@ -25,10 +25,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define _LP64 /* This doesn't appear to be necessary on OSF 4/5  -- fx.  */
 #endif
 
-/* Define WORDS_BIG_ENDIAN if lowest-numbered byte in a word
-   is the most significant byte.  */
-#undef WORDS_BIG_ENDIAN
-
 /* Now define a symbol for the cpu type, if your compiler
    does not define it automatically.  */
 /* __alpha defined automatically */
@@ -53,14 +49,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define DATA_START    0x140000000
 #endif
 
-#if (defined (__NetBSD__) || defined (__OpenBSD__))
-#define HAVE_TEXT_START
-#endif
-
 #else  /* not __ELF__ */
 
 /* Describe layout of the address space in an executing process.  */
-#define TEXT_START    0x120000000
 #define DATA_START    0x140000000
 
 #endif /* __ELF__ */
@@ -68,12 +59,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* On the Alpha it's best to avoid including TERMIO since struct
    termio and struct termios are mutually incompatible.  */
 #define NO_TERMIO
-
-#if defined (GNU_LINUX) || defined (__NetBSD__) || defined (__OpenBSD__)
-# ifndef __ELF__
-#  define COFF
-# endif /* notdef __ELF__ */
-#endif
 
 /* Many Alpha implementations (e.g. gas 2.8) can't handle DBL_MIN:
    they generate code that uses a signaling NaN instead of DBL_MIN.

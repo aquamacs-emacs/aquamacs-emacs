@@ -18,9 +18,7 @@ You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #ifdef WINDOWSNT
 
@@ -32,6 +30,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 # include <stdlib.h>
 # include <windows.h>
 # include <commctrl.h>
+# include <io.h>
+# include <winsock2.h>
 
 # define NO_SOCKETS_IN_FILE_SYSTEM
 
@@ -45,8 +45,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 # ifdef HAVE_INET_SOCKETS
 #  include <netinet/in.h>
+#  ifdef HAVE_SOCKETS
+#    include <sys/types.h>
+#    include <sys/socket.h>
+#    include <sys/un.h>
+#  endif /* HAVE_SOCKETS */
 # endif
-
 # include <arpa/inet.h>
 
 # define INVALID_SOCKET -1
@@ -67,25 +71,23 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <stdio.h>
 #include "getopt.h"
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 
-#ifdef WINDOWSNT
-# include <io.h>
-#else /* not WINDOWSNT */
-# include <pwd.h>
-#endif /* not WINDOWSNT */
+#include <pwd.h>
 #include <sys/stat.h>
-
 #include <signal.h>
 #include <errno.h>
 
+
 
 char *getenv (const char *), *getwd (char *);
-char *(getcwd) ();
+#ifdef HAVE_GETCWD
+char *(getcwd) (char *, size_t);
+#endif
 
 #ifdef WINDOWSNT
-char *w32_getenv ();
+char *w32_getenv (char *);
 #define egetenv(VAR) w32_getenv(VAR)
 #else
 #define egetenv(VAR) getenv(VAR)
@@ -112,10 +114,6 @@ char *w32_getenv ();
 #define TRUE 1
 #endif
 
-#ifndef NO_RETURN
-#define NO_RETURN
-#endif
-
 /* Additional space when allocating buffers for filenames, etc.  */
 #define EXTRA_SPACE 100
 
@@ -136,7 +134,7 @@ int eval = 0;
 int current_frame = 1;
 
 /* The display on which Emacs should work.  --display.  */
-char *display = NULL;
+const char *display = NULL;
 
 /* The parent window ID, if we are opening a frame via XEmbed.  */
 char *parent_id = NULL;
@@ -152,12 +150,14 @@ const char *alternate_editor = NULL;
 char *socket_name = NULL;
 
 /* If non-NULL, the filename of the authentication file.  */
-char *server_file = NULL;
+const char *server_file = NULL;
 
 /* PID of the Emacs server process.  */
 int emacs_pid = 0;
 
 void print_help_and_exit (void) NO_RETURN;
+void fail (void) NO_RETURN;
+
 
 struct option longopts[] =
 {
@@ -235,7 +235,7 @@ xstrdup (const char *s)
    Any other returned value must be freed with free.  This is used
    only when get_current_dir_name is not defined on the system.  */
 char*
-get_current_dir_name ()
+get_current_dir_name (void)
 {
   char *buf;
   char *pwd;
@@ -311,10 +311,7 @@ get_current_dir_name ()
    Return NULL if the variable was not found, or it was empty.
    This code is based on w32_get_resource (w32.c).  */
 char *
-w32_get_resource (predefined, key, type)
-     HKEY predefined;
-     char *key;
-     LPDWORD type;
+w32_get_resource (HKEY predefined, char *key, LPDWORD type)
 {
   HKEY hrootkey = NULL;
   char *result = NULL;
@@ -347,8 +344,7 @@ w32_get_resource (predefined, key, type)
   variables in the registry if they don't appear in the environment.
 */
 char *
-w32_getenv (envvar)
-     char *envvar;
+w32_getenv (char *envvar)
 {
   char *value;
   DWORD dwType;
@@ -396,7 +392,7 @@ w32_getenv (envvar)
 }
 
 void
-w32_set_user_model_id ()
+w32_set_user_model_id (void)
 {
   HMODULE shell;
   HRESULT (WINAPI * set_user_model) (wchar_t * id);
@@ -404,7 +400,7 @@ w32_set_user_model_id ()
   /* On Windows 7 and later, we need to set the user model ID
      to associate emacsclient launched files with Emacs frames
      in the UI.  */
-  shell = LoadLibrary("shell32.dll");
+  shell = LoadLibrary ("shell32.dll");
   if (shell)
     {
       set_user_model
@@ -423,7 +419,7 @@ w32_set_user_model_id ()
 }
 
 int
-w32_window_app ()
+w32_window_app (void)
 {
   static int window_app = -1;
   char szTitle[MAX_PATH];
@@ -434,7 +430,7 @@ w32_window_app ()
          nonconsole apps.  Testing for the console title seems to work. */
       window_app = (GetConsoleTitleA (szTitle, MAX_PATH) == 0);
       if (window_app)
-        InitCommonControls();
+        InitCommonControls ();
     }
 
   return window_app;
@@ -446,13 +442,11 @@ w32_window_app ()
   This is necessary due to the broken implementation of exec* routines in
   the Microsoft libraries: they concatenate the arguments together without
   quoting special characters, and pass the result to CreateProcess, with
-  predictably bad results.  By contrast, Posix execvp passes the arguments
+  predictably bad results.  By contrast, POSIX execvp passes the arguments
   directly into the argv array of the child process.
 */
 int
-w32_execvp (path, argv)
-     char *path;
-     char **argv;
+w32_execvp (const char *path, char **argv)
 {
   int i;
 
@@ -485,9 +479,9 @@ ttyname (int fd)
 /* Display a normal or error message.
    On Windows, use a message box if compiled as a Windows app.  */
 void
-message (int is_error, char *message, ...)
+message (int is_error, const char *message, ...)
 {
-  char msg [2048];
+  char msg[2048];
   va_list args;
 
   va_start (args, message);
@@ -704,9 +698,7 @@ fail (void)
 #if !defined (HAVE_SOCKETS) || !defined (HAVE_INET_SOCKETS)
 
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char **argv)
 {
   main_argv = argv;
   progname = argv[0];
@@ -717,14 +709,6 @@ main (argc, argv)
 }
 
 #else /* HAVE_SOCKETS && HAVE_INET_SOCKETS */
-
-#ifdef WINDOWSNT
-# include <winsock2.h>
-#else
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <sys/un.h>
-#endif
 
 #define AUTH_KEY_LENGTH      64
 #define SEND_BUFFER_SIZE   4096
@@ -740,7 +724,7 @@ HSOCKET emacs_socket = 0;
 /* On Windows, the socket library was historically separate from the standard
    C library, so errors are handled differently.  */
 void
-sock_err_message (char *function_name)
+sock_err_message (const char *function_name)
 {
 #ifdef WINDOWSNT
   char* msg = NULL;
@@ -764,7 +748,7 @@ sock_err_message (char *function_name)
    - the buffer is full (but this shouldn't happen)
    Otherwise, we just accumulate it.  */
 void
-send_to_emacs (HSOCKET s, char *data)
+send_to_emacs (HSOCKET s, const char *data)
 {
   while (data)
     {
@@ -803,10 +787,11 @@ send_to_emacs (HSOCKET s, char *data)
 
    Does not change the string.  Outputs the result to S.  */
 void
-quote_argument (HSOCKET s, char *str)
+quote_argument (HSOCKET s, const char *str)
 {
   char *copy = (char *) xmalloc (strlen (str) * 2 + 1);
-  char *p, *q;
+  const char *p;
+  char *q;
 
   p = str;
   q = copy;
@@ -900,15 +885,15 @@ file_name_absolute_p (const unsigned char *filename)
 
 #ifdef WINDOWSNT
 /* Wrapper to make WSACleanup a cdecl, as required by atexit.  */
-void
-__cdecl close_winsock ()
+void __cdecl
+close_winsock (void)
 {
   WSACleanup ();
 }
 
 /* Initialize the WinSock2 library.  */
 void
-initialize_sockets ()
+initialize_sockets (void)
 {
   WSADATA wsaData;
 
@@ -1042,7 +1027,7 @@ set_tcp_socket (void)
 
 /* Returns 1 if PREFIX is a prefix of STRING. */
 static int
-strprefix (char *prefix, char *string)
+strprefix (const char *prefix, const char *string)
 {
   return !strncmp (prefix, string, strlen (prefix));
 }
@@ -1231,11 +1216,13 @@ set_local_socket (void)
     int sock_status = 0;
     int default_sock = !socket_name;
     int saved_errno = 0;
-    char *server_name = "server";
-    char *tmpdir;
+    const char *server_name = "server";
+    const char *tmpdir;
 
-    if (socket_name && !index (socket_name, '/') && !index (socket_name, '\\'))
-      { /* socket_name is a file name component.  */
+    if (socket_name && !strchr (socket_name, '/')
+	&& !strchr (socket_name, '\\'))
+      {
+	/* socket_name is a file name component.  */
  	server_name = socket_name;
  	socket_name = NULL;
  	default_sock = 1;	/* Try both UIDs.  */
@@ -1406,9 +1393,7 @@ FARPROC set_fg;  /* Pointer to AllowSetForegroundWindow.  */
 FARPROC get_wc;  /* Pointer to RealGetWindowClassA.  */
 
 BOOL CALLBACK
-w32_find_emacs_process (hWnd, lParam)
-     HWND hWnd;
-     LPARAM lParam;
+w32_find_emacs_process (HWND hWnd, LPARAM lParam)
 {
   DWORD pid;
   char class[6];
@@ -1436,7 +1421,7 @@ w32_find_emacs_process (hWnd, lParam)
  * process id = emacs_pid.  If found, allow it to grab the focus.
  */
 void
-w32_give_focus ()
+w32_give_focus (void)
 {
   HANDLE user32;
 
@@ -1474,7 +1459,7 @@ start_daemon_and_retry_set_socket (void)
       pid_t w;
       w = waitpid (dpid, &status, WUNTRACED | WCONTINUED);
 
-      if ((w == -1) || !WIFEXITED (status) || WEXITSTATUS(status))
+      if ((w == -1) || !WIFEXITED (status) || WEXITSTATUS (status))
 	{
 	  message (TRUE, "Error: Could not start the Emacs daemon\n");
 	  exit (EXIT_FAILURE);
@@ -1495,11 +1480,13 @@ start_daemon_and_retry_set_socket (void)
     }
   else
     {
-      char *d_argv[] = {"emacs", "--daemon", 0 };
+      char emacs[] = "emacs";
+      char daemon[] = "--daemon";
+      char *d_argv[] = {emacs, daemon, 0 };
       if (socket_name != NULL)
 	{
 	  /* Pass  --daemon=socket_name as argument.  */
-	  char *deq = "--daemon=";
+	  const char *deq = "--daemon=";
 	  char *daemon_arg = alloca (strlen (deq)
 				     + strlen (socket_name) + 1);
 	  strcpy (daemon_arg, deq);

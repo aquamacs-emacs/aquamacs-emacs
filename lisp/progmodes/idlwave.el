@@ -7,7 +7,7 @@
 ;;          Carsten Dominik <dominik@science.uva.nl>
 ;;          Chris Chase <chase@att.com>
 ;; Maintainer: J.D. Smith <jdsmith@as.arizona.edu>
-;; Version: 6.1_em22
+;; Version: 6.1.22
 ;; Keywords: languages
 
 ;; This file is part of GNU Emacs.
@@ -1602,7 +1602,7 @@ Capitalize system variables - action only
         `(lambda ()
            (interactive)
            (self-insert-command 1)
-           ,@(if (listp cmd) cmd (list cmd))))))
+           ,(if (listp cmd) cmd (list cmd))))))
 
 ;; Set action and key bindings.
 ;; See description of the function `idlwave-action-and-binding'.

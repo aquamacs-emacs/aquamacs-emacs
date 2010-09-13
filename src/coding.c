@@ -154,9 +154,8 @@ STRUCT CODING_SYSTEM
 
 #if 0
 static int
-detect_coding_XXX (coding, detect_info)
-     struct coding_system *coding;
-     struct coding_detection_info *detect_info;
+detect_coding_XXX (struct coding_system *coding,
+		   struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -203,8 +202,7 @@ detect_coding_XXX (coding, detect_info)
 
 #if 0
 static void
-decode_coding_XXXX (coding)
-     struct coding_system *coding;
+decode_coding_XXXX (struct coding_system *coding)
 {
   const unsigned char *src = coding->source + coding->consumed;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -261,8 +259,7 @@ decode_coding_XXXX (coding)
   Below is a template of these functions.  */
 #if 0
 static void
-encode_coding_XXX (coding)
-     struct coding_system *coding;
+encode_coding_XXX (struct coding_system *coding)
 {
   int multibytep = coding->dst_multibyte;
   int *charbuf = coding->charbuf;
@@ -306,7 +303,6 @@ Lisp_Object Vcoding_system_hash_table;
 
 Lisp_Object Qcoding_system, Qcoding_aliases, Qeol_type;
 Lisp_Object Qunix, Qdos;
-extern Lisp_Object Qmac;	/* frame.c */
 Lisp_Object Qbuffer_file_coding_system;
 Lisp_Object Qpost_read_conversion, Qpre_write_conversion;
 Lisp_Object Qdefault_char;
@@ -320,15 +316,12 @@ Lisp_Object QCdecode_translation_table, QCencode_translation_table;
 Lisp_Object QCpost_read_conversion, QCpre_write_conversion;
 Lisp_Object QCascii_compatible_p;
 
-extern Lisp_Object Qinsert_file_contents, Qwrite_region;
 Lisp_Object Qcall_process, Qcall_process_region;
 Lisp_Object Qstart_process, Qopen_network_stream;
 Lisp_Object Qtarget_idx;
 
 Lisp_Object Qinsufficient_source, Qinconsistent_eol, Qinvalid_source;
 Lisp_Object Qinterrupted, Qinsufficient_memory;
-
-extern Lisp_Object Qcompletion_ignore_case;
 
 /* If a symbol has this property, evaluate the value to define the
    symbol as a coding system.  */
@@ -1165,7 +1158,8 @@ coding_alloc_by_realloc (struct coding_system *coding, EMACS_INT bytes)
 }
 
 static void
-coding_alloc_by_making_gap (struct coding_system *coding, EMACS_INT gap_head_used, EMACS_INT bytes)
+coding_alloc_by_making_gap (struct coding_system *coding,
+			    EMACS_INT gap_head_used, EMACS_INT bytes)
 {
   if (EQ (coding->src_object, coding->dst_object))
     {
@@ -1194,7 +1188,8 @@ coding_alloc_by_making_gap (struct coding_system *coding, EMACS_INT gap_head_use
 
 
 static unsigned char *
-alloc_destination (struct coding_system *coding, EMACS_INT nbytes, unsigned char *dst)
+alloc_destination (struct coding_system *coding, EMACS_INT nbytes,
+		   unsigned char *dst)
 {
   EMACS_INT offset = dst - coding->destination;
 
@@ -1292,7 +1287,8 @@ alloc_destination (struct coding_system *coding, EMACS_INT nbytes, unsigned char
 #define UTF_8_BOM_3 0xBF
 
 static int
-detect_coding_utf_8 (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_utf_8 (struct coding_system *coding,
+		     struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -1423,8 +1419,6 @@ decode_coding_utf_8 (struct coding_system *coding)
     }
   CODING_UTF_8_BOM (coding) = utf_without_bom;
 
-
-
   while (1)
     {
       int c, c1, c2, c3, c4, c5;
@@ -1447,7 +1441,7 @@ decode_coding_utf_8 (struct coding_system *coding)
 	{
 	  c = - c1;
 	}
-      else if (UTF_8_1_OCTET_P(c1))
+      else if (UTF_8_1_OCTET_P (c1))
 	{
 	  if (eol_crlf && c1 == '\r')
 	    ONE_MORE_BYTE (byte_after_cr);
@@ -1610,7 +1604,8 @@ encode_coding_utf_8 (struct coding_system *coding)
 
 
 static int
-detect_coding_utf_16 (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_utf_16 (struct coding_system *coding,
+		      struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base = src;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -1962,7 +1957,8 @@ char emacs_mule_bytes[256];
    else return 0.  */
 
 static int
-detect_coding_emacs_mule (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_emacs_mule (struct coding_system *coding,
+			  struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -2050,7 +2046,9 @@ detect_coding_emacs_mule (struct coding_system *coding, struct coding_detection_
    -1.  If SRC is too short, return -2.  */
 
 int
-emacs_mule_char (struct coding_system *coding, const unsigned char *src, int *nbytes, int *nchars, int *id, struct composition_status *cmp_status)
+emacs_mule_char (struct coding_system *coding, const unsigned char *src,
+		 int *nbytes, int *nchars, int *id,
+		 struct composition_status *cmp_status)
 {
   const unsigned char *src_end = coding->source + coding->src_bytes;
   const unsigned char *src_base = src;
@@ -2187,7 +2185,7 @@ emacs_mule_char (struct coding_system *coding, const unsigned char *src, int *nb
    (3) alt&rule composition: 0x80 0xF5 BYTES CHARS | ALT RULE ... ALT CHAR ...
 
    and these old form:
-  
+
    (4) relative composition: 0x80 | MSEQ ... MSEQ
    (5) rulebase composition: 0x80 0xFF | MSEQ MRULE ... MSEQ
 
@@ -2368,7 +2366,8 @@ emacs_mule_char (struct coding_system *coding, const unsigned char *src, int *nb
 
 
 static int
-emacs_mule_finish_composition (int *charbuf, struct composition_status *cmp_status)
+emacs_mule_finish_composition (int *charbuf,
+			       struct composition_status *cmp_status)
 {
   int idx = - cmp_status->length;
   int new_chars;
@@ -3048,7 +3047,8 @@ setup_iso_safe_charsets (Lisp_Object attrs)
    If it is, return 1, else return 0.  */
 
 static int
-detect_coding_iso_2022 (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_iso_2022 (struct coding_system *coding,
+			struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base = src;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -3902,7 +3902,7 @@ decode_coding_iso_2022 (struct coding_system *coding)
 		  int size;
 
 		  ONE_MORE_BYTE (dim);
-		  if (dim < 0 || dim > 4)
+		  if (dim < '0' || dim > '4')
 		    goto invalid_code;
 		  ONE_MORE_BYTE (M);
 		  if (M < 128)
@@ -4097,8 +4097,8 @@ decode_coding_iso_2022 (struct coding_system *coding)
 #define ENCODE_DESIGNATION(charset, reg, coding)			\
   do {									\
     unsigned char final_char = CHARSET_ISO_FINAL (charset);		\
-    char *intermediate_char_94 = "()*+";				\
-    char *intermediate_char_96 = ",-./";				\
+    const char *intermediate_char_94 = "()*+";				\
+    const char *intermediate_char_96 = ",-./";				\
     int revision = -1;							\
     int c;								\
 									\
@@ -4284,7 +4284,7 @@ decode_coding_iso_2022 (struct coding_system *coding)
 
 #define ENCODE_ISO_CHARACTER(charset, c)				   \
   do {									   \
-    int code = ENCODE_CHAR ((charset),(c));				   \
+    int code = ENCODE_CHAR ((charset), (c));				   \
 									   \
     if (CHARSET_DIMENSION (charset) == 1)				   \
       ENCODE_ISO_CHARACTER_DIMENSION1 ((charset), code);		   \
@@ -4298,7 +4298,9 @@ decode_coding_iso_2022 (struct coding_system *coding)
    Return new DST.  */
 
 unsigned char *
-encode_invocation_designation (struct charset *charset, struct coding_system *coding, unsigned char *dst, int *p_nchars)
+encode_invocation_designation (struct charset *charset,
+			       struct coding_system *coding,
+			       unsigned char *dst, int *p_nchars)
 {
   int multibytep = coding->dst_multibyte;
   int produced_chars = *p_nchars;
@@ -4410,7 +4412,8 @@ encode_invocation_designation (struct charset *charset, struct coding_system *co
    find all the necessary designations.  */
 
 static unsigned char *
-encode_designation_at_bol (struct coding_system *coding, int *charbuf, int *charbuf_end, unsigned char *dst)
+encode_designation_at_bol (struct coding_system *coding, int *charbuf,
+			   int *charbuf_end, unsigned char *dst)
 {
   struct charset *charset;
   /* Table of charsets to be designated to each graphic register.  */
@@ -4650,7 +4653,8 @@ encode_coding_iso_2022 (struct coding_system *coding)
    CATEGORY_MASK_SJIS, else return 0.  */
 
 static int
-detect_coding_sjis (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_sjis (struct coding_system *coding,
+		    struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -4706,7 +4710,8 @@ detect_coding_sjis (struct coding_system *coding, struct coding_detection_info *
    CATEGORY_MASK_BIG5, else return 0.  */
 
 static int
-detect_coding_big5 (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_big5 (struct coding_system *coding,
+		    struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -5144,7 +5149,8 @@ encode_coding_big5 (struct coding_system *coding)
    CATEGORY_MASK_CCL, else return 0.  */
 
 static int
-detect_coding_ccl (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_ccl (struct coding_system *coding,
+		   struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -5423,7 +5429,8 @@ encode_coding_raw_text (struct coding_system *coding)
    is, return 1, else return 0.  */
 
 static int
-detect_coding_charset (struct coding_system *coding, struct coding_detection_info *detect_info)
+detect_coding_charset (struct coding_system *coding,
+		       struct coding_detection_info *detect_info)
 {
   const unsigned char *src = coding->source, *src_base;
   const unsigned char *src_end = coding->source + coding->src_bytes;
@@ -6168,7 +6175,8 @@ coding_inherit_eol_type (Lisp_Object coding_system, Lisp_Object parent)
 #define MAX_EOL_CHECK_COUNT 3
 
 static int
-detect_eol (const unsigned char *source, EMACS_INT src_bytes, enum coding_category category)
+detect_eol (const unsigned char *source, EMACS_INT src_bytes,
+	    enum coding_category category)
 {
   const unsigned char *src = source, *src_end = src + src_bytes;
   unsigned char c;
@@ -6538,7 +6546,7 @@ decode_eol (struct coding_system *coding)
 	  for (p = pend - 2; p >= pbeg; p--)
 	    if (*p == '\r')
 	      {
-		safe_bcopy ((char *) (p + 1), (char *) p, pend-- - p - 1);
+		memmove (p, p + 1, pend-- - p - 1);
 		n++;
 	      }
 	}
@@ -6704,7 +6712,8 @@ get_translation (Lisp_Object trans, int *buf, int *buf_end)
 
 
 static int
-produce_chars (struct coding_system *coding, Lisp_Object translation_table, int last_block)
+produce_chars (struct coding_system *coding, Lisp_Object translation_table,
+	       int last_block)
 {
   unsigned char *dst = coding->destination + coding->produced;
   unsigned char *dst_end = coding->destination + coding->dst_bytes;
@@ -7174,7 +7183,9 @@ decode_coding (struct coding_system *coding)
    return BUF.  */
 
 static INLINE int *
-handle_composition_annotation (EMACS_INT pos, EMACS_INT limit, struct coding_system *coding, int *buf, EMACS_INT *stop)
+handle_composition_annotation (EMACS_INT pos, EMACS_INT limit,
+			       struct coding_system *coding, int *buf,
+			       EMACS_INT *stop)
 {
   EMACS_INT start, end;
   Lisp_Object prop;
@@ -7255,7 +7266,9 @@ handle_composition_annotation (EMACS_INT pos, EMACS_INT limit, struct coding_sys
    property value is non-nil (limiting by LIMIT), and return BUF.  */
 
 static INLINE int *
-handle_charset_annotation (EMACS_INT pos, EMACS_INT limit, struct coding_system *coding, int *buf, EMACS_INT *stop)
+handle_charset_annotation (EMACS_INT pos, EMACS_INT limit,
+			   struct coding_system *coding, int *buf,
+			   EMACS_INT *stop)
 {
   Lisp_Object val, next;
   int id;
@@ -7275,7 +7288,8 @@ handle_charset_annotation (EMACS_INT pos, EMACS_INT limit, struct coding_system 
 
 
 static void
-consume_chars (struct coding_system *coding, Lisp_Object translation_table, int max_lookup)
+consume_chars (struct coding_system *coding, Lisp_Object translation_table,
+	       int max_lookup)
 {
   int *buf = coding->charbuf;
   int *buf_end = coding->charbuf + coding->charbuf_size;
@@ -7560,9 +7574,10 @@ code_conversion_save (int with_work_buf, int multibyte)
 }
 
 int
-decode_coding_gap (struct coding_system *coding, EMACS_INT chars, EMACS_INT bytes)
+decode_coding_gap (struct coding_system *coding,
+		   EMACS_INT chars, EMACS_INT bytes)
 {
-  int count = specpdl_ptr - specpdl;
+  int count = SPECPDL_INDEX ();
   Lisp_Object attrs;
 
   code_conversion_save (0, 0);
@@ -7605,9 +7620,10 @@ decode_coding_gap (struct coding_system *coding, EMACS_INT chars, EMACS_INT byte
 }
 
 int
-encode_coding_gap (struct coding_system *coding, EMACS_INT chars, EMACS_INT bytes)
+encode_coding_gap (struct coding_system *coding,
+		   EMACS_INT chars, EMACS_INT bytes)
 {
-  int count = specpdl_ptr - specpdl;
+  int count = SPECPDL_INDEX ();
 
   code_conversion_save (0, 0);
 
@@ -7658,14 +7674,13 @@ encode_coding_gap (struct coding_system *coding, EMACS_INT chars, EMACS_INT byte
  */
 
 void
-decode_coding_object (coding, src_object, from, from_byte, to, to_byte,
-		      dst_object)
-     struct coding_system *coding;
-     Lisp_Object src_object;
-     EMACS_INT from, from_byte, to, to_byte;
-     Lisp_Object dst_object;
+decode_coding_object (struct coding_system *coding,
+		      Lisp_Object src_object,
+		      EMACS_INT from, EMACS_INT from_byte,
+		      EMACS_INT to, EMACS_INT to_byte,
+		      Lisp_Object dst_object)
 {
-  int count = specpdl_ptr - specpdl;
+  int count = SPECPDL_INDEX ();
   unsigned char *destination;
   EMACS_INT dst_bytes;
   EMACS_INT chars = to - from;
@@ -7795,7 +7810,7 @@ decode_coding_object (coding, src_object, from, from_byte, to, to_byte,
 	    }
 	  if (BEGV < GPT && GPT < BEGV + coding->produced_char)
 	    move_gap_both (BEGV, BEGV_BYTE);
-	  bcopy (BEGV_ADDR, destination, coding->produced);
+	  memcpy (destination, BEGV_ADDR, coding->produced);
 	  coding->destination = destination;
 	}
     }
@@ -7849,14 +7864,13 @@ decode_coding_object (coding, src_object, from, from_byte, to, to_byte,
 
 
 void
-encode_coding_object (coding, src_object, from, from_byte, to, to_byte,
-		      dst_object)
-     struct coding_system *coding;
-     Lisp_Object src_object;
-     EMACS_INT from, from_byte, to, to_byte;
-     Lisp_Object dst_object;
+encode_coding_object (struct coding_system *coding,
+		      Lisp_Object src_object,
+		      EMACS_INT from, EMACS_INT from_byte,
+		      EMACS_INT to, EMACS_INT to_byte,
+		      Lisp_Object dst_object)
 {
-  int count = specpdl_ptr - specpdl;
+  int count = SPECPDL_INDEX ();
   EMACS_INT chars = to - from;
   EMACS_INT bytes = to_byte - from_byte;
   Lisp_Object attrs;
@@ -8073,8 +8087,7 @@ DEFUN ("coding-system-p", Fcoding_system_p, Scoding_system_p, 1, 1, 0,
        doc: /* Return t if OBJECT is nil or a coding-system.
 See the documentation of `define-coding-system' for information
 about coding-system objects.  */)
-     (object)
-     Lisp_Object object;
+  (Lisp_Object object)
 {
   if (NILP (object)
       || CODING_SYSTEM_ID (object) >= 0)
@@ -8088,8 +8101,7 @@ about coding-system objects.  */)
 DEFUN ("read-non-nil-coding-system", Fread_non_nil_coding_system,
        Sread_non_nil_coding_system, 1, 1, 0,
        doc: /* Read a coding system from the minibuffer, prompting with string PROMPT.  */)
-     (prompt)
-     Lisp_Object prompt;
+  (Lisp_Object prompt)
 {
   Lisp_Object val;
   do
@@ -8106,8 +8118,7 @@ DEFUN ("read-coding-system", Fread_coding_system, Sread_coding_system, 1, 2, 0,
 If the user enters null input, return second argument DEFAULT-CODING-SYSTEM.
 Ignores case when completing coding systems (all Emacs coding systems
 are lower-case).  */)
-     (prompt, default_coding_system)
-     Lisp_Object prompt, default_coding_system;
+  (Lisp_Object prompt, Lisp_Object default_coding_system)
 {
   Lisp_Object val;
   int count = SPECPDL_INDEX ();
@@ -8128,8 +8139,7 @@ DEFUN ("check-coding-system", Fcheck_coding_system, Scheck_coding_system,
 If valid, return CODING-SYSTEM, else signal a `coding-system-error' error.
 It is valid if it is nil or a symbol defined as a coding system by the
 function `define-coding-system'.  */)
-  (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   Lisp_Object define_form;
 
@@ -8162,13 +8172,10 @@ function `define-coding-system'.  */)
    detect only text-format.  */
 
 Lisp_Object
-detect_coding_system (src, src_chars, src_bytes, highest, multibytep,
-		      coding_system)
-     const unsigned char *src;
-     EMACS_INT src_chars, src_bytes;
-     int highest;
-     int multibytep;
-     Lisp_Object coding_system;
+detect_coding_system (const unsigned char *src,
+		      EMACS_INT src_chars, EMACS_INT src_bytes,
+		      int highest, int multibytep,
+		      Lisp_Object coding_system)
 {
   const unsigned char *src_end = src + src_bytes;
   Lisp_Object attrs, eol_type;
@@ -8484,8 +8491,7 @@ format.
 
 If optional argument HIGHEST is non-nil, return the coding system of
 highest priority.  */)
-     (start, end, highest)
-     Lisp_Object start, end, highest;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object highest)
 {
   int from, to;
   int from_byte, to_byte;
@@ -8523,8 +8529,7 @@ format.
 
 If optional argument HIGHEST is non-nil, return the coding system of
 highest priority.  */)
-     (string, highest)
-     Lisp_Object string, highest;
+  (Lisp_Object string, Lisp_Object highest)
 {
   CHECK_STRING (string);
 
@@ -8566,8 +8571,7 @@ DEFUN ("find-coding-systems-region-internal",
        Ffind_coding_systems_region_internal,
        Sfind_coding_systems_region_internal, 2, 3, 0,
        doc: /* Internal use only.  */)
-     (start, end, exclude)
-     Lisp_Object start, end, exclude;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object exclude)
 {
   Lisp_Object coding_attrs_list, safe_codings;
   EMACS_INT start_byte, end_byte;
@@ -8700,8 +8704,7 @@ list of positions.
 If optional 5th argument STRING is non-nil, it is a string to search
 for un-encodable characters.  In that case, START and END are indexes
 to the string.  */)
-     (start, end, coding_system, count, string)
-     Lisp_Object start, end, coding_system, count, string;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object count, Lisp_Object string)
 {
   int n;
   struct coding_system coding;
@@ -8816,8 +8819,7 @@ buffer positions.  END is ignored.
 
 If the current buffer (or START if it is a string) is unibyte, the value
 is nil.  */)
-     (start, end, coding_system_list)
-     Lisp_Object start, end, coding_system_list;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object coding_system_list)
 {
   Lisp_Object list;
   EMACS_INT start_byte, end_byte;
@@ -8922,7 +8924,9 @@ is nil.  */)
 
 
 Lisp_Object
-code_convert_region (Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object dst_object, int encodep, int norecord)
+code_convert_region (Lisp_Object start, Lisp_Object end,
+		     Lisp_Object coding_system, Lisp_Object dst_object,
+		     int encodep, int norecord)
 {
   struct coding_system coding;
   EMACS_INT from, from_byte, to, to_byte;
@@ -8981,8 +8985,7 @@ If DESTINATION is t, the decoded text is returned.
 This function sets `last-coding-system-used' to the precise coding system
 used (which may be different from CODING-SYSTEM if CODING-SYSTEM is
 not fully specified.)  */)
-     (start, end, coding_system, destination)
-     Lisp_Object start, end, coding_system, destination;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object destination)
 {
   return code_convert_region (start, end, coding_system, destination, 0, 0);
 }
@@ -9004,17 +9007,14 @@ If DESTINATION is t, the encoded text is returned.
 This function sets `last-coding-system-used' to the precise coding system
 used (which may be different from CODING-SYSTEM if CODING-SYSTEM is
 not fully specified.)  */)
-  (start, end, coding_system, destination)
-     Lisp_Object start, end, coding_system, destination;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object coding_system, Lisp_Object destination)
 {
   return code_convert_region (start, end, coding_system, destination, 1, 0);
 }
 
 Lisp_Object
-code_convert_string (string, coding_system, dst_object,
-		     encodep, nocopy, norecord)
-     Lisp_Object string, coding_system, dst_object;
-     int encodep, nocopy, norecord;
+code_convert_string (Lisp_Object string, Lisp_Object coding_system,
+		     Lisp_Object dst_object, int encodep, int nocopy, int norecord)
 {
   struct coding_system coding;
   EMACS_INT chars, bytes;
@@ -9061,7 +9061,8 @@ code_convert_string (string, coding_system, dst_object,
    ENCODE_FILE, thus we ignore character composition.  */
 
 Lisp_Object
-code_convert_string_norecord (Lisp_Object string, Lisp_Object coding_system, int encodep)
+code_convert_string_norecord (Lisp_Object string, Lisp_Object coding_system,
+			      int encodep)
 {
   return code_convert_string (string, coding_system, Qt, encodep, 0, 1);
 }
@@ -9081,8 +9082,7 @@ case, the return value is the length of the decoded text.
 This function sets `last-coding-system-used' to the precise coding system
 used (which may be different from CODING-SYSTEM if CODING-SYSTEM is
 not fully specified.)  */)
-  (string, coding_system, nocopy, buffer)
-     Lisp_Object string, coding_system, nocopy, buffer;
+  (Lisp_Object string, Lisp_Object coding_system, Lisp_Object nocopy, Lisp_Object buffer)
 {
   return code_convert_string (string, coding_system, buffer,
 			      0, ! NILP (nocopy), 0);
@@ -9102,8 +9102,7 @@ case, the return value is the length of the encoded text.
 This function sets `last-coding-system-used' to the precise coding system
 used (which may be different from CODING-SYSTEM if CODING-SYSTEM is
 not fully specified.)  */)
-     (string, coding_system, nocopy, buffer)
-     Lisp_Object string, coding_system, nocopy, buffer;
+  (Lisp_Object string, Lisp_Object coding_system, Lisp_Object nocopy, Lisp_Object buffer)
 {
   return code_convert_string (string, coding_system, buffer,
 			      1, ! NILP (nocopy), 1);
@@ -9113,8 +9112,7 @@ not fully specified.)  */)
 DEFUN ("decode-sjis-char", Fdecode_sjis_char, Sdecode_sjis_char, 1, 1, 0,
        doc: /* Decode a Japanese character which has CODE in shift_jis encoding.
 Return the corresponding character.  */)
-     (code)
-     Lisp_Object code;
+  (Lisp_Object code)
 {
   Lisp_Object spec, attrs, val;
   struct charset *charset_roman, *charset_kanji, *charset_kana, *charset;
@@ -9161,8 +9159,7 @@ Return the corresponding character.  */)
 DEFUN ("encode-sjis-char", Fencode_sjis_char, Sencode_sjis_char, 1, 1, 0,
        doc: /* Encode a Japanese character CH to shift_jis encoding.
 Return the corresponding code in SJIS.  */)
-     (ch)
-    Lisp_Object ch;
+  (Lisp_Object ch)
 {
   Lisp_Object spec, attrs, charset_list;
   int c;
@@ -9190,8 +9187,7 @@ Return the corresponding code in SJIS.  */)
 DEFUN ("decode-big5-char", Fdecode_big5_char, Sdecode_big5_char, 1, 1, 0,
        doc: /* Decode a Big5 character which has CODE in BIG5 coding system.
 Return the corresponding character.  */)
-     (code)
-     Lisp_Object code;
+  (Lisp_Object code)
 {
   Lisp_Object spec, attrs, val;
   struct charset *charset_roman, *charset_big5, *charset;
@@ -9229,8 +9225,7 @@ Return the corresponding character.  */)
 DEFUN ("encode-big5-char", Fencode_big5_char, Sencode_big5_char, 1, 1, 0,
        doc: /* Encode the Big5 character CH to BIG5 coding system.
 Return the corresponding character code in Big5.  */)
-     (ch)
-     Lisp_Object ch;
+  (Lisp_Object ch)
 {
   Lisp_Object spec, attrs, charset_list;
   struct charset *charset;
@@ -9257,9 +9252,7 @@ Return the corresponding character code in Big5.  */)
 DEFUN ("set-terminal-coding-system-internal", Fset_terminal_coding_system_internal,
        Sset_terminal_coding_system_internal, 1, 2, 0,
        doc: /* Internal use only.  */)
-     (coding_system, terminal)
-     Lisp_Object coding_system;
-     Lisp_Object terminal;
+  (Lisp_Object coding_system, Lisp_Object terminal)
 {
   struct coding_system *terminal_coding = TERMINAL_TERMINAL_CODING (get_terminal (terminal, 1));
   CHECK_SYMBOL (coding_system);
@@ -9277,8 +9270,7 @@ DEFUN ("set-safe-terminal-coding-system-internal",
        Fset_safe_terminal_coding_system_internal,
        Sset_safe_terminal_coding_system_internal, 1, 1, 0,
        doc: /* Internal use only.  */)
-     (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   CHECK_SYMBOL (coding_system);
   setup_coding_system (Fcheck_coding_system (coding_system),
@@ -9295,8 +9287,7 @@ DEFUN ("terminal-coding-system", Fterminal_coding_system,
        doc: /* Return coding system specified for terminal output on the given terminal.
 TERMINAL may be a terminal object, a frame, or nil for the selected
 frame's terminal device.  */)
-     (terminal)
-     Lisp_Object terminal;
+  (Lisp_Object terminal)
 {
   struct coding_system *terminal_coding
     = TERMINAL_TERMINAL_CODING (get_terminal (terminal, 1));
@@ -9309,9 +9300,7 @@ frame's terminal device.  */)
 DEFUN ("set-keyboard-coding-system-internal", Fset_keyboard_coding_system_internal,
        Sset_keyboard_coding_system_internal, 1, 2, 0,
        doc: /* Internal use only.  */)
-     (coding_system, terminal)
-     Lisp_Object coding_system;
-     Lisp_Object terminal;
+  (Lisp_Object coding_system, Lisp_Object terminal)
 {
   struct terminal *t = get_terminal (terminal, 1);
   CHECK_SYMBOL (coding_system);
@@ -9329,8 +9318,7 @@ DEFUN ("set-keyboard-coding-system-internal", Fset_keyboard_coding_system_intern
 DEFUN ("keyboard-coding-system",
        Fkeyboard_coding_system, Skeyboard_coding_system, 0, 1, 0,
        doc: /* Return coding system specified for decoding keyboard input.  */)
-     (terminal)
-     Lisp_Object terminal;
+  (Lisp_Object terminal)
 {
   return CODING_ID_NAME (TERMINAL_KEYBOARD_CODING
 			 (get_terminal (terminal, 1))->id);
@@ -9378,9 +9366,7 @@ function to call for FILENAME, that function should examine the
 contents of BUFFER instead of reading the file.
 
 usage: (find-operation-coding-system OPERATION ARGUMENTS...)  */)
-     (nargs, args)
-     int nargs;
-     Lisp_Object *args;
+  (int nargs, Lisp_Object *args)
 {
   Lisp_Object operation, target_idx, target, val;
   register Lisp_Object chain;
@@ -9456,15 +9442,13 @@ If multiple coding systems belong to the same category,
 all but the first one are ignored.
 
 usage: (set-coding-system-priority &rest coding-systems)  */)
-     (nargs, args)
-     int nargs;
-     Lisp_Object *args;
+  (int nargs, Lisp_Object *args)
 {
   int i, j;
   int changed[coding_category_max];
   enum coding_category priorities[coding_category_max];
 
-  bzero (changed, sizeof changed);
+  memset (changed, 0, sizeof changed);
 
   for (i = j = 0; i < nargs; i++)
     {
@@ -9499,7 +9483,7 @@ usage: (set-coding-system-priority &rest coding-systems)  */)
       priorities[i] = coding_priorities[j];
     }
 
-  bcopy (priorities, coding_priorities, sizeof priorities);
+  memcpy (coding_priorities, priorities, sizeof priorities);
 
   /* Update `coding-category-list'.  */
   Vcoding_category_list = Qnil;
@@ -9518,8 +9502,7 @@ The list contains a subset of coding systems; i.e. coding systems
 assigned to each coding category (see `coding-category-list').
 
 HIGHESTP non-nil means just return the highest priority one.  */)
-     (highestp)
-     Lisp_Object highestp;
+  (Lisp_Object highestp)
 {
   int i;
   Lisp_Object val;
@@ -9550,11 +9533,11 @@ make_subsidiaries (Lisp_Object base)
   char *buf = (char *) alloca (base_name_len + 6);
   int i;
 
-  bcopy (SDATA (SYMBOL_NAME (base)), buf, base_name_len);
+  memcpy (buf, SDATA (SYMBOL_NAME (base)), base_name_len);
   subsidiaries = Fmake_vector (make_number (3), Qnil);
   for (i = 0; i < 3; i++)
     {
-      bcopy (suffixes[i], buf + base_name_len, strlen (suffixes[i]) + 1);
+      memcpy (buf + base_name_len, suffixes[i], strlen (suffixes[i]) + 1);
       ASET (subsidiaries, i, intern (buf));
     }
   return subsidiaries;
@@ -9565,9 +9548,7 @@ DEFUN ("define-coding-system-internal", Fdefine_coding_system_internal,
        Sdefine_coding_system_internal, coding_arg_max, MANY, 0,
        doc: /* For internal use only.
 usage: (define-coding-system-internal ...)  */)
-     (nargs, args)
-     int nargs;
-     Lisp_Object *args;
+  (int nargs, Lisp_Object *args)
 {
   Lisp_Object name;
   Lisp_Object spec_vec;		/* [ ATTRS ALIASE EOL_TYPE ] */
@@ -10096,8 +10077,7 @@ usage: (define-coding-system-internal ...)  */)
 DEFUN ("coding-system-put", Fcoding_system_put, Scoding_system_put,
        3, 3, 0,
        doc: /* Change value in CODING-SYSTEM's property list PROP to VAL.  */)
-  (coding_system, prop, val)
-     Lisp_Object coding_system, prop, val;
+  (Lisp_Object coding_system, Lisp_Object prop, Lisp_Object val)
 {
   Lisp_Object spec, attrs;
 
@@ -10153,8 +10133,7 @@ DEFUN ("coding-system-put", Fcoding_system_put, Scoding_system_put,
 DEFUN ("define-coding-system-alias", Fdefine_coding_system_alias,
        Sdefine_coding_system_alias, 2, 2, 0,
        doc: /* Define ALIAS as an alias for CODING-SYSTEM.  */)
-     (alias, coding_system)
-     Lisp_Object alias, coding_system;
+  (Lisp_Object alias, Lisp_Object coding_system)
 {
   Lisp_Object spec, aliases, eol_type, val;
 
@@ -10194,8 +10173,7 @@ DEFUN ("coding-system-base", Fcoding_system_base, Scoding_system_base,
        1, 1, 0,
        doc: /* Return the base of CODING-SYSTEM.
 Any alias or subsidiary coding system is not a base coding system.  */)
-  (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   Lisp_Object spec, attrs;
 
@@ -10209,8 +10187,7 @@ Any alias or subsidiary coding system is not a base coding system.  */)
 DEFUN ("coding-system-plist", Fcoding_system_plist, Scoding_system_plist,
        1, 1, 0,
        doc: "Return the property list of CODING-SYSTEM.")
-     (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   Lisp_Object spec, attrs;
 
@@ -10225,8 +10202,7 @@ DEFUN ("coding-system-plist", Fcoding_system_plist, Scoding_system_plist,
 DEFUN ("coding-system-aliases", Fcoding_system_aliases, Scoding_system_aliases,
        1, 1, 0,
        doc: /* Return the list of aliases of CODING-SYSTEM.  */)
-     (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   Lisp_Object spec;
 
@@ -10247,8 +10223,7 @@ and CR respectively.
 A vector value indicates that a format of end-of-line should be
 detected automatically.  Nth element of the vector is the subsidiary
 coding system whose eol-type is N.  */)
-     (coding_system)
-     Lisp_Object coding_system;
+  (Lisp_Object coding_system)
 {
   Lisp_Object spec, eol_type;
   int n;
@@ -10854,7 +10829,7 @@ character.");
     for (i = 0; i < coding_category_max; i++)
       Fset (AREF (Vcoding_category_table, i), Qno_conversion);
   }
-#if defined (MSDOS) || defined (WINDOWSNT)
+#if defined (DOS_NT)
   system_eol_type = Qdos;
 #else
   system_eol_type = Qunix;

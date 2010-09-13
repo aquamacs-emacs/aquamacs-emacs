@@ -6,8 +6,8 @@
 ;;             2002- Martin Stjernholm
 ;; Maintainer: bug-cc-mode@gnu.org
 ;; Created:    07-Jan-2002
-;; Version:    See cc-mode.el
-;; Keywords:   c languages oop
+;; Keywords:   c languages
+;; Package:    cc-mode
 
 ;; This file is part of GNU Emacs.
 
@@ -193,6 +193,10 @@
 	 ;; XEmacs.  Same pitfall here.
 	 (unless (face-property-instance oldface 'reverse)
 	   (invert-face newface)))))
+
+(defvar c-annotation-face (make-face 'c-annotation-face)
+  "Face used to highlight annotations in java-mode and other modes that may wish to use it.")
+(set-face-foreground 'c-annotation-face "blue")
 
 (eval-and-compile
   ;; We need the following functions during compilation since they're
@@ -1538,6 +1542,9 @@ higher."
 	       '((c-fontify-types-and-refs ((c-promote-possible-types t))
 		   (c-forward-keyword-clause 1)
 		   (if (> (point) limit) (goto-char limit))))))))
+
+      ,@(when (c-major-mode-is 'java-mode)
+	  `((eval . (list "\\<\\(@[a-zA-Z0-9]+\\)\\>" 1 c-annotation-face))))
       ))
 
 (c-lang-defconst c-matchers-1

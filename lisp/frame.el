@@ -5,6 +5,7 @@
 
 ;; Maintainer: FSF
 ;; Keywords: internal
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -736,11 +737,11 @@ the new frame according to its own rules."
       (error "Don't know how to create a frame on window system %s" w))
     ;; Add parameters from `window-system-default-frame-alist'.
     (dolist (p (cdr (assq w window-system-default-frame-alist)))
-      (unless (memq (car p) params)
+      (unless (assq (car p) params)
 	(push p params)))
     ;; Add parameters from `default-frame-alist'.
     (dolist (p default-frame-alist)
-      (unless (memq (car p) params)
+      (unless (assq (car p) params)
 	(push p params)))
     ;; Now make the frame.
     (run-hooks 'before-make-frame-hook)
@@ -1209,8 +1210,7 @@ frame's display)."
 (defun display-selections-p (&optional display)
   "Return non-nil if DISPLAY supports selections.
 A selection is a way to transfer text or other data between programs
-via special system buffers called `selection' or `cut buffer' or
-`clipboard'.
+via special system buffers called `selection' or `clipboard'.
 DISPLAY can be a display name, a frame, or nil (meaning the selected
 frame's display)."
   (let ((frame-type (framep-on-display display)))
@@ -1431,23 +1431,6 @@ In the 3rd, 4th, and 6th examples, the returned value is relative to
 the opposite frame edge from the edge indicated in the input spec."
   (cons (car spec) (frame-geom-value-cons (car spec) (cdr spec))))
 
-;;;; Aliases for backward compatibility with Emacs 18.
-(define-obsolete-function-alias 'screen-height 'frame-height "19.7")
-(define-obsolete-function-alias 'screen-width 'frame-width "19.7")
-
-(defun set-screen-width (cols &optional pretend)
-  "Change the size of the screen to COLS columns.
-Optional second arg non-nil means that redisplay should use COLS columns
-but that the idea of the actual width of the frame should not be changed.
-This function is provided only for compatibility with Emacs 18."
-  (set-frame-width (selected-frame) cols pretend))
-
-(defun set-screen-height (lines &optional pretend)
-  "Change the height of the screen to LINES lines.
-Optional second arg non-nil means that redisplay should use LINES lines
-but that the idea of the actual height of the screen should not be changed.
-This function is provided only for compatibility with Emacs 18."
-  (set-frame-height (selected-frame) lines pretend))
 
 (defun delete-other-frames (&optional frame)
   "Delete all frames except FRAME.
@@ -1472,9 +1455,6 @@ left untouched.  FRAME nil or omitted means use the selected frame."
     (dolist (frame frames)
       (when (eq (frame-parameter frame 'minibuffer) 'only)
 	(delete-frame frame)))))
-
-(make-obsolete 'set-screen-width 'set-frame-width "19.7")
-(make-obsolete 'set-screen-height 'set-frame-height "19.7")
 
 ;; miscellaneous obsolescence declarations
 (define-obsolete-variable-alias 'delete-frame-hook

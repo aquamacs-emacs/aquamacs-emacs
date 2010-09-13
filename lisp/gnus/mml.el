@@ -120,10 +120,10 @@ match found will be used."
 			  ,dispositions))))
   :group 'message)
 
-(defcustom mml-insert-mime-headers-always nil
+(defcustom mml-insert-mime-headers-always t
   "If non-nil, always put Content-Type: text/plain at top of empty parts.
 It is necessary to work against a bug in certain clients."
-  :version "22.1"
+  :version "24.1"
   :type 'boolean
   :group 'message)
 
@@ -228,7 +228,10 @@ part.  This is for the internal use, you should never modify the value.")
 	(let* (secure-mode
 	       (taginfo (mml-read-tag))
 	       (keyfile (cdr (assq 'keyfile taginfo)))
-	       (certfile (cdr (assq 'certfile taginfo)))
+	       (certfiles (delq nil (mapcar (lambda (tag)
+					      (if (eq (car-safe tag) 'certfile)
+						  (cdr tag)))
+					    taginfo)))
 	       (recipients (cdr (assq 'recipients taginfo)))
 	       (sender (cdr (assq 'sender taginfo)))
 	       (location (cdr (assq 'tag-location taginfo)))
@@ -254,8 +257,10 @@ part.  This is for the internal use, you should never modify the value.")
 				 ,@tags
 				 ,(if keyfile "keyfile")
 				 ,keyfile
-				 ,(if certfile "certfile")
-				 ,certfile
+				 ,@(apply #'append
+					  (mapcar (lambda (certfile)
+						    (list "certfile" certfile))
+						  certfiles))
 				 ,(if recipients "recipients")
 				 ,recipients
 				 ,(if sender "sender")
@@ -1565,5 +1570,4 @@ or the `pop-to-buffer' function."
 
 (provide 'mml)
 
-;; arch-tag: 583c96cf-1ffe-451b-a5e5-4733ae9ddd12
 ;;; mml.el ends here

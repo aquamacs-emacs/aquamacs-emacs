@@ -83,19 +83,21 @@ int
 ns_load_image (struct frame *f, struct image *img,
                Lisp_Object spec_file, Lisp_Object spec_data)
 {
-  NSTRACE (ns_load_image);
-
-  EmacsImage *eImg;
+  EmacsImage *eImg = nil;
   NSSize size;
 
-  if (NILP (spec_data))
+  NSTRACE (ns_load_image);
+
+  if (STRINGP (spec_file))
     {
       eImg = [EmacsImage allocInitFromFile: spec_file];
     }
-  else
+  else if (STRINGP (spec_data))
     {
-      NSData *data = [NSData dataWithBytes: SDATA (spec_data)
-                                    length: SBYTES (spec_data)];
+      NSData *data;
+
+      data = [NSData dataWithBytes: SDATA (spec_data)
+			    length: SBYTES (spec_data)];
       eImg = [[EmacsImage alloc] initWithData: data];
       [eImg setPixmapData];
     }
@@ -315,9 +317,9 @@ static EmacsImage *ImageList = nil;
 
   [self addRepresentation: bmRep];
 
-  bzero (planes[0], w*h);
-  bzero (planes[1], w*h);
-  bzero (planes[2], w*h);
+  memset (planes[0], 0, w*h);
+  memset (planes[1], 0, w*h);
+  memset (planes[2], 0, w*h);
   [self setXBMColor: [NSColor blackColor]];
   return self;
 }
@@ -379,7 +381,7 @@ static EmacsImage *ImageList = nil;
 
   [bmRep getBitmapDataPlanes: pixmapData];
   for (i =0; i<4; i++)
-    bzero (pixmapData[i], width*height);
+    memset (pixmapData[i], 0, width*height);
   [self addRepresentation: bmRep];
   return self;
 }
