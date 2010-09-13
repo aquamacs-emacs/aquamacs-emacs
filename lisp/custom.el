@@ -6,6 +6,7 @@
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: FSF
 ;; Keywords: help, faces
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -143,7 +144,9 @@ set to nil, as the value is no longer rogue."
   (when (get symbol 'force-value)
     (put symbol 'force-value nil))
   (when doc
-    (put symbol 'variable-documentation doc))
+    (if (keywordp doc)
+	(error "Doc string is missing")
+      (put symbol 'variable-documentation doc)))
   (let ((initialize 'custom-initialize-reset)
 	(requests nil))
     (unless (memq :group args)

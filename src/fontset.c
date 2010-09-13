@@ -177,7 +177,6 @@ EXFUN (Fclear_face_cache, 1);
 
 /********** VARIABLES and FUNCTION PROTOTYPES **********/
 
-extern Lisp_Object Qfont;
 static Lisp_Object Qfontset;
 static Lisp_Object Qfontset_info;
 static Lisp_Object Qprepend, Qappend;
@@ -284,6 +283,10 @@ fontset_id_valid_p (id)
 #define RFONT_DEF_OBJECT(rfont_def) AREF (rfont_def, 2)
 #define RFONT_DEF_SET_OBJECT(rfont_def, object)	\
   ASET ((rfont_def), 2, (object))
+/* Score of RFONT_DEF is an integer value; the lowest 8 bits represent
+   the order of listing by font backends, the higher bits represents
+   the order given by charset priority list.  The smaller value is
+   preferable.  */
 #define RFONT_DEF_SCORE(rfont_def) XINT (AREF (rfont_def, 3))
 #define RFONT_DEF_SET_SCORE(rfont_def, score) \
   ASET ((rfont_def), 3, make_number (score))
@@ -388,8 +391,6 @@ fontset_compare_rfontdef (const void *val1, const void *val2)
    If PREFERRED_FAMILY is not nil, that family has the higher priority
    if the encoding charsets or languages in font-specs are the same.  */
 
-extern Lisp_Object Fassoc_string (Lisp_Object, Lisp_Object, Lisp_Object);
-
 static void
 reorder_font_vector (Lisp_Object font_group, struct font *font)
 {
@@ -415,8 +416,13 @@ reorder_font_vector (Lisp_Object font_group, struct font *font)
       Lisp_Object font_def = RFONT_DEF_FONT_DEF (rfont_def);
       Lisp_Object font_spec = FONT_DEF_SPEC (font_def);
       int score = RFONT_DEF_SCORE (rfont_def) & 0xFF;
+      Lisp_Object otf_spec = Ffont_get (font_spec, QCotf);
 
-      if (! font_match_p (font_spec, font_object))
+      if (! NILP (otf_spec))
+	/* A font-spec with :otf is preferable regardless of encoding
+	   and language..  */
+	;
+      else if (! font_match_p (font_spec, font_object))
 	{
 	  Lisp_Object encoding = FONT_DEF_ENCODING (font_def);
 
@@ -1065,8 +1071,8 @@ static Lisp_Object Vcached_fontset_data;
 static Lisp_Object
 fontset_pattern_regexp (Lisp_Object pattern)
 {
-  if (!index ((char *) SDATA (pattern), '*')
-      && !index ((char *) SDATA (pattern), '?'))
+  if (!strchr ((char *) SDATA (pattern), '*')
+      && !strchr ((char *) SDATA (pattern), '?'))
     /* PATTERN does not contain any wild cards.  */
     return Qnil;
 
@@ -1186,8 +1192,7 @@ The value is nil if there is no matching fontset.
 PATTERN can contain `*' or `?' as a wildcard
 just as X font name matching algorithm allows.
 If REGEXPP is non-nil, PATTERN is a regular expression.  */)
-     (pattern, regexpp)
-     Lisp_Object pattern, regexpp;
+  (Lisp_Object pattern, Lisp_Object regexpp)
 {
   Lisp_Object fontset;
   int id;
@@ -1396,7 +1401,6 @@ set_fontset_font (Lisp_Object arg, Lisp_Object range)
   ASET (arg, 4, script_range_list);
 }
 
-extern Lisp_Object QCfamily, QCregistry;
 static void update_auto_fontset_alist (Lisp_Object, Lisp_Object);
 
 
@@ -1435,8 +1439,7 @@ Optional 5th argument ADD, if non-nil, specifies how to add FONT-SPEC
 to the font specifications for TARGET previously set.  If it is
 `prepend', FONT-SPEC is prepended.  If it is `append', FONT-SPEC is
 appended.  By default, FONT-SPEC overrides the previous settings.  */)
-     (name, target, font_spec, frame, add)
-     Lisp_Object name, target, font_spec, frame, add;
+  (Lisp_Object name, Lisp_Object target, Lisp_Object font_spec, Lisp_Object frame, Lisp_Object add)
 {
   Lisp_Object fontset;
   Lisp_Object font_def, registry, family;
@@ -1459,7 +1462,6 @@ appended.  By default, FONT-SPEC overrides the previous settings.  */)
   else if (STRINGP (font_spec))
     {
       Lisp_Object args[2];
-      extern Lisp_Object QCname;
 
       fontname = font_spec;
       args[0] = QCname;
@@ -1645,8 +1647,7 @@ char-table `char-script-table'.
 
 FONT-SPEC is a vector, a cons, or a string.  See the documentation of
 `set-fontset-font' for the meaning.  */)
-  (name, fontlist)
-     Lisp_Object name, fontlist;
+  (Lisp_Object name, Lisp_Object fontlist)
 {
   Lisp_Object fontset;
   int id;
@@ -1821,8 +1822,7 @@ update_auto_fontset_alist (Lisp_Object font_object, Lisp_Object fontset)
 
 DEFUN ("internal-char-font", Finternal_char_font, Sinternal_char_font, 1, 2, 0,
        doc: /* For internal use only.  */)
-     (position, ch)
-     Lisp_Object position, ch;
+  (Lisp_Object position, Lisp_Object ch)
 {
   EMACS_INT pos, pos_byte, dummy;
   int face_id;
@@ -1912,8 +1912,7 @@ The char-table has one extra slot.  If FONTSET is not the default
 fontset, the value the extra slot is a char-table containing the
 information about the derived fonts from the default fontset.  The
 format is the same as above.  */)
-     (fontset, frame)
-     Lisp_Object fontset, frame;
+  (Lisp_Object fontset, Lisp_Object frame)
 {
   FRAME_PTR f;
   Lisp_Object *realized[2], fontsets[2], tables[2];
@@ -2048,8 +2047,7 @@ fontset.
 
 If the 2nd optional arg ALL is non-nil, return a list of all font name
 patterns.  */)
-  (name, ch, all)
-     Lisp_Object name, ch, all;
+  (Lisp_Object name, Lisp_Object ch, Lisp_Object all)
 {
   int c;
   Lisp_Object fontset, elt, list, repertory, val;
@@ -2109,7 +2107,7 @@ patterns.  */)
 
 DEFUN ("fontset-list", Ffontset_list, Sfontset_list, 0, 0, 0,
        doc: /* Return a list of all defined fontset names.  */)
-     ()
+  (void)
 {
   Lisp_Object fontset, list;
   int i;
@@ -2166,7 +2164,7 @@ dump_fontset (fontset)
 
 DEFUN ("fontset-list-all", Ffontset_list_all, Sfontset_list_all, 0, 0, 0,
        doc: /* Return a brief summary of all fontsets for debug use.  */)
-     ()
+  (void)
 {
   Lisp_Object val;
   int i;

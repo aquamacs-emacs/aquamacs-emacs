@@ -76,14 +76,13 @@ static void receive_incremental_selection (Display *, Window, Atom,
 static Lisp_Object x_get_window_property_as_lisp_data (Display *,
                                                        Window, Atom,
                                                        Lisp_Object, Atom);
-static Lisp_Object selection_data_to_lisp_data (Display *, unsigned char *,
+static Lisp_Object selection_data_to_lisp_data (Display *,
+						const unsigned char *,
                                                 int, Atom, int);
 static void lisp_data_to_selection_data (Display *, Lisp_Object,
                                          unsigned char **, Atom *,
                                          unsigned *, int *, int *);
 static Lisp_Object clean_local_selection_data (Lisp_Object);
-static void initialize_cut_buffers (Display *, Window);
-
 
 /* Printing traces to stderr.  */
 
@@ -104,9 +103,7 @@ static void initialize_cut_buffers (Display *, Window);
 #endif
 
 
-#define CUT_BUFFER_SUPPORT
-
-Lisp_Object QPRIMARY, QSECONDARY, QSTRING, QINTEGER, QCLIPBOARD, QTIMESTAMP,
+Lisp_Object QSECONDARY, QSTRING, QINTEGER, QCLIPBOARD, QTIMESTAMP,
   QTEXT, QDELETE, QMULTIPLE, QINCR, QEMACS_TMP, QTARGETS, QATOM, QNULL,
   QATOM_PAIR;
 
@@ -114,11 +111,6 @@ Lisp_Object QCOMPOUND_TEXT;	/* This is a type of selection.  */
 Lisp_Object QUTF8_STRING;	/* This is a type of selection.  */
 
 Lisp_Object Qcompound_text_with_extensions;
-
-#ifdef CUT_BUFFER_SUPPORT
-Lisp_Object QCUT_BUFFER0, QCUT_BUFFER1, QCUT_BUFFER2, QCUT_BUFFER3,
-  QCUT_BUFFER4, QCUT_BUFFER5, QCUT_BUFFER6, QCUT_BUFFER7;
-#endif
 
 static Lisp_Object Vx_lost_selection_functions;
 static Lisp_Object Vx_sent_selection_functions;
@@ -191,7 +183,7 @@ x_queue_event (struct input_event *event)
      This only happens for large requests which uses the incremental protocol.  */
   for (queue_tmp = selection_queue; queue_tmp; queue_tmp = queue_tmp->next)
     {
-      if (!bcmp (&queue_tmp->event, event, sizeof (*event)))
+      if (!memcmp (&queue_tmp->event, event, sizeof (*event)))
 	{
 	  TRACE1 ("DECLINE DUP SELECTION EVENT %08lx", (unsigned long)queue_tmp);
 	  x_decline_selection_request (event);
@@ -269,16 +261,6 @@ symbol_to_x_atom (struct x_display_info *dpyinfo, Display *display, Lisp_Object 
   if (EQ (sym, QEMACS_TMP)) return dpyinfo->Xatom_EMACS_TMP;
   if (EQ (sym, QTARGETS))   return dpyinfo->Xatom_TARGETS;
   if (EQ (sym, QNULL))	    return dpyinfo->Xatom_NULL;
-#ifdef CUT_BUFFER_SUPPORT
-  if (EQ (sym, QCUT_BUFFER0)) return XA_CUT_BUFFER0;
-  if (EQ (sym, QCUT_BUFFER1)) return XA_CUT_BUFFER1;
-  if (EQ (sym, QCUT_BUFFER2)) return XA_CUT_BUFFER2;
-  if (EQ (sym, QCUT_BUFFER3)) return XA_CUT_BUFFER3;
-  if (EQ (sym, QCUT_BUFFER4)) return XA_CUT_BUFFER4;
-  if (EQ (sym, QCUT_BUFFER5)) return XA_CUT_BUFFER5;
-  if (EQ (sym, QCUT_BUFFER6)) return XA_CUT_BUFFER6;
-  if (EQ (sym, QCUT_BUFFER7)) return XA_CUT_BUFFER7;
-#endif
   if (!SYMBOLP (sym)) abort ();
 
   TRACE1 (" XInternAtom %s", (char *) SDATA (SYMBOL_NAME (sym)));
@@ -314,24 +296,6 @@ x_atom_to_symbol (Display *dpy, Atom atom)
       return QINTEGER;
     case XA_ATOM:
       return QATOM;
-#ifdef CUT_BUFFER_SUPPORT
-    case XA_CUT_BUFFER0:
-      return QCUT_BUFFER0;
-    case XA_CUT_BUFFER1:
-      return QCUT_BUFFER1;
-    case XA_CUT_BUFFER2:
-      return QCUT_BUFFER2;
-    case XA_CUT_BUFFER3:
-      return QCUT_BUFFER3;
-    case XA_CUT_BUFFER4:
-      return QCUT_BUFFER4;
-    case XA_CUT_BUFFER5:
-      return QCUT_BUFFER5;
-    case XA_CUT_BUFFER6:
-      return QCUT_BUFFER6;
-    case XA_CUT_BUFFER7:
-      return QCUT_BUFFER7;
-#endif
     }
 
   dpyinfo = x_display_info_for_display (dpy);
@@ -391,7 +355,7 @@ x_own_selection (Lisp_Object selection_name, Lisp_Object selection_value)
   selecting_window = FRAME_X_WINDOW (sf);
   display = FRAME_X_DISPLAY (sf);
   dpyinfo = FRAME_X_DISPLAY_INFO (sf);
-  
+
   CHECK_SYMBOL (selection_name);
   selection_atom = symbol_to_x_atom (dpyinfo, display, selection_name);
 
@@ -409,10 +373,8 @@ x_own_selection (Lisp_Object selection_name, Lisp_Object selection_value)
     Lisp_Object prev_value;
 
     selection_time = long_to_cons ((unsigned long) time);
-    selection_data = Fcons (selection_name,
-			    Fcons (selection_value,
-				   Fcons (selection_time,
-					  Fcons (selected_frame, Qnil))));
+    selection_data = list4 (selection_name, selection_value,
+			    selection_time, selected_frame);
     prev_value = assq_no_quit (selection_name, Vselection_alist);
 
     Vselection_alist = Fcons (selection_data, Vselection_alist);
@@ -1014,7 +976,7 @@ x_handle_selection_clear (struct input_event *event)
 	  }
       }
   UNBLOCK_INPUT;
-  
+
   selection_symbol = x_atom_to_symbol (display, selection);
 
   local_selection_data = assq_no_quit (selection_symbol, Vselection_alist);
@@ -1453,18 +1415,10 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type, 
 /* Use xfree, not XFree, to free the data obtained with this function.  */
 
 static void
-x_get_window_property (display, window, property, data_ret, bytes_ret,
-		       actual_type_ret, actual_format_ret, actual_size_ret,
-		       delete_p)
-     Display *display;
-     Window window;
-     Atom property;
-     unsigned char **data_ret;
-     int *bytes_ret;
-     Atom *actual_type_ret;
-     int *actual_format_ret;
-     unsigned long *actual_size_ret;
-     int delete_p;
+x_get_window_property (Display *display, Window window, Atom property,
+		       unsigned char **data_ret, int *bytes_ret,
+		       Atom *actual_type_ret, int *actual_format_ret,
+		       unsigned long *actual_size_ret, int delete_p)
 {
   int total_size;
   unsigned long bytes_remaining;
@@ -1534,7 +1488,7 @@ x_get_window_property (display, window, property, data_ret, bytes_ret,
           elements."
          This applies even if long is more than 32 bits, the X library
          converts from 32 bit elements received from the X server to long
-         and passes the long array to us.  Thus, for that case bcopy can not
+         and passes the long array to us.  Thus, for that case memcpy can not
          be used.  We convert to a 32 bit type here, because so much code
          assume on that.
 
@@ -1556,7 +1510,7 @@ x_get_window_property (display, window, property, data_ret, bytes_ret,
       else
         {
           *actual_size_ret *= *actual_format_ret / 8;
-          bcopy (tmp_data, (*data_ret) + offset, *actual_size_ret);
+          memcpy ((*data_ret) + offset, tmp_data, *actual_size_ret);
           offset += *actual_size_ret;
         }
 
@@ -1572,19 +1526,12 @@ x_get_window_property (display, window, property, data_ret, bytes_ret,
 /* Use xfree, not XFree, to free the data obtained with this function.  */
 
 static void
-receive_incremental_selection (display, window, property, target_type,
-			       min_size_bytes, data_ret, size_bytes_ret,
-			       type_ret, format_ret, size_ret)
-     Display *display;
-     Window window;
-     Atom property;
-     Lisp_Object target_type; /* for error messages only */
-     unsigned int min_size_bytes;
-     unsigned char **data_ret;
-     int *size_bytes_ret;
-     Atom *type_ret;
-     unsigned long *size_ret;
-     int *format_ret;
+receive_incremental_selection (Display *display, Window window, Atom property,
+			       Lisp_Object target_type,
+			       unsigned int min_size_bytes,
+			       unsigned char **data_ret, int *size_bytes_ret,
+			       Atom *type_ret, int *format_ret,
+			       unsigned long *size_ret)
 {
   int offset = 0;
   struct prop_location *wait_object;
@@ -1658,7 +1605,7 @@ receive_incremental_selection (display, window, property, target_type,
 	  *data_ret = (unsigned char *) xrealloc (*data_ret, *size_bytes_ret);
 	}
 
-      bcopy (tmp_data, (*data_ret) + offset, tmp_size_bytes);
+      memcpy ((*data_ret) + offset, tmp_data, tmp_size_bytes);
       offset += tmp_size_bytes;
 
       /* Use xfree, not XFree, because x_get_window_property
@@ -1673,13 +1620,10 @@ receive_incremental_selection (display, window, property, target_type,
    TARGET_TYPE and SELECTION_ATOM are used in error message if this fails.  */
 
 static Lisp_Object
-x_get_window_property_as_lisp_data (display, window, property, target_type,
-				    selection_atom)
-     Display *display;
-     Window window;
-     Atom property;
-     Lisp_Object target_type;	/* for error messages only */
-     Atom selection_atom;	/* for error messages only */
+x_get_window_property_as_lisp_data (Display *display, Window window,
+				    Atom property,
+				    Lisp_Object target_type,
+				    Atom selection_atom)
 {
   Atom actual_type;
   int actual_format;
@@ -1776,7 +1720,8 @@ x_get_window_property_as_lisp_data (display, window, property, target_type,
 
 
 static Lisp_Object
-selection_data_to_lisp_data (Display *display, unsigned char *data, int size, Atom type, int format)
+selection_data_to_lisp_data (Display *display, const unsigned char *data,
+			     int size, Atom type, int format)
 {
   struct x_display_info *dpyinfo = x_display_info_for_display (display);
 
@@ -1869,16 +1814,10 @@ selection_data_to_lisp_data (Display *display, unsigned char *data, int size, At
 /* Use xfree, not XFree, to free the data obtained with this function.  */
 
 static void
-lisp_data_to_selection_data (display, obj,
-			     data_ret, type_ret, size_ret,
-			     format_ret, nofree_ret)
-     Display *display;
-     Lisp_Object obj;
-     unsigned char **data_ret;
-     Atom *type_ret;
-     unsigned int *size_ret;
-     int *format_ret;
-     int *nofree_ret;
+lisp_data_to_selection_data (Display *display, Lisp_Object obj,
+			     unsigned char **data_ret, Atom *type_ret,
+			     unsigned int *size_ret,
+			     int *format_ret, int *nofree_ret)
 {
   Lisp_Object type = Qnil;
   struct x_display_info *dpyinfo = x_display_info_for_display (display);
@@ -2094,8 +2033,7 @@ TYPE is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names, since that's what X expects.)
 VALUE is typically a string, or a cons of two markers, but may be
 anything that the functions on `selection-converter-alist' know about.  */)
-     (selection_name, selection_value)
-     Lisp_Object selection_name, selection_value;
+  (Lisp_Object selection_name, Lisp_Object selection_value)
 {
   check_x ();
   CHECK_SYMBOL (selection_name);
@@ -2117,8 +2055,7 @@ SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 TYPE is the type of data desired, typically `STRING'.
 TIME_STAMP is the time to use in the XConvertSelection call for foreign
 selections.  If omitted, defaults to the time for the last event.  */)
-  (selection_symbol, target_type, time_stamp)
-     Lisp_Object selection_symbol, target_type, time_stamp;
+  (Lisp_Object selection_symbol, Lisp_Object target_type, Lisp_Object time_stamp)
 {
   Lisp_Object val = Qnil;
   struct gcpro gcpro1, gcpro2;
@@ -2163,9 +2100,7 @@ DEFUN ("x-disown-selection-internal", Fx_disown_selection_internal,
        Sx_disown_selection_internal, 1, 2, 0,
        doc: /* If we own the selection SELECTION, disown it.
 Disowning it means there is no such selection.  */)
-     (selection, time)
-     Lisp_Object selection;
-     Lisp_Object time;
+  (Lisp_Object selection, Lisp_Object time)
 {
   Time timestamp;
   Atom selection_atom;
@@ -2239,8 +2174,7 @@ the symbols `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names, since that's what X expects.)
 For convenience, the symbol nil is the same as `PRIMARY',
 and t is the same as `SECONDARY'.  */)
-     (selection)
-     Lisp_Object selection;
+  (Lisp_Object selection)
 {
   check_x ();
   CHECK_SYMBOL (selection);
@@ -2260,8 +2194,7 @@ the symbols `PRIMARY', `SECONDARY', or `CLIPBOARD'.
 \(Those are literal upper-case symbol names, since that's what X expects.)
 For convenience, the symbol nil is the same as `PRIMARY',
 and t is the same as `SECONDARY'.  */)
-     (selection)
-     Lisp_Object selection;
+  (Lisp_Object selection)
 {
   Window owner;
   Atom atom;
@@ -2287,198 +2220,6 @@ and t is the same as `SECONDARY'.  */)
   return (owner ? Qt : Qnil);
 }
 
-
-#ifdef CUT_BUFFER_SUPPORT
-
-/* Ensure that all 8 cut buffers exist.  ICCCM says we gotta...  */
-static void
-initialize_cut_buffers (Display *display, Window window)
-{
-  unsigned char *data = (unsigned char *) "";
-  BLOCK_INPUT;
-#define FROB(atom) XChangeProperty (display, window, atom, XA_STRING, 8, \
-				    PropModeAppend, data, 0)
-  FROB (XA_CUT_BUFFER0);
-  FROB (XA_CUT_BUFFER1);
-  FROB (XA_CUT_BUFFER2);
-  FROB (XA_CUT_BUFFER3);
-  FROB (XA_CUT_BUFFER4);
-  FROB (XA_CUT_BUFFER5);
-  FROB (XA_CUT_BUFFER6);
-  FROB (XA_CUT_BUFFER7);
-#undef FROB
-  UNBLOCK_INPUT;
-}
-
-
-#define CHECK_CUT_BUFFER(symbol)					\
-  do { CHECK_SYMBOL ((symbol));					\
-    if (!EQ((symbol), QCUT_BUFFER0) && !EQ((symbol), QCUT_BUFFER1)	\
-	&& !EQ((symbol), QCUT_BUFFER2) && !EQ((symbol), QCUT_BUFFER3)	\
-	&& !EQ((symbol), QCUT_BUFFER4) && !EQ((symbol), QCUT_BUFFER5)	\
-	&& !EQ((symbol), QCUT_BUFFER6) && !EQ((symbol), QCUT_BUFFER7))	\
-      signal_error ("Doesn't name a cut buffer", (symbol));		\
-  } while (0)
-
-DEFUN ("x-get-cut-buffer-internal", Fx_get_cut_buffer_internal,
-       Sx_get_cut_buffer_internal, 1, 1, 0,
-       doc: /* Returns the value of the named cut buffer (typically CUT_BUFFER0).  */)
-     (buffer)
-     Lisp_Object buffer;
-{
-  Window window;
-  Atom buffer_atom;
-  unsigned char *data = NULL;
-  int bytes;
-  Atom type;
-  int format;
-  unsigned long size;
-  Lisp_Object ret;
-  Display *display;
-  struct x_display_info *dpyinfo;
-  struct frame *sf = SELECTED_FRAME ();
-
-  check_x ();
-
-  if (! FRAME_X_P (sf))
-    return Qnil;
-
-  display = FRAME_X_DISPLAY (sf);
-  dpyinfo = FRAME_X_DISPLAY_INFO (sf);
-  window = RootWindow (display, 0); /* Cut buffers are on screen 0 */
-  CHECK_CUT_BUFFER (buffer);
-  buffer_atom = symbol_to_x_atom (dpyinfo, display, buffer);
-
-  x_get_window_property (display, window, buffer_atom, &data, &bytes,
-			 &type, &format, &size, 0);
-
-  if (!data || !format)
-    {
-      xfree (data);
-      return Qnil;
-    }
-
-  if (format != 8 || type != XA_STRING)
-    signal_error ("Cut buffer doesn't contain 8-bit data",
-		  list2 (x_atom_to_symbol (display, type),
-			 make_number (format)));
-
-  ret = (bytes ? make_unibyte_string ((char *) data, bytes) : Qnil);
-  /* Use xfree, not XFree, because x_get_window_property
-     calls xmalloc itself.  */
-  xfree (data);
-  return ret;
-}
-
-
-DEFUN ("x-store-cut-buffer-internal", Fx_store_cut_buffer_internal,
-       Sx_store_cut_buffer_internal, 2, 2, 0,
-       doc: /* Sets the value of the named cut buffer (typically CUT_BUFFER0).  */)
-     (buffer, string)
-     Lisp_Object buffer, string;
-{
-  Window window;
-  Atom buffer_atom;
-  unsigned char *data;
-  int bytes;
-  int bytes_remaining;
-  int max_bytes;
-  Display *display;
-  struct frame *sf = SELECTED_FRAME ();
-
-  check_x ();
-
-  if (! FRAME_X_P (sf))
-    return Qnil;
-
-  display = FRAME_X_DISPLAY (sf);
-  window = RootWindow (display, 0); /* Cut buffers are on screen 0 */
-
-  max_bytes = SELECTION_QUANTUM (display);
-  if (max_bytes > MAX_SELECTION_QUANTUM)
-    max_bytes = MAX_SELECTION_QUANTUM;
-
-  CHECK_CUT_BUFFER (buffer);
-  CHECK_STRING (string);
-  buffer_atom = symbol_to_x_atom (FRAME_X_DISPLAY_INFO (sf),
-				  display, buffer);
-  data = (unsigned char *) SDATA (string);
-  bytes = SBYTES (string);
-  bytes_remaining = bytes;
-
-  if (! FRAME_X_DISPLAY_INFO (sf)->cut_buffers_initialized)
-    {
-      initialize_cut_buffers (display, window);
-      FRAME_X_DISPLAY_INFO (sf)->cut_buffers_initialized = 1;
-    }
-
-  BLOCK_INPUT;
-
-  /* Don't mess up with an empty value.  */
-  if (!bytes_remaining)
-    XChangeProperty (display, window, buffer_atom, XA_STRING, 8,
-		     PropModeReplace, data, 0);
-
-  while (bytes_remaining)
-    {
-      int chunk = (bytes_remaining < max_bytes
-		   ? bytes_remaining : max_bytes);
-      XChangeProperty (display, window, buffer_atom, XA_STRING, 8,
-		       (bytes_remaining == bytes
-			? PropModeReplace
-			: PropModeAppend),
-		       data, chunk);
-      data += chunk;
-      bytes_remaining -= chunk;
-    }
-  UNBLOCK_INPUT;
-  return string;
-}
-
-
-DEFUN ("x-rotate-cut-buffers-internal", Fx_rotate_cut_buffers_internal,
-       Sx_rotate_cut_buffers_internal, 1, 1, 0,
-       doc: /* Rotate the values of the cut buffers by N steps.
-Positive N means shift the values forward, negative means backward.  */)
-     (n)
-     Lisp_Object n;
-{
-  Window window;
-  Atom props[8];
-  Display *display;
-  struct frame *sf = SELECTED_FRAME ();
-  
-  check_x ();
-
-  if (! FRAME_X_P (sf))
-    return Qnil;
-
-  display = FRAME_X_DISPLAY (sf);
-  window = RootWindow (display, 0); /* Cut buffers are on screen 0 */
-  CHECK_NUMBER (n);
-  if (XINT (n) == 0)
-    return n;
-  if (! FRAME_X_DISPLAY_INFO (sf)->cut_buffers_initialized)
-    {
-      initialize_cut_buffers (display, window);
-      FRAME_X_DISPLAY_INFO (sf)->cut_buffers_initialized = 1;
-    }
-
-  props[0] = XA_CUT_BUFFER0;
-  props[1] = XA_CUT_BUFFER1;
-  props[2] = XA_CUT_BUFFER2;
-  props[3] = XA_CUT_BUFFER3;
-  props[4] = XA_CUT_BUFFER4;
-  props[5] = XA_CUT_BUFFER5;
-  props[6] = XA_CUT_BUFFER6;
-  props[7] = XA_CUT_BUFFER7;
-  BLOCK_INPUT;
-  XRotateWindowProperties (display, window, props, 8, XINT (n));
-  UNBLOCK_INPUT;
-  return n;
-}
-
-#endif
 
 /***********************************************************************
                       Drag and drop support
@@ -2573,7 +2314,8 @@ x_fill_property_data (Display *dpy, Lisp_Object data, void *ret, int format)
    Also see comment for selection_data_to_lisp_data above.  */
 
 Lisp_Object
-x_property_data_to_lisp (struct frame *f, unsigned char *data, Atom type, int format, long unsigned int size)
+x_property_data_to_lisp (struct frame *f, const unsigned char *data,
+			 Atom type, int format, long unsigned int size)
 {
   return selection_data_to_lisp_data (FRAME_X_DISPLAY (f),
                                       data, size*format/8, type, format);
@@ -2624,11 +2366,11 @@ the cdr is the lower 16 bits of a 32 bit value.
 Use the display for FRAME or the current frame if FRAME is not given or nil.
 
 If the value is 0 or the atom is not known, return the empty string.  */)
-  (value, frame)
-     Lisp_Object value, frame;
+  (Lisp_Object value, Lisp_Object frame)
 {
   struct frame *f = check_x_frame (frame);
   char *name = 0;
+  char empty[] = "";
   Lisp_Object ret = Qnil;
   Display *dpy = FRAME_X_DISPLAY (f);
   Atom atom;
@@ -2645,7 +2387,7 @@ If the value is 0 or the atom is not known, return the empty string.  */)
 
   BLOCK_INPUT;
   x_catch_errors (dpy);
-  name = atom ? XGetAtomName (dpy, atom) : "";
+  name = atom ? XGetAtomName (dpy, atom) : empty;
   had_errors = x_had_errors_p (dpy);
   x_uncatch_errors ();
 
@@ -2665,8 +2407,7 @@ DEFUN ("x-register-dnd-atom", Fx_register_dnd_atom,
        doc: /* Request that dnd events are made for ClientMessages with ATOM.
 ATOM can be a symbol or a string.  The ATOM is interned on the display that
 FRAME is on.  If FRAME is nil, the selected frame is used.  */)
-    (atom, frame)
-    Lisp_Object atom, frame;
+  (Lisp_Object atom, Lisp_Object frame)
 {
   Atom x_atom;
   struct frame *f = check_x_frame (frame);
@@ -2783,8 +2524,7 @@ the Atom is sent.  If a value is a cons, it is converted to a 32 bit number
 with the high 16 bits from the car and the lower 16 bit from the cdr.
 If more values than fits into the event is given, the excessive values
 are ignored.  */)
-     (display, dest, from, message_type, format, values)
-     Lisp_Object display, dest, from, message_type, format, values;
+  (Lisp_Object display, Lisp_Object dest, Lisp_Object from, Lisp_Object message_type, Lisp_Object format, Lisp_Object values)
 {
   struct x_display_info *dpyinfo = check_x_display_info (display);
   Window wdest;
@@ -2884,12 +2624,6 @@ syms_of_xselect (void)
   defsubr (&Sx_selection_owner_p);
   defsubr (&Sx_selection_exists_p);
 
-#ifdef CUT_BUFFER_SUPPORT
-  defsubr (&Sx_get_cut_buffer_internal);
-  defsubr (&Sx_store_cut_buffer_internal);
-  defsubr (&Sx_rotate_cut_buffers_internal);
-#endif
-
   defsubr (&Sx_get_atom_name);
   defsubr (&Sx_send_client_message);
   defsubr (&Sx_register_dnd_atom);
@@ -2951,7 +2685,7 @@ A value of 0 means wait as long as necessary.  This is initialized from the
 \"*selectionTimeout\" resource.  */);
   x_selection_timeout = 0;
 
-  QPRIMARY   = intern_c_string ("PRIMARY");	staticpro (&QPRIMARY);
+  /* QPRIMARY is defined in keyboard.c.  */
   QSECONDARY = intern_c_string ("SECONDARY");	staticpro (&QSECONDARY);
   QSTRING    = intern_c_string ("STRING");	staticpro (&QSTRING);
   QINTEGER   = intern_c_string ("INTEGER");	staticpro (&QINTEGER);
@@ -2970,17 +2704,6 @@ A value of 0 means wait as long as necessary.  This is initialized from the
   QNULL	     = intern_c_string ("NULL");		staticpro (&QNULL);
   Qcompound_text_with_extensions = intern_c_string ("compound-text-with-extensions");
   staticpro (&Qcompound_text_with_extensions);
-
-#ifdef CUT_BUFFER_SUPPORT
-  QCUT_BUFFER0 = intern_c_string ("CUT_BUFFER0"); staticpro (&QCUT_BUFFER0);
-  QCUT_BUFFER1 = intern_c_string ("CUT_BUFFER1"); staticpro (&QCUT_BUFFER1);
-  QCUT_BUFFER2 = intern_c_string ("CUT_BUFFER2"); staticpro (&QCUT_BUFFER2);
-  QCUT_BUFFER3 = intern_c_string ("CUT_BUFFER3"); staticpro (&QCUT_BUFFER3);
-  QCUT_BUFFER4 = intern_c_string ("CUT_BUFFER4"); staticpro (&QCUT_BUFFER4);
-  QCUT_BUFFER5 = intern_c_string ("CUT_BUFFER5"); staticpro (&QCUT_BUFFER5);
-  QCUT_BUFFER6 = intern_c_string ("CUT_BUFFER6"); staticpro (&QCUT_BUFFER6);
-  QCUT_BUFFER7 = intern_c_string ("CUT_BUFFER7"); staticpro (&QCUT_BUFFER7);
-#endif
 
   Qforeign_selection = intern_c_string ("foreign-selection");
   staticpro (&Qforeign_selection);

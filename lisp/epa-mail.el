@@ -3,6 +3,7 @@
 
 ;; Author: Daiki Ueno <ueno@unixuser.org>
 ;; Keywords: PGP, GnuPG, mail, message
+;; Package: epa
 
 ;; This file is part of GNU Emacs.
 
@@ -32,6 +33,12 @@
     (define-key keymap "\C-c\C-ee" 'epa-mail-encrypt)
     (define-key keymap "\C-c\C-ei" 'epa-mail-import-keys)
     (define-key keymap "\C-c\C-eo" 'epa-insert-keys)
+    (define-key keymap "\C-c\C-e\C-d" 'epa-mail-decrypt)
+    (define-key keymap "\C-c\C-e\C-v" 'epa-mail-verify)
+    (define-key keymap "\C-c\C-e\C-s" 'epa-mail-sign)
+    (define-key keymap "\C-c\C-e\C-e" 'epa-mail-encrypt)
+    (define-key keymap "\C-c\C-e\C-i" 'epa-mail-import-keys)
+    (define-key keymap "\C-c\C-e\C-o" 'epa-insert-keys)
     keymap))
 
 (defvar epa-mail-mode-hook nil)

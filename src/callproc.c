@@ -102,8 +102,6 @@ Lisp_Object Vconfigure_info_directory, Vshared_game_score_directory;
 /* Pattern used by call-process-region to make temp files.  */
 static Lisp_Object Vtemp_file_name_pattern;
 
-extern Lisp_Object Vtemporary_file_directory;
-
 Lisp_Object Vshell_file_name;
 
 Lisp_Object Vprocess_environment, Vinitial_environment;
@@ -117,7 +115,7 @@ Lisp_Object Qbuffer_file_type;
 int synch_process_alive;
 
 /* Nonzero => this is a string explaining death of synchronous subprocess.  */
-char *synch_process_death;
+const char *synch_process_death;
 
 /* Nonzero => this is the signal number that terminated the subprocess.  */
 int synch_process_termsig;
@@ -215,9 +213,7 @@ and returns a numeric exit status or a signal description string.
 If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.
 
 usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
-     (nargs, args)
-     int nargs;
-     register Lisp_Object *args;
+  (int nargs, register Lisp_Object *args)
 {
   Lisp_Object infile, buffer, current_dir, path;
   int display_p;
@@ -614,12 +610,6 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
     {
       if (fd[0] >= 0)
 	emacs_close (fd[0]);
-#ifndef subprocesses
-      /* If Emacs has been built with asynchronous subprocess support,
-	 we don't need to do this, I think because it will then have
-	 the facilities for handling SIGCHLD.  */
-      wait_without_blocking ();
-#endif /* subprocesses */
       return Qnil;
     }
 
@@ -775,10 +765,8 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 				  PT_BYTE + process_coding.produced);
 		carryover = process_coding.carryover_bytes;
 		if (carryover > 0)
-		  /* As CARRYOVER should not be that large, we had
-		     better avoid overhead of bcopy.  */
-		  BCOPY_SHORT (process_coding.carryover, buf,
-			       process_coding.carryover_bytes);
+		  memcpy (buf, process_coding.carryover,
+			  process_coding.carryover_bytes);
 	      }
 	  }
 
@@ -815,8 +803,10 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 	     make_number (total_read));
   }
 
+#ifndef MSDOS
   /* Wait for it to terminate, unless it already has.  */
   wait_for_termination (pid);
+#endif
 
   immediate_quit = 0;
 
@@ -828,7 +818,7 @@ usage: (call-process PROGRAM &optional INFILE BUFFER DISPLAY &rest ARGS)  */)
 
   if (synch_process_termsig)
     {
-      char *signame;
+      const char *signame;
 
       synchronize_system_messages_locale ();
       signame = strsignal (synch_process_termsig);
@@ -879,9 +869,7 @@ and returns a numeric exit status or a signal description string.
 If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.
 
 usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &rest ARGS)  */)
-     (nargs, args)
-     int nargs;
-     register Lisp_Object *args;
+  (int nargs, register Lisp_Object *args)
 {
   struct gcpro gcpro1;
   Lisp_Object filename_string;
@@ -916,7 +904,7 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
 
   pattern = Fexpand_file_name (Vtemp_file_name_pattern, tmpdir);
   tempfile = (char *) alloca (SBYTES (pattern) + 1);
-  bcopy (SDATA (pattern), tempfile, SBYTES (pattern) + 1);
+  memcpy (tempfile, SDATA (pattern), SBYTES (pattern) + 1);
   coding_systems = Qt;
 
 #ifdef HAVE_MKSTEMP
@@ -994,7 +982,9 @@ usage: (call-process-region START END PROGRAM &optional DELETE BUFFER DISPLAY &r
   RETURN_UNGCPRO (unbind_to (count, Fcall_process (nargs, args)));
 }
 
+#ifndef WINDOWSNT
 static int relocate_fd (int fd, int minfd);
+#endif
 
 static char **
 add_env (char **env, char **new_env, char *string)
@@ -1060,19 +1050,9 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
 
   int pid = getpid ();
 
-#ifdef SET_EMACS_PRIORITY
-  {
-    extern EMACS_INT emacs_priority;
-
-    if (emacs_priority < 0)
-      nice (- emacs_priority);
-  }
-#endif
-
-#ifdef subprocesses
   /* Close Emacs's descriptors that this process should not have.  */
   close_process_descs ();
-#endif
+
   /* DOS_NT isn't in a vfork, so if we are in the middle of load-file,
      we will lose if we call close_load_descs here.  */
 #ifndef DOS_NT
@@ -1099,8 +1079,8 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
     pwd_var = (char *) alloca (i + 6);
 #endif
     temp = pwd_var + 4;
-    bcopy ("PWD=", pwd_var, 4);
-    bcopy (SDATA (current_dir), temp, i);
+    memcpy (pwd_var, "PWD=", 4);
+    memcpy (temp, SDATA (current_dir), i);
     if (!IS_DIRECTORY_SEP (temp[i - 1])) temp[i++] = DIRECTORY_SEP;
     temp[i] = 0;
 
@@ -1133,7 +1113,7 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
     char **p, **q;
     register int new_length;
     Lisp_Object display = Qnil;
-    
+
     new_length = 0;
 
     for (tem = Vprocess_environment;
@@ -1169,7 +1149,7 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
        but with corrected value.  */
     if (egetenv ("PWD"))
       *new_env++ = pwd_var;
- 
+
     if (STRINGP (display))
       {
 	int vlen = strlen ("DISPLAY=") + strlen (SDATA (display)) + 1;
@@ -1199,7 +1179,7 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
       }
   }
 
-  
+
 #ifdef WINDOWSNT
   prepare_standard_handles (in, out, err, handles);
   set_process_dir (SDATA (current_dir));
@@ -1251,8 +1231,6 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
 #else
   setpgrp (pid, pid);
 #endif /* USG */
-  /* setpgrp_of_tty is incorrect here; it uses input_fd.  */
-  EMACS_SET_TTY_PGRP (0, &pid);
 
 #ifdef MSDOS
   pid = run_msdos_command (new_argv, pwd_var + 4, in, out, err, env);
@@ -1271,6 +1249,9 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
     report_file_error ("Spawning child process", Qnil);
   return cpid;
 #else /* not WINDOWSNT */
+  /* setpgrp_of_tty is incorrect here; it uses input_fd.  */
+  EMACS_SET_TTY_PGRP (0, &pid);
+
   /* execvp does not accept an environment arg so the only way
      to pass this environment is to set environ.  Our caller
      is responsible for restoring the ambient value of environ.  */
@@ -1285,6 +1266,7 @@ child_setup (int in, int out, int err, register char **new_argv, int set_pgrp, L
 #endif /* not MSDOS */
 }
 
+#ifndef WINDOWSNT
 /* Move the file descriptor FD so that its number is not less than MINFD.
    If the file descriptor is moved at all, the original is freed.  */
 static int
@@ -1294,27 +1276,35 @@ relocate_fd (int fd, int minfd)
     return fd;
   else
     {
-      int new = dup (fd);
+      int new;
+#ifdef F_DUPFD
+      new = fcntl (fd, F_DUPFD, minfd);
+#else
+      new = dup (fd);
+      if (new != -1)
+	/* Note that we hold the original FD open while we recurse,
+	   to guarantee we'll get a new FD if we need it.  */
+	new = relocate_fd (new, minfd);
+#endif
       if (new == -1)
 	{
-	  char *message1 = "Error while setting up child: ";
-	  char *errmessage = strerror (errno);
-	  char *message2 = "\n";
+	  const char *message1 = "Error while setting up child: ";
+	  const char *errmessage = strerror (errno);
+	  const char *message2 = "\n";
 	  emacs_write (2, message1, strlen (message1));
 	  emacs_write (2, errmessage, strlen (errmessage));
 	  emacs_write (2, message2, strlen (message2));
 	  _exit (1);
 	}
-      /* Note that we hold the original FD open while we recurse,
-	 to guarantee we'll get a new FD if we need it.  */
-      new = relocate_fd (new, minfd);
       emacs_close (fd);
       return new;
     }
 }
+#endif /* not WINDOWSNT */
 
 static int
-getenv_internal_1 (char *var, int varlen, char **value, int *valuelen, Lisp_Object env)
+getenv_internal_1 (const char *var, int varlen, char **value, int *valuelen,
+		   Lisp_Object env)
 {
   for (; CONSP (env); env = XCDR (env))
     {
@@ -1325,7 +1315,7 @@ getenv_internal_1 (char *var, int varlen, char **value, int *valuelen, Lisp_Obje
 	  /* NT environment variables are case insensitive.  */
 	  && ! strnicmp (SDATA (entry), var, varlen)
 #else  /* not WINDOWSNT */
-	  && ! bcmp (SDATA (entry), var, varlen)
+	  && ! memcmp (SDATA (entry), var, varlen)
 #endif /* not WINDOWSNT */
 	  )
 	{
@@ -1348,7 +1338,8 @@ getenv_internal_1 (char *var, int varlen, char **value, int *valuelen, Lisp_Obje
 }
 
 static int
-getenv_internal (char *var, int varlen, char **value, int *valuelen, Lisp_Object frame)
+getenv_internal (const char *var, int varlen, char **value, int *valuelen,
+		 Lisp_Object frame)
 {
   /* Try to find VAR in Vprocess_environment first.  */
   if (getenv_internal_1 (var, varlen, value, valuelen,
@@ -1385,8 +1376,7 @@ This function searches `process-environment' for VARIABLE.
 If optional parameter ENV is a list, then search this list instead of
 `process-environment', and return t when encountering a negative entry
 \(an entry for a variable with no value).  */)
-     (variable, env)
-     Lisp_Object variable, env;
+  (Lisp_Object variable, Lisp_Object env)
 {
   char *value;
   int valuelen;
@@ -1410,7 +1400,7 @@ If optional parameter ENV is a list, then search this list instead of
 /* A version of getenv that consults the Lisp environment lists,
    easily callable from C.  */
 char *
-egetenv (char *var)
+egetenv (const char *var)
 {
   char *value;
   int valuelen;
@@ -1539,13 +1529,12 @@ void
 set_initial_environment (void)
 {
   register char **envp;
-#ifndef CANNOT_DUMP
-  if (initialized)
-    {
+#ifdef CANNOT_DUMP
+  Vprocess_environment = Qnil;
 #else
-    {
-      Vprocess_environment = Qnil;
+  if (initialized)
 #endif
+    {
       for (envp = environ; *envp; envp++)
 	Vprocess_environment = Fcons (build_string (*envp),
 				      Vprocess_environment);

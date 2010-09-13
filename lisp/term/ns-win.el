@@ -222,26 +222,23 @@ The properties returned may include `top', `left', `height', and `width'."
    ;; NS-Style specification
    (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
-		     geom)
+		      geom)
        (append
-	 (list (cons 'top (string-to-number (match-string 1 geom))))
-	 (if (match-string 3 geom)
-	     (list (cons 'left (string-to-number (match-string 3 geom)))))
-	 (if (match-string 5 geom)
-	     (list (cons 'height (string-to-number (match-string 5 geom)))))
-	 (if (match-string 7 geom)
-	     (list (cons 'width (string-to-number (match-string 7 geom)))))))))
+      (list (cons 'top (string-to-number (match-string 1 geom))))
+      (if (match-string 3 geom)
+	  (list (cons 'left (string-to-number (match-string 3 geom)))))
+      (if (match-string 5 geom)
+	  (list (cons 'height (string-to-number (match-string 5 geom)))))
+      (if (match-string 7 geom)
+	  (list (cons 'width (string-to-number (match-string 7 geom)))))))))
 
 ;;;; Keyboard mapping.
-
-;; These tell read-char how to convert these special chars to ASCII.
-(put 'S-tab 'ascii-character (logior 16 ?\t))
 
 (defvar ns-alternatives-map
   (let ((map (make-sparse-keymap)))
     ;; Map certain keypad keys into ASCII characters
     ;; that people usually expect.
-    (define-key map [S-tab] [25])
+    (define-key map [S-tab] [backtab])
     (define-key map [M-backspace] [?\M-\d])
     (define-key map [M-delete] [?\M-\d])
     (define-key map [M-tab] [?\M-\t])
@@ -292,7 +289,7 @@ The properties returned may include `top', `left', `height', and `width'."
   (unless (terminal-parameter frame 'x-setup-function-keys)
     (with-selected-frame frame
       (setq interprogram-cut-function 'x-select-text
-	    interprogram-paste-function 'x-cut-buffer-or-selection-value)
+	    interprogram-paste-function 'x-selection-value)
       (let ((map (copy-keymap ns-alternatives-map)))
 	(set-keymap-parent map (keymap-parent local-function-key-map))
 	(set-keymap-parent local-function-key-map map))
@@ -309,7 +306,7 @@ The properties returned may include `top', `left', `height', and `width'."
 ;             (cons (logior (lsh 0 16)   9) 'ns-insert-working-text)
 ;             (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
              (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
-             (cons (logior (lsh 0 16)  12) 'ns-new-frame)
+	     (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  17) 'ns-change-color)
@@ -896,8 +893,8 @@ Lines are highlighted according to `ns-input-line'."
   (modify-frame-parameters
    (or frame (selected-frame))
    (list (cons 'tool-bar-lines
-	       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
-		   0 1)) ))
+		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
+				   0 1)) ))
   ;; trigger update of toolbar
   (force-mode-line-update))
 
@@ -1052,7 +1049,7 @@ panel immediately after correcting a word in a buffer."
 
 (defun ns-get-pasteboard ()
   "Returns the value of the pasteboard."
-  (ns-get-cut-buffer-internal 'PRIMARY))
+  (ns-get-cut-buffer-internal 'CLIPBOARD))
 
 (declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string &optional type))
 
@@ -1061,27 +1058,25 @@ panel immediately after correcting a word in a buffer."
 TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
   ;; Check the data type of STRING.
   (if (not (stringp string)) (error "Nonstring given to pasteboard"))
-  (ns-store-cut-buffer-internal 'PRIMARY string type))
+  (ns-store-cut-buffer-internal 'CLIPBOARD string))
 
 ;; We keep track of the last text selected here, so we can check the
 ;; current selection against it, and avoid passing back our own text
-;; from x-cut-buffer-or-selection-value.
+;; from x-selection-value.
 (defvar ns-last-selected-text nil)
 
-(defun x-select-text (text &optional push)
+(defun x-select-text (text)
   "Select TEXT, a string, according to the window system.
 
-On X, put TEXT in the primary X selection.  For backward
-compatibility with older X applications, set the value of X cut
-buffer 0 as well, and if the optional argument PUSH is non-nil,
-rotate the cut buffers.  If `x-select-enable-clipboard' is
-non-nil, copy the text to the X clipboard as well.
+On X, if `x-select-enable-clipboard' is non-nil, copy TEXT to the
+clipboard.  If `x-select-enable-primary' is non-nil, put TEXT in
+the primary selection.
 
 On Windows, make TEXT the current selection.  If
 `x-select-enable-clipboard' is non-nil, copy the text to the
-clipboard as well.  The argument PUSH is ignored.
+clipboard as well.
 
-On Nextstep, put TEXT in the pasteboard; PUSH is ignored."
+On Nextstep, put TEXT in the pasteboard."
   ;; Don't send the pasteboard too much text.
   ;; It becomes slow, and if really big it causes errors.
   (ns-set-pasteboard text)
@@ -1090,11 +1085,10 @@ On Nextstep, put TEXT in the pasteboard; PUSH is ignored."
 ;; Return the value of the current Nextstep selection.  For
 ;; compatibility with older Nextstep applications, this checks cut
 ;; buffer 0 before retrieving the value of the primary selection.
-(defun x-cut-buffer-or-selection-value ()
+(defun x-selection-value ()
   (let (text)
 
-    ;; Consult the selection, then the cut buffer.  Treat empty strings
-    ;; as if they were unset.
+    ;; Consult the selection.  Treat empty strings as if they were unset.
     (or text (setq text (ns-get-pasteboard)))
     (if (string= text "") (setq text nil))
 
@@ -1213,9 +1207,9 @@ the operating system.")
      ((eq area 'vertical-line)
       'default)
      ((and (not area) (eq p (window-point window)))
-      'cursor)
+            'cursor)
      ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
-      'region)
+            'region)
      ((not area)
       (let* ((faces (or (get-char-property p 'face window) 'default))
 	     (face (if (consp faces) (car faces) faces)))
@@ -1234,14 +1228,14 @@ EVENT is a mouse event, and ATTRIBUTE is either
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
 	   (frame (window-frame (posn-window position))))
-      (cond
-       ((eq face 'cursor)
-	(modify-frame-parameters frame (list (cons 'cursor-color
-						   ns-input-color))))
-       ((not face)
+    (cond
+     ((eq face 'cursor)
+      (modify-frame-parameters frame (list (cons 'cursor-color
+                                                 ns-input-color))))
+     ((not face)
 	(modify-frame-parameters frame (list (cons attribute
-						   ns-input-color))))
-       (t
+                                                 ns-input-color))))
+     (t
 	(if (eq attribute 'foreground-color)
 	    (set-face-foreground face ns-input-color frame)
 	  (set-face-background face ns-input-color frame))

@@ -75,7 +75,6 @@ Lisp_Object Qtest, Qsize;
 Lisp_Object Qweakness;
 Lisp_Object Qrehash_size;
 Lisp_Object Qrehash_threshold;
-extern Lisp_Object QCtest, QCsize, QCrehash_size, QCrehash_threshold, QCweakness;
 
 Lisp_Object Qread_char, Qget_file_char, Qstandard_input, Qcurrent_load_list;
 Lisp_Object Qvariable_documentation, Vvalues, Vstandard_input, Vafter_load_alist;
@@ -90,9 +89,6 @@ Lisp_Object Qfile_truename, Qdo_after_load_evaluation; /* ACM 2006/5/16 */
 static Lisp_Object Qget_emacs_mule_file_char;
 
 static Lisp_Object Qload_force_doc_strings;
-
-extern Lisp_Object Qevent_symbol_element_mask;
-extern Lisp_Object Qfile_exists_p;
 
 /* non-zero if inside `load' */
 int load_in_progress;
@@ -661,10 +657,8 @@ static void substitute_in_interval (INTERVAL, Lisp_Object);
    return Qnil if no input arrives within that time.  */
 
 Lisp_Object
-read_filtered_event (no_switch_frame, ascii_required, error_nonascii,
-		     input_method, seconds)
-     int no_switch_frame, ascii_required, error_nonascii, input_method;
-     Lisp_Object seconds;
+read_filtered_event (int no_switch_frame, int ascii_required,
+		     int error_nonascii, int input_method, Lisp_Object seconds)
 {
   Lisp_Object val, delayed_switch_frame;
   EMACS_TIME end_time;
@@ -779,8 +773,7 @@ If the optional argument SECONDS is non-nil, it should be a number
 specifying the maximum number of seconds to wait for input.  If no
 input arrives in that time, return nil.  SECONDS may be a
 floating-point value.  */)
-     (prompt, inherit_input_method, seconds)
-     Lisp_Object prompt, inherit_input_method, seconds;
+  (Lisp_Object prompt, Lisp_Object inherit_input_method, Lisp_Object seconds)
 {
   Lisp_Object val;
 
@@ -802,8 +795,7 @@ If the optional argument SECONDS is non-nil, it should be a number
 specifying the maximum number of seconds to wait for input.  If no
 input arrives in that time, return nil.  SECONDS may be a
 floating-point value.  */)
-     (prompt, inherit_input_method, seconds)
-     Lisp_Object prompt, inherit_input_method, seconds;
+  (Lisp_Object prompt, Lisp_Object inherit_input_method, Lisp_Object seconds)
 {
   if (! NILP (prompt))
     message_with_string ("%s", prompt, 0);
@@ -824,8 +816,7 @@ If the optional argument SECONDS is non-nil, it should be a number
 specifying the maximum number of seconds to wait for input.  If no
 input arrives in that time, return nil.  SECONDS may be a
 floating-point value.  */)
-     (prompt, inherit_input_method, seconds)
-     Lisp_Object prompt, inherit_input_method, seconds;
+  (Lisp_Object prompt, Lisp_Object inherit_input_method, Lisp_Object seconds)
 {
   Lisp_Object val;
 
@@ -840,7 +831,7 @@ floating-point value.  */)
 
 DEFUN ("get-file-char", Fget_file_char, Sget_file_char, 0, 0, 0,
        doc: /* Don't use this yourself.  */)
-     ()
+  (void)
 {
   register Lisp_Object val;
   BLOCK_INPUT;
@@ -925,7 +916,7 @@ DEFUN ("get-load-suffixes", Fget_load_suffixes, Sget_load_suffixes, 0, 0, 0,
        doc: /* Return the suffixes that `load' should try if a suffix is \
 required.
 This uses the variables `load-suffixes' and `load-file-rep-suffixes'.  */)
-     ()
+  (void)
 {
   Lisp_Object lst = Qnil, suffixes = Vload_suffixes, suffix, ext;
   while (CONSP (suffixes))
@@ -980,8 +971,7 @@ Loading a file records its definitions, and its `provide' and
 car is the file name loaded.  See `load-history'.
 
 Return t if the file exists and loads successfully.  */)
-     (file, noerror, nomessage, nosuffix, must_suffix)
-     Lisp_Object file, noerror, nomessage, nosuffix, must_suffix;
+  (Lisp_Object file, Lisp_Object noerror, Lisp_Object nomessage, Lisp_Object nosuffix, Lisp_Object must_suffix)
 {
   register FILE *stream;
   register int fd = -1;
@@ -994,7 +984,7 @@ Return t if the file exists and loads successfully.  */)
   int compiled = 0;
   Lisp_Object handler;
   int safe_p = 1;
-  char *fmode = "r";
+  const char *fmode = "r";
   Lisp_Object tmp[2];
   int version;
 
@@ -1125,8 +1115,7 @@ Return t if the file exists and loads successfully.  */)
   specbind (Qold_style_backquotes, Qnil);
   record_unwind_protect (load_warn_old_style_backquotes, file);
 
-  if (!bcmp (SDATA (found) + SBYTES (found) - 4,
-	     ".elc", 4)
+  if (!memcmp (SDATA (found) + SBYTES (found) - 4, ".elc", 4)
       || (fd >= 0 && (version = safe_to_load_p (fd)) > 0))
     /* Load .elc files directly, but not when they are
        remote and have no handler!  */
@@ -1283,7 +1272,6 @@ Return t if the file exists and loads successfully.  */)
 
 static Lisp_Object
 load_unwind (Lisp_Object arg)  /* used as unwind-protect function in load */
-                     
 {
   FILE *stream = (FILE *) XSAVE_VALUE (arg)->pointer;
   if (stream != NULL)
@@ -1332,8 +1320,7 @@ file name when searching.
 If non-nil, PREDICATE is used instead of `file-readable-p'.
 PREDICATE can also be an integer to pass to the access(2) function,
 in which case file-name-handlers are ignored.  */)
-     (filename, path, suffixes, predicate)
-     Lisp_Object filename, path, suffixes, predicate;
+  (Lisp_Object filename, Lisp_Object path, Lisp_Object suffixes, Lisp_Object predicate)
 {
   Lisp_Object file;
   int fd = openp (path, filename, suffixes, &file, predicate);
@@ -1575,9 +1562,8 @@ build_load_history (Lisp_Object filename, int entire)
 			   Vload_history);
 }
 
-Lisp_Object
+static Lisp_Object
 unreadpure (Lisp_Object junk) /* Used as unwind-protect function in readevalloop */
-                      
 {
   read_pure = 0;
   return Qnil;
@@ -1786,8 +1772,7 @@ DO-ALLOW-PRINT, if non-nil, specifies that `print' and related
  functions should work normally even if PRINTFLAG is nil.
 
 This function preserves the position of point.  */)
-     (buffer, printflag, filename, unibyte, do_allow_print)
-     Lisp_Object buffer, printflag, filename, unibyte, do_allow_print;
+  (Lisp_Object buffer, Lisp_Object printflag, Lisp_Object filename, Lisp_Object unibyte, Lisp_Object do_allow_print)
 {
   int count = SPECPDL_INDEX ();
   Lisp_Object tem, buf;
@@ -1830,8 +1815,7 @@ instead of `read' to read each expression.  It gets one argument
 which is the input stream for reading characters.
 
 This function does not move point.  */)
-     (start, end, printflag, read_function)
-     Lisp_Object start, end, printflag, read_function;
+  (Lisp_Object start, Lisp_Object end, Lisp_Object printflag, Lisp_Object read_function)
 {
   int count = SPECPDL_INDEX ();
   Lisp_Object tem, cbuf;
@@ -1865,8 +1849,7 @@ STREAM or the value of `standard-input' may be:
  a string (takes text from string, starting at the beginning)
  t (read text line using minibuffer and use it, or read from
     standard input in batch mode).  */)
-     (stream)
-     Lisp_Object stream;
+  (Lisp_Object stream)
 {
   if (NILP (stream))
     stream = Vstandard_input;
@@ -1883,8 +1866,7 @@ DEFUN ("read-from-string", Fread_from_string, Sread_from_string, 1, 3, 0,
 Returns a cons: (OBJECT-READ . FINAL-STRING-INDEX).
 START and END optionally delimit a substring of STRING from which to read;
  they default to 0 and (length STRING) respectively.  */)
-     (string, start, end)
-     Lisp_Object string, start, end;
+  (Lisp_Object string, Lisp_Object start, Lisp_Object end)
 {
   Lisp_Object ret;
   CHECK_STRING (string);
@@ -2326,28 +2308,28 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	      /* This is repetitive but fast and simple. */
 	      params[param_count] = QCsize;
 	      params[param_count+1] = Fplist_get (tmp, Qsize);
-	      if (!NILP (params[param_count+1]))
-		param_count+=2;
+	      if (!NILP (params[param_count + 1]))
+		param_count += 2;
 
 	      params[param_count] = QCtest;
 	      params[param_count+1] = Fplist_get (tmp, Qtest);
-	      if (!NILP (params[param_count+1]))
-		param_count+=2;
+	      if (!NILP (params[param_count + 1]))
+		param_count += 2;
 
 	      params[param_count] = QCweakness;
 	      params[param_count+1] = Fplist_get (tmp, Qweakness);
-	      if (!NILP (params[param_count+1]))
-		param_count+=2;
+	      if (!NILP (params[param_count + 1]))
+		param_count += 2;
 
 	      params[param_count] = QCrehash_size;
 	      params[param_count+1] = Fplist_get (tmp, Qrehash_size);
-	      if (!NILP (params[param_count+1]))
-		param_count+=2;
+	      if (!NILP (params[param_count + 1]))
+		param_count += 2;
 
 	      params[param_count] = QCrehash_threshold;
 	      params[param_count+1] = Fplist_get (tmp, Qrehash_threshold);
-	      if (!NILP (params[param_count+1]))
-		param_count+=2;
+	      if (!NILP (params[param_count + 1]))
+		param_count += 2;
 
 	      /* This is the hashtable data. */
 	      data = Fplist_get (tmp, Qdata);
@@ -2368,6 +2350,8 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 
 	      return ht;
 	    }
+	  UNREAD (c);
+	  invalid_syntax ("#", 1);
 	}
       if (c == '^')
 	{
@@ -2430,8 +2414,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 		invalid_syntax ("#&...", 5);
 
 	      val = Fmake_bool_vector (length, Qnil);
-	      bcopy (SDATA (tmp), XBOOL_VECTOR (val)->data,
-		     size_in_chars);
+	      memcpy (XBOOL_VECTOR (val)->data, SDATA (tmp), size_in_chars);
 	      /* Clear the extraneous bits in the last byte.  */
 	      if (XINT (length) != size_in_chars * BOOL_VECTOR_BITS_PER_CHAR)
 		XBOOL_VECTOR (val)->data[size_in_chars - 1]
@@ -2734,7 +2717,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 
 	    ok = (next_next_char <= 040
 		  || (next_next_char < 0200
-		      && (index ("\"';([#?", next_next_char)
+		      && (strchr ("\"';([#?", next_next_char)
 			  || (!first_in_list && next_next_char == '`')
 			  || (new_backquote_flag && next_next_char == ','))));
 	  }
@@ -2742,7 +2725,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	  {
 	    ok = (next_char <= 040
 		  || (next_char < 0200
-		      && (index ("\"';()[]#?", next_char)
+		      && (strchr ("\"';()[]#?", next_char)
 			  || (!first_in_list && next_char == '`')
 			  || (new_backquote_flag && next_char == ','))));
 	  }
@@ -2887,7 +2870,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 
 	if (next_char <= 040
 	    || (next_char < 0200
-		&& (index ("\"';([#?", next_char)
+		&& (strchr ("\"';([#?", next_char)
 		    || (!first_in_list && next_char == '`')
 		    || (new_backquote_flag && next_char == ','))))
 	  {
@@ -2914,7 +2897,7 @@ read1 (register Lisp_Object readcharfun, int *pch, int first_in_list)
 	  while (c > 040
 		 && c != 0x8a0 /* NBSP */
 		 && (c >= 0200
-		     || (!index ("\"';()[]#", c)
+		     || (!strchr ("\"';()[]#", c)
 			 && !(!first_in_list && c == '`')
 			 && !(new_backquote_flag && c == ','))))
 	    {
@@ -3199,11 +3182,10 @@ substitute_in_interval (INTERVAL interval, Lisp_Object arg)
 #define EXP_INT 16
 
 int
-isfloat_string (register char *cp, int ignore_trailing)
+isfloat_string (const char *cp, int ignore_trailing)
 {
-  register int state;
-
-  char *start = cp;
+  int state;
+  const char *start = cp;
 
   state = 0;
   if (*cp == '+' || *cp == '-')
@@ -3254,7 +3236,8 @@ isfloat_string (register char *cp, int ignore_trailing)
     }
 
   return ((ignore_trailing
-           || (*cp == 0) || (*cp == ' ') || (*cp == '\t') || (*cp == '\n') || (*cp == '\r') || (*cp == '\f'))
+	   || *cp == 0 || *cp == ' ' || *cp == '\t' || *cp == '\n'
+	   || *cp == '\r' || *cp == '\f')
 	  && (state == (LEAD_INT|DOT_CHAR|TRAIL_INT)
 	      || state == (DOT_CHAR|TRAIL_INT)
 	      || state == (LEAD_INT|E_CHAR|EXP_INT)
@@ -3597,13 +3580,13 @@ intern_c_string (const char *str)
 /* Create an uninterned symbol with name STR.  */
 
 Lisp_Object
-make_symbol (char *str)
+make_symbol (const char *str)
 {
   int len = strlen (str);
 
-  return Fmake_symbol ((!NILP (Vpurify_flag)
-			? make_pure_string (str, len, len, 0)
-			: make_string (str, len)));
+  return Fmake_symbol (!NILP (Vpurify_flag)
+		       ? make_pure_string (str, len, len, 0)
+		       : make_string (str, len));
 }
 
 DEFUN ("intern", Fintern, Sintern, 1, 2, 0,
@@ -3611,8 +3594,7 @@ DEFUN ("intern", Fintern, Sintern, 1, 2, 0,
 If there is none, one is created by this function and returned.
 A second optional argument specifies the obarray to use;
 it defaults to the value of `obarray'.  */)
-     (string, obarray)
-     Lisp_Object string, obarray;
+  (Lisp_Object string, Lisp_Object obarray)
 {
   register Lisp_Object tem, sym, *ptr;
 
@@ -3659,8 +3641,7 @@ NAME may be a string or a symbol.  If it is a symbol, that exact
 symbol is searched for.
 A second optional argument specifies the obarray to use;
 it defaults to the value of `obarray'.  */)
-     (name, obarray)
-     Lisp_Object name, obarray;
+  (Lisp_Object name, Lisp_Object obarray)
 {
   register Lisp_Object tem, string;
 
@@ -3688,8 +3669,7 @@ The value is t if a symbol was found and deleted, nil otherwise.
 NAME may be a string or a symbol.  If it is a symbol, that symbol
 is deleted, if it belongs to OBARRAY--no other symbol is deleted.
 OBARRAY defaults to the value of the variable `obarray'.  */)
-     (name, obarray)
-     Lisp_Object name, obarray;
+  (Lisp_Object name, Lisp_Object obarray)
 {
   register Lisp_Object string, tem;
   int hash;
@@ -3786,7 +3766,7 @@ oblookup (Lisp_Object obarray, register const char *ptr, int size, int size_byte
       {
 	if (SBYTES (SYMBOL_NAME (tail)) == size_byte
 	    && SCHARS (SYMBOL_NAME (tail)) == size
-	    && !bcmp (SDATA (SYMBOL_NAME (tail)), ptr, size_byte))
+	    && !memcmp (SDATA (SYMBOL_NAME (tail)), ptr, size_byte))
 	  return tail;
 	else if (XSYMBOL (tail)->next == 0)
 	  break;
@@ -3832,7 +3812,7 @@ map_obarray (Lisp_Object obarray, void (*fn) (Lisp_Object, Lisp_Object), Lisp_Ob
     }
 }
 
-void
+static void
 mapatoms_1 (Lisp_Object sym, Lisp_Object function)
 {
   call1 (function, sym);
@@ -3841,8 +3821,7 @@ mapatoms_1 (Lisp_Object sym, Lisp_Object function)
 DEFUN ("mapatoms", Fmapatoms, Smapatoms, 1, 2, 0,
        doc: /* Call FUNCTION on every symbol in OBARRAY.
 OBARRAY defaults to the value of `obarray'.  */)
-     (function, obarray)
-     Lisp_Object function, obarray;
+  (Lisp_Object function, Lisp_Object obarray)
 {
   if (NILP (obarray)) obarray = Vobarray;
   obarray = check_obarray (obarray);
@@ -3992,7 +3971,7 @@ static Lisp_Object dump_path;
 void
 init_lread (void)
 {
-  char *normal;
+  const char *normal;
   int turn_off_warning = 0;
 
   /* Compute the default load-path.  */
@@ -4183,7 +4162,7 @@ init_lread (void)
    does not exist.  Print it on stderr and put it in *Messages*.  */
 
 void
-dir_warning (char *format, Lisp_Object dirname)
+dir_warning (const char *format, Lisp_Object dirname)
 {
   char *buffer
     = (char *) alloca (SCHARS (dirname) + strlen (format) + 5);

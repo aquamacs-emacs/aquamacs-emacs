@@ -68,8 +68,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 int scan_file (char *filename);
-int scan_lisp_file (char *filename, char *mode);
-int scan_c_file (char *filename, char *mode);
+int scan_lisp_file (const char *filename, const char *mode);
+int scan_c_file (char *filename, const char *mode);
+void fatal (const char *s1, const char *s2) NO_RETURN;
 
 #ifdef MSDOS
 /* s/msdos.h defines this as sys_chdir, but we're not linking with the
@@ -91,7 +92,7 @@ char *progname;
 
 /* VARARGS1 */
 void
-error (char *s1, char *s2)
+error (const char *s1, const char *s2)
 {
   fprintf (stderr, "%s: ", progname);
   fprintf (stderr, s1, s2);
@@ -102,7 +103,7 @@ error (char *s1, char *s2)
 
 /* VARARGS1 */
 void
-fatal (char *s1, char *s2)
+fatal (const char *s1, const char *s2)
 {
   error (s1, s2);
   exit (EXIT_FAILURE);
@@ -232,10 +233,10 @@ struct rcsoc_state
 
   /* A keyword we look for at the beginning of lines.  If found, it is
      not copied, and SAW_KEYWORD is set to true.  */
-  char *keyword;
+  const char *keyword;
   /* The current point we've reached in an occurrence of KEYWORD in
      the input stream.  */
-  char *cur_keyword_ptr;
+  const char *cur_keyword_ptr;
   /* Set to true if we saw an occurrence of KEYWORD.  */
   int saw_keyword;
 };
@@ -325,7 +326,7 @@ scan_keyword_or_put_char (int ch, struct rcsoc_state *state)
 	   keyword, but it was a false alarm.  Output the
 	   part we scanned.  */
 	{
-	  char *p;
+	  const char *p;
 
 	  for (p = state->keyword; p < state->cur_keyword_ptr; p++)
 	    put_char (*p, state);
@@ -440,8 +441,8 @@ write_c_args (FILE *out, char *func, char *buf, int minargs, int maxargs)
 {
   register char *p;
   int in_ident = 0;
-  int just_spaced = 0;
-  int need_space = 1;
+  char *ident_start;
+  int ident_length = 0;
 
   fprintf (out, "(fn");
 
@@ -451,9 +452,8 @@ write_c_args (FILE *out, char *func, char *buf, int minargs, int maxargs)
   for (p = buf; *p; p++)
     {
       char c = *p;
-      int ident_start = 0;
 
-      /* Notice when we start printing a new identifier.  */
+      /* Notice when a new identifier starts.  */
       if ((('A' <= c && c <= 'Z')
 	   || ('a' <= c && c <= 'z')
 	   || ('0' <= c && c <= '9')
@@ -463,55 +463,56 @@ write_c_args (FILE *out, char *func, char *buf, int minargs, int maxargs)
 	  if (!in_ident)
 	    {
 	      in_ident = 1;
-	      ident_start = 1;
-
-	      if (need_space)
-		putc (' ', out);
-
-	      if (minargs == 0 && maxargs > 0)
-		fprintf (out, "&optional ");
-	      just_spaced = 1;
-
-	      minargs--;
-	      maxargs--;
+	      ident_start = p;
 	    }
 	  else
-	    in_ident = 0;
+	    {
+	      in_ident = 0;
+	      ident_length = p - ident_start;
+	    }
 	}
 
-      /* Print the C argument list as it would appear in lisp:
-	 print underscores as hyphens, and print commas and newlines
-	 as spaces.  Collapse adjacent spaces into one.  */
-      if (c == '_')
-	c = '-';
-      else if (c == ',' || c == '\n')
-	c = ' ';
-
-      /* In C code, `default' is a reserved word, so we spell it
-	 `defalt'; unmangle that here.  */
-      if (ident_start
-	  && strncmp (p, "defalt", 6) == 0
-	  && ! (('A' <= p[6] && p[6] <= 'Z')
-		|| ('a' <= p[6] && p[6] <= 'z')
-		|| ('0' <= p[6] && p[6] <= '9')
-		|| p[6] == '_'))
+      /* Found the end of an argument, write out the last seen
+	 identifier.  */
+      if (c == ',' || c == ')')
 	{
-	  fprintf (out, "DEFAULT");
-	  p += 5;
-	  in_ident = 0;
-	  just_spaced = 0;
-	}
-      else if (c != ' ' || !just_spaced)
-	{
-	  if (c >= 'a' && c <= 'z')
-	    /* Upcase the letter.  */
-	    c += 'A' - 'a';
-	  putc (c, out);
-	}
+	  if (ident_length == 0)
+	    {
+	      error ("empty arg list for `%s' should be (void), not ()", func);
+	      continue;
+	    }
 
-      just_spaced = c == ' ';
-      need_space = 0;
+	  if (strncmp (ident_start, "void", ident_length) == 0)
+	    continue;
+
+	  putc (' ', out);
+
+	  if (minargs == 0 && maxargs > 0)
+	    fprintf (out, "&optional ");
+
+	  minargs--;
+	  maxargs--;
+
+	  /* In C code, `default' is a reserved word, so we spell it
+	     `defalt'; unmangle that here.  */
+	  if (ident_length == 6 && strncmp (ident_start, "defalt", 6) == 0)
+	    fprintf (out, "DEFAULT");
+	  else
+	    while (ident_length-- > 0)
+	      {
+		c = *ident_start++;
+		if (c >= 'a' && c <= 'z')
+		  /* Upcase the letter.  */
+		  c += 'A' - 'a';
+		else if (c == '_')
+		  /* Print underscore as hyphen.  */
+		  c = '-';
+		putc (c, out);
+	      }
+	}
     }
+
+  putc (')', out);
 }
 
 /* Read through a c file.  If a .o file is named,
@@ -520,7 +521,7 @@ write_c_args (FILE *out, char *func, char *buf, int minargs, int maxargs)
    Accepts any word starting DEF... so it finds DEFSIMPLE and DEFPRED.  */
 
 int
-scan_c_file (char *filename, char *mode)
+scan_c_file (char *filename, const char *mode)
 {
   FILE *infile;
   register int c;
@@ -833,7 +834,7 @@ read_lisp_symbol (FILE *infile, char *buffer)
 }
 
 int
-scan_lisp_file (char *filename, char *mode)
+scan_lisp_file (const char *filename, const char *mode)
 {
   FILE *infile;
   register int c;

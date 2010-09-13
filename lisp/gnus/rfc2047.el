@@ -655,6 +655,9 @@ should not change this value.")
 Point moves to the end of the region."
   (let ((mime-charset (or (mm-find-mime-charset-region b e) (list 'us-ascii)))
 	cs encoding tail crest eword)
+    ;; Use utf-8 as a last resort if determining charset of text fails.
+    (if (memq nil mime-charset)
+	(setq mime-charset (list 'utf-8)))
     (cond ((> (length mime-charset) 1)
 	   (error "Can't rfc2047-encode `%s'"
 		  (buffer-substring-no-properties b e)))
@@ -1172,5 +1175,4 @@ strings are stripped."
 
 (provide 'rfc2047)
 
-;; arch-tag: a07fe3d4-22b5-4c4a-bd89-b1f82d5d36f6
 ;;; rfc2047.el ends here

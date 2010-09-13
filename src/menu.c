@@ -61,12 +61,6 @@ extern HMENU current_popup_menu;
 #define HAVE_BOXES 1
 #endif
 
-/* The timestamp of the last input event Emacs received from the X server.  */
-/* Defined in keyboard.c.  */
-extern unsigned long last_event_timestamp;
-
-extern Lisp_Object QCtoggle, QCradio;
-
 Lisp_Object menu_items;
 
 /* If non-nil, means that the global vars defined here are already in use.
@@ -133,12 +127,14 @@ discard_menu_items (void)
   xassert (NILP (menu_items_inuse));
 }
 
+#ifdef HAVE_NS
 static Lisp_Object
 cleanup_popup_menu (Lisp_Object arg)
 {
   discard_menu_items ();
   return Qnil;
 }
+#endif
 
 /* This undoes save_menu_items, and it is called by the specpdl unwind
    mechanism.  */
@@ -666,7 +662,7 @@ digest_single_submenu (int start, int end, int top_level_items)
 	{
 	  /* Create a new pane.  */
 	  Lisp_Object pane_name, prefix;
-	  char *pane_string;
+	  const char *pane_string;
 
 	  panes_seen++;
 
@@ -1064,13 +1060,12 @@ keyboard input, then this normally results in a quit and
 `x-popup-menu' does not return.  But if POSITION is a mouse button
 event (indicating that the user invoked the menu with the mouse) then
 no quit occurs and `x-popup-menu' returns nil.  */)
-  (position, menu)
-     Lisp_Object position, menu;
+  (Lisp_Object position, Lisp_Object menu)
 {
   Lisp_Object keymap, tem;
   int xpos = 0, ypos = 0;
   Lisp_Object title;
-  char *error_name = NULL;
+  const char *error_name = NULL;
   Lisp_Object selection = Qnil;
   FRAME_PTR f = NULL;
   Lisp_Object x, y, window;

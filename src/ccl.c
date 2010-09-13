@@ -72,8 +72,6 @@ Lisp_Object Vtranslation_hash_table_vector;
 #define GET_HASH_TABLE(id) \
   (XHASH_TABLE (XCDR(XVECTOR(Vtranslation_hash_table_vector)->contents[(id)])))
 
-extern int charset_unicode;
-
 /* CCL (Code Conversion Language) is a simple language which has
    operations on one input buffer, one output buffer, and 7 registers.
    The syntax of CCL is described in `ccl.el'.  Emacs Lisp function
@@ -1715,7 +1713,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 	    msglen = strlen (msg);
 	    if (dst + msglen <= (dst_bytes ? dst_end : src))
 	      {
-		bcopy (msg, dst, msglen);
+		memcpy (dst, msg, msglen);
 		dst += msglen;
 	      }
 
@@ -1728,7 +1726,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 		msglen = strlen (msg);
 		if (dst + msglen > (dst_bytes ? dst_end : src))
 		  break;
-		bcopy (msg, dst, msglen);
+		memcpy (dst, msg, msglen);
 		dst += msglen;
 	      }
 	    goto ccl_finish;
@@ -1761,7 +1759,7 @@ ccl_driver (struct ccl_program *ccl, int *source, int *destination, int src_size
 	  int i = src_end - src;
 	  if (dst_bytes && (dst_end - dst) < i)
 	    i = dst_end - dst;
-	  bcopy (src, dst, i);
+	  memcpy (dst, src, i);
 	  src += i;
 	  dst += i;
 #else
@@ -1968,8 +1966,7 @@ check_ccl_update (struct ccl_program *ccl)
 DEFUN ("ccl-program-p", Fccl_program_p, Sccl_program_p, 1, 1, 0,
        doc: /* Return t if OBJECT is a CCL program name or a compiled CCL program code.
 See the documentation of `define-ccl-program' for the detail of CCL program.  */)
-     (object)
-     Lisp_Object object;
+  (Lisp_Object object)
 {
   Lisp_Object val;
 
@@ -2003,8 +2000,7 @@ the corresponding register after the execution.
 
 See the documentation of `define-ccl-program' for a definition of CCL
 programs.  */)
-     (ccl_prog, reg)
-     Lisp_Object ccl_prog, reg;
+  (Lisp_Object ccl_prog, Lisp_Object reg)
 {
   struct ccl_program ccl;
   int i;
@@ -2058,8 +2054,7 @@ is a unibyte string.  By default it is a multibyte string.
 
 See the documentation of `define-ccl-program' for the detail of CCL program.
 usage: (ccl-execute-on-string CCL-PROGRAM STATUS STRING &optional CONTINUE UNIBYTE-P)  */)
-     (ccl_prog, status, str, contin, unibyte_p)
-     Lisp_Object ccl_prog, status, str, contin, unibyte_p;
+  (Lisp_Object ccl_prog, Lisp_Object status, Lisp_Object str, Lisp_Object contin, Lisp_Object unibyte_p)
 {
   Lisp_Object val;
   struct ccl_program ccl;
@@ -2189,8 +2184,7 @@ DEFUN ("register-ccl-program", Fregister_ccl_program, Sregister_ccl_program,
 CCL-PROG should be a compiled CCL program (vector), or nil.
 If it is nil, just reserve NAME as a CCL program name.
 Return index number of the registered CCL program.  */)
-     (name, ccl_prog)
-     Lisp_Object name, ccl_prog;
+     (Lisp_Object name, Lisp_Object ccl_prog)
 {
   int len = ASIZE (Vccl_program_table);
   int idx;
@@ -2265,8 +2259,7 @@ DEFUN ("register-code-conversion-map", Fregister_code_conversion_map,
        2, 2, 0,
        doc: /* Register SYMBOL as code conversion map MAP.
 Return index number of the registered map.  */)
-     (symbol, map)
-     Lisp_Object symbol, map;
+  (Lisp_Object symbol, Lisp_Object map)
 {
   int len = ASIZE (Vcode_conversion_map_vector);
   int i;

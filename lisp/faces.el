@@ -6,6 +6,7 @@
 
 ;; Maintainer: FSF
 ;; Keywords: internal
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -376,7 +377,7 @@ FRAME nil or not specified means do it for all frames."
 (defun face-all-attributes (face &optional frame)
   "Return an alist stating the attributes of FACE.
 Each element of the result has the form (ATTR-NAME . ATTR-VALUE).
-Normally the value describes the default attributes,
+If FRAME is omitted or nil the value describes the default attributes,
 but if you specify FRAME, the value describes the attributes
 of FACE on FRAME."
   (mapcar (lambda (pair)
@@ -2286,6 +2287,9 @@ terminal type to a different value."
 (defface region
   '((((class color) (min-colors 88) (background dark))
      :background "blue3")
+    (((class color) (min-colors 88) (background light) (type gtk))
+     :foreground "gtk_selection_fg_color"
+     :background "gtk_selection_bg_color")
     (((class color) (min-colors 88) (background light) (type ns))
      :background "ns_selection_color")
     (((class color) (min-colors 88) (background light))

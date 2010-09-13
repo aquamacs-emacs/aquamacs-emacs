@@ -6,6 +6,7 @@
 
 ;; Maintainer: FSF
 ;; Keywords: help, internal
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -231,8 +232,8 @@ if the variable `help-downcase-arguments' is non-nil."
   "Guess the file that defined the Lisp object OBJECT, of type TYPE.
 OBJECT should be a symbol associated with a function, variable, or face;
   alternatively, it can be a function definition.
-If TYPE is `variable', search for a variable definition.
-If TYPE is `face', search for a face definition.
+If TYPE is `defvar', search for a variable definition.
+If TYPE is `defface', search for a face definition.
 If TYPE is the value returned by `symbol-function' for a function symbol,
  search for a function definition.
 

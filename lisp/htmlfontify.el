@@ -15,6 +15,7 @@
 ;; Compatibility: Emacs23, Emacs22
 ;; Incompatibility: Emacs19, Emacs20, Emacs21
 ;; Last Updated: Thu 2009-11-19 01:31:21 +0000
+;; Version: 0.21
 
 ;; This file is part of GNU Emacs.
 
@@ -926,7 +927,7 @@ See also `hfy-display-class' for details of valid values for CLASS."
                new-spec)))))
     (if (or (memq :inherit face-spec) (eq 'default face))
         face-spec
-      (nconc face-spec (list :inherit 'default))) ))
+      (append face-spec (list :inherit 'default)))))
 
 ;; construct an assoc of (css-tag-name . css-tag-value) pairs
 ;; from a face or assoc of face attributes:
@@ -2348,7 +2349,7 @@ You may also want to set `hfy-page-header' and `hfy-page-footer'."
 
 
 ;;;### (autoloads (hfy-fallback-colour-values htmlfontify-load-rgb-file)
-;;;;;;  "hfy-cmap" "hfy-cmap.el" "3de2db2d213813bb3afe170ffd66cdde")
+;;;;;;  "hfy-cmap" "hfy-cmap.el" "7e622e4b131ea5efbe9d258f719822d6")
 ;;; Generated autoloads from hfy-cmap.el
 
 (autoload 'htmlfontify-load-rgb-file "hfy-cmap" "\

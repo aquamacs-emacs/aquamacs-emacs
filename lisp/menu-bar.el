@@ -6,6 +6,7 @@
 ;; Author: RMS
 ;; Maintainer: FSF
 ;; Keywords: internal, mouse
+;; Package: emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -449,7 +450,7 @@ for the definition of the menu frame."
 			    ;; Emacs compiled --without-x doesn't have
 			    ;; x-selection-exists-p.
 			    (and (fboundp 'x-selection-exists-p)
-				 (x-selection-exists-p))
+				 (x-selection-exists-p 'CLIPBOARD))
 			    kill-ring)
 			   (not buffer-read-only))
 	      :help ,(purecopy "Paste (yank) text most recently cut/copied")))
@@ -523,17 +524,6 @@ for the definition of the menu frame."
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
 Do the same for the keys of the same name."
   (interactive)
-  ;; We can't use constant list structure here because it becomes pure,
-  ;; and because it gets modified with cache data.
-  (define-key menu-bar-edit-menu [paste]
-    (cons "Paste" (cons "Paste text from clipboard" 'clipboard-yank)))
-  (define-key menu-bar-edit-menu [copy]
-    (cons "Copy" (cons "Copy text in region to the clipboard"
-		       'clipboard-kill-ring-save)))
-  (define-key menu-bar-edit-menu [cut]
-    (cons "Cut" (cons "Delete text in region and copy it to the clipboard"
-		      'clipboard-kill-region)))
-
   ;; These are Sun server keysyms for the Cut, Copy and Paste keys
   ;; (also for XFree86 on Sun keyboard):
   (define-key global-map [f20] 'clipboard-kill-region)
@@ -988,11 +978,100 @@ Only available in Aquamacs."
 	      :help ,(purecopy "Turn menu-bar on/off")
 	      :button (:toggle . (> (frame-parameter nil 'menu-bar-lines) 0))))
 
-(define-key menu-bar-showhide-menu [showhide-tool-bar]
-  `(menu-item ,(purecopy "Tool-bar") toggle-tool-bar-mode-from-frame
-	      :help ,(purecopy "Turn tool-bar on/off")
-	      :visible (display-graphic-p)
-	      :button (:toggle . (> (frame-parameter nil 'tool-bar-lines) 0))))
+(defun menu-bar-set-tool-bar-position (position)
+  (customize-set-variable 'tool-bar-mode t)
+  (dolist (frame (frame-list))
+    (set-frame-parameter frame 'tool-bar-position position))
+  (customize-set-variable 'default-frame-alist
+			  (cons (cons 'tool-bar-position position)
+				(assq-delete-all 'tool-bar-position
+						 default-frame-alist))))
+
+(defun menu-bar-showhide-tool-bar-menu-customize-disable ()
+  "Do not display tool bars."
+  (interactive)
+  (customize-set-variable 'tool-bar-mode nil))
+(defun menu-bar-showhide-tool-bar-menu-customize-enable-left ()
+  "Display tool bars on the left side."
+  (interactive)
+  (menu-bar-set-tool-bar-position 'left))
+
+(defun menu-bar-showhide-tool-bar-menu-customize-enable-right ()
+  "Display tool bars on the right side."
+  (interactive)
+  (menu-bar-set-tool-bar-position 'right))
+(defun menu-bar-showhide-tool-bar-menu-customize-enable-top ()
+  "Display tool bars on the top side."
+  (interactive)
+  (menu-bar-set-tool-bar-position 'top))
+(defun menu-bar-showhide-tool-bar-menu-customize-enable-bottom ()
+  "Display tool bars on the bottom side."
+  (interactive)
+  (menu-bar-set-tool-bar-position 'bottom))
+
+(if (featurep 'move-toolbar)
+    (progn
+      (defvar menu-bar-showhide-tool-bar-menu (make-sparse-keymap "Tool-bar"))
+
+      (define-key menu-bar-showhide-tool-bar-menu [showhide-tool-bar-left]
+	`(menu-item ,(purecopy "On the left") 
+		    menu-bar-showhide-tool-bar-menu-customize-enable-left
+		    :help ,(purecopy "Tool-bar at the left side")
+		    :visible (display-graphic-p)
+		    :button 
+		    (:radio . (and tool-bar-mode 
+				   (eq (frame-parameter nil 'tool-bar-position)
+				       'left)))))
+
+      (define-key menu-bar-showhide-tool-bar-menu [showhide-tool-bar-right]
+	`(menu-item ,(purecopy "On the right") 
+		    menu-bar-showhide-tool-bar-menu-customize-enable-right
+		    :help ,(purecopy "Tool-bar at the right side")
+		    :visible (display-graphic-p)
+		    :button
+		    (:radio . (and tool-bar-mode 
+				   (eq (frame-parameter nil 'tool-bar-position)
+				       'right)))))
+
+      (define-key menu-bar-showhide-tool-bar-menu [showhide-tool-bar-bottom]
+	`(menu-item ,(purecopy "On the bottom") 
+		    menu-bar-showhide-tool-bar-menu-customize-enable-bottom
+		    :help ,(purecopy "Tool-bar at the bottom")
+		    :visible (display-graphic-p)
+		    :button
+		    (:radio . (and tool-bar-mode 
+				   (eq (frame-parameter nil 'tool-bar-position)
+				       'bottom)))))
+
+      (define-key menu-bar-showhide-tool-bar-menu [showhide-tool-bar-top]
+	`(menu-item ,(purecopy "On the top") 
+		    menu-bar-showhide-tool-bar-menu-customize-enable-top
+		    :help ,(purecopy "Tool-bar at the top")
+		    :visible (display-graphic-p)
+		    :button
+		    (:radio . (and tool-bar-mode 
+				   (eq (frame-parameter nil 'tool-bar-position)
+				       'top)))))
+
+      (define-key menu-bar-showhide-tool-bar-menu [showhide-tool-bar-none]
+	`(menu-item ,(purecopy "None") 
+		    menu-bar-showhide-tool-bar-menu-customize-disable
+		    :help ,(purecopy "Turn tool-bar off")
+		    :visible (display-graphic-p)
+		    :button (:radio . (eq tool-bar-mode nil))))
+
+      (define-key menu-bar-showhide-menu [showhide-tool-bar]
+	`(menu-item ,(purecopy "Tool-bar") ,menu-bar-showhide-tool-bar-menu
+		    :visible (display-graphic-p)))
+
+      )
+  ;; else not tool bar that can move.
+  (define-key menu-bar-showhide-menu [showhide-tool-bar]
+    `(menu-item ,(purecopy "Tool-bar") toggle-tool-bar-mode-from-frame
+		:help ,(purecopy "Turn tool-bar on/off")
+		:visible (display-graphic-p)
+		:button (:toggle . (> (frame-parameter nil 'tool-bar-lines) 0))))
+)
 
 (define-key menu-bar-options-menu [showhide]
   `(menu-item ,(purecopy "Show/Hide") ,menu-bar-showhide-menu))
@@ -1234,6 +1313,9 @@ for future buffers."
 (define-key menu-bar-games-menu [life]
   `(menu-item ,(purecopy "Life")  life
 	      :help ,(purecopy "Watch how John Conway's cellular automaton evolves")))
+(define-key menu-bar-games-menu [land]
+  `(menu-item ,(purecopy "Landmark") landmark
+	      :help ,(purecopy "Watch a neural-network robot learn landmarks")))
 (define-key menu-bar-games-menu [hanoi]
   `(menu-item ,(purecopy "Towers of Hanoi") hanoi
 	      :help ,(purecopy "Watch Towers-of-Hanoi puzzle solved by Emacs")))
@@ -1440,6 +1522,9 @@ for future buffers."
 (define-key menu-bar-describe-menu [describe-current-display-table]
   `(menu-item ,(purecopy "Describe Display Table") describe-current-display-table
 	      :help ,(purecopy "Describe the current display table")))
+(define-key menu-bar-describe-menu [describe-package]
+  `(menu-item ,(purecopy "Describe Package...") describe-package
+              :help ,(purecopy "Display documentation of a Lisp package")))
 (define-key menu-bar-describe-menu [describe-face]
   `(menu-item ,(purecopy "Describe Face...") describe-face
               :help ,(purecopy "Display the properties of a face")))
@@ -1574,11 +1659,11 @@ key, a click, or a menu-item")))
 (define-key menu-bar-help-menu [sep2]
   menu-bar-separator)
 (define-key menu-bar-help-menu [external-packages]
-  `(menu-item ,(purecopy "External Packages") menu-bar-help-extra-packages
+  `(menu-item ,(purecopy "Finding Extra Packages") menu-bar-help-extra-packages
 	      :help ,(purecopy "Lisp packages distributed separately for use in Emacs")))
 (define-key menu-bar-help-menu [find-emacs-packages]
-  `(menu-item ,(purecopy "Find Emacs Packages") finder-by-keyword
-	      :help ,(purecopy "Find packages and features by keyword")))
+  `(menu-item ,(purecopy "Search Built-in Packages") finder-by-keyword
+	      :help ,(purecopy "Find built-in packages and features by keyword")))
 (define-key menu-bar-help-menu [more-manuals]
   `(menu-item ,(purecopy "More Manuals") ,menu-bar-manuals-menu))
 (define-key menu-bar-help-menu [emacs-manual]

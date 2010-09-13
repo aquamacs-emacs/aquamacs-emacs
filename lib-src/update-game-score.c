@@ -60,16 +60,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 extern char *optarg;
 extern int optind, opterr;
 
+int usage (int err) NO_RETURN;
+
 #define MAX_ATTEMPTS 5
 #define MAX_SCORES 200
 #define MAX_DATA_LEN 1024
-
-/* Declare the prototype for a general external function.  */
-#if defined (PROTOTYPES) || defined (WINDOWSNT)
-#define P_(proto) proto
-#else
-#define P_(proto) ()
-#endif
 
 #ifndef HAVE_DIFFTIME
 /* OK on POSIX (time_t is arithmetic type) modulo overflow in subtraction.  */
@@ -162,8 +157,8 @@ get_user_id (void)
   return buf->pw_name;
 }
 
-char *
-get_prefix (int running_suid, char *user_prefix)
+const char *
+get_prefix (int running_suid, const char *user_prefix)
 {
   if (!running_suid && user_prefix == NULL)
     lose ("Not using a shared game directory, and no prefix given.");
@@ -183,7 +178,8 @@ main (int argc, char **argv)
 {
   int c, running_suid;
   void *lockstate;
-  char *user_id, *scorefile, *prefix, *user_prefix = NULL;
+  char *user_id, *scorefile;
+  const char *prefix, *user_prefix = NULL;
   struct stat buf;
   struct score_entry *scores;
   int newscore, scorecount, reverse = 0, max = MAX_SCORES;
@@ -456,7 +452,7 @@ lock_file (const char *filename, void **state)
   int fd;
   struct stat buf;
   int attempts = 0;
-  char *lockext = ".lockfile";
+  const char *lockext = ".lockfile";
   char *lockpath = malloc (strlen (filename) + strlen (lockext) + 60);
   if (!lockpath)
     return -1;

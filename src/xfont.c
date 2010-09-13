@@ -154,8 +154,6 @@ struct font_driver xfont_driver =
     NULL, /* filter_properties */
   };
 
-extern Lisp_Object QCname;
-
 static Lisp_Object
 xfont_get_cache (FRAME_PTR f)
 {
@@ -163,8 +161,6 @@ xfont_get_cache (FRAME_PTR f)
 
   return (dpyinfo->name_list_element);
 }
-
-extern Lisp_Object Vface_alternative_font_registry_alist;
 
 static int
 compare_font_names (const void *name1, const void *name2)
@@ -289,8 +285,6 @@ static Lisp_Object xfont_scripts_cache;
 /* Re-usable vector to store characteristic font properites.   */
 static Lisp_Object xfont_scratch_props;
 
-extern Lisp_Object Qlatin;
-
 /* Return a list of scripts supported by the font of FONTNAME whose
    characteristic properties are in PROPS and whose encoding charset
    is ENCODING.  A caller must call BLOCK_INPUT in advance.  */
@@ -339,10 +333,8 @@ xfont_supported_scripts (Display *display, char *fontname, Lisp_Object props,
   return scripts;
 }
 
-extern Lisp_Object Vscalable_fonts_allowed;
-
 static Lisp_Object
-xfont_list_pattern (Display *display, char *pattern,
+xfont_list_pattern (Display *display, const char *pattern,
 		    Lisp_Object registry, Lisp_Object script)
 {
   Lisp_Object list = Qnil;
@@ -562,7 +554,7 @@ xfont_list (Lisp_Object frame, Lisp_Object spec)
       val = assq_no_quit (QCname, AREF (spec, FONT_EXTRA_INDEX));
       if (CONSP (val) && STRINGP (XCDR (val)) && SBYTES (XCDR (val)) < 512)
 	{
-	  bcopy (SDATA (XCDR (val)), name, SBYTES (XCDR (val)) + 1);
+	  memcpy (name, SDATA (XCDR (val)), SBYTES (XCDR (val)) + 1);
 	  if (xfont_encode_coding_xlfd (name) < 0)
 	    return Qnil;
 	  list = xfont_list_pattern (display, name, registry, script);
@@ -590,7 +582,7 @@ xfont_match (Lisp_Object frame, Lisp_Object spec)
 	return Qnil;
     }
   else if (SBYTES (XCDR (val)) < 512)
-    bcopy (SDATA (XCDR (val)), name, SBYTES (XCDR (val)) + 1);
+    memcpy (name, SDATA (XCDR (val)), SBYTES (XCDR (val)) + 1);
   else
     return Qnil;
   if (xfont_encode_coding_xlfd (name) < 0)
@@ -669,7 +661,7 @@ xfont_list_family (Lisp_Object frame)
       if (! *p1 || p1 == p0)
 	continue;
       if (last_len == p1 - p0
-	  && bcmp (last_family, p0, last_len) == 0)
+	  && memcmp (last_family, p0, last_len) == 0)
 	continue;
       last_len = p1 - p0;
       last_family = p0;
@@ -686,8 +678,6 @@ xfont_list_family (Lisp_Object frame)
 
   return list;
 }
-
-extern Lisp_Object QCavgwidth;
 
 static Lisp_Object
 xfont_open (FRAME_PTR f, Lisp_Object entity, int pixel_size)
@@ -980,7 +970,7 @@ xfont_text_extents (struct font *font, unsigned int *code, int nglyphs, struct f
   int i, first, x;
 
   if (metrics)
-    bzero (metrics, sizeof (struct font_metrics));
+    memset (metrics, 0, sizeof (struct font_metrics));
   for (i = 0, x = 0, first = 1; i < nglyphs; i++)
     {
       XChar2b char2b;

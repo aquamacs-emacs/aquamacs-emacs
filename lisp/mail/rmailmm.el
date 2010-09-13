@@ -6,6 +6,7 @@
 ;;	Alex Schroeder
 ;; Maintainer: FSF
 ;; Keywords: mail
+;; Package: rmail
 
 ;; This file is part of GNU Emacs.
 
@@ -112,6 +113,10 @@ automatically display the image in the buffer."
 			(file-name-as-directory filename))))
     (with-temp-buffer
       (set-buffer-file-coding-system 'no-conversion)
+      ;; Needed e.g. by jka-compr, so if the attachment is a compressed
+      ;; file, the magic signature compares equal with the unibyte
+      ;; signature string recorded in jka-compr-compression-info-list.
+      (set-buffer-multibyte nil)
       (insert data)
       (write-region nil nil filename nil nil nil t))))
 
