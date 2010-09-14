@@ -1153,10 +1153,6 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
 
   NSTRACE (x_set_offset);
 
-  /* Refuse to change one or both offsets if in full-screen mode. */
-  if (f->want_fullscreen & FULLSCREEN_BOTH)
-    return;
-
   BLOCK_INPUT;
 
   f->left_pos = xoff;
@@ -1202,9 +1198,6 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
        && oldFontWidth == FRAME_COLUMN_WIDTH (f)
        && oldFontHeight == FRAME_LINE_HEIGHT (f)
        && oldTB == tb))
-    return;
-
-  if (f->want_fullscreen & FULLSCREEN_BOTH)
     return;
 
 /*fprintf (stderr, "\tsetWindowSize: %d x %d, font size %d x %d\n", cols, rows, FRAME_COLUMN_WIDTH (f), FRAME_LINE_HEIGHT (f)); */
@@ -3518,216 +3511,6 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 }
 
 
-/* ==========================================================================
-
-   Fullscreen
-
-   ========================================================================== */
-
-#ifndef NSAppKitVersionNumber10_5
-#define NSAppKitVersionNumber10_5 949
-#endif
-
-/* Allow for compilation with pre-10.6 SDKs */
-#define _NSApplicationPresentationAutoHideDock  (1 <<  0)
-#define _NSApplicationPresentationAutoHideMenuBar  (1 <<  2)
-
-static Lisp_Object ns_fullscreen_vertical_scrollbar_state = NULL;
-
-static void
-ns_fullscreen_hook  (f)
-FRAME_PTR f;
-{
-  int rows, cols;
-  int fs =0;
-  int width, height, ign;
-  Lisp_Object frame;
-  XSETFRAME (frame, f);
-
-#ifdef NS_IMPL_COCOA
-  if (f->async_visible)
-    {
-      EmacsView *view = FRAME_NS_VIEW (f);
-
-      if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)])
-	{
-	  NSDictionary *opts;
-
-	  BLOCK_INPUT;
-	  NSDisableScreenUpdates();
-
-	  switch (f->want_fullscreen)
-	    {
-	    case FULLSCREEN_BOTH:
-	      if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5)
-		{
-		  opts = [NSDictionary dictionaryWithObjectsAndKeys: nil];
-		} else if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5+1) /* not 10.6 yet? */
-		{
-		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithBool:NO],
-				       NSFullScreenModeAllScreens, /* defined from 10.5 on */
-				       nil];
-		} else /* 10.6 and later. */
-		{
-		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithBool:NO],
-				       NSFullScreenModeAllScreens, 
-				       /* let menu and Dock appear if mouse is moved there. */
-					    [NSNumber numberWithInt: (_NSApplicationPresentationAutoHideMenuBar|_NSApplicationPresentationAutoHideDock)],
-							    /* hack: avoid using constant to allow for compilation with pre-10.6 SDKs */
-				       @"NSFullScreenModeApplicationPresentationOptions", /* defined from 10.6 on */
-				       nil];
-		}
-	      
-	      [view enterFullScreenMode:[[view window] screen]
-	      		    withOptions:opts];
-	      FRAME_NS_WINDOW (f) = [view window];
-	      // causes black screen.
-	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
-
-	      fs = 1;
-	      [NSCursor setHiddenUntilMouseMoves:YES];
-
-	      break;
-	    default:
-	      [view exitFullScreenModeWithOptions: nil];
-	      FRAME_NS_WINDOW (f) = [view window];
-	      /* restore from fullscreen NSWindow: */
-	      [[view window] makeFirstResponder: view];
-	    }
-
-	  NSRect vr = [view frame];
-
-	  NSRect r = [[view window] frame];
-	  width = r.size.width;
-	  height = r.size.height;
-
-	  /* NS removes toolbar / titlebar for fullscreen.
-	     We need to recalculate frame geometry and 
-	     update frame parameters. */
-
-	  FRAME_NS_TITLEBAR_HEIGHT (f) = height - vr.size.height;
-
-	  if ([[[view window] toolbar] isVisible])
-	    {
-	      FRAME_EXTERNAL_TOOL_BAR (f) = 1;
-	      update_frame_tool_bar (f);
-	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(1)),
-						Qnil));
-	    }
-	  else
-	    {
-	      if (FRAME_EXTERNAL_TOOL_BAR (f))
-		{
-		  free_frame_tool_bar (f);
-		  FRAME_EXTERNAL_TOOL_BAR (f) = 0;
-		}
-	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(0)),
-						Qnil));
-	    }
-
-	  /* to do: save and restore previous state of tool bar */
- 
-  if (FRAME_EXTERNAL_TOOL_BAR (f))
-    {
-    
-    FRAME_NS_TOOLBAR_HEIGHT (f) =
-      /* XXX: GNUstep has not yet implemented the first method below, added
-	 in Panther, however the second is incorrect under Cocoa. */
-#ifdef NS_IMPL_COCOA
-      NSHeight ([[view window] frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
-      /* NOTE: previously this would generate wrong result if toolbar not
-               yet displayed and fixing toolbar_height=32 helped, but
-               now (200903) seems no longer needed */
-#else
-      NSHeight ([NSWindow frameRectForContentRect: NSMakeRect (0, 0, 0, 0)
-					styleMask: [[view window] styleMask]])
-#endif
-            - FRAME_NS_TITLEBAR_HEIGHT (f);
-    }
-  else
-    FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
-
-
-
-	  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f,
-#ifdef NS_IMPL_GNUSTEP
-						 width + 3);
-#else
-						width);
-#endif
-          if (cols < MINWIDTH)
-	    cols = MINWIDTH;
-	  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, height
-#ifdef NS_IMPL_GNUSTEP
-					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
-					       - FRAME_NS_TOOLBAR_HEIGHT (f));
-#else
-	  - FRAME_NS_TITLEBAR_HEIGHT (f)
-          - FRAME_NS_TOOLBAR_HEIGHT (f));
-#endif
-          if (rows < MINHEIGHT)
-	    rows = MINHEIGHT;
-
-#if 0 /* does harm and doesnt seem to be needed. */
-	  /* Handle scroll bars */
-	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
-	  if (fs)
-	    {
-	      ns_fullscreen_vertical_scrollbar_state =
-		Fframe_parameter (frame, Qvertical_scroll_bars);
-
-	      // turn off scroll bars in full screen mode
-	      // we want to hide those scroll bars for now, as they are displayed
-	      // in the wrong position, and clicks aren't processed reliably 
-	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qnil),
-	      					Qnil));
-
-	      // we can only assume that removeFromSuperview is called
-	      // when NSView goes into fullscreen mode.
-	      // this should trigger their re-addition by the next set_vertical_scroll_bar
-	      XWINDOW (f->root_window) -> vertical_scroll_bar = Qnil;
-	    } else
-	    {
-	      if (! ns_fullscreen_vertical_scrollbar_state)
-		ns_fullscreen_vertical_scrollbar_state = Qnil;
-	      // Fixme: we don't know that they were Qright in the first place.
-	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars,
-						       ns_fullscreen_vertical_scrollbar_state),
-	      					Qnil));
-	    }
-#endif	    
-	  /* Fixme: after going back to normal mode, scroll bars flicker heavily
-	     Miniaturizing/de-m. removes flicker.  Why? */
-
-	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
-
-	  FRAME_PIXEL_WIDTH (f) = width;
-	  FRAME_PIXEL_HEIGHT (f) = height;
-	  if (FRAME_COLS (f) != cols || FRAME_LINES (f) != rows)
-	    {
-	      change_frame_size (f, rows, cols, 0, 0, 1);  /* pretend, delay, safe */
-	      SET_FRAME_GARBAGED (f);
-	      cancel_mouse_face (f);
-	    }
-	  x_set_window_size (f, 0, f->text_cols, f->text_lines);
-
-	  f->async_iconified = 0;
-	  f->async_visible   = 1;
-	  windows_or_buffers_changed++;
-	  SET_FRAME_GARBAGED (f);
-	  ns_raise_frame (f);
-	  ns_frame_rehighlight (f);
-	  ns_send_appdefined (-1);
-
-	  NSEnableScreenUpdates();
-
-	  UNBLOCK_INPUT;
-     }
-   }
-#endif
-}
 
 /* ==========================================================================
 
@@ -3961,7 +3744,7 @@ ns_create_terminal (struct ns_display_info *dpyinfo)
   terminal->frame_rehighlight_hook = ns_frame_rehighlight;
   terminal->frame_raise_lower_hook = ns_frame_raise_lower;
 
-  terminal->fullscreen_hook = ns_fullscreen_hook; /* see XTfullscreen_hook */
+  terminal->fullscreen_hook = 0; /* see XTfullscreen_hook */
 
   terminal->set_vertical_scroll_bar_hook = ns_set_vertical_scroll_bar;
   terminal->condemn_scroll_bars_hook = ns_condemn_scroll_bars;
@@ -5635,9 +5418,6 @@ ns_term_shutdown (int sig)
   NSTRACE (windowWillResize);
 /*fprintf (stderr,"Window will resize: %.0f x %.0f\n",frameSize.width,frameSize.height); */
 
-  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
-    return;
-
   cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe,
 #ifdef NS_IMPL_GNUSTEP
                                         frameSize.width + 3);
@@ -5706,9 +5486,6 @@ ns_term_shutdown (int sig)
 {
   NSWindow *theWindow = [notification object];
   NSTRACE (windowDidResize);
-
-  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
-    return;
 
 #ifdef NS_IMPL_GNUSTEP
    /* in GNUstep, at least currently, it's possible to get a didResize
@@ -5943,9 +5720,6 @@ ns_term_shutdown (int sig)
   NSScreen *screen = [win screen];
 
   NSTRACE (windowDidMove);
-
-  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
-    return;
 
   if (!emacsframe->output_data.ns)
     return;
