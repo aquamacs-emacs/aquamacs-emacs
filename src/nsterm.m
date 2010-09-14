@@ -734,12 +734,12 @@ ns_focus (struct frame *f, NSRect *r, int n)
 /*debug_lock--; */
             }
 
-          if (view) {
-              EmacsFullWindow *win = [view window];
-              if ([win isKindOfClass:[EmacsFullWindow class]]) {
-                  [[win getNormalWindow] orderOut:nil];
-              }
-          }
+          if (view) 
+	    {
+	      EmacsFullWindow *win = (EmacsFullWindow *) [view window];
+	      if ([win isKindOfClass:[EmacsFullWindow class]])
+		  [[win getNormalWindow] orderOut:nil];
+	    }
 
           if (view)
 #ifdef NS_IMPL_GNUSTEP
@@ -3532,7 +3532,6 @@ FRAME_PTR f;
   NSRect r;
   int rows, cols;
 
-  NSLog(@"window: %@ \n", [[FRAME_NS_VIEW (f) window] className]);
   new_window = [(EmacsWindow *) [FRAME_NS_VIEW (f) window]
 		 setFullscreen:(f->want_fullscreen & FULLSCREEN_BOTH ? YES : NO)];
   FRAME_NS_WINDOW(f) = new_window;
@@ -6201,10 +6200,13 @@ ns_term_shutdown (int sig)
 -(EmacsWindow *)setFullscreen:(BOOL) flag {
   BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
     NSWindow *win;
+    EmacsFullWindow *f;
+    EmacsWindow *w;
+    EmacsView *view;
 
     if (isFullscreen && ! flag) {
-        EmacsFullWindow *f = (EmacsFullWindow *)self;
-        EmacsWindow *w = [f getNormalWindow];
+        f = (EmacsFullWindow *)self;
+        w = [f getNormalWindow];
 
         [w setContentView:[f contentView]];
         [w makeKeyAndOrderFront:nil];
@@ -6237,8 +6239,8 @@ ns_term_shutdown (int sig)
 
         [self orderOut:nil];
 
-        EmacsFullWindow *f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
-        EmacsView *view = (EmacsView *)[self delegate];
+        f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
+        view = (EmacsView *)[self delegate];
         [f setDelegate:view];
         [f makeFirstResponder:view];
         [f setContentView:[self contentView]];
