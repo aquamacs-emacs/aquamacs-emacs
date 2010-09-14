@@ -1035,7 +1035,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fringe_width, /* generic OK */
   x_set_fringe_width, /* generic OK */
   0, /* x_set_wait_for_wm, will ignore */
-  0,  /* x_set_fullscreen will ignore */
+  x_set_fullscreen,  /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
   0, /* x_set_sticky */  
@@ -2599,35 +2599,6 @@ Value is t if tooltip was open, nil otherwise.  */)
 
 #endif
 
-DEFUN ("ns-toggle-fullscreen-internal", Fns_toggle_fullscreen_internal, Sns_toggle_fullscreen_internal,
-       0, 0, 0,
-       doc: /* Toggle fulscreen mode */)
-    ()
-{
-    struct frame *f = SELECTED_FRAME();
-    EmacsWindow *window = ns_get_window(f);
-
-    EmacsWindow *new_window = [window toggleFullscreen];
-    FRAME_NS_WINDOW(f) = new_window;
-
-    NSRect r = [new_window contentRectForFrameRect:[new_window frame]];
-    int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(f, r.size.width);
-    int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(f, r.size.height);
-
-    change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
-    FRAME_PIXEL_WIDTH (f) = (int)r.size.width;
-    FRAME_PIXEL_HEIGHT (f) = (int)r.size.height;
-
-    f->border_width = [new_window frame].size.width - r.size.width;
-    FRAME_NS_TITLEBAR_HEIGHT (f) =
-        [new_window frame].size.height - r.size.height;
-
-    [[new_window delegate] windowDidMove:nil];
-
-    return Qnil;
-}
-
-
 /* ==========================================================================
 
     Lisp interface declaration
@@ -2711,8 +2682,6 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
-
-  defsubr (&Sns_toggle_fullscreen_internal);
 
   /* used only in fontset.c */
   check_window_system_func = check_ns;

@@ -1263,11 +1263,6 @@ the operating system.")
 (add-to-list 'window-system-initialization-alist '(ns . ns-initialize-window-system))
 
 
-(declare-function ns-toggle-fullscreen-internal "nsfns.m" ())
-(defun ns-toggle-fullscreen ()
-  (interactive)
-  (ns-toggle-fullscreen-internal))
-
 (provide 'ns-win)
 
 ;; arch-tag: eb138a45-4e2e-4d68-b1c9-a39665731644

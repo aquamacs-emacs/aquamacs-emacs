@@ -1209,7 +1209,7 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
   FRAME_PIXEL_WIDTH (f) = pixelwidth;
   FRAME_PIXEL_HEIGHT (f) = pixelheight;
-  /*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
+ /*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
 
   mark_window_cursors_off (XWINDOW (f->root_window));
   cancel_mouse_face (f);
@@ -3410,6 +3410,37 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
   /* XXX irrelevant under NS */
 }
 
+static void
+ns_fullscreen_hook  (f)
+FRAME_PTR f;
+{
+#ifdef NS_IMPL_COCOA
+  EmacsWindow *new_window;
+  NSRect r;
+  int rows, cols;
+
+  NSLog(@"window: %@ \n", [[FRAME_NS_VIEW (f) window] className]);
+  new_window = [(EmacsWindow *) [FRAME_NS_VIEW (f) window]
+		 setFullscreen:(f->want_fullscreen & FULLSCREEN_BOTH ? YES : NO)];
+  FRAME_NS_WINDOW(f) = new_window;
+
+  r = [new_window contentRectForFrameRect:[new_window frame]];
+  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(f, r.size.width);
+  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(f, r.size.height);
+
+  change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+  FRAME_PIXEL_WIDTH (f) = (int)r.size.width;
+  FRAME_PIXEL_HEIGHT (f) = (int)r.size.height;
+
+  f->border_width = [new_window frame].size.width - r.size.width;
+  FRAME_NS_TITLEBAR_HEIGHT (f) =
+    [new_window frame].size.height - r.size.height;
+
+  [[new_window delegate] windowDidMove:nil];
+
+#endif
+    return Qnil;
+}
 
 
 /* ==========================================================================
@@ -3644,7 +3675,7 @@ ns_create_terminal (struct ns_display_info *dpyinfo)
   terminal->frame_rehighlight_hook = ns_frame_rehighlight;
   terminal->frame_raise_lower_hook = ns_frame_raise_lower;
 
-  terminal->fullscreen_hook = 0; /* see XTfullscreen_hook */
+  terminal->fullscreen_hook = ns_fullscreen_hook; /* see XTfullscreen_hook */
 
   terminal->set_vertical_scroll_bar_hook = ns_set_vertical_scroll_bar;
   terminal->condemn_scroll_bars_hook = ns_condemn_scroll_bars;
@@ -4457,7 +4488,7 @@ ns_term_shutdown (int sig)
              code, fnKeysym, flags, emacs_event->modifiers);
 
       /* if it was a function key or had modifiers, pass it directly to emacs */
-  if (fnKeysym || (emacs_event->modifiers && (emacs_event->modifiers != shift_modifier)
+      if (fnKeysym || (emacs_event->modifiers
                        && [[theEvent charactersIgnoringModifiers] length] > 0))
 /*[[theEvent characters] length] */
         {
@@ -5589,11 +5620,11 @@ ns_term_shutdown (int sig)
 
 @implementation EmacsWindow
 
--(NSWindow *)toggleFullscreen {
-    BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
+-(EmacsWindow *)setFullscreen:(BOOL) flag {
+  BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
     NSWindow *win;
 
-    if (isFullscreen) {
+    if (isFullscreen && ! flag) {
         EmacsFullWindow *f = (EmacsFullWindow *)self;
         EmacsWindow *w = [f getNormalWindow];
 
@@ -5613,7 +5644,8 @@ ns_term_shutdown (int sig)
             }
         }
     }
-    else {
+    else if (! isFullscreen)
+      {
         [self deminiaturize:nil];
 
         if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
