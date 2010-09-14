@@ -1028,7 +1028,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fringe_width, /* generic OK */
   x_set_fringe_width, /* generic OK */
   0, /* x_set_wait_for_wm, will ignore */
-  0, /* x_set_fullscreen, will ignore */
+  x_set_fullscreen,  /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha,
   0, /* x_set_sticky */  
@@ -3269,7 +3269,6 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 
 
 #endif
-
 
 /* ==========================================================================
 

@@ -734,6 +734,13 @@ ns_focus (struct frame *f, NSRect *r, int n)
 /*debug_lock--; */
             }
 
+          if (view) {
+              EmacsFullWindow *win = [view window];
+              if ([win isKindOfClass:[EmacsFullWindow class]]) {
+                  [[win getNormalWindow] orderOut:nil];
+              }
+          }
+
           if (view)
 #ifdef NS_IMPL_GNUSTEP
             r ? [view lockFocusInRect: u] : [view lockFocus];
@@ -1215,8 +1222,14 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   f->scroll_bar_actual_width = NS_SCROLL_BAR_WIDTH (f);
   compute_fringe_widths (f, 0);
 
-  pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
-  pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
+  if ([window isKindOfClass:[EmacsFullWindow class]]) {
+      pixelwidth = [[window screen] frame].size.width;
+      pixelheight = [[window screen] frame].size.height;
+  }
+  else {
+      pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
+      pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
+  }
 
   /* If we have a toolbar, take its height into account. */
   if (tb)
@@ -1234,7 +1247,7 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
                   + FRAME_NS_TOOLBAR_HEIGHT (f);
 
   /* constrain to screen if we can */
-  if (screen)
+  if (screen && ![window isKindOfClass:[EmacsFullWindow class]])
     {
       NSSize sz = [screen visibleFrame].size;
       NSSize ez = { wr.size.width - sz.width, wr.size.height - sz.height };
@@ -1281,7 +1294,7 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
   FRAME_PIXEL_WIDTH (f) = pixelwidth;
   FRAME_PIXEL_HEIGHT (f) = pixelheight;
-/*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
+ /*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
 
   mark_window_cursors_off (XWINDOW (f->root_window));
   cancel_mouse_face (f);
@@ -3510,6 +3523,37 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
   /* XXX irrelevant under NS */
 }
 
+static void
+ns_fullscreen_hook  (f)
+FRAME_PTR f;
+{
+#ifdef NS_IMPL_COCOA
+  EmacsWindow *new_window;
+  NSRect r;
+  int rows, cols;
+
+  NSLog(@"window: %@ \n", [[FRAME_NS_VIEW (f) window] className]);
+  new_window = [(EmacsWindow *) [FRAME_NS_VIEW (f) window]
+		 setFullscreen:(f->want_fullscreen & FULLSCREEN_BOTH ? YES : NO)];
+  FRAME_NS_WINDOW(f) = new_window;
+
+  r = [new_window contentRectForFrameRect:[new_window frame]];
+  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(f, r.size.width);
+  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(f, r.size.height);
+
+  change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+  FRAME_PIXEL_WIDTH (f) = (int)r.size.width;
+  FRAME_PIXEL_HEIGHT (f) = (int)r.size.height;
+
+  f->border_width = [new_window frame].size.width - r.size.width;
+  FRAME_NS_TITLEBAR_HEIGHT (f) =
+    [new_window frame].size.height - r.size.height;
+
+  [[new_window delegate] windowDidMove:nil];
+
+#endif
+    return Qnil;
+}
 
 
 /* ==========================================================================
@@ -3744,7 +3788,7 @@ ns_create_terminal (struct ns_display_info *dpyinfo)
   terminal->frame_rehighlight_hook = ns_frame_rehighlight;
   terminal->frame_raise_lower_hook = ns_frame_raise_lower;
 
-  terminal->fullscreen_hook = 0; /* see XTfullscreen_hook */
+  terminal->fullscreen_hook = ns_fullscreen_hook; /* see XTfullscreen_hook */
 
   terminal->set_vertical_scroll_bar_hook = ns_set_vertical_scroll_bar;
   terminal->condemn_scroll_bars_hook = ns_condemn_scroll_bars;
@@ -6154,6 +6198,60 @@ ns_term_shutdown (int sig)
 
 @implementation EmacsWindow
 
+-(EmacsWindow *)setFullscreen:(BOOL) flag {
+  BOOL isFullscreen = [[self className] isEqualToString:@"EmacsFullWindow"];
+    NSWindow *win;
+
+    if (isFullscreen && ! flag) {
+        EmacsFullWindow *f = (EmacsFullWindow *)self;
+        EmacsWindow *w = [f getNormalWindow];
+
+        [w setContentView:[f contentView]];
+        [w makeKeyAndOrderFront:nil];
+
+        [f close];
+
+        win = w;
+
+        if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
+            if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
+                [NSApp setPresentationOptions:NSApplicationPresentationDefault];
+            }
+            else {
+                [NSMenu setMenuBarVisible:YES];
+            }
+        }
+    }
+    else if (flag && ! isFullscreen)
+      {
+        [self deminiaturize:nil];
+
+        if ([[self screen] isEqual:[[NSScreen screens] objectAtIndex:0]]) {
+            if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
+                [NSApp setPresentationOptions:NSApplicationPresentationAutoHideDock | NSApplicationPresentationAutoHideMenuBar];
+            }
+            else {
+                [NSMenu setMenuBarVisible:NO];
+            }
+        }
+
+        [self orderOut:nil];
+
+        EmacsFullWindow *f = [[EmacsFullWindow alloc] initWithNormalWindow:self];
+        EmacsView *view = (EmacsView *)[self delegate];
+        [f setDelegate:view];
+        [f makeFirstResponder:view];
+        [f setContentView:[self contentView]];
+        [f setContentSize:[[self screen] frame].size];
+        [f setTitle:[self title]];
+        [f makeKeyAndOrderFront:nil];
+
+        win = f;
+    }
+
+    return win;
+}
+
 /* called only on resize clicks by special case in EmacsApp-sendEvent */
 - (void)mouseDown: (NSEvent *)theEvent
 {
@@ -6211,6 +6309,32 @@ ns_term_shutdown (int sig)
 
 
 @end /* EmacsWindow */
+
+@implementation EmacsFullWindow
+
+-(BOOL)canBecomeKeyWindow {
+    return YES;
+}
+
+-(id)initWithNormalWindow:(EmacsWindow *)window {
+    self = [super initWithContentRect:[window contentRectForFrameRect:[[window screen] frame]]
+                            styleMask:NSBorderlessWindowMask
+                              backing:NSBackingStoreBuffered
+                                defer:YES];
+    if (self) {
+        normalWindow = window;
+        [self setAcceptsMouseMovedEvents: YES];
+        [self useOptimizedDrawing: YES];
+    }
+
+    return self;
+}
+
+-(EmacsWindow *)getNormalWindow {
+    return normalWindow;
+}
+
+@end /* EmacsFullWindow */
 
 
 /* ==========================================================================
