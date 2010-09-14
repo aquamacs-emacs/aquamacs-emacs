@@ -1135,6 +1135,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
   `(menu-item "Full Screen Editing" 
 	      aquamacs-toggle-full-frame
 	      :key-sequence [(,osxkeys-command-key shift 13)]
+	      :button (:toggle . (eq (frame-parameter nil 'fullscreen) 'fullboth))
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Use full screen for the selected frame"))
   
@@ -1369,12 +1370,12 @@ that should be represented in the Aquamacs menus."
                   (interactive)
                   (show-refcard "calccard.pdf"))))
 (define-key menu-bar-help-refcards-menu [sk-refcard]
-             (list 'menu-item "GNU Emacs -- Referenèná karta"
+             (list 'menu-item "GNU Emacs -- Referenà¥nà¥‡ karta"
                 (defun show-refcard-sk-refcard () 
                   (interactive)
                   (show-refcard "sk-refcard.pdf"))))
 (define-key menu-bar-help-refcards-menu [cs-refcard]
-             (list 'menu-item "GNU Emacs -- Referenèní karta"
+             (list 'menu-item "GNU Emacs -- Referenà¥nö€Œ karta"
                 (defun show-refcard-cs-refcard () 
                   (interactive)
                   (show-refcard "cs-refcard.pdf"))))
@@ -1409,12 +1410,12 @@ that should be represented in the Aquamacs menus."
                   (interactive)
                   (show-refcard "de-refcard.pdf"))))
 (define-key menu-bar-help-refcards-menu [sk-dired-ref]
-             (list 'menu-item "Referenèná karta pre Dired"
+             (list 'menu-item "Referenà¥nà¥‡ karta pre Dired"
                 (defun show-refcard-sk-dired-ref () 
                   (interactive)
                   (show-refcard "sk-dired-ref.pdf"))))
 (define-key menu-bar-help-refcards-menu [cs-dired-ref]
-             (list 'menu-item "Referenèní karta pro Dired"
+             (list 'menu-item "Referenà¥nö€Œ karta pro Dired"
                 (defun show-refcard-cs-dired-ref () 
                   (interactive)
                   (show-refcard "cs-dired-ref.pdf"))))

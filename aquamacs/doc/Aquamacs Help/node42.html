@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 2.1</TITLE>
-<META NAME="description" CONTENT="Changes-- 2.1">
+<TITLE>Changes-- after 2.1</TITLE>
+<META NAME="description" CONTENT="Changes-- after 2.1">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,128 +27,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html721"
+<A NAME="tex2html724"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html717"
+<A NAME="tex2html720"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html711"
+<A NAME="tex2html714"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html719"
+<A NAME="tex2html722"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html722"
-  HREF="node43.html">Changes  2.0</A>
-<B> Up:</B> <A NAME="tex2html718"
+<B> Next:</B> <A NAME="tex2html725"
+  HREF="node43.html">Changes  2.1</A>
+<B> Up:</B> <A NAME="tex2html721"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html712"
+<B> Previous:</B> <A NAME="tex2html715"
   HREF="node41.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html720"
+ &nbsp; <B>  <A NAME="tex2html723"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<a name="changelog-top"></a><H2><A NAME="SECTION000141000000000000000">
-Changes-- 2.1</A>
+<H2><A NAME="SECTION000141000000000000000">
+Changes-- after 2.1</A>
 </H2>
 
 <P>
 
-
-
-<P>
-<B>To all supporters: thank you so much for your donations.  See also: <TT><A NAME="tex2html32"
-  HREF="http://aquamacs.org/donations.shtml">http://aquamacs.org/donations.shtml</A></TT>. To all users and hackers: Thank You for your support!  We appreciate your bug reports, success stories, ideas and code.  </B>
-<P>
-
 <UL>
-<LI>Aquamacs is now optimized further for speed on machines with Intel processors: It starts up faster and also executes lisp faster (up to 50% in some situations).
+<LI>Improved fullscreen mode: addresses rare display issues (related to scrollbars), crashes after switching back from fullscreen mode, and empty menus during fullscreen mode.  Note that multiple frames may be shown in fullscreen mode (switch with, e.g.,  A-`).
+Code by Daisuke Murase and David Reitter.  Suggested by many.
 </LI>
-<LI>The ``Line Numbers'' item in the Options/View menu now turns on `global-linum-mode', displaying line numbers to the left of each buffer line.
-Suggested by Konrad Podczeck.
+<LI>Repeated cycling between frames (forwards with A-`) now cycles through all frames rather than just the two most recent ones.
+Suggested by many Aquamacs users.
 </LI>
-<LI>Copying bug reports and other mail to the pasteboard in order to send them with GMail or another mail program now works reliably.
-Reported by Matt Mollison. </LI>
-<LI>C-x s (`save-some-buffers') and other functions that ask questions applying to a series of items accept the <TT>!</TT> command again to apply the action to all items (e.g., save all buffers).
-Reported by Michael Kohlhase.
+<LI>When using <TT>emacsclient -t</TT> to connect to a running Aquamacs session from the terminal, entering the minibuffer no longer produces an error.
+Reported by Stephen T.
 </LI>
-<LI>Users should now experience no more trouble binding the new Aquamacs version to file types with the Finder's ``Open With'' and ``Change all'' functions when earlier versions of Aquamacs are present.  In case of persistent issues, we advise to reset the LaunchServices database with the `lsregister' command as described here:  <TT><A NAME="tex2html33"
-  HREF="http://www.macosxhints.com/article.php?story=20071102084155353">http://www.macosxhints.com/article.php?story=20071102084155353</A></TT>Reported by Arthur Ogus
+<LI>When hollow cursors are used, ensure that the glyph underneath the cursor remains visible.
+Reported by Marcin Koziej.
 </LI>
-<LI>The Spellchecking context menu (flyspell-mode / Check Spelling While Typing) now shows suggested alternatives in the right order. 
-</LI>
-<LI>The LaTeX icon in the toolbar changes again when toggling PDF mode.
-Reported by Gabriel Cardona and Konrad Podczeck.
-</LI>
-<LI>Jumping to the exact source/PDF position with Skim now works even in multi-file LaTeX projects where files are in different locations.  
-Reported by Brad Miller and Jeffery Kline.
-</LI>
-<LI>Setting frame position and size in `default-frame-alist' (and elsewhere) now works again.
-Reported by Konrad Podczeck.
-</LI>
-<LI>Fixed ``Join Windows'' menu item (was: ``Remove Splits'').
-</LI>
-<LI>PHP-mode has been updated to version 1.5.0.
-</LI>
-<LI>Files opened from the command line or via the Finder will be shown if they are already visible in a tab or in any other window;  unless `Show Buffers in New Frames' (one-buffer-one-frame-mode) is enabled, Aquamacs no longer creates a new frame for those files.  The customization variable `dnd-open-file-other-window'  can be used to control the behavior.
-Reported by Mike Pelican.
-</LI>
-<LI>With all frames closed, minimized or on other spaces, Aquamacs now recognizes key commands again.  If the minibuffer is needed, a frame showing an <I>empty</I> buffer will appear.  This buffer is always read-only and, unsurprisingly, rather empty.
-</LI>
-<LI>Frames are now cycled in order of their last selection, rather than their creation.  Selecting a frame and deleting it will, for instance, select the previously selected frame.  Cycling with A-` (`next-frame')  will cycle accordingly.
-Reported by Konrad Podczeck and David Eyk.
-</LI>
-<LI>Haskell-mode has been updated to version 2.7.0.
-Suggested by Johannes Krause.
-</LI>
-<LI>Menu-bar-mode, not supported in Aquamacs, will no longer cause problems for people who try to switch the menu bar off in their customizations.
-</LI>
-<LI>The cursor is now drawn correctly when `line-spacing' is set.
-</LI>
-<LI>Aquamacs no longer hangs in some situations when using `ispell'.
+<LI>Find-file (C-x C-f) with a file that is already visible in another window now switches to that window again (`one-buffer-one-frame-mode' being on).
+Reported by Dan Coe.
+Cursor movement (up/down) is more precise in terms of horizontal placement.
+Reported by Matt Crawford.
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html721"
-  HREF="node43.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next.png"></A> 
-<A NAME="tex2html717"
-  HREF="node41.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="./up.png"></A> 
-<A NAME="tex2html711"
-  HREF="node41.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="./prev.png"></A> 
-<A NAME="tex2html719"
-  HREF="node1.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
- SRC="./contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html722"
-  HREF="node43.html">Changes  2.0</A>
-<B> Up:</B> <A NAME="tex2html718"
-  HREF="node41.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html712"
-  HREF="node41.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html720"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2010-08-14</I>
+<BR><I>2010-09-13</I>
 </ADDRESS>
 </BODY>
 </HTML>
