@@ -868,7 +868,7 @@ draw_row_fringe_bitmaps (struct window *w, struct glyph_row *row)
      window and scrollbar */
   /*  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0) */
 
-    draw_fringe_bitmap (w, row, 0);
+  draw_fringe_bitmap (w, row, 0);
 }
 
 /* Draw the fringes of window W.  Only fringes for rows marked for
@@ -1170,9 +1170,8 @@ update_window_fringes (struct window *w, int keep_current_p)
       if (!row->enabled_p)
 	row = cur;
 
-      left_face_id = right_face_id = DEFAULT_FACE_ID;
-      left_offset = right_offset = 0;
       left_face_id = right_face_id = FRINGE_FACE_ID; /* takes priority if customized */
+      left_offset = right_offset = 0;
 
       /* Decide which bitmap to draw in the left fringe.  */
       if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)

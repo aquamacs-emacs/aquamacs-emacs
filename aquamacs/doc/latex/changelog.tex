@@ -1,7 +1,22 @@
 % Choose C-x RET f Latin-1 to save this file in Emacs
 \section{Aquamacs Emacs: What's New in This Release}
 
-\subsection{Changes--- 2.dev}
+\subsection{Changes--- after 2.1}
+
+\begin{itemize}
+\item Repeated cycling between frames (forwards with A-`) now cycles through all frames rather than just the two most recent ones.
+Suggested by many Aquamacs users.
+\item When using {\tt emacsclient -t} to connect to a running Aquamacs session from the terminal, entering the minibuffer no longer produces an error.
+Reported by Stephen T.
+\item When hollow cursors are used, ensure that the glyph underneath the cursor remains visible.
+Reported by Marcin Koziej.
+\item Find-file (C-x C-f) with a file that is already visible in another window now switches to that window again (`one-buffer-one-frame-mode' being on).
+Reported by Dan Coe.
+\irem Cursor movement (up/down) is more precise in terms of horizontal placement.
+Reported by Matt Crawford.
+\end{itemize}
+
+\subsection{Changes--- 2.1}
 
 \begin{rawhtml}
 <a name="changelog-top"></a>
@@ -9,7 +24,12 @@
 
 
 
+\textbf{To all supporters: thank you so much for your donations.  See also: \url{http://aquamacs.org/donations.shtml}. To all users and hackers: Thank You for your support!  We appreciate your bug reports, success stories, ideas and code.  }
+\vskip2em
+
 \begin{itemize}
+
+
 \item Aquamacs is now optimized further for speed on machines with Intel processors: It starts up faster and also executes lisp faster (up to 50\% in some situations).
 \item The ``Line Numbers'' item in the Options/View menu now turns on `global-linum-mode', displaying line numbers to the left of each buffer line.
 Suggested by Konrad Podczeck.
@@ -30,7 +50,7 @@ Reported by Konrad Podczeck.
 \item PHP-mode has been updated to version 1.5.0.
 \item Files opened from the command line or via the Finder will be shown if they are already visible in a tab or in any other window;  unless `Show Buffers in New Frames' (one-buffer-one-frame-mode) is enabled, Aquamacs no longer creates a new frame for those files.  The customization variable `dnd-open-file-other-window'  can be used to control the behavior.
 Reported by Mike Pelican.
-\item With all frames closed, minimized or on other spaces, Aquamacs now recognizes key commands again.  If the minibuffer is needed, a frame showing an internal \emph{empty} buffer will appear (or we're switching to a frame that shows an Aquamacs frame, if possible).
+\item With all frames closed, minimized or on other spaces, Aquamacs now recognizes key commands again.  If the minibuffer is needed, a frame showing an \emph{empty} buffer will appear.  This buffer is always read-only and, unsurprisingly, rather empty.
 \item Frames are now cycled in order of their last selection, rather than their creation.  Selecting a frame and deleting it will, for instance, select the previously selected frame.  Cycling with A-` (`next-frame')  will cycle accordingly.
 Reported by Konrad Podczeck and David Eyk.
 \item Haskell-mode has been updated to version 2.7.0.
@@ -47,8 +67,6 @@ Suggested by Johannes Krause.
 
 \emph{Aquamacs is now based on Emacs 23 and the Cocoa NextStep port.  There are many changes under the hood associated with this, but also a plethora of visible improvements.  Major ones, and those pertaining to Aquamacs specifically, are listed here.  Further changes can be found in the NEWS file for Emacs 23.}  
 
-\textbf{To all users and hackers: Thank You for your support!  We appreciate your bug reports, success stories, ideas and code.  We'd also like to thank those who fund this project.  See also: \url{http://aquamacs.org/donations.shtml}}
-\vskip2em
 
 \textbf{Major User Interface Improvements}
 
@@ -2305,8 +2323,11 @@ Or, if you would like to go with the default position all the time,
     directly from within Aquamacs Emacs (Help menu). There is a
     brand-new Aquamacs manual, and there is Richard
     Stallman's original Emacs manual. They can be searched (e.g. via
-    Spotlight on OS X 10.4). We also provide direct access to the online configuration Wiki, which has been filling up with content nicely.  Please contribute; everybody has write access!
-	\end{itemize}
+    Spotlight on OS X 10.4). We also provide direct access to the online configuration Wiki, which has been filling up with content nicely.  Please contribute; everybody has write access.
+
+\end{itemize}
+
+
 
 %%% Local Variables: 
 %%% mode: latex

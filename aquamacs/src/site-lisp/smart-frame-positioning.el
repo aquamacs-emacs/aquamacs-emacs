@@ -217,18 +217,19 @@ pixels apart if possible."
        (round (- (/ (float pixels) (frame-char-height frame)) 
 		 (if round-to-lower .499999 0))))
 
+(defvar smart-fp-window-system (or initial-window-system 'ns))
 (defun smart-fp--get-frame-creation-function ()
   (if (boundp 'frame-creation-function)
       frame-creation-function
     (if (boundp 'frame-creation-function-alist)
-	(cdr (assq initial-window-system frame-creation-function-alist))
+	(cdr (assq smart-fp-window-system frame-creation-function-alist))
       nil)))
 (require 'aquamacs-tools)
 (defun smart-fp--set-frame-creation-function (fun)
   (if (boundp 'frame-creation-function)
       (setq frame-creation-function fun)
     (if (boundp 'frame-creation-function-alist)
-	(assq-set initial-window-system fun 'frame-creation-function-alist))
+	(assq-set smart-fp-window-system fun 'frame-creation-function-alist))
     nil))
 
  
@@ -244,10 +245,11 @@ pixels apart if possible."
       
       (let* (
 	     ;; on some systems, we can retrieve the available pixel width.
-	     (rect (if (fboundp 'display-available-pixel-bounds)
-		       (display-available-pixel-bounds old-frame)
-		     (list 0 0 
-			   (display-pixel-width) (display-pixel-height))))
+	     (rect (or (if (fboundp 'display-available-pixel-bounds)
+			   ;; may return nil:
+			   (display-available-pixel-bounds old-frame))
+		       (list 0 0 
+			     (display-pixel-width) (display-pixel-height))))
 	     (min-x (+ 5 (nth 0 rect)))
 	     (min-y (+ 5 (nth 1 rect)))
 	     (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
@@ -710,15 +712,17 @@ Returns nil of parms is nil."
 	       (bounds  (display-available-pixel-bounds frame)))
 	  ;; is the area visible? 
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
-	  (and  (>= left (- (nth 0 bounds) 4))
-		(>= top (nth 1 bounds))
-		(<= right (+ (nth 0 bounds) (nth 2 bounds)))
-		(<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
+	  (and bounds
+	       (>= left (- (nth 0 bounds) 4))
+	       (>= top (nth 1 bounds))
+	       (<= right (+ (nth 0 bounds) (nth 2 bounds)))
+	       (<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4)))))
 
+; (display-available-pixel-bounds nil)
 ; (setq frame (selected-frame))
 ; (smart-move-minibuffer-inside-screen)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
-  (when (and initial-window-system ; this should probably be window-system with frame selected for Multi-TTY
+  (when (and (frame-parameter (or frame (selected-frame)) 'window-system)
 	     (not (frame-parameter frame 'fullscreen)))
     (unless
 	(smart-minibuffer-inside-screen-p frame)
@@ -736,7 +740,7 @@ boundaries.
 The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
-  (when initial-window-system ;; to do: select frame and use window-system
+  (when (frame-parameter (or frame (selected-frame)) 'window-system)
     (let* ((frame (or frame (selected-frame)))
 	   ;; on some systems, we can retrieve the available pixel width with
 	   ;; non-standard methods.

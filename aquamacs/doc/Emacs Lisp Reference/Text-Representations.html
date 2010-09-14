@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,12 +44,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dA
 
 <h3 class="section">33.1 Text Representations</h3>
 
-<p><a name="index-text-representation-2771"></a>
+<p><a name="index-text-representation-2772"></a>
   Emacs buffers and strings support a large repertoire of characters
 from many different scripts, allowing users to type and display text
 in almost any known written language.
 
-   <p><a name="index-character-codepoint-2772"></a><a name="index-codespace-2773"></a><a name="index-Unicode-2774"></a>  To support this multitude of characters and scripts, Emacs closely
+   <p><a name="index-character-codepoint-2773"></a><a name="index-codespace-2774"></a><a name="index-Unicode-2775"></a>  To support this multitude of characters and scripts, Emacs closely
 follows the <dfn>Unicode Standard</dfn>.  The Unicode Standard assigns a
 unique number, called a <dfn>codepoint</dfn>, to each and every character. 
 The range of codepoints defined by Unicode, or the Unicode
@@ -60,7 +60,7 @@ that are not unified with Unicode and <dfn>raw 8-bit bytes</dfn> that
 cannot be interpreted as characters.  Thus, a character codepoint in
 Emacs is a 22-bit integer number.
 
-   <p><a name="index-internal-representation-of-characters-2775"></a><a name="index-characters_002c-representation-in-buffers-and-strings-2776"></a><a name="index-multibyte-text-2777"></a>  To conserve memory, Emacs does not hold fixed-length 22-bit numbers
+   <p><a name="index-internal-representation-of-characters-2776"></a><a name="index-characters_002c-representation-in-buffers-and-strings-2777"></a><a name="index-multibyte-text-2778"></a>  To conserve memory, Emacs does not hold fixed-length 22-bit numbers
 that are codepoints of text characters within buffers and strings. 
 Rather, Emacs uses a variable-length internal representation of
 characters, that stores each character as a sequence of 1 to 5 8-bit
@@ -80,7 +80,7 @@ Emacs visits a file, it first reads the file's text verbatim into a
 buffer, and only then converts it to the internal representation. 
 Before the conversion, the buffer holds encoded text.
 
-   <p><a name="index-unibyte-text-2778"></a>  Encoded text is not really text, as far as Emacs is concerned, but
+   <p><a name="index-unibyte-text-2779"></a>  Encoded text is not really text, as far as Emacs is concerned, but
 rather a sequence of raw 8-bit bytes.  We call buffers and strings
 that hold encoded text <dfn>unibyte</dfn> buffers and strings, because
 Emacs treats them as a sequence of individual bytes.  Usually, Emacs
@@ -94,7 +94,7 @@ The representation for a string is determined and recorded in the string
 when the string is constructed.
 
 <div class="defun">
-&mdash; Variable: <b>enable-multibyte-characters</b><var><a name="index-enable_002dmultibyte_002dcharacters-2779"></a></var><br>
+&mdash; Variable: <b>enable-multibyte-characters</b><var><a name="index-enable_002dmultibyte_002dcharacters-2780"></a></var><br>
 <blockquote><p>This variable specifies the current buffer's text representation. 
 If it is non-<code>nil</code>, the buffer contains multibyte text; otherwise,
 it contains unibyte encoded text or binary non-text data.
@@ -107,7 +107,7 @@ default value to <code>nil</code> early in startup.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>position-bytes</b><var> position<a name="index-position_002dbytes-2780"></a></var><br>
+&mdash; Function: <b>position-bytes</b><var> position<a name="index-position_002dbytes-2781"></a></var><br>
 <blockquote><p>Buffer positions are measured in character units.  This function
 returns the byte-position corresponding to buffer position
 <var>position</var> in the current buffer.  This is 1 at the start of the
@@ -116,7 +116,7 @@ range, the value is <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>byte-to-position</b><var> byte-position<a name="index-byte_002dto_002dposition-2781"></a></var><br>
+&mdash; Function: <b>byte-to-position</b><var> byte-position<a name="index-byte_002dto_002dposition-2782"></a></var><br>
 <blockquote><p>Return the buffer position, in character units, corresponding to given
 <var>byte-position</var> in the current buffer.  If <var>byte-position</var> is
 out of range, the value is <code>nil</code>.  In a multibyte buffer, an
@@ -129,20 +129,20 @@ belong to the same character.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>multibyte-string-p</b><var> string<a name="index-multibyte_002dstring_002dp-2782"></a></var><br>
+&mdash; Function: <b>multibyte-string-p</b><var> string<a name="index-multibyte_002dstring_002dp-2783"></a></var><br>
 <blockquote><p>Return <code>t</code> if <var>string</var> is a multibyte string, <code>nil</code>
 otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-bytes</b><var> string<a name="index-string_002dbytes-2783"></a></var><br>
-<blockquote><p><a name="index-string_002c-number-of-bytes-2784"></a>This function returns the number of bytes in <var>string</var>. 
+&mdash; Function: <b>string-bytes</b><var> string<a name="index-string_002dbytes-2784"></a></var><br>
+<blockquote><p><a name="index-string_002c-number-of-bytes-2785"></a>This function returns the number of bytes in <var>string</var>. 
 If <var>string</var> is a multibyte string, this can be greater than
 <code>(length </code><var>string</var><code>)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>unibyte-string</b><var> &amp;rest bytes<a name="index-unibyte_002dstring-2785"></a></var><br>
+&mdash; Function: <b>unibyte-string</b><var> &amp;rest bytes<a name="index-unibyte_002dstring-2786"></a></var><br>
 <blockquote><p>This function concatenates all its argument <var>bytes</var> and makes the
 result a unibyte string. 
 </p></blockquote></div>

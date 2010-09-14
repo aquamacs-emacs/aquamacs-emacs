@@ -343,8 +343,8 @@ static void x_update_window_begin (struct window *);
 static void x_after_update_window_line (struct glyph_row *);
 static struct scroll_bar *x_window_to_scroll_bar (Display *, Window);
 static void x_scroll_bar_report_motion (struct frame **, Lisp_Object *,
-                                        enum scroll_bar_part *,
-                                        Lisp_Object *, Lisp_Object *,
+					    enum scroll_bar_part *,
+					    Lisp_Object *, Lisp_Object *,
                                         unsigned long *);
 static void x_handle_net_wm_state (struct frame *, XPropertyEvent *);
 static void x_check_fullscreen (struct frame *);
@@ -456,7 +456,7 @@ x_set_frame_alpha (struct frame *f)
   if (FRAME_X_DISPLAY_INFO (f)->root_window != FRAME_X_OUTPUT (f)->parent_desc)
     /* Since the WM decoration lies under the FRAME_OUTER_WINDOW,
        we must treat the former instead of the latter. */
-    win = FRAME_X_OUTPUT (f)->parent_desc;
+    win = FRAME_X_OUTPUT(f)->parent_desc;
 
   if (dpyinfo->x_highlight_frame == f)
     alpha = f->alpha[0];
@@ -485,10 +485,10 @@ x_set_frame_alpha (struct frame *f)
     unsigned long n, left;
 
     x_catch_errors (dpy);
-    rc = XGetWindowProperty (dpy, win, XInternAtom(dpy, OPACITY, False),
-			     0L, 1L, False, XA_CARDINAL,
-			     &actual, &format, &n, &left,
-			     &data);
+    rc = XGetWindowProperty(dpy, win, XInternAtom(dpy, OPACITY, False),
+			    0L, 1L, False, XA_CARDINAL,
+			    &actual, &format, &n, &left,
+			    &data);
 
     if (rc == Success && actual != None)
       if (*(unsigned long *)data == opac)
@@ -898,7 +898,7 @@ static void x_draw_image_foreground_1 (struct glyph_string *, Pixmap);
 static void x_clear_glyph_string_rect (struct glyph_string *, int,
                                        int, int, int);
 static void x_draw_relief_rect (struct frame *, int, int, int, int,
-                                int, int, int, int, int, int,
+				    int, int, int, int, int, int,
                                 XRectangle *);
 static void x_draw_box_rect (struct glyph_string *, int, int, int, int,
                              int, int, int, XRectangle *);
@@ -2444,11 +2444,11 @@ x_draw_stretch_glyph_string (struct glyph_string *s)
 	{
 	  int left_x = window_box_left_offset (s->w, TEXT_AREA);
 
-	  if (x < left_x)
-	    {
-	      background_width -= left_x - x;
-	      x = left_x;
-	    }
+      if (x < left_x)
+	{
+	  background_width -= left_x - x;
+	  x = left_x;
+	}
 	}
       else
 	{
@@ -2476,7 +2476,7 @@ x_draw_stretch_glyph_string (struct glyph_string *s)
 	  GC gc;
 
 	  if (!s->row->reversed_p)
-	    x += width;
+	  x += width;
 	  else
 	    x = s->x;
 	  if (s->row->mouse_face_p
@@ -2838,9 +2838,9 @@ x_clear_frame (struct frame *f)
   /* Make sure scroll bars are redrawn.  As they aren't redrawn by
      redisplay, do it here.  */
   if (FRAME_GTK_WIDGET (f))
-    gtk_widget_queue_draw (FRAME_GTK_WIDGET (f));
+  gtk_widget_queue_draw (FRAME_GTK_WIDGET (f));
 #endif
-
+  
   XFlush (FRAME_X_DISPLAY (f));
 
   UNBLOCK_INPUT;
@@ -3047,7 +3047,7 @@ static void
 XTtoggle_invisible_pointer (FRAME_PTR f, int invisible)
 {
   BLOCK_INPUT;
-  if (invisible)
+  if (invisible) 
     {
       if (FRAME_X_DISPLAY_INFO (f)->invisible_cursor != 0)
         XDefineCursor (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
@@ -4499,7 +4499,7 @@ x_create_toolkit_scroll_bar (struct frame *f, struct scroll_bar *bar)
   if (f->output_data.x->scroll_bar_top_shadow_pixel == -1)
     {
       pixel = f->output_data.x->scroll_bar_background_pixel;
-      if (pixel != -1)
+      if (pixel != -1) 
         {
           if (!x_alloc_lighter_color (f, FRAME_X_DISPLAY (f),
                                       FRAME_X_COLORMAP (f),
@@ -4511,7 +4511,7 @@ x_create_toolkit_scroll_bar (struct frame *f, struct scroll_bar *bar)
   if (f->output_data.x->scroll_bar_bottom_shadow_pixel == -1)
     {
       pixel = f->output_data.x->scroll_bar_background_pixel;
-      if (pixel != -1)
+      if (pixel != -1) 
         {
           if (!x_alloc_lighter_color (f, FRAME_X_DISPLAY (f),
                                       FRAME_X_COLORMAP (f),
@@ -5666,10 +5666,10 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventp, int *finish, 
   EVENT_INIT (inev.ie);
   inev.ie.kind = NO_EVENT;
   inev.ie.arg = Qnil;
-
+  
   if (pending_event_wait.eventtype == event.type)
     pending_event_wait.eventtype = 0; /* Indicates we got it.  */
-
+  
   switch (event.type)
     {
     case ClientMessage:
@@ -6589,7 +6589,7 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventp, int *finish, 
                             event.xconfigure.height);
           f = 0;
         }
-#endif
+#endif  
       if (f)
         {
 #ifndef USE_X_TOOLKIT
@@ -6771,8 +6771,8 @@ handle_one_xevent (struct x_display_info *dpyinfo, XEvent *eventp, int *finish, 
             last_mouse_press_frame = Qnil;
             goto OTHER;
           }
-        else
-          goto OTHER;
+            else
+              goto OTHER;
 #endif /* USE_X_TOOLKIT || USE_GTK */
       }
       break;
@@ -7242,31 +7242,31 @@ x_draw_window_cursor (struct window *w, struct glyph_row *glyph_row, int x, int 
 	}
       else
 	{
-	  switch (cursor_type)
-	    {
-	    case HOLLOW_BOX_CURSOR:
-	      x_draw_hollow_cursor (w, glyph_row);
-	      break;
+      switch (cursor_type)
+	{
+	case HOLLOW_BOX_CURSOR:
+	  x_draw_hollow_cursor (w, glyph_row);
+	  break;
 
-	    case FILLED_BOX_CURSOR:
-	      draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
-	      break;
+	case FILLED_BOX_CURSOR:
+	  draw_phys_cursor_glyph (w, glyph_row, DRAW_CURSOR);
+	  break;
 
-	    case BAR_CURSOR:
-	      x_draw_bar_cursor (w, glyph_row, cursor_width, BAR_CURSOR);
-	      break;
+	case BAR_CURSOR:
+	  x_draw_bar_cursor (w, glyph_row, cursor_width, BAR_CURSOR);
+	  break;
 
-	    case HBAR_CURSOR:
-	      x_draw_bar_cursor (w, glyph_row, cursor_width, HBAR_CURSOR);
-	      break;
+	case HBAR_CURSOR:
+	  x_draw_bar_cursor (w, glyph_row, cursor_width, HBAR_CURSOR);
+	  break;
 
-	    case NO_CURSOR:
-	      w->phys_cursor_width = 0;
-	      break;
+	case NO_CURSOR:
+	  w->phys_cursor_width = 0;
+	  break;
 
-	    default:
-	      abort ();
-	    }
+	default:
+	  abort ();
+	}
 	}
 
 #ifdef HAVE_X_I18N
@@ -7901,7 +7901,7 @@ xim_open_dpy (struct x_display_info *dpyinfo, char *resource_name)
       if (dpyinfo->xim)
 	XCloseIM (dpyinfo->xim);
       xim = XOpenIM (dpyinfo->display, dpyinfo->xrdb, resource_name,
-		     emacs_class);
+		     EMACS_CLASS);
       dpyinfo->xim = xim;
 
       if (xim)
@@ -8002,7 +8002,7 @@ xim_initialize (struct x_display_info *dpyinfo, char *resource_name)
       xim_inst->resource_name = (char *) xmalloc (len + 1);
       memcpy (xim_inst->resource_name, resource_name, len + 1);
       XRegisterIMInstantiateCallback (dpyinfo->display, dpyinfo->xrdb,
-				      resource_name, emacs_class,
+				      resource_name, EMACS_CLASS,
 				      xim_instantiate_callback,
 				      /* This is XPointer in XFree86
 					 but (XPointer *) on Tru64, at
@@ -8027,7 +8027,7 @@ xim_close_dpy (struct x_display_info *dpyinfo)
 #ifdef HAVE_X11R6_XIM
       if (dpyinfo->display)
 	XUnregisterIMInstantiateCallback (dpyinfo->display, dpyinfo->xrdb,
-					  NULL, emacs_class,
+					  NULL, EMACS_CLASS,
 					  xim_instantiate_callback, NULL);
       xfree (dpyinfo->xim_callback_data->resource_name);
       xfree (dpyinfo->xim_callback_data);
@@ -8285,19 +8285,89 @@ x_set_sticky (struct frame *f, Lisp_Object new_value, Lisp_Object old_value)
                 "_NET_WM_STATE_STICKY", NULL);
 }
 
+/* Return the current _NET_WM_STATE.
+   SIZE_STATE is set to one of the FULLSCREEN_* values.
+   STICKY is set to 1 if the sticky state is set, 0 if not.  */
+
+static void
+get_current_vm_state (struct frame *f,
+                      Window window,
+                      int *size_state,
+                      int *sticky)
+{
+  Atom actual_type;
+  unsigned long actual_size, bytes_remaining;
+  int i, rc, actual_format;
+  struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
+  long max_len = 65536;
+  Display *dpy = FRAME_X_DISPLAY (f);
+  unsigned char *tmp_data = NULL;
+  Atom target_type = XA_ATOM;
+
+  *sticky = 0;
+  *size_state = FULLSCREEN_NONE;
+
+  BLOCK_INPUT;
+  x_catch_errors (dpy);
+  rc = XGetWindowProperty (dpy, window, dpyinfo->Xatom_net_wm_state,
+                           0, max_len, False, target_type,
+                           &actual_type, &actual_format, &actual_size,
+                           &bytes_remaining, &tmp_data);
+
+  if (rc != Success || actual_type != target_type || x_had_errors_p (dpy))
+    {
+      if (tmp_data) XFree (tmp_data);
+      x_uncatch_errors ();
+      UNBLOCK_INPUT;
+      return;
+    }
+
+  x_uncatch_errors ();
+
+  for (i = 0; i < actual_size; ++i)
+    {
+      Atom a = ((Atom*)tmp_data)[i];
+      if (a == dpyinfo->Xatom_net_wm_state_maximized_horz) 
+        {
+          if (*size_state == FULLSCREEN_HEIGHT)
+            *size_state = FULLSCREEN_MAXIMIZED;
+          else
+            *size_state = FULLSCREEN_WIDTH;
+        }
+      else if (a == dpyinfo->Xatom_net_wm_state_maximized_vert)
+        {
+          if (*size_state == FULLSCREEN_WIDTH)
+            *size_state = FULLSCREEN_MAXIMIZED;
+          else
+            *size_state = FULLSCREEN_HEIGHT;
+        }
+      else if (a == dpyinfo->Xatom_net_wm_state_fullscreen_atom)
+        *size_state = FULLSCREEN_BOTH;
+      else if (a == dpyinfo->Xatom_net_wm_state_sticky)
+        *sticky = 1;
+    }
+
+  if (tmp_data) XFree (tmp_data);
+  UNBLOCK_INPUT;
+}
+
 /* Do fullscreen as specified in extended window manager hints */
 
 static int
 do_ewmh_fullscreen (struct frame *f)
 {
   int have_net_atom = wm_supports (f, "_NET_WM_STATE");
+  Lisp_Object lval = get_frame_param (f, Qfullscreen);
+  int cur, dummy;
+
+  get_current_vm_state (f, FRAME_OUTER_WINDOW (f), &cur, &dummy);
 
   /* Some window managers don't say they support _NET_WM_STATE, but they do say
      they support _NET_WM_STATE_FULLSCREEN.  Try that also.  */
   if (!have_net_atom)
       have_net_atom = wm_supports (f, "_NET_WM_STATE_FULLSCREEN");
 
-  if (have_net_atom)
+  if (have_net_atom && cur != f->want_fullscreen)
     {
       Lisp_Object frame;
       const char *fs = "_NET_WM_STATE_FULLSCREEN";
@@ -8306,26 +8376,41 @@ do_ewmh_fullscreen (struct frame *f)
 
       XSETFRAME (frame, f);
 
-      set_wm_state (frame, 0, fs, NULL);
-      set_wm_state (frame, 0, fh, NULL);
-      set_wm_state (frame, 0, fw, NULL);
-
-      /* If there are _NET_ atoms we assume we have extended window manager
-         hints.  */
+      /* Keep number of calls to set_wm_state as low as possible.
+         Some window managers, or possible Gtk+, hangs when too many
+         are sent at once.  */
       switch (f->want_fullscreen)
         {
         case FULLSCREEN_BOTH:
+          if (cur == FULLSCREEN_WIDTH || cur == FULLSCREEN_MAXIMIZED
+              || cur == FULLSCREEN_HEIGHT)
+            set_wm_state (frame, 0, fw, fh);
           set_wm_state (frame, 1, fs, NULL);
           break;
         case FULLSCREEN_WIDTH:
-          set_wm_state (frame, 1, fw, NULL);
+          if (cur == FULLSCREEN_BOTH || cur == FULLSCREEN_HEIGHT
+              || cur == FULLSCREEN_MAXIMIZED)
+            set_wm_state (frame, 0, fs, fh);
+          if (cur != FULLSCREEN_MAXIMIZED)
+            set_wm_state (frame, 1, fw, NULL);
           break;
         case FULLSCREEN_HEIGHT:
-          set_wm_state (frame, 1, fh, NULL);
+          if (cur == FULLSCREEN_BOTH || cur == FULLSCREEN_WIDTH
+              || cur == FULLSCREEN_MAXIMIZED)
+            set_wm_state (frame, 0, fs, fw);
+          if (cur != FULLSCREEN_MAXIMIZED)
+            set_wm_state (frame, 1, fh, NULL);
           break;
         case FULLSCREEN_MAXIMIZED:
+          if (cur == FULLSCREEN_BOTH)
+            set_wm_state (frame, 0, fs, NULL);
           set_wm_state (frame, 1, fw, fh);
           break;
+        case FULLSCREEN_NONE:
+          if (cur == FULLSCREEN_BOTH)
+            set_wm_state (frame, 0, fs, NULL);
+          else
+            set_wm_state (frame, 0, fw, fh);
         }
 
       f->want_fullscreen = FULLSCREEN_NONE;
@@ -8351,59 +8436,13 @@ XTfullscreen_hook (FRAME_PTR f)
 static void
 x_handle_net_wm_state (struct frame *f, XPropertyEvent *event)
 {
-  Atom actual_type;
-  unsigned long actual_size, bytes_remaining;
-  int i, rc, actual_format, value = FULLSCREEN_NONE;
-  struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
-  long max_len = 65536;
-  Display *dpy = FRAME_X_DISPLAY (f);
-  unsigned char *tmp_data = NULL;
-  Atom target_type = XA_ATOM;
+  int value = FULLSCREEN_NONE;
   Lisp_Object lval;
   int sticky = 0;
 
-  BLOCK_INPUT;
-  x_catch_errors (dpy);
-  rc = XGetWindowProperty (dpy, event->window,
-                           event->atom, 0, max_len, False, target_type,
-                           &actual_type, &actual_format, &actual_size,
-                           &bytes_remaining, &tmp_data);
-
-  if (rc != Success || actual_type != target_type || x_had_errors_p (dpy))
-    {
-      if (tmp_data) XFree (tmp_data);
-      x_uncatch_errors ();
-      UNBLOCK_INPUT;
-      return;
-    }
-
-  x_uncatch_errors ();
-
-  for (i = 0; i < actual_size; ++i)
-    {
-      Atom a = ((Atom*)tmp_data)[i];
-      if (a == dpyinfo->Xatom_net_wm_state_maximized_horz)
-        {
-          if (value == FULLSCREEN_HEIGHT)
-            value = FULLSCREEN_MAXIMIZED;
-          else
-            value = FULLSCREEN_WIDTH;
-        }
-      else if (a == dpyinfo->Xatom_net_wm_state_maximized_vert)
-        {
-          if (value == FULLSCREEN_WIDTH)
-            value = FULLSCREEN_MAXIMIZED;
-          else
-            value = FULLSCREEN_HEIGHT;
-        }
-      else if (a == dpyinfo->Xatom_net_wm_state_fullscreen_atom)
-        value = FULLSCREEN_BOTH;
-      else if (a == dpyinfo->Xatom_net_wm_state_sticky)
-        sticky = 1;
-    }
-
+  get_current_vm_state (f, event->window, &value, &sticky);
   lval = Qnil;
-  switch (value)
+  switch (value) 
     {
     case FULLSCREEN_WIDTH:
       lval = Qfullwidth;
@@ -8418,12 +8457,9 @@ x_handle_net_wm_state (struct frame *f, XPropertyEvent *event)
       lval = Qmaximized;
       break;
     }
-
+      
   store_frame_param (f, Qfullscreen, lval);
   store_frame_param (f, Qsticky, sticky ? Qt : Qnil);
-
-  if (tmp_data) XFree (tmp_data);
-  UNBLOCK_INPUT;
 }
 
 /* Check if we need to resize the frame due to a fullscreen request.
@@ -8456,7 +8492,7 @@ x_check_fullscreen (struct frame *f)
         case FULLSCREEN_HEIGHT:
           height = x_display_pixel_height (dpyinfo);
         }
-
+      
       if (FRAME_COLS (f) != width || FRAME_LINES (f) != height)
         {
           change_frame_size (f, height, width, 0, 1, 0);
@@ -8584,7 +8620,7 @@ x_wait_for_event (struct frame *f, int eventtype)
 
       FD_ZERO (&fds);
       FD_SET (fd, &fds);
-
+      
       EMACS_GET_TIME (time_now);
       EMACS_SUB_TIME (tmo, tmo_at, time_now);
 
@@ -8673,7 +8709,7 @@ x_set_window_size (struct frame *f, int change_gravity, int cols, int rows)
   if (NILP (tip_frame) || XFRAME (tip_frame) != f)
     {
       int r, c;
-
+	  
       /* When the frame is maximized/fullscreen or running under for
          example Xmonad, x_set_window_size_1 will be a no-op.
          In that case, the right thing to do is extend rows/cols to
@@ -9699,7 +9735,7 @@ my_log_handler (const gchar *log_domain, GLogLevelFlags log_level, const gchar *
       fprintf (stderr, "%s-WARNING **: %s\n", log_domain, message);
 }
 #endif
-
+  
 /* Open a connection to X display DISPLAY_NAME, and return
    the structure that describes the open display.
    If we cannot contact the display, return null.  */
@@ -10123,7 +10159,7 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
     = XInternAtom (dpyinfo->display, "_NET_WM_ICON_NAME", False);
   dpyinfo->Xatom_net_wm_name
     = XInternAtom (dpyinfo->display, "_NET_WM_NAME", False);
-
+  
   dpyinfo->x_dnd_atoms_size = 8;
   dpyinfo->x_dnd_atoms_length = 0;
   dpyinfo->x_dnd_atoms = xmalloc (sizeof (*dpyinfo->x_dnd_atoms)
@@ -10246,7 +10282,7 @@ x_delete_display (struct x_display_info *dpyinfo)
 #ifdef HAVE_X_SM
         /* Close X session management when we close its display.  */
         if (t->id == 1 && x_session_have_connection ())
-          x_session_close ();
+          x_session_close();
 #endif
         delete_terminal (t);
         break;

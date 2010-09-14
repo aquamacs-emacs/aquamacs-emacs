@@ -4344,7 +4344,7 @@ into account variable-width characters and line continuation."
     (or (and (= (vertical-motion
 		 (cons (or goal-column
 			   (if (consp temporary-goal-column)
-			       (truncate (car temporary-goal-column))
+			       (car temporary-goal-column)
 			     temporary-goal-column))
 		       arg))
 		arg)

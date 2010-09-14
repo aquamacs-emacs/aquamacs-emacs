@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Inte
 
 <h3 class="appendixsec">E.5 Writing Emacs Primitives</h3>
 
-<p><a name="index-primitive-function-internals-3883"></a><a name="index-writing-Emacs-primitives-3884"></a>
+<p><a name="index-primitive-function-internals-3884"></a><a name="index-writing-Emacs-primitives-3885"></a>
   Lisp primitives are Lisp functions implemented in C.  The details of
 interfacing the C function so that Lisp can call it are handled by a few
 C macros.  The only way to really understand how to write new C code is
@@ -56,7 +56,7 @@ to read the source, but we can explain some things here.
 <samp><span class="file">eval.c</span></samp>.  (An ordinary function would have the same general
 appearance.)
 
-   <p><a name="index-garbage-collection-protection-3885"></a>
+   <p><a name="index-garbage-collection-protection-3886"></a>
 <pre class="smallexample">     DEFUN ("or", For, Sor, 0, UNEVALLED, 0,
        doc: /* Eval args until one of them yields non-nil, then return that
      value. The remaining args are not evalled at all.
@@ -82,7 +82,7 @@ appearance.)
        return val;
      }
 </pre>
-   <p><a name="index-g_t_0040code_007bDEFUN_007d_002c-C-macro-to-define-Lisp-primitives-3886"></a>  Let's start with a precise explanation of the arguments to the
+   <p><a name="index-g_t_0040code_007bDEFUN_007d_002c-C-macro-to-define-Lisp-primitives-3887"></a>  Let's start with a precise explanation of the arguments to the
 <code>DEFUN</code> macro.  Here is a template for them:
 
 <pre class="example">     DEFUN (<var>lname</var>, <var>fname</var>, <var>sname</var>, <var>min</var>, <var>max</var>, <var>interactive</var>, <var>doc</var>)
@@ -154,7 +154,7 @@ receives exactly two arguments: the first is the number of Lisp
 arguments, and the second is the address of a block containing their
 values.  They have types <code>int</code> and <code>Lisp_Object&nbsp;*</code><!-- /@w -->.
 
-   <p><a name="index-g_t_0040code_007bGCPRO_007d-and-_0040code_007bUNGCPRO_007d-3887"></a><a name="index-protect-C-variables-from-garbage-collection-3888"></a>  Within the function <code>For</code> itself, note the use of the macros
+   <p><a name="index-g_t_0040code_007bGCPRO_007d-and-_0040code_007bUNGCPRO_007d-3888"></a><a name="index-protect-C-variables-from-garbage-collection-3889"></a>  Within the function <code>For</code> itself, note the use of the macros
 <code>GCPRO1</code> and <code>UNGCPRO</code>.  <code>GCPRO1</code> is used to
 &ldquo;protect&rdquo; a variable from garbage collection&mdash;to inform the garbage
 collector that it must look in that variable and regard its contents
@@ -205,7 +205,7 @@ macro.  (This definition is used because those systems put all variables
 declared static in a place that becomes read-only after dumping, whether
 they have initializers or not.)
 
-   <p><a name="index-g_t_0040code_007bdefsubr_007d_002c-Lisp-symbol-for-a-primitive-3889"></a>  Defining the C function is not enough to make a Lisp primitive
+   <p><a name="index-g_t_0040code_007bdefsubr_007d_002c-Lisp-symbol-for-a-primitive-3890"></a>  Defining the C function is not enough to make a Lisp primitive
 available; you must also create the Lisp symbol for the primitive and
 store a suitable subr object in its function cell.  The code looks like
 this:
@@ -224,7 +224,7 @@ file, add to it a <code>syms_of_</code><var>filename</var> (e.g.,
 of these functions are called, and add a call to
 <code>syms_of_</code><var>filename</var> there.
 
-   <p><a name="Defining-Lisp-variables-in-C"></a><a name="index-byte_002dboolean_002dvars-3890"></a><a name="index-defining-Lisp-variables-in-C-3891"></a><a name="index-g_t_0040code_007bDEFVAR_005fINT_007d_002c-_0040code_007bDEFVAR_005fLISP_007d_002c-_0040code_007bDEFVAR_005fBOOL_007d-3892"></a>  The function <code>syms_of_</code><var>filename</var> is also the place to define
+   <p><a name="Defining-Lisp-variables-in-C"></a><a name="index-byte_002dboolean_002dvars-3891"></a><a name="index-defining-Lisp-variables-in-C-3892"></a><a name="index-g_t_0040code_007bDEFVAR_005fINT_007d_002c-_0040code_007bDEFVAR_005fLISP_007d_002c-_0040code_007bDEFVAR_005fBOOL_007d-3893"></a>  The function <code>syms_of_</code><var>filename</var> is also the place to define
 any C variables that are to be visible as Lisp variables. 
 <code>DEFVAR_LISP</code> makes a C variable of type <code>Lisp_Object</code> visible
 in Lisp.  <code>DEFVAR_INT</code> makes a C variable of type <code>int</code>
@@ -234,7 +234,7 @@ with a value that is either <code>t</code> or <code>nil</code>.  Note that varia
 defined with <code>DEFVAR_BOOL</code> are automatically added to the list
 <code>byte-boolean-vars</code> used by the byte compiler.
 
-   <p><a name="index-g_t_0040code_007bstaticpro_007d_002c-protection-from-GC-3893"></a>  If you define a file-scope C variable of type <code>Lisp_Object</code>,
+   <p><a name="index-g_t_0040code_007bstaticpro_007d_002c-protection-from-GC-3894"></a>  If you define a file-scope C variable of type <code>Lisp_Object</code>,
 you must protect it from garbage-collection by calling <code>staticpro</code>
 in <code>syms_of_</code><var>filename</var>, like this:
 
@@ -264,16 +264,16 @@ of macros and functions to manipulate Lisp objects.
      
        switch (coordinates_in_window (XWINDOW (window), &amp;x, &amp;y))
          {
-         case 0:			/* NOT in window at all. */
+         case 0:                     /* NOT in window at all. */
            return Qnil;
      
-         case 1:			/* In text part of window. */
+         case 1:                     /* In text part of window. */
            return Fcons (make_number (x), make_number (y));
      
-         case 2:			/* In mode line of window. */
+         case 2:                     /* In mode line of window. */
            return Qmode_line;
      
-         case 3:			/* On right border of window.  */
+         case 3:                     /* On right border of window.  */
            return Qvertical_line;
      
          default:

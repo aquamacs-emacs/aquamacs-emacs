@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -48,7 +48,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minor-Modes.html#Minor-Modes">Minor Mod
 implementing a mode in one self-contained definition.
 
 <div class="defun">
-&mdash; Macro: <b>define-minor-mode</b><var> mode doc </var>[<var>init-value </var>[<var>lighter </var>[<var>keymap</var>]]]<var> keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dminor_002dmode-1630"></a></var><br>
+&mdash; Macro: <b>define-minor-mode</b><var> mode doc </var>[<var>init-value </var>[<var>lighter </var>[<var>keymap</var>]]]<var> keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dminor_002dmode-1631"></a></var><br>
 <blockquote><p>This macro defines a new minor mode whose name is <var>mode</var> (a
 symbol).  It defines a command named <var>mode</var> to toggle the minor
 mode, with <var>doc</var> as its documentation string.  It also defines a
@@ -114,7 +114,7 @@ and will always be loaded by that time, enabling it by default is
 harmless.  But these are unusual circumstances.  Normally, the
 initial value must be <code>nil</code>.
 
-   <p><a name="index-easy_002dmmode_002ddefine_002dminor_002dmode-1631"></a>  The name <code>easy-mmode-define-minor-mode</code> is an alias
+   <p><a name="index-easy_002dmmode_002ddefine_002dminor_002dmode-1632"></a>  The name <code>easy-mmode-define-minor-mode</code> is an alias
 for this macro.
 
    <p>Here is an example of using <code>define-minor-mode</code>:
@@ -133,7 +133,7 @@ for this macro.
       ;; The indicator for the mode line.
       " Hungry"
       ;; The minor mode bindings.
-      '(("\C-\^?" . hungry-electric-delete))
+      '(([C-delete] . hungry-electric-delete))
       :group 'hunger)
 </pre>
    <p class="noindent">This defines a minor mode named &ldquo;Hungry mode,&rdquo; a command named
@@ -162,15 +162,15 @@ minor modes don't need any.
       :lighter " Hungry"
       ;; The minor mode bindings.
       :keymap
-      '(("\C-\^?" . hungry-electric-delete)
-        ("\C-\M-\^?"
+      '(([C-delete] . hungry-electric-delete)
+        ([C-M-delete]
          . (lambda ()
              (interactive)
              (hungry-electric-delete t))))
       :group 'hunger)
 </pre>
    <div class="defun">
-&mdash; Macro: <b>define-globalized-minor-mode</b><var> global-mode mode turn-on keyword-args<small class="dots">...</small><a name="index-define_002dglobalized_002dminor_002dmode-1632"></a></var><br>
+&mdash; Macro: <b>define-globalized-minor-mode</b><var> global-mode mode turn-on keyword-args<small class="dots">...</small><a name="index-define_002dglobalized_002dminor_002dmode-1633"></a></var><br>
 <blockquote><p>This defines a global toggle named <var>global-mode</var> whose meaning is
 to enable or disable the buffer-local minor mode <var>mode</var> in all
 buffers.  To turn on the minor mode in a buffer, it uses the function

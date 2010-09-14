@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -44,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting 
 
 <h4 class="subsection">39.1.1 Summary: Sequence of Actions at Startup</h4>
 
-<p><a name="index-initialization-of-Emacs-3673"></a><a name="index-startup-of-Emacs-3674"></a><a name="index-g_t_0040file_007bstartup_002eel_007d-3675"></a>
+<p><a name="index-initialization-of-Emacs-3674"></a><a name="index-startup-of-Emacs-3675"></a><a name="index-g_t_0040file_007bstartup_002eel_007d-3676"></a>
   When Emacs is started up, it performs the following operations
 (which are defined in <samp><span class="file">startup.el</span></samp>):
 
@@ -55,12 +55,12 @@ adds the directory's subdirectories to the list, and those are scanned
 in their turn.  The files <samp><span class="file">subdirs.el</span></samp> are normally generated
 automatically when Emacs is installed.
 
-     <p><a name="index-before_002dinit_002dtime-3676"></a><li>It sets the variable <code>before-init-time</code> to the value of
+     <p><a name="index-before_002dinit_002dtime-3677"></a><li>It sets the variable <code>before-init-time</code> to the value of
 <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).  It also sets
 <code>after-init-time</code> to <code>nil</code>, which signals to Lisp programs
 that Emacs is being initialized.
 
-     <p><a name="index-initial_002dwindow_002dsystem_0040r_007b_002c-and-startup_007d-3677"></a><a name="index-window_002dsystem_002dinitialization_002dalist-3678"></a><li>It loads the initialization library for the window system specified by
+     <p><a name="index-initial_002dwindow_002dsystem_0040r_007b_002c-and-startup_007d-3678"></a><a name="index-window_002dsystem_002dinitialization_002dalist-3679"></a><li>It loads the initialization library for the window system specified by
 the variable <code>initial-window-system</code> (see <a href="Window-Systems.html#Window-Systems">initial-window-system</a>).  This library's name is
 <samp><span class="file">term/</span><var>windowsystem</var><span class="file">-win.el</span></samp>, where <var>windowsystem</var> is the
 value of <code>initial-window-system</code>.  From that library, it calls
@@ -81,7 +81,7 @@ on the menu bar and tool bar, if the initial frame needs them.
 
      <li>It loads the library <samp><span class="file">site-start</span></samp>, if it exists.  This is not
 done if the options &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo; or &lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo; were specified. 
-<a name="index-g_t_0040file_007bsite_002dstart_002eel_007d-3679"></a>
+<a name="index-g_t_0040file_007bsite_002dstart_002eel_007d-3680"></a>
 <li>It loads your init file (see <a href="Init-File.html#Init-File">Init File</a>).  This is not done if the
 options &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; were specified.  If
 the &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; option was specified, Emacs looks for the init file in
@@ -90,13 +90,13 @@ that user's home directory instead.
      <li>It loads the library <samp><span class="file">default</span></samp>, if it exists.  This is not done
 if <code>inhibit-default-init</code> is non-<code>nil</code>, nor if the options
 &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; were specified. 
-<a name="index-g_t_0040file_007bdefault_002eel_007d-3680"></a>
+<a name="index-g_t_0040file_007bdefault_002eel_007d-3681"></a>
 <li>It loads your abbrevs from the file specified by
 <code>abbrev-file-name</code>, if that file exists and can be read
 (see <a href="Abbrev-Files.html#Abbrev-Files">abbrev-file-name</a>).  This is not done if the
 option &lsquo;<samp><span class="samp">--batch</span></samp>&rsquo; was specified.
 
-     <p><a name="index-after_002dinit_002dtime-3681"></a><li>It sets the variable <code>after-init-time</code> to the value of
+     <p><a name="index-after_002dinit_002dtime-3682"></a><li>It sets the variable <code>after-init-time</code> to the value of
 <code>current-time</code>.  This variable was set to <code>nil</code> earlier;
 setting it to the current time signals that the initialization phase
 is over, and, together with <code>before-init-time</code>, provides the
@@ -148,7 +148,7 @@ previous session.  See <a href="Session-Management.html#Session-Management">Sess
         </ol>
 
 <div class="defun">
-&mdash; User Option: <b>inhibit-startup-screen</b><var><a name="index-inhibit_002dstartup_002dscreen-3682"></a></var><br>
+&mdash; User Option: <b>inhibit-startup-screen</b><var><a name="index-inhibit_002dstartup_002dscreen-3683"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code>, inhibits the startup screen.  In
 that case, Emacs typically displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer; but
 see <code>initial-buffer-choice</code>, below.
@@ -157,12 +157,12 @@ see <code>initial-buffer-choice</code>, below.
 that affects more than one user, as that would prevent new users from
 receiving information about copyleft and basic Emacs usage.
 
-        <p><a name="index-inhibit_002dstartup_002dmessage-3683"></a><a name="index-inhibit_002dsplash_002dscreen-3684"></a><code>inhibit-startup-message</code> and <code>inhibit-splash-screen</code> are
+        <p><a name="index-inhibit_002dstartup_002dmessage-3684"></a><a name="index-inhibit_002dsplash_002dscreen-3685"></a><code>inhibit-startup-message</code> and <code>inhibit-splash-screen</code> are
 aliases for this variable. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>initial-buffer-choice</b><var><a name="index-initial_002dbuffer_002dchoice-3685"></a></var><br>
+&mdash; User Option: <b>initial-buffer-choice</b><var><a name="index-initial_002dbuffer_002dchoice-3686"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code>, determines a file or buffer for
 Emacs to display after starting up, instead of the startup screen.  If
 its value is <code>t</code>, Emacs displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer.  If
@@ -171,7 +171,7 @@ visit.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>inhibit-startup-echo-area-message</b><var><a name="index-inhibit_002dstartup_002decho_002darea_002dmessage-3686"></a></var><br>
+&mdash; User Option: <b>inhibit-startup-echo-area-message</b><var><a name="index-inhibit_002dstartup_002decho_002darea_002dmessage-3687"></a></var><br>
 <blockquote><p>This variable controls the display of the startup echo area message. 
 You can suppress the startup echo area message by adding text with this
 form to your init file:
@@ -189,7 +189,7 @@ file will not inhibit the message for someone else.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>initial-scratch-message</b><var><a name="index-initial_002dscratch_002dmessage-3687"></a></var><br>
+&mdash; User Option: <b>initial-scratch-message</b><var><a name="index-initial_002dscratch_002dmessage-3688"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code>, should be a string, which is
 inserted into the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer when Emacs starts up.  If it
 is <code>nil</code>, the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer is empty. 

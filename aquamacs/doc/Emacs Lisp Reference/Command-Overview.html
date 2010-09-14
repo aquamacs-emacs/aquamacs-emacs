@@ -11,7 +11,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -58,15 +58,18 @@ function.  If the key is <kbd>M-x</kbd>, then it reads the name of another
 command, which it then calls.  This is done by the command
 <code>execute-extended-command</code> (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
 
-   <p>To execute a command requires first reading the arguments for it. 
-This is done by calling <code>command-execute</code> (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).  For commands written in Lisp, the <code>interactive</code>
-specification says how to read the arguments.  This may use the prefix
-argument (see <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>) or may read with prompting
-in the minibuffer (see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>).  For example, the command
-<code>find-file</code> has an <code>interactive</code> specification which says to
-read a file name using the minibuffer.  The command's function body does
-not use the minibuffer; if you call this command from Lisp code as a
-function, you must supply the file name string as an ordinary Lisp
+   <p>Prior to executing the command, Emacs runs <code>undo-boundary</code> to
+create an undo boundary.  See <a href="Maintaining-Undo.html#Maintaining-Undo">Maintaining Undo</a>.
+
+   <p>To execute a command, Emacs first reads its arguments by calling
+<code>command-execute</code> (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).  For commands
+written in Lisp, the <code>interactive</code> specification says how to read
+the arguments.  This may use the prefix argument (see <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>) or may read with prompting in the minibuffer
+(see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>).  For example, the command <code>find-file</code> has
+an <code>interactive</code> specification which says to read a file name
+using the minibuffer.  The function body of <code>find-file</code> does not
+use the minibuffer, so if you call <code>find-file</code> as a function from
+Lisp code, you must supply the file name string as an ordinary Lisp
 function argument.
 
    <p>If the command is a string or vector (i.e., a keyboard macro) then
@@ -77,7 +80,7 @@ function yourself (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard M
 character causes <dfn>quitting</dfn> (see <a href="Quitting.html#Quitting">Quitting</a>).
 
 <div class="defun">
-&mdash; Variable: <b>pre-command-hook</b><var><a name="index-pre_002dcommand_002dhook-1202"></a></var><br>
+&mdash; Variable: <b>pre-command-hook</b><var><a name="index-pre_002dcommand_002dhook-1203"></a></var><br>
 <blockquote><p>The editor command loop runs this normal hook before each command.  At
 that time, <code>this-command</code> contains the command that is about to
 run, and <code>last-command</code> describes the previous command. 
@@ -85,7 +88,7 @@ See <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>post-command-hook</b><var><a name="index-post_002dcommand_002dhook-1203"></a></var><br>
+&mdash; Variable: <b>post-command-hook</b><var><a name="index-post_002dcommand_002dhook-1204"></a></var><br>
 <blockquote><p>The editor command loop runs this normal hook after each command
 (including commands terminated prematurely by quitting or by errors),
 and also when the command loop is first entered.  At that time,

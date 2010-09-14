@@ -669,8 +669,9 @@ by \"Save Options\" in Custom buffers.")
     ;; These are set with `customize-set-variable'.
     (dolist (elt '(scroll-bar-mode
 		   debug-on-quit debug-on-error
-		   tooltip-mode menu-bar-mode tool-bar-mode
-		   save-place fringe-mode
+		   ;; Somehow this works, when tool-bar and menu-bar don't.
+		   tooltip-mode
+		   save-place uniquify-buffer-name-style fringe-mode
 		   indicate-empty-lines indicate-buffer-boundaries
 		   case-fold-search font-use-system-font
 		   current-language-environment default-input-method
@@ -1060,17 +1061,17 @@ Only available in Aquamacs."
 		    :visible (display-graphic-p)
 		    :button (:radio . (eq tool-bar-mode nil))))
 
-      (define-key menu-bar-showhide-menu [showhide-tool-bar]
+(define-key menu-bar-showhide-menu [showhide-tool-bar]
 	`(menu-item ,(purecopy "Tool-bar") ,menu-bar-showhide-tool-bar-menu
 		    :visible (display-graphic-p)))
 
       )
   ;; else not tool bar that can move.
   (define-key menu-bar-showhide-menu [showhide-tool-bar]
-    `(menu-item ,(purecopy "Tool-bar") toggle-tool-bar-mode-from-frame
-		:help ,(purecopy "Turn tool-bar on/off")
-		:visible (display-graphic-p)
-		:button (:toggle . (> (frame-parameter nil 'tool-bar-lines) 0))))
+  `(menu-item ,(purecopy "Tool-bar") toggle-tool-bar-mode-from-frame
+	      :help ,(purecopy "Turn tool-bar on/off")
+	      :visible (display-graphic-p)
+	      :button (:toggle . (> (frame-parameter nil 'tool-bar-lines) 0))))
 )
 
 (define-key menu-bar-options-menu [showhide]
@@ -2071,6 +2072,16 @@ turn on menu bars; otherwise, turn off menu bars."
   (when (and (called-interactively-p 'interactive) (not menu-bar-mode))
     (run-with-idle-timer 0 nil 'message
 			 "Menu-bar mode disabled.  Use M-x menu-bar-mode to make the menu bar appear.")))
+
+;;;###autoload
+;; (This does not work right unless it comes after the above definition.)
+;; This comment is taken from tool-bar.el near
+;; (put 'tool-bar-mode ...)
+;; We want to pretend the menu bar by standard is on, as this will make
+;; customize consider disabling the menu bar a customization, and save
+;; that.  We could do this for real by setting :init-value above, but
+;; that would overwrite disabling the menu bar from X resources.
+(put 'menu-bar-mode 'standard-value '(t))
 
 (defun toggle-menu-bar-mode-from-frame (&optional arg)
   "Toggle menu bar on or off, based on the status of the current frame.

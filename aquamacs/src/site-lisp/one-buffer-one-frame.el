@@ -701,7 +701,6 @@ even if it's the only visible frame."
 	       (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
 	       (make-frame-invisible hf t))))))))))
 
-
 (defun aquamacs-handle-frame-iconified (&optional frame)
   (interactive)
   (when (or (null (visible-frame-list))
@@ -932,18 +931,30 @@ The buffer contains unsaved changes which will be lost if you discard them now."
   ;; is interpreted with wrong current buffer)
   (set-buffer (window-buffer (selected-window))))
 
-;; To Do: 
-(defun handle-ns-application-reopen ()
-  (interactive) (message "reopen")
-  (unless (visible-frame-list)
-    (let ((list (frame-list))) 
-      (while list      
-	(when (frame-iconified-p (car list))
-	  (make-frame-visible (car list))
-	  (select-frame-set-input-focus (car list))
-	  (setq list))
-	(setq list (cdr list))))))
-(define-key special-event-map [ns-application-reopen] 'handle-ns-application-reopen)
+;; (defun handle-ns-application-reopen ()
+;;   (interactive)
+;;   (if (visible-frame-list)
+;;       ;; did it just bring up the *empty* frame?
+;;       (let (last-iconified-frame)
+;; 	(and (= 1 (length (visible-frame-list)))
+;; 	     (equal (buffer-name) " *empty*")
+;; 	     (progn (mapcar (lambda (f) (if (and (not last-iconified-frame) 
+;; 						 (frame-live-p f) (frame-iconified-p f)) 
+;; 					    (setq last-iconified-frame f))) (frame-list))
+;; 		    last-iconified-frame)
+;; 	     (let ((f (selected-frame)))
+	       
+;; 	       (raise-frame last-iconified-frame)
+;; 	       (make-frame-invisible f)
+;; 	       )))
+;;     (let ((list (frame-list))) 
+;;       (while list      
+;; 	(when (frame-iconified-p (car list))
+;; 	  (make-frame-visible (car list))
+;; 	  (select-frame-set-input-focus (car list))
+;; 	  (setq list))
+;; 	(setq list (cdr list))))))
+(define-key special-event-map [ns-application-reopen] 'ignore)
 (define-key special-event-map [ns-application-activated] 'ignore)
 )
 

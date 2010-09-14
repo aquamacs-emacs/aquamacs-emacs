@@ -1,79 +1,24 @@
-2010-09-12  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+2010-09-12  Jan Djärv  <jan.h.d@swipnet.se>
 
-	* xml.c (Fhtml_parse_string, Fxml_parse_string): Mention BASE-URL.
+	* xterm.c (get_current_vm_state): New function.
+	(do_ewmh_fullscreen): Call get_current_vm_state and compare with
+	want_fullscreen so set_wm_state calls are few (Bug#7013).
+	(x_handle_net_wm_state): Move code to get_current_vm_state and
+	call that function.
 
-2010-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+2010-09-11  Courtney Bane  <emacs-bugs-7626@cbane.org>  (tiny change)
 
-	* fns.c (Fy_or_n_p): Move to lisp/subr.el.
-	(syms_of_fns): Don't defsubr Sy_or_n_p.
-	* lisp.h: Don't declare Fy_or_n_p.
-	* fileio.c (barf_or_query_if_file_exists): Fy_or_n_p -> y-or-n-p.
+	* term.c (tty_set_terminal_modes): Don't initialize twice (bug#7002).
 
-2010-09-09  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+2010-09-08  Kenichi Handa  <handa@m17n.org>
 
-	* xml.c (Fxml_parse_buffer): New function to parse XML files.
+	* coding.c (encode_coding_iso_2022): Don't optimize for ASCII if
+	we may use designation or locking-shift.
 
-2010-09-08  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+2010-09-07  Kenichi Handa  <handa@m17n.org>
 
-	* xml.c: New file.
-	(Fhtml_parse_buffer): New function to interface to the libxml2
-	html parsing function.
-
-2010-09-05  Juanma Barranquero  <lekktu@gmail.com>
-
-	* biditype.h: Regenerate.
-
-2010-09-04  Andreas Schwab  <schwab@linux-m68k.org>
-
-	* nsimage.m (ns_load_image): Check argument types.
-
-	* image.c: Remove all uses of gcpro.
-	(xpm_load): Check all lisp types.
-	(pbm_load): Likewise.
-	(png_load): Likewise.
-	(jpeg_load): Likewise.
-	(tiff_load): Likewise.
-	(gif_load): Likewise.
-	(imagemagick_load_image): Likewise.
-	(imagemagick_load): Likewise.
-	(svg_load): Likewise.
-	(gs_load): Likewise.
-
-2010-09-04  Eli Zaretskii  <eliz@gnu.org>
-
-	* w32uniscribe.c (uniscribe_shape): Update commentary.  Don't
-	try to reorder grapheme clusters, since LGSTRING should always
-	hold them in the logical order.
-	(uniscribe_encode_char, uniscribe_shape): Force ScriptShape to
-	return glyph codes in the logical order.
-
-2010-09-04  Andreas Schwab  <schwab@linux-m68k.org>
-
-	* image.c (imagemagick_image_p): Replace bcopy by memcpy.
-	(imagemagick_load_image): Fix type mismatch.
-	(Fimagemagick_types): Likewise.  Doc fix.
-
-2010-09-02  Jan Djärv  <jan.h.d@swipnet.se>
-
-	* xterm.h (struct dpyinfo): Remove cut_buffers_initialized.
-
-	* xterm.c (x_term_init): Don't set dpyinfo->cut_buffers_initialized.
-
-	* xselect.c: Remove declaration of cut-buffer objects and functions.
-	(symbol_to_x_atom): Remove mapping to XA_CUT_BUFFERn.
-	(x_atom_to_symbol): Remove mapping to QCUT_BUFFERn.
-	(Fx_get_cut_buffer_internal, Fx_store_cut_buffer_internal)
-	(Fx_rotate_cut_buffers_internal): Remove.
-	(syms_of_xselect): Remove defsubr of above.
-	Remove intern of QCUT_BUFFERn.
-
-2010-09-01  Stefan Monnier  <monnier@iro.umontreal.ca>
-
-	* cmds.c (Vblink_paren_function): Remove.
-	(internal_self_insert): Make it insert N chars at a time.
-	Don't call blink-paren-function.
-	(Fself_insert_command): Adjust accordingly.
-	(syms_of_cmds): Don't declare blink-paren-function.
+	* coding.c (detect_coding_emacs_mule): Fix checking of multibyte
+	sequence when the source is multibyte.
 
 2010-08-31  Kenichi Handa  <handa@m17n.org>
 
@@ -101,8 +46,8 @@
 	(produce_stretch_glyph): Set it2.char_to_display too before
 	calling x_produce_glyphs.
 	(x_produce_glyphs): Simplify by using the same code for ASCII and
-	non-ASCII characters.  Don't set it->char_to_display here.  Don't
-	handle unibyte-display-via-language-environment here. For a
+	non-ASCII characters.  Don't set it->char_to_display here.
+	Don't handle unibyte-display-via-language-environment here.  For a
 	charater of no glyph, use font->space_width instead of FONT_WIDTH.
 
 2010-08-31  Stefan Monnier  <monnier@iro.umontreal.ca>
@@ -2684,7 +2629,7 @@
 	* nsterm.m (ns_draw_fringe_bitmap): Likewise.
 
 	* fringe.c (draw_fringe_bitmap_1): Don't clip bitmap here.
-	Take account of bitmap offset.
+	Take account of	bitmap offset.
 	(draw_window_fringes): Take account of window vscroll.
 	(update_window_fringes): Likewise.  Extend top-aligned top indicator
 	or bottom-aligned bottom indicator to adjacent rows if it doesn't fit
@@ -12481,7 +12426,7 @@
 	<after-change-functions>: Reflow docstrings.
 
 2008-08-04  Adrian Robert  <Adrian.B.Robert@gmail.com>
-            Ken Raeburn  <raeburn@gnu.org>
+	    Ken Raeburn  <raeburn@gnu.org>
 
 	Dock menu customization, based on a patch by Ken Raeburn, plus some
 	other fixes.
@@ -13546,7 +13491,7 @@
 	batch-compiling for bootstrap).
 
 2008-07-15  Chris Hall  <chris@web.workinglinux.com>  (tiny change)
-            YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+	    YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
 
 	* frame.c (make_initial_frame): Call init_frame_faces(f) in
 	CANNOT_DUMP case -- fix crash due to different init order.
@@ -14164,7 +14109,7 @@
 	(USG_SHARED_LIBRARIES): Remove duplicate definition.
 
 2008-06-26  Juanma Barranquero  <lekktu@gmail.com>
-            Eli Zaretskii  <eliz@gnu.org>
+	    Eli Zaretskii  <eliz@gnu.org>
 
 	* makefile.w32-in (LOCAL_FLAGS):
 	Don't include WINDOWSNT, DOS_NT and _UCHAR_T.
@@ -14412,7 +14357,7 @@
 	the property of LFACE_FONT of LFACE (if any).
 
 2008-06-21  Seiji Zenitani  <zenitani@mac.com>
-            Ryo Yoshitake  <ryo@shiftmode.net>
+	    Ryo Yoshitake  <ryo@shiftmode.net>
 
 	* xterm.c (x_set_frame_alpha): Add x_catch_errors for bug#437.
 
@@ -15508,7 +15453,7 @@
 	* xterm.c (x_set_frame_alpha): Move declarations before statements.
 
 2008-05-21  Seiji Zenitani  <zenitani@mac.com>
-            Ryo Yoshitake  <ryo@shiftmode.net>
+	    Ryo Yoshitake  <ryo@shiftmode.net>
 
 	* frame.c (Qalpha): Add a new frame parameter `alpha'.
 	(Vframe_alpha_lower_limit): New variable.

@@ -12,7 +12,7 @@
 <!--
 This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
 
-corresponding to Emacs version 23.2.
+corresponding to Emacs version 23.2.50.
 
 Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
@@ -46,7 +46,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 
 <h3 class="section">29.2 Multiple Terminals</h3>
 
-<p><a name="index-multiple-terminals-2218"></a><a name="index-multi_002dtty-2219"></a><a name="index-multiple-X-displays-2220"></a><a name="index-displays_002c-multiple-2221"></a>
+<p><a name="index-multiple-terminals-2219"></a><a name="index-multi_002dtty-2220"></a><a name="index-multiple-X-displays-2221"></a><a name="index-displays_002c-multiple-2222"></a>
   Emacs represents each terminal, whether graphical or text-only, as a
 <dfn>terminal object</dfn> data type (see <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>).  On GNU and
 Unix systems, Emacs can use multiple terminals simultaneously in each
@@ -72,7 +72,7 @@ them as needed, such as when you call <code>make-frame-on-display</code>
 (which is described below).
 
 <div class="defun">
-&mdash; Function: <b>terminal-name</b><var> &amp;optional terminal<a name="index-terminal_002dname-2222"></a></var><br>
+&mdash; Function: <b>terminal-name</b><var> &amp;optional terminal<a name="index-terminal_002dname-2223"></a></var><br>
 <blockquote><p>This function returns the file name of the device used by
 <var>terminal</var>.  If <var>terminal</var> is omitted or <code>nil</code>, it
 defaults to the selected frame's terminal.  <var>terminal</var> can also be
@@ -80,12 +80,12 @@ a frame, meaning that frame's terminal.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>terminal-list</b><var><a name="index-terminal_002dlist-2223"></a></var><br>
+&mdash; Function: <b>terminal-list</b><var><a name="index-terminal_002dlist-2224"></a></var><br>
 <blockquote><p>This function returns a list of all terminal objects currently in use. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-device-terminal</b><var> device<a name="index-get_002ddevice_002dterminal-2224"></a></var><br>
+&mdash; Function: <b>get-device-terminal</b><var> device<a name="index-get_002ddevice_002dterminal-2225"></a></var><br>
 <blockquote><p>This function returns a terminal whose device name is given by
 <var>device</var>.  If <var>device</var> is a string, it can be either the file
 name of a terminal device, or the name of an X display of the form
@@ -97,7 +97,7 @@ function signals an error if its argument is none of the above.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-terminal</b><var> &amp;optional terminal force<a name="index-delete_002dterminal-2225"></a></var><br>
+&mdash; Function: <b>delete-terminal</b><var> &amp;optional terminal force<a name="index-delete_002dterminal-2226"></a></var><br>
 <blockquote><p>This function deletes all frames on <var>terminal</var> and frees the
 resources used by it.  It runs the abnormal hook
 <code>delete-terminal-functions</code>, passing <var>terminal</var> as the
@@ -114,7 +114,7 @@ last frame on a terminal is deleted (see <a href="Deleting-Frames.html#Deleting-
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>delete-terminal-functions</b><var><a name="index-delete_002dterminal_002dfunctions-2226"></a></var><br>
+&mdash; Variable: <b>delete-terminal-functions</b><var><a name="index-delete_002dterminal_002dfunctions-2227"></a></var><br>
 <blockquote><p>An abnormal hook run by <code>delete-terminal</code>.  Each function
 receives one argument, the <var>terminal</var> argument passed to
 <code>delete-terminal</code>.  Due to technical details, the functions may
@@ -122,7 +122,7 @@ be called either just before the terminal is deleted, or just
 afterwards. 
 </p></blockquote></div>
 
-   <p><a name="index-terminal_002dlocal-variables-2227"></a>  A few Lisp variables are <dfn>terminal-local</dfn>; that is, they have a
+   <p><a name="index-terminal_002dlocal-variables-2228"></a>  A few Lisp variables are <dfn>terminal-local</dfn>; that is, they have a
 separate binding for each terminal.  The binding in effect at any time
 is the one for the terminal that the currently selected frame belongs
 to.  These variables include <code>default-minibuffer-frame</code>,
@@ -154,7 +154,7 @@ than one monitor.  Currently, there is no way for Emacs to distinguish
 between the different physical monitors.
 
 <div class="defun">
-&mdash; Command: <b>make-frame-on-display</b><var> display &amp;optional parameters<a name="index-make_002dframe_002don_002ddisplay-2228"></a></var><br>
+&mdash; Command: <b>make-frame-on-display</b><var> display &amp;optional parameters<a name="index-make_002dframe_002don_002ddisplay-2229"></a></var><br>
 <blockquote><p>This function creates and returns a new frame on <var>display</var>, taking
 the other frame parameters from the alist <var>parameters</var>. 
 <var>display</var> should be the name of an X display (a string).
@@ -167,14 +167,14 @@ so at this time.  In all other respects, this function behaves like
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-display-list</b><var><a name="index-x_002ddisplay_002dlist-2229"></a></var><br>
+&mdash; Function: <b>x-display-list</b><var><a name="index-x_002ddisplay_002dlist-2230"></a></var><br>
 <blockquote><p>This function returns a list that indicates which X displays Emacs has
 a connection to.  The elements of the list are strings, and each one
 is a display name. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-open-connection</b><var> display &amp;optional xrm-string must-succeed<a name="index-x_002dopen_002dconnection-2230"></a></var><br>
+&mdash; Function: <b>x-open-connection</b><var> display &amp;optional xrm-string must-succeed<a name="index-x_002dopen_002dconnection-2231"></a></var><br>
 <blockquote><p>This function opens a connection to the X display <var>display</var>,
 without creating a frame on that display.  Normally, Emacs Lisp
 programs need not call this function, as <code>make-frame-on-display</code>
@@ -194,7 +194,7 @@ terminates Emacs.  Otherwise, it is an ordinary Lisp error.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-close-connection</b><var> display<a name="index-x_002dclose_002dconnection-2231"></a></var><br>
+&mdash; Function: <b>x-close-connection</b><var> display<a name="index-x_002dclose_002dconnection-2232"></a></var><br>
 <blockquote><p>This function closes the connection to display <var>display</var>.  Before
 you can do this, you must first delete all the frames that were open
 on that display (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>). 
