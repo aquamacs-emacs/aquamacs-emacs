@@ -24,7 +24,7 @@
 ;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
 ;; Free Software Foundation, Inc.
 
-;; Copyright (C) 2005, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2008, 2009, 2010 David Reitter
 
 
 
@@ -92,13 +92,53 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 		  (rename-buffer "*mail*" t)))
 	    ))))))
 
-(defun start-vanilla-aquamacs (&optional arg)
-  "Start a vanilla Aquamacs
+
+(defun start-aquamacs-with-args (kill-session &rest args)
+  "Start Aquamacs with optional arguments.
+Starts a new instance of Aquamacs with arguments args.
+If kill-session is non-nil, kills the current session
+\(requires Mac OS X 10.6 or greater)."
+  (let ((osx-version (shell-command-to-string 
+		      "/usr/bin/sw_vers | /usr/bin/awk '/ProductVersion/ {print $2}'"))
+		(aquamacs-args (or args (list "-q"))))
+	(if (string< "10.6" osx-version)
+	    (progn
+	      (async-shell-command (concat  "open -a " (car command-line-args) " -n --args " 
+					    (mapconcat 'identity aquamacs-args " ")))
+	      (if kill-session (kill-emacs)))
+	  (apply 'start-process "aquamacs-with-args" nil 
+		 (car command-line-args) aquamacs-args))))
+
+(defun start-vanilla-aquamacs (&optional kill-session)
+  "Start a vanilla Aquamacs.
 Starts another instance of the current session.
-With prefix argument ARG, start without initializing
-most Aquamacs-specific code."
+With prefix argument KILL-SESSION, kills the current session
+\(requires Mac OS X 10.6 or greater)."
   (interactive "P")
-  (start-process "vanilla-aquamacs" nil (car command-line-args) (if arg "-Q" "-q")))
+  (start-aquamacs-with-args kill-session "-q"))
+
+(defun start-vanilla-emacs (&optional kill-session)
+  "Start a vanilla Emacs.
+Starts another instance of the current session, omitting
+the initialization of many of Aquamacs extended features
+that distinguish it from GNU Emacs.
+
+With prefix argument KILL-SESSION, kills the current session
+\(requires Mac OS X 10.6 or greater)."
+  (interactive "P")
+  (start-aquamacs-with-args kill-session "-Q"))
+
+
+(defun start-debug-aquamacs (&optional kill-session)
+  "Start Aquamacs for init file debugging.
+Starts another instance of the current session, enabling
+informative error messages (see `debug-on-error') during
+processing of user-supplied initialization files.
+
+With prefix argument KILL-SESSION, kills the current session
+\(requires Mac OS X 10.6 or greater)."
+  (interactive "P")
+  (start-aquamacs-with-args kill-session "--debug-init"))
 
 
 (defvar menu-bar-bug-help-menu (make-sparse-keymap "Diagnose and Report Bug"))
