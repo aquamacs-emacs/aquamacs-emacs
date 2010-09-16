@@ -140,6 +140,29 @@ With prefix argument KILL-SESSION, kills the current session
   (interactive "P")
   (start-aquamacs-with-args kill-session "--debug-init"))
 
+(defun aquamacs-prefs-file-remove-elc ()
+  "Delete corresponding .elc file."
+  (let ((f (concat buffer-file-name "c")))
+    (when (file-exists-p f) ;; .elc
+      (when (y-or-n-p (format "Delete byte-compiled %s " f))
+	(message "Deleting %s" f)
+	(delete-file f)))))
+
+(defun aquamacs-edit-preferences-files ()
+  "Open the preferences files for editing.
+This command will open `user-init-file' and all files
+in `aquamacs-preference-files' for editing."
+  (interactive)
+  (let ((pref-file))
+    (mapcar
+     (lambda (f)
+       (setq pref-file f)
+       (when (file-exists-p f)
+	 (dnd-open-local-file (concat "file:" f) nil)
+	 (add-hook 'after-save-hook 'aquamacs-prefs-file-remove-elc nil 'local)))
+     (cons user-init-file (mapcar (lambda (x) (concat x ".el")) aquamacs-preference-files)))
+    ;; ensure last file is open and visible, regardless of existence:
+    (unless (file-exists-p pref-file) (dnd-open-local-file (concat "file:" f) nil))))
 
 (defvar menu-bar-bug-help-menu (make-sparse-keymap "Diagnose and Report Bug"))
 
@@ -151,6 +174,17 @@ With prefix argument KILL-SESSION, kills the current session
   `(menu-item "Start Aquamacs without customizations"  
 	      start-vanilla-aquamacs
 	      :help "Start Aquamacs Emacs without any user-specific settings."))
+(define-key menu-bar-bug-help-menu [start-debug-aquamacs]
+  `(menu-item "Start Aquamacs and debug preference files"  
+	      start-debug-aquamacs
+	      :help "Start Aquamacs Emacs and enter debugger on error in init files."))
+(define-key menu-bar-bug-help-menu [edit-init-files]
+  `(menu-item "Edit preferences files"  
+	      aquamacs-edit-preferences-files
+	      :help "Edit Aquamacs Emacs user preference files."))
+
+(define-key menu-bar-bug-help-menu [debug-sep] '("--"))
+
 (define-key menu-bar-bug-help-menu [debug-on-quit]
   (menu-bar-make-toggle toggle-debug-on-quit debug-on-quit
 			"Enter Debugger on Quit/C-g" "Debug on Quit %s"
