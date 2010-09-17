@@ -11,13 +11,13 @@
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Aquamacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
@@ -45,7 +45,7 @@
 )
 
 ; (report-aquamacs-bug)
-(defun report-aquamacs-bug (topic &optional recent-keys)
+(defun report-aquamacs-bug (topic &optional recent-keys insert-file)
   "Report a bug in Aquamacs Emacs.
 Prompts for bug subject.  Leaves you in a mail buffer."
   ;; This strange form ensures that (recent-keys) is the value before
@@ -81,16 +81,49 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 		(setq backup-buffer (rename-buffer "mail-backup" t))))
 	    (report-emacs-bug topic recent-keys)
 	    (insert "Enter your bug report here.")
+	    (when insert-file
+	      (search-forward "Major mode:" nil 'move-to-limit-if-not-found)
+	      (beginning-of-line)
+	      (delete-region (point) (point-max)))
 	    (end-of-buffer)
 	    (insert (format "\nCommand line: %s\n\nPATH: %s\n\nexec-path: %s" 
 			    command-line-args (getenv "PATH") exec-path))
+	    (when insert-file
+	      (end-of-buffer)
+	      (insert "\n\n")
+	      (insert-file-contents insert-file))
 	    (set-buffer-modified-p t)
 	    (mail-send)
-	    (kill-buffer "*mail*")
+	    (if (buffer-live-p "*mail*") (kill-buffer "*mail*"))
 	    (if backup-buffer
 		(with-current-buffer backup-buffer
 		  (rename-buffer "*mail*" t)))
 	    ))))))
+
+
+(defun check-for-aquamacs-crashes ()
+  "Check for crashes of Aquamacs since last start.
+Offer to send a bug report."
+  (interactive)
+  (protect
+   (let ((last-nonmenu-event nil))
+     (mapc
+      (lambda (file)
+	(when (file-newer-than-file-p file aquamacs-id-file)
+	  (let ((location (aq-chomp
+			   (shell-command-to-string
+			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
+	    (when (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send Report? 
+Please send a simple bug report by e-mailing the automatically
+generated crash report to us.
+\(This crash occurred in %s.)" location) nil nil nil nil t)
+	    
+	    
+	      (report-aquamacs-bug (concat "Crash in " location) nil file)))))
+      (directory-files "~/Library/Logs/CrashReporter" t "Aquamacs.*"))
+     nil)))
+
+
 
 
 (defun start-aquamacs-with-args (kill-session &rest args)
