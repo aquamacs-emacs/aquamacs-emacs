@@ -1,3 +1,174 @@
+2010-09-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el (byte-compile-file-form-defvar)
+	(byte-compile-defvar): "foo/bar" does not lack a prefix.
+
+	* subr.el (y-or-n-p): Add the "(y or n)" that was lost somehow.
+
+2010-09-17  Stephen Berman  <stephen.berman@gmx.net>
+
+	* dframe.el (dframe-reposition-frame-emacs): Use tool-bar-pixel-width
+	in calculating new frame position.  Add more space between new and
+	parent on the left (Bug#7048).
+
+2010-09-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-compat.el (tramp-compat-with-temp-message): Make it a
+	defmacro.
+
+2010-09-16  Chong Yidong  <cyd@stupidchicken.com>
+
+	* mail/sendmail.el: Add "*unsent mail*" to same-window-buffer-names.
+
+	* term/x-win.el (x-cut-buffer-or-selection-value): Define as
+	obsolete alias for x-selection-value.
+
+	* ido.el (ido-make-buffer-list): Fix error in 2010-08-22 merge.
+
+2010-09-16  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-cmds.el (tramp-cleanup-connection): Set tramp-autoload
+	cookie.
+
+2010-09-15  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-compat.el (tramp-compat-with-temp-message)
+	(tramp-compat-font-lock-add-keywords, tramp-compat-process-get)
+	(tramp-compat-process-put): New defuns.
+
+	* net/tramp.el (top):
+	* net/tramp-gvfs.el (top):
+	* net/tramp-cache.el (top): Use `tramp-compat-font-lock-add-keywords'.
+
+	* net/tramp.el (tramp-progress-reporter-update):
+	Use `tramp-compat-funcall'.
+
+	* net/tramp.el (tramp-process-actions):
+	* net/tramp-gvfs.el (tramp-handle-vc-registered):
+	* net/tramp-sh.el (tramp-gvfs-handler-askquestion)
+	(tramp-get-remote-stat, tramp-get-remote-readlink):
+	Use `tramp-compat-with-temp-message'.
+
+	* net/tramp-sh.el (top): Require 'cl.
+	(tramp-handle-start-file-process): Use `tramp-compat-process-get'.
+	(tramp-open-connection-setup-interactive-shell):
+	Use `tramp-compat-process-put'.
+
+2010-09-15  Alan Mackenzie  <acm@muc.de>
+
+	* progmodes/cc-engine.el (c-forward-<>-arglist-recur): Correct the
+	indentation.
+	(c-forward-<>-arglist-recur): Fix an infinite recursion.
+
+2010-09-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el (byte-compile-warning-types): New type
+	`lexical' for warnings related to lexical scoping.
+	(byte-compile-file-form-defvar, byte-compile-defvar): Warn about
+	global vars which don't have a prefix and could hence affect lexical
+	scoping in unrelated files.
+
+2010-09-14  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* net/imap.el: Revert back to version
+	cb950ed8ff3e0f40dac437a51b269166f9ffb60d, since some of the changes
+	seem problematic.
+
+2010-09-14  Juanma Barranquero  <lekktu@gmail.com>
+
+	* obsolete/old-whitespace.el (whitespace-unload-function):
+	Explicitly pass `obarray' to `unintern' to avoid a warning.
+
+2010-09-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/byte-run.el (set-advertised-calling-convention):
+	Add `when' argument.  Update callers.
+
+	* subr.el (unintern): Declare the obarray arg mandatory.
+
+2010-09-14  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/diary-lib.el (diary-list-entries-hook, diary-sort-entries):
+	Doc fixes.
+
+	* calendar/diary-lib.el (diary-included-files): New variable.
+	(diary-list-entries): Maybe initialize diary-included-files.
+	(diary-include-other-diary-files): Append to diary-included-files.
+	* calendar/appt.el (appt-update-list): Also check the members of
+	diary-included-files.  (Bug#6999)
+	(appt-check): Doc fix.
+
+2010-09-14  David Reitter  <david.reitter@gmail.com>
+
+	* simple.el (line-move-visual): Do not truncate goal column to
+	integer size.  (Bug#7020)
+
+2010-09-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* repeat.el (repeat): Allow repeating when the last event is a click.
+	Suggested by Drew Adams (bug#6256).
+
+2010-09-14  Sascha Wilde  <wilde@sha-bang.de>
+
+	* vc/vc-hg.el (vc-hg-state,vc-hg-working-revision):
+	Replace setting HGRCPATH to "" by some less invasive --config options.
+
+2010-09-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* font-lock.el (font-lock-beginning-of-syntax-function):
+	Mark as obsolete.
+
+2010-09-14  Glenn Morris  <rgm@gnu.org>
+
+	* menu-bar.el (menu-bar-options-save): Fix handling of menu-bar
+	and tool-bar modes.  (Bug#6211)
+	(menu-bar-mode): Move setting of standard-value after the
+	minor-mode definition, otherwise it seems to have no effect.
+
+2010-09-14  Masatake YAMATO  <yamato@redhat.com>
+
+	* progmodes/antlr-mode.el (antlr-font-lock-additional-keywords):
+	Fix typo.  (Bug#6976)
+
+2010-09-14  Vinicius Jose Latorre  <viniciusjl@ig.com.br>
+
+	* whitespace.el: Allow cleaning up blanks without blank
+	visualization (Bug#6651).  Adjust help window for
+	whitespace-toggle-options (Bug#6479).  Allow to use fill-column
+	instead of whitespace-line-column (from EmacsWiki).  New version 13.1.
+	(whitespace-style): Add new value 'face.  Adjust docstring.
+	(whitespace-space, whitespace-hspace, whitespace-tab):
+	Adjust foreground property face.
+	(whitespace-line-column): Adjust docstring and type declaration.
+	(whitespace-style-value-list, whitespace-toggle-option-alist)
+	(whitespace-help-text): Adjust const initialization.
+	(whitespace-toggle-options, global-whitespace-toggle-options):
+	Adjust docstring.
+	(whitespace-display-window, whitespace-interactive-char)
+	(whitespace-style-face-p, whitespace-color-on): Adjust code.
+	(whitespace-help-scroll): New fun.
+
+2010-09-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* calendar/time-date.el (format-seconds): Comment fix.
+
+2010-09-13  Michael R. Mauger  <mmaug@yahoo.com>
+
+	* progmodes/sql.el: Version 2.7.
+	(sql-buffer-live-p): Improve detection.
+	(sql-find-sqli-buffer, sql-set-sqli-buffer-generally)
+	(sql-set-sqli-buffer): Use it.
+	(sql-product-interactive): Run `sql-set-sqli-hook'.
+	(sql-rename-buffer): Code cleanup.
+	(sql-redirect, sql-redirect-value): New functions.  More to come.
+
+2010-09-13  Juanma Barranquero  <lekktu@gmail.com>
+
+	Port tramp-related Makefile changes of revnos 101381, 101422 to Windows.
+	* makefile.w32-in (LOADDEFS): Add $(lisp)/net/tramp-loaddefs.el.
+	(TRAMP_SRC): New macro.
+	($(lisp)/net/tramp-loaddefs.el): New target.
+
 2010-09-13  Michael Albinus  <michael.albinus@gmx.de>
 
 	Major code cleanup.  Split tramp.el into tramp.el and tramp-sh.el.
@@ -5,8 +176,8 @@
 	* Makefile.in (TRAMP_SRC): Remove tramp-fish.el.  Add tramp-sh.el.
 
 	* net/tramp.el (top): Don't show loading message.  Require just
-	'tramp-compat, everything else is required there.  Use
-	`ignore-errors' where appropriate.
+	'tramp-compat, everything else is required there.
+	Use `ignore-errors' where appropriate.
 	(tramp-inline-compress-start-size, tramp-copy-size-limit)
 	(tramp-terminal-type, tramp-end-of-output)
 	(tramp-initial-end-of-output, tramp-completion-function-alist-rsh)
@@ -95,7 +266,7 @@
 	(tramp-get-remote-readlink, tramp-get-remote-trash)
 	(tramp-get-remote-id, tramp-get-remote-uid, tramp-get-remote-gid)
 	(tramp-get-local-uid, tramp-get-local-gid)
-	(tramp-get-inline-compress, tramp-get-inline-coding, ): Move to
+	(tramp-get-inline-compress, tramp-get-inline-coding): Move to
 	tramp-sh.el.
 	(tramp-methods, tramp-default-method-alist)
 	(tramp-default-user-alist, tramp-foreign-file-name-handler-alist):
@@ -104,7 +275,7 @@
 	(tramp-dissect-file-name): Don't check anymore for multi-hop
 	methods.
 	(tramp-debug-outline-regexp): Add a docstring.
-	(tramp-debug-outline-level): Renamed from `tramp-outline-level'.
+	(tramp-debug-outline-level): Rename from `tramp-outline-level'.
 	(tramp-get-debug-buffer): Use it.
 
 	* net/tramp-cache.el (top): Set tramp-autoload cookie for
@@ -123,10 +294,10 @@
 
 	* net/tramp-sh.el: New file, derived from tramp.el.
 	(top): Initialize `tramp-methods', `tramp-default-method-alist',
-	`tramp-default-user-alist', tramp-foreign-file-name-handler-alist.
-	Remove "scp1_old", "scp2_old", "ssh1_old", "ssh2_old".  Use
-	`ignore-errors' where appropriate.
-	(tramp-sh-file-name-handler-alist): Renamed from
+	`tramp-default-user-alist', `tramp-foreign-file-name-handler-alist'.
+	Remove "scp1_old", "scp2_old", "ssh1_old", "ssh2_old".
+	Use `ignore-errors' where appropriate.
+	(tramp-sh-file-name-handler-alist): Rename from
 	`tramp-file-name-handler-alist'.
 	(tramp-send-command-and-check): Return t or nil.  Remove all
 	`zerop' checks, where called.
@@ -152,7 +323,7 @@
 
 2010-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
 
-	* subr.el (y-or-n-p): New function, moved from src/fns.c.  Use read-key.
+	* subr.el (y-or-n-p): New function, moved from src/fns.c; use read-key.
 
 2010-09-12  Leo  <sdl.web@gmail.com>
 
@@ -193,12 +364,10 @@
 	(sql-comint-mysql): Handle "sql-port" as a numeric.
 	(sql-port-history): Delete unused variable.
 	(sql-get-login): Default "sql-port" to a number.
-	(sql-product-alist): Correct Postgres prompt and terminator
-	regexp.
+	(sql-product-alist): Correct Postgres prompt and terminator regexp.
 	(sql-sqlite-program): Dynamically detect presence of "sqlite" or
 	"sqlite3" executables.
-	(sql-sqlite-login-params): Add "*.sqlite[23]?" database name
-	pattern.
+	(sql-sqlite-login-params): Add "*.sqlite[23]?" database name pattern.
 	(sql-buffer-live-p): New function.
 	(sql-mode-menu, sql-send-string): Use it.
 	(sql-mode-oracle-font-lock-keywords): Improve SQL*Plus REMARK
@@ -208,7 +377,7 @@
 
 2010-09-10  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
-	* net/netrc.el (netrc-credentials): New conveniency function.
+	* net/netrc.el (netrc-credentials): New convenience function.
 
 2010-09-10  Stefan Monnier  <monnier@iro.umontreal.ca>
 
@@ -1287,7 +1456,7 @@
 	* mouse.el (mouse-yank-primary): Avoid setting primary when
 	deactivating the mark (Bug#6872).
 
-2010-08-23  Chris Foote <chris@foote.com.au>  (tiny change)
+2010-08-23  Chris Foote  <chris@foote.com.au>  (tiny change)
 
 	* progmodes/python.el (python-block-pairs): Allow use of "finally"
 	with "else" (Bug#3991).
@@ -2330,7 +2499,7 @@
 2010-07-14  Jan Djärv  <jan.h.d@swipnet.se>
 
 	* xt-mouse.el (xterm-mouse-event-read): Fix for characters > 127
-	now that unicode is used (Bug#6594).
+	now that Unicode is used (Bug#6594).
 
 2010-07-14  Chong Yidong  <cyd@stupidchicken.com>
 
@@ -4235,7 +4404,7 @@
 
 2010-05-08  Chong Yidong  <cyd@stupidchicken.com>
 
-	* international/mule.el (auto-coding-alist):  Only purecopy
+	* international/mule.el (auto-coding-alist): Only purecopy
 	car of each item, not the whole list (Bug#6083).
 
 2010-05-08  Chong Yidong  <cyd@stupidchicken.com>
@@ -9303,7 +9472,7 @@
 	* Makefile.in (ELCFILES): Adapt to subword.el move.
 
 2009-11-21  Thierry Volpiatto  <thierry.volpiatto@gmail.com>
-	    Stefan Monnier  <monnier@iro.umontreal.ca>
+            Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* bookmark.el (bookmark-bmenu-bookmark-column): Remove var.
 	(bookmark-bmenu-list): Save name on `bookmark-name-prop' text-prop.
@@ -13241,7 +13410,7 @@
 
 	* textmodes/fill.el: Convert to utf-8 encoding.
 	(fill-french-nobreak-p): Remove redundant » and « inherited from our
-	pre-unicode days.
+	pre-Unicode days.
 
 	* add-log.el (change-log-fill-forward-paragraph): New function.
 	(change-log-mode): Use it so fill-region DTRT.
@@ -13389,7 +13558,7 @@
 	indent buffer only if called interactively (Bug#4452).
 
 2009-09-19  Juanma Barranquero  <lekktu@gmail.com>
-	    Eli Zaretskii  <eliz@gnu.org>
+            Eli Zaretskii  <eliz@gnu.org>
 
 	This fixes bug#4197 (merged to bug#865, though not identical).
 	* server.el (server-auth-dir): Add docstring note about FAT32.
@@ -14206,7 +14375,7 @@
 	Don't call substitute-in-file-name on diary-file.
 
 2009-09-03  Eduard Wiebe  <usenet@pusto.de>
-	    Stefan Monnier  <monnier@iro.umontreal.ca>
+            Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* mail/footnote.el (footnote-prefix): Make it a defcustom.
 	(footnote-mode-map): Move initialization into the declaration.
@@ -15317,7 +15486,7 @@
 	* progmodes/hideshow.el (hs-special-modes-alist): Add js-mode entry.
 
 2009-08-14  Daniel Colascione  <dan.colascione@gmail.com>
-	    Karl Landstrom  <karl.landstrom@brgeight.se>
+            Karl Landstrom  <karl.landstrom@brgeight.se>
 
 	* progmodes/js.el: New file.
 
@@ -17084,7 +17253,7 @@
 	XZ is the successor to LZMA: <http://tukaani.org/xz/>
 
 2009-06-22  Dmitry Dzhus  <dima@sphinx.net.ru>
-	    Nick Roberts  <nickrob@snap.net.nz>
+            Nick Roberts  <nickrob@snap.net.nz>
 
 	* progmodes/gdb-mi.el: Pull further modified changes from Dmitry's
 	repository (http://sphinx.net.ru/hg/gdb-mi/).
