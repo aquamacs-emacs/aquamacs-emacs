@@ -1,6 +1,6 @@
 ;; -*-mode:emacs-lisp; coding: utf-8;-*-'
 ;; emulate-mac-*-keyboard-modes for Aquamacs
-;; (C) 2005,2007 by David Reitter
+;; (C) 2005,2007, 2010 by David Reitter
 ;; do not copy / redistribute outside of Aquamacs. All rights reserved.
 
 ;; This defines multiple global minor modes, each of which
@@ -13,11 +13,6 @@
 ;; emulate-mac-german-keyboard-mode
 ;; emulate-mac-italian-keyboard-mode
 ;; emulate-mac-french-keyboard-mode
-
-;; Changes:
-
-;; 2007-05-21: Finnish keybindings by Lauri Raittila
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar emulate-mac-keyboard-mode-maps nil
@@ -140,15 +135,6 @@ Example:
 
 (require 'aquamacs-tools) ;; aq-list-contains
 
-;; (emmkm-key-binding emm-k)
-(defun emmkm-key-binding (key-char)
-  (or
-   (if overriding-terminal-local-map
-       (lookup-key overriding-terminal-local-map key-char)
-     (key-binding key-char))
-   ;; not all keys are bound to self-insert-command -- e.g. the pound sign.
-   'self-insert-command))
-
 ;; also add it to isearch-mode-map
 (defun make-emulate-mac-keyboard-mode-map (language)
   (let ((emkm-ins-count 0))
@@ -162,14 +148,13 @@ Example:
 		  (define-key map  (car x)
 		    (eval (list 'defun  (intern (format "emkm-%s-%d" 
 							language emkm-ins-count))
-				'(n)
+				nil
 				(format "Insert %s character (%s keyboard layout).
 If called with ESC prefix (rather than Meta modifier), 
-call the command that would be called if 
-ey`%s' was off.
+call the command that would be called if key `%s' was off.
 
 This command is part of `%s'." string-rep language mode-name mode-name)
-				'(interactive "p") 
+				'(interactive) 
 				;; was called using Meta modifier?
 				;; caveat: because of this, prefix key bindings are not supported.
 				;; To Do: check whether a command is bound to the ESC x alternative. 
@@ -177,24 +162,12 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 				`(if (aq-list-contains (event-modifiers 
 						     last-command-event)
 						    'meta)
-				     (let ((last-command-char ,(if (stringp (cdr x))
-								   (string-to-char (cdr x))
-								 (cdr x)))
-					   (kb (emmkm-key-binding ,string-rep)))
-				  
-				       (and kb
-					    
-					    ;; we call the original binding to preserve 
-					    ;; functionality (e.g. in isearch)
-					    (call-interactively kb)))
-				   
+				     (execute-kbd-macro ,string-rep)
 				   ;; otherwise: called using Esc prefix.
 				   ;; call original binding 
-				   (let* ((,mode-name nil)
-					  (kb (emmkm-key-binding (this-command-keys))))
-				     (and kb
-					  (not (eq kb this-command))
-					  (call-interactively kb)))))))))
+				   (let ((,mode-name nil))
+				     (execute-kbd-macro (this-command-keys)))
+				   ))))))
 	      (reverse (cdr 
 			(assq language 
 			      emulate-mac-keyboard-mode-maps))))
@@ -437,7 +410,4 @@ do not let it produce special characters (passing the key to the system)."
 ;; (define-key special-event-map [language-change] 'aquamacs-handle-language-change)
 
 
-
-
 (provide 'emulate-mac-keyboard-mode)
- 
