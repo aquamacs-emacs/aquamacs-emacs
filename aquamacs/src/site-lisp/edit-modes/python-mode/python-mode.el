@@ -619,9 +619,11 @@ Currently-active file is at the head of the list.")
 
 ;; In previous version of python-mode.el, the hook was incorrectly
 ;; called py-mode-hook, and was not defvar'd.  Deprecate its use.
+(defvaralias 'py-mode-hook 'python-mode-hook)
 (and (fboundp 'make-obsolete-variable)
      (make-obsolete-variable 'py-mode-hook 'python-mode-hook))
 
+(defvaralias 'py-mode-map 'python-mode-map)
 (and (fboundp 'make-obsolete-variable)
      (make-obsolete-variable 'py-mode-map 'python-mode-map))
 
