@@ -1566,6 +1566,10 @@ to write the `custom-file'.")
        (if (boundp 'aquamacs-version) aquamacs-version "?") 
        (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")))
 
+;; the check for crashes must be done BEFORE checking for updates
+;; as the latter updates the .id file.
+(add-hook 'after-init-hook 'check-for-aquamacs-crashes 'append)
+
 (require 'check-for-updates)
 ;; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
