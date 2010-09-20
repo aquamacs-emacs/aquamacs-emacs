@@ -43,6 +43,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void)fd_handler: (NSTimer *) fdEntry;
 - (void)timeout_handler: (NSTimer *)timedEntry;
 - (BOOL)fulfillService: (NSString *)name withArg: (NSString *)arg;
+- (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc;
 @end
 
 

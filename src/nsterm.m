@@ -141,7 +141,7 @@ static unsigned convert_ns_to_X_keysym[] =
 
 /* Lisp communications */
 Lisp_Object ns_spelling_text;
-Lisp_Object ns_input_file, ns_input_font, ns_input_fontsize, ns_input_line;
+Lisp_Object ns_input_file, ns_input_font, ns_input_fontsize, ns_input_line, ns_input_search_string;
 Lisp_Object ns_input_color, ns_input_background_color, ns_input_text, ns_working_text;
 Lisp_Object ns_input_spi_name, ns_input_spi_arg;
 Lisp_Object ns_save_panel_file, ns_save_panel_buffer;
@@ -3551,7 +3551,7 @@ FRAME_PTR f;
   [[new_window delegate] windowDidMove:nil];
 
 #endif
-    return Qnil;
+    return;
 }
 
 
@@ -4245,6 +4245,98 @@ ns_term_shutdown (int sig)
 }
 
 
+typedef struct _AppleEventSelectionRange {
+        short unused1; // 0 (not used)
+        short lineNum; // line to select (<0 to specify range)
+        long startRange; // start of selection range (if line < 0)
+        long endRange; // end of selection range (if line < 0)
+        long unused2; // 0 (not used)
+        long theDate; // modification date/time
+} AppleEventSelectionRange;
+
+
+/* The following taken from the MacVIM source code, by Björn Winckler */
+
+// ODB Editor Suite Constants (taken from ODBEditorSuite.h)
+#define keyFileSender		'FSnd'
+#define keyFileSenderToken	'FTok'
+#define keyFileCustomPath	'Burl'
+#define kODBEditorSuite		'R*ch'
+#define kAEModifiedFile		'FMod'
+#define keyNewLocation		'New?'
+#define kAEClosedFile		'FCls'
+#define keySenderToken		'Tokn'
+typedef struct
+{
+  int16_t unused1;	   // 0 (not used)
+  int16_t lineNum;	   // line to select (< 0 to specify range)
+  int32_t startRange;   // start of selection range (if line < 0)
+  int32_t endRange;	   // end of selection range (if line < 0)
+  int32_t unused2;	   // 0 (not used)
+  int32_t theDate;	   // modification date/time
+} MMXcodeSelectionRange;
+
+- (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc
+{
+  const char *s;
+
+#if 0  // ODB Support
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  // 1. Extract ODB parameters (if any)
+  NSAppleEventDescriptor *odbdesc = desc;
+  if (![odbdesc paramDescriptorForKeyword:keyFileSender]) {
+    // The ODB paramaters may hide inside the 'keyAEPropData' descriptor.
+    odbdesc = [odbdesc paramDescriptorForKeyword:keyAEPropData];
+    if (![odbdesc paramDescriptorForKeyword:keyFileSender])
+      odbdesc = nil;
+  }
+  if (odbdesc) 
+    {
+      NSAppleEventDescriptor *p =
+	[odbdesc paramDescriptorForKeyword:keyFileSender];
+      if (p)
+	[dict setObject:[NSNumber numberWithUnsignedInt:[p typeCodeValue]]
+		 forKey:@"remoteID"];
+      p = [odbdesc paramDescriptorForKeyword:keyFileCustomPath];
+      if (p)
+	[dict setObject:[p stringValue] forKey:@"remotePath"];
+      p = [odbdesc paramDescriptorForKeyword:keyFileSenderToken];
+      if (p) {
+	[dict setObject:[NSNumber numberWithUnsignedLong:[p descriptorType]]
+		 forKey:@"remoteTokenDescType"];
+	[dict setObject:[p data] forKey:@"remoteTokenData"];
+      }
+    }
+#endif
+
+  // 2. Extract Xcode parameters (if any)
+  NSAppleEventDescriptor *xcodedesc =
+    [desc paramDescriptorForKeyword:keyAEPosition];
+  if (xcodedesc) {
+    NSRange range;
+    NSData *data = [xcodedesc data];
+    NSUInteger length = [data length];
+
+    if (length == sizeof(MMXcodeSelectionRange)) {
+      MMXcodeSelectionRange *sr = (MMXcodeSelectionRange*)[data bytes];
+      if (sr->lineNum < 0) {
+	// Should select a range of lines.
+	ns_input_line = Fcons (make_number (sr->startRange + 1),
+			       make_number (sr->endRange));
+      } else {
+	// Should only move cursor to a line.
+	ns_input_line = make_number (sr->lineNum + 1);
+      }
+    }
+  }
+  // 3. Extract Spotlight search text (if any)
+  NSAppleEventDescriptor *spotlightdesc = 
+    [desc paramDescriptorForKeyword:keyAESearchText];
+  if (spotlightdesc)
+      ns_input_search_string = build_string ([[spotlightdesc stringValue] UTF8String]);
+}
+
+
 /* Open a file (used by below, after going into queue read by ns_read_socket) */
 - (BOOL) openFile: (NSString *)fileName
 {
@@ -4257,7 +4349,9 @@ ns_term_shutdown (int sig)
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->code = KEY_NS_OPEN_FILE_LINE;
   ns_input_file = append2 (ns_input_file, build_string ([fileName UTF8String]));
-  ns_input_line = Qnil; /* can be start or cons start,end */
+  //  ns_input_line = Qnil; /* can be start or cons start,end : set in openFiles*/
+
+  
   emacs_event->modifiers =0;
   EV_TRAILER (theEvent);
 
@@ -4456,10 +4550,22 @@ ns_term_shutdown (int sig)
 /*   Notification from the Workspace to open multiple files */
 - (void)application: sender openFiles: (NSArray *)fileList
 {
+
+  ns_input_line = Qnil;
+  ns_input_search_string = Qnil;
+
+// Extract ODB/Xcode/Spotlight parameters from the current Apple event
+  [self extractArgumentsFromOdocEvent:
+	  [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent]];
+ 
+
+  const char *s;
   NSEnumerator *files = [fileList objectEnumerator];
   NSString *file;
   while ((file = [files nextObject]) != nil)
     [ns_pending_files addObject: file];
+
+
 
   [self replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
 
@@ -6874,6 +6980,10 @@ syms_of_nsterm ()
   DEFVAR_LISP ("ns-input-line", &ns_input_line,
                "The line specified in the last NS event.");
   ns_input_line =Qnil;
+
+  DEFVAR_LISP ("ns-input-search-string", &ns_input_search_string,
+               "The search string specified in the last NS event.");
+  ns_input_search_string =Qnil;
 
   DEFVAR_LISP ("ns-input-color", &ns_input_color,
                "The color specified in the last NS event.");
