@@ -3258,9 +3258,9 @@ Keeps argument list for future ispell invocations for no async support."
 		 (file-readable-p default-directory))
       ;; Defend against bad `default-directory'.
       (setq default-directory (expand-file-name "~/")))
-  ;; Local dictionary becomes the global dictionary in use.
+    ;; Local dictionary becomes the global dictionary in use.
     (setq ispell-current-dictionary current-dict-name)
-  (setq ispell-current-personal-dictionary
+    (setq ispell-current-personal-dictionary
         (or ispell-local-pdict ispell-personal-dictionary))
     (setq args (ispell-get-ispell-args))
     (if (and ispell-current-dictionary	; use specified dictionary
@@ -3270,16 +3270,18 @@ Keeps argument list for future ispell invocations for no async support."
     (if ispell-current-personal-dictionary	; use specified pers dict
 	(setq args
 	      (append args
-               (list "-p"
-                     (expand-file-name ispell-current-personal-dictionary)))
-           ;; If we are using recent aspell or hunspell, make sure we use the
-           ;; right encoding for communication. ispell or older aspell/hunspell
-           ;; does not support this.
-           (if ispell-encoding8-command
-               (list
-                (concat ispell-encoding8-command
-                        (symbol-name (ispell-get-coding-system)))))
-           ispell-extra-args)))
+		      (list "-p"
+			    (expand-file-name ispell-current-personal-dictionary)))))
+
+    ;; If we are using recent aspell or hunspell, make sure we use the right encoding
+    ;; for communication. ispell or older aspell/hunspell does not support this
+    (if ispell-encoding8-command
+	(setq args
+	      (append args
+		      (list
+		       (concat ispell-encoding8-command
+			       (symbol-name (ispell-get-coding-system)))))))
+    (setq args (append args ispell-extra-args))
 
     ;; Initially we don't know any buffer's local words.
     (setq ispell-buffer-local-name nil)
