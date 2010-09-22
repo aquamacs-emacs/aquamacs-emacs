@@ -141,7 +141,8 @@ static unsigned convert_ns_to_X_keysym[] =
 
 /* Lisp communications */
 Lisp_Object ns_spelling_text;
-Lisp_Object ns_input_file, ns_input_font, ns_input_fontsize, ns_input_line, ns_input_search_string;
+Lisp_Object ns_input_font, ns_input_fontsize;
+Lisp_Object ns_input_file, ns_input_line, ns_input_search_string, ns_input_parms;
 Lisp_Object ns_input_color, ns_input_background_color, ns_input_text, ns_working_text;
 Lisp_Object ns_input_spi_name, ns_input_spi_arg;
 Lisp_Object ns_save_panel_file, ns_save_panel_buffer;
@@ -3949,6 +3950,13 @@ ns_term_init (Lisp_Object display_name)
 
   ns_app_name = [[NSProcessInfo processInfo] processName];
 
+  /* XCode and ODB support */
+  [[NSAppleEventManager sharedAppleEventManager]
+            setEventHandler:NSApp
+                andSelector:@selector(handleXcodeModEvent:withReplyEvent:)
+              forEventClass:'KAHL'
+                 andEventID:'MOD '];
+
 /* Set up OS X app menu */
 #ifdef NS_IMPL_COCOA
   {
@@ -4255,39 +4263,19 @@ typedef struct _AppleEventSelectionRange {
 } AppleEventSelectionRange;
 
 
-/* The following taken from the MacVIM source code, by Björn Winckler */
-
-// ODB Editor Suite Constants (taken from ODBEditorSuite.h)
-#define keyFileSender		'FSnd'
-#define keyFileSenderToken	'FTok'
-#define keyFileCustomPath	'Burl'
-#define kODBEditorSuite		'R*ch'
-#define kAEModifiedFile		'FMod'
-#define keyNewLocation		'New?'
-#define kAEClosedFile		'FCls'
-#define keySenderToken		'Tokn'
-typedef struct
-{
-  int16_t unused1;	   // 0 (not used)
-  int16_t lineNum;	   // line to select (< 0 to specify range)
-  int32_t startRange;   // start of selection range (if line < 0)
-  int32_t endRange;	   // end of selection range (if line < 0)
-  int32_t unused2;	   // 0 (not used)
-  int32_t theDate;	   // modification date/time
-} MMXcodeSelectionRange;
 
 - (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc
 {
   const char *s;
-
-#if 0  // ODB Support
+  //NSLog (@"%@", desc);
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   // 1. Extract ODB parameters (if any)
   NSAppleEventDescriptor *odbdesc = desc;
-  if (![odbdesc paramDescriptorForKeyword:keyFileSender]) {
+  if (! [odbdesc paramDescriptorForKeyword:keyFileSender]) {
     // The ODB paramaters may hide inside the 'keyAEPropData' descriptor.
     odbdesc = [odbdesc paramDescriptorForKeyword:keyAEPropData];
-    if (![odbdesc paramDescriptorForKeyword:keyFileSender])
+    //NSLog (@"%@", odbdesc);
+    if (! [odbdesc paramDescriptorForKeyword:keyFileSender])
       odbdesc = nil;
   }
   if (odbdesc) 
@@ -4295,19 +4283,34 @@ typedef struct
       NSAppleEventDescriptor *p =
 	[odbdesc paramDescriptorForKeyword:keyFileSender];
       if (p)
-	[dict setObject:[NSNumber numberWithUnsignedInt:[p typeCodeValue]]
-		 forKey:@"remoteID"];
+	ns_input_parms = Fcons (Fcons (intern("remote-id"),
+				       make_number ([p typeCodeValue])),
+				ns_input_parms);
+
+	// [dict setObject:[NSNumber numberWithUnsignedInt:[p typeCodeValue]]
+	// 	 forKey:@"remoteID"];
       p = [odbdesc paramDescriptorForKeyword:keyFileCustomPath];
       if (p)
-	[dict setObject:[p stringValue] forKey:@"remotePath"];
+	ns_input_parms = Fcons (Fcons (intern("remote-path"),
+				       build_string ([[p stringValue] UTF8String])),
+				ns_input_parms);
+      // [dict setObject:[p stringValue] forKey:@"remotePath"];
       p = [odbdesc paramDescriptorForKeyword:keyFileSenderToken];
       if (p) {
-	[dict setObject:[NSNumber numberWithUnsignedLong:[p descriptorType]]
-		 forKey:@"remoteTokenDescType"];
-	[dict setObject:[p data] forKey:@"remoteTokenData"];
+	ns_input_parms = Fcons (Fcons (intern("remote-token-type"),
+				       make_number ([p descriptorType])),
+				ns_input_parms);
+	ns_input_parms = Fcons (Fcons (intern("remote-token-data"),
+				       /* To do: check that this doesn't lose data. */
+            build_string ([[[NSString string] initWithData:[p data] encoding:NSNonLossyASCIIStringEncoding]
+			    UTF8String])),
+				ns_input_parms);
+
+	// [dict setObject:[NSNumber numberWithUnsignedLong:[p descriptorType]]
+	// 	 forKey:@"remoteTokenDescType"];
+	// [dict setObject:[p data] forKey:@"remoteTokenData"];
       }
     }
-#endif
 
   // 2. Extract Xcode parameters (if any)
   NSAppleEventDescriptor *xcodedesc =
@@ -4357,6 +4360,115 @@ typedef struct
 
   return YES;
 }
+
+/* Make FSSpec from NSString
+   based on http://www.opensource.apple.com/darwinsource/10.3/Kerberos-47/KerberosFramework/Common/Sources/FSpUtils.c */
+- (OSErr)getFSRefAtPath:(NSString*)sourceItem ref:(FSRef*)sourceRef
+{
+    OSErr    err;
+    BOOL    isSymLink;
+    id manager=[NSFileManager defaultManager];
+    NSDictionary *sourceAttribute = [manager fileAttributesAtPath:sourceItem traverseLink:NO];
+    isSymLink = ([sourceAttribute objectForKey:@"NSFileType"] == NSFileTypeSymbolicLink);
+    if (isSymLink)
+      {
+        const char    *sourceParentPath;
+        FSRef        sourceParentRef;
+        HFSUniStr255    sourceFileName;
+        sourceParentPath = (UInt8*)[[sourceItem
+stringByDeletingLastPathComponent] fileSystemRepresentation];
+        err = FSPathMakeRef(sourceParentPath, &sourceParentRef, NULL);
+        if (err == noErr){
+            [[sourceItem lastPathComponent]
+getCharacters:sourceFileName.unicode];
+            sourceFileName.length = [[sourceItem lastPathComponent] length];
+            if (sourceFileName.length == 0)
+	      {
+                err = fnfErr;
+	      }
+            else err = FSMakeFSRefUnicode(&sourceParentRef,
+					  sourceFileName.length,
+					  sourceFileName.unicode,
+					  kTextEncodingFullName,
+					  sourceRef);
+        }
+      }
+    else
+      {
+        err = FSPathMakeRef([sourceItem fileSystemRepresentation], sourceRef, NULL);
+      }
+    return err;
+}
+
+typedef struct
+{
+  FSSpec theFile; // identifies the file
+  long theDate; // the date/time the file was last modified
+  short saved; // set this to zero when replying
+} ModificationInfo;
+
+- (void)handleXcodeModEvent:(NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent
+{
+  Lisp_Object tail, buf, file;
+  NSAppleEventDescriptor *replyDesc = [NSAppleEventDescriptor listDescriptor];
+  int index = 1;
+  // Xcode sends this event to query us which open files have been
+  // modified.
+
+  // This per se seems to work, yet we are unable to send a useful reply.
+  // Other editors such as TextMate or BBEdit seem to fail this task.
+
+  // NSLog(@"reply:%@", replyEvent);
+  // NSLog(@"event:%@", event);
+  if ([replyEvent typeCodeValue] == typeNull)
+    return;
+
+  for (tail = Vbuffer_alist; CONSP (tail); tail = XCDR (tail))
+    {
+      buf = XCDR (XCAR (tail));
+      if (! NILP (Fbuffer_modified_p (buf)))
+	{
+	  file = Fbuffer_file_name (buf);
+	  if (! NILP (file) && STRINGP (file))
+	    {
+	      // simple variant:
+	      // [replyDesc insertDescriptor:
+	      // 		   [NSAppleEventDescriptor descriptorWithString:
+	      // 				    [NSString stringWithUTF8String: SDATA (file)]]
+	      // 			  atIndex: index++];
+
+	      ModificationInfo *record = (ModificationInfo *) malloc(sizeof(ModificationInfo));
+
+	      FSRef fsRef;
+	      if ([self getFSRefAtPath:[NSString stringWithUTF8String: SDATA (file)]
+				   ref:&fsRef] != noErr)
+		return;
+	      if (FSGetCatalogInfo(&fsRef,
+	      			   kFSCatInfoNone,
+	      			   NULL,
+	      			   NULL,
+	      			   &record->theFile,
+	      			   NULL) != noErr)
+	      	return;
+
+	      record->theDate = (long)  time(NULL) - 2;
+	      record->saved = 0;
+
+	      [replyDesc insertDescriptor:
+			   [NSAppleEventDescriptor descriptorWithDescriptorType:keyDirectObject
+									  bytes:record
+									 length:sizeof(ModificationInfo)]
+				  atIndex: index++];
+	      //	      NSLog(@"replyDesc: %@\n", replyDesc);
+
+	    }
+	}
+    }
+  [NSAppleEventDescriptor descriptorWithDescriptorType:typeFileURL data:data]
+  [replyEvent setParamDescriptor:replyDesc forKeyword:keyDirectObject];
+  // NSLog(@"reply: %@\n", replyEvent);
+}
+
 
 - (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
@@ -4553,6 +4665,7 @@ typedef struct
 
   ns_input_line = Qnil;
   ns_input_search_string = Qnil;
+  ns_input_parms = Qnil;
 
 // Extract ODB/Xcode/Spotlight parameters from the current Apple event
   [self extractArgumentsFromOdocEvent:
@@ -6980,6 +7093,10 @@ syms_of_nsterm ()
   DEFVAR_LISP ("ns-input-line", &ns_input_line,
                "The line specified in the last NS event.");
   ns_input_line =Qnil;
+
+  DEFVAR_LISP ("ns-input-parms", &ns_input_parms,
+               "Additional parameter alist related to the last NS event.");
+  ns_input_parms =Qnil;
 
   DEFVAR_LISP ("ns-input-search-string", &ns_input_search_string,
                "The search string specified in the last NS event.");

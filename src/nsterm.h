@@ -32,6 +32,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
    ========================================================================== */
 
+
 /* We override sendEvent: as a means to stop/start the event loop */
 @interface EmacsApp : NSApplication
 {
@@ -822,6 +823,31 @@ extern char gnustep_base_version[];  /* version tracking */
 
 /* needed somewhere... */
 #define VERTICAL_SCROLL_BAR_WIDTH_TRIM (0)
+
+
+/* ODB / XCode interaction support */
+
+/* The following taken from the MacVIM source code, by Björn Winckler */
+
+// ODB Editor Suite Constants (taken from ODBEditorSuite.h)
+#define keyFileSender		'FSnd'
+#define keyFileSenderToken	'FTok'
+#define keyFileCustomPath	'Burl'
+#define kODBEditorSuite		'R*ch'
+#define kAEModifiedFile		'FMod'
+#define keyNewLocation		'New?'
+#define kAEClosedFile		'FCls'
+#define keySenderToken		'Tokn'
+
+typedef struct
+{
+  int16_t unused1;	   // 0 (not used)
+  int16_t lineNum;	   // line to select (< 0 to specify range)
+  int32_t startRange;   // start of selection range (if line < 0)
+  int32_t endRange;	   // end of selection range (if line < 0)
+  int32_t unused2;	   // 0 (not used)
+  int32_t theDate;	   // modification date/time
+} MMXcodeSelectionRange;
 
 
 #endif	/* HAVE_NS */

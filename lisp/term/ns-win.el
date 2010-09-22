@@ -752,6 +752,17 @@ prompting.  If file is a directory perform a `find-file' on it."
         (find-file f)
       (push-mark (+ (point) (car (cdr (insert-file-contents f))))))))
 
+(make-variable-buffer-local
+ (defvar buffer-odb-parameters nil 
+   "ODB External Editor tokens stored with this buffer."))
+
+(defun ns-odb-save-function ()
+  (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parms))
+(defun ns-odb-kill-function ()
+  (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parms))
+
+(defvar ns-input-parms) 			; nsterm.m
+
 (defun ns-handle-drag-file (&optional open-file)
   "Handle one or more dragged files.
 If OPEN-FILE is non-nil, always open the file."
@@ -772,7 +783,16 @@ If OPEN-FILE is non-nil, always open the file."
 	  (if open-file
 	      (dnd-open-local-file uri nil)
 	    (dnd-handle-one-url window action
-				uri))))
+				uri))
+	  ;; install ODB file save handler
+	  ;; this is installed for completeness - most
+	  ;; applications seem to monitor edited files 
+	  ;; via system means independent of us.
+	  (and ns-input-parms
+	       (setq buffer-odb-parameters ns-input-parms)
+	       (add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
+	       (add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))
+	  ))
       (setq ns-input-file (cdr ns-input-file)))))
 
 (defun ns-handle-open-file ()
