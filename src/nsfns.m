@@ -2645,6 +2645,119 @@ In case the execution fails, an error is signaled. */)
 }
 #endif
 
+
+// -- ODB Editor Support ----------------------------------------------------
+
+/*
+ * Code adapted from MacVIM - gui_macvim.m
+ *
+ * The ODB Editor protocol works like this:
+ * - An external program (the server) asks us to open a file and associates
+ *   three things with this file: (1) a server id (a four character code that
+ *   identifies the server), (2) a path that can be used as window title for
+ *   the file (optional), (3) an arbitrary token (optional)
+ *   This is handled in nsterm.m's extractArgumentsFromOdocEvent().
+ * - When a file is saved or closed, we should tell the server about which
+ *   file was modified and also pass back the token
+ *
+ * All communication between Aquamacs and the server is handled via Apple Events.
+ */
+
+OSStatus odb_event (struct buffer *buffer,
+		Lisp_Object parms,
+		const AEEventID action)
+{
+  Lisp_Object Qremote_id = intern("remote-id");
+  Lisp_Object Qremote_token_data = intern("remote-token-data");
+  Lisp_Object Qremote_token_type = intern("remote-token-type");
+
+  Lisp_Object remote_id, remote_token_data, remote_token_type;
+  uint32_t rid;
+
+  remote_id = Fcdr (Fassq (Qremote_id, parms));
+  remote_token_data = Fcdr (Fassq (Qremote_token_data, parms));
+  remote_token_type = Fcdr (Fassq (Qremote_token_type, parms));
+
+  if (NILP (remote_id))
+    return;
+        
+  rid = XUINT (remote_id);
+
+  /* Destination Process */
+    NSAppleEventDescriptor *targetDesc = [NSAppleEventDescriptor
+            descriptorWithDescriptorType:typeApplSignature
+                                   bytes:&rid
+                                  length:sizeof(unsigned int)];
+
+
+    /* file name */
+    NSString *path = [NSString stringWithUTF8String:SDATA (current_buffer->filename)];
+    NSData *pathData = [[[NSURL fileURLWithPath:path] absoluteString]
+            dataUsingEncoding:NSUTF8StringEncoding];
+    NSAppleEventDescriptor *pathDesc = [NSAppleEventDescriptor
+            descriptorWithDescriptorType:typeFileURL data:pathData];
+
+    /* Make event */
+    NSAppleEventDescriptor *event = [NSAppleEventDescriptor
+            appleEventWithEventClass:kODBEditorSuite
+                             eventID:action
+                    targetDescriptor:targetDesc
+                            returnID:kAutoGenerateReturnID
+                       transactionID:kAnyTransactionID];
+
+    [event setParamDescriptor:pathDesc forKeyword:keyDirectObject];
+
+    if (! NILP (remote_token_data) && ! NILP (remote_token_type))
+      {
+	NSData *tokenData = [[NSString stringWithUTF8String:SDATA (remote_token_data)]
+			      dataUsingEncoding:NSNonLossyASCIIStringEncoding];
+	if (tokenData)
+	  {
+	    DescType tokenType = (unsigned int) XUINT (remote_token_type);
+	    [event setParamDescriptor: 
+		     [NSAppleEventDescriptor descriptorWithDescriptorType:tokenType
+								     data:tokenData]
+			   forKeyword: keySenderToken];
+	  }
+      }
+
+    return AESendMessage([event aeDesc], NULL, kAENoReply | kAENeverInteract,
+            kAEDefaultTimeout);
+}
+
+
+DEFUN ("ns-send-odb-notification", Fns_send_odb_notification, Sns_send_odb_notification, 3, 3, 0,
+       doc: /* Send ODB notification after file save.
+BUF is the buffer in question.
+TYPE is one of `saved', `closed', `end'.
+PARMS is an association list as communicated for the opening event for the specific buffer.
+
+ */)
+     (buf, type, parms)
+     Lisp_Object buf, type, parms;
+{
+  struct buffer *buffer;
+
+  if (NILP (buf))
+    buffer = current_buffer;
+  else
+    buffer = XBUFFER (buf);
+
+  if (EQ (type, intern ("closed")))
+    {
+      if (odb_event(buffer, parms, kAEClosedFile) != noErr)
+	error("Error during ODB notification.");
+    }
+  else if (EQ (type, intern ("saved")))
+    {
+      if (odb_event(buffer, parms, kAEModifiedFile) != noErr)
+	error("Error during ODB notification.");
+    }
+  return Qnil;
+}
+
+
+
 DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
        doc: /* Returns non-nil if application is hidden. */)
     ()
@@ -3321,6 +3434,7 @@ be used as the image of the icon representing the frame.  */);
 #ifdef NS_IMPL_COCOA
   defsubr (&Sns_do_applescript);
 #endif
+  defsubr (&Sns_send_odb_notification);
   defsubr (&Sns_application_hidden_p);
   defsubr (&Sxw_color_defined_p);
   defsubr (&Sxw_color_values);
