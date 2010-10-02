@@ -1,5 +1,5 @@
 ;;; html-helper-mode.el --- Major mode for composing html files.
-;;; Revision: 3.10aquamacs
+;;; Revision: 3.10aquamacs2
 ;; based on beta version dated 22-Mar-2004 http://savannah.inetbridge.net/baol-hth/
 ;; plus: 3.0.4Kilo's CSS mode
 ;; plus: changes to set major-mode while running mode hooks  (Aquamacs compatibility)
@@ -240,8 +240,10 @@ are created as local. When nil the creation is skipped.")
 (defvar html-helper-use-expert-menu t
   "*If not nil, then use the full HTML menu.")
 
-(defvar html-helper-do-write-file-hooks t
-  "*If not nil, then modify `local-write-file-hooks' to do timestamps.")
+(defvar html-helper-do-write-contents-functions t
+  "*If not nil, then modify `write-contents-functions' to do timestamps.")
+(defvaralias 'html-helper-do-write-file-hooks
+  'html-helper-do-write-contents-functions)
 
 (defvar html-helper-build-new-buffer-flag t
   "*If not nil, then insert `html-helper-new-buffer-strings' for new buffers.")
@@ -390,7 +392,7 @@ html-helper-mode-local-JSP-not-ASP-flag is nil")
 Inserted by `html-helper-insert-new-PHP-buffer-strings' if
 `html-helper-build-new-buffer-flag' is set to t")
 
-(defvar html-helper-timestamp-start "<!-- hhmts start --> "
+(defvar html-helper-timestamp-start "<!-- hhmts start -->"
   "*Start delimiter for timestamps.
 Everything between `html-helper-timestamp-start' and
 `html-helper-timestamp-end' will be deleted and replaced with the output
@@ -1715,7 +1717,7 @@ html-helper-build-new-buffer-flag is set to t"
   (tempo-use-tag-list 'html-helper-tempo-tags html-helper-completion-finder)
 
   (if html-helper-do-write-file-hooks
-      (add-hook 'local-write-file-hooks 'html-helper-update-timestamp))
+      (add-hook 'write-contents-functions 'html-helper-update-timestamp))
 
   (if (and html-helper-build-new-buffer-flag (zerop (buffer-size)))
       (if template-maker
