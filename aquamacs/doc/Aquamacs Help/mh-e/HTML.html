@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>HTML - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Viewing-Attachments.html#Viewing-Attachments" title="Viewing Attachments">
+<link rel="next" href="Digests.html#Digests" title="Digests">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="HTML"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Digests.html#Digests">Digests</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Viewing-Attachments.html#Viewing-Attachments">Viewing Attachments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.3 HTML</h3>
+
+<p><a name="index-HTML-616"></a><a name="index-Gnus-617"></a>
+MH-E can display messages that have been sent in HTML<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. The
+content of the message will appear in the MH-Show buffer as you would
+expect if the entire message is HTML, or there is an inline HTML body
+part. However, if there is an HTML body part that is an attachment,
+then you'll see a button like this:
+
+<pre class="smallexample">     [1. text/html; foo.html]...
+</pre>
+   <p>To see how to read the contents of this body part, see <a href="Viewing-Attachments.html#Viewing-Attachments">Viewing Attachments</a>.
+
+   <p><a name="index-mm_002dtext_002dhtml_002drenderer-618"></a>
+The browser that MH-E uses is determined by the option
+<code>mm-text-html-renderer</code>. The default setting is set automatically
+based upon the presence of a known browser on your system. If you wish
+to use a different browser, then set this option accordingly. See the
+documentation for the browser you use for additional information on
+how to use it. In particular, find and disable the option to render
+images as this can tip off spammers that the email address they have
+used is valid.
+
+   <p><a name="index-mm_002dtext_002dhtml_002drenderer-619"></a>
+If you're confused about which <code>mm-text-html-renderer</code> to use,
+here's a brief description of each, sorted by popularity, that
+includes the results of a quick poll of MH-E users from 2005-12-23.
+
+     
+<a name="index-browser_002c-_0040samp_007bw3m_007d-620"></a>
+<a name="index-g_t_0040samp_007bw3m_007d-621"></a>
+<a name="index-Mouse_002d2-622"></a>
+<dl><dt>&lsquo;<samp><span class="samp">w3m</span></samp>&rsquo; 7<dd>The &lsquo;<samp><span class="samp">w3m</span></samp>&rsquo; browser requires an external program. It's quick,
+produces pretty nice output, and best of all, it's the only browser
+that highlights links. These can be clicked with <kbd>Mouse-2</kbd> to view
+the content of the link in &lsquo;<samp><span class="samp">w3m</span></samp>&rsquo;. The &lsquo;<samp><span class="samp">w3m</span></samp>&rsquo; browser handles
+tables well and actually respects the table's width parameter (which
+can cause text to wrap if the author didn't anticipate that the page
+would be viewed in Emacs). 
+<!--  -->
+<a name="index-browser_002c-_0040samp_007bw3m_002dstandalone_007d-623"></a><a name="index-g_t_0040samp_007bw3m_002dstandalone_007d-624"></a><br><dt>&lsquo;<samp><span class="samp">w3m-standalone</span></samp>&rsquo; 3<dd>This browser, along with &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; for the external browser, are the
+only choices that work without having to download a separate lisp
+package or external program. This browser is quick, but does not show
+links. It handles simple tables but some tables get rendered much
+wider than the Emacs frame. This browser was the only one not to
+handle the escape &lsquo;<samp><span class="samp">&amp;ndash;</span></samp>&rsquo; (it printed a &lsquo;<samp><span class="samp">?</span></samp>&rsquo;), but it did
+render &lsquo;<samp><span class="samp">&amp;reg;</span></samp>&rsquo;. 
+<!--  -->
+<a name="index-browser_002c-_0040samp_007blinks_007d-625"></a><a name="index-g_t_0040samp_007blinks_007d-626"></a><br><dt>&lsquo;<samp><span class="samp">links</span></samp>&rsquo; 1<dd>The &lsquo;<samp><span class="samp">links</span></samp>&rsquo; browser requires an external program. It's quick, and
+produces nicer output than &lsquo;<samp><span class="samp">lynx</span></samp>&rsquo; on single column mails in
+tables. However, it doesn't show links and it doesn't do as nice a job
+on multi-column tables as some lines wrap. At least it fits in 80
+columns and thus seems better than &lsquo;<samp><span class="samp">w3</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">w3m-standalone</span></samp>&rsquo;. Converts escapes such as &lsquo;<samp><span class="samp">&amp;reg;</span></samp>&rsquo; to (R). 
+<!--  -->
+<a name="index-browser_002c-_0040samp_007blynx_007d-627"></a><a name="index-g_t_0040samp_007blynx_007d-628"></a><br><dt>&lsquo;<samp><span class="samp">lynx</span></samp>&rsquo; 1<dd>The &lsquo;<samp><span class="samp">lynx</span></samp>&rsquo; browser requires an external program. It's quick and
+produces pretty decent output but it doesn't show links. It doesn't
+seem to do multi-column tables which makes output much cleaner. It
+centers the output and wraps long lines more than most. Handles
+&lsquo;<samp><span class="samp">&amp;reg;</span></samp>&rsquo;. 
+<!--  -->
+<br><dt>&lsquo;<samp><span class="samp">nil</span></samp>&rsquo; 1<dd>This choice obviously requires an external browser. Like
+&lsquo;<samp><span class="samp">w3m-standalone</span></samp>&rsquo;, it works out of the box. With this setting,
+HTML messages have a button for the body part which you can view with
+<kbd>K v</kbd> (<code>mh-folder-toggle-mime-part</code>). 
+<!--  -->
+<a name="index-browser_002c-_0040samp_007bw3_007d-629"></a><a name="index-g_t_0040samp_007bw3_007d-630"></a><br><dt>&lsquo;<samp><span class="samp">w3</span></samp>&rsquo; 0<dd>This choice does not require an external program as all of the
+rendering is done in lisp. You do need to get the package separately. 
+This browser is <strong>slow</strong>, and doesn't appear to have been updated
+since 2001 and the author hasn't responded to my emails. It displays
+unknown tags instead of hiding them, so you get to see all the
+Microsoft crap in certain messages. Tends to make multi-column tables
+wider than even a full-screen Emacs can handle. Like &lsquo;<samp><span class="samp">w3m</span></samp>&rsquo;, you
+can follow links, but you have to find them first as they are not
+highlighted. Performs well on single-column tables and handles escapes
+such as &lsquo;<samp><span class="samp">&amp;reg;</span></samp>&rsquo;. 
+<!--  -->
+<a name="index-browser_002c-_0040samp_007bhtml2text_007d-631"></a><a name="index-g_t_0040samp_007bhtml2text_007d-632"></a><br><dt>&lsquo;<samp><span class="samp">html2text</span></samp>&rsquo; 0<dd>The &lsquo;<samp><span class="samp">html2text</span></samp>&rsquo; browser requires an external program. I noticed
+that it can do some nasty things with simple HTML mails (like filling
+the entire message as if it were one paragraph, including signature). 
+On another message, it displayed half of the HTML tags for some
+reason. 
+</dl>
+
+   <p><a name="index-mm_002dtext_002dhtml_002drenderer-633"></a>
+For a couple more sources of information about
+<code>mm-text-html-renderer</code>,
+see section <a href="http://www.gnus.org/manual/emacs-mime_6.html">Display Customization</a> in the <cite>The Emacs MIME Manual</cite> and the
+documentation for the Gnus command <kbd>W h</kbd> (see section
+<a href="http://www.gnus.org/manual/gnus_99.html">Article Washing</a> in the
+<cite>The Gnus Manual</cite>).
+
+   <p><a name="index-g_t_0040file_007b_002eemacs_007d-634"></a><a name="index-files_002c-_0040file_007b_002eemacs_007d-635"></a><a name="index-browse_002durl_002dat_002dmouse-636"></a><a name="index-S_002dMouse_002d2-637"></a>
+A useful key binding that you can add to <samp><span class="file">~/.emacs</span></samp> is the
+following which displays an HTML link or textual URL in an external
+browser when clicked with <kbd>S-mouse-2</kbd>. This binding works in any
+buffer, including HTML buffers.
+
+<pre class="smalllisp">     (global-set-key [S-mouse-2] 'browse-url-at-mouse)
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This
+feature depends on a version of Gnus that is at least 5.10.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,363 @@
+<html lang="en">
+<head>
+<title>Predicates - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" title="Stack Lisp Functions">
+<link rel="next" href="Computational-Lisp-Functions.html#Computational-Lisp-Functions" title="Computational Lisp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Predicates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Computational-Lisp-Functions.html#Computational-Lisp-Functions">Computational Lisp Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Stack-Lisp-Functions.html#Stack-Lisp-Functions">Stack Lisp Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.4 Predicates</h5>
+
+<p class="noindent">The functions described here are predicates, that is, they return a
+true/false value where <code>nil</code> means false and anything else means
+true.  These predicates are expanded by <code>defmath</code>, for example,
+from <code>zerop</code> to <code>math-zerop</code>.  In many cases they correspond
+to native Lisp functions by the same name, but are extended to cover
+the full range of Calc data types.
+
+<div class="defun">
+&mdash; Function: <b>zerop</b><var> x<a name="index-zerop-2358"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is numerically zero, in any of the Calc data
+types.  (Note that for some types, such as error forms and intervals,
+it never makes sense to return true.)  In <code>defmath</code>, the expression
+&lsquo;<samp><span class="samp">(= x 0)</span></samp>&rsquo; will automatically be converted to &lsquo;<samp><span class="samp">(math-zerop x)</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">(/= x 0)</span></samp>&rsquo; will be converted to &lsquo;<samp><span class="samp">(not (math-zerop x))</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>negp</b><var> x<a name="index-negp-2359"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is negative.  This accepts negative real numbers
+of various types, negative HMS and date forms, and intervals in which
+all included values are negative.  In <code>defmath</code>, the expression
+&lsquo;<samp><span class="samp">(&lt; x 0)</span></samp>&rsquo; will automatically be converted to &lsquo;<samp><span class="samp">(math-negp x)</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">(&gt;= x 0)</span></samp>&rsquo; will be converted to &lsquo;<samp><span class="samp">(not (math-negp x))</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>posp</b><var> x<a name="index-posp-2360"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is positive (and non-zero).  For complex
+numbers, none of these three predicates will return true. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>looks-negp</b><var> x<a name="index-looks_002dnegp-2361"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is &ldquo;negative-looking.&rdquo;  This returns true if
+<var>x</var> is a negative number, or a formula with a leading minus sign
+such as &lsquo;<samp><span class="samp">-a/b</span></samp>&rsquo;.  In other words, this is an object which can be
+made simpler by calling <code>(- </code><var>x</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>integerp</b><var> x<a name="index-integerp-2362"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is an integer of any size. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>fixnump</b><var> x<a name="index-fixnump-2363"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a native Lisp integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>natnump</b><var> x<a name="index-natnump-2364"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a nonnegative integer of any size. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>fixnatnump</b><var> x<a name="index-fixnatnump-2365"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a nonnegative Lisp integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>num-integerp</b><var> x<a name="index-num_002dintegerp-2366"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is numerically an integer, i.e., either a
+true integer or a float with no significant digits to the right of
+the decimal point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>messy-integerp</b><var> x<a name="index-messy_002dintegerp-2367"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is numerically, but not literally, an integer. 
+A value is <code>num-integerp</code> if it is <code>integerp</code> or
+<code>messy-integerp</code> (but it is never both at once). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>num-natnump</b><var> x<a name="index-num_002dnatnump-2368"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is numerically a nonnegative integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>evenp</b><var> x<a name="index-evenp-2369"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is an even integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>looks-evenp</b><var> x<a name="index-looks_002devenp-2370"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is an even integer, or a formula with a leading
+multiplicative coefficient which is an even integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>oddp</b><var> x<a name="index-oddp-2371"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is an odd integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ratp</b><var> x<a name="index-ratp-2372"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a rational number, i.e., an integer or a
+fraction. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>realp</b><var> x<a name="index-realp-2373"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a real number, i.e., an integer, fraction,
+or floating-point number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>anglep</b><var> x<a name="index-anglep-2374"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a real number or HMS form. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>floatp</b><var> x<a name="index-floatp-2375"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a float, or a complex number, error form,
+interval, date form, or modulo form in which at least one component
+is a float. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>complexp</b><var> x<a name="index-complexp-2376"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a rectangular or polar complex number
+(but not a real number). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>rect-complexp</b><var> x<a name="index-rect_002dcomplexp-2377"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a rectangular complex number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>polar-complexp</b><var> x<a name="index-polar_002dcomplexp-2378"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a polar complex number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>numberp</b><var> x<a name="index-numberp-2379"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a real number or a complex number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>scalarp</b><var> x<a name="index-scalarp-2380"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a real or complex number or an HMS form. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>vectorp</b><var> x<a name="index-vectorp-2381"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a vector (this simply checks if its argument
+is a list whose first element is the symbol <code>vec</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>numvecp</b><var> x<a name="index-numvecp-2382"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a number or vector. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>matrixp</b><var> x<a name="index-matrixp-2383"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a matrix, i.e., a vector of one or more vectors,
+all of the same size. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>square-matrixp</b><var> x<a name="index-square_002dmatrixp-2384"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a square matrix. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>objectp</b><var> x<a name="index-objectp-2385"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is any numeric Calc object, including real and
+complex numbers, HMS forms, date forms, error forms, intervals, and
+modulo forms.  (Note that error forms and intervals may include formulas
+as their components; see <code>constp</code> below.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>objvecp</b><var> x<a name="index-objvecp-2386"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is an object or a vector.  This also accepts
+incomplete objects, but it rejects variables and formulas (except as
+mentioned above for <code>objectp</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>primp</b><var> x<a name="index-primp-2387"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is a &ldquo;primitive&rdquo; or &ldquo;atomic&rdquo; Calc object,
+i.e., one whose components cannot be regarded as sub-formulas.  This
+includes variables, and all <code>objectp</code> types except error forms
+and intervals. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>constp</b><var> x<a name="index-constp-2388"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is constant, i.e., a real or complex number,
+HMS form, date form, or error form, interval, or vector all of whose
+components are <code>constp</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>lessp</b><var> x y<a name="index-lessp-2389"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is numerically less than <var>y</var>.  Returns false
+if <var>x</var> is greater than or equal to <var>y</var>, or if the order is
+undefined or cannot be determined.  Generally speaking, this works
+by checking whether &lsquo;<samp><var>x</var><span class="samp"> - </span><var>y</var></samp>&rsquo; is <code>negp</code>.  In
+<code>defmath</code>, the expression &lsquo;<samp><span class="samp">(&lt; x y)</span></samp>&rsquo; will automatically be
+converted to &lsquo;<samp><span class="samp">(lessp x y)</span></samp>&rsquo;; expressions involving <code>&gt;</code>, <code>&lt;=</code>,
+and <code>&gt;=</code> are similarly converted in terms of <code>lessp</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>beforep</b><var> x y<a name="index-beforep-2390"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> comes before <var>y</var> in a canonical ordering
+of Calc objects.  If <var>x</var> and <var>y</var> are both real numbers, this
+will be the same as <code>lessp</code>.  But whereas <code>lessp</code> considers
+other types of objects to be unordered, <code>beforep</code> puts any two
+objects into a definite, consistent order.  The <code>beforep</code>
+function is used by the <kbd>V S</kbd> vector-sorting command, and also
+by <kbd>a s</kbd> to put the terms of a product into canonical order:
+This allows &lsquo;<samp><span class="samp">x y + y x</span></samp>&rsquo; to be simplified easily to &lsquo;<samp><span class="samp">2 x y</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>equal</b><var> x y<a name="index-equal-2391"></a></var><br>
+<blockquote><p>This is the standard Lisp <code>equal</code> predicate; it returns true if
+<var>x</var> and <var>y</var> are structurally identical.  This is the usual way
+to compare numbers for equality, but note that <code>equal</code> will treat
+0 and 0.0 as different. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>math-equal</b><var> x y<a name="index-math_002dequal-2392"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> and <var>y</var> are numerically equal, either because
+they are <code>equal</code>, or because their difference is <code>zerop</code>.  In
+<code>defmath</code>, the expression &lsquo;<samp><span class="samp">(= x y)</span></samp>&rsquo; will automatically be
+converted to &lsquo;<samp><span class="samp">(math-equal x y)</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>equal-int</b><var> x n<a name="index-equal_002dint-2393"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> and <var>n</var> are numerically equal, where <var>n</var>
+is a fixnum which is not a multiple of 10.  This will automatically be
+used by <code>defmath</code> in place of the more general <code>math-equal</code>
+whenever possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nearly-equal</b><var> x y<a name="index-nearly_002dequal-2394"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> and <var>y</var>, as floating-point numbers, are
+equal except possibly in the last decimal place.  For example,
+314.159 and 314.166 are considered nearly equal if the current
+precision is 6 (since they differ by 7 units), but not if the current
+precision is 7 (since they differ by 70 units).  Most functions which
+use series expansions use <code>with-extra-prec</code> to evaluate the
+series with 2 extra digits of precision, then use <code>nearly-equal</code>
+to decide when the series has converged; this guards against cumulative
+error in the series evaluation without doing extra work which would be
+lost when the result is rounded back down to the current precision. 
+In <code>defmath</code>, this can be written &lsquo;<samp><span class="samp">(~= </span><var>x</var> <var>y</var><span class="samp">)</span></samp>&rsquo;. 
+The <var>x</var> and <var>y</var> can be numbers of any kind, including complex. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nearly-zerop</b><var> x y<a name="index-nearly_002dzerop-2395"></a></var><br>
+<blockquote><p>Returns true if <var>x</var> is nearly zero, compared to <var>y</var>.  This
+checks whether <var>x</var> plus <var>y</var> would by be <code>nearly-equal</code>
+to <var>y</var> itself, to within the current precision, in other words,
+if adding <var>x</var> to <var>y</var> would have a negligible effect on <var>y</var>
+due to roundoff error.  <var>X</var> may be a real or complex number, but
+<var>y</var> must be real. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>is-true</b><var> x<a name="index-is_002dtrue-2396"></a></var><br>
+<blockquote><p>Return true if the formula <var>x</var> represents a true value in
+Calc, not Lisp, terms.  It tests if <var>x</var> is a non-zero number
+or a provably non-zero formula. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>reject-arg</b><var> val pred<a name="index-reject_002darg-2397"></a></var><br>
+<blockquote><p>Abort the current function evaluation due to unacceptable argument values. 
+This calls &lsquo;<samp><span class="samp">(calc-record-why </span><var>pred</var> <var>val</var><span class="samp">)</span></samp>&rsquo;, then signals a
+Lisp error which <code>normalize</code> will trap.  The net effect is that the
+function call which led here will be left in symbolic form. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>inexact-value</b><var><a name="index-inexact_002dvalue-2398"></a></var><br>
+<blockquote><p>If Symbolic mode is enabled, this will signal an error that causes
+<code>normalize</code> to leave the formula in symbolic form, with the message
+&ldquo;Inexact result.&rdquo;  (This function has no effect when not in Symbolic mode.) 
+Note that if your function calls &lsquo;<samp><span class="samp">(sin 5)</span></samp>&rsquo; in Symbolic mode, the
+<code>sin</code> function will call <code>inexact-value</code>, which will cause your
+function to be left unsimplified.  You may instead wish to call
+&lsquo;<samp><span class="samp">(normalize (list 'calcFunc-sin 5))</span></samp>&rsquo;, which in Symbolic mode will
+return the formula &lsquo;<samp><span class="samp">sin(5)</span></samp>&rsquo; to your function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>overflow</b><var><a name="index-overflow-2399"></a></var><br>
+<blockquote><p>This signals an error that will be reported as a floating-point overflow. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>underflow</b><var><a name="index-underflow-2400"></a></var><br>
+<blockquote><p>This signals a floating-point underflow. 
+</p></blockquote></div>
+
+   </body></html>
+

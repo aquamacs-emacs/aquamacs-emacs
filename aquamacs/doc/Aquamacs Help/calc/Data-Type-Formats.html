@@ -1,0 +1,190 @@
+<html lang="en">
+<head>
+<title>Data Type Formats - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Internals.html#Internals" title="Internals">
+<link rel="next" href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions" title="Interactive Lisp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Data-Type-Formats"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions">Interactive Lisp Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Internals.html#Internals">Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.1 Data Type Formats</h5>
+
+<p class="noindent">Integers are stored in either of two ways, depending on their magnitude. 
+Integers less than one million in absolute value are stored as standard
+Lisp integers.  This is the only storage format for Calc data objects
+which is not a Lisp list.
+
+   <p>Large integers are stored as lists of the form &lsquo;<samp><span class="samp">(bigpos </span><var>d0</var>
+<var>d1</var> <var>d2</var><span class="samp"> ...)</span></samp>&rsquo; for positive integers 1000000 or more, or
+&lsquo;<samp><span class="samp">(bigneg </span><var>d0</var> <var>d1</var> <var>d2</var><span class="samp"> ...)</span></samp>&rsquo; for negative integers
+<i>-1000000</i> or less.  Each <var>d</var> is a base-1000 &ldquo;digit,&rdquo; a Lisp integer
+from 0 to 999.  The least significant digit is <var>d0</var>; the last digit,
+<var>dn</var>, which is always nonzero, is the most significant digit.  For
+example, the integer <i>-12345678</i> is stored as &lsquo;<samp><span class="samp">(bigneg 678 345 12)</span></samp>&rsquo;.
+
+   <p>The distinction between small and large integers is entirely hidden from
+the user.  In <code>defmath</code> definitions, the Lisp predicate <code>integerp</code>
+returns true for either kind of integer, and in general both big and small
+integers are accepted anywhere the word &ldquo;integer&rdquo; is used in this manual. 
+If the distinction must be made, native Lisp integers are called <dfn>fixnums</dfn>
+and large integers are called <dfn>bignums</dfn>.
+
+   <p>Fractions are stored as a list of the form, &lsquo;<samp><span class="samp">(frac </span><var>n</var> <var>d</var><span class="samp">)</span></samp>&rsquo;
+where <var>n</var> is an integer (big or small) numerator, <var>d</var> is an
+integer denominator greater than one, and <var>n</var> and <var>d</var> are relatively
+prime.  Note that fractions where <var>d</var> is one are automatically converted
+to plain integers by all math routines; fractions where <var>d</var> is negative
+are normalized by negating the numerator and denominator.
+
+   <p>Floating-point numbers are stored in the form, &lsquo;<samp><span class="samp">(float </span><var>mant</var>
+<var>exp</var><span class="samp">)</span></samp>&rsquo;, where <var>mant</var> (the &ldquo;mantissa&rdquo;) is an integer less than
+&lsquo;<samp><span class="samp">10^</span><var>p</var></samp>&rsquo; in absolute value (<var>p</var> represents the current
+precision), and <var>exp</var> (the &ldquo;exponent&rdquo;) is a fixnum.  The value of
+the float is &lsquo;<samp><var>mant</var><span class="samp"> * 10^</span><var>exp</var></samp>&rsquo;.  For example, the number
+<i>-3.14</i> is stored as &lsquo;<samp><span class="samp">(float -314 -2) = -314*10^-2</span></samp>&rsquo;.  Other constraints
+are that the number 0.0 is always stored as &lsquo;<samp><span class="samp">(float 0 0)</span></samp>&rsquo;, and,
+except for the 0.0 case, the rightmost base-10 digit of <var>mant</var> is
+always nonzero.  (If the rightmost digit is zero, the number is
+rearranged by dividing <var>mant</var> by ten and incrementing <var>exp</var>.)
+
+   <p>Rectangular complex numbers are stored in the form &lsquo;<samp><span class="samp">(cplx </span><var>re</var>
+<var>im</var><span class="samp">)</span></samp>&rsquo;, where <var>re</var> and <var>im</var> are each real numbers, either
+integers, fractions, or floats.  The value is &lsquo;<samp><var>re</var><span class="samp"> + </span><var>im</var><span class="samp">i</span></samp>&rsquo;. 
+The <var>im</var> part is nonzero; complex numbers with zero imaginary
+components are converted to real numbers automatically.
+
+   <p>Polar complex numbers are stored in the form &lsquo;<samp><span class="samp">(polar </span><var>r</var>
+<var>theta</var><span class="samp">)</span></samp>&rsquo;, where <var>r</var> is a positive real value and <var>theta</var>
+is a real value or HMS form representing an angle.  This angle is
+usually normalized to lie in the interval &lsquo;<samp><span class="samp">(-180 .. 180)</span></samp>&rsquo; degrees,
+or &lsquo;<samp><span class="samp">(-pi .. pi)</span></samp>&rsquo; radians, according to the current angular mode. 
+If the angle is 0 the value is converted to a real number automatically. 
+(If the angle is 180 degrees, the value is usually also converted to a
+negative real number.)
+
+   <p>Hours-minutes-seconds forms are stored as &lsquo;<samp><span class="samp">(hms </span><var>h</var> <var>m</var>
+<var>s</var><span class="samp">)</span></samp>&rsquo;, where <var>h</var> is an integer or an integer-valued float (i.e.,
+a float with &lsquo;<samp><var>exp</var><span class="samp"> &gt;= 0</span></samp>&rsquo;), <var>m</var> is an integer or integer-valued
+float in the range &lsquo;<samp><span class="samp">[0&nbsp;..&nbsp;60)</span></samp>&rsquo;<!-- /@w -->, and <var>s</var> is any real number
+in the range &lsquo;<samp><span class="samp">[0 .. 60)</span></samp>&rsquo;.
+
+   <p>Date forms are stored as &lsquo;<samp><span class="samp">(date </span><var>n</var><span class="samp">)</span></samp>&rsquo;, where <var>n</var> is
+a real number that counts days since midnight on the morning of
+January 1, 1 AD.  If <var>n</var> is an integer, this is a pure date
+form.  If <var>n</var> is a fraction or float, this is a date/time form.
+
+   <p>Modulo forms are stored as &lsquo;<samp><span class="samp">(mod </span><var>n</var> <var>m</var><span class="samp">)</span></samp>&rsquo;, where <var>m</var> is a
+positive real number or HMS form, and <var>n</var> is a real number or HMS
+form in the range &lsquo;<samp><span class="samp">[0 .. </span><var>m</var><span class="samp">)</span></samp>&rsquo;.
+
+   <p>Error forms are stored as &lsquo;<samp><span class="samp">(sdev </span><var>x</var> <var>sigma</var><span class="samp">)</span></samp>&rsquo;, where <var>x</var>
+is the mean value and <var>sigma</var> is the standard deviation.  Each
+component is either a number, an HMS form, or a symbolic object
+(a variable or function call).  If <var>sigma</var> is zero, the value is
+converted to a plain real number.  If <var>sigma</var> is negative or
+complex, it is automatically normalized to be a positive real.
+
+   <p>Interval forms are stored as &lsquo;<samp><span class="samp">(intv </span><var>mask</var> <var>lo</var> <var>hi</var><span class="samp">)</span></samp>&rsquo;,
+where <var>mask</var> is one of the integers 0, 1, 2, or 3, and <var>lo</var> and
+<var>hi</var> are real numbers, HMS forms, or symbolic objects.  The <var>mask</var>
+is a binary integer where 1 represents the fact that the interval is
+closed on the high end, and 2 represents the fact that it is closed on
+the low end.  (Thus 3 represents a fully closed interval.)  The interval
+&lsquo;<samp><span class="samp">(intv&nbsp;3&nbsp;</span><var>x</var><span class="samp">&nbsp;</span><var>x</var><span class="samp">)</span></samp>&rsquo;<!-- /@w --> is converted to the plain number <var>x</var>;
+intervals &lsquo;<samp><span class="samp">(intv </span><var>mask</var> <var>x</var> <var>x</var><span class="samp">)</span></samp>&rsquo; for any other <var>mask</var>
+represent empty intervals.  If <var>hi</var> is less than <var>lo</var>, the interval
+is converted to a standard empty interval by replacing <var>hi</var> with <var>lo</var>.
+
+   <p>Vectors are stored as &lsquo;<samp><span class="samp">(vec </span><var>v1</var> <var>v2</var><span class="samp"> ...)</span></samp>&rsquo;, where <var>v1</var>
+is the first element of the vector, <var>v2</var> is the second, and so on. 
+An empty vector is stored as &lsquo;<samp><span class="samp">(vec)</span></samp>&rsquo;.  A matrix is simply a vector
+where all <var>v</var>'s are themselves vectors of equal lengths.  Note that
+Calc vectors are unrelated to the Emacs Lisp &ldquo;vector&rdquo; type, which is
+generally unused by Calc data structures.
+
+   <p>Variables are stored as &lsquo;<samp><span class="samp">(var </span><var>name</var> <var>sym</var><span class="samp">)</span></samp>&rsquo;, where
+<var>name</var> is a Lisp symbol whose print name is used as the visible name
+of the variable, and <var>sym</var> is a Lisp symbol in which the variable's
+value is actually stored.  Thus, &lsquo;<samp><span class="samp">(var pi var-pi)</span></samp>&rsquo; represents the
+special constant &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;.  Almost always, the form is &lsquo;<samp><span class="samp">(var
+</span><var>v</var><span class="samp"> var-</span><var>v</var><span class="samp">)</span></samp>&rsquo;.  If the variable name was entered with <code>#</code>
+signs (which are converted to hyphens internally), the form is
+&lsquo;<samp><span class="samp">(var </span><var>u</var> <var>v</var><span class="samp">)</span></samp>&rsquo;, where <var>u</var> is a symbol whose name
+contains <code>#</code> characters, and <var>v</var> is a symbol that contains
+<code>-</code> characters instead.  The value of a variable is the Calc
+object stored in its <var>sym</var> symbol's value cell.  If the symbol's
+value cell is void or if it contains <code>nil</code>, the variable has no
+value.  Special constants have the form &lsquo;<samp><span class="samp">(special-const
+</span><var>value</var><span class="samp">)</span></samp>&rsquo; stored in their value cell, where <var>value</var> is a formula
+which is evaluated when the constant's value is requested.  Variables
+which represent units are not stored in any special way; they are units
+only because their names appear in the units table.  If the value
+cell contains a string, it is parsed to get the variable's value when
+the variable is used.
+
+   <p>A Lisp list with any other symbol as the first element is a function call. 
+The symbols <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>,
+and <code>|</code> represent special binary operators; these lists are always
+of the form &lsquo;<samp><span class="samp">(</span><var>op</var> <var>lhs</var> <var>rhs</var><span class="samp">)</span></samp>&rsquo; where <var>lhs</var> is the
+sub-formula on the lefthand side and <var>rhs</var> is the sub-formula on the
+right.  The symbol <code>neg</code> represents unary negation; this list is always
+of the form &lsquo;<samp><span class="samp">(neg </span><var>arg</var><span class="samp">)</span></samp>&rsquo;.  Any other symbol <var>func</var> represents a
+function that would be displayed in function-call notation; the symbol
+<var>func</var> is in general always of the form &lsquo;<samp><span class="samp">calcFunc-</span><var>name</var></samp>&rsquo;. 
+The function cell of the symbol <var>func</var> should contain a Lisp function
+for evaluating a call to <var>func</var>.  This function is passed the remaining
+elements of the list (themselves already evaluated) as arguments; such
+functions should return <code>nil</code> or call <code>reject-arg</code> to signify
+that they should be left in symbolic form, or they should return a Calc
+object which represents their value, or a list of such objects if they
+wish to return multiple values.  (The latter case is allowed only for
+functions which are the outer-level call in an expression whose value is
+about to be pushed on the stack; this feature is considered obsolete
+and is not used by any built-in Calc functions.)
+
+   </body></html>
+

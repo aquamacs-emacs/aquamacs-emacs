@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>GTK widget names - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link rel="next" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs" title="GTK Names in Emacs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="GTK-widget-names"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs">GTK Names in Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GTK-resources.html#GTK-resources">GTK resources</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">D.6.1 GTK widget names</h4>
+
+<p><a name="index-GTK-widget-names-4304"></a>
+  A GTK widget is specified by its <dfn>widget class</dfn> and
+<dfn>widget name</dfn>.  The widget class is the type of the widget: for
+example, <code>GtkMenuBar</code>.  The widget name is the name given to a
+specific widget.  A widget always has a class, but need not have a
+name.
+
+   <p><dfn>Absolute names</dfn> are sequences of widget names or widget
+classes, corresponding to hierarchies of widgets embedded within
+other widgets.  For example, if a <code>GtkWindow</code> named <code>top</code>
+contains a <code>GtkVBox</code> named <code>box</code>, which in turn contains
+a <code>GtkMenuBar</code> called <code>menubar</code>, the absolute class name
+of the menu-bar widget is <code>GtkWindow.GtkVBox.GtkMenuBar</code>, and
+its absolute widget name is <code>top.box.menubar</code>.
+
+   <p>When assigning a style to a widget, you can use the absolute class
+name or the absolute widget name.
+
+   <p>There are two commands to specify changes for widgets:
+
+     <dl>
+<dt><code>widget_class</code><dd>specifies a style for widgets based on the absolute class name.
+
+     <br><dt><code>widget</code><dd>specifies a style for widgets based on the absolute class name,
+or just the class. 
+</dl>
+
+<p class="noindent">You must specify the class and the style in double-quotes, and put
+these commands at the top level in the GTK customization file, like
+this:
+
+<pre class="smallexample">     style "menufont"
+     {
+       font_name = "helvetica bold 14"
+     }
+     
+     widget "top.box.menubar" style "menufont"
+     widget_class "GtkWindow.GtkVBox.GtkMenuBar" style "menufont"
+</pre>
+   <p>Matching of absolute names uses shell wildcard syntax: &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+matches zero or more characters and &lsquo;<samp><span class="samp">?</span></samp>&rsquo; matches one character. 
+This example assigns <code>base_style</code> to all widgets:
+
+<pre class="smallexample">     widget "*" style "base_style"
+</pre>
+   <p>Given the absolute class name <code>GtkWindow.GtkVBox.GtkMenuBar</code>
+and the corresponding absolute widget name <code>top.box.menubar</code>, all
+these examples specify <code>my_style</code> for the menu bar:
+
+<pre class="smallexample">     widget_class "GtkWindow.GtkVBox.GtkMenuBar" style "my_style"
+     widget_class "GtkWindow.*.GtkMenuBar" style "my_style"
+     widget_class "*GtkMenuBar" style "my_style"
+     widget "top.box.menubar" style "my_style"
+     widget "*box*menubar" style "my_style"
+     widget "*menubar" style "my_style"
+     widget "*menu*" style "my_style"
+</pre>
+   </body></html>
+

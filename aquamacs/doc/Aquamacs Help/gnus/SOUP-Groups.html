@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>SOUP Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="SOUP.html#SOUP" title="SOUP">
+<link rel="prev" href="SOUP-Commands.html#SOUP-Commands" title="SOUP Commands">
+<link rel="next" href="SOUP-Replies.html#SOUP-Replies" title="SOUP Replies">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SOUP-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SOUP-Replies.html#SOUP-Replies">SOUP Replies</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SOUP-Commands.html#SOUP-Commands">SOUP Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="SOUP.html#SOUP">SOUP</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.6.4.2 SOUP Groups</h5>
+
+<p><a name="index-nnsoup-2428"></a>
+<code>nnsoup</code> is the back end for reading <span class="sc">soup</span> packets.  It will
+read incoming packets, unpack them, and put them in a directory where
+you can read them at leisure.
+
+   <p>These are the variables you can use to customize its behavior:
+
+     <dl>
+<dt><code>nnsoup-tmp-directory</code><dd><a name="index-nnsoup_002dtmp_002ddirectory-2429"></a>When <code>nnsoup</code> unpacks a <span class="sc">soup</span> packet, it does it in this
+directory.  (<samp><span class="file">/tmp/</span></samp> by default.)
+
+     <br><dt><code>nnsoup-directory</code><dd><a name="index-nnsoup_002ddirectory-2430"></a><code>nnsoup</code> then moves each message and index file to this directory. 
+The default is <samp><span class="file">~/SOUP/</span></samp>.
+
+     <br><dt><code>nnsoup-replies-directory</code><dd><a name="index-nnsoup_002dreplies_002ddirectory-2431"></a>All replies will be stored in this directory before being packed into a
+reply packet.  The default is <samp><span class="file">~/SOUP/replies/</span></samp>.
+
+     <br><dt><code>nnsoup-replies-format-type</code><dd><a name="index-nnsoup_002dreplies_002dformat_002dtype-2432"></a>The <span class="sc">soup</span> format of the replies packets.  The default is &lsquo;<samp><span class="samp">?n</span></samp>&rsquo;
+(rnews), and I don't think you should touch that variable.  I probably
+shouldn't even have documented it.  Drats!  Too late!
+
+     <br><dt><code>nnsoup-replies-index-type</code><dd><a name="index-nnsoup_002dreplies_002dindex_002dtype-2433"></a>The index type of the replies packet.  The default is &lsquo;<samp><span class="samp">?n</span></samp>&rsquo;, which
+means &ldquo;none&rdquo;.  Don't fiddle with this one either!
+
+     <br><dt><code>nnsoup-active-file</code><dd><a name="index-nnsoup_002dactive_002dfile-2434"></a>Where <code>nnsoup</code> stores lots of information.  This is not an &ldquo;active
+file&rdquo; in the <code>nntp</code> sense; it's an Emacs Lisp file.  If you lose
+this file or mess it up in any way, you're dead.  The default is
+<samp><span class="file">~/SOUP/active</span></samp>.
+
+     <br><dt><code>nnsoup-packer</code><dd><a name="index-nnsoup_002dpacker-2435"></a>Format string command for packing a reply <span class="sc">soup</span> packet.  The default
+is &lsquo;<samp><span class="samp">tar cf - %s | gzip &gt; $HOME/Soupin%d.tgz</span></samp>&rsquo;.
+
+     <br><dt><code>nnsoup-unpacker</code><dd><a name="index-nnsoup_002dunpacker-2436"></a>Format string command for unpacking incoming <span class="sc">soup</span> packets.  The
+default is &lsquo;<samp><span class="samp">gunzip -c %s | tar xvf -</span></samp>&rsquo;.
+
+     <br><dt><code>nnsoup-packet-directory</code><dd><a name="index-nnsoup_002dpacket_002ddirectory-2437"></a>Where <code>nnsoup</code> will look for incoming packets.  The default is
+<samp><span class="file">~/</span></samp>.
+
+     <br><dt><code>nnsoup-packet-regexp</code><dd><a name="index-nnsoup_002dpacket_002dregexp-2438"></a>Regular expression matching incoming <span class="sc">soup</span> packets.  The default is
+&lsquo;<samp><span class="samp">Soupout</span></samp>&rsquo;.
+
+     <br><dt><code>nnsoup-always-save</code><dd><a name="index-nnsoup_002dalways_002dsave-2439"></a>If non-<code>nil</code>, save the replies buffer after each posted message.
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Help with Source - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Online-Help.html#Online-Help" title="Online Help">
+<link rel="prev" href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation" title="Help with HTML Documentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Help-with-Source"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Online-Help.html#Online-Help">Online Help</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.3.2 Help with Source</h4>
+
+<p><a name="index-Help-using-routine-source-110"></a>
+<a name="index-Source-code_002c-as-online-help-111"></a><a name="index-DocLib-header_002c-as-online-help-112"></a>For routines which are not documented in an HTML manual (for example
+personal or library routines), the source code itself is used as help
+text.  If the requested information can be found in a (more or less)
+standard DocLib file header, IDLWAVE shows the header (scrolling down to
+a keyword, if appropriate).  Otherwise the routine definition statement
+(<code>pro</code>/<code>function</code>) is shown.  The doclib header sections which
+are searched for include &lsquo;<samp><span class="samp">NAME</span></samp>&rsquo; and &lsquo;<samp><span class="samp">KEYWORDS</span></samp>&rsquo;.  Localization
+support can be added by customizing the <code>idlwave-help-doclib-name</code>
+and <code>idlwave-help-doclib-keyword</code> variables.
+
+   <p><a name="index-Structure-tags_002c-in-online-help-113"></a><a name="index-Class-tags_002c-in-online-help-114"></a>Help is also available for class structure tags (<code>self.TAG</code>), and
+generic structure tags, if structure tag completion is enabled
+(see <a href="Structure-Tag-Completion.html#Structure-Tag-Completion">Structure Tag Completion</a>).  This is implemented by visiting the
+tag within the class or structure definition source itself.  Help is not
+available on built-in system class tags.
+
+   <p>The help window is normally displayed in the same frame, but can be
+popped-up in a separate frame.  The following commands can be used to
+navigate inside the help system for source files:
+
+   <p><table summary=""><tr align="left"><td valign="top" width="15%"><kbd>&lt;SPACE&gt;</kbd>
+</td><td valign="top" width="85%">Scroll forward one page. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>&lt;RET&gt;</kbd>
+</td><td valign="top" width="85%">Scroll forward one line. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>&lt;DEL&gt;</kbd>
+</td><td valign="top" width="85%">Scroll back one page. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>h</kbd>
+</td><td valign="top" width="85%">Jump to DocLib Header of the routine whose source is displayed
+as help. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>H</kbd>
+</td><td valign="top" width="85%">Jump to the first DocLib Header in the file. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>.</kbd> <span class="roman">(Dot)</span>
+</td><td valign="top" width="85%">Jump back and forth between the routine definition (the
+<code>pro</code>/<code>function</code> statement) and the description of the help
+item in the DocLib header. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>F</kbd>
+</td><td valign="top" width="85%">Fontify the buffer like source code.  See the variable <code>idlwave-help-fontify-source-code</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>q</kbd>
+</td><td valign="top" width="85%">Kill the help window.
+   <br></td></tr></table>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-use-dedicated-frame</b> (<code>nil</code>)<var><a name="index-idlwave_002dhelp_002duse_002ddedicated_002dframe-115"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means use a separate frame for Online Help if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-frame-parameters</b><var><a name="index-idlwave_002dhelp_002dframe_002dparameters-116"></a></var><br>
+<blockquote><p>The frame parameters for the special Online Help frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-max-popup-menu-items</b> (<code>20</code>)<var><a name="index-idlwave_002dmax_002dpopup_002dmenu_002ditems-117"></a></var><br>
+<blockquote><p>Maximum number of items per pane in pop-up menus. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-extra-help-function</b><var><a name="index-idlwave_002dextra_002dhelp_002dfunction-118"></a></var><br>
+<blockquote><p>Function to call for help if the normal help fails. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-fontify-source-code</b> (<code>nil</code>)<var><a name="index-idlwave_002dhelp_002dfontify_002dsource_002dcode-119"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means fontify source code displayed as help. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-source-try-header</b> (<code>t</code>)<var><a name="index-idlwave_002dhelp_002dsource_002dtry_002dheader-120"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means try to find help in routine header when
+displaying source file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-doclib-name</b> (<code>"name"</code>)<var><a name="index-idlwave_002dhelp_002ddoclib_002dname-121"></a></var><br>
+<blockquote><p>The case-insensitive heading word in doclib headers to locate the
+<em>name</em> section.  Can be a regexp, e.g. <code>"\\(name\\|nom\\)"</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-doclib-keyword</b> (<code>"KEYWORD"</code>)<var><a name="index-idlwave_002dhelp_002ddoclib_002dkeyword-122"></a></var><br>
+<blockquote><p>The case-insensitive heading word in doclib headers to locate the
+<em>keywords</em> section.  Can be a regexp. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Images in LaTeX export - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="LaTeX-and-PDF-export.html#LaTeX-and-PDF-export" title="LaTeX and PDF export">
+<link rel="prev" href="Tables-in-LaTeX-export.html#Tables-in-LaTeX-export" title="Tables in LaTeX export">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Images-in-LaTeX-export"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tables-in-LaTeX-export.html#Tables-in-LaTeX-export">Tables in LaTeX export</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="LaTeX-and-PDF-export.html#LaTeX-and-PDF-export">LaTeX and PDF export</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.6.5 Images in LaTeX export</h4>
+
+<p><a name="index-images_002c-inline-in-La_0040TeX_007b_007d-1154"></a><a name="index-inlining-images-in-La_0040TeX_007b_007d-1155"></a>
+Images that are linked to without a description part in the link, like
+&lsquo;<samp><span class="samp">[[file:img.jpg]]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[[./img.jpg]]</span></samp>&rsquo; will be inserted into the PDF
+output file resulting from LaTeX processing.  Org will use an
+<code>\includegraphics</code> macro to insert the image.  If you have specified a
+caption and/or a label as described in <a href="Images-and-tables.html#Images-and-tables">Images and tables</a>, the figure
+will be wrapped into a <code>figure</code> environment and thus become a floating
+element.  You can use an <code>#+ATTR_LaTeX:</code> line to specify the various
+options that can be used in the optional argument of the
+<code>\includegraphics</code> macro.  To modify the placement option of the
+<code>figure</code> environment, add something like &lsquo;<samp><span class="samp">placement=[h!]</span></samp>&rsquo; to the
+Attributes.
+
+   <p>If you'd like to let text flow around the image, add the word &lsquo;<samp><span class="samp">wrap</span></samp>&rsquo; to
+the <code>#+ATTR_LaTeX:</code> line, which will make the figure occupy the left
+half of the page.  To fine-tune, the <code>placement</code> field will be the
+set of additional arguments needed by the <code>wrapfigure</code> environment. 
+Note that if you change the size of the image, you need to use compatible
+settings for <code>\includegraphics</code> and <code>wrapfigure</code>.
+
+   <p><a name="index-g_t_0023_002bCAPTION-1156"></a><a name="index-g_t_0023_002bLABEL-1157"></a><a name="index-g_t_0023_002bATTR_005fLaTeX-1158"></a>
+<pre class="example">     #+CAPTION:    The black-body emission of the disk around HR 4049
+     #+LABEL:      fig:SED-HR4049
+     #+ATTR_LaTeX: width=5cm,angle=90
+     [[./img/sed-hr4049.pdf]]
+     
+     #+ATTR_LaTeX: width=0.38\textwidth wrap placement={r}{0.4\textwidth}
+     [[./img/hst.png]]
+</pre>
+   <p>If you need references to a label created in this way, write
+&lsquo;<samp><span class="samp">\ref{fig:SED-HR4049}</span></samp>&rsquo; just like in LaTeX.
+
+   </body></html>
+

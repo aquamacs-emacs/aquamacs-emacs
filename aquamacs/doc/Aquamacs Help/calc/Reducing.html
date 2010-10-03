@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Reducing - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
+<link rel="prev" href="Mapping.html#Mapping" title="Mapping">
+<link rel="next" href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" title="Nesting and Fixed Points">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Reducing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points">Nesting and Fixed Points</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mapping.html#Mapping">Mapping</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.8.3 Reducing</h4>
+
+<p class="noindent"><a name="index-v-R-1512"></a><a name="index-V-R-1513"></a><a name="index-calc_002dreduce-1514"></a><a name="index-reduce-1515"></a>The <kbd>V R</kbd> (<code>calc-reduce</code>) [<code>reduce</code>] command applies a given
+binary operator across all the elements of a vector.  A binary operator is
+a function such as <code>+</code> or <code>max</code> which takes two arguments.  For
+example, reducing <code>+</code> over a vector computes the sum of the elements
+of the vector.  Reducing <code>-</code> computes the first element minus each of
+the remaining elements.  Reducing <code>max</code> computes the maximum element
+and so on.  In general, reducing <code>f</code> over the vector &lsquo;<samp><span class="samp">[a, b, c, d]</span></samp>&rsquo;
+produces &lsquo;<samp><span class="samp">f(f(f(a, b), c), d)</span></samp>&rsquo;.
+
+   <p><a name="index-I-v-R-1516"></a><a name="index-I-V-R-1517"></a><a name="index-rreduce-1518"></a>The <kbd>I V R</kbd> [<code>rreduce</code>] command is similar to <kbd>V R</kbd> except
+that works from right to left through the vector.  For example, plain
+<kbd>V R -</kbd> on the vector &lsquo;<samp><span class="samp">[a, b, c, d]</span></samp>&rsquo; produces &lsquo;<samp><span class="samp">a - b - c - d</span></samp>&rsquo;
+but <kbd>I V R -</kbd> on the same vector produces &lsquo;<samp><span class="samp">a - (b - (c - d))</span></samp>&rsquo;,
+or &lsquo;<samp><span class="samp">a - b + c - d</span></samp>&rsquo;.  This &ldquo;alternating sum&rdquo; occurs frequently
+in power series expansions.
+
+   <p><a name="index-v-U-1519"></a><a name="index-V-U-1520"></a><a name="index-accum-1521"></a>The <kbd>V U</kbd> (<code>calc-accumulate</code>) [<code>accum</code>] command does an
+accumulation operation.  Here Calc does the corresponding reduction
+operation, but instead of producing only the final result, it produces
+a vector of all the intermediate results.  Accumulating <code>+</code> over
+the vector &lsquo;<samp><span class="samp">[a, b, c, d]</span></samp>&rsquo; produces the vector
+&lsquo;<samp><span class="samp">[a, a + b, a + b + c, a + b + c + d]</span></samp>&rsquo;.
+
+   <p><a name="index-I-v-U-1522"></a><a name="index-I-V-U-1523"></a><a name="index-raccum-1524"></a>The <kbd>I V U</kbd> [<code>raccum</code>] command does a right-to-left accumulation. 
+For example, <kbd>I V U -</kbd> on the vector &lsquo;<samp><span class="samp">[a, b, c, d]</span></samp>&rsquo; produces the
+vector &lsquo;<samp><span class="samp">[a - b + c - d, b - c + d, c - d, d]</span></samp>&rsquo;.
+
+   <p><a name="index-reducea-1525"></a><a name="index-rreducea-1526"></a><a name="index-reduced-1527"></a><a name="index-rreduced-1528"></a>As for <kbd>V M</kbd>, <kbd>V R</kbd> normally reduces a matrix elementwise.  For
+example, given the matrix &lsquo;<samp><span class="samp">[[a, b, c], [d, e, f]]</span></samp>&rsquo;, <kbd>V R +</kbd> will
+compute &lsquo;<samp><span class="samp">a + b + c + d + e + f</span></samp>&rsquo;.  You can type <kbd>V R _</kbd> or
+<kbd>V R :</kbd> to modify this behavior.  The <kbd>V R _</kbd> [<code>reducea</code>]
+command reduces &ldquo;across&rdquo; the matrix; it reduces each row of the matrix
+as a vector, then collects the results.  Thus <kbd>V R _ +</kbd> of this
+matrix would produce &lsquo;<samp><span class="samp">[a + b + c, d + e + f]</span></samp>&rsquo;.  Similarly, <kbd>V R :</kbd>
+[<code>reduced</code>] reduces down; <kbd>V R : +</kbd> would produce &lsquo;<samp><span class="samp">[a + d,
+b + e, c + f]</span></samp>&rsquo;.
+
+   <p><a name="index-reducer-1529"></a><a name="index-rreducer-1530"></a>There is a third &ldquo;by rows&rdquo; mode for reduction that is occasionally
+useful; <kbd>V R =</kbd> [<code>reducer</code>] simply reduces the operator over
+the rows of the matrix themselves.  Thus <kbd>V R = +</kbd> on the above
+matrix would get the same result as <kbd>V R : +</kbd>, since adding two
+row vectors is equivalent to adding their elements.  But <kbd>V R = *</kbd>
+would multiply the two rows (to get a single number, their dot product),
+while <kbd>V R : *</kbd> would produce a vector of the products of the columns.
+
+   <p>These three matrix reduction modes work with <kbd>V R</kbd> and <kbd>I V R</kbd>,
+but they are not currently supported with <kbd>V U</kbd> or <kbd>I V U</kbd>.
+
+   <p><a name="index-reducec-1531"></a><a name="index-rreducec-1532"></a>The obsolete reduce-by-columns function, <code>reducec</code>, is still
+supported but there is no way to get it through the <kbd>V R</kbd> command.
+
+   <p>The commands <kbd>C-x * :</kbd> and <kbd>C-x * _</kbd> are equivalent to typing
+<kbd>C-x * r</kbd> to grab a rectangle of data into Calc, and then typing
+<kbd>V R : +</kbd> or <kbd>V R _ +</kbd>, respectively, to sum the columns or
+rows of the matrix.  See <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers">Grabbing From Buffers</a>.
+
+   </body></html>
+

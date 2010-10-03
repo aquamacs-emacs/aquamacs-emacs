@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Simplification Modes - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="Calculation-Modes.html#Calculation-Modes" title="Calculation Modes">
+<link rel="next" href="Declarations.html#Declarations" title="Declarations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Simplification-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Declarations.html#Declarations">Declarations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Calculation-Modes.html#Calculation-Modes">Calculation Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.5 Simplification Modes</h3>
+
+<p class="noindent">The current <dfn>simplification mode</dfn> controls how numbers and formulas
+are &ldquo;normalized&rdquo; when being taken from or pushed onto the stack. 
+Some normalizations are unavoidable, such as rounding floating-point
+results to the current precision, and reducing fractions to simplest
+form.  Others, such as simplifying a formula like &lsquo;<samp><span class="samp">a+a</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">2+3</span></samp>&rsquo;),
+are done by default but can be turned off when necessary.
+
+   <p>When you press a key like <kbd>+</kbd> when &lsquo;<samp><span class="samp">2</span></samp>&rsquo; and &lsquo;<samp><span class="samp">3</span></samp>&rsquo; are on the
+stack, Calc pops these numbers, normalizes them, creates the formula
+&lsquo;<samp><span class="samp">2+3</span></samp>&rsquo;, normalizes it, and pushes the result.  Of course the standard
+rules for normalizing &lsquo;<samp><span class="samp">2+3</span></samp>&rsquo; will produce the result &lsquo;<samp><span class="samp">5</span></samp>&rsquo;.
+
+   <p>Simplification mode commands consist of the lower-case <kbd>m</kbd> prefix key
+followed by a shifted letter.
+
+   <p><a name="index-m-O-443"></a><a name="index-calc_002dno_002dsimplify_002dmode-444"></a>The <kbd>m O</kbd> (<code>calc-no-simplify-mode</code>) command turns off all optional
+simplifications.  These would leave a formula like &lsquo;<samp><span class="samp">2+3</span></samp>&rsquo; alone.  In
+fact, nothing except simple numbers are ever affected by normalization
+in this mode.
+
+   <p><a name="index-m-N-445"></a><a name="index-calc_002dnum_002dsimplify_002dmode-446"></a>The <kbd>m N</kbd> (<code>calc-num-simplify-mode</code>) command turns off simplification
+of any formulas except those for which all arguments are constants.  For
+example, &lsquo;<samp><span class="samp">1+2</span></samp>&rsquo; is simplified to &lsquo;<samp><span class="samp">3</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">a+(2-2)</span></samp>&rsquo; is
+simplified to &lsquo;<samp><span class="samp">a+0</span></samp>&rsquo; but no further, since one argument of the sum
+is not a constant.  Unfortunately, &lsquo;<samp><span class="samp">(a+2)-2</span></samp>&rsquo; is <em>not</em> simplified
+because the top-level &lsquo;<samp><span class="samp">-</span></samp>&rsquo; operator's arguments are not both
+constant numbers (one of them is the formula &lsquo;<samp><span class="samp">a+2</span></samp>&rsquo;). 
+A constant is a number or other numeric object (such as a constant
+error form or modulo form), or a vector all of whose
+elements are constant.
+
+   <p><a name="index-m-D-447"></a><a name="index-calc_002ddefault_002dsimplify_002dmode-448"></a>The <kbd>m D</kbd> (<code>calc-default-simplify-mode</code>) command restores the
+default simplifications for all formulas.  This includes many easy and
+fast algebraic simplifications such as &lsquo;<samp><span class="samp">a+0</span></samp>&rsquo; to &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">a + 2 a</span></samp>&rsquo; to &lsquo;<samp><span class="samp">3 a</span></samp>&rsquo;, as well as evaluating functions like
+&lsquo;<samp><tt>deriv</tt><span class="samp">(x^2, x)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">2 x</span></samp>&rsquo;.
+
+   <p><a name="index-m-B-449"></a><a name="index-calc_002dbin_002dsimplify_002dmode-450"></a>The <kbd>m B</kbd> (<code>calc-bin-simplify-mode</code>) mode applies the default
+simplifications to a result and then, if the result is an integer,
+uses the <kbd>b c</kbd> (<code>calc-clip</code>) command to clip the integer according
+to the current binary word size.  See <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>.  Real numbers
+are rounded to the nearest integer and then clipped; other kinds of
+results (after the default simplifications) are left alone.
+
+   <p><a name="index-m-A-451"></a><a name="index-calc_002dalg_002dsimplify_002dmode-452"></a>The <kbd>m A</kbd> (<code>calc-alg-simplify-mode</code>) mode does algebraic
+simplification; it applies all the default simplifications, and also
+the more powerful (and slower) simplifications made by <kbd>a s</kbd>
+(<code>calc-simplify</code>).  See <a href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>.
+
+   <p><a name="index-m-E-453"></a><a name="index-calc_002dext_002dsimplify_002dmode-454"></a>The <kbd>m E</kbd> (<code>calc-ext-simplify-mode</code>) mode does &ldquo;extended&rdquo;
+algebraic simplification, as by the <kbd>a e</kbd> (<code>calc-simplify-extended</code>)
+command.  See <a href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>.
+
+   <p><a name="index-m-U-455"></a><a name="index-calc_002dunits_002dsimplify_002dmode-456"></a>The <kbd>m U</kbd> (<code>calc-units-simplify-mode</code>) mode does units
+simplification; it applies the command <kbd>u s</kbd>
+(<code>calc-simplify-units</code>), which in turn
+is a superset of <kbd>a s</kbd>.  In this mode, variable names which
+are identifiable as unit names (like &lsquo;<samp><span class="samp">mm</span></samp>&rsquo; for &ldquo;millimeters&rdquo;)
+are simplified with their unit definitions in mind.
+
+   <p>A common technique is to set the simplification mode down to the lowest
+amount of simplification you will allow to be applied automatically, then
+use manual commands like <kbd>a s</kbd> and <kbd>c c</kbd> (<code>calc-clean</code>) to
+perform higher types of simplifications on demand.  See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>, for another sample use of No-Simplification mode.
+
+   </body></html>
+

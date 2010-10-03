@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Consistency Checks - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Index-Phrases-File.html#The-Index-Phrases-File" title="The Index Phrases File">
+<link rel="prev" href="Collecting-Phrases.html#Collecting-Phrases" title="Collecting Phrases">
+<link rel="next" href="Global-Indexing.html#Global-Indexing" title="Global Indexing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Consistency-Checks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Global-Indexing.html#Global-Indexing">Global Indexing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Collecting-Phrases.html#Collecting-Phrases">Collecting Phrases</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.2 Consistency Checks</h4>
+
+<p><a name="index-Index-phrases_002c-consistency-checks-247"></a><a name="index-Phrases_002c-consistency-checks-248"></a><a name="index-Consistency-check-for-index-phrases-249"></a>
+<a name="index-C_002dc-C_002ds-250"></a>Before indexing the phrases in the phrases buffer, they should be
+checked carefully for consistency.  A first step is to sort the phrases
+alphabetically - this is done with the command <kbd>C-c C-s</kbd>
+(<code>reftex-index-sort-phrases</code>).  It will sort all phrases in the
+buffer alphabetically by search phrase.  If you want to group certain
+phrases and only sort within the groups, insert empty lines between the
+groups.  Sorting will only change the sequence of phrases within each
+group (see the variable <code>reftex-index-phrases-sort-in-blocks</code>).
+
+   <p><a name="index-C_002dc-C_002di-251"></a>A useful command is <kbd>C-c C-i</kbd> (<code>reftex-index-phrases-info</code>)
+which lists information about the phrase at point, including an example
+of how the index entry will look like and the number of expected matches
+in the document.
+
+   <p><a name="index-C_002dc-C_002dt-252"></a>Another important check is to find out if there are double or
+overlapping entries in the buffer.  For example if you are first
+searching and indexing &lsquo;<samp><span class="samp">Mars</span></samp>&rsquo; and then &lsquo;<samp><span class="samp">Planet Mars</span></samp>&rsquo;, the
+second phrase will not match because of the index macro inserted before
+&lsquo;<samp><span class="samp">Mars</span></samp>&rsquo; earlier.  The command <kbd>C-c C-t</kbd>
+(<code>reftex-index-find-next-conflict-phrase</code>) finds the next phrase in
+the buffer which is either duplicate or a subphrase of another phrase. 
+In order to check the whole buffer like this, start at the beginning and
+execute this command repeatedly.
+
+   </body></html>
+

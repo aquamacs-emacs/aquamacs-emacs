@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>States in Viper - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Overview.html#Overview" title="Overview">
+<link rel="prev" href="Loading-Viper.html#Loading-Viper" title="Loading Viper">
+<link rel="next" href="The-Minibuffer.html#The-Minibuffer" title="The Minibuffer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="States-in-Viper"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-Minibuffer.html#The-Minibuffer">The Minibuffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading-Viper.html#Loading-Viper">Loading Viper</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Overview.html#Overview">Overview</a>
+<hr>
+</div>
+
+<h3 class="section">1.3 States in Viper</h3>
+
+<p><a name="index-g_t_0040kbd_007bC_002dz_007d-24"></a><a name="index-g_t_0040key_007bESC_007d-25"></a><a name="index-g_t_0040kbd_007bi_007d-26"></a><a name="index-Emacs-state-27"></a><a name="index-Vi-state-28"></a><a name="index-Insert-state-29"></a><a name="index-Replace-state-30"></a><a name="index-Ex-commands-31"></a><a name="index-g_t_0040code_007bviper_002dgo_002daway_007d-32"></a><a name="index-g_t_0040code_007btoggle_002dviper_002dmode_007d-33"></a>
+Viper has four states, Emacs, Vi, Insert, and Replace.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">Emacs state</span></samp>&rsquo;<dd>This is the state plain vanilla Emacs is normally in.  After you have loaded
+Viper, <kbd>C-z</kbd> will normally take you to Vi command state.  Another
+<kbd>C-z</kbd> will take you back to Emacs state.  This toggle key can be
+changed, see <a href="Customization.html#Customization">Customization</a> You can also type <kbd>M-x viper-mode</kbd> to
+change to Vi state.
+
+     <p>For users who chose to set their user level to 1 at Viper setup time,
+switching to Emacs state is deliberately made harder in order to not
+confuse the novice user.  In this case, <kbd>C-z</kbd> will either iconify Emacs
+(if Emacs runs as an application under X) or it will stop Emacs (if
+Emacs runs on a dumb terminal or in an Xterm window).
+
+     <br><dt>&lsquo;<samp><span class="samp">Vi state</span></samp>&rsquo;<dd>This is the Vi command mode.  Any of the Vi commands, such as <kbd>i, o, a</kbd>,
+<small class="dots">...</small>, will take you to Insert state.  All Vi commands may
+be used in this mode.  Most Ex commands can also be used. 
+For a full list of Ex commands supported by Viper, type
+<kbd>:</kbd> and then &lt;TAB&gt;.  To get help on any issue, including the Ex
+commands, type <kbd>:help</kbd>.  This will invoke Viper Info
+(if it is installed).  Then typing <kbd>i</kbd> will prompt you for a topic to
+search in the index.  Note: to search for Ex commands in the index, you
+should start them with a <kbd>:</kbd>, e.g., <kbd>:WW</kbd>.
+
+     <p>In Viper, Ex commands can be made to work on the current Emacs region. 
+This is done by typing a digit argument before <kbd>:</kbd>. 
+For instance, typing <kbd>1:</kbd> will prompt you with something like
+<em>:123,135</em>, assuming that the current region starts at line 123 and
+ends at line 135.  There is no need to type the line numbers, since Viper
+inserts them automatically in front of the Ex command.
+
+     <br><dt>&lsquo;<samp><span class="samp">Insert state</span></samp>&rsquo;<dd>Insert state is the Vi insertion mode.  &lt;ESC&gt; will take you back to
+Vi state.  Insert state editing can be done, including auto-indentation.  By
+default, Viper disables Emacs key bindings in Insert state.
+
+     <br><dt>&lsquo;<samp><span class="samp">Replace state</span></samp>&rsquo;<dd>Commands like <kbd>cw</kbd> invoke the Replace state.  When you cross the
+boundary of a replacement region (usually designated via a &lsquo;<samp><span class="samp">$</span></samp>&rsquo; sign),
+it will automatically change to Insert state.  You do not have to worry
+about it.  The key bindings remain practically the same as in Insert
+state.  If you type &lt;ESC&gt;, Viper will switch to Vi command mode, terminating the
+replacement state. 
+</dl>
+
+   <p><a name="index-mode-line-34"></a>
+The modes are indicated on the <dfn>mode line</dfn> as &lt;E&gt;, &lt;I&gt;, &lt;V&gt;, and &lt;R&gt;,
+so that the multiple modes do not confuse you.  Most of your editing can be
+done in Vi and Insert states.  Viper will try to make all new buffers be in Vi
+state, but sometimes they may come up in Emacs state.  <kbd>C-z</kbd>
+will take you to Vi state in such a case.  In some major modes, like Dired,
+Info, Gnus, etc., you should not switch to Vi state (and Viper will not
+attempt to do so) because these modes are not intended for text editing and
+many of the Vi keys have special meaning there.  If you plan to read news,
+browse directories, read mail, etc., from Emacs (which you should start
+doing soon!), you should learn about the meaning of the various keys in
+those special modes (typing <kbd>C-h m</kbd> in a buffer provides
+help with key bindings for the major mode of that buffer).
+
+   <p>If you switch to Vi in Dired or similar modes&mdash;no harm is done.  It is just
+that the special key bindings provided by those modes will be temporarily
+overshadowed by Viper's bindings.  Switching back to Viper's Emacs state
+will revive the environment provided by the current major mode.
+
+   <p>States in Viper are orthogonal to Emacs major modes, such as C mode or Dired
+mode.  You can turn Viper on and off for any Emacs state.  When Viper is turned
+on, Vi state can be used to move around.  In Insert state, the bindings for
+these modes can be accessed.  For beginners (users at Viper levels 1 and 2),
+these bindings are suppressed in Insert state, so that new users are not
+confused by the Emacs states.  Note that unless you allow Emacs bindings in
+Insert state, you cannot do many interesting things, like language
+sensitive editing.  For the novice user (at Viper level 1), all major mode
+bindings are turned off in Vi state as well.  This includes the bindings for
+key sequences that start with <kbd>C-c</kbd>, which practically means that all
+major mode bindings are unsupported.  See <a href="Customization.html#Customization">Customization</a>, to find out how
+to allow Emacs keys in Insert state.
+
+<ul class="menu">
+<li><a accesskey="1" href="Emacs-State.html#Emacs-State">Emacs State</a>:          This is the state you should learn more about when
+                        you get up to speed with Viper. 
+<li><a accesskey="2" href="Vi-State.html#Vi-State">Vi State</a>:             Vi commands are executed in this state. 
+<li><a accesskey="3" href="Insert-State.html#Insert-State">Insert State</a>:         You can enter text, and also can do sophisticated
+                        editing if you know enough Emacs commands. 
+<li><a accesskey="4" href="Replace-State.html#Replace-State">Replace State</a>:        Like Insert mode, but it is invoked via the
+                        replacement commands, such as cw, C, R, etc. 
+</ul>
+
+   </body></html>
+

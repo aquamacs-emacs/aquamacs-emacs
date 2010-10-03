@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Global Score Files - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scoring.html#Scoring" title="Scoring">
+<link rel="prev" href="Reverse-Scoring.html#Reverse-Scoring" title="Reverse Scoring">
+<link rel="next" href="Kill-Files.html#Kill-Files" title="Kill Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Global-Score-Files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Kill-Files.html#Kill-Files">Kill Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reverse-Scoring.html#Reverse-Scoring">Reverse Scoring</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
+<hr>
+</div>
+
+<h3 class="section">7.12 Global Score Files</h3>
+
+<p><a name="index-global-score-files-2687"></a>
+Sure, other newsreaders have &ldquo;global kill files&rdquo;.  These are usually
+nothing more than a single kill file that applies to all groups, stored
+in the user's home directory.  Bah!  Puny, weak newsreaders!
+
+   <p>What I'm talking about here are Global Score Files.  Score files from
+all over the world, from users everywhere, uniting all nations in one
+big, happy score file union!  Ange-score!  New and untested!
+
+   <p><a name="index-gnus_002dglobal_002dscore_002dfiles-2688"></a>All you have to do to use other people's score files is to set the
+<code>gnus-global-score-files</code> variable.  One entry for each score file,
+or each score file directory.  Gnus will decide by itself what score
+files are applicable to which group.
+
+   <p>To use the score file
+<samp><span class="file">/ftp@ftp.gnus.org:/pub/larsi/ding/score/soc.motss.SCORE</span></samp> and
+all score files in the <samp><span class="file">/ftp@ftp.some-where:/pub/score</span></samp> directory,
+say this:
+
+<pre class="lisp">     (setq gnus-global-score-files
+           '("/ftp@ftp.gnus.org:/pub/larsi/ding/score/soc.motss.SCORE"
+             "/ftp@ftp.some-where:/pub/score/"))
+</pre>
+   <p><a name="index-gnus_002dscore_002dsearch_002dglobal_002ddirectories-2689"></a>Simple, eh?  Directory names must end with a &lsquo;<samp><span class="samp">/</span></samp>&rsquo;.  These
+directories are typically scanned only once during each Gnus session. 
+If you feel the need to manually re-scan the remote directories, you can
+use the <code>gnus-score-search-global-directories</code> command.
+
+   <p>Note that, at present, using this option will slow down group entry
+somewhat.  (That is&mdash;a lot.)
+
+   <p>If you want to start maintaining score files for other people to use,
+just put your score file up for anonymous ftp and announce it to the
+world.  Become a retro-moderator!  Participate in the retro-moderator
+wars sure to ensue, where retro-moderators battle it out for the
+sympathy of the people, luring them to use their score files on false
+premises!  Yay!  The net is saved!
+
+   <p>Here are some tips for the would-be retro-moderator, off the top of my
+head:
+
+     <ul>
+<li>Articles heavily crossposted are probably junk. 
+<li>To lower a single inappropriate article, lower by <code>Message-ID</code>. 
+<li>Particularly brilliant authors can be raised on a permanent basis. 
+<li>Authors that repeatedly post off-charter for the group can safely be
+lowered out of existence. 
+<li>Set the <code>mark</code> and <code>expunge</code> atoms to obliterate the nastiest
+articles completely.
+
+     <li>Use expiring score entries to keep the size of the file down.  You
+should probably have a long expiry period, though, as some sites keep
+old articles for a long time. 
+</ul>
+
+<small class="dots">...</small><p>I wonder whether other newsreaders will support global score files
+in the future.  <em>Snicker</em>.  Yup, any day now, newsreaders like Blue
+Wave, xrn and 1stReader are bound to implement scoring.  Should we start
+holding our breath yet?
+
+   </body></html>
+

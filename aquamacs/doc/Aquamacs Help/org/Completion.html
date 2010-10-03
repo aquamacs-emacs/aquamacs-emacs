@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Completion - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
+<link rel="prev" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
+<link rel="next" href="Speed-keys.html#Speed-keys" title="Speed keys">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Completion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Speed-keys.html#Speed-keys">Speed keys</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>
+<hr>
+</div>
+
+<h3 class="section">14.1 Completion</h3>
+
+<p><a name="index-completion_002c-of-_0040TeX_007b_007d-symbols-1273"></a><a name="index-completion_002c-of-TODO-keywords-1274"></a><a name="index-completion_002c-of-dictionary-words-1275"></a><a name="index-completion_002c-of-option-keywords-1276"></a><a name="index-completion_002c-of-tags-1277"></a><a name="index-completion_002c-of-property-keys-1278"></a><a name="index-completion_002c-of-link-abbreviations-1279"></a><a name="index-g_t_0040TeX_007b_007d-symbol-completion-1280"></a><a name="index-TODO-keywords-completion-1281"></a><a name="index-dictionary-word-completion-1282"></a><a name="index-option-keyword-completion-1283"></a><a name="index-tag-completion-1284"></a><a name="index-link-abbreviations_002c-completion-of-1285"></a>
+Emacs would not be Emacs without completion, and Org-mode uses it whenever it
+makes sense.  If you prefer an <i>iswitchb</i>- or <i>ido</i>-like interface for
+some of the completion prompts, you can specify your preference by setting at
+most one of the variables <code>org-completion-use-iswitchb</code>
+<code>org-completion-use-ido</code>.
+
+   <p>Org supports in-buffer completion.  This type of completion does
+not make use of the minibuffer.  You simply type a few letters into
+the buffer and use the key to complete text right there.
+
+     
+<a name="index-M_002d_0040key_007bTAB_007d-1286"></a>
+<dl><dt><kbd>M-&lt;TAB&gt;</kbd><dd>Complete word at point
+          <ul>
+<li>At the beginning of a headline, complete TODO keywords. 
+<li>After &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, complete TeX symbols supported by the exporter. 
+<li>After &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, complete headlines in the current buffer so that they
+can be used in search links like &lsquo;<samp><span class="samp">[[*find this headline]]</span></samp>&rsquo;. 
+<li>After &lsquo;<samp><span class="samp">:</span></samp>&rsquo; in a headline, complete tags.  The list of tags is taken
+from the variable <code>org-tag-alist</code> (possibly set through the
+&lsquo;<samp><span class="samp">#+TAGS</span></samp>&rsquo; in-buffer option, see <a href="Setting-tags.html#Setting-tags">Setting tags</a>), or it is created
+dynamically from all tags used in the current buffer. 
+<li>After &lsquo;<samp><span class="samp">:</span></samp>&rsquo; and not in a headline, complete property keys.  The list
+of keys is constructed dynamically from all keys used in the current
+buffer. 
+<li>After &lsquo;<samp><span class="samp">[</span></samp>&rsquo;, complete link abbreviations (see <a href="Link-abbreviations.html#Link-abbreviations">Link abbreviations</a>). 
+<li>After &lsquo;<samp><span class="samp">#+</span></samp>&rsquo;, complete the special keywords like &lsquo;<samp><span class="samp">TYP_TODO</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">OPTIONS</span></samp>&rsquo; which set file-specific options for Org mode.  When the
+option keyword is already complete, pressing <kbd>M-&lt;TAB&gt;</kbd> again
+will insert example settings for this keyword. 
+<li>In the line after &lsquo;<samp><span class="samp">#+STARTUP: </span></samp>&rsquo;, complete startup keywords,
+i.e. valid keys for this line. 
+<li>Elsewhere, complete dictionary words using Ispell. 
+</ul>
+     </dl>
+
+   </body></html>
+

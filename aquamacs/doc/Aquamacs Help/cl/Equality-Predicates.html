@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Equality Predicates - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Predicates.html#Predicates" title="Predicates">
+<link rel="prev" href="Type-Predicates.html#Type-Predicates" title="Type Predicates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Equality-Predicates"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Type-Predicates.html#Type-Predicates">Type Predicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Predicates.html#Predicates">Predicates</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Equality Predicates</h3>
+
+<p class="noindent">This package defines the Common Lisp predicate <code>equalp</code>.
+
+<div class="defun">
+&mdash; Function: <b>equalp</b><var> a b<a name="index-equalp-11"></a></var><br>
+<blockquote><p>This function is a more flexible version of <code>equal</code>.  In
+particular, it compares strings case-insensitively, and it compares
+numbers without regard to type (so that <code>(equalp 3 3.0)</code> is
+true).  Vectors and conses are compared recursively.  All other
+objects are compared as if by <code>equal</code>.
+
+        <p>This function differs from Common Lisp <code>equalp</code> in several
+respects.  First, Common Lisp's <code>equalp</code> also compares
+<em>characters</em> case-insensitively, which would be impractical
+in this package since Emacs does not distinguish between integers
+and characters.  In keeping with the idea that strings are less
+vector-like in Emacs Lisp, this package's <code>equalp</code> also will
+not compare strings against vectors of integers. 
+</p></blockquote></div>
+
+   <p>Also note that the Common Lisp functions <code>member</code> and <code>assoc</code>
+use <code>eql</code> to compare elements, whereas Emacs Lisp follows the
+MacLisp tradition and uses <code>equal</code> for these two functions. 
+In Emacs, use <code>member*</code> and <code>assoc*</code> to get functions
+which use <code>eql</code> for comparisons.
+
+   </body></html>
+

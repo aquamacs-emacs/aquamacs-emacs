@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Lucid Resources - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="X-Resources.html#X-Resources" title="X Resources">
+<link rel="prev" href="Face-Resources.html#Face-Resources" title="Face Resources">
+<link rel="next" href="LessTif-Resources.html#LessTif-Resources" title="LessTif Resources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Lucid-Resources"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="LessTif-Resources.html#LessTif-Resources">LessTif Resources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Face-Resources.html#Face-Resources">Face Resources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resources</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">D.4 Lucid Menu X Resources</h3>
+
+<p><a name="index-Menu-X-Resources-_0028Lucid-widgets_0029-4296"></a><a name="index-Lucid-Widget-X-Resources-4297"></a>
+  If the Emacs installed at your site was built to use the X toolkit
+with the Lucid menu widgets, then the menu bar is a separate widget and
+has its own resources.  The resource names contain &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo;
+(following, as always, the name of the Emacs invocation, or &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo;,
+which stands for all Emacs invocations).  Specify them like this:
+
+<pre class="example">     Emacs.pane.menubar.<var>resource</var>:  <var>value</var>
+</pre>
+   <p class="noindent">For example, to specify the font &lsquo;<samp><span class="samp">8x16</span></samp>&rsquo; for the menu-bar items,
+write this:
+
+<pre class="example">     Emacs.pane.menubar.font:  8x16
+</pre>
+   <p class="noindent">Resources for <em>non-menubar</em> toolkit pop-up menus have
+&lsquo;<samp><span class="samp">menu*</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo;.  For example, to specify
+the font &lsquo;<samp><span class="samp">8x16</span></samp>&rsquo; for the pop-up menu items, write this:
+
+<pre class="example">     Emacs.menu*.font:  8x16
+</pre>
+   <p class="noindent">For dialog boxes, use &lsquo;<samp><span class="samp">dialog*</span></samp>&rsquo;:
+
+<pre class="example">     Emacs.dialog*.font:  8x16
+</pre>
+   <p class="noindent">The Lucid menus can display multilingual text in your locale.  For
+more information about fontsets see the man page for
+<code>XCreateFontSet</code>.  To enable multilingual menu text you specify a
+<code>fontSet</code> resource instead of the font resource.  If both
+<code>font</code> and <code>fontSet</code> resources are specified, the
+<code>fontSet</code> resource is used.
+
+   <p>Thus, to specify &lsquo;<samp><span class="samp">-*-helvetica-medium-r-*--*-120-*-*-*-*-*-*,*</span></samp>&rsquo;
+for both the popup and menu bar menus, write this:
+
+<pre class="example">     Emacs*menu*fontSet:  -*-helvetica-medium-r-*--*-120-*-*-*-*-*-*,*
+</pre>
+   <p class="noindent">The &lsquo;<samp><span class="samp">*menu*</span></samp>&rsquo; as a wildcard matches &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">menu...</span></samp>&rsquo;.
+
+   <p>Experience shows that on some systems you may need to add
+&lsquo;<samp><span class="samp">shell.</span></samp>&rsquo; before the &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo; or &lsquo;<samp><span class="samp">menu*</span></samp>&rsquo;.  On
+some other systems, you must not add &lsquo;<samp><span class="samp">shell.</span></samp>&rsquo;.  The generic wildcard
+approach should work on both kinds of systems.
+
+   <p>Here is a list of the specific resources for menu bars and pop-up menus:
+
+     <dl>
+<dt><code>font</code><dd>Font for menu item text. 
+<br><dt><code>fontSet</code><dd>Fontset for menu item text. 
+<br><dt><code>foreground</code><dd>Color of the foreground. 
+<br><dt><code>background</code><dd>Color of the background. 
+<br><dt><code>buttonForeground</code><dd>In the menu bar, the color of the foreground for a selected item. 
+<br><dt><code>horizontalSpacing</code><dd>Horizontal spacing in pixels between items.  Default is 3. 
+<br><dt><code>verticalSpacing</code><dd>Vertical spacing in pixels between items.  Default is 2. 
+<br><dt><code>arrowSpacing</code><dd>Horizontal spacing between the arrow (which indicates a submenu) and
+the associated text.  Default is 10. 
+<br><dt><code>shadowThickness</code><dd>Thickness of shadow line around the widget.  Default is 1.
+
+     <p>Also determines the thickness of shadow lines around other objects,
+for instance 3D buttons and arrows.  If you have the impression that
+the arrows in the menus do not stand out clearly enough or that the
+difference between &ldquo;in&rdquo; and &ldquo;out&rdquo; buttons is difficult to see, set
+this to 2.  If you have no problems with visibility, the default
+probably looks better.  The background color may also have some effect
+on the contrast. 
+<br><dt><code>margin</code><dd>The margin of the menu bar, in characters.  Default is 1. 
+</dl>
+
+   </body></html>
+

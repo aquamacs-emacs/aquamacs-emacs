@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Low-level interface to the spam-stat dictionary - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Statistics-Package.html#Spam-Statistics-Package" title="Spam Statistics Package">
+<link rel="prev" href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" title="Splitting mail using spam-stat">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Low-level-interface-to-the-spam-stat-dictionary"></a>
+<a name="Low_002dlevel-interface-to-the-spam_002dstat-dictionary"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat">Splitting mail using spam-stat</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Statistics-Package.html#Spam-Statistics-Package">Spam Statistics Package</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.8.3 Low-level interface to the spam-stat dictionary</h5>
+
+<p>The main interface to using <code>spam-stat</code>, are the following functions:
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-buffer-is-spam</b><var><a name="index-spam_002dstat_002dbuffer_002dis_002dspam-3010"></a></var><br>
+<blockquote><p>Called in a buffer, that buffer is considered to be a new spam mail. 
+Use this for new mail that has not been processed before. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-buffer-is-no-spam</b><var><a name="index-spam_002dstat_002dbuffer_002dis_002dno_002dspam-3011"></a></var><br>
+<blockquote><p>Called in a buffer, that buffer is considered to be a new non-spam
+mail.  Use this for new mail that has not been processed before. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-buffer-change-to-spam</b><var><a name="index-spam_002dstat_002dbuffer_002dchange_002dto_002dspam-3012"></a></var><br>
+<blockquote><p>Called in a buffer, that buffer is no longer considered to be normal
+mail but spam.  Use this to change the status of a mail that has
+already been processed as non-spam. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-buffer-change-to-non-spam</b><var><a name="index-spam_002dstat_002dbuffer_002dchange_002dto_002dnon_002dspam-3013"></a></var><br>
+<blockquote><p>Called in a buffer, that buffer is no longer considered to be spam but
+normal mail.  Use this to change the status of a mail that has already
+been processed as spam. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-save</b><var><a name="index-spam_002dstat_002dsave-3014"></a></var><br>
+<blockquote><p>Save the hash table to the file.  The filename used is stored in the
+variable <code>spam-stat-file</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-load</b><var><a name="index-spam_002dstat_002dload-3015"></a></var><br>
+<blockquote><p>Load the hash table from a file.  The filename used is stored in the
+variable <code>spam-stat-file</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-score-word</b><var><a name="index-spam_002dstat_002dscore_002dword-3016"></a></var><br>
+<blockquote><p>Return the spam score for a word. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-score-buffer</b><var><a name="index-spam_002dstat_002dscore_002dbuffer-3017"></a></var><br>
+<blockquote><p>Return the spam score for a buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-split-fancy</b><var><a name="index-spam_002dstat_002dsplit_002dfancy-3018"></a></var><br>
+<blockquote><p>Use this function for fancy mail splitting.  Add the rule &lsquo;<samp><span class="samp">(:
+spam-stat-split-fancy)</span></samp>&rsquo; to <code>nnmail-split-fancy</code>
+</p></blockquote></div>
+
+   <p>Make sure you load the dictionary before using it.  This requires the
+following in your <samp><span class="file">~/.gnus.el</span></samp> file:
+
+<pre class="lisp">     (require 'spam-stat)
+     (spam-stat-load)
+</pre>
+   <p>Typical test will involve calls to the following functions:
+
+<pre class="smallexample">     Reset: (setq spam-stat (make-hash-table :test 'equal))
+     Learn spam: (spam-stat-process-spam-directory "~/Mail/mail/spam")
+     Learn non-spam: (spam-stat-process-non-spam-directory "~/Mail/mail/misc")
+     Save table: (spam-stat-save)
+     File size: (nth 7 (file-attributes spam-stat-file))
+     Number of words: (hash-table-count spam-stat)
+     Test spam: (spam-stat-test-directory "~/Mail/mail/spam")
+     Test non-spam: (spam-stat-test-directory "~/Mail/mail/misc")
+     Reduce table size: (spam-stat-reduce-size)
+     Save table: (spam-stat-save)
+     File size: (nth 7 (file-attributes spam-stat-file))
+     Number of words: (hash-table-count spam-stat)
+     Test spam: (spam-stat-test-directory "~/Mail/mail/spam")
+     Test non-spam: (spam-stat-test-directory "~/Mail/mail/misc")
+</pre>
+   <p>Here is how you would create your dictionary:
+
+<pre class="smallexample">     Reset: (setq spam-stat (make-hash-table :test 'equal))
+     Learn spam: (spam-stat-process-spam-directory "~/Mail/mail/spam")
+     Learn non-spam: (spam-stat-process-non-spam-directory "~/Mail/mail/misc")
+     Repeat for any other non-spam group you need...
+     Reduce table size: (spam-stat-reduce-size)
+     Save table: (spam-stat-save)
+</pre>
+   </body></html>
+

@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Score File Syntax - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link rel="prev" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link rel="next" href="Headers.html#Headers" title="Headers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Score-File-Syntax"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Headers.html#Headers">Headers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.7.3 Score File Syntax</h4>
+
+<p>Score files are meant to be easily parseable, but yet extremely
+mallable.  It was decided that something that had the same read syntax
+as an Emacs Lisp list would fit that spec.
+
+   <p>Here's a typical score file:
+
+<pre class="lisp">     (("summary"
+       ("win95" -10000 nil s)
+       ("Gnus"))
+      ("from"
+       ("Lars" -1000))
+      (mark -100))
+</pre>
+   <p>BNF definition of a score file:
+
+<pre class="example">     score-file      = "" / "(" *element ")"
+     element         = rule / atom
+     rule            = string-rule / number-rule / date-rule
+     string-rule     = "(" quote string-header quote space *string-match ")"
+     number-rule     = "(" quote number-header quote space *number-match ")"
+     date-rule       = "(" quote date-header quote space *date-match ")"
+     quote           = &lt;ascii 34&gt;
+     string-header   = "subject" / "from" / "references" / "message-id" /
+                       "xref" / "body" / "head" / "all" / "followup"
+     number-header   = "lines" / "chars"
+     date-header     = "date"
+     string-match    = "(" quote &lt;string&gt; quote [ "" / [ space score [ "" /
+                       space date [ "" / [ space string-match-t ] ] ] ] ] ")"
+     score           = "nil" / &lt;integer&gt;
+     date            = "nil" / &lt;natural number&gt;
+     string-match-t  = "nil" / "s" / "substring" / "S" / "Substring" /
+                       "r" / "regex" / "R" / "Regex" /
+                       "e" / "exact" / "E" / "Exact" /
+                       "f" / "fuzzy" / "F" / "Fuzzy"
+     number-match    = "(" &lt;integer&gt; [ "" / [ space score [ "" /
+                       space date [ "" / [ space number-match-t ] ] ] ] ] ")"
+     number-match-t  = "nil" / "=" / "&lt;" / "&gt;" / "&gt;=" / "&lt;="
+     date-match      = "(" quote &lt;string&gt; quote [ "" / [ space score [ "" /
+                       space date [ "" / [ space date-match-t ] ] ] ] ")"
+     date-match-t    = "nil" / "at" / "before" / "after"
+     atom            = "(" [ required-atom / optional-atom ] ")"
+     required-atom   = mark / expunge / mark-and-expunge / files /
+                       exclude-files / read-only / touched
+     optional-atom   = adapt / local / eval
+     mark            = "mark" space nil-or-number
+     nil-or-number   = "nil" / &lt;integer&gt;
+     expunge         = "expunge" space nil-or-number
+     mark-and-expunge = "mark-and-expunge" space nil-or-number
+     files           = "files" *[ space &lt;string&gt; ]
+     exclude-files   = "exclude-files" *[ space &lt;string&gt; ]
+     read-only       = "read-only" [ space "nil" / space "t" ]
+     adapt        = "adapt" [ space "ignore" / space "t" / space adapt-rule ]
+     adapt-rule      = "(" *[ &lt;string&gt; *[ "(" &lt;string&gt; &lt;integer&gt; ")" ] ")"
+     local           = "local" *[ space "(" &lt;string&gt; space &lt;form&gt; ")" ]
+     eval            = "eval" space &lt;form&gt;
+     space           = *[ " " / &lt;TAB&gt; / &lt;NEWLINE&gt; ]
+</pre>
+   <p>Any unrecognized elements in a score file should be ignored, but not
+discarded.
+
+   <p>As you can see, white space is needed, but the type and amount of white
+space is irrelevant.  This means that formatting of the score file is
+left up to the programmer&mdash;if it's simpler to just spew it all out on
+one looong line, then that's ok.
+
+   <p>The meaning of the various atoms are explained elsewhere in this
+manual (see <a href="Score-File-Format.html#Score-File-Format">Score File Format</a>).
+
+   </body></html>
+

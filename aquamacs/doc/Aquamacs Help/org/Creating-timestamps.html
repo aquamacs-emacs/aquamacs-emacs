@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Creating timestamps - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Timestamps.html#Timestamps" title="Timestamps">
+<link rel="next" href="Deadlines-and-scheduling.html#Deadlines-and-scheduling" title="Deadlines and scheduling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Creating-timestamps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Deadlines-and-scheduling.html#Deadlines-and-scheduling">Deadlines and scheduling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Timestamps.html#Timestamps">Timestamps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.2 Creating timestamps</h3>
+
+<p><a name="index-creating-timestamps-558"></a><a name="index-timestamps_002c-creating-559"></a>
+For Org mode to recognize timestamps, they need to be in the specific
+format.  All commands listed below produce timestamps in the correct
+format.
+
+     
+<a name="index-C_002dc-_002e-560"></a>
+<dl><dt><kbd>C-c .</kbd><dd>Prompt for a date and insert a corresponding timestamp.  When the cursor is
+at an existing timestamp in the buffer, the command is used to modify this
+timestamp instead of inserting a new one.  When this command is used twice in
+succession, a time range is inserted. 
+<a name="index-C_002dc-_0021-561"></a><br><dt><kbd>C-c !</kbd><dd>Like <kbd>C-c .</kbd>, but insert an inactive timestamp that will not cause
+an agenda entry. 
+<a name="index-C_002du-C_002dc-_002e-562"></a><a name="index-C_002du-C_002dc-_0021-563"></a><br><dt><kbd>C-u C-c .</kbd><dt><kbd>C-u C-c !</kbd><dd><a name="index-org_002dtime_002dstamp_002drounding_002dminutes-564"></a>Like <kbd>C-c .</kbd> and <kbd>C-c !</kbd>, but use the alternative format which
+contains date and time.  The default time can be rounded to multiples of 5
+minutes, see the option <code>org-time-stamp-rounding-minutes</code>. 
+<a name="index-C_002dc-_003c-565"></a><br><dt><kbd>C-c &lt;</kbd><dd>Insert a timestamp corresponding to the cursor date in the Calendar. 
+<a name="index-C_002dc-_003e-566"></a><br><dt><kbd>C-c &gt;</kbd><dd>Access the Emacs calendar for the current date.  If there is a
+timestamp in the current line, go to the corresponding date
+instead. 
+<a name="index-C_002dc-C_002do-567"></a><br><dt><kbd>C-c C-o</kbd><dd>Access the agenda for the date given by the timestamp or -range at
+point (see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>). 
+<a name="index-S_002d_0040key_007bleft_007d-568"></a><a name="index-S_002d_0040key_007bright_007d-569"></a><br><dt><kbd>S-&lt;left&gt;</kbd><dt><kbd>S-&lt;right&gt;</kbd><dd>Change date at cursor by one day.  These key bindings conflict with
+shift-selection and related modes (see <a href="Conflicts.html#Conflicts">Conflicts</a>). 
+<a name="index-S_002d_0040key_007bup_007d-570"></a><a name="index-S_002d_0040key_007bdown_007d-571"></a><br><dt><kbd>S-&lt;up&gt;</kbd><dt><kbd>S-&lt;down&gt;</kbd><dd>Change the item under the cursor in a timestamp.  The cursor can be on a
+year, month, day, hour or minute.  When the timestamp contains a time range
+like &lsquo;<samp><span class="samp">15:30-16:30</span></samp>&rsquo;, modifying the first time will also shift the second,
+shifting the time block with constant length.  To change the length, modify
+the second time.  Note that if the cursor is in a headline and not at a
+timestamp, these same keys modify the priority of an item. 
+(see <a href="Priorities.html#Priorities">Priorities</a>). The key bindings also conflict with shift-selection and
+related modes (see <a href="Conflicts.html#Conflicts">Conflicts</a>). 
+<a name="index-C_002dc-C_002dy-572"></a><a name="index-evaluate-time-range-573"></a><br><dt><kbd>C-c C-y</kbd><dd>Evaluate a time range by computing the difference between start and end. 
+With a prefix argument, insert result after the time range (in a table: into
+the following column). 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="The-date_002ftime-prompt.html#The-date_002ftime-prompt">The date/time prompt</a>:         How Org mode helps you entering date and time
+<li><a accesskey="2" href="Custom-time-format.html#Custom-time-format">Custom time format</a>:           Making dates look different
+</ul>
+
+   </body></html>
+

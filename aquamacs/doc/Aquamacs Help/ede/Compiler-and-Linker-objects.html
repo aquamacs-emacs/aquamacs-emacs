@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Compiler and Linker objects - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Extending-EDE.html#Extending-EDE" title="Extending EDE">
+<link rel="prev" href="Sourcecode-objects.html#Sourcecode-objects" title="Sourcecode objects">
+<link rel="next" href="Project.html#Project" title="Project">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Compiler-and-Linker-objects"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Project.html#Project">Project</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sourcecode-objects.html#Sourcecode-objects">Sourcecode objects</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Extending-EDE.html#Extending-EDE">Extending EDE</a>
+<hr>
+</div>
+
+<h3 class="section">7.4 Compiler and Linker objects</h3>
+
+<p>In order for a target to create a <samp><span class="file">Makefile</span></samp>, it must know how to
+compile the sources into the program or desired data file, and
+possibly link them together.
+
+   <p>A compiler object instantiation is used to associate a given target
+with a given source code type.  Some targets can handle many types of
+sources, and thus has many compilers available to it.  Some targets
+may have multiple compilers for a given type of source code.
+
+   <p><i>EDE</i> will examine the actual source files in a target, cross reference
+that against the compiler list to come up with the final set of
+compilers that will be inserted into the Makefile.
+
+   <p>Compiler instantiations must also insert variables specifying the
+compiler it plans to use, in addition to creating Automake settings for
+<samp><span class="file">configure.in</span></samp> when appropriate.
+
+   <p>Compiler objects are stored in the target objects as a list of
+symbols, where the symbols value is the object.  This enables the
+project output mechanism to work more efficiently.
+
+   <p>Targets will also have a special "compiler" slot which lets a user
+explicitly choose the compiler they want to use.
+
+   <p>Here is an example for texinfo:
+
+<pre class="example">     (defvar ede-makeinfo-compiler
+       (ede-compiler
+        "ede-makeinfo-compiler"
+        :name "makeinfo"
+        :variables '(("MAKEINFO" . "makeinfo"))
+        :commands '("makeinfo -o $ $&lt;")
+        :autoconf '(("AC_CHECK_PROG" . "MAKEINFO, makeinfo"))
+        :sourcetype '(ede-makeinfo-source)
+        )
+       "Compile texinfo files into info files.")
+</pre>
+   <p>See <a href="Compilers.html#Compilers">Compilers</a>.
+
+   <p>When creating compiler instantiations, it may be useful to <code>clone</code>
+an existing compiler variable.  Cloning allows you to only modify
+parts of the original, while keeping the rest of the same. 
+Modification of the original will result in the clone also being
+changed for shared value slots.
+
+   <p>The second important object is the linker class.  The linker is similar
+to the compiler, except several compilers might be used to create some
+object files, and only one linker is used to link those objects together.
+
+   <p>See <samp><span class="file">ede-proj-obj.el</span></samp> for examples of the combination.
+
+   </body></html>
+

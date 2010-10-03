@@ -1,0 +1,287 @@
+<html lang="en">
+<head>
+<title>Window Layout - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Formatting-Variables.html#Formatting-Variables" title="Formatting Variables">
+<link rel="next" href="Faces-and-Fonts.html#Faces-and-Fonts" title="Faces and Fonts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Window-Layout"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.5 Window Layout</h3>
+
+<p><a name="index-window-layout-2736"></a>
+No, there's nothing here about X, so be quiet.
+
+   <p><a name="index-gnus_002duse_002dfull_002dwindow-2737"></a>If <code>gnus-use-full-window</code> non-<code>nil</code>, Gnus will delete all
+other windows and occupy the entire Emacs screen by itself.  It is
+<code>t</code> by default.
+
+   <p>Setting this variable to <code>nil</code> kinda works, but there are
+glitches.  Use at your own peril.
+
+   <p><a name="index-gnus_002dbuffer_002dconfiguration-2738"></a><code>gnus-buffer-configuration</code> describes how much space each Gnus
+buffer should be given.  Here's an excerpt of this variable:
+
+<pre class="lisp">     ((group (vertical 1.0 (group 1.0 point)
+                           (if gnus-carpal (group-carpal 4))))
+      (article (vertical 1.0 (summary 0.25 point)
+                             (article 1.0))))
+</pre>
+   <p>This is an alist.  The <dfn>key</dfn> is a symbol that names some action or
+other.  For instance, when displaying the group buffer, the window
+configuration function will use <code>group</code> as the key.  A full list of
+possible names is listed below.
+
+   <p>The <dfn>value</dfn> (i.e., the <dfn>split</dfn>) says how much space each buffer
+should occupy.  To take the <code>article</code> split as an example -
+
+<pre class="lisp">     (article (vertical 1.0 (summary 0.25 point)
+                            (article 1.0)))
+</pre>
+   <p>This <dfn>split</dfn> says that the summary buffer should occupy 25% of upper
+half of the screen, and that it is placed over the article buffer.  As
+you may have noticed, 100% + 25% is actually 125% (yup, I saw y'all
+reaching for that calculator there).  However, the special number
+<code>1.0</code> is used to signal that this buffer should soak up all the
+rest of the space available after the rest of the buffers have taken
+whatever they need.  There should be only one buffer with the <code>1.0</code>
+size spec per split.
+
+   <p>Point will be put in the buffer that has the optional third element
+<code>point</code>.  In a <code>frame</code> split, the last subsplit having a leaf
+split where the tag <code>frame-focus</code> is a member (i.e. is the third or
+fourth element in the list, depending on whether the <code>point</code> tag is
+present) gets focus.
+
+   <p>Here's a more complicated example:
+
+<pre class="lisp">     (article (vertical 1.0 (group 4)
+                            (summary 0.25 point)
+                            (if gnus-carpal (summary-carpal 4))
+                            (article 1.0)))
+</pre>
+   <p>If the size spec is an integer instead of a floating point number,
+then that number will be used to say how many lines a buffer should
+occupy, not a percentage.
+
+   <p>If the <dfn>split</dfn> looks like something that can be <code>eval</code>ed (to be
+precise&mdash;if the <code>car</code> of the split is a function or a subr), this
+split will be <code>eval</code>ed.  If the result is non-<code>nil</code>, it will
+be used as a split.  This means that there will be three buffers if
+<code>gnus-carpal</code> is <code>nil</code>, and four buffers if <code>gnus-carpal</code>
+is non-<code>nil</code>.
+
+   <p>Not complicated enough for you?  Well, try this on for size:
+
+<pre class="lisp">     (article (horizontal 1.0
+                  (vertical 0.5
+                      (group 1.0)
+                      (gnus-carpal 4))
+                  (vertical 1.0
+                      (summary 0.25 point)
+                      (summary-carpal 4)
+                      (article 1.0))))
+</pre>
+   <p>Whoops.  Two buffers with the mystery 100% tag.  And what's that
+<code>horizontal</code> thingie?
+
+   <p>If the first element in one of the split is <code>horizontal</code>, Gnus will
+split the window horizontally, giving you two windows side-by-side. 
+Inside each of these strips you may carry on all you like in the normal
+fashion.  The number following <code>horizontal</code> says what percentage of
+the screen is to be given to this strip.
+
+   <p>For each split, there <em>must</em> be one element that has the 100% tag. 
+The splitting is never accurate, and this buffer will eat any leftover
+lines from the splits.
+
+   <p>To be slightly more formal, here's a definition of what a valid split
+may look like:
+
+<pre class="example">     split      = frame | horizontal | vertical | buffer | form
+     frame      = "(frame " size *split ")"
+     horizontal = "(horizontal " size *split ")"
+     vertical   = "(vertical " size *split ")"
+     buffer     = "(" buf-name " " size *[ "point" ] *[ "frame-focus"] ")"
+     size       = number | frame-params
+     buf-name   = group | article | summary ...
+</pre>
+   <p>The limitations are that the <code>frame</code> split can only appear as the
+top-level split.  <var>form</var> should be an Emacs Lisp form that should
+return a valid split.  We see that each split is fully recursive, and
+may contain any number of <code>vertical</code> and <code>horizontal</code> splits.
+
+   <p><a name="index-gnus_002dwindow_002dmin_002dwidth-2739"></a><a name="index-gnus_002dwindow_002dmin_002dheight-2740"></a><a name="index-window-height-2741"></a><a name="index-window-width-2742"></a>Finding the right sizes can be a bit complicated.  No window may be less
+than <code>gnus-window-min-height</code> (default 1) characters high, and all
+windows must be at least <code>gnus-window-min-width</code> (default 1)
+characters wide.  Gnus will try to enforce this before applying the
+splits.  If you want to use the normal Emacs window width/height limit,
+you can just set these two variables to <code>nil</code>.
+
+   <p>If you're not familiar with Emacs terminology, <code>horizontal</code> and
+<code>vertical</code> splits may work the opposite way of what you'd expect. 
+Windows inside a <code>horizontal</code> split are shown side-by-side, and
+windows within a <code>vertical</code> split are shown above each other.
+
+   <p><a name="index-gnus_002dconfigure_002dframe-2743"></a>If you want to experiment with window placement, a good tip is to call
+<code>gnus-configure-frame</code> directly with a split.  This is the function
+that does all the real work when splitting buffers.  Below is a pretty
+nonsensical configuration with 5 windows; two for the group buffer and
+three for the article buffer.  (I said it was nonsensical.)  If you
+<code>eval</code> the statement below, you can get an idea of how that would
+look straight away, without going through the normal Gnus channels. 
+Play with it until you're satisfied, and then use
+<code>gnus-add-configuration</code> to add your new creation to the buffer
+configuration list.
+
+<pre class="lisp">     (gnus-configure-frame
+      '(horizontal 1.0
+         (vertical 10
+           (group 1.0)
+           (article 0.3 point))
+         (vertical 1.0
+           (article 1.0)
+           (horizontal 4
+             (group 1.0)
+             (article 10)))))
+</pre>
+   <p>You might want to have several frames as well.  No prob&mdash;just use the
+<code>frame</code> split:
+
+<pre class="lisp">     (gnus-configure-frame
+      '(frame 1.0
+              (vertical 1.0
+                        (summary 0.25 point frame-focus)
+                        (article 1.0))
+              (vertical ((height . 5) (width . 15)
+                         (user-position . t)
+                         (left . -1) (top . 1))
+                        (picon 1.0))))
+     
+</pre>
+   <p>This split will result in the familiar summary/article window
+configuration in the first (or &ldquo;main&rdquo;) frame, while a small additional
+frame will be created where picons will be shown.  As you can see,
+instead of the normal <code>1.0</code> top-level spec, each additional split
+should have a frame parameter alist as the size spec. 
+See <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.  Under XEmacs, a frame property list will be
+accepted, too&mdash;for instance, <code>(height 5 width 15 left -1 top 1)</code>
+is such a plist. 
+The list of all possible keys for <code>gnus-buffer-configuration</code> can
+be found in its default value.
+
+   <p>Note that the <code>message</code> key is used for both
+<code>gnus-group-mail</code> and <code>gnus-summary-mail-other-window</code>.  If
+it is desirable to distinguish between the two, something like this
+might be used:
+
+<pre class="lisp">     (message (horizontal 1.0
+                          (vertical 1.0 (message 1.0 point))
+                          (vertical 0.24
+                                    (if (buffer-live-p gnus-summary-buffer)
+                                        '(summary 0.5))
+                                    (group 1.0))))
+</pre>
+   <p>One common desire for a multiple frame split is to have a separate frame
+for composing mail and news while leaving the original frame intact.  To
+accomplish that, something like the following can be done:
+
+<pre class="lisp">     (message
+       (frame 1.0
+              (if (not (buffer-live-p gnus-summary-buffer))
+                  (car (cdr (assoc 'group gnus-buffer-configuration)))
+                (car (cdr (assoc 'summary gnus-buffer-configuration))))
+              (vertical ((user-position . t) (top . 1) (left . 1)
+                         (name . "Message"))
+                        (message 1.0 point))))
+</pre>
+   <p><a name="index-gnus_002dadd_002dconfiguration-2744"></a>Since the <code>gnus-buffer-configuration</code> variable is so long and
+complicated, there's a function you can use to ease changing the config
+of a single setting: <code>gnus-add-configuration</code>.  If, for instance,
+you want to change the <code>article</code> setting, you could say:
+
+<pre class="lisp">     (gnus-add-configuration
+      '(article (vertical 1.0
+                    (group 4)
+                    (summary .25 point)
+                    (article 1.0))))
+</pre>
+   <p>You'd typically stick these <code>gnus-add-configuration</code> calls in your
+<samp><span class="file">~/.gnus.el</span></samp> file or in some startup hook&mdash;they should be run after
+Gnus has been loaded.
+
+   <p><a name="index-gnus_002dalways_002dforce_002dwindow_002dconfiguration-2745"></a>If all windows mentioned in the configuration are already visible, Gnus
+won't change the window configuration.  If you always want to force the
+&ldquo;right&rdquo; window configuration, you can set
+<code>gnus-always-force-window-configuration</code> to non-<code>nil</code>.
+
+   <p>If you're using tree displays (see <a href="Tree-Display.html#Tree-Display">Tree Display</a>), and the tree
+window is displayed vertically next to another window, you may also want
+to fiddle with <code>gnus-tree-minimize-window</code> to avoid having the
+windows resized.
+
+<h4 class="subsection">8.5.1 Example Window Configurations</h4>
+
+     <ul>
+<li>Narrow left hand side occupied by group buffer.  Right hand side split
+between summary buffer (top one-sixth) and article buffer (bottom).
+
+     <pre class="lisp">          (gnus-add-configuration
+           '(article
+             (horizontal 1.0
+                         (vertical 25 (group 1.0))
+                         (vertical 1.0
+                                   (summary 0.16 point)
+                                   (article 1.0)))))
+          
+          (gnus-add-configuration
+           '(summary
+             (horizontal 1.0
+                         (vertical 25 (group 1.0))
+                         (vertical 1.0 (summary 1.0 point)))))
+</pre>
+     </ul>
+
+   </body></html>
+

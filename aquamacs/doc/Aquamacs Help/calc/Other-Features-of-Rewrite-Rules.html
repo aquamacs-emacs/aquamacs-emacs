@@ -1,0 +1,350 @@
+<html lang="en">
+<head>
+<title>Other Features of Rewrite Rules - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules" title="Algebraic Properties of Rewrite Rules">
+<link rel="next" href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules" title="Composing Patterns in Rewrite Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Other-Features-of-Rewrite-Rules"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules">Composing Patterns in Rewrite Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules">Algebraic Properties of Rewrite Rules</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.5 Other Features of Rewrite Rules</h4>
+
+<p class="noindent">Certain &ldquo;function names&rdquo; serve as markers in rewrite rules. 
+Here is a complete list of these markers.  First are listed the
+markers that work inside a pattern; then come the markers that
+work in the righthand side of a rule.
+
+   <p><a name="index-import-1908"></a>One kind of marker, &lsquo;<samp><span class="samp">import(x)</span></samp>&rsquo;, takes the place of a whole
+rule.  Here &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is the name of a variable containing another
+rule set; those rules are &ldquo;spliced into&rdquo; the rule set that
+imports them.  For example, if &lsquo;<samp><span class="samp">[f(a+b) := f(a) + f(b),
+f(a b) := a f(b) :: real(a)]</span></samp>&rsquo; is stored in variable &lsquo;<samp><span class="samp">linearF</span></samp>&rsquo;,
+then the rule set &lsquo;<samp><span class="samp">[f(0) := 0, import(linearF)]</span></samp>&rsquo; will apply
+all three rules.  It is possible to modify the imported rules
+slightly:  &lsquo;<samp><span class="samp">import(x, v1, x1, v2, x2, ...)</span></samp>&rsquo; imports
+the rule set &lsquo;<samp><span class="samp">x</span></samp>&rsquo; with all occurrences of
+<!-- @math{v_1}, -->
+&lsquo;<samp><span class="samp">v1</span></samp>&rsquo;,
+as either a variable name or a function name, replaced with
+<!-- @math{x_1} -->
+&lsquo;<samp><span class="samp">x1</span></samp>&rsquo;
+and so on.  (If
+<!-- @math{v_1} -->
+&lsquo;<samp><span class="samp">v1</span></samp>&rsquo;
+is used as a function name, then
+<!-- @math{x_1} -->
+&lsquo;<samp><span class="samp">x1</span></samp>&rsquo;
+must be either a function name itself or a &lsquo;<samp><span class="samp">&lt;&nbsp;&gt;</span></samp>&rsquo;<!-- /@w --> nameless
+function; see <a href="Specifying-Operators.html#Specifying-Operators">Specifying Operators</a>.)  For example, &lsquo;<samp><span class="samp">[g(0) := 0,
+import(linearF, f, g)]</span></samp>&rsquo; applies the linearity rules to the function
+&lsquo;<samp><span class="samp">g</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">f</span></samp>&rsquo;.  Imports can be nested, but the
+import-with-renaming feature may fail to rename sub-imports properly.
+
+   <p>The special functions allowed in patterns are:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">quote(x)</span></samp>&rsquo;<dd><a name="index-quote-1909"></a>This pattern matches exactly &lsquo;<samp><span class="samp">x</span></samp>&rsquo;; variable names in &lsquo;<samp><span class="samp">x</span></samp>&rsquo; are
+not interpreted as meta-variables.  The only flexibility is that
+numbers are compared for numeric equality, so that the pattern
+&lsquo;<samp><span class="samp">f(quote(12))</span></samp>&rsquo; will match both &lsquo;<samp><span class="samp">f(12)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">f(12.0)</span></samp>&rsquo;. 
+(Numbers are always treated this way by the rewrite mechanism:
+The rule &lsquo;<samp><span class="samp">f(x,x) := g(x)</span></samp>&rsquo; will match &lsquo;<samp><span class="samp">f(12, 12.0)</span></samp>&rsquo;. 
+The rewrite may produce either &lsquo;<samp><span class="samp">g(12)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">g(12.0)</span></samp>&rsquo;
+as a result in this case.)
+
+     <br><dt>&lsquo;<samp><span class="samp">plain(x)</span></samp>&rsquo;<dd><a name="index-plain-1910"></a>Here &lsquo;<samp><span class="samp">x</span></samp>&rsquo; must be a function call &lsquo;<samp><span class="samp">f(x1,x2,...)</span></samp>&rsquo;.  This
+pattern matches a call to function &lsquo;<samp><span class="samp">f</span></samp>&rsquo; with the specified
+argument patterns.  No special knowledge of the properties of the
+function &lsquo;<samp><span class="samp">f</span></samp>&rsquo; is used in this case; &lsquo;<samp><span class="samp">+</span></samp>&rsquo; is not commutative or
+associative.  Unlike <code>quote</code>, the arguments &lsquo;<samp><span class="samp">x1,x2,...</span></samp>&rsquo;
+are treated as patterns.  If you wish them to be treated &ldquo;plainly&rdquo;
+as well, you must enclose them with more <code>plain</code> markers:
+&lsquo;<samp><span class="samp">plain(plain(-a<!-- /@w -->) + plain(b c))</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">opt(x,def)</span></samp>&rsquo;<dd><a name="index-opt-1911"></a>Here &lsquo;<samp><span class="samp">x</span></samp>&rsquo; must be a variable name.  This must appear as an
+argument to a function or an element of a vector; it specifies that
+the argument or element is optional. 
+As an argument to &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">||</span></samp>&rsquo;,
+or as the second argument to &lsquo;<samp><span class="samp">/</span></samp>&rsquo; or &lsquo;<samp><span class="samp">^</span></samp>&rsquo;, the value <var>def</var>
+may be omitted.  The pattern &lsquo;<samp><span class="samp">x + opt(y)</span></samp>&rsquo; matches a sum by
+binding one summand to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and the other to &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, and it
+matches anything else by binding the whole expression to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and
+zero to &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.  The other operators above work similarly.
+
+     <p>For general miscellaneous functions, the default value <code>def</code>
+must be specified.  Optional arguments are dropped starting with
+the rightmost one during matching.  For example, the pattern
+&lsquo;<samp><span class="samp">f(opt(a,0), b, opt(c,b))</span></samp>&rsquo; will match &lsquo;<samp><span class="samp">f(b)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">f(a,b)</span></samp>&rsquo;,
+or &lsquo;<samp><span class="samp">f(a,b,c)</span></samp>&rsquo;.  Default values of zero and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are
+supplied in this example for the omitted arguments.  Note that
+the literal variable &lsquo;<samp><span class="samp">b</span></samp>&rsquo; will be the default in the latter
+case, <em>not</em> the value that matched the meta-variable &lsquo;<samp><span class="samp">b</span></samp>&rsquo;. 
+In other words, the default <var>def</var> is effectively quoted.
+
+     <br><dt>&lsquo;<samp><span class="samp">condition(x,c)</span></samp>&rsquo;<dd><a name="index-condition-1912"></a><a name="index-g_t_003a_003a-1913"></a>This matches the pattern &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, with the attached condition
+&lsquo;<samp><span class="samp">c</span></samp>&rsquo;.  It is the same as &lsquo;<samp><span class="samp">x :: c</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">pand(x,y)</span></samp>&rsquo;<dd><a name="index-pand-1914"></a><a name="index-g_t_0026_0026_0026-1915"></a>This matches anything that matches both pattern &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and
+pattern &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.  It is the same as &lsquo;<samp><span class="samp">x &amp;&amp;&amp; y</span></samp>&rsquo;. 
+see <a href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules">Composing Patterns in Rewrite Rules</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">por(x,y)</span></samp>&rsquo;<dd><a name="index-por-1916"></a><a name="index-g_t_007c_007c_007c-1917"></a>This matches anything that matches either pattern &lsquo;<samp><span class="samp">x</span></samp>&rsquo; or
+pattern &lsquo;<samp><span class="samp">y</span></samp>&rsquo;.  It is the same as &lsquo;<samp><span class="samp">x&nbsp;|||&nbsp;y</span></samp>&rsquo;<!-- /@w -->.
+
+     <br><dt>&lsquo;<samp><span class="samp">pnot(x)</span></samp>&rsquo;<dd><a name="index-pnot-1918"></a><a name="index-g_t_0021_0021_0021-1919"></a>This matches anything that does not match pattern &lsquo;<samp><span class="samp">x</span></samp>&rsquo;. 
+It is the same as &lsquo;<samp><span class="samp">!!! x</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">cons(h,t)</span></samp>&rsquo;<dd><a name="index-cons-_0028rewrites_0029-1920"></a>This matches any vector of one or more elements.  The first
+element is matched to &lsquo;<samp><span class="samp">h</span></samp>&rsquo;; a vector of the remaining
+elements is matched to &lsquo;<samp><span class="samp">t</span></samp>&rsquo;.  Note that vectors of fixed
+length can also be matched as actual vectors:  The rule
+&lsquo;<samp><span class="samp">cons(a,cons(b,[])) := cons(a+b,[])</span></samp>&rsquo; is equivalent
+to the rule &lsquo;<samp><span class="samp">[a,b] := [a+b]</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">rcons(t,h)</span></samp>&rsquo;<dd><a name="index-rcons-_0028rewrites_0029-1921"></a>This is like <code>cons</code>, except that the <em>last</em> element
+is matched to &lsquo;<samp><span class="samp">h</span></samp>&rsquo;, with the remaining elements matched
+to &lsquo;<samp><span class="samp">t</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">apply(f,args)</span></samp>&rsquo;<dd><a name="index-apply-_0028rewrites_0029-1922"></a>This matches any function call.  The name of the function, in
+the form of a variable, is matched to &lsquo;<samp><span class="samp">f</span></samp>&rsquo;.  The arguments
+of the function, as a vector of zero or more objects, are
+matched to &lsquo;<samp><span class="samp">args</span></samp>&rsquo;.  Constants, variables, and vectors
+do <em>not</em> match an <code>apply</code> pattern.  For example,
+&lsquo;<samp><span class="samp">apply(f,x)</span></samp>&rsquo; matches any function call, &lsquo;<samp><span class="samp">apply(quote(f),x)</span></samp>&rsquo;
+matches any call to the function &lsquo;<samp><span class="samp">f</span></samp>&rsquo;, &lsquo;<samp><span class="samp">apply(f,[a,b])</span></samp>&rsquo;
+matches any function call with exactly two arguments, and
+&lsquo;<samp><span class="samp">apply(quote(f), cons(a,cons(b,x)))</span></samp>&rsquo; matches any call
+to the function &lsquo;<samp><span class="samp">f</span></samp>&rsquo; with two or more arguments.  Another
+way to implement the latter, if the rest of the rule does not
+need to refer to the first two arguments of &lsquo;<samp><span class="samp">f</span></samp>&rsquo; by name,
+would be &lsquo;<samp><span class="samp">apply(quote(f), x :: vlen(x) &gt;= 2)</span></samp>&rsquo;. 
+Here's a more interesting sample use of <code>apply</code>:
+
+     <pre class="example">          apply(f,[x+n])  :=  n + apply(f,[x])
+             :: in(f, [floor,ceil,round,trunc]) :: integer(n)
+</pre>
+     <p>Note, however, that this will be slower to match than a rule
+set with four separate rules.  The reason is that Calc sorts
+the rules of a rule set according to top-level function name;
+if the top-level function is <code>apply</code>, Calc must try the
+rule for every single formula and sub-formula.  If the top-level
+function in the pattern is, say, <code>floor</code>, then Calc invokes
+the rule only for sub-formulas which are calls to <code>floor</code>.
+
+     <p>Formulas normally written with operators like <code>+</code> are still
+considered function calls:  <code>apply(f,x)</code> matches &lsquo;<samp><span class="samp">a+b</span></samp>&rsquo;
+with &lsquo;<samp><span class="samp">f = add</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x = [a,b]</span></samp>&rsquo;.
+
+     <p>You must use <code>apply</code> for meta-variables with function names
+on both sides of a rewrite rule:  &lsquo;<samp><span class="samp">apply(f, [x]) := f(x+1)</span></samp>&rsquo;
+is <em>not</em> correct, because it rewrites &lsquo;<samp><span class="samp">spam(6)</span></samp>&rsquo; into
+&lsquo;<samp><span class="samp">f(7)</span></samp>&rsquo;.  The righthand side should be &lsquo;<samp><span class="samp">apply(f, [x+1])</span></samp>&rsquo;. 
+Also note that you will have to use No-Simplify mode (<kbd>m O</kbd>)
+when entering this rule so that the <code>apply</code> isn't
+evaluated immediately to get the new rule &lsquo;<samp><span class="samp">f(x) := f(x+1)</span></samp>&rsquo;. 
+Or, use <kbd>s e</kbd> to enter the rule without going through the stack,
+or enter the rule as &lsquo;<samp><span class="samp">apply(f, [x]) := apply(f, [x+1]) ::&nbsp;1<!-- /@w --></span></samp>&rsquo;. 
+See <a href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">select(x)</span></samp>&rsquo;<dd><a name="index-select-1923"></a>This is used for applying rules to formulas with selections;
+see <a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>. 
+</dl>
+
+   <p>Special functions for the righthand sides of rules are:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">quote(x)</span></samp>&rsquo;<dd>The notation &lsquo;<samp><span class="samp">quote(x)</span></samp>&rsquo; is changed to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; when the
+righthand side is used.  As far as the rewrite rule is concerned,
+<code>quote</code> is invisible.  However, <code>quote</code> has the special
+property in Calc that its argument is not evaluated.  Thus,
+while it will not work to put the rule &lsquo;<samp><span class="samp">t(a) := typeof(a)</span></samp>&rsquo;
+on the stack because &lsquo;<samp><span class="samp">typeof(a)</span></samp>&rsquo; is evaluated immediately
+to produce &lsquo;<samp><span class="samp">t(a) := 100</span></samp>&rsquo;, you can use <code>quote</code> to
+protect the righthand side:  &lsquo;<samp><span class="samp">t(a) := quote(typeof(a))</span></samp>&rsquo;. 
+(See <a href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>, for another trick for
+protecting rules from evaluation.)
+
+     <br><dt>&lsquo;<samp><span class="samp">plain(x)</span></samp>&rsquo;<dd>Special properties of and simplifications for the function call
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; are not used.  One interesting case where <code>plain</code>
+is useful is the rule, &lsquo;<samp><span class="samp">q(x) := quote(x)</span></samp>&rsquo;, trying to expand a
+shorthand notation for the <code>quote</code> function.  This rule will
+not work as shown; instead of replacing &lsquo;<samp><span class="samp">q(foo)</span></samp>&rsquo; with
+&lsquo;<samp><span class="samp">quote(foo)</span></samp>&rsquo;, it will replace it with &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;!  The correct
+rule would be &lsquo;<samp><span class="samp">q(x) := plain(quote(x))</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">cons(h,t)</span></samp>&rsquo;<dd>Where &lsquo;<samp><span class="samp">t</span></samp>&rsquo; is a vector, this is converted into an expanded
+vector during rewrite processing.  Note that <code>cons</code> is a regular
+Calc function which normally does this anyway; the only way <code>cons</code>
+is treated specially by rewrites is that <code>cons</code> on the righthand
+side of a rule will be evaluated even if default simplifications
+have been turned off.
+
+     <br><dt>&lsquo;<samp><span class="samp">rcons(t,h)</span></samp>&rsquo;<dd>Analogous to <code>cons</code> except putting &lsquo;<samp><span class="samp">h</span></samp>&rsquo; at the <em>end</em> of
+the vector &lsquo;<samp><span class="samp">t</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">apply(f,args)</span></samp>&rsquo;<dd>Where &lsquo;<samp><span class="samp">f</span></samp>&rsquo; is a variable and <var>args</var> is a vector, this
+is converted to a function call.  Once again, note that <code>apply</code>
+is also a regular Calc function.
+
+     <br><dt>&lsquo;<samp><span class="samp">eval(x)</span></samp>&rsquo;<dd><a name="index-eval-1924"></a>The formula &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is handled in the usual way, then the
+default simplifications are applied to it even if they have
+been turned off normally.  This allows you to treat any function
+similarly to the way <code>cons</code> and <code>apply</code> are always
+treated.  However, there is a slight difference:  &lsquo;<samp><span class="samp">cons(2+3, [])</span></samp>&rsquo;
+with default simplifications off will be converted to &lsquo;<samp><span class="samp">[2+3]</span></samp>&rsquo;,
+whereas &lsquo;<samp><span class="samp">eval(cons(2+3, []))</span></samp>&rsquo; will be converted to &lsquo;<samp><span class="samp">[5]</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">evalsimp(x)</span></samp>&rsquo;<dd><a name="index-evalsimp-1925"></a>The formula &lsquo;<samp><span class="samp">x</span></samp>&rsquo; has meta-variables substituted in the usual
+way, then algebraically simplified as if by the <kbd>a s</kbd> command.
+
+     <br><dt>&lsquo;<samp><span class="samp">evalextsimp(x)</span></samp>&rsquo;<dd><a name="index-evalextsimp-1926"></a>The formula &lsquo;<samp><span class="samp">x</span></samp>&rsquo; has meta-variables substituted in the normal
+way, then &ldquo;extendedly&rdquo; simplified as if by the <kbd>a e</kbd> command.
+
+     <br><dt>&lsquo;<samp><span class="samp">select(x)</span></samp>&rsquo;<dd>See <a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>. 
+</dl>
+
+   <p>There are also some special functions you can use in conditions.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">let(v := x)</span></samp>&rsquo;<dd><a name="index-let-1927"></a>The expression &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is evaluated with meta-variables substituted. 
+The <kbd>a s</kbd> command's simplifications are <em>not</em> applied by
+default, but &lsquo;<samp><span class="samp">x</span></samp>&rsquo; can include calls to <code>evalsimp</code> or
+<code>evalextsimp</code> as described above to invoke higher levels
+of simplification.  The
+result of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is then bound to the meta-variable &lsquo;<samp><span class="samp">v</span></samp>&rsquo;.  As
+usual, if this meta-variable has already been matched to something
+else the two values must be equal; if the meta-variable is new then
+it is bound to the result of the expression.  This variable can then
+appear in later conditions, and on the righthand side of the rule. 
+In fact, &lsquo;<samp><span class="samp">v</span></samp>&rsquo; may be any pattern in which case the result of
+evaluating &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is matched to that pattern, binding any
+meta-variables that appear in that pattern.  Note that <code>let</code>
+can only appear by itself as a condition, or as one term of an
+&lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo; which is a whole condition:  It cannot be inside
+an &lsquo;<samp><span class="samp">||</span></samp>&rsquo; term or otherwise buried.
+
+     <p>The alternate, equivalent form &lsquo;<samp><span class="samp">let(v, x)</span></samp>&rsquo; is also recognized. 
+Note that the use of &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; by <code>let</code>, while still being
+assignment-like in character, is unrelated to the use of &lsquo;<samp><span class="samp">:=</span></samp>&rsquo;
+in the main part of a rewrite rule.
+
+     <p>As an example, &lsquo;<samp><span class="samp">f(a) := g(ia) :: let(ia := 1/a) :: constant(ia)</span></samp>&rsquo;
+replaces &lsquo;<samp><span class="samp">f(a)</span></samp>&rsquo; with &lsquo;<samp><span class="samp">g</span></samp>&rsquo; of the inverse of &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, if
+that inverse exists and is constant.  For example, if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a
+singular matrix the operation &lsquo;<samp><span class="samp">1/a</span></samp>&rsquo; is left unsimplified and
+&lsquo;<samp><span class="samp">constant(ia)</span></samp>&rsquo; fails, but if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is an invertible matrix
+then the rule succeeds.  Without <code>let</code> there would be no way
+to express this rule that didn't have to invert the matrix twice. 
+Note that, because the meta-variable &lsquo;<samp><span class="samp">ia</span></samp>&rsquo; is otherwise unbound
+in this rule, the <code>let</code> condition itself always &ldquo;succeeds&rdquo;
+because no matter what &lsquo;<samp><span class="samp">1/a</span></samp>&rsquo; evaluates to, it can successfully
+be bound to <code>ia</code>.
+
+     <p>Here's another example, for integrating cosines of linear
+terms:  &lsquo;<samp><span class="samp">myint(cos(y),x) := sin(y)/b :: let([a,b,x] := lin(y,x))</span></samp>&rsquo;. 
+The <code>lin</code> function returns a 3-vector if its argument is linear,
+or leaves itself unevaluated if not.  But an unevaluated <code>lin</code>
+call will not match the 3-vector on the lefthand side of the <code>let</code>,
+so this <code>let</code> both verifies that <code>y</code> is linear, and binds
+the coefficients <code>a</code> and <code>b</code> for use elsewhere in the rule. 
+(It would have been possible to use &lsquo;<samp><span class="samp">sin(a x + b)/b</span></samp>&rsquo; for the
+righthand side instead, but using &lsquo;<samp><span class="samp">sin(y)/b</span></samp>&rsquo; avoids gratuitous
+rearrangement of the argument of the sine.)
+
+     <p><a name="index-ierf-1928"></a>Similarly, here is a rule that implements an inverse-<code>erf</code>
+function.  It uses <code>root</code> to search for a solution.  If
+<code>root</code> succeeds, it will return a vector of two numbers
+where the first number is the desired solution.  If no solution
+is found, <code>root</code> remains in symbolic form.  So we use
+<code>let</code> to check that the result was indeed a vector.
+
+     <pre class="example">          ierf(x)  :=  y  :: let([y,z] := root(erf(a) = x, a, .5))
+</pre>
+     <br><dt>&lsquo;<samp><span class="samp">matches(v,p)</span></samp>&rsquo;<dd>The meta-variable <var>v</var>, which must already have been matched
+to something elsewhere in the rule, is compared against pattern
+<var>p</var>.  Since <code>matches</code> is a standard Calc function, it
+can appear anywhere in a condition.  But if it appears alone or
+as a term of a top-level &lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo;, then you get the special
+extra feature that meta-variables which are bound to things
+inside <var>p</var> can be used elsewhere in the surrounding rewrite
+rule.
+
+     <p>The only real difference between &lsquo;<samp><span class="samp">let(p := v)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">matches(v, p)</span></samp>&rsquo; is that the former evaluates &lsquo;<samp><span class="samp">v</span></samp>&rsquo; using
+the default simplifications, while the latter does not.
+
+     <br><dt>&lsquo;<samp><span class="samp">remember</span></samp>&rsquo;<dd><a name="index-remember-1929"></a>This is actually a variable, not a function.  If <code>remember</code>
+appears as a condition in a rule, then when that rule succeeds
+the original expression and rewritten expression are added to the
+front of the rule set that contained the rule.  If the rule set
+was not stored in a variable, <code>remember</code> is ignored.  The
+lefthand side is enclosed in <code>quote</code> in the added rule if it
+contains any variables.
+
+     <p>For example, the rule &lsquo;<samp><span class="samp">f(n) := n f(n-1) :: remember</span></samp>&rsquo; applied
+to &lsquo;<samp><span class="samp">f(7)</span></samp>&rsquo; will add the rule &lsquo;<samp><span class="samp">f(7) := 7 f(6)</span></samp>&rsquo; to the front
+of the rule set.  The rule set <code>EvalRules</code> works slightly
+differently:  There, the evaluation of &lsquo;<samp><span class="samp">f(6)</span></samp>&rsquo; will complete before
+the result is added to the rule set, in this case as &lsquo;<samp><span class="samp">f(7) := 5040</span></samp>&rsquo;. 
+Thus <code>remember</code> is most useful inside <code>EvalRules</code>.
+
+     <p>It is up to you to ensure that the optimization performed by
+<code>remember</code> is safe.  For example, the rule &lsquo;<samp><span class="samp">foo(n) := n
+:: evalv(eatfoo) &gt; 0 :: remember</span></samp>&rsquo; is a bad idea (<code>evalv</code> is
+the function equivalent of the <kbd>=</kbd> command); if the variable
+<code>eatfoo</code> ever contains 1, rules like &lsquo;<samp><span class="samp">foo(7) := 7</span></samp>&rsquo; will
+be added to the rule set and will continue to operate even if
+<code>eatfoo</code> is later changed to 0.
+
+     <br><dt>&lsquo;<samp><span class="samp">remember(c)</span></samp>&rsquo;<dd><a name="index-remember-1930"></a>Remember the match as described above, but only if condition &lsquo;<samp><span class="samp">c</span></samp>&rsquo;
+is true.  For example, &lsquo;<samp><span class="samp">remember(n % 4 = 0)</span></samp>&rsquo; in the above factorial
+rule remembers only every fourth result.  Note that &lsquo;<samp><span class="samp">remember(1)</span></samp>&rsquo;
+is equivalent to &lsquo;<samp><span class="samp">remember</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">remember(0)</span></samp>&rsquo; has no effect. 
+</dl>
+
+   </body></html>
+

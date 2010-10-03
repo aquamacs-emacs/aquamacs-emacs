@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>Options (Creating Labels) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029" title="Options (Defining Label Environments)">
+<link rel="next" href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029" title="Options (Referencing Labels)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Creating-Labels)"></a>
+<a name="Options-_0028Creating-Labels_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.3 Creating Labels</h3>
+
+<p><a name="index-Options_002c-creating-labels-466"></a><a name="index-Creating-labels_002c-options-467"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-insert-label-flags</b><var><a name="index-reftex_002dinsert_002dlabel_002dflags-468"></a></var><br>
+<blockquote><p>Flags governing label insertion.  The value has the form
+
+     <pre class="example">          (<var>derive</var> <var>prompt</var>)
+</pre>
+        <p>If <var>derive</var>is <code>t</code>, <b>RefTeX</b> will try to derive a sensible
+label from context.  A section label for example will be derived from
+the section heading.  The conversion of the context to a valid label is
+governed by the specifications given in
+<code>reftex-derive-label-parameters</code>.  If <var>derive</var> is <code>nil</code>,
+the default label will consist of the prefix and a unique number, like
+&lsquo;<samp><span class="samp">eq:23</span></samp>&rsquo;.
+
+        <p>If <var>prompt</var> is <code>t</code>, the user will be prompted for a label
+string.  When <var>prompt</var> is <code>nil</code>, the default label will be
+inserted without query.
+
+        <p>So the combination of <var>derive</var> and <var>prompt</var> controls label
+insertion.  Here is a table describing all four possibilities:
+
+     <pre class="example">          <var>derive</var> <var>prompt</var> <var>action</var>
+          -----------------------------------------------------------
+          nil    nil    <span class="roman">Insert simple label, like &lsquo;</span><samp><span class="samp">eq:22</span></samp><span class="roman">&rsquo; or &lsquo;</span><samp><span class="samp">sec:13</span></samp><span class="roman">&rsquo;. No query.</span>
+          nil    t      <span class="roman">Prompt for label.</span>
+          t      nil    <span class="roman">Derive a label from context and insert. No query.</span>
+          t      t      <span class="roman">Derive a label from context, prompt for confirmation.</span>
+</pre>
+        <p>Each flag may be set to <code>t</code>, <code>nil</code>, or a string of label type
+letters indicating the label types for which it should be true.  Thus,
+the combination may be set differently for each label type.  The default
+settings &lsquo;<samp><span class="samp">"s"</span></samp>&rsquo; and &lsquo;<samp><span class="samp">"sft"</span></samp>&rsquo; mean: Derive section labels from
+headings (with confirmation).  Prompt for figure and table labels.  Use
+simple labels without confirmation for everything else.
+
+        <p>The available label types are: <code>s</code> (section), <code>f</code> (figure),
+<code>t</code> (table), <code>i</code> (item), <code>e</code> (equation), <code>n</code>
+(footnote), <code>N</code> (endnote) plus any definitions in
+<code>reftex-label-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Hook: <b>reftex-format-label-function</b><var><a name="index-reftex_002dformat_002dlabel_002dfunction-469"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, should be a function which produces the string to
+insert as a label definition.  The function will be called with two
+arguments, the <var>label</var> and the <var>default-format</var> (usually
+&lsquo;<samp><span class="samp">\label{%s}</span></samp>&rsquo;).  It should return the string to insert into the
+buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Hook: <b>reftex-string-to-label-function</b><var><a name="index-reftex_002dstring_002dto_002dlabel_002dfunction-470"></a></var><br>
+<blockquote><p>Function to turn an arbitrary string into a valid label. 
+<b>RefTeX</b>'s default function uses the variable
+<code>reftex-derive-label-parameters</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Hook: <b>reftex-translate-to-ascii-function</b><var><a name="index-reftex_002dtranslate_002dto_002dascii_002dfunction-471"></a></var><br>
+<blockquote><p>Filter function which will process a context string before it is used to
+derive a label from it.  The intended application is to convert ISO or
+Mule characters into something valid in labels.  The default function
+<code>reftex-latin1-to-ascii</code> removes the accents from Latin-1
+characters.  X-Symbol (&gt;=2.6) sets this variable to the much more
+general <code>x-symbol-translate-to-ascii</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-derive-label-parameters</b><var><a name="index-reftex_002dderive_002dlabel_002dparameters-472"></a></var><br>
+<blockquote><p>Parameters for converting a string into a label.  This variable is a
+list of the following items:
+          <dl>
+<dt><var>nwords</var><dd>Number of words to use. 
+<br><dt><var>maxchar</var><dd>Maximum number of characters in a label string. 
+<br><dt><var>invalid</var><dd><code>nil</code>: Throw away any words containing characters invalid in labels.<br>
+<code>t</code>:   Throw away only the invalid characters, not the whole word. 
+<br><dt><var>abbrev</var><dd><code>nil</code>: Never abbreviate words.<br>
+<code>t</code>:   Always abbreviate words (see <code>reftex-abbrev-parameters</code>).<br>
+<code>1</code>:   Abbreviate words if necessary to shorten label string. 
+<br><dt><var>separator</var><dd>String separating different words in the label. 
+<br><dt><var>ignorewords</var><dd>List of words which should not be part of labels. 
+<br><dt><var>downcase</var><dd><code>t</code>:   Downcase words before putting them into the label.<br>
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-label-illegal-re</b><var><a name="index-reftex_002dlabel_002dillegal_002dre-473"></a></var><br>
+<blockquote><p>Regexp matching characters not valid in labels. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-abbrev-parameters</b><var><a name="index-reftex_002dabbrev_002dparameters-474"></a></var><br>
+<blockquote><p>Parameters for abbreviation of words.  A list of four parameters.
+          <dl>
+<dt><var>min-chars</var><dd>Minimum number of characters remaining after abbreviation. 
+<br><dt><var>min-kill</var><dd>Minimum number of characters to remove when abbreviating words. 
+<br><dt><var>before</var><dd>Character class before abbrev point in word. 
+<br><dt><var>after</var><dd>Character class after  abbrev point in word. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

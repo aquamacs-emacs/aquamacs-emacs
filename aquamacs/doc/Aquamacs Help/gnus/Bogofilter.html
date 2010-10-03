@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Bogofilter - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
+<link rel="prev" href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" title="Regular Expressions Header Matching">
+<link rel="next" href="SpamAssassin-back-end.html#SpamAssassin-back-end" title="SpamAssassin back end">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Bogofilter"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SpamAssassin-back-end.html#SpamAssassin-back-end">SpamAssassin back end</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching">Regular Expressions Header Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.6.7 Bogofilter</h5>
+
+<p><a name="index-spam-filtering-2954"></a><a name="index-bogofilter_002c-spam-filtering-2955"></a><a name="index-spam-2956"></a>
+
+<div class="defun">
+&mdash; Variable: <b>spam-use-bogofilter</b><var><a name="index-spam_002duse_002dbogofilter-2957"></a></var><br>
+<blockquote>
+        <p>Set this variable if you want <code>spam-split</code> to use Eric Raymond's
+speedy Bogofilter.
+
+        <p>With a minimum of care for associating the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark for spam
+articles only, Bogofilter training all gets fairly automatic.  You
+should do this until you get a few hundreds of articles in each
+category, spam or not.  The command <kbd>S t</kbd> in summary mode, either
+for debugging or for curiosity, shows the <em>spamicity</em> score of
+the current article (between 0.0 and 1.0).
+
+        <p>Bogofilter determines if a message is spam based on a specific
+threshold.  That threshold can be customized, consult the Bogofilter
+documentation.
+
+        <p>If the <code>bogofilter</code> executable is not in your path, Bogofilter
+processing will be turned off.
+
+        <p>You should not enable this if you use <code>spam-use-bogofilter-headers</code>.
+
+        </blockquote></div>
+
+     <dl>
+<dt><kbd>M s t</kbd><dt><kbd>S t</kbd><dd><a name="index-M-s-t-2958"></a><a name="index-S-t-2959"></a><a name="index-spam_002dbogofilter_002dscore-2960"></a>Get the Bogofilter spamicity score (<code>spam-bogofilter-score</code>). 
+</dl>
+
+<div class="defun">
+&mdash; Variable: <b>spam-use-bogofilter-headers</b><var><a name="index-spam_002duse_002dbogofilter_002dheaders-2961"></a></var><br>
+<blockquote>
+        <p>Set this variable if you want <code>spam-split</code> to use Eric Raymond's
+speedy Bogofilter, looking only at the message headers.  It works
+similarly to <code>spam-use-bogofilter</code>, but the <code>X-Bogosity</code> header
+must be in the message already.  Normally you would do this with a
+procmail recipe or something similar; consult the Bogofilter
+installation documents for details.
+
+        <p>You should not enable this if you use <code>spam-use-bogofilter</code>.
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-spam-exit-processor-bogofilter</b><var><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dbogofilter-2962"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameters or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
+added to a group's <code>spam-process</code> parameter, spam-marked articles
+will be added to the Bogofilter spam database.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-spam-exit-processor-bogofilter</code>, it is recommended
+that you use <code>(spam spam-use-bogofilter)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-ham-exit-processor-bogofilter</b><var><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dbogofilter-2963"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameters or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
+added to a group's <code>spam-process</code> parameter, the ham-marked
+articles in <em>ham</em> groups will be added to the Bogofilter database
+of non-spam messages.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-ham-exit-processor-bogofilter</code>, it is recommended
+that you use <code>(ham spam-use-bogofilter)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>spam-bogofilter-database-directory</b><var><a name="index-spam_002dbogofilter_002ddatabase_002ddirectory-2964"></a></var><br>
+<blockquote>
+        <p>This is the directory where Bogofilter will store its databases.  It
+is not specified by default, so Bogofilter will use its own default
+database directory.
+
+        </blockquote></div>
+
+   <p>The Bogofilter mail classifier is similar to <samp><span class="command">ifile</span></samp> in intent and
+purpose.  A ham and a spam processor are provided, plus the
+<code>spam-use-bogofilter</code> and <code>spam-use-bogofilter-headers</code>
+variables to indicate to spam-split that Bogofilter should either be
+used, or has already been used on the article.  The 0.9.2.1 version of
+Bogofilter was used to test this functionality.
+
+   </body></html>
+

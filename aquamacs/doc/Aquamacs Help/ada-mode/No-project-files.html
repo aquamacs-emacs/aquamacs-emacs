@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+<title>No project files - Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compiling-Examples.html#Compiling-Examples" title="Compiling Examples">
+<link rel="prev" href="Compiling-Examples.html#Compiling-Examples" title="Compiling Examples">
+<link rel="next" href="Set-compiler-options.html#Set-compiler-options" title="Set compiler options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="No-project-files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Set-compiler-options.html#Set-compiler-options">Set compiler options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-Examples.html#Compiling-Examples">Compiling Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compiling-Examples.html#Compiling-Examples">Compiling Examples</a>
+<hr>
+</div>
+
+<h3 class="section">6.1 No project files</h3>
+
+<p>This example uses no project files.
+
+   <p>First, create a directory <samp><span class="file">Example_1</span></samp>, containing:
+
+   <p><samp><span class="file">hello.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     procedure Hello
+     is begin
+        Put_Line("Hello from hello.adb");
+     end Hello;
+</pre>
+   <p>Yes, this is missing &ldquo;use Ada.Text_IO;&rdquo; - we want to demonstrate
+compiler error handling.
+
+   <p><samp><span class="file">hello_2.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     procedure Hello_2
+     is begin
+        Hello_Pkg.Say_Hello;
+     end Hello_2;
+</pre>
+   <p>This file has no errors.
+
+   <p><samp><span class="file">hello_pkg.ads</span></samp>:
+
+<pre class="example">     package Hello_Pkg is
+        procedure Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>This file has no errors.
+
+   <p><samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     package Hello_Pkg is
+        procedure Say_Hello
+        is begin
+           Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
+        end Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>Yes, this is missing the keyword <code>body</code>; another compiler error
+example.
+
+   <p>In buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Check file</span></samp>&rsquo;. You should
+get a <code>*compilation*</code> buffer containing something like (the
+directory paths will be different):
+
+<pre class="example">     cd c:/Examples/Example_1/
+     gnatmake -u -c -gnatc -g c:/Examples/Example_1/hello.adb -cargs -gnatq -gnatQ
+     gcc -c -Ic:/Examples/Example_1/ -gnatc -g -gnatq -gnatQ -I- c:/Examples/Example_1/hello.adb
+     hello.adb:4:04: "Put_Line" is not visible
+     hello.adb:4:04: non-visible declaration at a-textio.ads:264
+     hello.adb:4:04: non-visible declaration at a-textio.ads:260
+     gnatmake: "c:/Examples/Example_1/hello.adb" compilation error
+</pre>
+   <p>If you have enabled font-lock, the lines with actual errors (starting
+with <samp><span class="file">hello.adb</span></samp>) are highlighted, with the file name in red.
+
+   <p>Now type <kbd>C-x `</kbd> (on a PC keyboard, &lt;`&gt; is next to &lt;1&gt;). 
+Or you can click the middle mouse button on the first error line. The
+compilation buffer scrolls to put the first error on the top line, and
+point is put at the place of the error in the <samp><span class="file">hello.adb</span></samp> buffer.
+
+   <p>To fix the error, change the line to be
+
+<pre class="example">         Ada.Text_IO.Put_Line ("hello from hello.adb");
+</pre>
+   <p>Now invoke &lsquo;<samp><span class="samp">Ada | Show main</span></samp>&rsquo;; this displays &lsquo;<samp><span class="samp">Ada mode main: hello</span></samp>&rsquo;.
+
+   <p>Now (in buffer <samp><span class="file">hello.adb</span></samp>), invoke &lsquo;<samp><span class="samp">Ada | Build</span></samp>&rsquo;. You are
+prompted to save the file (if you haven't already). Then the
+compilation buffer is displayed again, containing:
+
+<pre class="example">     cd c:/Examples/Example_1/
+     gnatmake -o hello hello -g -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatq -gnatQ hello.adb
+     gnatbind -x hello.ali
+     gnatlink hello.ali -o hello.exe -g
+</pre>
+   <p>The compilation has succeeded without errors; <samp><span class="file">hello.exe</span></samp> now
+exists in the same directory as <samp><span class="file">hello.adb</span></samp>.
+
+   <p>Now invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;. A <samp><span class="file">*run*</span></samp> buffer is displayed,
+containing
+
+<pre class="example">     Hello from hello.adb
+     
+     Process run finished
+</pre>
+   <p>That completes the first part of this example.
+
+   <p>Now we will compile a multi-file project. Open the file
+<samp><span class="file">hello_2.adb</span></samp>, and invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;. This
+finds an error in <samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     cd c:/Examples/Example_1/
+     gnatmake -o hello_2 hello_2 -g -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatq -gnatQ hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "hello_pkg.adb" compilation error
+</pre>
+   <p>This demonstrates that gnatmake finds the files needed by the main
+program. However, it cannot find files in a different directory,
+unless you use an Emacs Ada mode project file to specify the other directories;
+See <a href="Set-source-search-path.html#Set-source-search-path">Set source search path</a>, or a GNAT project file; <a href="Use-GNAT-project-file.html#Use-GNAT-project-file">Use GNAT project file</a>.
+
+   <p>Invoke &lsquo;<samp><span class="samp">Ada | Show main</span></samp>&rsquo;; this displays <samp><span class="file">Ada mode main: hello_2</span></samp>.
+
+   <p>Move to the error with <kbd>C-x `</kbd>, and fix the error by adding <code>body</code>:
+
+<pre class="example">     package body Hello_Pkg is
+</pre>
+   <p>Now, while still in <samp><span class="file">hello_pkg.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Build</span></samp>&rsquo;. 
+gnatmake successfully builds <samp><span class="file">hello_2</span></samp>. This demonstrates that
+Emacs has remembered the main file, in the project variable
+<code>main</code>, and used it for the Build command.
+
+   <p>Finally, again while in <samp><span class="file">hello_pkg.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;. 
+The <code>*run*</code> buffer displays <code>Hello from hello_pkg.adb</code>.
+
+   <p>One final point. If you switch back to buffer <samp><span class="file">hello.adb</span></samp>, and
+invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;, <samp><span class="file">hello_2.exe</span></samp> will be run. That is
+because <code>main</code> is still set to <code>hello_2</code>, as you can
+see when you invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;.
+
+   <p>There are three ways to change <code>main</code>:
+
+     <ol type=1 start=1>
+<li>Invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;, which sets <code>main</code> to
+the current file.
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;, edit <code>main</code>, and click &lsquo;<samp><span class="samp">[save]</span></samp>&rsquo;
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;, and load a project file that specifies <code>main</code>
+
+        </ol>
+
+   </body></html>
+

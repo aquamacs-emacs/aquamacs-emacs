@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Drafts - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Composing-Messages.html#Composing-Messages" title="Composing Messages">
+<link rel="prev" href="Posting-Styles.html#Posting-Styles" title="Posting Styles">
+<link rel="next" href="Rejected-Articles.html#Rejected-Articles" title="Rejected Articles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Drafts"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rejected-Articles.html#Rejected-Articles">Rejected Articles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Posting-Styles.html#Posting-Styles">Posting Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messages">Composing Messages</a>
+<hr>
+</div>
+
+<h3 class="section">5.7 Drafts</h3>
+
+<p><a name="index-drafts-1963"></a>
+If you are writing a message (mail or news) and suddenly remember that
+you have a steak in the oven (or some pesto in the food processor, you
+craaazy vegetarians), you'll probably wish there was a method to save
+the message you are writing so that you can continue editing it some
+other day, and send it when you feel its finished.
+
+   <p>Well, don't worry about it.  Whenever you start composing a message of
+some sort using the Gnus mail and post commands, the buffer you get will
+automatically associate to an article in a special <dfn>draft</dfn> group. 
+If you save the buffer the normal way (<kbd>C-x C-s</kbd>, for instance), the
+article will be saved there.  (Auto-save files also go to the draft
+group.)
+
+   <p><a name="index-nndraft-1964"></a><a name="index-nndraft_002ddirectory-1965"></a>The draft group is a special group (which is implemented as an
+<code>nndraft</code> group, if you absolutely have to know) called
+&lsquo;<samp><span class="samp">nndraft:drafts</span></samp>&rsquo;.  The variable <code>nndraft-directory</code> says where
+<code>nndraft</code> is to store its files.  What makes this group special is
+that you can't tick any articles in it or mark any articles as
+read&mdash;all articles in the group are permanently unread.
+
+   <p>If the group doesn't exist, it will be created and you'll be subscribed
+to it.  The only way to make it disappear from the Group buffer is to
+unsubscribe it.  The special properties of the draft group comes from
+a group property (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>), and if lost the group
+behaves like any other group.  This means the commands below will not
+be available.  To restore the special properties of the group, the
+simplest way is to kill the group, using <kbd>C-k</kbd>, and restart
+Gnus.  The group is automatically created again with the
+correct parameters.  The content of the group is not lost.
+
+<!-- @findex gnus-dissociate-buffer-from-draft -->
+<!-- @kindex C-c M-d (Mail) -->
+<!-- @kindex C-c M-d (Post) -->
+<!-- @findex gnus-associate-buffer-with-draft -->
+<!-- @kindex C-c C-d (Mail) -->
+<!-- @kindex C-c C-d (Post) -->
+<!-- If you're writing some super-secret message that you later want to -->
+<!-- encode with PGP before sending, you may wish to turn the auto-saving -->
+<!-- (and association with the draft group) off.  You never know who might be -->
+<!-- interested in reading all your extremely valuable and terribly horrible -->
+<!-- and interesting secrets.  The @kbd{C-c M-d} -->
+<!-- (@code{gnus-dissociate-buffer-from-draft}) command does that for you. -->
+<!-- If you change your mind and want to turn the auto-saving back on again, -->
+<!-- @kbd{C-c C-d} (@code{gnus-associate-buffer-with-draft} does that. -->
+<!-- @vindex gnus-use-draft -->
+<!-- To leave association with the draft group off by default, set -->
+<!-- @code{gnus-use-draft} to @code{nil}.  It is @code{t} by default. -->
+   <p><a name="index-gnus_002ddraft_002dedit_002dmessage-1966"></a><a name="index-D-e-_0028Draft_0029-1967"></a>When you want to continue editing the article, you simply enter the
+draft group and push <kbd>D e</kbd> (<code>gnus-draft-edit-message</code>) to do
+that.  You will be placed in a buffer where you left off.
+
+   <p>Rejected articles will also be put in this draft group (see <a href="Rejected-Articles.html#Rejected-Articles">Rejected Articles</a>).
+
+   <p><a name="index-gnus_002ddraft_002dsend_002dall_002dmessages-1968"></a><a name="index-D-s-_0028Draft_0029-1969"></a><a name="index-gnus_002ddraft_002dsend_002dmessage-1970"></a><a name="index-D-S-_0028Draft_0029-1971"></a>If you have lots of rejected messages you want to post (or mail) without
+doing further editing, you can use the <kbd>D s</kbd> command
+(<code>gnus-draft-send-message</code>).  This command understands the
+process/prefix convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).  The <kbd>D S</kbd>
+command (<code>gnus-draft-send-all-messages</code>) will ship off all messages
+in the buffer.
+
+   <p><a name="index-gnus_002ddraft_002dtoggle_002dsending-1972"></a><a name="index-D-t-_0028Draft_0029-1973"></a>If you have some messages that you wish not to send, you can use the
+<kbd>D t</kbd> (<code>gnus-draft-toggle-sending</code>) command to mark the message
+as unsendable.  This is a toggling command.
+
+   </body></html>
+

@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>EDT Emulation for Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EDT Emulation for Emacs">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the EDT emulation package for Emacs.
+
+Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">EDT Emulation for Emacs</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">Emacs EDT emulation</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">1 Overview of the EDT Package</a>
+<ul>
+<li><a href="Quick-start.html#Quick-start">1.1 How to Begin Using EDT</a>
+<li><a href="Changes.html#Changes">1.2 What's New in Version 4.0</a>
+<li><a href="Goals.html#Goals">1.3 The Aims of this Package</a>
+</li></ul>
+<li><a name="toc_Supported-terminals" href="Supported-terminals.html#Supported-terminals">2 Terminals/Keyboards that are Supported</a>
+<li><a name="toc_Starting-emulation" href="Starting-emulation.html#Starting-emulation">3 How to Get Started</a>
+<li><a name="toc_Platform_002dspecific-notes" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes">4 Notes Specific to Certain Platforms</a>
+<ul>
+<li><a href="Sun-workstations.html#Sun-workstations">4.1 Sun Workstations Running X</a>
+<li><a href="MS_002dDOS.html#MS_002dDOS">4.2 PC Users Running MS-DOS</a>
+<li><a href="GNU_002fLinux.html#GNU_002fLinux">4.3 PC Users Running GNU/Linux</a>
+<li><a href="Unix.html#Unix">4.4 General Notes on Using &lt;NumLock&gt; for the &lt;PF1&gt; Key on Unix Systems</a>
+</li></ul>
+<li><a name="toc_Differences" href="Differences.html#Differences">5 How Does this EDT Emulation Differ from Real EDT?</a>
+<li><a name="toc_Highlights" href="Highlights.html#Highlights">6 Some Highlights, and Comparisons to the Original Emacs EDT Emulation</a>
+<li><a name="toc_Customizing" href="Customizing.html#Customizing">7 Customizing Emulation</a>
+<ul>
+<li><a href="edt_002duser_002eel.html#edt_002duser_002eel">7.1 Creating your own <samp><span class="file">edt-user.el</span></samp> File</a>
+<li><a href="Words.html#Words">7.2 Specifying Word Entities</a>
+<li><a href="Control-keys.html#Control-keys">7.3 Enabling EDT Control Key Sequence Bindings</a>
+<li><a href="Scroll-margins.html#Scroll-margins">7.4 Setting Scroll Margins</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overview.html#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Emacs EDT emulation</h2>
+
+<p>This manual describes the Emacs EDT package, which provides emulation
+of DEC's EDT editor.
+
+   <p>This file documents the EDT emulation package for Emacs.
+
+   <p>Copyright &copy; 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Overview.html#Overview">Overview</a>:                 Overview of the EDT package. 
+<li><a accesskey="2" href="Supported-terminals.html#Supported-terminals">Supported terminals</a>:      Terminals/keyboards that are supported. 
+<li><a accesskey="3" href="Starting-emulation.html#Starting-emulation">Starting emulation</a>:       How to get started. 
+<li><a accesskey="4" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes">Platform-specific notes</a>:  Notes specific to certain platforms. 
+<li><a accesskey="5" href="Differences.html#Differences">Differences</a>:              How does this EDT emulation differ from real EDT? 
+<li><a accesskey="6" href="Highlights.html#Highlights">Highlights</a>:               Some highlights, and comparisons to the
+                              original Emacs EDT emulation. 
+<li><a accesskey="7" href="Customizing.html#Customizing">Customizing</a>:              Customizing emulation. 
+<li><a accesskey="8" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:   The license for this manual. 
+</ul>
+
+   </body></html>
+

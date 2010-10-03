@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Trigonometric and Hyperbolic Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scientific-Functions.html#Scientific-Functions" title="Scientific Functions">
+<link rel="prev" href="Logarithmic-Functions.html#Logarithmic-Functions" title="Logarithmic Functions">
+<link rel="next" href="Advanced-Math-Functions.html#Advanced-Math-Functions" title="Advanced Math Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Trigonometric-and-Hyperbolic-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-Math-Functions.html#Advanced-Math-Functions">Advanced Math Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Logarithmic-Functions.html#Logarithmic-Functions">Logarithmic Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>
+<hr>
+</div>
+
+<h3 class="section">9.2 Trigonometric/Hyperbolic Functions</h3>
+
+<p class="noindent"><a name="index-S-1011"></a><a name="index-calc_002dsin-1012"></a><a name="index-sin-1013"></a>The shift-<kbd>S</kbd> (<code>calc-sin</code>) [<code>sin</code>] command computes the sine
+of an angle or complex number.  If the input is an HMS form, it is interpreted
+as degrees-minutes-seconds; otherwise, the input is interpreted according
+to the current angular mode.  It is best to use Radians mode when operating
+on complex numbers.
+
+   <p>Calc's &ldquo;units&rdquo; mechanism includes angular units like <code>deg</code>,
+<code>rad</code>, and <code>grad</code>.  While &lsquo;<samp><span class="samp">sin(45 deg)</span></samp>&rsquo; is not evaluated
+all the time, the <kbd>u s</kbd> (<code>calc-simplify-units</code>) command will
+simplify &lsquo;<samp><span class="samp">sin(45 deg)</span></samp>&rsquo; by taking the sine of 45 degrees, regardless
+of the current angular mode.  See <a href="Basic-Operations-on-Units.html#Basic-Operations-on-Units">Basic Operations on Units</a>.
+
+   <p>Also, the symbolic variable <code>pi</code> is not ordinarily recognized in
+arguments to trigonometric functions, as in &lsquo;<samp><span class="samp">sin(3 pi / 4)</span></samp>&rsquo;, but
+the <kbd>a s</kbd> (<code>calc-simplify</code>) command recognizes many such
+formulas when the current angular mode is Radians <em>and</em> Symbolic
+mode is enabled; this example would be replaced by &lsquo;<samp><span class="samp">sqrt(2) / 2</span></samp>&rsquo;. 
+See <a href="Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>.  Beware, this simplification occurs even if you
+have stored a different value in the variable &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;; this is one
+reason why changing built-in variables is a bad idea.  Arguments of
+the form &lsquo;<samp><span class="samp">x</span></samp>&rsquo; plus a multiple of &lsquo;<samp><span class="samp">pi/2</span></samp>&rsquo; are also simplified. 
+Calc includes similar formulas for <code>cos</code> and <code>tan</code>.
+
+   <p>The <kbd>a s</kbd> command knows all angles which are integer multiples of
+&lsquo;<samp><span class="samp">pi/12</span></samp>&rsquo;, &lsquo;<samp><span class="samp">pi/10</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">pi/8</span></samp>&rsquo; radians.  In Degrees mode,
+analogous simplifications occur for integer multiples of 15 or 18
+degrees, and for arguments plus multiples of 90 degrees.
+
+   <p><a name="index-I-S-1014"></a><a name="index-calc_002darcsin-1015"></a><a name="index-arcsin-1016"></a>With the Inverse flag, <code>calc-sin</code> computes an arcsine.  This is also
+available as the <code>calc-arcsin</code> command or <code>arcsin</code> algebraic
+function.  The returned argument is converted to degrees, radians, or HMS
+notation depending on the current angular mode.
+
+   <p><a name="index-H-S-1017"></a><a name="index-calc_002dsinh-1018"></a><a name="index-sinh-1019"></a><a name="index-H-I-S-1020"></a><a name="index-calc_002darcsinh-1021"></a><a name="index-arcsinh-1022"></a>With the Hyperbolic flag, <code>calc-sin</code> computes the hyperbolic
+sine, also available as <code>calc-sinh</code> [<code>sinh</code>].  With the
+Hyperbolic and Inverse flags, it computes the hyperbolic arcsine
+(<code>calc-arcsinh</code>) [<code>arcsinh</code>].
+
+   <p><a name="index-C-1023"></a><a name="index-calc_002dcos-1024"></a><a name="index-cos-1025"></a><a name="index-I-C-1026"></a><a name="index-calc_002darccos-1027"></a><a name="index-arccos-1028"></a><a name="index-H-C-1029"></a><a name="index-calc_002dcosh-1030"></a><a name="index-cosh-1031"></a><a name="index-H-I-C-1032"></a><a name="index-calc_002darccosh-1033"></a><a name="index-arccosh-1034"></a><a name="index-T-1035"></a><a name="index-calc_002dtan-1036"></a><a name="index-tan-1037"></a><a name="index-I-T-1038"></a><a name="index-calc_002darctan-1039"></a><a name="index-arctan-1040"></a><a name="index-H-T-1041"></a><a name="index-calc_002dtanh-1042"></a><a name="index-tanh-1043"></a><a name="index-H-I-T-1044"></a><a name="index-calc_002darctanh-1045"></a><a name="index-arctanh-1046"></a>The shift-<kbd>C</kbd> (<code>calc-cos</code>) [<code>cos</code>] command computes the cosine
+of an angle or complex number, and shift-<kbd>T</kbd> (<code>calc-tan</code>) [<code>tan</code>]
+computes the tangent, along with all the various inverse and hyperbolic
+variants of these functions.
+
+   <p><a name="index-f-T-1047"></a><a name="index-calc_002darctan2-1048"></a><a name="index-arctan2-1049"></a>The <kbd>f T</kbd> (<code>calc-arctan2</code>) [<code>arctan2</code>] command takes two
+numbers from the stack and computes the arc tangent of their ratio.  The
+result is in the full range from <i>-180</i> (exclusive) to <i>+180</i>
+(inclusive) degrees, or the analogous range in radians.  A similar
+result would be obtained with <kbd>/</kbd> followed by <kbd>I T</kbd>, but the
+value would only be in the range from <i>-90</i> to <i>+90</i> degrees
+since the division loses information about the signs of the two
+components, and an error might result from an explicit division by zero
+which <code>arctan2</code> would avoid.  By (arbitrary) definition,
+&lsquo;<samp><span class="samp">arctan2(0,0)=0</span></samp>&rsquo;.
+
+   <p><a name="index-calc_002dsincos-1050"></a><a name="index-sincos-1051"></a><a name="index-arcsincos-1052"></a>The <code>calc-sincos</code> [<code>sincos</code>] command computes the sine and
+cosine of a number, returning them as a vector of the form
+&lsquo;<samp><span class="samp">[</span><var>cos</var><span class="samp">, </span><var>sin</var><span class="samp">]</span></samp>&rsquo;. 
+With the Inverse flag [<code>arcsincos</code>], this command takes a two-element
+vector as an argument and computes <code>arctan2</code> of the elements. 
+(This command does not accept the Hyperbolic flag.)
+
+   <p><a name="index-calc_002dsec-1053"></a><a name="index-sec-1054"></a><a name="index-calc_002dcsc-1055"></a><a name="index-csc-1056"></a><a name="index-calc_002dcot-1057"></a><a name="index-cot-1058"></a><a name="index-calc_002dsech-1059"></a><a name="index-sech-1060"></a><a name="index-calc_002dcsch-1061"></a><a name="index-csch-1062"></a><a name="index-calc_002dcoth-1063"></a><a name="index-coth-1064"></a>The remaining trigonometric functions, <code>calc-sec</code> [<code>sec</code>],
+<code>calc-csc</code> [<code>csc</code>] and <code>calc-cot</code> [<code>cot</code>], are also
+available.  With the Hyperbolic flag, these compute their hyperbolic
+counterparts, which are also available separately as <code>calc-sech</code>
+[<code>sech</code>], <code>calc-csch</code> [<code>csch</code>] and <code>calc-coth</code>
+[<code>coth</code>].  (These commands do not accept the Inverse flag.)
+
+   </body></html>
+

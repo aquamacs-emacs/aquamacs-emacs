@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>Implementation Parameters - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numbers.html#Numbers" title="Numbers">
+<link rel="prev" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Implementation-Parameters"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Random-Numbers.html#Random-Numbers">Random Numbers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
+<hr>
+</div>
+
+<h3 class="section">9.4 Implementation Parameters</h3>
+
+<p class="noindent">This package defines several useful constants having to with numbers.
+
+   <p>The following parameters have to do with floating-point numbers. 
+This package determines their values by exercising the computer's
+floating-point arithmetic in various ways.  Because this operation
+might be slow, the code for initializing them is kept in a separate
+function that must be called before the parameters can be used.
+
+<div class="defun">
+&mdash; Function: <b>cl-float-limits</b><var><a name="index-cl_002dfloat_002dlimits-88"></a></var><br>
+<blockquote><p>This function makes sure that the Common Lisp floating-point parameters
+like <code>most-positive-float</code> have been initialized.  Until it is
+called, these parameters will be <code>nil</code>.  If this version of Emacs
+does not support floats, the parameters will remain <code>nil</code>.  If the
+parameters have already been initialized, the function returns
+immediately.
+
+        <p>The algorithm makes assumptions that will be valid for most modern
+machines, but will fail if the machine's arithmetic is extremely
+unusual, e.g., decimal. 
+</p></blockquote></div>
+
+   <p>Since true Common Lisp supports up to four different floating-point
+precisions, it has families of constants like
+<code>most-positive-single-float</code>, <code>most-positive-double-float</code>,
+<code>most-positive-long-float</code>, and so on.  Emacs has only one
+floating-point precision, so this package omits the precision word
+from the constants' names.
+
+<div class="defun">
+&mdash; Variable: <b>most-positive-float</b><var><a name="index-most_002dpositive_002dfloat-89"></a></var><br>
+<blockquote><p>This constant equals the largest value a Lisp float can hold. 
+For those systems whose arithmetic supports infinities, this is
+the largest <em>finite</em> value.  For IEEE machines, the value
+is approximately <code>1.79e+308</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>most-negative-float</b><var><a name="index-most_002dnegative_002dfloat-90"></a></var><br>
+<blockquote><p>This constant equals the most-negative value a Lisp float can hold. 
+(It is assumed to be equal to <code>(- most-positive-float)</code>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>least-positive-float</b><var><a name="index-least_002dpositive_002dfloat-91"></a></var><br>
+<blockquote><p>This constant equals the smallest Lisp float value greater than zero. 
+For IEEE machines, it is about <code>4.94e-324</code> if denormals are
+supported or <code>2.22e-308</code> if not. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>least-positive-normalized-float</b><var><a name="index-least_002dpositive_002dnormalized_002dfloat-92"></a></var><br>
+<blockquote><p>This constant equals the smallest <em>normalized</em> Lisp float greater
+than zero, i.e., the smallest value for which IEEE denormalization
+will not result in a loss of precision.  For IEEE machines, this
+value is about <code>2.22e-308</code>.  For machines that do not support
+the concept of denormalization and gradual underflow, this constant
+will always equal <code>least-positive-float</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>least-negative-float</b><var><a name="index-least_002dnegative_002dfloat-93"></a></var><br>
+<blockquote><p>This constant is the negative counterpart of <code>least-positive-float</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>least-negative-normalized-float</b><var><a name="index-least_002dnegative_002dnormalized_002dfloat-94"></a></var><br>
+<blockquote><p>This constant is the negative counterpart of
+<code>least-positive-normalized-float</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>float-epsilon</b><var><a name="index-float_002depsilon-95"></a></var><br>
+<blockquote><p>This constant is the smallest positive Lisp float that can be added
+to 1.0 to produce a distinct value.  Adding a smaller number to 1.0
+will yield 1.0 again due to roundoff.  For IEEE machines, epsilon
+is about <code>2.22e-16</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>float-negative-epsilon</b><var><a name="index-float_002dnegative_002depsilon-96"></a></var><br>
+<blockquote><p>This is the smallest positive value that can be subtracted from
+1.0 to produce a distinct value.  For IEEE machines, it is about
+<code>1.11e-16</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

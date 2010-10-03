@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Optional Installation File At Point - Dired Extra Version 2 User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Extra Version 2 User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Installation.html#Installation" title="Installation">
+<link rel="prev" href="Optional-Installation-Dired-Jump.html#Optional-Installation-Dired-Jump" title="Optional Installation Dired Jump">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Optional-Installation-File-At-Point"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Optional-Installation-Dired-Jump.html#Optional-Installation-Dired-Jump">Optional Installation Dired Jump</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Installation.html#Installation">Installation</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">2.2 Optional Installation File At Point</h3>
+
+<p><a name="index-Binding-_0040code_007bdired_002dx_002dfind_002dfile_007d-5"></a>If you choose to have <samp><span class="file">dired-x.el</span></samp> bind <code>dired-x-find-file</code> over
+<code>find-file</code> (see <a href="Find-File-At-Point.html#Find-File-At-Point">Find File At Point</a>), then you will need to set
+<code>dired-x-hands-off-my-keys</code> and make a call to the function
+<code>dired-x-bind-find-file</code> in the <code>dired-load-hook</code>:
+
+<pre class="example">     (add-hook 'dired-load-hook
+               (lambda ()
+                 (load "dired-x")
+                 ;; Bind dired-x-find-file.
+                 (setq dired-x-hands-off-my-keys nil)
+                 ;; Make sure our binding preference is invoked.
+                 (dired-x-bind-find-file)
+                 ))
+</pre>
+   <p>Alternatively, you can set the variable <em>before</em> <samp><span class="file">dired-x.el</span></samp> is
+loaded
+
+<pre class="example">     (add-hook 'dired-load-hook
+               (lambda ()
+                 ;; Bind dired-x-find-file.
+                 (setq dired-x-hands-off-my-keys nil)
+                 (load "dired-x")
+                 ))
+</pre>
+   </body></html>
+

@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Changing Servers - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
+<link rel="prev" href="New-Groups.html#New-Groups" title="New Groups">
+<link rel="next" href="Startup-Files.html#Startup-Files" title="Startup Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Changing-Servers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Startup-Files.html#Startup-Files">Startup Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="New-Groups.html#New-Groups">New Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
+<hr>
+</div>
+
+<h3 class="section">1.6 Changing Servers</h3>
+
+<p><a name="index-changing-servers-40"></a>
+Sometimes it is necessary to move from one <acronym>NNTP</acronym> server to another. 
+This happens very rarely, but perhaps you change jobs, or one server is
+very flaky and you want to use another.
+
+   <p>Changing the server is pretty easy, right?  You just change
+<code>gnus-select-method</code> to point to the new server?
+
+   <p><em>Wrong!</em>
+
+   <p>Article numbers are not (in any way) kept synchronized between different
+<acronym>NNTP</acronym> servers, and the only way Gnus keeps track of what articles
+you have read is by keeping track of article numbers.  So when you
+change <code>gnus-select-method</code>, your <samp><span class="file">.newsrc</span></samp> file becomes
+worthless.
+
+   <p>Gnus provides a few functions to attempt to translate a <samp><span class="file">.newsrc</span></samp>
+file from one server to another.  They all have one thing in
+common&mdash;they take a looong time to run.  You don't want to use these
+functions more than absolutely necessary.
+
+   <p><a name="index-M_002dx-gnus_002dchange_002dserver-41"></a><a name="index-gnus_002dchange_002dserver-42"></a>If you have access to both servers, Gnus can request the headers for all
+the articles you have read and compare <code>Message-ID</code>s and map the
+article numbers of the read articles and article marks.  The <kbd>M-x
+gnus-change-server</kbd> command will do this for all your native groups.  It
+will prompt for the method you want to move to.
+
+   <p><a name="index-M_002dx-gnus_002dgroup_002dmove_002dgroup_002dto_002dserver-43"></a><a name="index-gnus_002dgroup_002dmove_002dgroup_002dto_002dserver-44"></a>You can also move individual groups with the <kbd>M-x
+gnus-group-move-group-to-server</kbd> command.  This is useful if you want to
+move a (foreign) group from one server to another.
+
+   <p><a name="index-M_002dx-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-45"></a><a name="index-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-46"></a>If you don't have access to both the old and new server, all your marks
+and read ranges have become worthless.  You can use the <kbd>M-x
+gnus-group-clear-data-on-native-groups</kbd> command to clear out all data
+that you have on your native groups.  Use with caution.
+
+   <p><a name="index-M_002dx-gnus_002dgroup_002dclear_002ddata-47"></a><a name="index-gnus_002dgroup_002dclear_002ddata-48"></a>Clear the data from the current group only&mdash;nix out marks and the
+list of read articles (<code>gnus-group-clear-data</code>).
+
+   <p>After changing servers, you <strong>must</strong> move the cache hierarchy away,
+since the cached articles will have wrong article numbers, which will
+affect which articles Gnus thinks are read. 
+<code>gnus-group-clear-data-on-native-groups</code> will ask you if you want
+to have it done automatically; for <code>gnus-group-clear-data</code>, you
+can use <kbd>M-x gnus-cache-move-cache</kbd> (but beware, it will move the
+cache for all groups).
+
+   </body></html>
+

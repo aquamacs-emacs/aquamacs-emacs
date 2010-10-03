@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Export options - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Exporting.html#Exporting" title="Exporting">
+<link rel="prev" href="Selective-export.html#Selective-export" title="Selective export">
+<link rel="next" href="The-export-dispatcher.html#The-export-dispatcher" title="The export dispatcher">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Export-options"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="The-export-dispatcher.html#The-export-dispatcher">The export dispatcher</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-export.html#Selective-export">Selective export</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Exporting.html#Exporting">Exporting</a>
+<hr>
+</div>
+
+<h3 class="section">12.2 Export options</h3>
+
+<p><a name="index-options_002c-for-export-1028"></a>
+<a name="index-completion_002c-of-option-keywords-1029"></a>The exporter recognizes special lines in the buffer which provide
+additional information.  These lines may be put anywhere in the file. 
+The whole set of lines can be inserted into the buffer with <kbd>C-c
+C-e t</kbd>.  For individual lines, a good way to make sure the keyword is
+correct is to type &lsquo;<samp><span class="samp">#+</span></samp>&rsquo; and then use <kbd>M-&lt;TAB&gt;</kbd> completion
+(see <a href="Completion.html#Completion">Completion</a>).   For a summary of other in-buffer settings not
+specifically related to export, see <a href="In_002dbuffer-settings.html#In_002dbuffer-settings">In-buffer settings</a>. 
+In particular, note that you can place commonly-used (export) options in
+a separate file which can be included using <code>#+SETUPFILE</code>.
+
+     
+<a name="index-C_002dc-C_002de-t-1030"></a>
+<dl><dt><kbd>C-c C-e t</kbd><dd>Insert template with export options, see example below. 
+</dl>
+
+   <p><a name="index-g_t_0023_002bTITLE-1031"></a><a name="index-g_t_0023_002bAUTHOR-1032"></a><a name="index-g_t_0023_002bDATE-1033"></a><a name="index-g_t_0023_002bEMAIL-1034"></a><a name="index-g_t_0023_002bDESCRIPTION-1035"></a><a name="index-g_t_0023_002bKEYWORDS-1036"></a><a name="index-g_t_0023_002bLANGUAGE-1037"></a><a name="index-g_t_0023_002bTEXT-1038"></a><a name="index-g_t_0023_002bOPTIONS-1039"></a><a name="index-g_t_0023_002bBIND-1040"></a><a name="index-g_t_0023_002bLINK_005fUP-1041"></a><a name="index-g_t_0023_002bLINK_005fHOME-1042"></a><a name="index-g_t_0023_002bEXPORT_005fSELECT_005fTAGS-1043"></a><a name="index-g_t_0023_002bEXPORT_005fEXCLUDE_005fTAGS-1044"></a><a name="index-g_t_0023_002bLATEX_005fHEADER-1045"></a><a name="index-user_002dfull_002dname-1046"></a><a name="index-user_002dmail_002daddress-1047"></a><a name="index-org_002dexport_002ddefault_002dlanguage-1048"></a>
+<pre class="example">     #+TITLE:       the title to be shown (default is the buffer name)
+     #+AUTHOR:      the author (default taken from <code>user-full-name</code>)
+     #+DATE:        a date, fixed, of a format string for <code>format-time-string</code>
+     #+EMAIL:       his/her email address (default from <code>user-mail-address</code>)
+     #+DESCRIPTION: the page description, e.g. for the XHTML meta tag
+     #+KEYWORDS:    the page keywords, e.g. for the XHTML meta tag
+     #+LANGUAGE:    language for HTML, e.g. &lsquo;<samp><span class="samp">en</span></samp>&rsquo; (<code>org-export-default-language</code>)
+     #+TEXT:        Some descriptive text to be inserted at the beginning.
+     #+TEXT:        Several lines may be given.
+     #+OPTIONS:     H:2 num:t toc:t \n:nil @:t ::t |:t ^:t f:t TeX:t ...
+     #+BIND:        lisp-var lisp-val, e.g.: org-export-latex-low-levels itemize
+                    <span class="roman">You need to confirm using these, or configure </span><code>org-export-allow-BIND</code>
+     #+LINK_UP:     the ``up'' link of an exported page
+     #+LINK_HOME:   the ``home'' link of an exported page
+     #+LATEX_HEADER: extra line(s) for the LaTeX header, like \usepackage{xyz}
+     #+EXPORT_SELECT_TAGS:   Tags that select a tree for export
+     #+EXPORT_EXCLUDE_TAGS:  Tags that exclude a tree from export
+</pre>
+   <p class="noindent">The OPTIONS line is a compact<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> form to specify export settings.  Here
+you can:
+<a name="index-headline-levels-1049"></a><a name="index-section_002dnumbers-1050"></a><a name="index-table-of-contents-1051"></a><a name="index-line_002dbreak-preservation-1052"></a><a name="index-quoted-HTML-tags-1053"></a><a name="index-fixed_002dwidth-sections-1054"></a><a name="index-tables-1055"></a><a name="index-g_t_0040TeX_007b_007d_002dlike-syntax-for-sub_002d-and-superscripts-1056"></a><a name="index-footnotes-1057"></a><a name="index-special-strings-1058"></a><a name="index-emphasized-text-1059"></a><a name="index-g_t_0040TeX_007b_007d-macros-1060"></a><a name="index-La_0040TeX_007b_007d-fragments-1061"></a><a name="index-author-info_002c-in-export-1062"></a><a name="index-time-info_002c-in-export-1063"></a>
+<pre class="example">     H:         <span class="roman">set the number of headline levels for export</span>
+     num:       <span class="roman">turn on/off section-numbers</span>
+     toc:       <span class="roman">turn on/off table of contents, or set level limit (integer)</span>
+     \n:        <span class="roman">turn on/off line-break-preservation</span>
+     @:         <span class="roman">turn on/off quoted HTML tags</span>
+     ::         <span class="roman">turn on/off fixed-width sections</span>
+     |:         <span class="roman">turn on/off tables</span>
+     ^:         <span class="roman">turn on/off TeX-like syntax for sub- and superscripts.  If</span>
+                <span class="roman">you write "^:{}", </span><code>a_{b}</code><span class="roman"> will be interpreted, but</span>
+                <span class="roman">the simple </span><code>a_b</code><span class="roman"> will be left as it is.</span>
+     -:         <span class="roman">turn on/off conversion of special strings.</span>
+     f:         <span class="roman">turn on/off footnotes like this[1].</span>
+     todo:      <span class="roman">turn on/off inclusion of TODO keywords into exported text</span>
+     pri:       <span class="roman">turn on/off priority cookies</span>
+     tags:      <span class="roman">turn on/off inclusion of tags, may also be </span><code>not-in-toc</code>
+     &lt;:         <span class="roman">turn on/off inclusion of any time/date stamps like DEADLINES</span>
+     *:         <span class="roman">turn on/off emphasized text (bold, italic, underlined)</span>
+     TeX:       <span class="roman">turn on/off simple TeX macros in plain text</span>
+     LaTeX:     <span class="roman">turn on/off LaTeX fragments</span>
+     skip:      <span class="roman">turn on/off skipping the text before the first heading</span>
+     author:    <span class="roman">turn on/off inclusion of author name/email into exported file</span>
+     creator:   <span class="roman">turn on/off inclusion of creator info into exported file</span>
+     timestamp: <span class="roman">turn on/off inclusion creation time into exported file</span>
+     d:         <span class="roman">turn on/off inclusion of drawers</span>
+</pre>
+   <p class="noindent">These options take effect in both the HTML and LaTeX export, except
+for <code>TeX</code> and <code>LaTeX</code>, which are respectively <code>t</code> and
+<code>nil</code> for the LaTeX export.
+
+   <p>When exporting only a single subtree by selecting it with <kbd>C-c @</kbd> before
+calling an export command, the subtree can overrule some of the file's export
+settings with properties <code>EXPORT_FILE_NAME</code>, <code>EXPORT_TITLE</code>,
+<code>EXPORT_TEXT</code>, <code>EXPORT_AUTHOR</code>, <code>EXPORT_DATE</code>, and
+<code>EXPORT_OPTIONS</code>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If you want to configure many options
+this way, you can use several OPTIONS lines.</p>
+
+   <hr></div>
+
+   </body></html>
+

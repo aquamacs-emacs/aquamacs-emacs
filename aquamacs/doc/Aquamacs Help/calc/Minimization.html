@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Minimization - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Numerical-Solutions.html#Numerical-Solutions" title="Numerical Solutions">
+<link rel="prev" href="Root-Finding.html#Root-Finding" title="Root Finding">
+<link rel="next" href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations" title="Numerical Systems of Equations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Minimization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations">Numerical Systems of Equations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Root-Finding.html#Root-Finding">Root Finding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Numerical-Solutions.html#Numerical-Solutions">Numerical Solutions</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.7.2 Minimization</h4>
+
+<p class="noindent"><a name="index-a-N-1788"></a><a name="index-H-a-N-1789"></a><a name="index-a-X-1790"></a><a name="index-H-a-X-1791"></a><a name="index-calc_002dfind_002dminimum-1792"></a><a name="index-calc_002dfind_002dmaximum-1793"></a><a name="index-minimize-1794"></a><a name="index-maximize-1795"></a><a name="index-Minimization_002c-numerical-1796"></a>The <kbd>a N</kbd> (<code>calc-find-minimum</code>) [<code>minimize</code>] command
+finds a minimum value for a formula.  It is very similar in operation
+to <kbd>a R</kbd> (<code>calc-find-root</code>):  You give the formula and an initial
+guess on the stack, and are prompted for the name of a variable.  The guess
+may be either a number near the desired minimum, or an interval enclosing
+the desired minimum.  The function returns a vector containing the
+value of the variable which minimizes the formula's value, along
+with the minimum value itself.
+
+   <p>Note that this command looks for a <em>local</em> minimum.  Many functions
+have more than one minimum; some, like
+<!-- @math{x \sin x}, -->
+&lsquo;<samp><span class="samp">x sin(x)</span></samp>&rsquo;,
+have infinitely many.  In fact, there is no easy way to define the
+&ldquo;global&rdquo; minimum of
+<!-- @math{x \sin x} -->
+&lsquo;<samp><span class="samp">x sin(x)</span></samp>&rsquo;
+but Calc can still locate any particular local minimum
+for you.  Calc basically goes downhill from the initial guess until it
+finds a point at which the function's value is greater both to the left
+and to the right.  Calc does not use derivatives when minimizing a function.
+
+   <p>If your initial guess is an interval and it looks like the minimum
+occurs at one or the other endpoint of the interval, Calc will return
+that endpoint only if that endpoint is closed; thus, minimizing &lsquo;<samp><span class="samp">17 x</span></samp>&rsquo;
+over &lsquo;<samp><span class="samp">[2..3]</span></samp>&rsquo; will return &lsquo;<samp><span class="samp">[2, 38]</span></samp>&rsquo;, but minimizing over
+&lsquo;<samp><span class="samp">(2..3]</span></samp>&rsquo; would report no minimum found.  In general, you should
+use closed intervals to find literally the minimum value in that
+range of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, or open intervals to find the local minimum, if
+any, that happens to lie in that range.
+
+   <p>Most functions are smooth and flat near their minimum values.  Because
+of this flatness, if the current precision is, say, 12 digits, the
+variable can only be determined meaningfully to about six digits.  Thus
+you should set the precision to twice as many digits as you need in your
+answer.
+
+   <p><a name="index-wminimize-1797"></a><a name="index-wmaximize-1798"></a>The <kbd>H a N</kbd> [<code>wminimize</code>] command, analogously to <kbd>H a R</kbd>,
+expands the guess interval to enclose a minimum rather than requiring
+that the minimum lie inside the interval you supply.
+
+   <p>The <kbd>a X</kbd> (<code>calc-find-maximum</code>) [<code>maximize</code>] and
+<kbd>H a X</kbd> [<code>wmaximize</code>] commands effectively minimize the
+negative of the formula you supply.
+
+   <p>The formula must evaluate to a real number at all points inside the
+interval (or near the initial guess if the guess is a number).  If
+the initial guess is a complex number the variable will be minimized
+over the complex numbers; if it is real or an interval it will
+be minimized over the reals.
+
+   </body></html>
+

@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+<title>Multi-Phase Rewrite Rules - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules" title="Nested Formulas with Rewrite Rules">
+<link rel="next" href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules" title="Selections with Rewrite Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multi-Phase-Rewrite-Rules"></a>
+<a name="Multi_002dPhase-Rewrite-Rules"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">Nested Formulas with Rewrite Rules</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.8 Multi-Phase Rewrite Rules</h4>
+
+<p class="noindent">It is possible to separate a rewrite rule set into several <dfn>phases</dfn>. 
+During each phase, certain rules will be enabled while certain others
+will be disabled.  A <dfn>phase schedule</dfn> controls the order in which
+phases occur during the rewriting process.
+
+   <p><a name="index-phase-1934"></a><a name="index-all-1935"></a>If a call to the marker function <code>phase</code> appears in the rules
+vector in place of a rule, all rules following that point will be
+members of the phase(s) identified in the arguments to <code>phase</code>. 
+Phases are given integer numbers.  The markers &lsquo;<samp><span class="samp">phase()</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">phase(all)</span></samp>&rsquo; both mean the following rules belong to all phases;
+this is the default at the start of the rule set.
+
+   <p>If you do not explicitly schedule the phases, Calc sorts all phase
+numbers that appear in the rule set and executes the phases in
+ascending order.  For example, the rule set
+
+<pre class="example">     [ f0(x) := g0(x),
+       phase(1),
+       f1(x) := g1(x),
+       phase(2),
+       f2(x) := g2(x),
+       phase(3),
+       f3(x) := g3(x),
+       phase(1,2),
+       f4(x) := g4(x) ]
+</pre>
+   <p class="noindent">has three phases, 1 through 3.  Phase 1 consists of the <code>f0</code>,
+<code>f1</code>, and <code>f4</code> rules (in that order).  Phase 2 consists of
+<code>f0</code>, <code>f2</code>, and <code>f4</code>.  Phase 3 consists of <code>f0</code>
+and <code>f3</code>.
+
+   <p>When Calc rewrites a formula using this rule set, it first rewrites
+the formula using only the phase 1 rules until no further changes are
+possible.  Then it switches to the phase 2 rule set and continues
+until no further changes occur, then finally rewrites with phase 3. 
+When no more phase 3 rules apply, rewriting finishes.  (This is
+assuming <kbd>a r</kbd> with a large enough prefix argument to allow the
+rewriting to run to completion; the sequence just described stops
+early if the number of iterations specified in the prefix argument,
+100 by default, is reached.)
+
+   <p>During each phase, Calc descends through the nested levels of the
+formula as described previously.  (See <a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">Nested Formulas with Rewrite Rules</a>.)  Rewriting starts at the top of the formula, then works its
+way down to the parts, then goes back to the top and works down again. 
+The phase 2 rules do not begin until no phase 1 rules apply anywhere
+in the formula.
+
+   <p><a name="index-schedule-1936"></a>A <code>schedule</code> marker appearing in the rule set (anywhere, but
+conventionally at the top) changes the default schedule of phases. 
+In the simplest case, <code>schedule</code> has a sequence of phase numbers
+for arguments; each phase number is invoked in turn until the
+arguments to <code>schedule</code> are exhausted.  Thus adding
+&lsquo;<samp><span class="samp">schedule(3,2,1)</span></samp>&rsquo; at the top of the above rule set would
+reverse the order of the phases; &lsquo;<samp><span class="samp">schedule(1,2,3)</span></samp>&rsquo; would have
+no effect since this is the default schedule; and &lsquo;<samp><span class="samp">schedule(1,2,1,3)</span></samp>&rsquo;
+would give phase 1 a second chance after phase 2 has completed, before
+moving on to phase 3.
+
+   <p>Any argument to <code>schedule</code> can instead be a vector of phase
+numbers (or even of sub-vectors).  Then the sub-sequence of phases
+described by the vector are tried repeatedly until no change occurs
+in any phase in the sequence.  For example, &lsquo;<samp><span class="samp">schedule([1, 2], 3)</span></samp>&rsquo;
+tries phase 1, then phase 2, then, if either phase made any changes
+to the formula, repeats these two phases until they can make no
+further progress.  Finally, it goes on to phase 3 for finishing
+touches.
+
+   <p>Also, items in <code>schedule</code> can be variable names as well as
+numbers.  A variable name is interpreted as the name of a function
+to call on the whole formula.  For example, &lsquo;<samp><span class="samp">schedule(1, simplify)</span></samp>&rsquo;
+says to apply the phase-1 rules (presumably, all of them), then to
+call <code>simplify</code> which is the function name equivalent of <kbd>a s</kbd>. 
+Likewise, &lsquo;<samp><span class="samp">schedule([1, simplify])</span></samp>&rsquo; says to alternate between
+phase 1 and <kbd>a s</kbd> until no further changes occur.
+
+   <p>Phases can be used purely to improve efficiency; if it is known that
+a certain group of rules will apply only at the beginning of rewriting,
+and a certain other group will apply only at the end, then rewriting
+will be faster if these groups are identified as separate phases. 
+Once the phase 1 rules are done, Calc can put them aside and no longer
+spend any time on them while it works on phase 2.
+
+   <p>There are also some problems that can only be solved with several
+rewrite phases.  For a real-world example of a multi-phase rule set,
+examine the set <code>FitRules</code>, which is used by the curve-fitting
+command to convert a model expression to linear form. 
+See <a href="Curve-Fitting-Details.html#Curve-Fitting-Details">Curve Fitting Details</a>.  This set is divided into four phases. 
+The first phase rewrites certain kinds of expressions to be more
+easily linearizable, but less computationally efficient.  After the
+linear components have been picked out, the final phase includes the
+opposite rewrites to put each component back into an efficient form. 
+If both sets of rules were included in one big phase, Calc could get
+into an infinite loop going back and forth between the two forms.
+
+   <p>Elsewhere in <code>FitRules</code>, the components are first isolated,
+then recombined where possible to reduce the complexity of the linear
+fit, then finally packaged one component at a time into vectors. 
+If the packaging rules were allowed to begin before the recombining
+rules were finished, some components might be put away into vectors
+before they had a chance to recombine.  By putting these rules in
+two separate phases, this problem is neatly avoided.
+
+   </body></html>
+

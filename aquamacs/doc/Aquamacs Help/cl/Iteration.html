@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+<title>Iteration - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
+<link rel="prev" href="Blocks-and-Exits.html#Blocks-and-Exits" title="Blocks and Exits">
+<link rel="next" href="Loop-Facility.html#Loop-Facility" title="Loop Facility">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Iteration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Loop-Facility.html#Loop-Facility">Loop Facility</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Blocks-and-Exits.html#Blocks-and-Exits">Blocks and Exits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
+<hr>
+</div>
+
+<h3 class="section">5.6 Iteration</h3>
+
+<p class="noindent">The macros described here provide more sophisticated, high-level
+looping constructs to complement Emacs Lisp's basic <code>while</code>
+loop.
+
+<div class="defun">
+&mdash; Special Form: <b>loop</b><var> forms<small class="dots">...</small><a name="index-loop-45"></a></var><br>
+<blockquote><p>The <dfn>CL</dfn> package supports both the simple, old-style meaning of
+<code>loop</code> and the extremely powerful and flexible feature known as
+the <dfn>Loop Facility</dfn> or <dfn>Loop Macro</dfn>.  This more advanced
+facility is discussed in the following section; see <a href="Loop-Facility.html#Loop-Facility">Loop Facility</a>. 
+The simple form of <code>loop</code> is described here.
+
+        <p>If <code>loop</code> is followed by zero or more Lisp expressions,
+then <code>(loop </code><var>exprs</var><code>...)</code> simply creates an infinite
+loop executing the expressions over and over.  The loop is
+enclosed in an implicit <code>nil</code> block.  Thus,
+
+     <pre class="example">          (loop (foo)  (if (no-more) (return 72))  (bar))
+</pre>
+        <p class="noindent">is exactly equivalent to
+
+     <pre class="example">          (block nil (while t (foo)  (if (no-more) (return 72))  (bar)))
+</pre>
+        <p>If any of the expressions are plain symbols, the loop is instead
+interpreted as a Loop Macro specification as described later. 
+(This is not a restriction in practice, since a plain symbol
+in the above notation would simply access and throw away the
+value of a variable.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>do</b> (<var>spec<small class="dots">...</small></var>) (<var>end-test </var>[<var>result<small class="dots">...</small></var>])<var> forms<small class="dots">...</small><a name="index-do-46"></a></var><br>
+<blockquote><p>This macro creates a general iterative loop.  Each <var>spec</var> is
+of the form
+
+     <pre class="example">          (<var>var</var> [<var>init</var> [<var>step</var>]])
+</pre>
+        <p>The loop works as follows:  First, each <var>var</var> is bound to the
+associated <var>init</var> value as if by a <code>let</code> form.  Then, in
+each iteration of the loop, the <var>end-test</var> is evaluated; if
+true, the loop is finished.  Otherwise, the body <var>forms</var> are
+evaluated, then each <var>var</var> is set to the associated <var>step</var>
+expression (as if by a <code>psetq</code> form) and the next iteration
+begins.  Once the <var>end-test</var> becomes true, the <var>result</var>
+forms are evaluated (with the <var>var</var>s still bound to their
+values) to produce the result returned by <code>do</code>.
+
+        <p>The entire <code>do</code> loop is enclosed in an implicit <code>nil</code>
+block, so that you can use <code>(return)</code> to break out of the
+loop at any time.
+
+        <p>If there are no <var>result</var> forms, the loop returns <code>nil</code>. 
+If a given <var>var</var> has no <var>step</var> form, it is bound to its
+<var>init</var> value but not otherwise modified during the <code>do</code>
+loop (unless the code explicitly modifies it); this case is just
+a shorthand for putting a <code>(let ((</code><var>var</var> <var>init</var><code>)) ...)</code>
+around the loop.  If <var>init</var> is also omitted it defaults to
+<code>nil</code>, and in this case a plain &lsquo;<samp><var>var</var></samp>&rsquo; can be used
+in place of &lsquo;<samp><span class="samp">(</span><var>var</var><span class="samp">)</span></samp>&rsquo;, again following the analogy with
+<code>let</code>.
+
+        <p>This example (from Steele) illustrates a loop which applies the
+function <code>f</code> to successive pairs of values from the lists
+<code>foo</code> and <code>bar</code>; it is equivalent to the call
+<code>(mapcar* 'f foo bar)</code>.  Note that this loop has no body
+<var>forms</var> at all, performing all its work as side effects of
+the rest of the loop.
+
+     <pre class="example">          (do ((x foo (cdr x))
+               (y bar (cdr y))
+               (z nil (cons (f (car x) (car y)) z)))
+            ((or (null x) (null y))
+             (nreverse z)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>do*</b> (<var>spec<small class="dots">...</small></var>) (<var>end-test </var>[<var>result<small class="dots">...</small></var>])<var> forms<small class="dots">...</small><a name="index-do_002a-47"></a></var><br>
+<blockquote><p>This is to <code>do</code> what <code>let*</code> is to <code>let</code>.  In
+particular, the initial values are bound as if by <code>let*</code>
+rather than <code>let</code>, and the steps are assigned as if by
+<code>setq</code> rather than <code>psetq</code>.
+
+        <p>Here is another way to write the above loop:
+
+     <pre class="example">          (do* ((xp foo (cdr xp))
+                (yp bar (cdr yp))
+                (x (car xp) (car xp))
+                (y (car yp) (car yp))
+                z)
+            ((or (null xp) (null yp))
+             (nreverse z))
+            (push (f x y) z))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>dolist</b> (<var>var list </var>[<var>result</var>])<var> forms<small class="dots">...</small><a name="index-dolist-48"></a></var><br>
+<blockquote><p>This is a more specialized loop which iterates across the elements
+of a list.  <var>list</var> should evaluate to a list; the body <var>forms</var>
+are executed with <var>var</var> bound to each element of the list in
+turn.  Finally, the <var>result</var> form (or <code>nil</code>) is evaluated
+with <var>var</var> bound to <code>nil</code> to produce the result returned by
+the loop.  Unlike with Emacs's built in <code>dolist</code>, the loop is
+surrounded by an implicit <code>nil</code> block. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>dotimes</b> (<var>var count </var>[<var>result</var>])<var> forms<small class="dots">...</small><a name="index-dotimes-49"></a></var><br>
+<blockquote><p>This is a more specialized loop which iterates a specified number
+of times.  The body is executed with <var>var</var> bound to the integers
+from zero (inclusive) to <var>count</var> (exclusive), in turn.  Then
+the <code>result</code> form is evaluated with <var>var</var> bound to the total
+number of iterations that were done (i.e., <code>(max 0 </code><var>count</var><code>)</code>)
+to get the return value for the loop form.  Unlike with Emacs's built in
+<code>dolist</code>, the loop is surrounded by an implicit <code>nil</code> block. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>do-symbols</b> (<var>var </var>[<var>obarray </var>[<var>result</var>]])<var> forms<small class="dots">...</small><a name="index-do_002dsymbols-50"></a></var><br>
+<blockquote><p>This loop iterates over all interned symbols.  If <var>obarray</var>
+is specified and is not <code>nil</code>, it loops over all symbols in
+that obarray.  For each symbol, the body <var>forms</var> are evaluated
+with <var>var</var> bound to that symbol.  The symbols are visited in
+an unspecified order.  Afterward the <var>result</var> form, if any,
+is evaluated (with <var>var</var> bound to <code>nil</code>) to get the return
+value.  The loop is surrounded by an implicit <code>nil</code> block. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>do-all-symbols</b> (<var>var </var>[<var>result</var>])<var> forms<small class="dots">...</small><a name="index-do_002dall_002dsymbols-51"></a></var><br>
+<blockquote><p>This is identical to <code>do-symbols</code> except that the <var>obarray</var>
+argument is omitted; it always iterates over the default obarray. 
+</p></blockquote></div>
+
+   <p>See <a href="Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping over Sequences</a>, for some more functions for
+iterating over vectors or lists.
+
+   </body></html>
+

@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Floats - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-Types.html#Data-Types" title="Data Types">
+<link rel="prev" href="Fractions.html#Fractions" title="Fractions">
+<link rel="next" href="Complex-Numbers.html#Complex-Numbers" title="Complex Numbers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Floats"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Complex-Numbers.html#Complex-Numbers">Complex Numbers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fractions.html#Fractions">Fractions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-Types.html#Data-Types">Data Types</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Floats</h3>
+
+<p class="noindent"><a name="index-Floating_002dpoint-numbers-239"></a>A floating-point number or <dfn>float</dfn> is a number stored in scientific
+notation.  The number of significant digits in the fractional part is
+governed by the current floating precision (see <a href="Precision.html#Precision">Precision</a>).  The
+range of acceptable values is from
+<!-- @math{10^{-3999999}} -->
+&lsquo;<samp><span class="samp">10^-3999999</span></samp>&rsquo;
+(inclusive) to
+<!-- @math{10^{4000000}} -->
+&lsquo;<samp><span class="samp">10^4000000</span></samp>&rsquo;
+(exclusive), plus the corresponding negative values and zero.
+
+   <p>Calculations that would exceed the allowable range of values (such
+as &lsquo;<samp><span class="samp">exp(exp(20))</span></samp>&rsquo;) are left in symbolic form by Calc.  The
+messages &ldquo;floating-point overflow&rdquo; or &ldquo;floating-point underflow&rdquo;
+indicate that during the calculation a number would have been produced
+that was too large or too close to zero, respectively, to be represented
+by Calc.  This does not necessarily mean the final result would have
+overflowed, just that an overflow occurred while computing the result. 
+(In fact, it could report an underflow even though the final result
+would have overflowed!)
+
+   <p>If a rational number and a float are mixed in a calculation, the result
+will in general be expressed as a float.  Commands that require an integer
+value (such as <kbd>k g</kbd> [<code>gcd</code>]) will also accept integer-valued
+floats, i.e., floating-point numbers with nothing after the decimal point.
+
+   <p>Floats are identified by the presence of a decimal point and/or an
+exponent.  In general a float consists of an optional sign, digits
+including an optional decimal point, and an optional exponent consisting
+of an &lsquo;<samp><span class="samp">e</span></samp>&rsquo;, an optional sign, and up to seven exponent digits. 
+For example, &lsquo;<samp><span class="samp">23.5e-2</span></samp>&rsquo; is 23.5 times ten to the minus-second power,
+or 0.235.
+
+   <p>Floating-point numbers are normally displayed in decimal notation with
+all significant figures shown.  Exceedingly large or small numbers are
+displayed in scientific notation.  Various other display options are
+available.  See <a href="Float-Formats.html#Float-Formats">Float Formats</a>.
+
+   <p><a name="index-Accuracy-of-calculations-240"></a>Floating-point numbers are stored in decimal, not binary.  The result
+of each operation is rounded to the nearest value representable in the
+number of significant digits specified by the current precision,
+rounding away from zero in the case of a tie.  Thus (in the default
+display mode) what you see is exactly what you get.  Some operations such
+as square roots and transcendental functions are performed with several
+digits of extra precision and then rounded down, in an effort to make the
+final result accurate to the full requested precision.  However,
+accuracy is not rigorously guaranteed.  If you suspect the validity of a
+result, try doing the same calculation in a higher precision.  The
+Calculator's arithmetic is not intended to be IEEE-conformant in any
+way.
+
+   <p>While floats are always <em>stored</em> in decimal, they can be entered
+and displayed in any radix just like integers and fractions.  Since a
+float that is entered in a radix other that 10 will be converted to
+decimal, the number that Calc stores may not be exactly the number that
+was entered, it will be the closest decimal approximation given the
+current precison.  The notation &lsquo;<samp><var>radix</var><span class="samp">#</span><var>ddd</var><span class="samp">.</span><var>ddd</var></samp>&rsquo;
+is a floating-point number whose digits are in the specified radix. 
+Note that the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;  is more aptly referred to as a &ldquo;radix point&rdquo;
+than as a decimal point in this case.  The number &lsquo;<samp><span class="samp">8#123.4567</span></samp>&rsquo; is
+defined as &lsquo;<samp><span class="samp">8#1234567 * 8^-4</span></samp>&rsquo;.  If the radix is 14 or less, you can
+use &lsquo;<samp><span class="samp">e</span></samp>&rsquo; notation to write a non-decimal number in scientific
+notation.  The exponent is written in decimal, and is considered to be a
+power of the radix: &lsquo;<samp><span class="samp">8#1234567e-4</span></samp>&rsquo;.  If the radix is 15 or above,
+the letter &lsquo;<samp><span class="samp">e</span></samp>&rsquo; is a digit, so scientific notation must be written
+out, e.g., &lsquo;<samp><span class="samp">16#123.4567*16^2</span></samp>&rsquo;.  The first two exercises of the
+Modes Tutorial explore some of the properties of non-decimal floats.
+
+   </body></html>
+

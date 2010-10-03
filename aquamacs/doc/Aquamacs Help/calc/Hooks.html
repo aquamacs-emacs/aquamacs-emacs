@@ -1,0 +1,237 @@
+<html lang="en">
+<head>
+<title>Hooks - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" title="Formatting Lisp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hooks"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">Formatting Lisp Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.9 Hooks</h5>
+
+<p class="noindent">Hooks are variables which contain Lisp functions (or lists of functions)
+which are called at various times.  Calc defines a number of hooks
+that help you to customize it in various ways.  Calc uses the Lisp
+function <code>run-hooks</code> to invoke the hooks shown below.  Several
+other customization-related variables are also described here.
+
+<div class="defun">
+&mdash; Variable: <b>calc-load-hook</b><var><a name="index-calc_002dload_002dhook-2546"></a></var><br>
+<blockquote><p>This hook is called at the end of <samp><span class="file">calc.el</span></samp>, after the file has
+been loaded, before any functions in it have been called, but after
+<code>calc-mode-map</code> and similar variables have been set up. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-ext-load-hook</b><var><a name="index-calc_002dext_002dload_002dhook-2547"></a></var><br>
+<blockquote><p>This hook is called at the end of <samp><span class="file">calc-ext.el</span></samp>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-start-hook</b><var><a name="index-calc_002dstart_002dhook-2548"></a></var><br>
+<blockquote><p>This hook is called as the last step in a <kbd>M-x calc</kbd> command. 
+At this point, the Calc buffer has been created and initialized if
+necessary, the Calc window and trail window have been created,
+and the &ldquo;Welcome to Calc&rdquo; message has been displayed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-mode-hook</b><var><a name="index-calc_002dmode_002dhook-2549"></a></var><br>
+<blockquote><p>This hook is called when the Calc buffer is being created.  Usually
+this will only happen once per Emacs session.  The hook is called
+after Emacs has switched to the new buffer, the mode-settings file
+has been read if necessary, and all other buffer-local variables
+have been set up.  After this hook returns, Calc will perform a
+<code>calc-refresh</code> operation, set up the mode line display, then
+evaluate any deferred <code>calc-define</code> properties that have not
+been evaluated yet. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-trail-mode-hook</b><var><a name="index-calc_002dtrail_002dmode_002dhook-2550"></a></var><br>
+<blockquote><p>This hook is called when the Calc Trail buffer is being created. 
+It is called as the very last step of setting up the Trail buffer. 
+Like <code>calc-mode-hook</code>, this will normally happen only once
+per Emacs session. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-end-hook</b><var><a name="index-calc_002dend_002dhook-2551"></a></var><br>
+<blockquote><p>This hook is called by <code>calc-quit</code>, generally because the user
+presses <kbd>q</kbd> or <kbd>C-x * c</kbd> while in Calc.  The Calc buffer will
+be the current buffer.  The hook is called as the very first
+step, before the Calc window is destroyed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-window-hook</b><var><a name="index-calc_002dwindow_002dhook-2552"></a></var><br>
+<blockquote><p>If this hook is non-<code>nil</code>, it is called to create the Calc window. 
+Upon return, this new Calc window should be the current window. 
+(The Calc buffer will already be the current buffer when the
+hook is called.)  If the hook is not defined, Calc will
+generally use <code>split-window</code>, <code>set-window-buffer</code>,
+and <code>select-window</code> to create the Calc window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-trail-window-hook</b><var><a name="index-calc_002dtrail_002dwindow_002dhook-2553"></a></var><br>
+<blockquote><p>If this hook is non-<code>nil</code>, it is called to create the Calc Trail
+window.  The variable <code>calc-trail-buffer</code> will contain the buffer
+which the window should use.  Unlike <code>calc-window-hook</code>, this hook
+must <em>not</em> switch into the new window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-mode-hook</b><var><a name="index-calc_002dembedded_002dmode_002dhook-2554"></a></var><br>
+<blockquote><p>This hook is called the first time that Embedded mode is entered. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-new-buffer-hook</b><var><a name="index-calc_002dembedded_002dnew_002dbuffer_002dhook-2555"></a></var><br>
+<blockquote><p>This hook is called each time that Embedded mode is entered in a
+new buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-embedded-new-formula-hook</b><var><a name="index-calc_002dembedded_002dnew_002dformula_002dhook-2556"></a></var><br>
+<blockquote><p>This hook is called each time that Embedded mode is enabled for a
+new formula. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-edit-mode-hook</b><var><a name="index-calc_002dedit_002dmode_002dhook-2557"></a></var><br>
+<blockquote><p>This hook is called by <code>calc-edit</code> (and the other &ldquo;edit&rdquo;
+commands) when the temporary editing buffer is being created. 
+The buffer will have been selected and set up to be in
+<code>calc-edit-mode</code>, but will not yet have been filled with
+text.  (In fact it may still have leftover text from a previous
+<code>calc-edit</code> command.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-mode-save-hook</b><var><a name="index-calc_002dmode_002dsave_002dhook-2558"></a></var><br>
+<blockquote><p>This hook is called by the <code>calc-save-modes</code> command,
+after Calc's own mode features have been inserted into the
+Calc init file and just before the &ldquo;End of mode settings&rdquo;
+message is inserted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-reset-hook</b><var><a name="index-calc_002dreset_002dhook-2559"></a></var><br>
+<blockquote><p>This hook is called after <kbd>C-x * 0</kbd> (<code>calc-reset</code>) has
+reset all modes.  The Calc buffer will be the current buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-other-modes</b><var><a name="index-calc_002dother_002dmodes-2560"></a></var><br>
+<blockquote><p>This variable contains a list of strings.  The strings are
+concatenated at the end of the modes portion of the Calc
+mode line (after standard modes such as &ldquo;Deg&rdquo;, &ldquo;Inv&rdquo; and
+&ldquo;Hyp&rdquo;).  Each string should be a short, single word followed
+by a space.  The variable is <code>nil</code> by default. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-mode-map</b><var><a name="index-calc_002dmode_002dmap-2561"></a></var><br>
+<blockquote><p>This is the keymap that is used by Calc mode.  The best time
+to adjust it is probably in a <code>calc-mode-hook</code>.  If the
+Calc extensions package (<samp><span class="file">calc-ext.el</span></samp>) has not yet been
+loaded, many of these keys will be bound to <code>calc-missing-key</code>,
+which is a command that loads the extensions package and
+&ldquo;retypes&rdquo; the key.  If your <code>calc-mode-hook</code> rebinds
+one of these keys, it will probably be overridden when the
+extensions are loaded. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-digit-map</b><var><a name="index-calc_002ddigit_002dmap-2562"></a></var><br>
+<blockquote><p>This is the keymap that is used during numeric entry.  Numeric
+entry uses the minibuffer, but this map binds every non-numeric
+key to <code>calcDigit-nondigit</code> which generally calls
+<code>exit-minibuffer</code> and &ldquo;retypes&rdquo; the key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-alg-ent-map</b><var><a name="index-calc_002dalg_002dent_002dmap-2563"></a></var><br>
+<blockquote><p>This is the keymap that is used during algebraic entry.  This is
+mostly a copy of <code>minibuffer-local-map</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-store-var-map</b><var><a name="index-calc_002dstore_002dvar_002dmap-2564"></a></var><br>
+<blockquote><p>This is the keymap that is used during entry of variable names for
+commands like <code>calc-store</code> and <code>calc-recall</code>.  This is
+mostly a copy of <code>minibuffer-local-completion-map</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-edit-mode-map</b><var><a name="index-calc_002dedit_002dmode_002dmap-2565"></a></var><br>
+<blockquote><p>This is the (sparse) keymap used by <code>calc-edit</code> and other
+temporary editing commands.  It binds &lt;RET&gt;, &lt;LFD&gt;,
+and <kbd>C-c C-c</kbd> to <code>calc-edit-finish</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-mode-var-list</b><var><a name="index-calc_002dmode_002dvar_002dlist-2566"></a></var><br>
+<blockquote><p>This is a list of variables which are saved by <code>calc-save-modes</code>. 
+Each entry is a list of two items, the variable (as a Lisp symbol)
+and its default value.  When modes are being saved, each variable
+is compared with its default value (using <code>equal</code>) and any
+non-default variables are written out. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>calc-local-var-list</b><var><a name="index-calc_002dlocal_002dvar_002dlist-2567"></a></var><br>
+<blockquote><p>This is a list of variables which should be buffer-local to the
+Calc buffer.  Each entry is a variable name (as a Lisp symbol). 
+These variables also have their default values manipulated by
+the <code>calc</code> and <code>calc-quit</code> commands; see <a href="Multiple-Calculators.html#Multiple-Calculators">Multiple Calculators</a>. 
+Since <code>calc-mode-hook</code> is called after this list has been
+used the first time, your hook should add a variable to the
+list and also call <code>make-local-variable</code> itself. 
+</p></blockquote></div>
+
+   </body></html>
+

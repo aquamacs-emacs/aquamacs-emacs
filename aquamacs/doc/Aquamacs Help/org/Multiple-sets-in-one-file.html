@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Multiple sets in one file - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="TODO-extensions.html#TODO-extensions" title="TODO extensions">
+<link rel="prev" href="TODO-types.html#TODO-types" title="TODO types">
+<link rel="next" href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" title="Fast access to TODO states">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multiple-sets-in-one-file"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states">Fast access to TODO states</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="TODO-types.html#TODO-types">TODO types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TODO-extensions.html#TODO-extensions">TODO extensions</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.3 Multiple keyword sets in one file</h4>
+
+<p><a name="index-TODO-keyword-sets-375"></a>
+Sometimes you may want to use different sets of TODO keywords in
+parallel.  For example, you may want to have the basic
+<code>TODO</code>/<code>DONE</code>, but also a workflow for bug fixing, and a
+separate state indicating that an item has been canceled (so it is not
+DONE, but also does not require action).  Your setup would then look
+like this:
+
+<pre class="lisp">     (setq org-todo-keywords
+           '((sequence "TODO" "|" "DONE")
+             (sequence "REPORT" "BUG" "KNOWNCAUSE" "|" "FIXED")
+             (sequence "|" "CANCELED")))
+</pre>
+   <p>The keywords should all be different, this helps Org mode to keep track
+of which subsequence should be used for a given entry.  In this setup,
+<kbd>C-c C-t</kbd> only operates within a subsequence, so it switches from
+<code>DONE</code> to (nothing) to <code>TODO</code>, and from <code>FIXED</code> to
+(nothing) to <code>REPORT</code>.  Therefore you need a mechanism to initially
+select the correct sequence.  Besides the obvious ways like typing a
+keyword or using completion, you may also apply the following commands:
+
+     
+<a name="index-C_002dS_002d_0040key_007bright_007d-376"></a>
+<a name="index-C_002dS_002d_0040key_007bleft_007d-377"></a>
+<a name="index-C_002du-C_002du-C_002dc-C_002dt-378"></a>
+<dl><dt><kbd>C-u C-u C-c C-t</kbd><dt><kbd>C-S-&lt;right&gt;</kbd><dt><kbd>C-S-&lt;left&gt;</kbd><dd>These keys jump from one TODO subset to the next.  In the above example,
+<kbd>C-u C-u C-c C-t</kbd> or <kbd>C-S-&lt;right&gt;</kbd> would jump from <code>TODO</code> or
+<code>DONE</code> to <code>REPORT</code>, and any of the words in the second row to
+<code>CANCELED</code>.  Note that the <kbd>C-S-</kbd> key binding conflict with
+<code>shift-selection-mode</code> (see <a href="Conflicts.html#Conflicts">Conflicts</a>). 
+<a name="index-S_002d_0040key_007bright_007d-379"></a><a name="index-S_002d_0040key_007bleft_007d-380"></a><br><dt><kbd>S-&lt;right&gt;</kbd><dt><kbd>S-&lt;left&gt;</kbd><dd><kbd>S-&lt;&lt;left&gt;&gt;</kbd> and <kbd>S-&lt;&lt;right&gt;&gt;</kbd> and walk through <em>all</em>
+keywords from all sets, so for example <kbd>S-&lt;&lt;right&gt;&gt;</kbd> would switch
+from <code>DONE</code> to <code>REPORT</code> in the example above.  See also
+<a href="Conflicts.html#Conflicts">Conflicts</a>, for a discussion of the interaction with
+<code>shift-selection-mode</code>. 
+</dl>
+
+   </body></html>
+

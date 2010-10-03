@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>Specifying Operators - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
+<link rel="prev" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
+<link rel="next" href="Mapping.html#Mapping" title="Mapping">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Specifying-Operators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mapping.html#Mapping">Mapping</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.8.1 Specifying Operators</h4>
+
+<p class="noindent">Commands in this section (like <kbd>V A</kbd>) prompt you to press the key
+corresponding to the desired operator.  Press <kbd>?</kbd> for a partial
+list of the available operators.  Generally, an operator is any key or
+sequence of keys that would normally take one or more arguments from
+the stack and replace them with a result.  For example, <kbd>V A H C</kbd>
+uses the hyperbolic cosine operator, <code>cosh</code>.  (Since <code>cosh</code>
+expects one argument, <kbd>V A H C</kbd> requires a vector with a single
+element as its argument.)
+
+   <p>You can press <kbd>x</kbd> at the operator prompt to select any algebraic
+function by name to use as the operator.  This includes functions you
+have defined yourself using the <kbd>Z F</kbd> command.  (See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>.)  If you give a name for which no function has been
+defined, the result is left in symbolic form, as in &lsquo;<samp><span class="samp">f(1, 2, 3)</span></samp>&rsquo;. 
+Calc will prompt for the number of arguments the function takes if it
+can't figure it out on its own (say, because you named a function that
+is currently undefined).  It is also possible to type a digit key before
+the function name to specify the number of arguments, e.g.,
+<kbd>V M 3 x f &lt;RET&gt;</kbd> calls <code>f</code> with three arguments even if it
+looks like it ought to have only two.  This technique may be necessary
+if the function allows a variable number of arguments.  For example,
+the <kbd>v e</kbd> [<code>vexp</code>] function accepts two or three arguments;
+if you want to map with the three-argument version, you will have to
+type <kbd>V M 3 v e</kbd>.
+
+   <p>It is also possible to apply any formula to a vector by treating that
+formula as a function.  When prompted for the operator to use, press
+<kbd>'</kbd> (the apostrophe) and type your formula as an algebraic entry. 
+You will then be prompted for the argument list, which defaults to a
+list of all variables that appear in the formula, sorted into alphabetic
+order.  For example, suppose you enter the formula &lsquo;<samp><span class="samp">x&nbsp;+&nbsp;2y^x</span></samp>&rsquo;<!-- /@w -->. 
+The default argument list would be &lsquo;<samp><span class="samp">(x y)</span></samp>&rsquo;, which means that if
+this function is applied to the arguments &lsquo;<samp><span class="samp">[3, 10]</span></samp>&rsquo; the result will
+be &lsquo;<samp><span class="samp">3 + 2*10^3</span></samp>&rsquo;.  (If you plan to use a certain formula in this
+way often, you might consider defining it as a function with <kbd>Z F</kbd>.)
+
+   <p>Another way to specify the arguments to the formula you enter is with
+<kbd>$</kbd>, <kbd>$$</kbd>, and so on.  For example, <kbd>V A ' $$ + 2$^$$</kbd>
+has the same effect as the previous example.  The argument list is
+automatically taken to be &lsquo;<samp><span class="samp">($$ $)</span></samp>&rsquo;.  (The order of the arguments
+may seem backwards, but it is analogous to the way normal algebraic
+entry interacts with the stack.)
+
+   <p>If you press <kbd>$</kbd> at the operator prompt, the effect is similar to
+the apostrophe except that the relevant formula is taken from top-of-stack
+instead.  The actual vector arguments of the <kbd>V A $</kbd> or related command
+then start at the second-to-top stack position.  You will still be
+prompted for an argument list.
+
+   <p><a name="index-Nameless-functions-1491"></a><a name="index-Generic-functions-1492"></a>A function can be written without a name using the notation &lsquo;<samp><span class="samp">&lt;#1 - #2&gt;</span></samp>&rsquo;,
+which means &ldquo;a function of two arguments that computes the first
+argument minus the second argument.&rdquo;  The symbols &lsquo;<samp><span class="samp">#1</span></samp>&rsquo; and &lsquo;<samp><span class="samp">#2</span></samp>&rsquo;
+are placeholders for the arguments.  You can use any names for these
+placeholders if you wish, by including an argument list followed by a
+colon:  &lsquo;<samp><span class="samp">&lt;x, y : x - y&gt;</span></samp>&rsquo;.  When you type <kbd>V A ' $$ + 2$^$$ &lt;RET&gt;</kbd>,
+Calc builds the nameless function &lsquo;<samp><span class="samp">&lt;#1 + 2 #2^#1&gt;</span></samp>&rsquo; as the function
+to map across the vectors.  When you type <kbd>V A ' x + 2y^x &lt;RET&gt; &lt;RET&gt;</kbd>,
+Calc builds the nameless function &lsquo;<samp><span class="samp">&lt;x,&nbsp;y&nbsp;:&nbsp;x&nbsp;+&nbsp;2&nbsp;y^x&gt;</span></samp>&rsquo;<!-- /@w -->.  In both
+cases, Calc also writes the nameless function to the Trail so that you
+can get it back later if you wish.
+
+   <p>If there is only one argument, you can write &lsquo;<samp><span class="samp">#</span></samp>&rsquo; in place of &lsquo;<samp><span class="samp">#1</span></samp>&rsquo;. 
+(Note that &lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; notation is also used for date forms.  Calc tells
+that &lsquo;<samp><span class="samp">&lt;</span><var>stuff</var><span class="samp">&gt;</span></samp>&rsquo; is a nameless function by the presence of
+&lsquo;<samp><span class="samp">#</span></samp>&rsquo; signs inside <var>stuff</var>, or by the fact that <var>stuff</var>
+begins with a list of variables followed by a colon.)
+
+   <p>You can type a nameless function directly to <kbd>V A '</kbd>, or put one on
+the stack and use it with <kbd>V&nbsp;A&nbsp;$</kbd><!-- /@w -->.  Calc will not prompt for an
+argument list in this case, since the nameless function specifies the
+argument list as well as the function itself.  In <kbd>V A '</kbd>, you can
+omit the &lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; marks if you use &lsquo;<samp><span class="samp">#</span></samp>&rsquo; notation for the arguments,
+so that <kbd>V A ' #1+#2 &lt;RET&gt;</kbd> is the same as <kbd>V A ' &lt;#1+#2&gt; &lt;RET&gt;</kbd>,
+which in turn is the same as <kbd>V A ' $$+$ &lt;RET&gt;</kbd>.
+
+   <p><a name="index-Lambda-expressions-1493"></a><a name="index-lambda-1494"></a>The internal format for &lsquo;<samp><span class="samp">&lt;x, y : x + y&gt;</span></samp>&rsquo; is &lsquo;<samp><span class="samp">lambda(x, y, x + y)</span></samp>&rsquo;. 
+(The word <code>lambda</code> derives from Lisp notation and the theory of
+functions.)  The internal format for &lsquo;<samp><span class="samp">&lt;#1 + #2&gt;</span></samp>&rsquo; is &lsquo;<samp><span class="samp">lambda(ArgA,
+ArgB, ArgA + ArgB)</span></samp>&rsquo;.  Note that there is no actual Calc function called
+<code>lambda</code>; the whole point is that the <code>lambda</code> expression is
+used in its symbolic form, not evaluated for an answer until it is applied
+to specific arguments by a command like <kbd>V A</kbd> or <kbd>V M</kbd>.
+
+   <p>(Actually, <code>lambda</code> does have one special property:  Its arguments
+are never evaluated; for example, putting &lsquo;<samp><span class="samp">&lt;(2/3) #&gt;</span></samp>&rsquo; on the stack
+will not simplify the &lsquo;<samp><span class="samp">2/3</span></samp>&rsquo; until the nameless function is actually
+called.)
+
+   <p><a name="index-add-1495"></a><a name="index-sub-1496"></a><a name="index-mul-1497"></a><a name="index-div-1498"></a><a name="index-pow-1499"></a><a name="index-neg-1500"></a><a name="index-mod-1501"></a><a name="index-vconcat-1502"></a>As usual, commands like <kbd>V A</kbd> have algebraic function name equivalents. 
+For example, <kbd>V A k g</kbd> with an argument of &lsquo;<samp><span class="samp">v</span></samp>&rsquo; is equivalent to
+&lsquo;<samp><span class="samp">apply(gcd, v)</span></samp>&rsquo;.  The first argument specifies the operator name,
+and is either a variable whose name is the same as the function name,
+or a nameless function like &lsquo;<samp><span class="samp">&lt;#^3+1&gt;</span></samp>&rsquo;.  Operators that are normally
+written as algebraic symbols have the names <code>add</code>, <code>sub</code>,
+<code>mul</code>, <code>div</code>, <code>pow</code>, <code>neg</code>, <code>mod</code>, and
+<code>vconcat</code>.
+
+   <p><a name="index-call-1503"></a>The <code>call</code> function builds a function call out of several arguments:
+&lsquo;<samp><span class="samp">call(gcd, x, y)</span></samp>&rsquo; is the same as &lsquo;<samp><span class="samp">apply(gcd, [x, y])</span></samp>&rsquo;, which
+in turn is the same as &lsquo;<samp><span class="samp">gcd(x, y)</span></samp>&rsquo;.  The first argument of <code>call</code>,
+like the other functions described here, may be either a variable naming a
+function, or a nameless function (&lsquo;<samp><span class="samp">call(&lt;#1+2#2&gt;, x, y)</span></samp>&rsquo; is the same
+as &lsquo;<samp><span class="samp">x + 2y</span></samp>&rsquo;).
+
+   <p>(Experts will notice that it's not quite proper to use a variable to name
+a function, since the name <code>gcd</code> corresponds to the Lisp variable
+<code>var-gcd</code> but to the Lisp function <code>calcFunc-gcd</code>.  Calc
+automatically makes this translation, so you don't have to worry
+about it.)
+
+   </body></html>
+

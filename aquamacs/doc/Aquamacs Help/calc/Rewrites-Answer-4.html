@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Rewrites Answer 4 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Rewrites-Answer-3.html#Rewrites-Answer-3" title="Rewrites Answer 3">
+<link rel="next" href="Rewrites-Answer-5.html#Rewrites-Answer-5" title="Rewrites Answer 5">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rewrites-Answer-4"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rewrites-Answer-5.html#Rewrites-Answer-5">Rewrites Answer 5</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rewrites-Answer-3.html#Rewrites-Answer-3">Rewrites Answer 3</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.55 Rewrites Tutorial Exercise 4</h4>
+
+<p class="noindent"><a name="index-seq-84"></a>Here is a suitable set of rules to solve the first part of the problem:
+
+<pre class="smallexample">     [ seq(n, c) := seq(n/2,  c+1) :: n%2 = 0,
+       seq(n, c) := seq(3n+1, c+1) :: n%2 = 1 :: n &gt; 1 ]
+</pre>
+   <p>Given the initial formula &lsquo;<samp><span class="samp">seq(6, 0)</span></samp>&rsquo;, application of these
+rules produces the following sequence of formulas:
+
+<pre class="example">     seq( 3, 1)
+     seq(10, 2)
+     seq( 5, 3)
+     seq(16, 4)
+     seq( 8, 5)
+     seq( 4, 6)
+     seq( 2, 7)
+     seq( 1, 8)
+</pre>
+   <p class="noindent">whereupon neither of the rules match, and rewriting stops.
+
+   <p>We can pretty this up a bit with a couple more rules:
+
+<pre class="smallexample">     [ seq(n) := seq(n, 0),
+       seq(1, c) := c,
+       ... ]
+</pre>
+   <p class="noindent">Now, given &lsquo;<samp><span class="samp">seq(6)</span></samp>&rsquo; as the starting configuration, we get 8
+as the result.
+
+   <p>The change to return a vector is quite simple:
+
+<pre class="smallexample">     [ seq(n) := seq(n, []) :: integer(n) :: n &gt; 0,
+       seq(1, v) := v | 1,
+       seq(n, v) := seq(n/2,  v | n) :: n%2 = 0,
+       seq(n, v) := seq(3n+1, v | n) :: n%2 = 1 ]
+</pre>
+   <p class="noindent">Given &lsquo;<samp><span class="samp">seq(6)</span></samp>&rsquo;, the result is &lsquo;<samp><span class="samp">[6, 3, 10, 5, 16, 8, 4, 2, 1]</span></samp>&rsquo;.
+
+   <p>Notice that the &lsquo;<samp><span class="samp">n &gt; 1</span></samp>&rsquo; guard is no longer necessary on the last
+rule since the &lsquo;<samp><span class="samp">n = 1</span></samp>&rsquo; case is now detected by another rule. 
+But a guard has been added to the initial rule to make sure the
+initial value is suitable before the computation begins.
+
+   <p>While still a good idea, this guard is not as vitally important as it
+was for the <code>fib</code> function, since calling, say, &lsquo;<samp><span class="samp">seq(x, [])</span></samp>&rsquo;
+will not get into an infinite loop.  Calc will not be able to prove
+the symbol &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is either even or odd, so none of the rules will
+apply and the rewrites will stop right away.
+
+   </body></html>
+

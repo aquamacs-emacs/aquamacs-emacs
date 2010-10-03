@@ -1,0 +1,279 @@
+<html lang="en">
+<head>
+<title>Commands - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Imprint.html#Imprint" title="Imprint">
+<link rel="next" href="Options.html#Options" title="Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options.html#Options">Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Imprint.html#Imprint">Imprint</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">7 Commands</h2>
+
+<p><a name="index-Commands_002c-list-of-412"></a>
+Here is a summary of <b>RefTeX</b>'s commands which can be executed from
+LaTeX files.  Command which are executed from the special buffers are
+not described here.  All commands are available from the <code>Ref</code>
+menu.  See See <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>.
+
+<div class="defun">
+&mdash; Command: <b>reftex-toc</b><var><a name="index-reftex_002dtoc-413"></a></var><br>
+<blockquote><p>Show the table of contents for the current document.  When called with
+one ore two <kbd>C-u</kbd> prefixes, rescan the document first. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-label</b><var><a name="index-reftex_002dlabel-414"></a></var><br>
+<blockquote><p>Insert a unique label.  With one or two <kbd>C-u</kbd> prefixes, enforce
+document rescan first. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-reference</b><var><a name="index-reftex_002dreference-415"></a></var><br>
+<blockquote><p>Start a selection process to select a label, and insert a reference to
+it.  With one or two <kbd>C-u</kbd> prefixes, enforce document rescan first. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-citation</b><var><a name="index-reftex_002dcitation-416"></a></var><br>
+<blockquote><p>Make a citation using BibTeX database files.  After prompting for a regular
+expression, scans the buffers with BibTeX entries (taken from the
+<code>\bibliography</code> command or a <code>thebibliography</code> environment)
+and offers the matching entries for selection.  The selected entry is
+formatted according to <code>reftex-cite-format</code> and inserted into the
+buffer. <br>
+When called with a <kbd>C-u</kbd> prefix, prompt for optional arguments in
+cite macros.  When called with a numeric prefix, make that many citations. 
+When called with point inside the braces of a <code>\cite</code> command, it
+will add another key, ignoring the value of
+<code>reftex-cite-format</code>. <br>
+The regular expression uses an expanded syntax: &lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo; is interpreted
+as <code>and</code>.  Thus, &lsquo;<samp><span class="samp">aaaa&amp;&amp;bbb</span></samp>&rsquo; matches entries which contain
+both &lsquo;<samp><span class="samp">aaaa</span></samp>&rsquo; and &lsquo;<samp><span class="samp">bbb</span></samp>&rsquo;.  While entering the regexp, completion
+on knows citation keys is possible.  &lsquo;<samp><span class="samp">=</span></samp>&rsquo; is a good regular
+expression to match all entries in all files. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-index</b><var><a name="index-reftex_002dindex-417"></a></var><br>
+<blockquote><p>Query for an index macro and insert it along with its arguments.  The
+index macros available are those defined in <code>reftex-index-macro</code> or
+by a call to <code>reftex-add-index-macros</code>, typically from an AUCTeX
+style file.  <b>RefTeX</b> provides completion for the index tag and the
+index key, and will prompt for other arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-index-selection-or-word</b><var><a name="index-reftex_002dindex_002dselection_002dor_002dword-418"></a></var><br>
+<blockquote><p>Put current selection or the word near point into the default index
+macro.  This uses the information in <code>reftex-index-default-macro</code>
+to make an index entry.  The phrase indexed is the current selection or
+the word near point.  When called with one <kbd>C-u</kbd> prefix, let the
+user have a chance to edit the index entry.  When called with 2
+<kbd>C-u</kbd> as prefix, also ask for the index macro and other stuff.  When
+called inside TeX math mode as determined by the <samp><span class="file">texmathp.el</span></samp>
+library which is part of AUCTeX, the string is first processed with the
+<code>reftex-index-math-format</code>, which see. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-index-phrase-selection-or-word</b><var><a name="index-reftex_002dindex_002dphrase_002dselection_002dor_002dword-419"></a></var><br>
+<blockquote><p>Add current selection or the word at point to the phrases buffer. 
+When you are in transient-mark-mode and the region is active, the
+selection will be used - otherwise the word at point. 
+You get a chance to edit the entry in the phrases buffer - to save the
+buffer and return to the LaTeX document, finish with <kbd>C-c C-c</kbd>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-index-visit-phrases-buffer</b><var><a name="index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-420"></a></var><br>
+<blockquote><p>Switch to the phrases buffer, initialize if empty. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-index-phrases-apply-to-region</b><var><a name="index-reftex_002dindex_002dphrases_002dapply_002dto_002dregion-421"></a></var><br>
+<blockquote><p>Index all index phrases in the current region. 
+This works exactly like global indexing from the index phrases buffer,
+but operation is restricted to the current region. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-display-index</b><var><a name="index-reftex_002ddisplay_002dindex-422"></a></var><br>
+<blockquote><p>Display a buffer with an index compiled from the current document. 
+When the document has multiple indices, first prompts for the correct one. 
+When index support is turned off, offer to turn it on. 
+With one or two <kbd>C-u</kbd> prefixes, rescan document first. 
+With prefix 2, restrict index to current document section. 
+With prefix 3, restrict index to active region. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-view-crossref</b><var><a name="index-reftex_002dview_002dcrossref-423"></a></var><br>
+<blockquote><p>View cross reference of macro at point.  Point must be on the <var>key</var>
+argument.  Works with the macros <code>\label</code>, <code>\ref</code>,
+<code>\cite</code>, <code>\bibitem</code>, <code>\index</code> and many derivatives of
+these.  Where it makes sense, subsequent calls show additional
+locations.  See also the variable <code>reftex-view-crossref-extra</code> and
+the command <code>reftex-view-crossref-from-bibtex</code>.  With one or two
+<kbd>C-u</kbd> prefixes, enforce rescanning of the document.  With argument
+2, select the window showing the cross reference. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-view-crossref-from-bibtex</b><var><a name="index-reftex_002dview_002dcrossref_002dfrom_002dbibtex-424"></a></var><br>
+<blockquote><p>View location in a LaTeX document which cites the BibTeX entry at point. 
+Since BibTeX files can be used by many LaTeX documents, this function
+prompts upon first use for a buffer in <b>RefTeX</b> mode.  To reset this
+link to a document, call the function with a prefix arg.  Calling
+this function several times find successive citation locations. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-create-tags-file</b><var><a name="index-reftex_002dcreate_002dtags_002dfile-425"></a></var><br>
+<blockquote><p>Create TAGS file by running <code>etags</code> on the current document.  The
+TAGS file is also immediately visited with
+<code>visit-tags-table</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-grep-document</b><var><a name="index-reftex_002dgrep_002ddocument-426"></a></var><br>
+<blockquote><p>Run grep query through all files related to this document. 
+With prefix arg, force to rescan document. 
+No active TAGS table is required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-search-document</b><var><a name="index-reftex_002dsearch_002ddocument-427"></a></var><br>
+<blockquote><p>Regexp search through all files of the current document. 
+Starts always in the master file.  Stops when a match is found. 
+No active TAGS table is required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-query-replace-document</b><var><a name="index-reftex_002dquery_002dreplace_002ddocument-428"></a></var><br>
+<blockquote><p>Run a query-replace-regexp of <var>from</var> with <var>to</var> over the entire
+document.  With prefix arg, replace only word-delimited matches.  No
+active TAGS table is required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-isearch-minor-mode</b><var><a name="index-reftex_002disearch_002dminor_002dmode-429"></a></var><br>
+<blockquote><p>Toggle a minor mode which enables incremental search to work globally
+on the entire multifile document.  Files will be searched in th
+sequence they appear in the document. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-goto-label</b><var><a name="index-reftex_002dgoto_002dlabel-430"></a></var><br>
+<blockquote><p>Prompt for a label (with completion) and jump to the location of this
+label.  Optional prefix argument <var>other-window</var> goes to the label in
+another window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-change-label</b><var><a name="index-reftex_002dchange_002dlabel-431"></a></var><br>
+<blockquote><p>Query replace <var>from</var> with <var>to</var> in all <code>\label</code> and
+<code>\ref</code> commands.  Works on the entire multifile document.  No
+active TAGS table is required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-renumber-simple-labels</b><var><a name="index-reftex_002drenumber_002dsimple_002dlabels-432"></a></var><br>
+<blockquote><p>Renumber all simple labels in the document to make them sequentially. 
+Simple labels are the ones created by RefTeX, consisting only of the
+prefix and a number.  After the command completes, all these labels will
+have sequential numbers throughout the document.  Any references to the
+labels will be changed as well.  For this, <b>RefTeX</b> looks at the
+arguments of any macros which either start or end with the string
+&lsquo;<samp><span class="samp">ref</span></samp>&rsquo;.  This command should be used with care, in particular in
+multifile documents.  You should not use it if another document refers
+to this one with the <code>xr</code> package. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-find-duplicate-labels</b><var><a name="index-reftex_002dfind_002dduplicate_002dlabels-433"></a></var><br>
+<blockquote><p>Produce a list of all duplicate labels in the document. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-create-bibtex-file</b><var><a name="index-reftex_002dcreate_002dbibtex_002dfile-434"></a></var><br>
+<blockquote><p>Create a new BibTeX database file with all entries referenced in document. 
+The command prompts for a filename and writes the collected entries to
+that file.  Only entries referenced in the current document with
+any <code>\cite</code>-like macros are used. 
+The sequence in the new file is the same as it was in the old database. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-customize</b><var><a name="index-reftex_002dcustomize-435"></a></var><br>
+<blockquote><p>Run the customize browser on the <b>RefTeX</b> group. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-show-commentary</b><var><a name="index-reftex_002dshow_002dcommentary-436"></a></var><br>
+<blockquote><p>Show the commentary section from <samp><span class="file">reftex.el</span></samp>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-info</b><var><a name="index-reftex_002dinfo-437"></a></var><br>
+<blockquote><p>Run info on the top <b>RefTeX</b> node. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-parse-document</b><var><a name="index-reftex_002dparse_002ddocument-438"></a></var><br>
+<blockquote><p>Parse the entire document in order to update the parsing information. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>reftex-reset-mode</b><var><a name="index-reftex_002dreset_002dmode-439"></a></var><br>
+<blockquote><p>Enforce rebuilding of several internal lists and variables.  Also
+removes the parse file associated with the current document. 
+</p></blockquote></div>
+
+   </body></html>
+

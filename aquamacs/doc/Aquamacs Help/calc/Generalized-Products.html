@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Generalized Products - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
+<link rel="prev" href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" title="Nesting and Fixed Points">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Generalized-Products"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points">Nesting and Fixed Points</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.8.5 Generalized Products</h4>
+
+<p><a name="index-v-O-1546"></a><a name="index-V-O-1547"></a><a name="index-calc_002douter_002dproduct-1548"></a><a name="index-outer-1549"></a>The <kbd>V O</kbd> (<code>calc-outer-product</code>) [<code>outer</code>] command applies
+a given binary operator to all possible pairs of elements from two
+vectors, to produce a matrix.  For example, <kbd>V O *</kbd> with &lsquo;<samp><span class="samp">[a, b]</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">[x, y, z]</span></samp>&rsquo; on the stack produces a multiplication table:
+&lsquo;<samp><span class="samp">[[a x, a y, a z], [b x, b y, b z]]</span></samp>&rsquo;.  Element <var>r</var>,<var>c</var> of
+the result matrix is obtained by applying the operator to element <var>r</var>
+of the lefthand vector and element <var>c</var> of the righthand vector.
+
+   <p><a name="index-v-I-1550"></a><a name="index-V-I-1551"></a><a name="index-calc_002dinner_002dproduct-1552"></a><a name="index-inner-1553"></a>The <kbd>V I</kbd> (<code>calc-inner-product</code>) [<code>inner</code>] command computes
+the generalized inner product of two vectors or matrices, given a
+&ldquo;multiplicative&rdquo; operator and an &ldquo;additive&rdquo; operator.  These can each
+actually be any binary operators; if they are &lsquo;<samp><span class="samp">*</span></samp>&rsquo; and &lsquo;<samp><span class="samp">+</span></samp>&rsquo;,
+respectively, the result is a standard matrix multiplication.  Element
+<var>r</var>,<var>c</var> of the result matrix is obtained by mapping the
+multiplicative operator across row <var>r</var> of the lefthand matrix and
+column <var>c</var> of the righthand matrix, and then reducing with the additive
+operator.  Just as for the standard <kbd>*</kbd> command, this can also do a
+vector-matrix or matrix-vector inner product, or a vector-vector
+generalized dot product.
+
+   <p>Since <kbd>V I</kbd> requires two operators, it prompts twice.  In each case,
+you can use any of the usual methods for entering the operator.  If you
+use <kbd>$</kbd> twice to take both operator formulas from the stack, the
+first (multiplicative) operator is taken from the top of the stack
+and the second (additive) operator is taken from second-to-top.
+
+   </body></html>
+

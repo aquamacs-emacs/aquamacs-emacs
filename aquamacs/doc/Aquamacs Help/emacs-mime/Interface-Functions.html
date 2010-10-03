@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>Interface Functions - Emacs MIME Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Emacs MIME Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Composing.html#Composing" title="Composing">
+<link rel="next" href="Basic-Functions.html#Basic-Functions" title="Basic Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs MIME interface functionality.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interface-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Functions.html#Basic-Functions">Basic Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Composing.html#Composing">Composing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">3 Interface Functions</h2>
+
+<p><a name="index-interface-functions-79"></a><a name="index-mail_002dparse-80"></a>
+The <code>mail-parse</code> library is an abstraction over the actual
+low-level libraries that are described in the next chapter.
+
+   <p>Standards change, and so programs have to change to fit in the new
+mold.  For instance, RFC2045 describes a syntax for the
+<code>Content-Type</code> header that only allows <acronym>ASCII</acronym> characters in the
+parameter list.  RFC2231 expands on RFC2045 syntax to provide a scheme
+for continuation headers and non-<acronym>ASCII</acronym> characters.
+
+   <p>The traditional way to deal with this is just to update the library
+functions to parse the new syntax.  However, this is sometimes the wrong
+thing to do.  In some instances it may be vital to be able to understand
+both the old syntax as well as the new syntax, and if there is only one
+library, one must choose between the old version of the library and the
+new version of the library.
+
+   <p>The Emacs <acronym>MIME</acronym> library takes a different tack.  It defines a
+series of low-level libraries (<samp><span class="file">rfc2047.el</span></samp>, <samp><span class="file">rfc2231.el</span></samp>
+and so on) that parses strictly according to the corresponding
+standard.  However, normal programs would not use the functions
+provided by these libraries directly, but instead use the functions
+provided by the <code>mail-parse</code> library.  The functions in this
+library are just aliases to the corresponding functions in the latest
+low-level libraries.  Using this scheme, programs get a consistent
+interface they can use, and library developers are free to create
+write code that handles new standards.
+
+   <p>The following functions are defined by this library:
+
+     <dl>
+<dt><code>mail-header-parse-content-type</code><dd><a name="index-mail_002dheader_002dparse_002dcontent_002dtype-81"></a>Parse a <code>Content-Type</code> header and return a list on the following
+format:
+
+     <pre class="lisp">          ("type/subtype"
+           (attribute1 . value1)
+           (attribute2 . value2)
+           ...)
+</pre>
+     <p>Here's an example:
+
+     <pre class="example">          (mail-header-parse-content-type
+           "image/gif; name=\"b980912.gif\"")
+          &rArr; ("image/gif" (name . "b980912.gif"))
+</pre>
+     <br><dt><code>mail-header-parse-content-disposition</code><dd><a name="index-mail_002dheader_002dparse_002dcontent_002ddisposition-82"></a>Parse a <code>Content-Disposition</code> header and return a list on the same
+format as the function above.
+
+     <br><dt><code>mail-content-type-get</code><dd><a name="index-mail_002dcontent_002dtype_002dget-83"></a>Takes two parameters&mdash;a list on the format above, and an attribute. 
+Returns the value of the attribute.
+
+     <pre class="example">          (mail-content-type-get
+           '("image/gif" (name . "b980912.gif")) 'name)
+          &rArr; "b980912.gif"
+</pre>
+     <br><dt><code>mail-header-encode-parameter</code><dd><a name="index-mail_002dheader_002dencode_002dparameter-84"></a>Takes a parameter string and returns an encoded version of the string. 
+This is used for parameters in headers like <code>Content-Type</code> and
+<code>Content-Disposition</code>.
+
+     <br><dt><code>mail-header-remove-comments</code><dd><a name="index-mail_002dheader_002dremove_002dcomments-85"></a>Return a comment-free version of a header.
+
+     <pre class="example">          (mail-header-remove-comments
+           "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+          &rArr; "Gnus/5.070027  "
+</pre>
+     <br><dt><code>mail-header-remove-whitespace</code><dd><a name="index-mail_002dheader_002dremove_002dwhitespace-86"></a>Remove linear white space from a header.  Space inside quoted strings
+and comments is preserved.
+
+     <pre class="example">          (mail-header-remove-whitespace
+           "image/gif; name=\"Name with spaces\"")
+          &rArr; "image/gif;name=\"Name with spaces\""
+</pre>
+     <br><dt><code>mail-header-get-comment</code><dd><a name="index-mail_002dheader_002dget_002dcomment-87"></a>Return the last comment in a header.
+
+     <pre class="example">          (mail-header-get-comment
+           "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+          &rArr; "Finnish Landrace"
+</pre>
+     <br><dt><code>mail-header-parse-address</code><dd><a name="index-mail_002dheader_002dparse_002daddress-88"></a>Parse an address and return a list containing the mailbox and the
+plaintext name.
+
+     <pre class="example">          (mail-header-parse-address
+           "Hrvoje Niksic &lt;hniksic@srce.hr&gt;")
+          &rArr; ("hniksic@srce.hr" . "Hrvoje Niksic")
+</pre>
+     <br><dt><code>mail-header-parse-addresses</code><dd><a name="index-mail_002dheader_002dparse_002daddresses-89"></a>Parse a string with list of addresses and return a list of elements like
+the one described above.
+
+     <pre class="example">          (mail-header-parse-addresses
+           "Hrvoje Niksic &lt;hniksic@srce.hr&gt;, Steinar Bang &lt;sb@metis.no&gt;")
+          &rArr; (("hniksic@srce.hr" . "Hrvoje Niksic")
+               ("sb@metis.no" . "Steinar Bang"))
+</pre>
+     <br><dt><code>mail-header-parse-date</code><dd><a name="index-mail_002dheader_002dparse_002ddate-90"></a>Parse a date string and return an Emacs time structure.
+
+     <br><dt><code>mail-narrow-to-head</code><dd><a name="index-mail_002dnarrow_002dto_002dhead-91"></a>Narrow the buffer to the header section of the buffer.  Point is placed
+at the beginning of the narrowed buffer.
+
+     <br><dt><code>mail-header-narrow-to-field</code><dd><a name="index-mail_002dheader_002dnarrow_002dto_002dfield-92"></a>Narrow the buffer to the header under point.  Understands continuation
+headers.
+
+     <br><dt><code>mail-header-fold-field</code><dd><a name="index-mail_002dheader_002dfold_002dfield-93"></a>Fold the header under point.
+
+     <br><dt><code>mail-header-unfold-field</code><dd><a name="index-mail_002dheader_002dunfold_002dfield-94"></a>Unfold the header under point.
+
+     <br><dt><code>mail-header-field-value</code><dd><a name="index-mail_002dheader_002dfield_002dvalue-95"></a>Return the value of the field under point.
+
+     <br><dt><code>mail-encode-encoded-word-region</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dregion-96"></a>Encode the non-<acronym>ASCII</acronym> words in the region.  For instance,
+&lsquo;<samp><span class="samp">Na&iuml;ve</span></samp>&rsquo; is encoded as &lsquo;<samp><span class="samp">=?iso-8859-1?q?Na=EFve?=</span></samp>&rsquo;.
+
+     <br><dt><code>mail-encode-encoded-word-buffer</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dbuffer-97"></a>Encode the non-<acronym>ASCII</acronym> words in the current buffer.  This function is
+meant to be called narrowed to the headers of a message.
+
+     <br><dt><code>mail-encode-encoded-word-string</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dstring-98"></a>Encode the words that need encoding in a string, and return the result.
+
+     <pre class="example">          (mail-encode-encoded-word-string
+           "This is na&iuml;ve, baby")
+          &rArr; "This is =?iso-8859-1?q?na=EFve,?= baby"
+</pre>
+     <br><dt><code>mail-decode-encoded-word-region</code><dd><a name="index-mail_002ddecode_002dencoded_002dword_002dregion-99"></a>Decode the encoded words in the region.
+
+     <br><dt><code>mail-decode-encoded-word-string</code><dd><a name="index-mail_002ddecode_002dencoded_002dword_002dstring-100"></a>Decode the encoded words in the string and return the result.
+
+     <pre class="example">          (mail-decode-encoded-word-string
+           "This is =?iso-8859-1?q?na=EFve,?= baby")
+          &rArr; "This is na&iuml;ve, baby"
+</pre>
+     </dl>
+
+   <p>Currently, <code>mail-parse</code> is an abstraction over <code>ietf-drums</code>,
+<code>rfc2047</code>, <code>rfc2045</code> and <code>rfc2231</code>.  These are documented
+in the subsequent sections.
+
+   </body></html>
+

@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>FAQ 4-14 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages" title="FAQ 4 - Reading messages">
+<link rel="prev" href="FAQ-4_002d13.html#FAQ-4_002d13" title="FAQ 4-13">
+<link rel="next" href="FAQ-4_002d15.html#FAQ-4_002d15" title="FAQ 4-15">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-4-14"></a>
+<a name="FAQ-4_002d14"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-4_002d15.html#FAQ-4_002d15">FAQ 4-15</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-4_002d13.html#FAQ-4_002d13">FAQ 4-13</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages">FAQ 4 - Reading messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 4.14</h5>
+
+<p>I don't like the way the Summary buffer looks, how to tweak it?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>You've got to play around with the variable
+gnus-summary-line-format. It's value is a string of
+symbols which stand for things like author, date, subject
+etc. A list of the available specifiers can be found in the
+manual node "Summary Buffer Lines" and the often forgotten
+node "Formatting Variables" and it's sub-nodes. There
+you'll find useful things like positioning the cursor and
+tabulators which allow you a summary in table form, but
+sadly hard tabulators are broken in 5.8.8.
+
+   <p>Since 5.10, Gnus offers you some very nice new specifiers,
+e.g. %B which draws a thread-tree and %&amp;user-date which
+gives you a date where the details are dependent of the
+articles age. Here's an example which uses both:
+
+<pre class="example">     (setq gnus-summary-line-format ":%U%R %B %s %-60=|%4L |%-20,20f |%&amp;user-date; \n")
+</pre>
+   <p class="noindent">resulting in:
+
+<pre class="example">     :O     Re: [Richard Stallman] rfc2047.el          |  13 |Lars Magne Ingebrigt |Sat 23:06
+     :O     Re: Revival of the ding-patches list       |  13 |Lars Magne Ingebrigt |Sat 23:12
+     :R  &gt;  Re: Find correct list of articles for a gro|  25 |Lars Magne Ingebrigt |Sat 23:16
+     :O  \-&gt;  ...                                      |  21 |Kai Grossjohann      | 0:01
+     :R  &gt;  Re: Cry for help: deuglify.el - moving stuf|  28 |Lars Magne Ingebrigt |Sat 23:34
+     :O  \-&gt;  ...                                      | 115 |Raymond Scholz       | 1:24
+     :O    \-&gt;  ...                                    |  19 |Lars Magne Ingebrigt |15:33
+     :O     Slow mailing list                          |  13 |Lars Magne Ingebrigt |Sat 23:49
+     :O     Re: `@' mark not documented                |  13 |Lars Magne Ingebrigt |Sat 23:50
+     :R  &gt;  Re: Gnus still doesn't count messages prope|  23 |Lars Magne Ingebrigt |Sat 23:57
+     :O  \-&gt;  ...                                      |  18 |Kai Grossjohann      | 0:35
+     :O    \-&gt;  ...                                    |  13 |Lars Magne Ingebrigt | 0:56
+</pre>
+   <p class="noindent">
+
+   </body></html>
+

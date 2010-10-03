@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Saving a copy of outgoing mail - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mail-and-news.html#Mail-and-news" title="Mail and news">
+<link rel="prev" href="Changing-the-included-text-prefix.html#Changing-the-included-text-prefix" title="Changing the included text prefix">
+<link rel="next" href="Expanding-aliases-when-sending-mail.html#Expanding-aliases-when-sending-mail" title="Expanding aliases when sending mail">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Saving-a-copy-of-outgoing-mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Expanding-aliases-when-sending-mail.html#Expanding-aliases-when-sending-mail">Expanding aliases when sending mail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-the-included-text-prefix.html#Changing-the-included-text-prefix">Changing the included text prefix</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-and-news.html#Mail-and-news">Mail and news</a>
+<hr>
+</div>
+
+<h3 class="section">12.2 How do I save a copy of outgoing mail?</h3>
+
+<p><a name="index-Saving-a-copy-of-outgoing-mail-504"></a><a name="index-Copying-outgoing-mail-to-a-file-505"></a><a name="index-Filing-outgoing-mail-506"></a><a name="index-Automatic-filing-of-outgoing-mail-507"></a><a name="index-Mail_002c-saving-outgoing-automatically-508"></a>
+You can either mail yourself a copy by including a &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo; header in the
+mail message, or store a copy of the message directly to a file by
+including an &lsquo;<samp><span class="samp">FCC</span></samp>&rsquo; header.
+
+   <p>If you use standard mail, you can automatically create a &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo; to
+yourself by putting
+
+<pre class="lisp">     (setq mail-self-blind t)
+</pre>
+   <p class="noindent">in your <samp><span class="file">.emacs</span></samp> file.  You can automatically include an &lsquo;<samp><span class="samp">FCC</span></samp>&rsquo;
+field by putting something like the following in your <samp><span class="file">.emacs</span></samp>
+file:
+
+<pre class="lisp">     (setq mail-archive-file-name (expand-file-name "~/outgoing"))
+</pre>
+   <p>The output file will be in Unix mail format.
+
+   <p>If you use <code>mh-e</code>, add an &lsquo;<samp><span class="samp">FCC</span></samp>&rsquo; or &lsquo;<samp><span class="samp">BCC</span></samp>&rsquo; field to your
+components file.
+
+   <p>It does not work to put &lsquo;<samp><span class="samp">set record filename</span></samp>&rsquo; in the <samp><span class="file">.mailrc</span></samp>
+file.
+
+   </body></html>
+

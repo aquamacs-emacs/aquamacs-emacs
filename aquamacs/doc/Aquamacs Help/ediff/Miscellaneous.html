@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Miscellaneous - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Customizing-the-Mode-Line.html#Customizing-the-Mode-Line" title="Customizing the Mode Line">
+<link rel="next" href="Notes-on-Heavy_002dduty-Customization.html#Notes-on-Heavy_002dduty-Customization" title="Notes on Heavy-duty Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Miscellaneous"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Notes-on-Heavy_002dduty-Customization.html#Notes-on-Heavy_002dduty-Customization">Notes on Heavy-duty Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-the-Mode-Line.html#Customizing-the-Mode-Line">Customizing the Mode Line</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.12 Miscellaneous</h3>
+
+<p>Here are a few other variables for customizing Ediff:
+
+     <dl>
+<dt><code>ediff-split-window-function</code><dd><a name="index-ediff_002dsplit_002dwindow_002dfunction-223"></a>Controls the way you want the window be split between file-A and file-B
+(and file-C, if applicable).  It defaults to the vertical split
+(<code>split-window-vertically</code>, but you can set it to
+<code>split-window-horizontally</code>, if you so wish. 
+Ediff also lets you switch from vertical to horizontal split and back
+interactively.
+
+     <p>Note that if Ediff detects that all the buffers it compares are displayed in
+separate frames, it assumes that the user wants them to be so displayed
+and stops splitting windows.  Instead, it arranges for each buffer to
+be displayed in a separate frame.  You can switch to the one-frame mode
+by hiding one of the buffers A/B/C.
+
+     <p>You can also swap the windows where buffers are displayed by typing
+<kbd>~</kbd>.
+
+     <br><dt><code>ediff-merge-split-window-function</code><dd><a name="index-ediff_002dmerge_002dsplit_002dwindow_002dfunction-224"></a>Controls how windows are
+split between buffers A and B in the merge mode. 
+This variable is like <code>ediff-split-window-function</code>, but it defaults
+to <code>split-window-horizontally</code> instead of
+<code>split-window-vertically</code>.
+
+     <br><dt><code>ediff-make-wide-display-function</code><dd><a name="index-ediff_002dmake_002dwide_002ddisplay_002dfunction-225"></a>The value is a function to be called to widen the frame for displaying
+the Ediff buffers.  See the on-line documentation for
+<code>ediff-make-wide-display-function</code> for details.  It is also
+recommended to look into the source of the default function
+<code>ediff-make-wide-display</code>.
+
+     <p>You can toggle wide/regular display by typing <kbd>m</kbd>.  In the wide
+display mode, buffers A, B (and C, when applicable) are displayed in a
+single frame that is as wide as the entire workstation screen.  This is
+useful when files are compared side-by-side.  By default, the display is
+widened without changing its height.
+
+     <br><dt><code>ediff-use-last-dir</code><dd><a name="index-ediff_002duse_002dlast_002ddir-226"></a>Controls the way Ediff presents the
+default directory when it prompts the user for files to compare.  If
+<code>nil</code>,
+Ediff uses the default directory of the current buffer when it
+prompts the user for file names.  Otherwise, it will use the
+directories it had previously used for files A, B, or C, respectively.
+
+     <br><dt><code>ediff-no-emacs-help-in-control-buffer</code><dd><a name="index-ediff_002dno_002demacs_002dhelp_002din_002dcontrol_002dbuffer-227"></a>If <code>t</code>, makes <kbd>C-h</kbd>
+behave like the &lt;DEL&gt; key, i.e., it will move you back to the previous
+difference rather than invoking help.  This is useful when, in an xterm
+window or a text-only terminal, the Backspace key is bound to <kbd>C-h</kbd> and is
+positioned more conveniently than the &lt;DEL&gt; key.
+
+     <br><dt><code>ediff-toggle-read-only-function</code><dd><a name="index-ediff_002dtoggle_002dread_002donly_002dfunction-228"></a>This variable's value is a function that Ediff uses to toggle
+the read-only property in its buffers.
+
+     <p>The default function that Ediff uses simply toggles the read-only property,
+unless the file is under version control.  For a checked-in file under
+version control, Ediff first tries to check the file out.
+
+     <br><dt><code>ediff-make-buffers-readonly-at-startup nil</code><dd><a name="index-ediff_002dmake_002dbuffers_002dreadonly_002dat_002dstartup-229"></a>If <code>t</code>, all variant buffers are made read-only at Ediff startup.
+
+     <br><dt><code>ediff-keep-variants</code><dd><a name="index-g_t_0040code_007bediff_002dkeep_002dvariants_007d-230"></a>The default is <code>t</code>, meaning that the buffers being compared or merged will
+be preserved when Ediff quits.  Setting this to <code>nil</code> causes Ediff to
+offer the user a chance to delete these buffers (if they are not modified). 
+Supplying a prefix argument to the quit command (<code>q</code>) temporarily
+reverses the meaning of this variable.  This is convenient when the user
+prefers one of the behaviors most of the time, but occasionally needs the
+other behavior.
+
+     <p>However, Ediff temporarily resets this variable to <code>t</code> if it is
+invoked via one of the "buffer" jobs, such as <code>ediff-buffers</code>. 
+This is because it is all too easy to loose day's work otherwise. 
+Besides, in a "buffer" job, the variant buffers have already been loaded
+prior to starting Ediff, so Ediff just preserves status quo here.
+
+     <p>Using <code>ediff-cleanup-hook</code>, one can make Ediff delete the variants
+unconditionally (e.g., by making <code>ediff-janitor</code> into one of these hooks).
+
+     <br><dt><code>ediff-keep-tmp-versions</code><dd><a name="index-g_t_0040code_007bediff_002dkeep_002dtmp_002dversions_007d-231"></a>Default is <code>nil</code>. If <code>t</code>, the versions of the files being
+compared or merged using operations such as <code>ediff-revision</code> or
+<code>ediff-merge-revisions</code> are not deleted on exit. The normal action is
+to clean up and delete these version files.
+
+     <br><dt><code>ediff-grab-mouse</code><dd><a name="index-g_t_0040code_007bediff_002dgrab_002dmouse_007d-232"></a>Default is <code>t</code>.  Normally, Ediff grabs mouse and puts it in its
+control frame.  This is useful since the user can be sure that when he
+needs to type an Ediff command the focus will be in an appropriate Ediff's
+frame.  However, some users prefer to move the mouse by themselves.  The
+above variable, if set to <code>maybe</code>, will prevent Ediff from grabbing
+the mouse in many situations, usually after commands that may take more
+time than usual.  In other situation, Ediff will continue grabbing the mouse
+and putting it where it believes is appropriate.  If the value is
+<code>nil</code>, then mouse is entirely user's responsibility. 
+Try different settings and see which one is for you. 
+</dl>
+
+   </body></html>
+

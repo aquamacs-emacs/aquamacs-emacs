@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Inheritance - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Building-Classes.html#Building-Classes" title="Building Classes">
+<link rel="next" href="Slot-Options.html#Slot-Options" title="Slot Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Inheritance"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Slot-Options.html#Slot-Options">Slot Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building-Classes.html#Building-Classes">Building Classes</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Inheritance</h3>
+
+<p><dfn>Inheritance</dfn> is a basic feature of an object-oriented language. 
+In <i>EIEIO</i>, a defined class specifies the super classes from which it
+inherits by using the second argument to <code>defclass</code>.  Here is an
+example:
+
+<pre class="example">     (defclass my-baseclass ()
+        ((slot-A :initarg :slot-A)
+         (slot-B :initarg :slot-B))
+       "My Baseclass.")
+</pre>
+   <p class="noindent">To subclass from <code>my-baseclass</code>, we specify it in the superclass
+list:
+
+<pre class="example">     (defclass my-subclass (my-baseclass)
+        ((specific-slot-A :initarg specific-slot-A)
+         )
+        "My subclass of my-baseclass")
+</pre>
+   <p class="indent">Instances of <code>my-subclass</code> will inherit <code>slot-A</code> and
+<code>slot-B</code>, in addition to having <code>specific-slot-A</code> from the
+declaration of <code>my-subclass</code>.
+
+   <p><i>EIEIO</i> also supports multiple inheritance.  Suppose we define a
+second baseclass, perhaps an &ldquo;interface&rdquo; class, like this:
+
+<pre class="example">     (defclass my-interface ()
+        ((interface-slot :initarg :interface-slot))
+        "An interface to special behavior."
+        :abstract t)
+</pre>
+   <p class="noindent">The interface class defines a special <code>interface-slot</code>, and also
+specifies itself as abstract.  Abstract classes cannot be
+instantiated.  It is not required to make interfaces abstract, but it
+is a good programming practice.
+
+   <p>We can now modify our definition of <code>my-subclass</code> to use this
+interface class, together with our original base class:
+
+<pre class="example">     (defclass my-subclass (my-baseclass my-interface)
+        ((specific-slot-A :initarg specific-slot-A)
+         )
+        "My subclass of my-baseclass")
+</pre>
+   <p class="noindent">With this, <code>my-subclass</code> also has <code>interface-slot</code>.
+
+   <p>If <code>my-baseclass</code> and <code>my-interface</code> had slots with the same
+name, then the superclass showing up in the list first defines the
+slot attributes.
+
+   <p>Inheritance in <i>EIEIO</i> is more than just combining different slots. 
+It is also important in method invocation.  <a href="Methods.html#Methods">Methods</a>.
+
+   <p>If a method is called on an instance of <code>my-subclass</code>, and that
+method only has an implementation on <code>my-baseclass</code>, or perhaps
+<code>my-interface</code>, then the implementation for the baseclass is
+called.
+
+   <p>If there is a method implementation for <code>my-subclass</code>, and
+another in <code>my-baseclass</code>, the implementation for
+<code>my-subclass</code> can call up to the superclass as well.
+
+   </body></html>
+

@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Locating the buildfile - GNU Flymake 0.3</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Flymake 0.3">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
+<link rel="prev" href="Getting-the-include-directories.html#Getting-the-include-directories" title="Getting the include directories">
+<link rel="next" href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process" title="Starting the syntax check process">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Flymake (version 0.3, April 2004),
+which is a universal on-the-fly syntax checker for GNU Emacs.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Locating-the-buildfile"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process">Starting the syntax check process</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-the-include-directories.html#Getting-the-include-directories">Getting the include directories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Locating the buildfile</h3>
+
+<p><a name="index-Locating-the-buildfile-23"></a><a name="index-buildfile_002c-locating-24"></a><a name="index-Makefile_002c-locating-25"></a>
+Flymake can be configured to use different tools for performing syntax
+checks. For example, it can use direct compiler call to syntax check a perl
+script or a call to <code>make</code> for a more complicated case of a
+<code>C/C++</code> source. The general idea is that simple files, like perl
+scripts and html pages, can be checked by directly invoking a
+corresponding tool. Files that are usually more complex and generally
+used as part of larger projects, might require non-trivial options to
+be passed to the syntax check tool, like include directories for
+C++. The latter files are syntax checked using some build tool, like
+<code>make</code> or <code>Ant</code>.
+
+   <p>All <code>make</code> configuration data is usually stored in a file called
+<code>Makefile</code>. To allow for future extensions, flymake uses a notion of
+buildfile to reference the 'project configuration' file.
+
+   <p>Special function, <code>flymake-find-buildfile</code> is provided for locating buildfiles. 
+Searching for a buildfile is done in a manner similar to that of searching
+for possible master files. A customizable variable
+<code>flymake-buildfile-dirs</code> holds a list of relative paths to the
+buildfile. They are checked sequentially until a buildfile is found. In case
+there's no build file, syntax check is aborted.
+
+   <p>Buildfile values are also cached.
+
+   </body></html>
+

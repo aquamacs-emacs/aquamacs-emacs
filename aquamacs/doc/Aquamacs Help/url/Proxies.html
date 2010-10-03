@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Proxies - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="General-Facilities.html#General-Facilities" title="General Facilities">
+<link rel="prev" href="Disk-Caching.html#Disk-Caching" title="Disk Caching">
+<link rel="next" href="Gateways-in-general.html#Gateways-in-general" title="Gateways in general">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Proxies"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Gateways-in-general.html#Gateways-in-general">Gateways in general</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Disk-Caching.html#Disk-Caching">Disk Caching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="General-Facilities.html#General-Facilities">General Facilities</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 Proxies and Gatewaying</h3>
+
+<!-- fixme: check/document url-ns stuff -->
+<p><a name="index-proxy-servers-107"></a><a name="index-proxies-108"></a><a name="index-environment-variables-109"></a><a name="index-HTTP_005fPROXY-110"></a>Proxy servers are commonly used to provide gateways through firewalls
+or as caches serving some more-or-less local network.  Each protocol
+(HTTP, FTP, etc.) can have a different gateway server.  Proxying is
+conventionally configured commonly amongst different programs through
+environment variables of the form <var>protocol</var><code>_proxy</code>, where
+<var>protocol</var> is one of the supported network protocols (<code>http</code>,
+<code>ftp</code> etc.).  The library recognizes such variables in either
+upper or lower case.  Their values are of one of the forms:
+     <ul>
+<li><var>host</var><code>:</code><var>port</var>
+<li>A full URL;
+<li>Simply a host name. 
+</ul>
+
+   <p><a name="index-NO_005fPROXY-111"></a>The <code>NO_PROXY</code> environment variable specifies URLs that should be
+excluded from proxying (on servers that should be contacted directly). 
+This should be a comma-separated list of hostnames, domain names, or a
+mixture of both.  Asterisks can be used as wildcards, but other
+clients may not support that.  Domain names may be indicated by a
+leading dot.  For example:
+<pre class="example">     NO_PROXY="*.aventail.com,home.com,.seanet.com"
+</pre>
+   <p class="noindent">says to contact all machines in the &lsquo;<samp><span class="samp">aventail.com</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">seanet.com</span></samp>&rsquo; domains directly, as well as the machine named
+&lsquo;<samp><span class="samp">home.com</span></samp>&rsquo;.  If <code>NO_PROXY</code> isn't defined, <code>no_PROXY</code>
+and <code>no_proxy</code> are also tried, in that order.
+
+   <p>Proxies may also be specified directly in Lisp.
+
+<div class="defun">
+&mdash; User Option: <b>url-proxy-services</b><var><a name="index-url_002dproxy_002dservices-112"></a></var><br>
+<blockquote><p>This variable is an alist of URL schemes and proxy servers that
+gateway them.  The items are of the form <code>(</code><var>scheme</var><code>&nbsp;.&nbsp;</code><var>host</var><code>:</code><var>portnumber</var><code>)</code><!-- /@w -->, says that the URL <var>scheme</var> is
+gatewayed through <var>portnumber</var> on the specified <var>host</var>.  An
+exception is the pseudo scheme <code>"no_proxy"</code>, which is paired with
+a regexp matching host names not to be proxied.  This variable is
+initialized from the environment as above.
+
+     <pre class="example">          (setq url-proxy-services
+                '(("http"     . "proxy.aventail.com:80")
+                  ("no_proxy" . "^.*\\(aventail\\|seanet\\)\\.com")))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

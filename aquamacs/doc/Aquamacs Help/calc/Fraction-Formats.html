@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Fraction Formats - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="prev" href="Complex-Formats.html#Complex-Formats" title="Complex Formats">
+<link rel="next" href="HMS-Formats.html#HMS-Formats" title="HMS Formats">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Fraction-Formats"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="HMS-Formats.html#HMS-Formats">HMS Formats</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Complex-Formats.html#Complex-Formats">Complex Formats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Modes.html#Display-Modes">Display Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.7.5 Fraction Formats</h4>
+
+<p class="noindent"><a name="index-d-o-519"></a><a name="index-calc_002dover_002dnotation-520"></a>Display of fractional numbers is controlled by the <kbd>d o</kbd>
+(<code>calc-over-notation</code>) command.  By default, a number like
+eight thirds is displayed in the form &lsquo;<samp><span class="samp">8:3</span></samp>&rsquo;.  The <kbd>d o</kbd> command
+prompts for a one- or two-character format.  If you give one character,
+that character is used as the fraction separator.  Common separators are
+&lsquo;<samp><span class="samp">:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">/</span></samp>&rsquo;.  (During input of numbers, the <kbd>:</kbd> key must be
+used regardless of the display format; in particular, the <kbd>/</kbd> is used
+for RPN-style division, <em>not</em> for entering fractions.)
+
+   <p>If you give two characters, fractions use &ldquo;integer-plus-fractional-part&rdquo;
+notation.  For example, the format &lsquo;<samp><span class="samp">+/</span></samp>&rsquo; would display eight thirds
+as &lsquo;<samp><span class="samp">2+2/3</span></samp>&rsquo;.  If two colons are present in a number being entered,
+the number is interpreted in this form (so that the entries <kbd>2:2:3</kbd>
+and <kbd>8:3</kbd> are equivalent).
+
+   <p>It is also possible to follow the one- or two-character format with
+a number.  For example:  &lsquo;<samp><span class="samp">:10</span></samp>&rsquo; or &lsquo;<samp><span class="samp">+/3</span></samp>&rsquo;.  In this case,
+Calc adjusts all fractions that are displayed to have the specified
+denominator, if possible.  Otherwise it adjusts the denominator to
+be a multiple of the specified value.  For example, in &lsquo;<samp><span class="samp">:6</span></samp>&rsquo; mode
+the fraction &lsquo;<samp><span class="samp">1:6</span></samp>&rsquo; will be unaffected, but &lsquo;<samp><span class="samp">2:3</span></samp>&rsquo; will be
+displayed as &lsquo;<samp><span class="samp">4:6</span></samp>&rsquo;, &lsquo;<samp><span class="samp">1:2</span></samp>&rsquo; will be displayed as &lsquo;<samp><span class="samp">3:6</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">1:8</span></samp>&rsquo; will be displayed as &lsquo;<samp><span class="samp">3:24</span></samp>&rsquo;.  Integers are also
+affected by this mode:  3 is displayed as &lsquo;<samp><span class="samp">18:6</span></samp>&rsquo;.  Note that the
+format &lsquo;<samp><span class="samp">:1</span></samp>&rsquo; writes fractions the same as &lsquo;<samp><span class="samp">:</span></samp>&rsquo;, but it writes
+integers as &lsquo;<samp><span class="samp">n:1</span></samp>&rsquo;.
+
+   <p>The fraction format does not affect the way fractions or integers are
+stored, only the way they appear on the screen.  The fraction format
+never affects floats.
+
+   </body></html>
+

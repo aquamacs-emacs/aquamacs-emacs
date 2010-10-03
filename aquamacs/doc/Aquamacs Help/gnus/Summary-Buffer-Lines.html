@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+<title>Summary Buffer Lines - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer-Format.html#Summary-Buffer-Format" title="Summary Buffer Format">
+<link rel="next" href="To-From-Newsgroups.html#To-From-Newsgroups" title="To From Newsgroups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Summary-Buffer-Lines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer-Format.html#Summary-Buffer-Format">Summary Buffer Format</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.1.1 Summary Buffer Lines</h4>
+
+<p><a name="index-gnus_002dsummary_002dline_002dformat-654"></a>You can change the format of the lines in the summary buffer by changing
+the <code>gnus-summary-line-format</code> variable.  It works along the same
+lines as a normal <code>format</code> string, with some extensions
+(see <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>).
+
+   <p>There should always be a colon or a point position marker on the line;
+the cursor always moves to the point position marker or the colon after
+performing an operation.  (Of course, Gnus wouldn't be Gnus if it wasn't
+possible to change this.  Just write a new function
+<code>gnus-goto-colon</code> which does whatever you like with the cursor.) 
+See <a href="Positioning-Point.html#Positioning-Point">Positioning Point</a>.
+
+   <p>The default string is &lsquo;<samp><span class="samp">%U%R%z%I%(%[%4L: %-23,23f%]%) %s\n</span></samp>&rsquo;.
+
+   <p>The following format specification characters and extended format
+specification(s) are understood:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">N</span></samp>&rsquo;<dd>Article number. 
+<br><dt>&lsquo;<samp><span class="samp">S</span></samp>&rsquo;<dd>Subject string.  List identifiers stripped,
+<code>gnus-list-identifiers</code>.  See <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>. 
+<br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>Subject if the article is the root of the thread or the previous article
+had a different subject, <code>gnus-summary-same-subject</code> otherwise. 
+(<code>gnus-summary-same-subject</code> defaults to <code>""</code>.) 
+<br><dt>&lsquo;<samp><span class="samp">F</span></samp>&rsquo;<dd>Full <code>From</code> header. 
+<br><dt>&lsquo;<samp><span class="samp">n</span></samp>&rsquo;<dd>The name (from the <code>From</code> header). 
+<br><dt>&lsquo;<samp><span class="samp">f</span></samp>&rsquo;<dd>The name, <code>To</code> header or the <code>Newsgroups</code> header (see <a href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>). 
+<br><dt>&lsquo;<samp><span class="samp">a</span></samp>&rsquo;<dd>The name (from the <code>From</code> header).  This differs from the <code>n</code>
+spec in that it uses the function designated by the
+<code>gnus-extract-address-components</code> variable, which is slower, but
+may be more thorough. 
+<br><dt>&lsquo;<samp><span class="samp">A</span></samp>&rsquo;<dd>The address (from the <code>From</code> header).  This works the same way as
+the <code>a</code> spec. 
+<br><dt>&lsquo;<samp><span class="samp">L</span></samp>&rsquo;<dd>Number of lines in the article. 
+<br><dt>&lsquo;<samp><span class="samp">c</span></samp>&rsquo;<dd>Number of characters in the article.  This specifier is not supported
+in some methods (like nnfolder). 
+<br><dt>&lsquo;<samp><span class="samp">k</span></samp>&rsquo;<dd>Pretty-printed version of the number of characters in the article;
+for example, &lsquo;<samp><span class="samp">1.2k</span></samp>&rsquo; or &lsquo;<samp><span class="samp">0.4M</span></samp>&rsquo;. 
+<br><dt>&lsquo;<samp><span class="samp">I</span></samp>&rsquo;<dd>Indentation based on thread level (see <a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>). 
+<br><dt>&lsquo;<samp><span class="samp">B</span></samp>&rsquo;<dd>A complex trn-style thread tree, showing response-connecting trace
+lines.  A thread could be drawn like this:
+
+     <pre class="example">          &gt;
+          +-&gt;
+          | +-&gt;
+          | | \-&gt;
+          | |   \-&gt;
+          | \-&gt;
+          +-&gt;
+          \-&gt;
+</pre>
+     <p>You can customize the appearance with the following options.  Note
+that it is possible to make the thread display look really neat by
+replacing the default <acronym>ASCII</acronym> characters with graphic
+line-drawing glyphs.
+          <dl>
+<dt><code>gnus-sum-thread-tree-root</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002droot-655"></a>Used for the root of a thread.  If <code>nil</code>, use subject
+instead.  The default is &lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-false-root</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dfalse_002droot-656"></a>Used for the false root of a thread (see <a href="Loose-Threads.html#Loose-Threads">Loose Threads</a>).  If
+<code>nil</code>, use subject instead.  The default is &lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-single-indent</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dsingle_002dindent-657"></a>Used for a thread with just one message.  If <code>nil</code>, use subject
+instead.  The default is &lsquo;<samp></samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-vertical</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dvertical-658"></a>Used for drawing a vertical line.  The default is &lsquo;<samp><span class="samp">| </span></samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-indent</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dindent-659"></a>Used for indenting.  The default is &lsquo;<samp>  </samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-leaf-with-other</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dleaf_002dwith_002dother-660"></a>Used for a leaf with brothers.  The default is &lsquo;<samp><span class="samp">+-&gt; </span></samp>&rsquo;.
+
+          <br><dt><code>gnus-sum-thread-tree-single-leaf</code><dd><a name="index-gnus_002dsum_002dthread_002dtree_002dsingle_002dleaf-661"></a>Used for a leaf without brothers.  The default is &lsquo;<samp><span class="samp">\-&gt; </span></samp>&rsquo;
+
+     </dl>
+
+     <br><dt>&lsquo;<samp><span class="samp">T</span></samp>&rsquo;<dd>Nothing if the article is a root and lots of spaces if it isn't (it
+pushes everything after it off the screen). 
+<br><dt>&lsquo;<samp><span class="samp">[</span></samp>&rsquo;<dd>Opening bracket, which is normally &lsquo;<samp><span class="samp">[</span></samp>&rsquo;, but can also be &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;
+for adopted articles (see <a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>). 
+<br><dt>&lsquo;<samp><span class="samp">]</span></samp>&rsquo;<dd>Closing bracket, which is normally &lsquo;<samp><span class="samp">]</span></samp>&rsquo;, but can also be &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;
+for adopted articles. 
+<br><dt>&lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;<dd>One space for each thread level. 
+<br><dt>&lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;<dd>Twenty minus thread level spaces. 
+<br><dt>&lsquo;<samp><span class="samp">U</span></samp>&rsquo;<dd>Unread.  See <a href="Read-Articles.html#Read-Articles">Read Articles</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">R</span></samp>&rsquo;<dd>This misleadingly named specifier is the <dfn>secondary mark</dfn>.  This
+mark will say whether the article has been replied to, has been cached,
+or has been saved.  See <a href="Other-Marks.html#Other-Marks">Other Marks</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">i</span></samp>&rsquo;<dd>Score as a number (see <a href="Scoring.html#Scoring">Scoring</a>). 
+<br><dt>&lsquo;<samp><span class="samp">z</span></samp>&rsquo;<dd><a name="index-gnus_002dsummary_002dzcore_002dfuzz-662"></a>Zcore, &lsquo;<samp><span class="samp">+</span></samp>&rsquo; if above the default level and &lsquo;<samp><span class="samp">-</span></samp>&rsquo; if below the
+default level.  If the difference between
+<code>gnus-summary-default-score</code> and the score is less than
+<code>gnus-summary-zcore-fuzz</code>, this spec will not be used. 
+<br><dt>&lsquo;<samp><span class="samp">V</span></samp>&rsquo;<dd>Total thread score. 
+<br><dt>&lsquo;<samp><span class="samp">x</span></samp>&rsquo;<dd><code>Xref</code>. 
+<br><dt>&lsquo;<samp><span class="samp">D</span></samp>&rsquo;<dd><code>Date</code>. 
+<br><dt>&lsquo;<samp><span class="samp">d</span></samp>&rsquo;<dd>The <code>Date</code> in <code>DD-MMM</code> format. 
+<br><dt>&lsquo;<samp><span class="samp">o</span></samp>&rsquo;<dd>The <code>Date</code> in <var>YYYYMMDD</var><code>T</code><var>HHMMSS</var> format. 
+<br><dt>&lsquo;<samp><span class="samp">M</span></samp>&rsquo;<dd><code>Message-ID</code>. 
+<br><dt>&lsquo;<samp><span class="samp">r</span></samp>&rsquo;<dd><code>References</code>. 
+<br><dt>&lsquo;<samp><span class="samp">t</span></samp>&rsquo;<dd>Number of articles in the current sub-thread.  Using this spec will slow
+down summary buffer generation somewhat. 
+<br><dt>&lsquo;<samp><span class="samp">e</span></samp>&rsquo;<dd>An &lsquo;<samp><span class="samp">=</span></samp>&rsquo; (<code>gnus-not-empty-thread-mark</code>) will be displayed if the
+article has any children. 
+<br><dt>&lsquo;<samp><span class="samp">P</span></samp>&rsquo;<dd>The line number. 
+<br><dt>&lsquo;<samp><span class="samp">O</span></samp>&rsquo;<dd>Download mark. 
+<br><dt>&lsquo;<samp><span class="samp">*</span></samp>&rsquo;<dd>Desired cursor position (instead of after first colon). 
+<br><dt>&lsquo;<samp><span class="samp">&amp;user-date;</span></samp>&rsquo;<dd>Age sensitive date format.  Various date format is defined in
+<code>gnus-user-date-format-alist</code>. 
+<br><dt>&lsquo;<samp><span class="samp">u</span></samp>&rsquo;<dd>User defined specifier.  The next character in the format string should
+be a letter.  Gnus will call the function
+<code>gnus-user-format-function-</code><var>x</var>, where <var>x</var> is the letter
+following &lsquo;<samp><span class="samp">%u</span></samp>&rsquo;.  The function will be passed the current header as
+argument.  The function should return a string, which will be inserted
+into the summary just like information from any other summary specifier. 
+</dl>
+
+   <p>Text between &lsquo;<samp><span class="samp">%(</span></samp>&rsquo; and &lsquo;<samp><span class="samp">%)</span></samp>&rsquo; will be highlighted with
+<code>gnus-mouse-face</code> when the mouse point is placed inside the area. 
+There can only be one such area.
+
+   <p>The &lsquo;<samp><span class="samp">%U</span></samp>&rsquo; (status), &lsquo;<samp><span class="samp">%R</span></samp>&rsquo; (replied) and &lsquo;<samp><span class="samp">%z</span></samp>&rsquo; (zcore) specs
+have to be handled with care.  For reasons of efficiency, Gnus will
+compute what column these characters will end up in, and &ldquo;hard-code&rdquo;
+that.  This means that it is invalid to have these specs after a
+variable-length spec.  Well, you might not be arrested, but your summary
+buffer will look strange, which is bad enough.
+
+   <p>The smart choice is to have these specs as far to the left as possible. 
+(Isn't that the case with everything, though?  But I digress.)
+
+   <p>This restriction may disappear in later versions of Gnus.
+
+   </body></html>
+

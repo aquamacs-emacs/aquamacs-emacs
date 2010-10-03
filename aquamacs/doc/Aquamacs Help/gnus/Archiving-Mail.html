@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Archiving Mail - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
+<link rel="next" href="Web-Searches.html#Web-Searches" title="Web Searches">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Archiving-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Web-Searches.html#Web-Searches">Web Searches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.4.1 Archiving Mail</h4>
+
+<p><a name="index-archiving-mail-2284"></a><a name="index-backup-of-mail-2285"></a>
+Some of the back ends, notably <code>nnml</code>, <code>nnfolder</code>, and
+<code>nnmaildir</code>, now actually store the article marks with each group. 
+For these servers, archiving and restoring a group while preserving
+marks is fairly simple.
+
+   <p>(Preserving the group level and group parameters as well still
+requires ritual dancing and sacrifices to the <samp><span class="file">.newsrc.eld</span></samp> deity
+though.)
+
+   <p>To archive an entire <code>nnml</code>, <code>nnfolder</code>, or <code>nnmaildir</code>
+server, take a recursive copy of the server directory.  There is no need
+to shut down Gnus, so archiving may be invoked by <code>cron</code> or
+similar.  You restore the data by restoring the directory tree, and
+adding a server definition pointing to that directory in Gnus.  The
+<a href="Article-Backlog.html#Article-Backlog">Article Backlog</a>, <a href="Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous Fetching</a> and other things
+might interfere with overwriting data, so you may want to shut down Gnus
+before you restore the data.
+
+   <p>It is also possible to archive individual <code>nnml</code>,
+<code>nnfolder</code>, or <code>nnmaildir</code> groups, while preserving marks. 
+For <code>nnml</code> or <code>nnmaildir</code>, you copy all files in the group's
+directory.  For <code>nnfolder</code> you need to copy both the base folder
+file itself (<samp><span class="file">FOO</span></samp>, say), and the marks file (<samp><span class="file">FOO.mrk</span></samp> in
+this example).  Restoring the group is done with <kbd>G m</kbd> from the Group
+buffer.  The last step makes Gnus notice the new directory. 
+<code>nnmaildir</code> notices the new directory automatically, so <kbd>G m</kbd>
+is unnecessary in that case.
+
+   </body></html>
+

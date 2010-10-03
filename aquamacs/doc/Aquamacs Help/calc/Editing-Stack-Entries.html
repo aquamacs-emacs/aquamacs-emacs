@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Editing Stack Entries - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Stack-and-Trail.html#Stack-and-Trail" title="Stack and Trail">
+<link rel="prev" href="Stack-Manipulation.html#Stack-Manipulation" title="Stack Manipulation">
+<link rel="next" href="Trail-Commands.html#Trail-Commands" title="Trail Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Editing-Stack-Entries"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Trail-Commands.html#Trail-Commands">Trail Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Stack-Manipulation.html#Stack-Manipulation">Stack Manipulation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 Editing Stack Entries</h3>
+
+<p class="noindent"><a name="index-g_t_0060-343"></a><a name="index-calc_002dedit-344"></a><a name="index-calc_002dedit_002dfinish-345"></a><a name="index-Editing-the-stack-with-Emacs-346"></a>The <kbd>`</kbd> (<code>calc-edit</code>) command creates a temporary buffer
+(&lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo;) for editing the top-of-stack value using regular
+Emacs commands.  Note that <kbd>`</kbd> is a backquote, not a quote. With a
+numeric prefix argument, it edits the specified number of stack entries
+at once.  (An argument of zero edits the entire stack; a negative
+argument edits one specific stack entry.)
+
+   <p>When you are done editing, press <kbd>C-c C-c</kbd> to finish and return
+to Calc.  The &lt;RET&gt; and &lt;LFD&gt; keys also work to finish most
+sorts of editing, though in some cases Calc leaves &lt;RET&gt; with its
+usual meaning (&ldquo;insert a newline&rdquo;) if it's a situation where you
+might want to insert new lines into the editing buffer.
+
+   <p>When you finish editing, the Calculator parses the lines of text in
+the &lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo; buffer as numbers or formulas, replaces the
+original stack elements in the original buffer with these new values,
+then kills the &lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo; buffer.  The original Calculator buffer
+continues to exist during editing, but for best results you should be
+careful not to change it until you have finished the edit.  You can
+also cancel the edit by killing the buffer with <kbd>C-x k</kbd>.
+
+   <p>The formula is normally reevaluated as it is put onto the stack. 
+For example, editing &lsquo;<samp><span class="samp">a + 2</span></samp>&rsquo; to &lsquo;<samp><span class="samp">3 + 2</span></samp>&rsquo; and pressing
+<kbd>C-c C-c</kbd> will push 5 on the stack.  If you use &lt;LFD&gt; to
+finish, Calc will put the result on the stack without evaluating it.
+
+   <p>If you give a prefix argument to <kbd>C-c C-c</kbd>,
+Calc will not kill the &lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo; buffer.  You can switch
+back to that buffer and continue editing if you wish.  However, you
+should understand that if you initiated the edit with <kbd>`</kbd>, the
+<kbd>C-c C-c</kbd> operation will be programmed to replace the top of the
+stack with the new edited value, and it will do this even if you have
+rearranged the stack in the meanwhile.  This is not so much of a problem
+with other editing commands, though, such as <kbd>s e</kbd>
+(<code>calc-edit-variable</code>; see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>).
+
+   <p>If the <code>calc-edit</code> command involves more than one stack entry,
+each line of the &lsquo;<samp><span class="samp">*Calc Edit*</span></samp>&rsquo; buffer is interpreted as a
+separate formula.  Otherwise, the entire buffer is interpreted as
+one formula, with line breaks ignored.  (You can use <kbd>C-o</kbd> or
+<kbd>C-q C-j</kbd> to insert a newline in the buffer without pressing &lt;RET&gt;.)
+
+   <p>The <kbd>`</kbd> key also works during numeric or algebraic entry.  The
+text entered so far is moved to the <code>*Calc Edit*</code> buffer for
+more extensive editing than is convenient in the minibuffer.
+
+   </body></html>
+

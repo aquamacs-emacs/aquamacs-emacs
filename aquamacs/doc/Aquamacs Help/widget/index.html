@@ -1,0 +1,286 @@
+<html lang="en">
+<head>
+<title>Index - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-ca   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">The Emacs Widget Library</a>
+<ul>
+<li><a href="Introduction.html#Introduction">Introduction</a>
+<li><a href="User-Interface.html#User-Interface">User Interface</a>
+<ul>
+<li><a href="User-Interface.html#User-Interface">Editable Text Fields</a>
+<li><a href="User-Interface.html#User-Interface">Buttons</a>
+<li><a href="User-Interface.html#User-Interface">Navigation</a>
+</li></ul>
+<li><a href="Programming-Example.html#Programming-Example">Programming Example</a>
+<li><a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting<ul class="index-cp" compact>
+<li><a href="Defining-New-Widgets.html#index-action_0040r_007b-keyword_007d-165"><code>action</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Widget-Properties.html#index-activate-a-widget-144">activate a widget</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Widget-Properties.html#index-active-widget-142">active widget</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="editable_002dlist.html#index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102"><code>append-button-args</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="editable_002dlist.html#index-args_0040r_007b-keyword_007d-105"><code>args</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="menu_002dchoice.html#index-args_0040r_007b-keyword_007d-76"><code>args</code><span class="roman"> keyword</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="checklist.html#index-args_0040r_007b-keyword_007d-97"><code>args</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-args_0040r_007b-keyword_007d-83"><code>args</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="atoms.html#index-atomic-sexp-widget-114">atomic sexp widget</a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="Introduction.html#index-basic-widgets-1">basic widgets</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="atoms.html#index-boolean-126"><code>boolean</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="url_002dlink.html#index-browse_002durl_002dbrowser_002dfunction_0040r_007b_002c-and-_0040code_007burl_002dlink_007d-widget_007d-57"><code>browse-url-browser-function</code><span class="roman">, and </span><code>url-link</code><span class="roman"> widget</span></a>: <a href="url_002dlink.html#url_002dlink">url-link</a></li>
+<li><a href="User-Interface.html#index-button-widgets-6">button widgets</a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="checklist.html#index-button_002dargs_0040r_007b-keyword_007d-94"><code>button-args</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-button_002dargs_0040r_007b-keyword_007d-79"><code>button-args</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="Basic-Types.html#index-button_002dface_0040r_007b-keyword_007d-31"><code>button-face</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-button_002dprefix_0040r_007b-keyword_007d-32"><code>button-prefix</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-button_002dsuffix_0040r_007b-keyword_007d-33"><code>button-suffix</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="editable_002dlist.html#index-buttons_0040r_007b-keyword_007d-103"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-buttons_0040r_007b-keyword_007d-80"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="checklist.html#index-buttons_0040r_007b-keyword_007d-95"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="menu_002dchoice.html#index-case_002dfold_0040r_007b-keyword_007d-73"><code>case-fold</code><span class="roman"> keyword</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="atoms.html#index-character-117"><code>character</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="checkbox.html#index-checkbox_0040r_007b-widget_007d-90"><code>checkbox</code><span class="roman"> widget</span></a>: <a href="checkbox.html#checkbox">checkbox</a></li>
+<li><a href="checklist.html#index-checklist_0040r_007b-widget_007d-91"><code>checklist</code><span class="roman"> widget</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="menu_002dchoice.html#index-children_0040r_007b-keyword_007d-74"><code>children</code><span class="roman"> keyword</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="checklist.html#index-children_0040r_007b-keyword_007d-96"><code>children</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-children_0040r_007b-keyword_007d-81"><code>children</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="editable_002dlist.html#index-children_0040r_007b-keyword_007d-104"><code>children</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="composite.html#index-choice-129"><code>choice</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-choice_0040r_007b-keyword_007d-82"><code>choice</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="menu_002dchoice.html#index-choice_0040r_007b-keyword_007d-75"><code>choice</code><span class="roman"> keyword</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="choice_002ditem.html#index-choice_002ditem_0040r_007b-widget_007d-86"><code>choice-item</code><span class="roman"> widget</span></a>: <a href="choice_002ditem.html#choice_002ditem">choice-item</a></li>
+<li><a href="composite.html#index-composite-sexp-widgets-127">composite sexp widgets</a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="composite.html#index-cons-128"><code>cons</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="constants.html#index-const-109"><code>const</code></a>: <a href="constants.html#constants">constants</a></li>
+<li><a href="constants.html#index-constant-widgets-108">constant widgets</a>: <a href="constants.html#constants">constants</a></li>
+<li><a href="Defining-New-Widgets.html#index-convert_002dwidget_0040r_007b-keyword_007d-149"><code>convert-widget</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-copy_0040r_007b-keyword_007d-152"><code>copy</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-create_0040r_007b-keyword_007d-156"><code>create</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Widget-Properties.html#index-deactivate-a-widget-145">deactivate a widget</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Defining-New-Widgets.html#index-default-168"><code>default</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-define_002dwidget-148"><code>define-widget</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-defining-new-widgets-147">defining new widgets</a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-delete_0040r_007b-keyword_007d-157"><code>delete</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="editable_002dlist.html#index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101"><code>delete-button-args</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="atoms.html#index-directory-120"><code>directory</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="Basic-Types.html#index-doc_0040r_007b-keyword_007d-34"><code>doc</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="editable_002dfield.html#index-editable_002dfield_0040r_007b-widget_007d-62"><code>editable-field</code><span class="roman"> widget</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="editable_002dlist.html#index-editable_002dlist_0040r_007b-widget_007d-98"><code>editable-list</code><span class="roman"> widget</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="User-Interface.html#index-embedded-buttons-11">embedded buttons</a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="editable_002dlist.html#index-entry_002dformat_0040r_007b-keyword_007d-99"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="checklist.html#index-entry_002dformat_0040r_007b-keyword_007d-92"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-entry_002dformat_0040r_007b-keyword_007d-78"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="Programming-Example.html#index-example-of-using-widgets-17">example of using widgets</a>: <a href="Programming-Example.html#Programming-Example">Programming Example</a></li>
+<li><a href="Basic-Types.html#index-extra_002doffset_0040r_007b-keyword_007d-41"><code>extra-offset</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="atoms.html#index-file-118"><code>file</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="Basic-Types.html#index-follow_002dlink_0040r_007b-keyword_007d-38"><code>follow-link</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-format_0040r_007b-keyword_007d-28"><code>format</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Defining-New-Widgets.html#index-format_002dhandler_0040r_007b-keyword_007d-163"><code>format-handler</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="atoms.html#index-function-122"><code>function</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="constants.html#index-function_002ditem-111"><code>function-item</code></a>: <a href="constants.html#constants">constants</a></li>
+<li><a href="generic.html#index-generic-sexp-widget-112">generic sexp widget</a>: <a href="generic.html#generic">generic</a></li>
+<li><a href="checklist.html#index-greedy_0040r_007b-keyword_007d-93"><code>greedy</code><span class="roman"> keyword</span></a>: <a href="checklist.html#checklist">checklist</a></li>
+<li><a href="group.html#index-group_0040r_007b-widget_007d-106"><code>group</code><span class="roman"> widget</span></a>: <a href="group.html#group">group</a></li>
+<li><a href="Basic-Types.html#index-help_002decho_0040r_007b-keyword_007d-37"><code>help-echo</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Widget-Properties.html#index-inactive-widget-143">inactive widget</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Basic-Types.html#index-indent_0040r_007b-keyword_007d-39"><code>indent</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="info_002dlink.html#index-info_002dlink_0040r_007b-widget_007d-58"><code>info-link</code><span class="roman"> widget</span></a>: <a href="info_002dlink.html#info_002dlink">info-link</a></li>
+<li><a href="editable_002dlist.html#index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100"><code>insert-button-args</code><span class="roman"> keyword</span></a>: <a href="editable_002dlist.html#editable_002dlist">editable-list</a></li>
+<li><a href="atoms.html#index-integer-124"><code>integer</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="item.html#index-item_0040r_007b-widget_007d-85"><code>item</code><span class="roman"> widget</span></a>: <a href="item.html#item">item</a></li>
+<li><a href="editable_002dfield.html#index-keymap_0040r_007b-keyword_007d-67"><code>keymap</code><span class="roman"> keyword</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="Basic-Types.html#index-keyword-arguments-26">keyword arguments</a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="link.html#index-link_0040r_007b-widget_007d-53"><code>link</code><span class="roman"> widget</span></a>: <a href="link.html#link">link</a></li>
+<li><a href="composite.html#index-list-130"><code>list</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="Basic-Types.html#index-match_0040r_007b-keyword_007d-45"><code>match</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="menu_002dchoice.html#index-menu_002dchoice_0040r_007b-widget_007d-71"><code>menu-choice</code><span class="roman"> widget</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="Basic-Types.html#index-menu_002dtag_0040r_007b-keyword_007d-43"><code>menu-tag</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-menu_002dtag_002dget_0040r_007b-keyword_007d-44"><code>menu-tag-get</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="User-Interface.html#index-Mouse_002d2-_0040r_007b_0028on-button-widgets_007d_0029-8"><code>Mouse-2 </code><span class="roman">(on button widgets</span><code>)</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="atoms.html#index-must_002dmatch_0040r_007b-keyword_007d-119"><code>must-match</code><span class="roman"> keyword</span></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="Defining-New-Widgets.html#index-new-widgets-146">new widgets</a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Basic-Types.html#index-notify_0040r_007b-keyword_007d-42"><code>notify</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="atoms.html#index-number-125"><code>number</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="toggle.html#index-off_002dglyph_0040r_007b-keyword_007d-89"><code>off-glyph</code><span class="roman"> keyword</span></a>: <a href="toggle.html#toggle">toggle</a></li>
+<li><a href="Basic-Types.html#index-offset_0040r_007b-keyword_007d-40"><code>offset</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="toggle.html#index-on_002dglyph_0040r_007b-keyword_007d-88"><code>on-glyph</code><span class="roman"> keyword</span></a>: <a href="toggle.html#toggle">toggle</a></li>
+<li><a href="User-Interface.html#index-option-field-tag-10">option field tag</a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Basic-Types.html#index-parent_0040r_007b-keyword_007d-49"><code>parent</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Defining-New-Widgets.html#index-prompt_002dvalue_0040r_007b-keyword_007d-167"><code>prompt-value</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Widget-Properties.html#index-properties-of-widgets-134">properties of widgets</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="push_002dbutton.html#index-push_002dbutton_0040r_007b-widget_007d-59"><code>push-button</code><span class="roman"> widget</span></a>: <a href="push_002dbutton.html#push_002dbutton">push-button</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"><code>radio-button-choice</code><span class="roman"> widget</span></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="atoms.html#index-regexp-116"><code>regexp</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="composite.html#index-repeat-133"><code>repeat</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="editable_002dfield.html#index-secret_0040r_007b-keyword_007d-65"><code>secret</code><span class="roman"> keyword</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="composite.html#index-set-132"><code>set</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="generic.html#index-sexp-113"><code>sexp</code></a>: <a href="generic.html#generic">generic</a></li>
+<li><a href="Sexp-Types.html#index-sexp-types-107">sexp types</a>: <a href="Sexp-Types.html#Sexp-Types">Sexp Types</a></li>
+<li><a href="Basic-Types.html#index-sibling_002dargs_0040r_007b-keyword_007d-50"><code>sibling-args</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="editable_002dfield.html#index-size_0040r_007b-keyword_007d-63"><code>size</code><span class="roman"> keyword</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="atoms.html#index-string-115"><code>string</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="atoms.html#index-symbol-121"><code>symbol</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="Basic-Types.html#index-tab_002dorder_0040r_007b-keyword_007d-48"><code>tab-order</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-tag_0040r_007b-keyword_007d-35"><code>tag</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-tag_002dglyph_0040r_007b-keyword_007d-36"><code>tag-glyph</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="text.html#index-text_0040r_007b-widget_007d-69"><code>text</code><span class="roman"> widget</span></a>: <a href="text.html#text">text</a></li>
+<li><a href="Widget-Wishlist.html#index-todo-179">todo</a>: <a href="Widget-Wishlist.html#Widget-Wishlist">Widget Wishlist</a></li>
+<li><a href="toggle.html#index-toggle_0040r_007b-widget_007d-87"><code>toggle</code><span class="roman"> widget</span></a>: <a href="toggle.html#toggle">toggle</a></li>
+<li><a href="url_002dlink.html#index-url_002dlink_0040r_007b-widget_007d-56"><code>url-link</code><span class="roman"> widget</span></a>: <a href="url_002dlink.html#url_002dlink">url-link</a></li>
+<li><a href="Utilities.html#index-utility-functions-for-widgets-176">utility functions for widgets</a>: <a href="Utilities.html#Utilities">Utilities</a></li>
+<li><a href="editable_002dfield.html#index-valid_002dregexp_0040r_007b-keyword_007d-66"><code>valid-regexp</code><span class="roman"> keyword</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="Basic-Types.html#index-validate_0040r_007b-keyword_007d-46"><code>validate</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-value_0040r_007b-keyword_007d-27"><code>value</code><span class="roman"> keyword</span></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Defining-New-Widgets.html#index-value_002dcreate_0040r_007b-keyword_007d-159"><code>value-create</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-value_002ddelete_0040r_007b-keyword_007d-160"><code>value-delete</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="editable_002dfield.html#index-value_002dface_0040r_007b-keyword_007d-64"><code>value-face</code><span class="roman"> keyword</span></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="Defining-New-Widgets.html#index-value_002dget_0040r_007b-keyword_007d-161"><code>value-get</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-value_002dto_002dexternal_0040r_007b-keyword_007d-155"><code>value-to-external</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-value_002dto_002dinternal_0040r_007b-keyword_007d-154"><code>value-to-internal</code><span class="roman"> keyword</span></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="atoms.html#index-variable-123"><code>variable</code></a>: <a href="atoms.html#atoms">atoms</a></li>
+<li><a href="constants.html#index-variable_002ditem-110"><code>variable-item</code></a>: <a href="constants.html#constants">constants</a></li>
+<li><a href="composite.html#index-vector-131"><code>vector</code></a>: <a href="composite.html#composite">composite</a></li>
+<li><a href="menu_002dchoice.html#index-void_0040r_007b-keyword_007d-72"><code>void</code><span class="roman"> keyword</span></a>: <a href="menu_002dchoice.html#menu_002dchoice">menu-choice</a></li>
+<li><a href="Widget-Browser.html#index-widget-browser-169">widget browser</a>: <a href="Widget-Browser.html#Widget-Browser">Widget Browser</a></li>
+<li><a href="User-Interface.html#index-widget-buttons-5">widget buttons</a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Introduction.html#index-widget-library_002c-why-use-it-3">widget library, why use it</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Widget-Minor-Mode.html#index-widget-minor-mode-173">widget minor mode</a>: <a href="Widget-Minor-Mode.html#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="Widget-Properties.html#index-widget-properties-135">widget properties</a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="User-Interface.html#index-widget_002dbackward-15"><code>widget-backward</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Widget-Browser.html#index-widget_002dbrowse-170"><code>widget-browse</code></a>: <a href="Widget-Browser.html#Widget-Browser">Widget Browser</a></li>
+<li><a href="Widget-Browser.html#index-widget_002dbrowse_002dat-172"><code>widget-browse-at</code></a>: <a href="Widget-Browser.html#Widget-Browser">Widget Browser</a></li>
+<li><a href="Widget-Browser.html#index-widget_002dbrowse_002dother_002dwindow-171"><code>widget-browse-other-window</code></a>: <a href="Widget-Browser.html#Widget-Browser">Widget Browser</a></li>
+<li><a href="User-Interface.html#index-widget_002dbutton_002dclick-9"><code>widget-button-click</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dbutton_002dclick-23"><code>widget-button-click</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="User-Interface.html#index-widget_002dbutton_002dface-12"><code>widget-button-face</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Basic-Types.html#index-widget_002dbutton_002dprefix-29"><code>widget-button-prefix</code></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dbutton_002dpress-22"><code>widget-button-press</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="User-Interface.html#index-widget_002dbutton_002dpress-7"><code>widget-button-press</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Basic-Types.html#index-widget_002dbutton_002dsuffix-30"><code>widget-button-suffix</code></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-widget_002dchildren_002dvalidate-47"><code>widget-children-validate</code></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dcreate-18"><code>widget-create</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002ddefault_002ddelete-158"><code>widget-default-delete</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002ddefault_002dformat_002dhandler-164"><code>widget-default-format-handler</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002ddelete-19"><code>widget-delete</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="User-Interface.html#index-widget_002dfield_002dface-4"><code>widget-field-face</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="editable_002dfield.html#index-widget_002dfield_002dkeymap-68"><code>widget-field-keymap</code></a>: <a href="editable_002dfield.html#editable_002dfield">editable-field</a></li>
+<li><a href="User-Interface.html#index-widget_002dforward-14"><code>widget-forward</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dget-139"><code>widget-get</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Utilities.html#index-widget_002dget_002dsibling-178"><code>widget-get-sibling</code></a>: <a href="Utilities.html#Utilities">Utilities</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dglobal_002dmap-25"><code>widget-global-map</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="Basic-Types.html#index-widget_002dglyph_002ddirectory-51"><code>widget-glyph-directory</code></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Basic-Types.html#index-widget_002dglyph_002denable-52"><code>widget-glyph-enable</code></a>: <a href="Basic-Types.html#Basic-Types">Basic Types</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dinsert-21"><code>widget-insert</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dkeymap-24"><code>widget-keymap</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="link.html#index-widget_002dlink_002dprefix-54"><code>widget-link-prefix</code></a>: <a href="link.html#link">link</a></li>
+<li><a href="link.html#index-widget_002dlink_002dsuffix-55"><code>widget-link-suffix</code></a>: <a href="link.html#link">link</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dmember-140"><code>widget-member</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Widget-Minor-Mode.html#index-widget_002dminor_002dmode-174"><code>widget-minor-mode</code></a>: <a href="Widget-Minor-Mode.html#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="Widget-Minor-Mode.html#index-widget_002dminor_002dmode_002dkeymap-175"><code>widget-minor-mode-keymap</code></a>: <a href="Widget-Minor-Mode.html#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="User-Interface.html#index-widget_002dmouse_002dface-13"><code>widget-mouse-face</code></a>: <a href="User-Interface.html#User-Interface">User Interface</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002dparent_002daction-166"><code>widget-parent-action</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Utilities.html#index-widget_002dprompt_002dvalue-177"><code>widget-prompt-value</code></a>: <a href="Utilities.html#Utilities">Utilities</a></li>
+<li><a href="push_002dbutton.html#index-widget_002dpush_002dbutton_002dprefix-60"><code>widget-push-button-prefix</code></a>: <a href="push_002dbutton.html#push_002dbutton">push-button</a></li>
+<li><a href="push_002dbutton.html#index-widget_002dpush_002dbutton_002dsuffix-61"><code>widget-push-button-suffix</code></a>: <a href="push_002dbutton.html#push_002dbutton">push-button</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dput-138"><code>widget-put</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="radio_002dbutton_002dchoice.html#index-widget_002dradio_002dadd_002ditem-84"><code>widget-radio-add-item</code></a>: <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="Setting-Up-the-Buffer.html#index-widget_002dsetup-20"><code>widget-setup</code></a>: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="text.html#index-widget_002dtext_002dkeymap-70"><code>widget-text-keymap</code></a>: <a href="text.html#text">text</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dtype-141"><code>widget-type</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002dtypes_002dconvert_002dwidget-150"><code>widget-types-convert-widget</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002dtypes_002dcopy-153"><code>widget-types-copy</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dvalue-136"><code>widget-value</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002dvalue_002dconvert_002dwidget-151"><code>widget-value-convert-widget</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Widget-Properties.html#index-widget_002dvalue_002dset-137"><code>widget-value-set</code></a>: <a href="Widget-Properties.html#Widget-Properties">Widget Properties</a></li>
+<li><a href="Defining-New-Widgets.html#index-widget_002dvalue_002dvalue_002dget-162"><code>widget-value-value-get</code></a>: <a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="Introduction.html#index-widgets_002c-basic-types-2">widgets, basic types</a>: <a href="Introduction.html#Introduction">Introduction</a></li>
+<li><a href="Programming-Example.html#index-widgets_002c-programming-example-16">widgets, programming example</a>: <a href="Programming-Example.html#Programming-Example">Programming Example</a></li>
+   </ul> Up the Buffer</a>
+<li><a href="Basic-Types.html#Basic-Types">Basic Types</a>
+<ul>
+<li><a href="link.html#link">The <code>link</code> Widget</a>
+<li><a href="url_002dlink.html#url_002dlink">The <code>url-link</code> Widget</a>
+<li><a href="info_002dlink.html#info_002dlink">The <code>info-link</code> Widget</a>
+<li><a href="push_002dbutton.html#push_002dbutton">The <code>push-button</code> Widget</a>
+<li><a href="editable_002dfield.html#editable_002dfield">The <code>editable-field</code> Widget</a>
+<li><a href="text.html#text">The <code>text</code> Widget</a>
+<li><a href="menu_002dchoice.html#menu_002dchoice">The <code>menu-choice</code> Widget</a>
+<li><a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice">The <code>radio-button-choice</code> Widget</a>
+<li><a href="item.html#item">The <code>item</code> Widget</a>
+<li><a href="choice_002ditem.html#choice_002ditem">The <code>choice-item</code> Widget</a>
+<li><a href="toggle.html#toggle">The <code>toggle</code> Widget</a>
+<li><a href="checkbox.html#checkbox">The <code>checkbox</code> Widget</a>
+<li><a href="checklist.html#checklist">The <code>checklist</code> Widget</a>
+<li><a href="editable_002dlist.html#editable_002dlist">The <code>editable-list</code> Widget</a>
+<li><a href="group.html#group">The <code>group</code> Widget</a>
+</li></ul>
+<li><a href="Sexp-Types.html#Sexp-Types">Sexp Types</a>
+<ul>
+<li><a href="constants.html#constants">The Constant Widgets</a>
+<li><a href="generic.html#generic">Generic Sexp Widget</a>
+<li><a href="atoms.html#atoms">Atomic Sexp Widgets</a>
+<li><a href="composite.html#composite">Composite Sexp Widgets</a>
+</li></ul>
+<li><a href="Widget-Properties.html#Widget-Properties">Properties</a>
+<li><a href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a>
+<li><a href="Widget-Browser.html#Widget-Browser">Widget Browser</a>
+<li><a href="Widget-Minor-Mode.html#Widget-Minor-Mode">Widget Minor Mode</a>
+<li><a href="Utilities.html#Utilities">Utilities.</a>
+<li><a href="Widget-Wishlist.html#Widget-Wishlist">Wishlist</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="Index.html#Index">Index</a>
+</li></ul>
+</div>
+
+ps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Index"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="unnumbered">Index</h2>
+
+<p>This is an alphabetical listing of all concepts, functions, commands,
+variables, and widgets described in this manual.
+
+</body></html>
+

@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Generalized Variables - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
+<link rel="prev" href="Assignment.html#Assignment" title="Assignment">
+<link rel="next" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Generalized-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Assignment.html#Assignment">Assignment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 Generalized Variables</h3>
+
+<p class="noindent">A &ldquo;generalized variable&rdquo; or &ldquo;place form&rdquo; is one of the many places
+in Lisp memory where values can be stored.  The simplest place form is
+a regular Lisp variable.  But the cars and cdrs of lists, elements
+of arrays, properties of symbols, and many other locations are also
+places where Lisp values are stored.
+
+   <p>The <code>setf</code> form is like <code>setq</code>, except that it accepts
+arbitrary place forms on the left side rather than just
+symbols.  For example, <code>(setf (car a) b)</code> sets the car of
+<code>a</code> to <code>b</code>, doing the same operation as <code>(setcar a b)</code>
+but without having to remember two separate functions for setting
+and accessing every type of place.
+
+   <p>Generalized variables are analogous to &ldquo;lvalues&rdquo; in the C
+language, where &lsquo;<samp><span class="samp">x = a[i]</span></samp>&rsquo; gets an element from an array
+and &lsquo;<samp><span class="samp">a[i] = x</span></samp>&rsquo; stores an element using the same notation. 
+Just as certain forms like <code>a[i]</code> can be lvalues in C, there
+is a set of forms that can be generalized variables in Lisp.
+
+<ul class="menu">
+<li><a accesskey="1" href="Basic-Setf.html#Basic-Setf">Basic Setf</a>:          `setf' and place forms
+<li><a accesskey="2" href="Modify-Macros.html#Modify-Macros">Modify Macros</a>:       `incf', `push', `rotatef', `letf', `callf', etc. 
+<li><a accesskey="3" href="Customizing-Setf.html#Customizing-Setf">Customizing Setf</a>:    `define-modify-macro', `defsetf', `define-setf-method'
+</ul>
+
+   </body></html>
+

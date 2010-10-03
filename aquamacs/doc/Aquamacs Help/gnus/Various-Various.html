@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Various Various - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Other-modes.html#Other-modes" title="Other modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Various-Various"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Other-modes.html#Other-modes">Other modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.23 Various Various</h3>
+
+<p><a name="index-mode-lines-3040"></a><a name="index-highlights-3041"></a>
+     <dl>
+<dt><code>gnus-home-directory</code><dd><a name="index-gnus_002dhome_002ddirectory-3042"></a>All Gnus file and directory variables will be initialized from this
+variable, which defaults to <samp><span class="file">~/</span></samp>.
+
+     <br><dt><code>gnus-directory</code><dd><a name="index-gnus_002ddirectory-3043"></a>Most Gnus storage file and directory variables will be initialized from
+this variable, which defaults to the <samp><span class="env">SAVEDIR</span></samp> environment
+variable, or <samp><span class="file">~/News/</span></samp> if that variable isn't set.
+
+     <p>Note that Gnus is mostly loaded when the <samp><span class="file">~/.gnus.el</span></samp> file is read. 
+This means that other directory variables that are initialized from this
+variable won't be set properly if you set this variable in
+<samp><span class="file">~/.gnus.el</span></samp>.  Set this variable in <samp><span class="file">.emacs</span></samp> instead.
+
+     <br><dt><code>gnus-default-directory</code><dd><a name="index-gnus_002ddefault_002ddirectory-3044"></a>Not related to the above variable at all&mdash;this variable says what the
+default directory of all Gnus buffers should be.  If you issue commands
+like <kbd>C-x C-f</kbd>, the prompt you'll get starts in the current buffer's
+default directory.  If this variable is <code>nil</code> (which is the
+default), the default directory will be the default directory of the
+buffer you were in when you started Gnus.
+
+     <br><dt><code>gnus-verbose</code><dd><a name="index-gnus_002dverbose-3045"></a>This variable is an integer between zero and ten.  The higher the value,
+the more messages will be displayed.  If this variable is zero, Gnus
+will never flash any messages, if it is seven (which is the default),
+most important messages will be shown, and if it is ten, Gnus won't ever
+shut up, but will flash so many messages it will make your head swim.
+
+     <br><dt><code>gnus-verbose-backends</code><dd><a name="index-gnus_002dverbose_002dbackends-3046"></a>This variable works the same way as <code>gnus-verbose</code>, but it applies
+to the Gnus back ends instead of Gnus proper.
+
+     <br><dt><code>gnus-add-timestamp-to-message</code><dd><a name="index-gnus_002dadd_002dtimestamp_002dto_002dmessage-3047"></a>This variable controls whether to add timestamps to messages that are
+controlled by <code>gnus-verbose</code> and <code>gnus-verbose-backends</code> and
+are issued.  The default value is <code>nil</code> which means never to add
+timestamp.  If it is <code>log</code>, add timestamps to only the messages
+that go into the &lsquo;<samp><span class="samp">*Messages*</span></samp>&rsquo; buffer (in XEmacs, it is the
+&lsquo;<samp><span class="samp">&nbsp;*Message-Log*</span></samp>&rsquo;<!-- /@w --> buffer).  If it is neither <code>nil</code> nor
+<code>log</code>, add timestamps not only to log messages but also to the ones
+displayed in the echo area.
+
+     <br><dt><code>nnheader-max-head-length</code><dd><a name="index-nnheader_002dmax_002dhead_002dlength-3048"></a>When the back ends read straight heads of articles, they all try to read
+as little as possible.  This variable (default 8192) specifies
+the absolute max length the back ends will try to read before giving up
+on finding a separator line between the head and the body.  If this
+variable is <code>nil</code>, there is no upper read bound.  If it is
+<code>t</code>, the back ends won't try to read the articles piece by piece,
+but read the entire articles.  This makes sense with some versions of
+<code>ange-ftp</code> or <code>efs</code>.
+
+     <br><dt><code>nnheader-head-chop-length</code><dd><a name="index-nnheader_002dhead_002dchop_002dlength-3049"></a>This variable (default 2048) says how big a piece of each article to
+read when doing the operation described above.
+
+     <br><dt><code>nnheader-file-name-translation-alist</code><dd><a name="index-nnheader_002dfile_002dname_002dtranslation_002dalist-3050"></a><a name="index-file-names-3051"></a><a name="index-invalid-characters-in-file-names-3052"></a><a name="index-characters-in-file-names-3053"></a>This is an alist that says how to translate characters in file names. 
+For instance, if &lsquo;<samp><span class="samp">:</span></samp>&rsquo; is invalid as a file character in file names
+on your system (you OS/2 user you), you could say something like:
+
+     <pre class="lisp">          (setq nnheader-file-name-translation-alist
+                '((?: . ?_)))
+</pre>
+     <p>In fact, this is the default value for this variable on OS/2 and MS
+Windows (phooey) systems.
+
+     <br><dt><code>gnus-hidden-properties</code><dd><a name="index-gnus_002dhidden_002dproperties-3054"></a>This is a list of properties to use to hide &ldquo;invisible&rdquo; text.  It is
+<code>(invisible t intangible t)</code> by default on most systems, which
+makes invisible text invisible and intangible.
+
+     <br><dt><code>gnus-parse-headers-hook</code><dd><a name="index-gnus_002dparse_002dheaders_002dhook-3055"></a>A hook called before parsing headers.  It can be used, for instance, to
+gather statistics on the headers fetched, or perhaps you'd like to prune
+some headers.  I don't see why you'd want that, though.
+
+     <br><dt><code>gnus-shell-command-separator</code><dd><a name="index-gnus_002dshell_002dcommand_002dseparator-3056"></a>String used to separate two shell commands.  The default is &lsquo;<samp><span class="samp">;</span></samp>&rsquo;.
+
+     <br><dt><code>gnus-invalid-group-regexp</code><dd><a name="index-gnus_002dinvalid_002dgroup_002dregexp-3057"></a>
+Regexp to match &ldquo;invalid&rdquo; group names when querying user for a group
+name.  The default value catches some <strong>really</strong> invalid group
+names who could possibly mess up Gnus internally (like allowing
+&lsquo;<samp><span class="samp">:</span></samp>&rsquo; in a group name, which is normally used to delimit method and
+group).
+
+     <p><acronym>IMAP</acronym> users might want to allow &lsquo;<samp><span class="samp">/</span></samp>&rsquo; in group names though.
+
+     <br><dt><code>gnus-safe-html-newsgroups</code><dd><a name="index-gnus_002dsafe_002dhtml_002dnewsgroups-3058"></a>Groups in which links in html articles are considered all safe.  The
+value may be a regexp matching those groups, a list of group names, or
+<code>nil</code>.  This overrides <code>mm-w3m-safe-url-regexp</code>.  The default
+value is <code>"\\`nnrss[+:]"</code>.  This is effective only when emacs-w3m
+renders html articles, i.e., in the case <code>mm-text-html-renderer</code> is
+set to <code>w3m</code>.  See <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display Customization</a>.
+
+   </dl>
+
+   </body></html>
+

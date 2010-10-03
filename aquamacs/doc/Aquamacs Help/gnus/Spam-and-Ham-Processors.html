@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+<title>Spam and Ham Processors - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
+<link rel="prev" href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" title="Detecting Spam in Groups">
+<link rel="next" href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples" title="Spam Package Configuration Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Spam-and-Ham-Processors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples">Spam Package Configuration Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting Spam in Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.20.4 Spam and Ham Processors</h4>
+
+<p><a name="index-spam-filtering-2891"></a><a name="index-spam-filtering-variables-2892"></a><a name="index-spam-variables-2893"></a><a name="index-spam-2894"></a>
+<a name="index-gnus_002dspam_002dprocess_002dnewsgroups-2895"></a>Spam and ham processors specify special actions to take when you exit
+a group buffer.  Spam processors act on spam messages, and ham
+processors on ham messages.  At present, the main role of these
+processors is to update the dictionaries of dictionary-based spam back
+ends such as Bogofilter (see <a href="Bogofilter.html#Bogofilter">Bogofilter</a>) and the Spam Statistics
+package (see <a href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam Statistics Filtering</a>).
+
+   <p>The spam and ham processors that apply to each group are determined by
+the group's<code>spam-process</code> group parameter.  If this group
+parameter is not defined, they are determined by the variable
+<code>gnus-spam-process-newsgroups</code>.
+
+   <p><a name="index-gnus_002dspam_002dnewsgroup_002dcontents-2896"></a>Gnus learns from the spam you get.  You have to collect your spam in
+one or more spam groups, and set or customize the variable
+<code>spam-junk-mailgroups</code> as appropriate.  You can also declare
+groups to contain spam by setting their group parameter
+<code>spam-contents</code> to <code>gnus-group-spam-classification-spam</code>, or
+by customizing the corresponding variable
+<code>gnus-spam-newsgroup-contents</code>.  The <code>spam-contents</code> group
+parameter and the <code>gnus-spam-newsgroup-contents</code> variable can
+also be used to declare groups as <em>ham</em> groups if you set their
+classification to <code>gnus-group-spam-classification-ham</code>.  If
+groups are not classified by means of <code>spam-junk-mailgroups</code>,
+<code>spam-contents</code>, or <code>gnus-spam-newsgroup-contents</code>, they are
+considered <em>unclassified</em>.  All groups are unclassified by
+default.
+
+   <p><a name="index-gnus_002dspam_002dmark-2897"></a><a name="index-g_t_0024-2898"></a>In spam groups, all messages are considered to be spam by default:
+they get the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark (<code>gnus-spam-mark</code>) when you enter the
+group.  If you have seen a message, had it marked as spam, then
+unmarked it, it won't be marked as spam when you enter the group
+thereafter.  You can disable that behavior, so all unread messages
+will get the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark, if you set the
+<code>spam-mark-only-unseen-as-spam</code> parameter to <code>nil</code>.  You
+should remove the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark when you are in the group summary
+buffer for every message that is not spam after all.  To remove the
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark, you can use <kbd>M-u</kbd> to &ldquo;unread&rdquo; the article, or
+<kbd>d</kbd> for declaring it read the non-spam way.  When you leave a
+group, all spam-marked (&lsquo;<samp><span class="samp">$</span></samp>&rsquo;) articles are sent to a spam
+processor which will study them as spam samples.
+
+   <p>Messages may also be deleted in various other ways, and unless
+<code>ham-marks</code> group parameter gets overridden below, marks &lsquo;<samp><span class="samp">R</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">r</span></samp>&rsquo; for default read or explicit delete, marks &lsquo;<samp><span class="samp">X</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">K</span></samp>&rsquo; for automatic or explicit kills, as well as mark &lsquo;<samp><span class="samp">Y</span></samp>&rsquo; for
+low scores, are all considered to be associated with articles which
+are not spam.  This assumption might be false, in particular if you
+use kill files or score files as means for detecting genuine spam, you
+should then adjust the <code>ham-marks</code> group parameter.
+
+<div class="defun">
+&mdash; Variable: <b>ham-marks</b><var><a name="index-ham_002dmarks-2899"></a></var><br>
+<blockquote><p>You can customize this group or topic parameter to be the list of
+marks you want to consider ham.  By default, the list contains the
+deleted, read, killed, kill-filed, and low-score marks (the idea is
+that these articles have been read, but are not spam).  It can be
+useful to also include the tick mark in the ham marks.  It is not
+recommended to make the unread mark a ham mark, because it normally
+indicates a lack of classification.  But you can do it, and we'll be
+happy for you. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>spam-marks</b><var><a name="index-spam_002dmarks-2900"></a></var><br>
+<blockquote><p>You can customize this group or topic parameter to be the list of
+marks you want to consider spam.  By default, the list contains only
+the spam mark.  It is not recommended to change that, but you can if
+you really want to. 
+</p></blockquote></div>
+
+   <p>When you leave <em>any</em> group, regardless of its
+<code>spam-contents</code> classification, all spam-marked articles are sent
+to a spam processor, which will study these as spam samples.  If you
+explicit kill a lot, you might sometimes end up with articles marked
+&lsquo;<samp><span class="samp">K</span></samp>&rsquo; which you never saw, and which might accidentally contain
+spam.  Best is to make sure that real spam is marked with &lsquo;<samp><span class="samp">$</span></samp>&rsquo;,
+and nothing else.
+
+   <p><a name="index-gnus_002dham_002dprocess_002ddestinations-2901"></a>When you leave a <em>spam</em> group, all spam-marked articles are
+marked as expired after processing with the spam processor.  This is
+not done for <em>unclassified</em> or <em>ham</em> groups.  Also, any
+<strong>ham</strong> articles in a spam group will be moved to a location
+determined by either the <code>ham-process-destination</code> group
+parameter or a match in the <code>gnus-ham-process-destinations</code>
+variable, which is a list of regular expressions matched with group
+names (it's easiest to customize this variable with <kbd>M-x
+customize-variable &lt;RET&gt; gnus-ham-process-destinations</kbd>).  Each
+group name list is a standard Lisp list, if you prefer to customize
+the variable manually.  If the <code>ham-process-destination</code>
+parameter is not set, ham articles are left in place.  If the
+<code>spam-mark-ham-unread-before-move-from-spam-group</code> parameter is
+set, the ham articles are marked as unread before being moved.
+
+   <p>If ham can not be moved&mdash;because of a read-only back end such as
+<acronym>NNTP</acronym>, for example, it will be copied.
+
+   <p>Note that you can use multiples destinations per group or regular
+expression!  This enables you to send your ham to a regular mail
+group and to a <em>ham training</em> group.
+
+   <p>When you leave a <em>ham</em> group, all ham-marked articles are sent to
+a ham processor, which will study these as non-spam samples.
+
+   <p><a name="index-spam_002dprocess_002dham_002din_002dspam_002dgroups-2902"></a>By default the variable <code>spam-process-ham-in-spam-groups</code> is
+<code>nil</code>.  Set it to <code>t</code> if you want ham found in spam groups
+to be processed.  Normally this is not done, you are expected instead
+to send your ham to a ham group and process it there.
+
+   <p><a name="index-spam_002dprocess_002dham_002din_002dnonham_002dgroups-2903"></a>By default the variable <code>spam-process-ham-in-nonham-groups</code> is
+<code>nil</code>.  Set it to <code>t</code> if you want ham found in non-ham (spam
+or unclassified) groups to be processed.  Normally this is not done,
+you are expected instead to send your ham to a ham group and process
+it there.
+
+   <p><a name="index-gnus_002dspam_002dprocess_002ddestinations-2904"></a>When you leave a <em>ham</em> or <em>unclassified</em> group, all
+<strong>spam</strong> articles are moved to a location determined by either
+the <code>spam-process-destination</code> group parameter or a match in the
+<code>gnus-spam-process-destinations</code> variable, which is a list of
+regular expressions matched with group names (it's easiest to
+customize this variable with <kbd>M-x customize-variable &lt;RET&gt;
+gnus-spam-process-destinations</kbd>).  Each group name list is a standard
+Lisp list, if you prefer to customize the variable manually.  If the
+<code>spam-process-destination</code> parameter is not set, the spam
+articles are only expired.  The group name is fully qualified, meaning
+that if you see &lsquo;<samp><span class="samp">nntp:servername</span></samp>&rsquo; before the group name in the
+group buffer then you need it here as well.
+
+   <p>If spam can not be moved&mdash;because of a read-only back end such as
+<acronym>NNTP</acronym>, for example, it will be copied.
+
+   <p>Note that you can use multiples destinations per group or regular
+expression!  This enables you to send your spam to multiple <em>spam
+training</em> groups.
+
+   <p><a name="index-spam_002dlog_002dto_002dregistry-2905"></a>The problem with processing ham and spam is that Gnus doesn't track
+this processing by default.  Enable the <code>spam-log-to-registry</code>
+variable so <code>spam.el</code> will use <code>gnus-registry.el</code> to track
+what articles have been processed, and avoid processing articles
+multiple times.  Keep in mind that if you limit the number of registry
+entries, this won't work as well as it does without a limit.
+
+   <p><a name="index-spam_002dmark_002donly_002dunseen_002das_002dspam-2906"></a>Set this variable if you want only unseen articles in spam groups to
+be marked as spam.  By default, it is set.  If you set it to
+<code>nil</code>, unread articles will also be marked as spam.
+
+   <p><a name="index-spam_002dmark_002dham_002dunread_002dbefore_002dmove_002dfrom_002dspam_002dgroup-2907"></a>Set this variable if you want ham to be unmarked before it is moved
+out of the spam group.  This is very useful when you use something
+like the tick mark &lsquo;<samp><span class="samp">!</span></samp>&rsquo; to mark ham&mdash;the article will be placed
+in your <code>ham-process-destination</code>, unmarked as if it came fresh
+from the mail server.
+
+   <p><a name="index-spam_002dautodetect_002drecheck_002dmessages-2908"></a>When autodetecting spam, this variable tells <code>spam.el</code> whether
+only unseen articles or all unread articles should be checked for
+spam.  It is recommended that you leave it off.
+
+   </body></html>
+

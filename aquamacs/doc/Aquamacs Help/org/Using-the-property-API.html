@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Using the property API - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Extracting-agenda-information.html#Extracting-agenda-information" title="Extracting agenda information">
+<link rel="next" href="Using-the-mapping-API.html#Using-the-mapping-API" title="Using the mapping API">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-the-property-API"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-mapping-API.html#Using-the-mapping-API">Using the mapping API</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Extracting-agenda-information.html#Extracting-agenda-information">Extracting agenda information</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.9 Using the property API</h3>
+
+<p><a name="index-API_002c-for-properties-1438"></a><a name="index-properties_002c-API-1439"></a>
+Here is a description of the functions that can be used to work with
+properties.
+
+<div class="defun">
+&mdash; Function: <b>org-entry-properties</b><var> &amp;optional pom which<a name="index-org_002dentry_002dproperties-1440"></a></var><br>
+<blockquote><p>Get all properties of the entry at point-or-marker POM.<br>
+This includes the TODO keyword, the tags, time strings for deadline,
+scheduled, and clocking, and any additional properties defined in the
+entry.  The return value is an alist, keys may occur multiple times
+if the property key was used several times.<br>
+POM may also be nil, in which case the current entry is used. 
+If WHICH is nil or `all', get all properties.  If WHICH is
+`special' or `standard', only get that subclass. 
+</p></blockquote></div>
+   <a name="index-org_002duse_002dproperty_002dinheritance-1441"></a>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-get</b><var> pom property &amp;optional inherit<a name="index-org_002dentry_002dget-1442"></a></var><br>
+<blockquote><p>Get value of PROPERTY for entry at point-or-marker POM.  By default,
+this only looks at properties defined locally in the entry.  If INHERIT
+is non-nil and the entry does not have the property, then also check
+higher levels of the hierarchy.  If INHERIT is the symbol
+<code>selective</code>, use inheritance if and only if the setting of
+<code>org-use-property-inheritance</code> selects PROPERTY for inheritance. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-delete</b><var> pom property<a name="index-org_002dentry_002ddelete-1443"></a></var><br>
+<blockquote><p>Delete the property PROPERTY from entry at point-or-marker POM. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-put</b><var> pom property value<a name="index-org_002dentry_002dput-1444"></a></var><br>
+<blockquote><p>Set PROPERTY to VALUE for entry at point-or-marker POM. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-buffer-property-keys</b><var> &amp;optional include-specials<a name="index-org_002dbuffer_002dproperty_002dkeys-1445"></a></var><br>
+<blockquote><p>Get all property keys in the current buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-insert-property-drawer</b><var><a name="index-org_002dinsert_002dproperty_002ddrawer-1446"></a></var><br>
+<blockquote><p>Insert a property drawer at point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-put-multivalued-property</b><var> pom property &amp;rest values<a name="index-org_002dentry_002dput_002dmultivalued_002dproperty-1447"></a></var><br>
+<blockquote><p>Set PROPERTY at point-or-marker POM to VALUES.  VALUES should be a list of
+strings.  They will be concatenated, with spaces as separators. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-get-multivalued-property</b><var> pom property<a name="index-org_002dentry_002dget_002dmultivalued_002dproperty-1448"></a></var><br>
+<blockquote><p>Treat the value of the property PROPERTY as a whitespace-separated list of
+values and return the values as a list of strings. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-add-to-multivalued-property</b><var> pom property value<a name="index-org_002dentry_002dadd_002dto_002dmultivalued_002dproperty-1449"></a></var><br>
+<blockquote><p>Treat the value of the property PROPERTY as a whitespace-separated list of
+values and make sure that VALUE is in this list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-remove-from-multivalued-property</b><var> pom property value<a name="index-org_002dentry_002dremove_002dfrom_002dmultivalued_002dproperty-1450"></a></var><br>
+<blockquote><p>Treat the value of the property PROPERTY as a whitespace-separated list of
+values and make sure that VALUE is <em>not</em> in this list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-entry-member-in-multivalued-property</b><var> pom property value<a name="index-org_002dentry_002dmember_002din_002dmultivalued_002dproperty-1451"></a></var><br>
+<blockquote><p>Treat the value of the property PROPERTY as a whitespace-separated list of
+values and check if VALUE is in this list. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Various Summary Stuff - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Mail-Group-Commands.html#Mail-Group-Commands" title="Mail Group Commands">
+<link rel="next" href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer" title="Exiting the Summary Buffer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Various-Summary-Stuff"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer">Exiting the Summary Buffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.27 Various Summary Stuff</h3>
+
+<ul class="menu">
+<li><a accesskey="1" href="Summary-Group-Information.html#Summary-Group-Information">Summary Group Information</a>:    Information oriented commands. 
+<li><a accesskey="2" href="Searching-for-Articles.html#Searching-for-Articles">Searching for Articles</a>:       Multiple article commands. 
+<li><a accesskey="3" href="Summary-Generation-Commands.html#Summary-Generation-Commands">Summary Generation Commands</a>
+<li><a accesskey="4" href="Really-Various-Summary-Commands.html#Really-Various-Summary-Commands">Really Various Summary Commands</a>:   Those pesky non-conformant commands. 
+</ul>
+
+     
+<a name="index-gnus_002dsummary_002ddisplay_002dwhile_002dbuilding-1688"></a>
+<dl><dt><code>gnus-summary-display-while-building</code><dd>If non-<code>nil</code>, show and update the summary buffer as it's being
+built.  If <code>t</code>, update the buffer after every line is inserted. 
+If the value is an integer, <var>n</var>, update the display every <var>n</var>
+lines.  The default is <code>nil</code>.
+
+     <p><a name="index-gnus_002dsummary_002ddisplay_002darrow-1689"></a><br><dt><code>gnus-summary-display-arrow</code><dd>If non-<code>nil</code>, display an arrow in the fringe to indicate the
+current article.
+
+     <p><a name="index-gnus_002dsummary_002dmode_002dhook-1690"></a><br><dt><code>gnus-summary-mode-hook</code><dd>This hook is called when creating a summary mode buffer.
+
+     <p><a name="index-gnus_002dsummary_002dgenerate_002dhook-1691"></a><br><dt><code>gnus-summary-generate-hook</code><dd>This is called as the last thing before doing the threading and the
+generation of the summary buffer.  It's quite convenient for customizing
+the threading variables based on what data the newsgroup has.  This hook
+is called from the summary buffer after most summary buffer variables
+have been set.
+
+     <p><a name="index-gnus_002dsummary_002dprepare_002dhook-1692"></a><br><dt><code>gnus-summary-prepare-hook</code><dd>It is called after the summary buffer has been generated.  You might use
+it to, for instance, highlight lines or modify the look of the buffer in
+some other ungodly manner.  I don't care.
+
+     <p><a name="index-gnus_002dsummary_002dprepared_002dhook-1693"></a><br><dt><code>gnus-summary-prepared-hook</code><dd>A hook called as the very last thing after the summary buffer has been
+generated.
+
+     <p><a name="index-gnus_002dsummary_002dignore_002dduplicates-1694"></a><br><dt><code>gnus-summary-ignore-duplicates</code><dd>When Gnus discovers two articles that have the same <code>Message-ID</code>,
+it has to do something drastic.  No articles are allowed to have the
+same <code>Message-ID</code>, but this may happen when reading mail from some
+sources.  Gnus allows you to customize what happens with this variable. 
+If it is <code>nil</code> (which is the default), Gnus will rename the
+<code>Message-ID</code> (for display purposes only) and display the article as
+any other article.  If this variable is <code>t</code>, it won't display the
+article&mdash;it'll be as if it never existed.
+
+     <p><a name="index-gnus_002dalter_002darticles_002dto_002dread_002dfunction-1695"></a><br><dt><code>gnus-alter-articles-to-read-function</code><dd>This function, which takes two parameters (the group name and the list
+of articles to be selected), is called to allow the user to alter the
+list of articles to be selected.
+
+     <p>For instance, the following function adds the list of cached articles to
+the list in one particular group:
+
+     <pre class="lisp">          (defun my-add-cached-articles (group articles)
+            (if (string= group "some.group")
+                (append gnus-newsgroup-cached articles)
+              articles))
+</pre>
+     <p><a name="index-gnus_002dnewsgroup_002dvariables-1696"></a><br><dt><code>gnus-newsgroup-variables</code><dd>A list of newsgroup (summary buffer) local variables, or cons of
+variables and their default expressions to be evalled (when the default
+values are not <code>nil</code>), that should be made global while the summary
+buffer is active.
+
+     <p>Note: The default expressions will be evaluated (using function
+<code>eval</code>) before assignment to the local variable rather than just
+assigned to it.  If the default expression is the symbol <code>global</code>,
+that symbol will not be evaluated but the global value of the local
+variable will be used instead.
+
+     <p>These variables can be used to set variables in the group parameters
+while still allowing them to affect operations done in other
+buffers.  For example:
+
+     <pre class="lisp">          (setq gnus-newsgroup-variables
+                '(message-use-followup-to
+                  (gnus-visible-headers .
+           "^From:\\|^Newsgroups:\\|^Subject:\\|^Date:\\|^To:")))
+</pre>
+     <p>Also see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
+
+     <p><a name="index-gnus_002dpropagate_002dmarks-1697"></a><br><dt><code>gnus-propagate-marks</code><dd>If non-<code>nil</code>, propagate marks to the backends for possible
+storing.  See <a href="NNTP-marks.html#NNTP-marks">NNTP marks</a>, and friends, for a more fine-grained
+sieve.
+
+</dl>
+
+   </body></html>
+

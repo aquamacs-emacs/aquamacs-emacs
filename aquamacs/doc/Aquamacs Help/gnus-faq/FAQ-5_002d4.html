@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>FAQ 5-4 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d3.html#FAQ-5_002d3" title="FAQ 5-3">
+<link rel="next" href="FAQ-5_002d5.html#FAQ-5_002d5" title="FAQ 5-5">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-4"></a>
+<a name="FAQ-5_002d4"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-5_002d5.html#FAQ-5_002d5">FAQ 5-5</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d3.html#FAQ-5_002d3">FAQ 5-3</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.4</h5>
+
+<p>Can I set things like From, Signature etc group based on the group I post too?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>That's the strength of posting styles. Before, we used ".*"
+to set the default for all groups. You can use a regexp
+like "^gmane" and the following settings are only applied
+to postings you send to the gmane hierarchy, use
+".*binaries" instead and they will be applied to postings
+send to groups containing the string binaries in their
+name etc.
+
+   <p>You can instead of specifying a regexp specify a function
+which is evaluated, only if it returns true, the
+corresponding settings take effect. Two interesting
+candidates for this are message-news-p which returns t if
+the current Group is a newsgroup and the corresponding
+message-mail-p.
+
+   <p>Note that all forms that match are applied, that means in
+the example below, when I post to
+gmane.mail.spam.spamassassin.general, the settings under
+".*" are applied and the settings under message-news-p and
+those under "^gmane" and those under
+"^gmane\\.mail\\.spam\\.spamassassin\\.general$". Because
+of this put general settings at the top and specific ones
+at the bottom.
+
+<pre class="example">     (setq gnus-posting-styles
+           '((".*" ;;default
+              (name "Frank Schmitt")
+              (organization "Hamme net, kren mer och nimmi")
+              (signature-file "~/.signature"))
+             ((message-news-p) ;;Usenet news?
+              (address "mySpamTrap@Frank-Schmitt.invalid")
+              (reply-to "hereRealRepliesOnlyPlease@Frank-Schmitt.invalid"))
+             ((message-mail-p) ;;mail?
+              (address "usedForMails@Frank-Schmitt.invalid"))
+             ("^gmane" ;;this is mail, too in fact
+              (address "usedForMails@Frank-Schmitt.invalid")
+              (reply-to nil))
+             ("^gmane\\.mail\\.spam\\.spamassassin\\.general$"
+              (eval (set (make-local-variable 'message-sendmail-envelope-from)
+                         "Azzrael@rz-online.de")))))
+</pre>
+   <p class="noindent">
+
+   </body></html>
+

@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Default Method - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Gateway-methods.html#Gateway-methods" title="Gateway methods">
+<link rel="next" href="Default-User.html#Default-User" title="Default User">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Default-Method"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Default-User.html#Default-User">Default User</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gateway-methods.html#Gateway-methods">Gateway methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.6 Selecting a default method</h3>
+
+<p><a name="index-default-method-113"></a>
+<a name="index-tramp_002ddefault_002dmethod-114"></a>When you select an appropriate transfer method for your typical usage
+you should set the variable <code>tramp-default-method</code> to reflect that
+choice.  This variable controls which method will be used when a method
+is not specified in the <span class="sc">tramp</span> file name.  For example:
+
+<pre class="lisp">     (setq tramp-default-method "ssh")
+</pre>
+   <p><a name="index-tramp_002ddefault_002dmethod_002dalist-115"></a>You can also specify different methods for certain user/host
+combinations, via the variable <code>tramp-default-method-alist</code>.  For
+example, the following two lines specify to use the <samp><span class="option">ssh</span></samp>
+method for all user names matching &lsquo;<samp><span class="samp">john</span></samp>&rsquo; and the <samp><span class="option">rsync</span></samp>
+method for all host names matching &lsquo;<samp><span class="samp">lily</span></samp>&rsquo;.  The third line
+specifies to use the <samp><span class="option">su</span></samp> method for the user &lsquo;<samp><span class="samp">root</span></samp>&rsquo; on
+the machine &lsquo;<samp><span class="samp">localhost</span></samp>&rsquo;.
+
+<pre class="lisp">     (add-to-list 'tramp-default-method-alist '("" "john" "ssh"))
+     (add-to-list 'tramp-default-method-alist '("lily" "" "rsync"))
+     (add-to-list 'tramp-default-method-alist
+                  '("\\`localhost\\'" "\\`root\\'" "su"))
+</pre>
+   <p class="noindent">See the documentation for the variable
+<code>tramp-default-method-alist</code> for more details.
+
+   <p>External methods are normally preferable to inline methods, giving
+better performance.
+
+   <p>See <a href="Inline-methods.html#Inline-methods">Inline methods</a>. 
+See <a href="External-methods.html#External-methods">External methods</a>.
+
+   <p>Another consideration with the selection of transfer methods is the
+environment you will use them in and, especially when used over the
+Internet, the security implications of your preferred method.
+
+   <p>The <samp><span class="option">rsh</span></samp> and <samp><span class="option">telnet</span></samp> methods send your password as
+plain text as you log in to the remote machine, as well as
+transferring the files in such a way that the content can easily be
+read from other machines.
+
+   <p>If you need to connect to remote systems that are accessible from the
+Internet, you should give serious thought to using <samp><span class="option">ssh</span></samp> based
+methods to connect.  These provide a much higher level of security,
+making it a non-trivial exercise for someone to obtain your password
+or read the content of the files you are editing.
+
+<h4 class="subsection">4.6.1 Which method is the right one for me?</h4>
+
+<p><a name="index-choosing-the-right-method-116"></a>
+Given all of the above, you are probably thinking that this is all fine
+and good, but it's not helping you to choose a method!  Right you are. 
+As a developer, we don't want to boss our users around but give them
+maximum freedom instead.  However, the reality is that some users would
+like to have some guidance, so here I'll try to give you this guidance
+without bossing you around.  You tell me whether it works <small class="dots">...</small>
+
+   <p>My suggestion is to use an inline method.  For large files, external
+methods might be more efficient, but I guess that most people will
+want to edit mostly small files.  And if you access large text files,
+compression (driven by <var>tramp-inline-compress-start-size</var>) shall
+still result in good performance.
+
+   <p>I guess that these days, most people can access a remote machine by
+using <samp><span class="command">ssh</span></samp>.  So I suggest that you use the <samp><span class="option">ssh</span></samp>
+method.  So, type <kbd>C-x C-f /ssh<!-- /@w -->:root<!-- /@w -->@otherhost:/etc/motd &lt;RET&gt;</kbd> to edit the <samp><span class="file">/etc/motd</span></samp> file on the other
+host.
+
+   <p>If you can't use <samp><span class="option">ssh</span></samp> to log in to the remote host, then
+select a method that uses a program that works.  For instance, Windows
+users might like the <samp><span class="option">plink</span></samp> method which uses the PuTTY
+implementation of <samp><span class="command">ssh</span></samp>.  Or you use Kerberos and thus like
+<samp><span class="option">krlogin</span></samp>.
+
+   <p>For the special case of editing files on the local host as another
+user, see the <samp><span class="option">su</span></samp> or <samp><span class="option">sudo</span></samp> methods.  They offer
+shortened syntax for the &lsquo;<samp><span class="samp">root</span></samp>&rsquo; account, like
+<samp><span class="file">/su<!-- /@w -->::/etc/motd</span></samp>.
+
+   <p>People who edit large files may want to consider <samp><span class="option">scpc</span></samp> instead
+of <samp><span class="option">ssh</span></samp>, or <samp><span class="option">pscp</span></samp> instead of <samp><span class="option">plink</span></samp>.  These
+external methods are faster than inline methods for large files. 
+Note, however, that external methods suffer from some limitations. 
+Please try first whether you really get a noticeable speed advantage
+from using an external method!  Maybe even for large files, inline
+methods are fast enough.
+
+   </body></html>
+

@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+<title>Tracking TODO state changes - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Progress-logging.html#Progress-logging" title="Progress logging">
+<link rel="prev" href="Closing-items.html#Closing-items" title="Closing items">
+<link rel="next" href="Tracking-your-habits.html#Tracking-your-habits" title="Tracking your habits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Tracking-TODO-state-changes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Tracking-your-habits.html#Tracking-your-habits">Tracking your habits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Closing-items.html#Closing-items">Closing items</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Progress-logging.html#Progress-logging">Progress logging</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.3.2 Tracking TODO state changes</h4>
+
+<p><a name="index-drawer_002c-for-state-change-recording-407"></a>
+<a name="index-org_002dlog_002dstates_002dorder_002dreversed-408"></a><a name="index-org_002dlog_002dinto_002ddrawer-409"></a><a name="index-property_002c-LOG_005fINTO_005fDRAWER-410"></a>When TODO keywords are used as workflow states (see <a href="Workflow-states.html#Workflow-states">Workflow states</a>), you
+might want to keep track of when a state change occurred and maybe take a
+note about this change.  You can either record just a timestamp, or a
+time-stamped note for a change.  These records will be inserted after the
+headline as an itemized list, newest first<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  When taking a lot of notes, you might
+want to get the notes out of the way into a drawer (see <a href="Drawers.html#Drawers">Drawers</a>). 
+Customize the variable <code>org-log-into-drawer</code> to get this
+behavior&mdash;the recommended drawer for this is called <code>LOGBOOK</code>.  You can
+also overrule the setting of this variable for a subtree by setting a
+<code>LOG_INTO_DRAWER</code> property.
+
+   <p>Since it is normally too much to record a note for every state, Org mode
+expects configuration on a per-keyword basis for this.  This is achieved by
+adding special markers &lsquo;<samp><span class="samp">!</span></samp>&rsquo; (for a timestamp) and &lsquo;<samp><span class="samp">@</span></samp>&rsquo; (for a note)
+in parentheses after each keyword.  For example, with the setting
+
+<pre class="lisp">     (setq org-todo-keywords
+       '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+</pre>
+   <p class="noindent"><a name="index-org_002dlog_002ddone-411"></a>you not only define global TODO keywords and fast access keys, but also
+request that a time is recorded when the entry is set to
+DONE<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>, and that a note is recorded when switching to
+WAIT or CANCELED.  The setting for WAIT is even more special: the
+&lsquo;<samp><span class="samp">!</span></samp>&rsquo; after the slash means that in addition to the note taken when
+entering the state, a timestamp should be recorded when <i>leaving</i> the
+WAIT state, if and only if the <i>target</i> state does not configure
+logging for entering it.  So it has no effect when switching from WAIT
+to DONE, because DONE is configured to record a timestamp only.  But
+when switching from WAIT back to TODO, the &lsquo;<samp><span class="samp">/!</span></samp>&rsquo; in the WAIT
+setting now triggers a timestamp even though TODO has no logging
+configured.
+
+   <p>You can use the exact same syntax for setting logging preferences local
+to a buffer:
+<pre class="example">     #+TODO: TODO(t) WAIT(w@/!) | DONE(d!) CANCELED(c@)
+</pre>
+   <p><a name="index-property_002c-LOGGING-412"></a>In order to define logging settings that are local to a subtree or a
+single item, define a LOGGING property in this entry.  Any non-empty
+LOGGING property resets all logging settings to nil.  You may then turn
+on logging for this specific tree using STARTUP keywords like
+<code>lognotedone</code> or <code>logrepeat</code>, as well as adding state specific
+settings like <code>TODO(!)</code>.  For example
+
+<pre class="example">     * TODO Log each state with only a time
+       :PROPERTIES:
+       :LOGGING: TODO(!) WAIT(!) DONE(!) CANCELED(!)
+       :END:
+     * TODO Only log when switching to WAIT, and when repeating
+       :PROPERTIES:
+       :LOGGING: WAIT(@) logrepeat
+       :END:
+     * TODO No logging at all
+       :PROPERTIES:
+       :LOGGING: nil
+       :END:
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the variable
+<code>org-log-states-order-reversed</code></p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> It is possible that Org mode will record two timestamps
+when you are using both <code>org-log-done</code> and state change logging. 
+However, it will never prompt for two notes&mdash;if you have configured
+both, the state change recording note will take precedence and cancel
+the &lsquo;<samp><span class="samp">Closing Note</span></samp>&rsquo;.</p>
+
+   <hr></div>
+
+   </body></html>
+

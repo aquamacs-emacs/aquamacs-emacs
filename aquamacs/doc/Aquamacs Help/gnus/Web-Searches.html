@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Web Searches - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
+<link rel="prev" href="Archiving-Mail.html#Archiving-Mail" title="Archiving Mail">
+<link rel="next" href="Slashdot.html#Slashdot" title="Slashdot">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Web-Searches"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Slashdot.html#Slashdot">Slashdot</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Archiving-Mail.html#Archiving-Mail">Archiving Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.4.2 Web Searches</h4>
+
+<p><a name="index-nnweb-2286"></a><a name="index-Google-2287"></a><a name="index-dejanews-2288"></a><a name="index-gmane-2289"></a><a name="index-Usenet-searches-2290"></a><a name="index-searching-the-Usenet-2291"></a>
+It's, like, too neat to search the Usenet for articles that match a
+string, but it, like, totally <em>sucks</em>, like, totally, to use one of
+those, like, Web browsers, and you, like, have to, rilly, like, look at
+the commercials, so, like, with Gnus you can do <em>rad</em>, rilly,
+searches without having to use a browser.
+
+   <p>The <code>nnweb</code> back end allows an easy interface to the mighty search
+engine.  You create an <code>nnweb</code> group, enter a search pattern, and
+then enter the group and read the articles like you would any normal
+group.  The <kbd>G w</kbd> command in the group buffer (see <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>) will do this in an easy-to-use fashion.
+
+   <p><code>nnweb</code> groups don't really lend themselves to being solid
+groups&mdash;they have a very fleeting idea of article numbers.  In fact,
+each time you enter an <code>nnweb</code> group (not even changing the search
+pattern), you are likely to get the articles ordered in a different
+manner.  Not even using duplicate suppression (see <a href="Duplicate-Suppression.html#Duplicate-Suppression">Duplicate Suppression</a>) will help, since <code>nnweb</code> doesn't even know the
+<code>Message-ID</code> of the articles before reading them using some search
+engines (Google, for instance).  The only possible way to keep track
+of which articles you've read is by scoring on the <code>Date</code>
+header&mdash;mark all articles posted before the last date you read the
+group as read.
+
+   <p>If the search engine changes its output substantially, <code>nnweb</code>
+won't be able to parse it and will fail.  One could hardly fault the Web
+providers if they were to do this&mdash;their <em>raison d'&ecirc;tre</em> is to
+make money off of advertisements, not to provide services to the
+community.  Since <code>nnweb</code> washes the ads off all the articles, one
+might think that the providers might be somewhat miffed.  We'll see.
+
+   <p>You must have the <code>url</code> and <code>W3</code> package or those alternatives
+(try <code>customize-group</code> on the &lsquo;<samp><span class="samp">mm-url</span></samp>&rsquo; variable group)
+installed to be able to use <code>nnweb</code>.
+
+   <p>Virtual server variables:
+
+     <dl>
+<dt><code>nnweb-type</code><dd><a name="index-nnweb_002dtype-2292"></a>What search engine type is being used.  The currently supported types
+are <code>google</code>, <code>dejanews</code>, and <code>gmane</code>.  Note that
+<code>dejanews</code> is an alias to <code>google</code>.
+
+     <br><dt><code>nnweb-search</code><dd><a name="index-nnweb_002dsearch-2293"></a>The search string to feed to the search engine.
+
+     <br><dt><code>nnweb-max-hits</code><dd><a name="index-nnweb_002dmax_002dhits-2294"></a>Advisory maximum number of hits per search to display.  The default is
+999.
+
+     <br><dt><code>nnweb-type-definition</code><dd><a name="index-nnweb_002dtype_002ddefinition-2295"></a>Type-to-definition alist.  This alist says what <code>nnweb</code> should do
+with the various search engine types.  The following elements must be
+present:
+
+          <dl>
+<dt><code>article</code><dd>Function to decode the article and provide something that Gnus
+understands.
+
+          <br><dt><code>map</code><dd>Function to create an article number to message header and URL alist.
+
+          <br><dt><code>search</code><dd>Function to send the search string to the search engine.
+
+          <br><dt><code>address</code><dd>The address the aforementioned function should send the search string
+to.
+
+          <br><dt><code>id</code><dd>Format string URL to fetch an article by <code>Message-ID</code>. 
+</dl>
+
+   </dl>
+
+   </body></html>
+

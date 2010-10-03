@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Literal examples - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Markup.html#Markup" title="Markup">
+<link rel="prev" href="Images-and-tables.html#Images-and-tables" title="Images and tables">
+<link rel="next" href="Include-files.html#Include-files" title="Include files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Literal-examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Include-files.html#Include-files">Include files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Images-and-tables.html#Images-and-tables">Images and tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Markup.html#Markup">Markup</a>
+<hr>
+</div>
+
+<h3 class="section">11.3 Literal examples</h3>
+
+<p><a name="index-literal-examples_002c-markup-rules-984"></a><a name="index-code-line-references_002c-markup-rules-985"></a>
+You can include literal examples that should not be subjected to
+markup.  Such examples will be typeset in monospace, so this is well suited
+for source code and similar examples. 
+<a name="index-g_t_0023_002bBEGIN_005fEXAMPLE-986"></a>
+<pre class="example">     #+BEGIN_EXAMPLE
+     Some example from a text file.
+     #+END_EXAMPLE
+</pre>
+   <p>Note that such blocks may be <i>indented</i> in order to align nicely with
+indented text and in particular with plain list structure (see <a href="Plain-lists.html#Plain-lists">Plain lists</a>).  For simplicity when using small examples, you can also start the
+example lines with a colon followed by a space.  There may also be additional
+whitespace before the colon:
+
+<pre class="example">     Here is an example
+        : Some example from a text file.
+</pre>
+   <p><a name="index-formatting-source-code_002c-markup-rules-987"></a>If the example is source code from a programming language, or any other text
+that can be marked up by font-lock in Emacs, you can ask for the example to
+look like the fontified Emacs buffer<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This is done with the &lsquo;<samp><span class="samp">src</span></samp>&rsquo;
+block, where you also need to specify the name of the major mode that should
+be used to fontify the example:
+<a name="index-g_t_0023_002bBEGIN_005fSRC-988"></a>
+<pre class="example">     #+BEGIN_SRC emacs-lisp
+     (defun org-xor (a b)
+        "Exclusive or."
+        (if a (not b) b))
+     #+END_SRC
+</pre>
+   <p>Both in <code>example</code> and in <code>src</code> snippets, you can add a <code>-n</code>
+switch to the end of the <code>BEGIN</code> line, to get the lines of the example
+numbered.  If you use a <code>+n</code> switch, the numbering from the previous
+numbered snippet will be continued in the current one.  In literal examples,
+Org will interpret strings like &lsquo;<samp><span class="samp">(ref:name)</span></samp>&rsquo; as labels, and use them as
+targets for special hyperlinks like <code>[[(name)]]</code> (i.e. the reference name
+enclosed in single parenthesis).  In HTML, hovering the mouse over such a
+link will remote-highlight the corresponding code line, which is kind of
+cool.
+
+   <p>You can also add a <code>-r</code> switch which <i>removes</i> the labels from the
+source code<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  With the <code>-n</code>
+switch, links to these references will be labeled by the line numbers from
+the code listing, otherwise links will use the labels with no parentheses. 
+Here is an example:
+
+<pre class="example">     #+BEGIN_SRC emacs-lisp -n -r
+     (save-excursion                  (ref:sc)
+        (goto-char (point-min))       (ref:jump)
+     #+END_SRC
+     In line [[(sc)]] we remember the current position.  [[(jump)][Line (jump)]]
+     jumps to point-min.
+</pre>
+   <p><a name="index-org_002dcoderef_002dlabel_002dformat-989"></a>If the syntax for the label format conflicts with the language syntax, use a
+<code>-l</code> switch to change the format, for example &lsquo;<samp><span class="samp">#+BEGIN_SRC pascal
+-n -r -l "((%s))"</span></samp>&rsquo;.  See also the variable <code>org-coderef-label-format</code>.
+
+   <p>HTML export also allows examples to be published as text areas, See <a href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export">Text areas in HTML export</a>.
+
+     
+<a name="index-C_002dc-_0027-990"></a>
+<dl><dt><kbd>C-c '</kbd><dd>Edit the source code example at point in its native mode.  This works by
+switching to a temporary buffer with the source code.  You need to exit by
+pressing <kbd>C-c '</kbd> again<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>, the edited version will
+then replace the old version in the Org buffer.  Fixed-width regions
+(where each line starts with a colon followed by a space) will be edited
+using <code>artist-mode</code><a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a> to allow creating ASCII
+drawings easily.  Using this command in an empty line will create a new
+fixed-width region. 
+<a name="index-C_002dc-l-991"></a><br><dt><kbd>C-c l</kbd><dd>Calling <code>org-store-link</code> while editing a source code example in a
+temporary buffer created with <kbd>C-c '</kbd> will prompt for a label, make sure
+that it is unique in the current buffer, and insert it with the proper
+formatting like &lsquo;<samp><span class="samp">(ref:label)</span></samp>&rsquo; at the end of the current line.  Then the
+label is stored as a link &lsquo;<samp><span class="samp">(label)</span></samp>&rsquo;, for retrieval with <kbd>C-c C-l</kbd>. 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Currently this works for the
+HTML backend, and requires the <samp><span class="file">htmlize.el</span></samp> package version 1.34 or
+later.  It also works for LaTeX with the listings package, if you turn on the
+option <code>org-export-latex-listings</code> and make sure that the listings
+package is included by the LaTeX header.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Adding <code>-k</code> to <code>-n -r</code> will <i>keep</i> the
+labels in the source code while using line numbers for the links, which might
+be useful to explain those in an org-mode example code.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> Upon exit, lines starting with &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">#</span></samp>&rsquo; will get a comma prepended, to keep them from being interpreted
+by Org as outline nodes or special comments.  These commas will be striped
+for editing with <kbd>C-c '</kbd>, and also for export.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> You may select a different-mode with the
+variable <code>org-edit-fixed-width-region-mode</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

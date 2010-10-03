@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Basics - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
+<link rel="prev" href="Improvements-over-Vi.html#Improvements-over-Vi" title="Improvements over Vi">
+<link rel="next" href="Undo-and-Backups.html#Undo-and-Backups" title="Undo and Backups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Undo-and-Backups.html#Undo-and-Backups">Undo and Backups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 Basics</h3>
+
+<p>The Vi command set is based on the idea of combining motion commands
+with other commands.  The motion command is used as a text region
+specifier for other commands. 
+We classify motion commands into <dfn>point commands</dfn> and
+<dfn>line commands</dfn>.
+
+   <p><a name="index-point-commands-63"></a>
+The point commands are:
+
+   <blockquote>
+<kbd>h</kbd>, <kbd>l</kbd>, <kbd>0</kbd>,  <kbd>$</kbd>, <kbd>w</kbd>, <kbd>W</kbd>, <kbd>b</kbd>, <kbd>B</kbd>,
+<kbd>e</kbd>, <kbd>E</kbd>, <kbd>(</kbd>, <kbd>)</kbd>, <kbd>/</kbd>, <kbd>?</kbd>, <kbd>`</kbd>, <kbd>f</kbd>,
+<kbd>F</kbd>, <kbd>t</kbd>, <kbd>T</kbd>, <kbd>%</kbd>, <kbd>;</kbd>, <kbd>,</kbd>, <kbd>^</kbd>
+</blockquote>
+
+   <p><a name="index-line-commands-64"></a>
+The line commands are:
+
+   <blockquote>
+<kbd>j</kbd>, <kbd>k</kbd>, <kbd>+</kbd>, <kbd>-</kbd>, <kbd>H</kbd>, <kbd>M</kbd>, <kbd>L</kbd>, <kbd>{</kbd>,
+<kbd>}</kbd>, <kbd>G</kbd>, <kbd>'</kbd>,  <kbd>[[</kbd>, <kbd>]]</kbd>, <kbd>[]</kbd>
+</blockquote>
+
+   <p><a name="index-region-65"></a><a name="index-region-specification-66"></a><a name="index-expanding-_0028region_0029-67"></a><a name="index-describing-regions-68"></a><a name="index-movement-commands-69"></a>
+If a point command is given as an argument to a modifying command, the
+region determined by the point command will be affected by the modifying
+command.  On the other hand, if a line command is given as an argument to a
+modifying command, the region determined by the line command will be
+enlarged so that it will become the smallest region properly containing the
+region and consisting of whole lines (we call this process <dfn>expanding
+the region</dfn>), and then the enlarged region will be affected by the modifying
+command. 
+Text Deletion Commands (see <a href="Deleting-Text.html#Deleting-Text">Deleting Text</a>), Change commands
+(see <a href="Changing-Text.html#Changing-Text">Changing Text</a>), even Shell Commands (see <a href="Shell-Commands.html#Shell-Commands">Shell Commands</a>)
+use these commands to describe a region of text to operate on. 
+Thus, type <kbd>dw</kbd> to delete a word, <kbd>&gt;}</kbd> to shift a paragraph, or
+<kbd>!'afmt</kbd> to format a region from &lsquo;<samp><span class="samp">point</span></samp>&rsquo; to textmarker
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo;.
+
+   <p><a name="index-r-and-R-region-specifiers-70"></a>
+Viper adds the region specifiers &lsquo;<samp><span class="samp">r</span></samp>&rsquo; and &lsquo;<samp><span class="samp">R</span></samp>&rsquo;.  Emacs has a
+special marker called <dfn>mark</dfn>.  The text-area between the current cursor
+position <dfn>point</dfn> and the <dfn>mark</dfn> is called the <dfn>region</dfn>. 
+&lsquo;<samp><span class="samp">r</span></samp>&rsquo; specifies the raw region and &lsquo;<samp><span class="samp">R</span></samp>&rsquo; is the expanded region
+(i.e., the minimal contiguous chunk of full lines that contains the raw
+region). 
+<kbd>dr</kbd> will now delete the region, <kbd>&gt;r</kbd> will shift it, etc. 
+<kbd>r,R</kbd> are not motion commands, however.  The special mark is set by
+<kbd>m.</kbd> and other commands.  See <a href="Marking.html#Marking">Marking</a>, for more info.
+
+   <p>Viper also adds counts to most commands for which it would make sense.
+
+   <p>In the Overview chapter, some Multiple File issues were discussed
+(see <a href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper">Multiple Files in Viper</a>).  In addition to the files, Emacs has
+buffers.  These can be seen in the <kbd>:args</kbd> list and switched using
+<kbd>:next</kbd> if you type <kbd>:set ex-cycle-through-non-files t</kbd>, or
+specify <code>(setq ex-cycle-through-non-files t)</code> in your <samp><span class="file">.viper</span></samp>
+file.  See <a href="Customization.html#Customization">Customization</a>, for details.
+
+   </body></html>
+

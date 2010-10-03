@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Local Keymaps - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="prev" href="Prefix-Keymaps.html#Prefix-Keymaps" title="Prefix Keymaps">
+<link rel="next" href="Minibuffer-Maps.html#Minibuffer-Maps" title="Minibuffer Maps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Local-Keymaps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Maps.html#Minibuffer-Maps">Minibuffer Maps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Keymaps.html#Prefix-Keymaps">Prefix Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.4.3 Local Keymaps</h4>
+
+<p><a name="index-local-keymap-4027"></a><a name="index-minor-mode-keymap-4028"></a>  So far, we have explained the ins and outs of the global map.  Major
+modes customize Emacs by providing their own key bindings in
+<dfn>local keymaps</dfn>.  For example, C mode overrides &lt;TAB&gt; to make
+it indent the current line for C code.  Minor modes can also have
+local keymaps; whenever a minor mode is in effect, the definitions in
+its keymap override both the major mode's local keymap and the global
+keymap.  In addition, portions of text in the buffer can specify their
+own keymaps, which override all other keymaps.
+
+   <p>A local keymap can redefine a key as a prefix key by defining it as
+a prefix keymap.  If the key is also defined globally as a prefix, its
+local and global definitions (both keymaps) effectively combine: both
+definitions are used to look up the event that follows the prefix key. 
+For example, if a local keymap defines <kbd>C-c</kbd> as a prefix keymap,
+and that keymap defines <kbd>C-z</kbd> as a command, this provides a local
+meaning for <kbd>C-c C-z</kbd>.  This does not affect other sequences that
+start with <kbd>C-c</kbd>; if those sequences don't have their own local
+bindings, their global bindings remain in effect.
+
+   <p>Another way to think of this is that Emacs handles a multi-event key
+sequence by looking in several keymaps, one by one, for a binding of the
+whole key sequence.  First it checks the minor mode keymaps for minor
+modes that are enabled, then it checks the major mode's keymap, and then
+it checks the global keymap.  This is not precisely how key lookup
+works, but it's good enough for understanding the results in ordinary
+circumstances.
+
+   </body></html>
+

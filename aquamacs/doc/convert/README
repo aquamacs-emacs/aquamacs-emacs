@@ -6,21 +6,6 @@ must be used. More about this here:
 
 http://gnu.rtin.bz/prep/maintain/html_node/Invoking-gendocs_002esh.html
 
-cd doc/emacs
-GENDOCS_TEMPLATE_DIR=`pwd`/../../aquamacs/doc/convert/ ../../aquamacs/doc/convert/gendocs.sh emacs "Emacs Manual"
-cd -
-cd doc/lispref
-# note that the main index is named Index.html, which conflicts with index.html
-perl -i -pe 's/Index/General_Index/sg' *
-GENDOCS_TEMPLATE_DIR=`pwd`/../../aquamacs/doc/convert/ ../../aquamacs/doc/convert/gendocs.sh elisp "Emacs Lisp Reference"
-cd -
+TODO: change script to call makeinfo --html directly.  Gendocs is not needed (?)
 
-# (ignore DVI/PDF generation errors)
-
-then, run:
-
-cd aquamacs/doc/convert
-./convert-emacs-manual ../../../doc/emacs/manual
-
-./convert-emacs-lisp-reference ../../../doc/lispref/manual
-cd -
+Just run ./make-emacs-manuals.sh

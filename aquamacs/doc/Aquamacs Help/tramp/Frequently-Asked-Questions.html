@@ -1,0 +1,554 @@
+<html lang="en">
+<head>
+<title>Frequently Asked Questions - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Bug-Reports.html#Bug-Reports" title="Bug Reports">
+<link rel="next" href="Function-Index.html#Function-Index" title="Function Index">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Frequently-Asked-Questions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Index.html#Function-Index">Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Bug-Reports.html#Bug-Reports">Bug Reports</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">7 Frequently Asked Questions</h2>
+
+<p><a name="index-frequently-asked-questions-194"></a><a name="index-FAQ-195"></a>
+     <ul>
+<li>Where can I get the latest <span class="sc">tramp</span>?
+
+     <p><span class="sc">tramp</span> is available under the URL below.
+
+     <p class="noindent"><a href="ftp://ftp.gnu.org/gnu/tramp/">ftp://ftp.gnu.org/gnu/tramp/</a>
+
+     <p class="noindent">There is also a Savannah project page.
+
+     <p class="noindent"><a href="http://savannah.gnu.org/projects/tramp/">http://savannah.gnu.org/projects/tramp/</a>
+
+     <li>Which systems does it work on?
+
+     <p>The package has been used successfully on GNU Emacs 22, GNU Emacs 23,
+XEmacs 21 (starting with 21.4), and SXEmacs 22.
+
+     <p>The package was intended to work on Unix, and it really expects a
+Unix-like system on the remote end (except the <samp><span class="option">smb</span></samp> and
+<samp><span class="option">imap</span></samp> methods), but some people seemed to have some success
+getting it to work on MS Windows XP/Vista/7 GNU Emacs.
+
+     <li>How could I speed up <span class="sc">tramp</span>?
+
+     <p>In the backstage, <span class="sc">tramp</span> needs a lot of operations on the
+remote host.  The time for transferring data from and to the remote
+host as well as the time needed to perform the operations there count. 
+In order to speed up <span class="sc">tramp</span>, one could either try to avoid some
+of the operations, or one could try to improve their performance.
+
+     <p>Use an external method, like <samp><span class="option">scpc</span></samp>.
+
+     <p>Use caching.  This is already enabled by default.  Information about
+the remote host as well as the remote files are cached for reuse.  The
+information about remote hosts is kept in the file specified in
+<code>tramp-persistency-file-name</code>.  Keep this file.
+
+     <p>Disable version control.  If you access remote files which are not
+under version control, a lot of check operations can be avoided by
+disabling VC.  This can be achieved by
+
+     <pre class="lisp">          (setq vc-ignore-dir-regexp
+                (format "\\(%s\\)\\|\\(%s\\)"
+                        vc-ignore-dir-regexp
+                        tramp-file-name-regexp))
+</pre>
+     <p>Disable excessive traces.  The default trace level of <span class="sc">tramp</span>,
+defined in the variable <code>tramp-verbose</code>, is 3.  You should
+increase this level only temporarily, hunting bugs.
+
+     <li><span class="sc">tramp</span> does not connect to the remote host
+
+     <p>When <span class="sc">tramp</span> does not connect to the remote host, there are three
+reasons heading the bug mailing list:
+
+          <ul>
+<li>Unknown characters in the prompt
+
+          <p><span class="sc">tramp</span> needs to recognize the prompt on the remote machine
+after execution any command.  This is not possible, when the prompt
+contains unknown characters like escape sequences for coloring.  This
+should be avoided on the remote side.  See <a href="Remote-shell-setup.html#Remote-shell-setup">Remote shell setup</a>. for
+setting the regular expression detecting the prompt.
+
+          <p>You can check your settings after an unsuccessful connection by
+switching to the <span class="sc">tramp</span> connection buffer <samp><span class="file">*tramp/foo*</span></samp>,
+setting the cursor at the top of the buffer, and applying the expression
+
+          <pre class="example">               <kbd>M-: (re-search-forward (concat tramp-shell-prompt-pattern "$"))</kbd>
+</pre>
+          <p>If it fails, or the cursor is not moved at the end of the buffer, your
+prompt is not recognized correctly.
+
+          <p>A special problem is the zsh, which uses left-hand side and right-hand
+side prompts in parallel.  Therefore, it is necessary to disable the
+zsh line editor on the remote host.  You shall add to <samp><span class="file">~/.zshrc</span></samp>
+the following command:
+
+          <pre class="example">               [ $TERM = "dumb" ] &amp;&amp; unsetopt zle &amp;&amp; PS1='$ '
+</pre>
+          <li>Echoed characters after login
+
+          <p>When the remote machine opens an echoing shell, there might be control
+characters in the welcome message.  <span class="sc">tramp</span> tries to suppress
+such echoes via the <code>stty -echo</code> command, but sometimes this
+command is not reached, because the echoed output has confused
+<span class="sc">tramp</span> already.  In such situations it might be helpful to use
+the <samp><span class="option">sshx</span></samp> or <samp><span class="option">scpx</span></samp> methods, which allocate a pseudo tty. 
+See <a href="Inline-methods.html#Inline-methods">Inline methods</a>.
+
+          <li><span class="sc">tramp</span> doesn't transfer strings with more than 500 characters
+correctly
+
+          <p>On some few systems, the implementation of <code>process-send-string</code>
+seems to be broken for longer strings.  It is reported for HP-UX,
+FreeBSD and Tru64 Unix, for example.  This case, you should customize
+the variable <code>tramp-chunksize</code> to 500.  For a description how to
+determine whether this is necessary see the documentation of
+<code>tramp-chunksize</code>.
+
+          <p>Additionally, it will be useful to set <code>file-precious-flag</code> to
+<code>t</code> for <span class="sc">tramp</span> files.  Then the file contents will be
+written into a temporary file first, which is checked for correct
+checksum.
+
+          <pre class="lisp">               (add-hook
+                'find-file-hooks
+                '(lambda ()
+                   (when (file-remote-p default-directory)
+                     (set (make-local-variable 'file-precious-flag) t))))
+</pre>
+          </ul>
+
+     <li><span class="sc">tramp</span> does not recognize hung <samp><span class="command">ssh</span></samp> sessions
+
+     <p>When your network connection is down, <samp><span class="command">ssh</span></samp> sessions might
+hang.  <span class="sc">tramp</span> cannot detect it safely, because it still sees a
+running <samp><span class="command">ssh</span></samp> process.  Timeouts cannot be used as well,
+because it cannot be predicted, how long a remote command will last,
+for example when copying very large files.
+
+     <p>Therefore, you must configure the <samp><span class="command">ssh</span></samp> process to die
+in such a case.  The following entry in <samp><span class="file">~/.ssh/config</span></samp> would do
+the job:
+
+     <pre class="example">          Host *
+               ServerAliveInterval 5
+</pre>
+     <li>File name completion does not work with <span class="sc">tramp</span>
+
+     <p>When you log in to the remote machine, do you see the output of
+<samp><span class="command">ls</span></samp> in color? If so, this may be the cause of your problems.
+
+     <p><samp><span class="command">ls</span></samp> outputs <acronym>ANSI</acronym> escape sequences that your terminal
+emulator interprets to set the colors.  These escape sequences will
+confuse <span class="sc">tramp</span> however.
+
+     <p>In your <samp><span class="file">.bashrc</span></samp>, <samp><span class="file">.profile</span></samp> or equivalent on the remote
+machine you probably have an alias configured that adds the option
+<samp><span class="option">--color=yes</span></samp> or <samp><span class="option">--color=auto</span></samp>.
+
+     <p>You should remove that alias and ensure that a new login <em>does not</em>
+display the output of <samp><span class="command">ls</span></samp> in color.  If you still cannot use
+filename completion, report a bug to the <span class="sc">tramp</span> developers.
+
+     <li>File name completion does not work in large directories
+
+     <p><span class="sc">tramp</span> uses globbing for some operations.  (Globbing means to use the
+shell to expand wildcards such as `*.c'.)  This might create long
+command lines, especially in directories with many files.  Some shells
+choke on long command lines, or don't cope well with the globbing
+itself.
+
+     <p>If you have a large directory on the remote end, you may wish to execute
+a command like &lsquo;<samp><span class="samp">ls -d * ..?* &gt; /dev/null</span></samp>&rsquo; and see if it hangs. 
+Note that you must first start the right shell, which might be
+<samp><span class="command">/bin/sh</span></samp>, <samp><span class="command">ksh</span></samp> or <samp><span class="command">bash</span></samp>, depending on which
+of those supports tilde expansion.
+
+     <li>How can I get notified when <span class="sc">tramp</span> file transfers are complete?
+
+     <p>The following snippet can be put in your <samp><span class="file">~/.emacs</span></samp> file.  It
+makes GNU Emacs beep after reading from or writing to the
+remote host.
+
+     <pre class="lisp">          (defadvice tramp-handle-write-region
+            (after tramp-write-beep-advice activate)
+            "Make tramp beep after writing a file."
+            (interactive)
+            (beep))
+          
+          (defadvice tramp-handle-do-copy-or-rename-file
+            (after tramp-copy-beep-advice activate)
+            "Make tramp beep after copying a file."
+            (interactive)
+            (beep))
+          
+          (defadvice tramp-handle-insert-file-contents
+            (after tramp-insert-beep-advice activate)
+            "Make tramp beep after inserting a file."
+            (interactive)
+            (beep))
+</pre>
+     <li>I'ld like to get a Visual Warning when working in a sudo:ed context
+
+     <p>When you are working with &lsquo;<samp><span class="samp">root</span></samp>&rsquo; privileges, it might be useful
+to get an indication in the buffer's modeline.  The following code,
+tested with GNU Emacs 22.1, does the job.  You should put it
+into your <samp><span class="file">~/.emacs</span></samp>:
+
+     <pre class="lisp">          (defun my-mode-line-function ()
+            (when (string-match "^/su\\(do\\)?:" default-directory)
+              (setq mode-line-format
+                    (format-mode-line mode-line-format 'font-lock-warning-face))))
+          
+          (add-hook 'find-file-hooks 'my-mode-line-function)
+          (add-hook 'dired-mode-hook 'my-mode-line-function)
+</pre>
+     <li>I'ld like to see a host indication in the mode line when I'm remote
+
+     <p>The following code has been tested with GNU Emacs 22.1.  You
+should put it into your <samp><span class="file">~/.emacs</span></samp>:
+
+     <pre class="lisp">          (defconst my-mode-line-buffer-identification
+            (list
+             '(:eval
+               (let ((host-name
+                      (if (file-remote-p default-directory)
+                          (tramp-file-name-host
+                           (tramp-dissect-file-name default-directory))
+                        (system-name))))
+                 (if (string-match "^[^0-9][^.]*\\(\\..*\\)" host-name)
+                     (substring host-name 0 (match-beginning 1))
+                   host-name)))
+             ": %12b"))
+          
+          (setq-default
+           mode-line-buffer-identification
+           my-mode-line-buffer-identification)
+          
+          (add-hook
+           'dired-mode-hook
+           '(lambda ()
+              (setq
+               mode-line-buffer-identification
+               my-mode-line-buffer-identification)))
+</pre>
+     <p>Since GNU Emacs 23.1, the mode line contains an indication if
+<code>default-directory</code> for the current buffer is on a remote host. 
+The corresponding tooltip includes the name of that host.  If you
+still want the host name as part of the mode line, you can use the
+example above, but the <code>:eval</code> clause can be simplified:
+
+     <pre class="lisp">             '(:eval
+               (let ((host-name
+                      (or (file-remote-p default-directory 'host)
+                          (system-name))))
+                 (if (string-match "^[^0-9][^.]*\\(\\..*\\)" host-name)
+                     (substring host-name 0 (match-beginning 1))
+                   host-name)))
+</pre>
+     <li>My remote host does not understand default directory listing options
+
+     <p>GNU Emacs computes the <samp><span class="command">dired</span></samp> options depending on
+the local host you are working.  If your <samp><span class="command">ls</span></samp> command on the
+remote host does not understand those options, you can change them
+like this:
+
+     <pre class="lisp">          (add-hook
+           'dired-before-readin-hook
+           '(lambda ()
+              (when (file-remote-p default-directory)
+                (setq dired-actual-switches "-al"))))
+</pre>
+     <li>There's this <samp><span class="file">~/.sh_history</span></samp> file on the remote host which keeps
+growing and growing.  What's that?
+
+     <p>Sometimes, <span class="sc">tramp</span> starts <samp><span class="command">ksh</span></samp> on the remote host for
+tilde expansion.  Maybe <samp><span class="command">ksh</span></samp> saves the history by default. 
+<span class="sc">tramp</span> tries to turn off saving the history, but maybe you have
+to help.  For example, you could put this in your <samp><span class="file">.kshrc</span></samp>:
+
+     <pre class="example">          if [ -f $HOME/.sh_history ] ; then
+             /bin/rm $HOME/.sh_history
+          fi
+          if [ "${HISTFILE-unset}" != "unset" ] ; then
+             unset HISTFILE
+          fi
+          if [ "${HISTSIZE-unset}" != "unset" ] ; then
+             unset HISTSIZE
+          fi
+</pre>
+     <li>There are longish file names to type.  How to shorten this?
+
+     <p>Let's say you need regularly access to <samp><span class="file">/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc</span></samp>, which is boring to type again and
+again.  The following approaches can be mixed:
+
+          <ol type=1 start=1>
+
+          <li>Use default values for method and user name:
+
+          <p>You can define default methods and user names for hosts,
+(see <a href="Default-Method.html#Default-Method">Default Method</a>, see <a href="Default-User.html#Default-User">Default User</a>):
+
+          <pre class="lisp">               (setq tramp-default-method "ssh"
+                     tramp-default-user "news")
+</pre>
+          <p>The file name left to type would be
+<kbd>C-x C-f /news.my.domain:/opt/news/etc</kbd>.
+
+          <p>Note, that there are some useful settings already.  Accessing your
+local host as &lsquo;<samp><span class="samp">root</span></samp>&rsquo; user, is possible just by <kbd>C-x C-f
+/su<!-- /@w -->::</kbd>.
+
+          <li>Use configuration possibilities of your method:
+
+          <p>Several connection methods (i.e. the programs used) offer powerful
+configuration possibilities (see <a href="Customizing-Completion.html#Customizing-Completion">Customizing Completion</a>).  In the
+given case, this could be <samp><span class="file">~/.ssh/config</span></samp>:
+
+          <pre class="example">               Host xy
+                    HostName news.my.domain
+                    User news
+</pre>
+          <p>The file name left to type would be <kbd>C-x C-f /ssh<!-- /@w -->:xy:/opt/news/etc</kbd>.  Depending on files in your directories, it is even
+possible to complete the host name with <kbd>C-x C-f
+/ssh:x &lt;TAB&gt;</kbd>.
+
+          <li>Use environment variables:
+
+          <p>File names typed in the minibuffer can be expanded by environment
+variables.  You can set them outside GNU Emacs, or even with
+Lisp:
+
+          <pre class="lisp">               (setenv "xy" "/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/")
+</pre>
+          <p>Then you need simply to type <kbd>C-x C-f $xy &lt;RET&gt;</kbd>, and here you
+are.  The disadvantage is, that you cannot edit the file name, because
+environment variables are not expanded during editing in the
+minibuffer.
+
+          <li>Define own keys:
+
+          <p>You can define your own key sequences in GNU Emacs, which can
+be used instead of <kbd>C-x C-f</kbd>:
+
+          <pre class="lisp">               (global-set-key
+                [(control x) (control y)]
+                (lambda ()
+                  (interactive)
+                  (find-file
+                   (read-file-name
+                    "Find Tramp file: "
+                    "/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/"))))
+</pre>
+          <p>Simply typing <kbd>C-x C-y</kbd> would initialize the minibuffer for
+editing with your beloved file name.
+
+          <p>See also <a href="http://www.emacswiki.org/cgi-bin/wiki/TrampMode">the Emacs Wiki</a> for a more comprehensive example.
+
+          <li>Define own abbreviation (1):
+
+          <p>It is possible to define an own abbreviation list for expanding file
+names:
+
+          <pre class="lisp">               (add-to-list
+                'directory-abbrev-alist
+                '("^/xy" . "/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/"))
+</pre>
+          <p>This shortens the file openening command to <kbd>C-x C-f /xy
+&lt;RET&gt;</kbd>.  The disadvantage is, again, that you cannot edit the file
+name, because the expansion happens after entering the file name only.
+
+          <li>Define own abbreviation (2):
+
+          <p>The <code>abbrev-mode</code> gives more flexibility for editing the
+minibuffer:
+
+          <pre class="lisp">               (define-abbrev-table 'my-tramp-abbrev-table
+                 '(("xy" "/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/")))
+               
+               (add-hook
+                'minibuffer-setup-hook
+                '(lambda ()
+                   (abbrev-mode 1)
+                   (setq local-abbrev-table my-tramp-abbrev-table)))
+               
+               (defadvice minibuffer-complete
+                 (before my-minibuffer-complete activate)
+                 (expand-abbrev))
+               
+               ;; If you use partial-completion-mode
+               (defadvice PC-do-completion
+                 (before my-PC-do-completion activate)
+                 (expand-abbrev))
+</pre>
+          <p>After entering <kbd>C-x C-f xy &lt;TAB&gt;</kbd>, the minibuffer is
+expanded, and you can continue editing.
+
+          <li>Use bookmarks:
+
+          <p>Bookmarks can be used to visit Tramp files or directories.
+
+          <p>When you have opened <samp><span class="file">/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/</span></samp>, you should save the bookmark via
+<kbd>&lt;menu-bar&gt; &lt;edit&gt; &lt;bookmarks&gt; &lt;set&gt;</kbd>.
+
+          <p>Later on, you can always navigate to that bookmark via
+<kbd>&lt;menu-bar&gt; &lt;edit&gt; &lt;bookmarks&gt; &lt;jump&gt;</kbd>.
+
+          <li>Use recent files:
+
+          <p><samp><span class="file">recentf</span></samp>
+remembers visited places.
+
+          <p>You could keep remote file names in the recent list without checking
+their readability through a remote access:
+
+          <pre class="lisp">               (recentf-mode 1)
+</pre>
+          <p>The list of files opened recently is reachable via
+<kbd>&lt;menu-bar&gt; &lt;file&gt; &lt;Open Recent&gt;</kbd>.
+
+          <li>Use filecache:
+
+          <p><samp><span class="file">filecache</span></samp> remembers visited places.  Add the directory into
+the cache:
+
+          <pre class="lisp">               (eval-after-load "filecache"
+                 '(file-cache-add-directory
+                   "/ssh<!-- /@w -->:news<!-- /@w -->@news.my.domain:/opt/news/etc/"))
+</pre>
+          <p>Whenever you want to load a file, you can enter <kbd>C-x C-f
+C-&lt;TAB&gt;</kbd> in the minibuffer.  The completion is done for the given
+directory.
+
+          <li>Use bbdb:
+
+          <p><samp><span class="file">bbdb</span></samp> has a built-in feature for Ange-FTP files,
+which works also for <span class="sc">tramp</span>.
+
+          <p>You need to load <samp><span class="file">bbdb</span></samp>:
+
+          <pre class="lisp">               (require 'bbdb)
+               (bbdb-initialize)
+</pre>
+          <p>Then you can create a BBDB entry via <kbd>M-x bbdb-create-ftp-site</kbd>. 
+Because BBDB is not prepared for <span class="sc">tramp</span> syntax, you must
+specify a method together with the user name, when needed. Example:
+
+          <pre class="example">               <kbd>M-x bbdb-create-ftp-site &lt;RET&gt;</kbd>
+               <b>Ftp Site:</b> news.my.domain &lt;RET&gt;
+               <b>Ftp Directory:</b> /opt/news/etc/ &lt;RET&gt;
+               <b>Ftp Username:</b> ssh:news &lt;RET&gt;
+               <b>Company:</b> &lt;RET&gt;
+               <b>Additional Comments:</b> &lt;RET&gt;
+</pre>
+          <p>When you have opened your BBDB buffer, you can access such an entry by
+pressing the key &lt;F&gt;.
+
+          </ol>
+
+     <p>I would like to thank all <span class="sc">tramp</span> users, who have contributed to
+the different recipes!
+
+     <li>How can I use <span class="sc">tramp</span> to connect to a remote GNU Emacs
+session?
+
+     <p>You can configure Emacs Client doing this.
+
+     <p>On the remote host, you start the Emacs Server:
+
+     <pre class="lisp">          (require 'server)
+          (setq server-host (system-name)
+                server-use-tcp t)
+          (server-start)
+</pre>
+     <p>Make sure, that the result of <code>(system-name)</code> can be resolved on
+your local host; otherwise you might use a hard coded IP address.
+
+     <p>The resulting file <samp><span class="file">~/.emacs.d/server/server</span></samp> must be copied to
+your local host, at the same location.  You can call then the Emacs
+Client from the command line:
+
+     <pre class="example">          emacsclient /ssh<!-- /@w -->:user<!-- /@w -->@host:/file/to/edit
+</pre>
+     <p><code>user</code> and <code>host</code> shall be related to your local host.
+
+     <p>If you want to use Emacs Client also as editor for other programs, you
+could write a script <samp><span class="file">emacsclient.sh</span></samp>:
+
+     <pre class="example">          #!/bin/sh
+          emacsclient /ssh<!-- /@w -->:$(whoami)<!-- /@w -->@$(hostname --fqdn):$1
+</pre>
+     <p>Then you must set the environment variable <code>EDITOR</code> pointing to
+that script:
+
+     <pre class="example">          export EDITOR=/path/to/emacsclient.sh
+</pre>
+     <li>How can I disable <span class="sc">tramp</span>?
+
+     <p>Shame on you, why did you read until now?
+
+          <ul>
+<li>If you just want to have Ange-FTP as default remote
+files access package, you should apply the following code:
+
+          <pre class="lisp">               (setq tramp-default-method "ftp")
+</pre>
+          <li>In order to disable
+<span class="sc">tramp</span> (and Ange-FTP),
+you must set <code>tramp-mode</code> to <code>nil</code>:
+
+          <pre class="lisp">               (setq tramp-mode nil)
+</pre>
+          <li>Unloading <span class="sc">tramp</span> can be achieved by applying <kbd>M-x
+tramp-unload-tramp</kbd>. 
+This resets also the Ange-FTP plugins. 
+</ul>
+     </ul>
+
+<!-- For the developer -->
+   </body></html>
+

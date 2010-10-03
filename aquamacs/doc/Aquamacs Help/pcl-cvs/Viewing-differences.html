@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Viewing differences - PCL-CVS -- Emacs Front-End to CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Ignoring-files.html#Ignoring-files" title="Ignoring files">
+<link rel="next" href="Invoking-Ediff.html#Invoking-Ediff" title="Invoking Ediff">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Viewing-differences"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Invoking-Ediff.html#Invoking-Ediff">Invoking Ediff</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Ignoring-files.html#Ignoring-files">Ignoring files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">5.13 Viewing differences</h3>
+
+<p><a name="index-Diff-114"></a><a name="index-Invoking-_0040code_007bdiff_007d-115"></a><a name="index-Conflicts_002c-how-to-resolve-them-116"></a><a name="index-Viewing-differences-117"></a><a name="index-d_003d_0040r_007b_002d_002drun-_0040samp_007bcvs-diff_007d_007d-118"></a><a name="index-g_t_003d_0040r_007b_002d_002drun-_0040samp_007bcvs-diff_007d_007d-119"></a><a name="index-db_0040r_007b_002d_002ddiff-against-base-version_007d-120"></a><a name="index-dh_0040r_007b_002d_002ddiff-against-head-of-repository_007d-121"></a><a name="index-dr_0040r_007b_002d_002ddiff-between-base-and-head-of-repository_007d-122"></a><a name="index-dv_0040r_007b_002d_002ddiff-against-vendor-branch_007d-123"></a><a name="index-dy_0040r_007b_002d_002ddiff-against-yesterday_0027s-head_007d-124"></a><a name="index-cvs_002dmode_002ddiff-125"></a><a name="index-cvs_002dmode_002ddiff_002dbackup-126"></a><a name="index-cvs_002dmode_002ddiff_002dhead-127"></a><a name="index-cvs_002dmode_002ddiff_002drepository-128"></a><a name="index-cvs_002dmode_002ddiff_002dvendor-129"></a><a name="index-cvs_002dmode_002ddiff_002dyesterday-130"></a><a name="index-cvs_002dinvert_002dignore_002dmarks_0040r_007b-_0028variable_0029_007d-131"></a>
+     <dl>
+<dt><kbd>=</kbd><dt><kbd>d =</kbd><dd>Display a &lsquo;<samp><span class="samp">cvs diff</span></samp>&rsquo; between the selected files and the version
+that they are based on (<code>cvs-mode-diff</code>).
+
+     <br><dt><kbd>d b</kbd><dd>If CVS finds a conflict while merging two versions of a file (during a
+&lsquo;<samp><span class="samp">cvs update</span></samp>&rsquo;, see <a href="Updating-the-buffer.html#Updating-the-buffer">Updating the buffer</a>) it will save the
+original file in a file called <samp><span class="file">.#</span><var>file</var><span class="file">.</span><var>version</var></samp> where
+<var>file</var> is the name of the file, and <var>version</var> is the revision
+number that <var>file</var> was based on.
+
+     <p>With the <kbd>d b</kbd> command you can run a &lsquo;<samp><span class="samp">diff</span></samp>&rsquo; on the files
+<samp><span class="file">.#</span><var>file</var><span class="file">.</span><var>version</var></samp> and <samp><var>file</var></samp>.
+
+     <br><dt><kbd>d h</kbd><dd>Display a &lsquo;<samp><span class="samp">cvs diff</span></samp>&rsquo; between the selected files and the head
+revision (the most recent version on the current
+branch) in the repository (<code>cvs-mode-diff-head</code>).
+
+     <br><dt><kbd>d r</kbd><dd>Display a &lsquo;<samp><span class="samp">cvs diff</span></samp>&rsquo; between the base revision of the selected
+files and the head revision in the repository.  This displays the
+changes anyone has committed to the repository since you last executed
+a checkout, update or commit operation
+(<code>cvs-mode-diff-repository</code>).
+
+     <br><dt><kbd>d v</kbd><dd>Display a &lsquo;<samp><span class="samp">cvs diff</span></samp>&rsquo; between the selected files and the head
+revision of the vendor branch in the repository
+(<code>cvs-mode-diff-vendor</code>).
+
+     <br><dt><kbd>d y</kbd><dd>Display a &lsquo;<samp><span class="samp">cvs diff</span></samp>&rsquo; between the selected files and yesterday's
+head revision in the repository
+(<code>cvs-mode-diff-yesterday</code>). 
+</dl>
+
+   <p>By default, &lsquo;<samp><span class="samp">diff</span></samp>&rsquo; commands ignore the marks.  This can be changed
+with <code>cvs-invert-ignore-marks</code>.
+
+   </body></html>
+

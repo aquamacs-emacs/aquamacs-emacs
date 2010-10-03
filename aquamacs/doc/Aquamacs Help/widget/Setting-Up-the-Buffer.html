@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Setting Up the Buffer - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Programming-Example.html#Programming-Example" title="Programming Example">
+<link rel="next" href="Basic-Types.html#Basic-Types" title="Basic Types">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Setting-Up-the-Buffer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Types.html#Basic-Types">Basic Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming-Example.html#Programming-Example">Programming Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">Setting Up the Buffer</h3>
+
+<p>Widgets are created with <code>widget-create</code>, which returns a
+<dfn>widget</dfn> object.  This object can be queried and manipulated by
+other widget functions, until it is deleted with <code>widget-delete</code>. 
+After the widgets have been created, <code>widget-setup</code> must be called
+to enable them.
+
+<div class="defun">
+&mdash; Function: <b>widget-create</b><var> type </var>[<var> keyword argument </var>]<var><small class="dots">...</small><a name="index-widget_002dcreate-18"></a></var><br>
+<blockquote><p>Create and return a widget of type <var>type</var>. 
+The syntax for the <var>type</var> argument is described in <a href="Basic-Types.html#Basic-Types">Basic Types</a>.
+
+        <p>The keyword arguments can be used to overwrite the keyword arguments
+that are part of <var>type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-delete</b><var> widget<a name="index-widget_002ddelete-19"></a></var><br>
+<blockquote><p>Delete <var>widget</var> and remove it from the buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-setup</b><var><a name="index-widget_002dsetup-20"></a></var><br>
+<blockquote><p>Set up a buffer to support widgets.
+
+        <p>This should be called after creating all the widgets and before allowing
+the user to edit them.
+
+        </blockquote></div>
+
+   <p>If you want to insert text outside the widgets in the form, the
+recommended way to do that is with <code>widget-insert</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-insert</b><var><a name="index-widget_002dinsert-21"></a></var><br>
+<blockquote><p>Insert the arguments, either strings or characters, at point. 
+The inserted text will be read-only. 
+</p></blockquote></div>
+
+   <p>There is a standard widget keymap which you might find useful.
+
+   <p><a name="index-widget_002dbutton_002dpress-22"></a><a name="index-widget_002dbutton_002dclick-23"></a>
+
+<div class="defun">
+&mdash; Const: <b>widget-keymap</b><var><a name="index-widget_002dkeymap-24"></a></var><br>
+<blockquote><p>A keymap with the global keymap as its parent.<br>
+&lt;TAB&gt; and <kbd>C-&lt;TAB&gt;</kbd> are bound to <code>widget-forward</code> and
+<code>widget-backward</code>, respectively.  &lt;RET&gt; and <kbd>Mouse-2</kbd>
+are bound to <code>widget-button-press</code> and
+<code>widget-button-click</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>widget-global-map</b><var><a name="index-widget_002dglobal_002dmap-25"></a></var><br>
+<blockquote><p>Keymap used by <code>widget-button-press</code> and <code>widget-button-click</code>
+when not on a button.  By default this is <code>global-map</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

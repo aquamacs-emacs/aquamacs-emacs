@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Creating a spam-stat dictionary - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Statistics-Package.html#Spam-Statistics-Package" title="Spam Statistics Package">
+<link rel="next" href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" title="Splitting mail using spam-stat">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Creating-a-spam-stat-dictionary"></a>
+<a name="Creating-a-spam_002dstat-dictionary"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat">Splitting mail using spam-stat</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Statistics-Package.html#Spam-Statistics-Package">Spam Statistics Package</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.8.1 Creating a spam-stat dictionary</h5>
+
+<p>Before you can begin to filter spam based on statistics, you must
+create these statistics based on two mail collections, one with spam,
+one with non-spam.  These statistics are then stored in a dictionary
+for later use.  In order for these statistics to be meaningful, you
+need several hundred emails in both collections.
+
+   <p>Gnus currently supports only the nnml back end for automated dictionary
+creation.  The nnml back end stores all mails in a directory, one file
+per mail.  Use the following:
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-process-spam-directory</b><var><a name="index-spam_002dstat_002dprocess_002dspam_002ddirectory-3002"></a></var><br>
+<blockquote><p>Create spam statistics for every file in this directory.  Every file
+is treated as one spam mail. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-process-non-spam-directory</b><var><a name="index-spam_002dstat_002dprocess_002dnon_002dspam_002ddirectory-3003"></a></var><br>
+<blockquote><p>Create non-spam statistics for every file in this directory.  Every
+file is treated as one non-spam mail. 
+</p></blockquote></div>
+
+   <p>Usually you would call <code>spam-stat-process-spam-directory</code> on a
+directory such as <samp><span class="file">~/Mail/mail/spam</span></samp> (this usually corresponds to
+the group &lsquo;<samp><span class="samp">nnml:mail.spam</span></samp>&rsquo;), and you would call
+<code>spam-stat-process-non-spam-directory</code> on a directory such as
+<samp><span class="file">~/Mail/mail/misc</span></samp> (this usually corresponds to the group
+&lsquo;<samp><span class="samp">nnml:mail.misc</span></samp>&rsquo;).
+
+   <p>When you are using <acronym>IMAP</acronym>, you won't have the mails available
+locally, so that will not work.  One solution is to use the Gnus Agent
+to cache the articles.  Then you can use directories such as
+<samp><span class="file">"~/News/agent/nnimap/mail.yourisp.com/personal_spam"</span></samp> for
+<code>spam-stat-process-spam-directory</code>.  See <a href="Agent-as-Cache.html#Agent-as-Cache">Agent as Cache</a>.
+
+<div class="defun">
+&mdash; Variable: <b>spam-stat</b><var><a name="index-spam_002dstat-3004"></a></var><br>
+<blockquote><p>This variable holds the hash-table with all the statistics&mdash;the
+dictionary we have been talking about.  For every word in either
+collection, this hash-table stores a vector describing how often the
+word appeared in spam and often it appeared in non-spam mails. 
+</p></blockquote></div>
+
+   <p>If you want to regenerate the statistics from scratch, you need to
+reset the dictionary.
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-reset</b><var><a name="index-spam_002dstat_002dreset-3005"></a></var><br>
+<blockquote><p>Reset the <code>spam-stat</code> hash-table, deleting all the statistics. 
+</p></blockquote></div>
+
+   <p>When you are done, you must save the dictionary.  The dictionary may
+be rather large.  If you will not update the dictionary incrementally
+(instead, you will recreate it once a month, for example), then you
+can reduce the size of the dictionary by deleting all words that did
+not appear often enough or that do not clearly belong to only spam or
+only non-spam mails.
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-reduce-size</b><var><a name="index-spam_002dstat_002dreduce_002dsize-3006"></a></var><br>
+<blockquote><p>Reduce the size of the dictionary.  Use this only if you do not want
+to update the dictionary incrementally. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>spam-stat-save</b><var><a name="index-spam_002dstat_002dsave-3007"></a></var><br>
+<blockquote><p>Save the dictionary. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>spam-stat-file</b><var><a name="index-spam_002dstat_002dfile-3008"></a></var><br>
+<blockquote><p>The filename used to store the dictionary.  This defaults to
+<samp><span class="file">~/.spam-stat.el</span></samp>. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,178 @@
+<html lang="en">
+<head>
+<title>Syntactic Analysis - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" title="Indentation Engine Basics">
+<link rel="prev" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" title="Indentation Engine Basics">
+<link rel="next" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Syntactic-Analysis"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">10.1 Syntactic Analysis</h3>
+
+<p><a name="index-syntactic-analysis-381"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p><a name="index-syntactic-element-382"></a><a name="index-syntactic-context-383"></a>The first thing CC Mode does when indenting a line of code, is to
+analyze the line, determining the <dfn>syntactic context</dfn> of the
+(first) construct on that line.  It's a list of <dfn>syntactic
+elements</dfn>, where each syntactic element in turn is a list<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  Here is a
+brief and typical example:
+
+<pre class="example">     ((defun-block-intro 1959))
+</pre>
+   <p><a name="index-syntactic-symbol-384"></a>The first thing inside each syntactic element is always a
+<dfn>syntactic symbol</dfn>.  It describes the kind of construct that was
+recognized, e.g. <code>statement</code>, <code>substatement</code>,
+<code>class-open</code>, <code>class-close</code>, etc.  See <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
+for a complete list of currently recognized syntactic symbols and
+their semantics.  The remaining entries are various data associated
+with the recognized construct - there might be zero or more.
+
+   <p><a name="index-anchor-position-385"></a>Conceptually, a line of code is always indented relative to some
+position higher up in the buffer (typically the indentation of the
+previous line).  That position is the <dfn>anchor position</dfn> in the
+syntactic element.  If there is an entry after the syntactic symbol in
+the syntactic element list then it's either nil or that anchor position.
+
+   <p>Here is an example.  Suppose we had the following code as the only thing
+in a C++ buffer <a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>:
+
+<pre class="example">      1: void swap( int&amp; a, int&amp; b )
+      2: {
+      3:     int tmp = a;
+      4:     a = b;
+      5:     b = tmp;
+      6: }
+</pre>
+   <p class="noindent">We can use <kbd>C-c C-s</kbd> (<code>c-show-syntactic-information</code>) to
+report what the syntactic analysis is for the current line:
+
+     <dl>
+<dt><kbd>C-c C-s</kbd> (<code>c-show-syntactic-information</code>)<dd><a name="index-C_002dc-C_002ds-386"></a><a name="index-c_002dshow_002dsyntactic_002dinformation-387"></a><a name="index-show_002dsyntactic_002dinformation-_0028c_002d_0029-388"></a>This command calculates the syntactic analysis of the current line and
+displays it in the minibuffer.  The command also highlights the anchor
+position(s). 
+</dl>
+
+   <p>Running this command on line 4 of this example, we'd see in the echo
+area<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>:
+
+<pre class="example">     ((statement 35))
+</pre>
+   <p class="noindent">and the &lsquo;<samp><span class="samp">i</span></samp>&rsquo; of <code>int</code> on line 3 would be highlighted.  This
+tells us that the line is a statement and it is indented relative to
+buffer position 35, the highlighted position.  If you were to move
+point to line 3 and hit <kbd>C-c C-s</kbd>, you would see:
+
+<pre class="example">     ((defun-block-intro 29))
+</pre>
+   <p class="noindent">This indicates that the &lsquo;<samp><span class="samp">int</span></samp>&rsquo; line is the first statement in a top
+level function block, and is indented relative to buffer position 29,
+which is the brace just after the function header.
+
+   <p>Here's another example:
+
+<pre class="example">      1: int add( int val, int incr, int doit )
+      2: {
+      3:     if( doit )
+      4:         {
+      5:             return( val + incr );
+      6:         }
+      7:     return( val );
+      8: }
+</pre>
+   <p class="noindent">Hitting <kbd>C-c C-s</kbd> on line 4 gives us:
+
+<pre class="example">     ((substatement-open 46))
+</pre>
+   <p><a name="index-substatement-389"></a><a name="index-substatement-block-390"></a>which tells us that this is a brace that <em>opens</em> a substatement
+block. <a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a>
+
+   <p><a name="index-comment_002donly-line-391"></a>Syntactic contexts can contain more than one element, and syntactic
+elements need not have anchor positions.  The most common example of
+this is a <dfn>comment-only line</dfn>:
+
+<pre class="example">      1: void draw_list( List&lt;Drawables&gt;&amp; drawables )
+      2: {
+      3:         // call the virtual draw() method on each element in list
+      4:     for( int i=0; i &lt; drawables.count(), ++i )
+      5:     {
+      6:         drawables[i].draw();
+      7:     }
+      8: }
+</pre>
+   <p class="noindent">Hitting <kbd>C-c C-s</kbd> on line 3 of this example gives:
+
+<pre class="example">     ((comment-intro) (defun-block-intro 46))
+</pre>
+   <p class="noindent">and you can see that the syntactic context contains two syntactic
+elements.  Notice that the first element, &lsquo;<samp><span class="samp">(comment-intro)</span></samp>&rsquo;, has no
+anchor position.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> In
+CC Mode 5.28 and earlier, a syntactic element was a dotted pair; the
+cons was the syntactic symbol and the cdr was the anchor position. 
+For compatibility's sake, the parameter passed to a line-up function
+still has this dotted pair form (see <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>).</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The line numbers in this and future examples
+don't actually appear in the buffer, of course!</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> With a universal argument (i.e. <kbd>C-u C-c C-s</kbd>) the
+analysis is inserted into the buffer as a comment on the current
+line.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> A <dfn>substatement</dfn> is the line after a
+conditional statement, such as <code>if</code>, <code>else</code>, <code>while</code>,
+<code>do</code>, <code>switch</code>, etc.  A <dfn>substatement
+block</dfn> is a brace block following one of these conditional statements.</p>
+
+   <hr></div>
+
+   </body></html>
+

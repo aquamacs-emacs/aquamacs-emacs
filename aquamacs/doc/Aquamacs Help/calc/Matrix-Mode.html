@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Matrix Mode - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Calculation-Modes.html#Calculation-Modes" title="Calculation Modes">
+<link rel="prev" href="Symbolic-Mode.html#Symbolic-Mode" title="Symbolic Mode">
+<link rel="next" href="Automatic-Recomputation.html#Automatic-Recomputation" title="Automatic Recomputation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Matrix-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Automatic-Recomputation.html#Automatic-Recomputation">Automatic Recomputation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calculation-Modes.html#Calculation-Modes">Calculation Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.4.6 Matrix and Scalar Modes</h4>
+
+<p class="noindent"><a name="index-Matrix-mode-432"></a><a name="index-Scalar-mode-433"></a>Calc sometimes makes assumptions during algebraic manipulation that
+are awkward or incorrect when vectors and matrices are involved. 
+Calc has two modes, <dfn>Matrix mode</dfn> and <dfn>Scalar mode</dfn>, which
+modify its behavior around vectors in useful ways.
+
+   <p><a name="index-m-v-434"></a><a name="index-calc_002dmatrix_002dmode-435"></a>Press <kbd>m v</kbd> (<code>calc-matrix-mode</code>) once to enter Matrix mode. 
+In this mode, all objects are assumed to be matrices unless provably
+otherwise.  One major effect is that Calc will no longer consider
+multiplication to be commutative.  (Recall that in matrix arithmetic,
+&lsquo;<samp><span class="samp">A*B</span></samp>&rsquo; is not the same as &lsquo;<samp><span class="samp">B*A</span></samp>&rsquo;.)  This assumption affects
+rewrite rules and algebraic simplification.  Another effect of this
+mode is that calculations that would normally produce constants like
+0 and 1 (e.g., &lsquo;<samp><span class="samp">a - a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">a / a</span></samp>&rsquo;, respectively) will now
+produce function calls that represent &ldquo;generic&rdquo; zero or identity
+matrices: &lsquo;<samp><span class="samp">idn(0)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">idn(1)</span></samp>&rsquo;.  The <code>idn</code> function
+&lsquo;<samp><span class="samp">idn(</span><var>a</var><span class="samp">,</span><var>n</var><span class="samp">)</span></samp>&rsquo; returns <var>a</var> times an <var>n</var>x<var>n</var>
+identity matrix; if <var>n</var> is omitted, it doesn't know what
+dimension to use and so the <code>idn</code> call remains in symbolic
+form.  However, if this generic identity matrix is later combined
+with a matrix whose size is known, it will be converted into
+a true identity matrix of the appropriate size.  On the other hand,
+if it is combined with a scalar (as in &lsquo;<samp><span class="samp">idn(1) + 2</span></samp>&rsquo;), Calc
+will assume it really was a scalar after all and produce, e.g., 3.
+
+   <p>Press <kbd>m v</kbd> a second time to get Scalar mode.  Here, objects are
+assumed <em>not</em> to be vectors or matrices unless provably so. 
+For example, normally adding a variable to a vector, as in
+&lsquo;<samp><span class="samp">[x, y, z] + a</span></samp>&rsquo;, will leave the sum in symbolic form because
+as far as Calc knows, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; could represent either a number or
+another 3-vector.  In Scalar mode, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is assumed to be a
+non-vector, and the addition is evaluated to &lsquo;<samp><span class="samp">[x+a, y+a, z+a]</span></samp>&rsquo;.
+
+   <p>Press <kbd>m v</kbd> a third time to return to the normal mode of operation.
+
+   <p>If you press <kbd>m v</kbd> with a numeric prefix argument <var>n</var>, you
+get a special &ldquo;dimensioned&rdquo; Matrix mode in which matrices of
+unknown size are assumed to be <var>n</var>x<var>n</var> square matrices. 
+Then, the function call &lsquo;<samp><span class="samp">idn(1)</span></samp>&rsquo; will expand into an actual
+matrix rather than representing a &ldquo;generic&rdquo; matrix.  Simply typing
+<kbd>C-u m v</kbd> will get you a square Matrix mode, in which matrices of
+unknown size are assumed to be square matrices of unspecified size.
+
+   <p><a name="index-Declaring-scalar-variables-436"></a>Of course these modes are approximations to the true state of
+affairs, which is probably that some quantities will be matrices
+and others will be scalars.  One solution is to &ldquo;declare&rdquo;
+certain variables or functions to be scalar-valued. 
+See <a href="Declarations.html#Declarations">Declarations</a>, to see how to make declarations in Calc.
+
+   <p>There is nothing stopping you from declaring a variable to be
+scalar and then storing a matrix in it; however, if you do, the
+results you get from Calc may not be valid.  Suppose you let Calc
+get the result &lsquo;<samp><span class="samp">[x+a, y+a, z+a]</span></samp>&rsquo; shown above, and then stored
+&lsquo;<samp><span class="samp">[1, 2, 3]</span></samp>&rsquo; in &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.  The result would not be the same as
+for &lsquo;<samp><span class="samp">[x, y, z] + [1, 2, 3]</span></samp>&rsquo;, but that's because you have broken
+your earlier promise to Calc that &lsquo;<samp><span class="samp">a</span></samp>&rsquo; would be scalar.
+
+   <p>Another way to mix scalars and matrices is to use selections
+(see <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>).  Use Matrix mode when operating on
+your formula normally; then, to apply Scalar mode to a certain part
+of the formula without affecting the rest just select that part,
+change into Scalar mode and press <kbd>=</kbd> to resimplify the part
+under this mode, then change back to Matrix mode before deselecting.
+
+   </body></html>
+

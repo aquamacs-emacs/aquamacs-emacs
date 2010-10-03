@@ -1,0 +1,247 @@
+<html lang="en">
+<head>
+<title>Clean-ups - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines" title="Custom Auto-newlines">
+<link rel="next" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" title="Indentation Engine Basics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Clean-ups"></a>
+<a name="Clean_002dups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">9 Clean-ups</h2>
+
+<p><a name="index-clean_002dups-369"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p><dfn>Clean-ups</dfn> are mechanisms which remove (or exceptionally, add)
+whitespace in specific circumstances and are complementary to colon
+and brace hanging.  You enable a clean-up by adding its symbol into
+<code>c-cleanup-list</code>, e.g. like this:
+
+<pre class="example">     (add-to-list 'c-cleanup-list 'space-before-funcall)
+</pre>
+   <p>On the surface, it would seem that clean-ups overlap the functionality
+provided by the <code>c-hanging-*-alist</code> variables.  Clean-ups,
+however, are used to adjust code &ldquo;after-the-fact&rdquo;, i.e. to adjust
+the whitespace in constructs later than when they were typed.
+
+   <p>Most of the clean-ups remove automatically inserted newlines, and are
+only active when auto-newline minor mode is turned on.  Others will
+work all the time.  Note that clean-ups are only performed when there
+is nothing but whitespace appearing between the individual components
+of the construct, and (apart from <code>comment-close-slash</code>) when the
+construct does not occur within a literal (see <a href="Auto_002dnewlines.html#Auto_002dnewlines">Auto-newlines</a>).
+
+<div class="defun">
+&mdash; User Option: <b>c-cleanup-list</b><var><a name="index-c_002dcleanup_002dlist-370"></a></var><br>
+<blockquote><p><a name="index-cleanup_002dlist-_0028c_002d_0029-371"></a><a name="index-literal-372"></a>
+You configure CC Mode's clean-ups by setting the style variable
+<code>c-cleanup-list</code>, which is a list of clean-up symbols.  By
+default, CC Mode cleans up only the <code>scope-operator</code> construct,
+which is necessary for proper C++ support. 
+</p></blockquote></div>
+
+   <p>These are the clean-ups that are only active when electric and
+auto-newline minor modes are enabled:
+
+<!-- TBD: Would like to use some sort of @deffoo here; @table indents a -->
+<!-- bit too much in dvi output. -->
+     <dl>
+<dt><code>brace-else-brace</code><dd>Clean up &lsquo;<samp><span class="samp">} else {</span></samp>&rsquo; constructs by placing the entire construct on
+a single line.  Clean up occurs when the open brace after the
+&lsquo;<samp><span class="samp">else</span></samp>&rsquo; is typed.  So for example, this:
+
+     <pre class="example">          void spam(int i)
+          {
+              if( i==7 ) {
+                  dosomething();
+              }
+              else
+              {
+</pre>
+     <p class="noindent">appears like this after the last open brace is typed:
+
+     <pre class="example">          void spam(int i)
+          {
+              if( i==7 ) {
+                  dosomething();
+              } else {
+</pre>
+     <br><dt><code>brace-elseif-brace</code><dd>Similar to the <code>brace-else-brace</code> clean-up, but this cleans up
+&lsquo;<samp><span class="samp">} else if (...) {</span></samp>&rsquo; constructs.  For example:
+
+     <pre class="example">          void spam(int i)
+          {
+              if( i==7 ) {
+                  dosomething();
+              }
+              else if( i==3 )
+              {
+</pre>
+     <p class="noindent">appears like this after the last open parenthesis is typed:
+
+     <pre class="example">          void spam(int i)
+          {
+              if( i==7 ) {
+                  dosomething();
+              } else if(
+</pre>
+     <p class="noindent">and like this after the last open brace is typed:
+
+     <pre class="example">          void spam(int i)
+          {
+              if( i==7 ) {
+                  dosomething();
+              } else if( i==3 ) {
+</pre>
+     <br><dt><code>brace-catch-brace</code><dd>Analogous to <code>brace-elseif-brace</code>, but cleans up &lsquo;<samp><span class="samp">} catch
+(...) {</span></samp>&rsquo; in C++ and Java mode.
+
+     <br><dt><code>empty-defun-braces</code><dd>Clean up braces following a top-level function or class definition that
+contains no body.  Clean up occurs when the closing brace is typed. 
+Thus the following:
+
+     <pre class="example">          class Spam
+          {
+          }
+</pre>
+     <p class="noindent">is transformed into this when the close brace is typed:
+
+     <pre class="example">          class Spam
+          {}
+</pre>
+     <br><dt><code>defun-close-semi</code><dd>Clean up the terminating semicolon on top-level function or class
+definitions when they follow a close brace.  Clean up occurs when the
+semicolon is typed.  So for example, the following:
+
+     <pre class="example">          class Spam
+          {
+          ...
+          }
+          ;
+</pre>
+     <p class="noindent">is transformed into this when the semicolon is typed:
+
+     <pre class="example">          class Spam
+          {
+          ...
+          };
+</pre>
+     <br><dt><code>list-close-comma</code><dd>Clean up commas following braces in array and aggregate initializers. 
+Clean up occurs when the comma is typed.  The space before the comma
+is zapped just like the space before the semicolon in
+<code>defun-close-semi</code>.
+
+     <br><dt><code>scope-operator</code><dd>Clean up double colons which might designate a C++ scope operator split
+across multiple lines<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Clean up occurs when the second colon is
+typed.  You will always want <code>scope-operator</code> in the
+<code>c-cleanup-list</code> when you are editing C++ code.
+
+     <br><dt><code>one-liner-defun</code><dd>Clean up a single line of code enclosed by defun braces by removing
+the whitespace before and after the code.  The clean-up happens when
+the closing brace is typed.  If the variable
+<code>c-max-one-liner-length</code> is set, the cleanup is only done if the
+resulting line would be no longer than the value of that variable.
+
+     <p>For example, consider this AWK code:
+
+     <pre class="example">          BEGIN {
+              FS = "\t" # use &lt;TAB&gt; as a field separator
+          }
+</pre>
+     <p class="noindent">It gets compacted to the following when the closing brace is typed:
+
+     <pre class="example">          BEGIN {FS = "\t"} # use &lt;TAB&gt; as a field separator
+</pre>
+     <div class="defun">
+&mdash; User Option: <b>c-max-one-liner-length</b><var><a name="index-c_002dmax_002done_002dliner_002dlength-373"></a></var><br>
+<blockquote> <p><a name="index-max_002done_002dliner_002dlength-_0028c_002d_0029-374"></a>The maximum length of the resulting line for which the clean-up
+<code>one-liner-defun</code> will be triggered.  This length is that of the entire
+line, including any leading whitespace and any trailing comment.  Its
+default value is 80.  If the value is zero or <code>nil</code>, no limit
+applies. 
+</p></blockquote></div>
+     </dl>
+
+   <p>The following clean-ups are always active when they occur on
+<code>c-cleanup-list</code>, regardless of whether Electric minor mode or
+Auto-newline minor mode are enabled:
+
+     <dl>
+<dt><code>space-before-funcall</code><dd>Insert a space between the function name and the opening parenthesis
+of a function call.  This produces function calls in the style
+mandated by the GNU coding standards, e.g. &lsquo;<samp><span class="samp">signal&nbsp;<!-- /@w -->(SIGINT,
+SIG_IGN)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">abort&nbsp;<!-- /@w -->()</span></samp>&rsquo;.  Clean up occurs when the opening
+parenthesis is typed.  This clean-up should never be active in AWK
+Mode, since such a space is syntactically invalid for user defined
+functions.
+
+     <br><dt><code>compact-empty-funcall</code><dd>Clean up any space between the function name and the opening parenthesis
+of a function call that has no arguments.  This is typically used
+together with <code>space-before-funcall</code> if you prefer the GNU function
+call style for functions with arguments but think it looks ugly when
+it's only an empty parenthesis pair.  I.e. you will get &lsquo;<samp><span class="samp">signal
+(SIGINT, SIG_IGN)</span></samp>&rsquo;, but &lsquo;<samp><span class="samp">abort()</span></samp>&rsquo;.  Clean up occurs when the
+closing parenthesis is typed.
+
+     <br><dt><code>comment-close-slash</code><dd>When inside a block comment, terminate the comment when you type a slash
+at the beginning of a line (i.e. immediately after the comment prefix). 
+This clean-up removes whitespace preceding the slash and if needed,
+inserts a star to complete the token &lsquo;<samp><span class="samp">*/</span></samp>&rsquo;.  Type <kbd>C-q /</kbd> in this
+situation if you just want a literal &lsquo;<samp><span class="samp">/</span></samp>&rsquo; inserted. 
+</dl>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Certain C++ constructs introduce
+ambiguous situations, so <code>scope-operator</code> clean-ups might not
+always be correct.  This usually only occurs when scoped identifiers
+appear in switch label tags.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>SOUP - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Other-Sources.html#Other-Sources" title="Other Sources">
+<link rel="prev" href="Document-Groups.html#Document-Groups" title="Document Groups">
+<link rel="next" href="Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways" title="Mail-To-News Gateways">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SOUP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways">Mail-To-News Gateways</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Document-Groups.html#Document-Groups">Document Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Other-Sources.html#Other-Sources">Other Sources</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.6.4 SOUP</h4>
+
+<p><a name="index-SOUP-2407"></a><a name="index-offline-2408"></a>
+In the PC world people often talk about &ldquo;offline&rdquo; newsreaders.  These
+are thingies that are combined reader/news transport monstrosities. 
+With built-in modem programs.  Yecchh!
+
+   <p>Of course, us Unix Weenie types of human beans use things like
+<code>uucp</code> and, like, <code>nntpd</code> and set up proper news and mail
+transport things like Ghod intended.  And then we just use normal
+newsreaders.
+
+   <p>However, it can sometimes be convenient to do something that's a bit
+easier on the brain if you have a very slow modem, and you're not really
+that interested in doing things properly.
+
+   <p>A file format called <span class="sc">soup</span> has been developed for transporting news
+and mail from servers to home machines and back again.  It can be a bit
+fiddly.
+
+   <p>First some terminology:
+
+     <dl>
+<dt><dfn>server</dfn><dd>This is the machine that is connected to the outside world and where you
+get news and/or mail from.
+
+     <br><dt><dfn>home machine</dfn><dd>This is the machine that you want to do the actual reading and responding
+on.  It is typically not connected to the rest of the world in any way.
+
+     <br><dt><dfn>packet</dfn><dd>Something that contains messages and/or commands.  There are two kinds
+of packets:
+
+          <dl>
+<dt><dfn>message packets</dfn><dd>These are packets made at the server, and typically contain lots of
+messages for you to read.  These are called <samp><span class="file">SoupoutX.tgz</span></samp> by
+default, where <var>x</var> is a number.
+
+          <br><dt><dfn>response packets</dfn><dd>These are packets made at the home machine, and typically contains
+replies that you've written.  These are called <samp><span class="file">SoupinX.tgz</span></samp> by
+default, where <var>x</var> is a number.
+
+     </dl>
+
+   </dl>
+
+     <ol type=1 start=1>
+
+     <li>You log in on the server and create a <span class="sc">soup</span> packet.  You can either
+use a dedicated <span class="sc">soup</span> thingie (like the <code>awk</code> program), or you
+can use Gnus to create the packet with its <span class="sc">soup</span> commands (<kbd>O
+s</kbd> and/or <kbd>G s b</kbd>; and then <kbd>G s p</kbd>) (see <a href="SOUP-Commands.html#SOUP-Commands">SOUP Commands</a>).
+
+     <li>You transfer the packet home.  Rail, boat, car or modem will do fine.
+
+     <li>You put the packet in your home directory.
+
+     <li>You fire up Gnus on your home machine using the <code>nnsoup</code> back end as
+the native or secondary server.
+
+     <li>You read articles and mail and answer and followup to the things you
+want (see <a href="SOUP-Replies.html#SOUP-Replies">SOUP Replies</a>).
+
+     <li>You do the <kbd>G s r</kbd> command to pack these replies into a <span class="sc">soup</span>
+packet.
+
+     <li>You transfer this packet to the server.
+
+     <li>You use Gnus to mail this packet out with the <kbd>G s s</kbd> command.
+
+     <li>You then repeat until you die.
+
+        </ol>
+
+   <p>So you basically have a bipartite system&mdash;you use <code>nnsoup</code> for
+reading and Gnus for packing/sending these <span class="sc">soup</span> packets.
+
+<ul class="menu">
+<li><a accesskey="1" href="SOUP-Commands.html#SOUP-Commands">SOUP Commands</a>:                Commands for creating and sending <span class="sc">soup</span> packets
+<li><a accesskey="2" href="SOUP-Groups.html#SOUP-Groups">SOUP Groups</a>:                  A back end for reading <span class="sc">soup</span> packets. 
+<li><a accesskey="3" href="SOUP-Replies.html#SOUP-Replies">SOUP Replies</a>:                 How to enable <code>nnsoup</code> to take over mail and news. 
+</ul>
+
+   </body></html>
+

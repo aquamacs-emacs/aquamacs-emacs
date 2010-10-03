@@ -1,0 +1,236 @@
+<html lang="en">
+<head>
+<title>Porting Common Lisp - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Old-CL-Compatibility.html#Old-CL-Compatibility" title="Old CL Compatibility">
+<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Porting-Common-Lisp"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Old-CL-Compatibility.html#Old-CL-Compatibility">Old CL Compatibility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix D Porting Common Lisp</h2>
+
+<p class="noindent">This package is meant to be used as an extension to Emacs Lisp,
+not as an Emacs implementation of true Common Lisp.  Some of the
+remaining differences between Emacs Lisp and Common Lisp make it
+difficult to port large Common Lisp applications to Emacs.  For
+one, some of the features in this package are not fully compliant
+with ANSI or Steele; see <a href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility">Common Lisp Compatibility</a>.  But there
+are also quite a few features that this package does not provide
+at all.  Here are some major omissions that you will want to watch out
+for when bringing Common Lisp code into Emacs.
+
+     <ul>
+<li>Case-insensitivity.  Symbols in Common Lisp are case-insensitive
+by default.  Some programs refer to a function or variable as
+<code>foo</code> in one place and <code>Foo</code> or <code>FOO</code> in another. 
+Emacs Lisp will treat these as three distinct symbols.
+
+     <p>Some Common Lisp code is written entirely in upper case.  While Emacs
+is happy to let the program's own functions and variables use
+this convention, calls to Lisp builtins like <code>if</code> and
+<code>defun</code> will have to be changed to lower case.
+
+     <li>Lexical scoping.  In Common Lisp, function arguments and <code>let</code>
+bindings apply only to references physically within their bodies
+(or within macro expansions in their bodies).  Emacs Lisp, by
+contrast, uses <dfn>dynamic scoping</dfn> wherein a binding to a
+variable is visible even inside functions called from the body.
+
+     <p>Variables in Common Lisp can be made dynamically scoped by
+declaring them <code>special</code> or using <code>defvar</code>.  In Emacs
+Lisp it is as if all variables were declared <code>special</code>.
+
+     <p>Often you can use code that was written for lexical scoping
+even in a dynamically scoped Lisp, but not always.  Here is
+an example of a Common Lisp code fragment that would fail in
+Emacs Lisp:
+
+     <pre class="example">          (defun map-odd-elements (func list)
+            (loop for x in list
+                  for flag = t then (not flag)
+                  collect (if flag x (funcall func x))))
+          
+          (defun add-odd-elements (list x)
+            (map-odd-elements (lambda (a) (+ a x)) list))
+</pre>
+     <p class="noindent">In Common Lisp, the two functions' usages of <code>x</code> are completely
+independent.  In Emacs Lisp, the binding to <code>x</code> made by
+<code>add-odd-elements</code> will have been hidden by the binding
+in <code>map-odd-elements</code> by the time the <code>(+ a x)</code> function
+is called.
+
+     <p>(This package avoids such problems in its own mapping functions
+by using names like <code>cl-x</code> instead of <code>x</code> internally;
+as long as you don't use the <code>cl-</code> prefix for your own
+variables no collision can occur.)
+
+     <p>See <a href="Lexical-Bindings.html#Lexical-Bindings">Lexical Bindings</a>, for a description of the <code>lexical-let</code>
+form which establishes a Common Lisp-style lexical binding, and some
+examples of how it differs from Emacs' regular <code>let</code>.
+
+     <li>Reader macros.  Common Lisp includes a second type of macro that
+works at the level of individual characters.  For example, Common
+Lisp implements the quote notation by a reader macro called <code>'</code>,
+whereas Emacs Lisp's parser just treats quote as a special case. 
+Some Lisp packages use reader macros to create special syntaxes
+for themselves, which the Emacs parser is incapable of reading.
+
+     <li>Other syntactic features.  Common Lisp provides a number of
+notations beginning with <code>#</code> that the Emacs Lisp parser
+won't understand.  For example, &lsquo;<samp><span class="samp">#| ... |#</span></samp>&rsquo; is an
+alternate comment notation, and &lsquo;<samp><span class="samp">#+lucid (foo)</span></samp>&rsquo; tells
+the parser to ignore the <code>(foo)</code> except in Lucid Common
+Lisp.
+
+     <li>Packages.  In Common Lisp, symbols are divided into <dfn>packages</dfn>. 
+Symbols that are Lisp built-ins are typically stored in one package;
+symbols that are vendor extensions are put in another, and each
+application program would have a package for its own symbols. 
+Certain symbols are &ldquo;exported&rdquo; by a package and others are
+internal; certain packages &ldquo;use&rdquo; or import the exported symbols
+of other packages.  To access symbols that would not normally be
+visible due to this importing and exporting, Common Lisp provides
+a syntax like <code>package:symbol</code> or <code>package::symbol</code>.
+
+     <p>Emacs Lisp has a single namespace for all interned symbols, and
+then uses a naming convention of putting a prefix like <code>cl-</code>
+in front of the name.  Some Emacs packages adopt the Common Lisp-like
+convention of using <code>cl:</code> or <code>cl::</code> as the prefix. 
+However, the Emacs parser does not understand colons and just
+treats them as part of the symbol name.  Thus, while <code>mapcar</code>
+and <code>lisp:mapcar</code> may refer to the same symbol in Common
+Lisp, they are totally distinct in Emacs Lisp.  Common Lisp
+programs which refer to a symbol by the full name sometimes
+and the short name other times will not port cleanly to Emacs.
+
+     <p>Emacs Lisp does have a concept of &ldquo;obarrays,&rdquo; which are
+package-like collections of symbols, but this feature is not
+strong enough to be used as a true package mechanism.
+
+     <li>The <code>format</code> function is quite different between Common
+Lisp and Emacs Lisp.  It takes an additional &ldquo;destination&rdquo;
+argument before the format string.  A destination of <code>nil</code>
+means to format to a string as in Emacs Lisp; a destination
+of <code>t</code> means to write to the terminal (similar to
+<code>message</code> in Emacs).  Also, format control strings are
+utterly different; <code>~</code> is used instead of <code>%</code> to
+introduce format codes, and the set of available codes is
+much richer.  There are no notations like <code>\n</code> for
+string literals; instead, <code>format</code> is used with the
+&ldquo;newline&rdquo; format code, <code>~%</code>.  More advanced formatting
+codes provide such features as paragraph filling, case
+conversion, and even loops and conditionals.
+
+     <p>While it would have been possible to implement most of Common
+Lisp <code>format</code> in this package (under the name <code>format*</code>,
+of course), it was not deemed worthwhile.  It would have required
+a huge amount of code to implement even a decent subset of
+<code>format*</code>, yet the functionality it would provide over
+Emacs Lisp's <code>format</code> would rarely be useful.
+
+     <li>Vector constants use square brackets in Emacs Lisp, but
+<code>#(a b c)</code> notation in Common Lisp.  To further complicate
+matters, Emacs has its own <code>#(</code> notation for
+something entirely different&mdash;strings with properties.
+
+     <li>Characters are distinct from integers in Common Lisp.  The notation
+for character constants is also different: <code>#\A</code> in Common Lisp
+where Emacs Lisp uses <code>?A</code>.  Also, <code>string=</code> and
+<code>string-equal</code> are synonyms in Emacs Lisp, whereas the latter is
+case-insensitive in Common Lisp.
+
+     <li>Data types.  Some Common Lisp data types do not exist in Emacs
+Lisp.  Rational numbers and complex numbers are not present,
+nor are large integers (all integers are &ldquo;fixnums&rdquo;).  All
+arrays are one-dimensional.  There are no readtables or pathnames;
+streams are a set of existing data types rather than a new data
+type of their own.  Hash tables, random-states, structures, and
+packages (obarrays) are built from Lisp vectors or lists rather
+than being distinct types.
+
+     <li>The Common Lisp Object System (CLOS) is not implemented,
+nor is the Common Lisp Condition System.  However, the EIEIO package
+(see <a href="../eieio/index.html#Top">Introduction</a>) does implement some
+CLOS functionality.
+
+     <li>Common Lisp features that are completely redundant with Emacs
+Lisp features of a different name generally have not been
+implemented.  For example, Common Lisp writes <code>defconstant</code>
+where Emacs Lisp uses <code>defconst</code>.  Similarly, <code>make-list</code>
+takes its arguments in different ways in the two Lisps but does
+exactly the same thing, so this package has not bothered to
+implement a Common Lisp-style <code>make-list</code>.
+
+     <li>A few more notable Common Lisp features not included in this
+package:  <code>compiler-let</code>, <code>tagbody</code>, <code>prog</code>,
+<code>ldb/dpb</code>, <code>parse-integer</code>, <code>cerror</code>.
+
+     <li>Recursion.  While recursion works in Emacs Lisp just like it
+does in Common Lisp, various details of the Emacs Lisp system
+and compiler make recursion much less efficient than it is in
+most Lisps.  Some schools of thought prefer to use recursion
+in Lisp over other techniques; they would sum a list of
+numbers using something like
+
+     <pre class="example">          (defun sum-list (list)
+            (if list
+                (+ (car list) (sum-list (cdr list)))
+              0))
+</pre>
+     <p class="noindent">where a more iteratively-minded programmer might write one of
+these forms:
+
+     <pre class="example">          (let ((total 0)) (dolist (x my-list) (incf total x)) total)
+          (loop for x in my-list sum x)
+</pre>
+     <p>While this would be mainly a stylistic choice in most Common Lisps,
+in Emacs Lisp you should be aware that the iterative forms are
+much faster than recursion.  Also, Lisp programmers will want to
+note that the current Emacs Lisp compiler does not optimize tail
+recursion. 
+</ul>
+
+   </body></html>
+

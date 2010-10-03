@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Uploading files - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Publishing.html#Publishing" title="Publishing">
+<link rel="prev" href="Configuration.html#Configuration" title="Configuration">
+<link rel="next" href="Sample-configuration.html#Sample-configuration" title="Sample configuration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Uploading-files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sample-configuration.html#Sample-configuration">Sample configuration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Configuration.html#Configuration">Configuration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Publishing.html#Publishing">Publishing</a>
+<hr>
+</div>
+
+<h3 class="section">13.2 Uploading files</h3>
+
+<p><a name="index-rsync-1266"></a><a name="index-unison-1267"></a>
+For those people already utilizing third party sync tools such as
+<samp><span class="command">rsync</span></samp> or <samp><span class="command">unison</span></samp>, it might be preferable not to use the built in
+<i>remote</i> publishing facilities of Org mode which rely heavily on
+Tramp.  Tramp, while very useful and powerful, tends not to be
+so efficient for multiple file transfer and has been known to cause problems
+under heavy usage.
+
+   <p>Specialized synchronization utilities offer several advantages.  In addition
+to timestamp comparison, they also do content and permissions/attribute
+checks.  For this reason you might prefer to publish your web to a local
+directory (possibly even <i>in place</i> with your Org files) and then use
+<samp><span class="file">unison</span></samp> or <samp><span class="file">rsync</span></samp> to do the synchronization with the remote host.
+
+   <p>Since Unison (for example) can be configured as to which files to transfer to
+a certain remote destination, it can greatly simplify the project publishing
+definition.  Simply keep all files in the correct location, process your Org
+files with <code>org-publish</code> and let the synchronization tool do the rest. 
+You do not need, in this scenario, to include attachments such as <samp><span class="file">jpg</span></samp>,
+<samp><span class="file">css</span></samp> or <samp><span class="file">gif</span></samp> files in the project definition since the 3rd party
+tool syncs them.
+
+   <p>Publishing to a local directory is also much faster than to a remote one, so
+that you can afford more easily to republish entire projects.  If you set
+<code>org-publish-use-timestamps-flag</code> to <code>nil</code>, you gain the main
+benefit of re-including any changed external files such as source example
+files you might include with <code>#+INCLUDE</code>.  The timestamp mechanism in
+Org is not smart enough to detect if included files have been modified.
+
+   </body></html>
+

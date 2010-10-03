@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Highlighting Difference Regions - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Selective-Browsing.html#Selective-Browsing" title="Selective Browsing">
+<link rel="next" href="Narrowing.html#Narrowing" title="Narrowing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Highlighting-Difference-Regions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Narrowing.html#Narrowing">Narrowing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-Browsing.html#Selective-Browsing">Selective Browsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.5 Highlighting Difference Regions</h3>
+
+<p>The following variables control the way Ediff highlights difference
+regions:
+
+     <dl>
+<dt><code>ediff-before-flag-bol</code><dt><code>ediff-after-flag-eol</code><dt><code>ediff-before-flag-mol</code><dt><code>ediff-after-flag-mol</code><dd><a name="index-ediff_002dbefore_002dflag_002dbol-166"></a><a name="index-ediff_002dafter_002dflag_002deol-167"></a><a name="index-ediff_002dbefore_002dflag_002dmol-168"></a><a name="index-ediff_002dafter_002dflag_002dmol-169"></a>These variables hold strings that Ediff uses to mark the beginning and the
+end of the differences found in files A, B, and C on devices where Emacs
+cannot display faces.  Ediff uses different flags to highlight regions that
+begin/end at the beginning/end of a line or in a middle of a line.
+
+     <br><dt><code>ediff-current-diff-face-A</code><dt><code>ediff-current-diff-face-B</code><dt><code>ediff-current-diff-face-C</code><dd><a name="index-ediff_002dcurrent_002ddiff_002dface_002dA-170"></a><a name="index-ediff_002dcurrent_002ddiff_002dface_002dB-171"></a><a name="index-ediff_002dcurrent_002ddiff_002dface_002dC-172"></a>Ediff uses these faces to highlight current differences on devices where
+Emacs can display faces.  These and subsequently described faces can be set
+either in <samp><span class="file">.emacs</span></samp> or in <samp><span class="file">.Xdefaults</span></samp>.  The X resource for Ediff
+is &lsquo;<samp><span class="samp">Ediff</span></samp>&rsquo;, <em>not</em> &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.  Please refer to Emacs manual for
+the information on how to set X resources. 
+<br><dt><code>ediff-fine-diff-face-A</code><dt><code>ediff-fine-diff-face-B</code><dt><code>ediff-fine-diff-face-C</code><dd><a name="index-ediff_002dfine_002ddiff_002dface_002dA-173"></a><a name="index-ediff_002dfine_002ddiff_002dface_002dB-174"></a><a name="index-ediff_002dfine_002ddiff_002dface_002dC-175"></a>Ediff uses these faces to show the fine differences between the current
+differences regions in buffers A, B, and C, respectively.
+
+     <br><dt><code>ediff-even-diff-face-A</code><dt><code>ediff-even-diff-face-B</code><dt><code>ediff-even-diff-face-C</code><dt><code>ediff-odd-diff-face-A</code><dt><code>ediff-odd-diff-face-B</code><dt><code>ediff-odd-diff-face-C</code><dd><a name="index-ediff_002deven_002ddiff_002dface_002dA-176"></a><a name="index-ediff_002deven_002ddiff_002dface_002dB-177"></a><a name="index-ediff_002deven_002ddiff_002dface_002dC-178"></a><a name="index-ediff_002dodd_002ddiff_002dface_002dA-179"></a><a name="index-ediff_002dodd_002ddiff_002dface_002dB-180"></a><a name="index-ediff_002dodd_002ddiff_002dface_002dC-181"></a>Non-current difference regions are displayed using these alternating
+faces.  The odd and the even faces are actually identical on monochrome
+displays, because without colors options are limited. 
+So, Ediff uses italics to highlight non-current differences.
+
+     <br><dt><code>ediff-force-faces</code><dd><a name="index-ediff_002dforce_002dfaces-182"></a>Ediff generally can detect when Emacs is running on a device where it can
+use highlighting with faces.  However, if it fails to determine that faces
+can be used, the user can set this variable to <code>t</code> to make sure that
+Ediff uses faces to highlight differences.
+
+     <br><dt><code>ediff-highlight-all-diffs</code><dd><a name="index-ediff_002dhighlight_002dall_002ddiffs-183"></a>Indicates whether&mdash;on a windowing display&mdash;Ediff should highlight
+differences using inserted strings (as on text-only terminals) or using
+colors and highlighting.  Normally, Ediff highlights all differences, but
+the selected difference is highlighted more visibly.  One can cycle through
+various modes of highlighting by typing <kbd>h</kbd>.  By default, Ediff starts
+in the mode where all difference regions are highlighted.  If you prefer to
+start in the mode where unselected differences are not highlighted, you
+should set <code>ediff-highlight-all-diffs</code> to <code>nil</code>.  Type <kbd>h</kbd> to
+restore highlighting for all differences.
+
+     <p>Ediff lets you switch between the two modes of highlighting.  That is,
+you can switch interactively from highlighting using faces to
+highlighting using string flags, and back.  Of course, switching has
+effect only under a windowing system.  On a text-only terminal or in an
+xterm window, the only available option is highlighting with strings. 
+</dl>
+
+<p class="noindent">If you want to change the default settings for <code>ediff-force-faces</code> and
+<code>ediff-highlight-all-diffs</code>, you must do it <strong>before</strong> Ediff is
+loaded.
+
+   <p>You can also change the defaults for the faces used to highlight the
+difference regions.  There are two ways to do this.  The simplest and the
+preferred way is to use the customization widget accessible from the
+menubar.  Ediff's customization group is located under "Tools", which in
+turn is under "Programming".  The faces that are used to highlight
+difference regions are located in the "Highlighting" subgroup of the Ediff
+customization group.
+
+   <p>The second, much more arcane, method to change default faces is to include
+some Lisp code in <samp><span class="file">~/.emacs</span></samp>.  For instance,
+
+<pre class="example">     (setq ediff-current-diff-face-A
+           (copy-face 'bold-italic 'ediff-current-diff-face-A))
+</pre>
+   <p class="noindent">would use the pre-defined face <code>bold-italic</code> to highlight the current
+difference region in buffer A (this face is not a good choice, by the way).
+
+   <p>If you are unhappy with just <em>some</em> of the aspects of the default
+faces, you can modify them when Ediff is being loaded using
+<code>ediff-load-hook</code>.  For instance:
+
+<pre class="smallexample">     (add-hook 'ediff-load-hook
+               (lambda ()
+                 (set-face-foreground
+                   ediff-current-diff-face-B "blue")
+                 (set-face-background
+                   ediff-current-diff-face-B "red")
+                 (make-face-italic
+                   ediff-current-diff-face-B)))
+</pre>
+   <p><strong>Please note:</strong> to set Ediff's faces, use only <code>copy-face</code>
+or <code>set/make-face-...</code> as shown above. Emacs' low-level
+face-manipulation functions should be avoided.
+
+   </body></html>
+

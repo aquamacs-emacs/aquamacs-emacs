@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Conflicts - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Interaction.html#Interaction" title="Interaction">
+<link rel="prev" href="Cooperation.html#Cooperation" title="Cooperation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Conflicts"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Cooperation.html#Cooperation">Cooperation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Interaction.html#Interaction">Interaction</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.8.2 Packages that lead to conflicts with Org mode</h4>
+
+     
+<a name="index-g_t_0040code_007bshift_002dselection_002dmode_007d-1397"></a>
+<a name="index-org_002dsupport_002dshift_002dselect-1398"></a>
+<dl>In Emacs 23, <code>shift-selection-mode</code> is on by default, meaning that
+cursor motions combined with the shift key should start or enlarge regions. 
+This conflicts with the use of <kbd>S-&lt;cursor&gt;</kbd> commands in Org to change
+timestamps, TODO keywords, priorities, and item bullet types if the cursor is
+at such a location.  By default, <kbd>S-&lt;cursor&gt;</kbd> commands outside
+special contexts don't do anything, but you can customize the variable
+<code>org-support-shift-select</code>.  Org mode then tries to accommodate shift
+selection by (i) using it outside of the special contexts where special
+commands apply, and by (ii) extending an existing active region even if the
+cursor moves across a special context.
+
+     <dt><samp><span class="file">CUA.el</span></samp> by Kim. F. Storm<dd><a name="index-g_t_0040file_007bCUA_002eel_007d-1399"></a><a name="index-Storm_002c-Kim_002e-F_002e-1400"></a><a name="index-org_002dreplace_002ddisputed_002dkeys-1401"></a>Key bindings in Org conflict with the <kbd>S-&lt;cursor&gt;</kbd> keys used by CUA mode
+(as well as <code>pc-select-mode</code> and <code>s-region-mode</code>) to select and extend the
+region.  In fact, Emacs 23 has this built-in in the form of
+<code>shift-selection-mode</code>, see previous paragraph.  If you are using Emacs
+23, you probably don't want to use another package for this purpose.  However,
+if you prefer to leave these keys to a different package while working in
+Org mode, configure the variable <code>org-replace-disputed-keys</code>.  When set,
+Org will move the following key bindings in Org files, and in the agenda
+buffer (but not during date selection).
+
+     <pre class="example">          S-UP      -&gt;  M-p             S-DOWN     -&gt;  M-n
+          S-LEFT    -&gt;  M--             S-RIGHT    -&gt;  M-+
+          C-S-LEFT  -&gt;  M-S--           C-S-RIGHT  -&gt;  M-S-+
+</pre>
+     <p><a name="index-org_002ddisputed_002dkeys-1402"></a>Yes, these are unfortunately more difficult to remember.  If you want
+to have other replacement keys, look at the variable
+<code>org-disputed-keys</code>.
+
+     <br><dt><samp><span class="file">yasnippet.el</span></samp><dd><a name="index-g_t_0040file_007byasnippet_002eel_007d-1403"></a>The way Org-mode binds the TAB key (binding to <code>[tab]</code> instead of
+<code>"\t"</code>) overrules yasnippets' access to this key.  The following code
+fixed this problem:
+
+     <pre class="lisp">          (add-hook 'org-mode-hook
+                    (lambda ()
+                      (org-set-local 'yas/trigger-key [tab])
+                      (define-key yas/keymap [tab] 'yas/next-field-group)))
+</pre>
+     <br><dt><samp><span class="file">windmove.el</span></samp> by Hovav Shacham<dd><a name="index-g_t_0040file_007bwindmove_002eel_007d-1404"></a>This package also uses the <kbd>S-&lt;cursor&gt;</kbd> keys, so everything written
+in the paragraph above about CUA mode also applies here.
+
+     <br><dt><samp><span class="file">viper.el</span></samp> by Michael Kifer<dd><a name="index-g_t_0040file_007bviper_002eel_007d-1405"></a><a name="index-C_002dc-_002f-1406"></a>Viper uses <kbd>C-c /</kbd> and therefore makes this key not access the
+corresponding Org-mode command <code>org-sparse-tree</code>.  You need to find
+another key for this command, or override the key in
+<code>viper-vi-global-user-map</code> with
+
+     <pre class="lisp">          (define-key viper-vi-global-user-map "C-c /" 'org-sparse-tree)
+</pre>
+     </dl>
+
+   </body></html>
+

@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Date Conversions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Date-Arithmetic.html#Date-Arithmetic" title="Date Arithmetic">
+<link rel="prev" href="Date-Arithmetic.html#Date-Arithmetic" title="Date Arithmetic">
+<link rel="next" href="Date-Functions.html#Date-Functions" title="Date Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Date-Conversions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Date-Functions.html#Date-Functions">Date Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.5.1 Date Conversions</h4>
+
+<p class="noindent"><a name="index-t-D-797"></a><a name="index-calc_002ddate-798"></a><a name="index-date-799"></a>The <kbd>t D</kbd> (<code>calc-date</code>) [<code>date</code>] command converts a
+date form into a number, measured in days since Jan 1, 1 AD.  The
+result will be an integer if <var>date</var> is a pure date form, or a
+fraction or float if <var>date</var> is a date/time form.  Or, if its
+argument is a number, it converts this number into a date form.
+
+   <p>With a numeric prefix argument, <kbd>t D</kbd> takes that many objects
+(up to six) from the top of the stack and interprets them in one
+of the following ways:
+
+   <p>The &lsquo;<samp><span class="samp">date(</span><var>year</var><span class="samp">, </span><var>month</var><span class="samp">, </span><var>day</var><span class="samp">)</span></samp>&rsquo; function
+builds a pure date form out of the specified year, month, and
+day, which must all be integers.  <var>Year</var> is a year number,
+such as 1991 (<em>not</em> the same as 91!).  <var>Month</var> must be
+an integer in the range 1 to 12; <var>day</var> must be in the range
+1 to 31.  If the specified month has fewer than 31 days and
+<var>day</var> is too large, the equivalent day in the following
+month will be used.
+
+   <p>The &lsquo;<samp><span class="samp">date(</span><var>month</var><span class="samp">, </span><var>day</var><span class="samp">)</span></samp>&rsquo; function builds a
+pure date form using the current year, as determined by the
+real-time clock.
+
+   <p>The &lsquo;<samp><span class="samp">date(</span><var>year</var><span class="samp">, </span><var>month</var><span class="samp">, </span><var>day</var><span class="samp">, </span><var>hms</var><span class="samp">)</span></samp>&rsquo;
+function builds a date/time form using an <var>hms</var> form.
+
+   <p>The &lsquo;<samp><span class="samp">date(</span><var>year</var><span class="samp">, </span><var>month</var><span class="samp">, </span><var>day</var><span class="samp">, </span><var>hour</var><span class="samp">,
+</span><var>minute</var><span class="samp">, </span><var>second</var><span class="samp">)</span></samp>&rsquo; function builds a date/time form. 
+<var>hour</var> should be an integer in the range 0 to 23;
+<var>minute</var> should be an integer in the range 0 to 59;
+<var>second</var> should be any real number in the range &lsquo;<samp><span class="samp">[0 .. 60)</span></samp>&rsquo;. 
+The last two arguments default to zero if omitted.
+
+   <p><a name="index-t-J-800"></a><a name="index-calc_002djulian-801"></a><a name="index-julian-802"></a><a name="index-Julian-day-counts_002c-conversions-803"></a>The <kbd>t J</kbd> (<code>calc-julian</code>) [<code>julian</code>] command converts
+a date form into a Julian day count, which is the number of days
+since noon (GMT) on Jan 1, 4713 BC.  A pure date is converted to an
+integer Julian count representing noon of that day.  A date/time form
+is converted to an exact floating-point Julian count, adjusted to
+interpret the date form in the current time zone but the Julian
+day count in Greenwich Mean Time.  A numeric prefix argument allows
+you to specify the time zone; see <a href="Time-Zones.html#Time-Zones">Time Zones</a>.  Use a prefix of
+zero to suppress the time zone adjustment.  Note that pure date forms
+are never time-zone adjusted.
+
+   <p>This command can also do the opposite conversion, from a Julian day
+count (either an integer day, or a floating-point day and time in
+the GMT zone), into a pure date form or a date/time form in the
+current or specified time zone.
+
+   <p><a name="index-t-U-804"></a><a name="index-calc_002dunix_002dtime-805"></a><a name="index-unixtime-806"></a><a name="index-Unix-time-format_002c-conversions-807"></a>The <kbd>t U</kbd> (<code>calc-unix-time</code>) [<code>unixtime</code>] command
+converts a date form into a Unix time value, which is the number of
+seconds since midnight on Jan 1, 1970, or vice-versa.  The numeric result
+will be an integer if the current precision is 12 or less; for higher
+precisions, the result may be a float with (<var>precision</var>&minus;12)
+digits after the decimal.  Just as for <kbd>t J</kbd>, the numeric time
+is interpreted in the GMT time zone and the date form is interpreted
+in the current or specified zone.  Some systems use Unix-like
+numbering but with the local time zone; give a prefix of zero to
+suppress the adjustment if so.
+
+   <p><a name="index-t-C-808"></a><a name="index-calc_002dconvert_002dtime_002dzones-809"></a><a name="index-tzconv-810"></a><a name="index-Time-Zones_002c-converting-between-811"></a>The <kbd>t C</kbd> (<code>calc-convert-time-zones</code>) [<code>tzconv</code>]
+command converts a date form from one time zone to another.  You
+are prompted for each time zone name in turn; you can answer with
+any suitable Calc time zone expression (see <a href="Time-Zones.html#Time-Zones">Time Zones</a>). 
+If you answer either prompt with a blank line, the local time
+zone is used for that prompt.  You can also answer the first
+prompt with <kbd>$</kbd> to take the two time zone names from the
+stack (and the date to be converted from the third stack level).
+
+   </body></html>
+

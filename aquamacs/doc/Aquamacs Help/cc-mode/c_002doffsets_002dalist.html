@@ -1,0 +1,207 @@
+<html lang="en">
+<head>
+<title>c-offsets-alist - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="prev" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="next" href="Interactive-Customization.html#Interactive-Customization" title="Interactive Customization">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="c-offsets-alist"></a>
+<a name="c_002doffsets_002dalist"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interactive-Customization.html#Interactive-Customization">Interactive Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">11.1 c-offsets-alist</h3>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>This section explains the structure and semantics of the style
+variable <code>c-offset-alist</code>, the principal variable for configuring
+indentation.  Details of how to set it up, and its relationship to
+CC Mode's style system are given in <a href="Style-Variables.html#Style-Variables">Style Variables</a>.
+
+<div class="defun">
+&mdash; User Option: <b>c-offsets-alist</b><var><a name="index-c_002doffsets_002dalist-482"></a></var><br>
+<blockquote><p><a name="index-offsets_002dalist-_0028c_002d_0029-483"></a>This is an alist which associates an offset with each syntactic
+symbol.  This <dfn>offset</dfn> is a rule specifying how to indent a line
+whose syntactic context matches the symbol.  See <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>.
+
+        <p>Note that the buffer-local binding of this alist in a CC Mode buffer
+contains an entry for <em>every</em> syntactic symbol.  Its global
+binding and its settings within style specifications usually contain
+only a few entries.  See <a href="Style-Variables.html#Style-Variables">Style Variables</a>.
+
+        <p>The offset specification associated with any particular syntactic
+symbol can be an integer, a variable name, a vector, a function or
+lambda expression, a list, or one of the following special symbols:
+<code>+</code>, <code>-</code>, <code>++</code>, <code>--</code>, <code>*</code>, or <code>/</code>.  The
+meanings of these values are described in detail below.
+
+        <p>Here is an example fragment of a <code>c-offsets-alist</code>, showing some
+of these kinds of offsets:
+
+     <pre class="example">          ((statement . 0)
+           (substatement . +)
+           (cpp-macro . [0])
+           (topmost-intro-cont . c-lineup-topmost-intro-cont)
+           (statement-block-intro . (add c-lineup-whitesmith-in-block
+                                         c-indent-multi-line-block))
+           ...
+          <br>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>c-set-offset</b> (<kbd>C-c C-o</kbd>)<var><a name="index-c_002dset_002doffset-484"></a></var><br>
+<blockquote><p><a name="index-set_002doffset-_0028c_002d_0029-485"></a><a name="index-C_002dc-C_002do-486"></a>This command changes the entry for a syntactic symbol in the current
+binding of <code>c-offsets-alist</code>, or it inserts a new entry if there
+isn't already one for that syntactic symbol.
+
+        <p>You can use <code>c-set-offsets</code> interactively within a CC Mode
+buffer to make experimental changes to your indentation settings. 
+<kbd>C-c C-o</kbd> prompts you for the syntactic symbol to change
+(defaulting to that of the current line) and the new offset
+(defaulting to the current offset).
+
+        <p><code>c-set-offsets</code> takes two arguments when used programmatically:
+<var>symbol</var>, the syntactic element symbol to change and <var>offset</var>,
+the new offset for that syntactic element.  You can call the command
+in your <samp><span class="file">.emacs</span></samp> to change the global binding of
+<code>c-offsets-alist</code> (see <a href="Style-Variables.html#Style-Variables">Style Variables</a>); you can use it in a
+hook function to make changes from the current style.  CC Mode
+itself uses this function when initializing styles. 
+</p></blockquote></div>
+
+   <p><a name="index-offset-specification-487"></a>The &ldquo;offset specifications&rdquo; in <code>c-offsets-alist</code> can be any of
+the following:
+
+     <dl>
+<dt>An integer<dd>The integer specifies a relative offset.  All relative
+offsets<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> will
+be added together and used to calculate the indentation relative to an
+anchor position earlier in the buffer.  See <a href="Indentation-Calculation.html#Indentation-Calculation">Indentation Calculation</a>, for details.  Most of the time, it's probably better to
+use one of the special symbols like <code>+</code> than an integer (apart
+from zero).
+
+     <br><dt>One of the symbols <code>+</code>, <code>-</code>, <code>++</code>, <code>--</code>, <code>*</code>, or <code>/</code><dd>These special symbols describe a relative offset in multiples of
+<code>c-basic-offset</code>:
+
+     <p>By defining a style's indentation in terms of <code>c-basic-offset</code>,
+you can change the amount of whitespace given to an indentation level
+while maintaining the same basic shape of your code.  Here are the
+values that the special symbols correspond to:
+
+          <dl>
+<dt><code>+</code><dd><code>c-basic-offset</code> times 1
+<br><dt><code>-</code><dd><code>c-basic-offset</code> times -1
+<br><dt><code>++</code><dd><code>c-basic-offset</code> times 2
+<br><dt><code>--</code><dd><code>c-basic-offset</code> times -2
+<br><dt><code>*</code><dd><code>c-basic-offset</code> times 0.5
+<br><dt><code>/</code><dd><code>c-basic-offset</code> times -0.5
+</dl>
+
+     <br><dt>A vector<dd>The first element of the vector, an integer, sets the absolute
+indentation column.  This will override any previously calculated
+indentation, but won't override relative indentation calculated from
+syntactic elements later on in the syntactic context of the line being
+indented.  See <a href="Indentation-Calculation.html#Indentation-Calculation">Indentation Calculation</a>.  Any elements in the vector
+beyond the first will be ignored.
+
+     <br><dt>A function or lambda expression<dd>The function will be called and its return value will in turn be
+evaluated as an offset specification.  Functions are useful when more
+context than just the syntactic symbol is needed to get the desired
+indentation.  See <a href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>, and <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>, for
+details about them.
+
+     <br><dt>A symbol with a variable binding<dd>If the symbol also has a function binding, the function takes
+precedence over the variable.  Otherwise the value of the variable is
+used.  It must be an integer (which is used as relative offset) or a
+vector (an absolute offset).
+
+     <br><dt>A list<dd>The offset can also be a list containing several offset
+specifications; these are evaluated recursively and combined.  A list
+is typically only useful when some of the offsets are line-up
+functions.  A common strategy is calling a sequence of functions in
+turn until one of them recognizes that it is appropriate for the
+source line and returns a non-<code>nil</code> value.
+
+     <p><code>nil</code> values are always ignored when the offsets are combined. 
+The first element of the list specifies the method of combining the
+non-<code>nil</code> offsets from the remaining elements:
+
+          <dl>
+<dt><code>first</code><dd>Use the first offset that doesn't evaluate to <code>nil</code>.  Subsequent
+elements of the list don't get evaluated. 
+<br><dt><code>min</code><dd>Use the minimum of all the offsets.  All must be either relative or
+absolute - they can't be mixed. 
+<br><dt><code>max</code><dd>Use the maximum of all the offsets.  All must be either relative or
+absolute - they can't be mixed. 
+<br><dt><code>add</code><dd>Add all the evaluated offsets together.  Exactly one of them may be
+absolute, in which case the result is absolute.  Any relative offsets
+that preceded the absolute one in the list will be ignored in that case. 
+</dl>
+
+     <p>As a compatibility measure, if the first element is none of the above
+then it too will be taken as an offset specification and the whole list
+will be combined according to the method <code>first</code>. 
+</dl>
+
+   <p><a name="index-c_002dstrict_002dsyntax_002dp-488"></a><a name="index-strict_002dsyntax_002dp-_0028c_002d_0029-489"></a>If an offset specification evaluates to <code>nil</code>, then a relative
+offset of 0 (zero) is used<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The syntactic context <code>((defun-block-intro&nbsp;2724)&nbsp;(comment-intro))<!-- /@w --></code> would likely have two relative offsets.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> There is however a variable
+<code>c-strict-syntax-p</code> that when set to non-<code>nil</code> will cause an
+error to be signaled in that case.  It's now considered obsolete since
+it doesn't work well with some of the alignment functions that return
+<code>nil</code> instead of zero.  You should therefore leave
+<code>c-strict-syntax-p</code> set to <code>nil</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

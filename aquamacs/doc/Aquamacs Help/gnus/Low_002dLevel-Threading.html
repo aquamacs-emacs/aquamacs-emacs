@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Low-Level Threading - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing-Threading.html#Customizing-Threading" title="Customizing Threading">
+<link rel="prev" href="More-Threading.html#More-Threading" title="More Threading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Low-Level-Threading"></a>
+<a name="Low_002dLevel-Threading"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="More-Threading.html#More-Threading">More Threading</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">3.9.1.4 Low-Level Threading</h5>
+
+     <dl>
+<dt><code>gnus-parse-headers-hook</code><dd><a name="index-gnus_002dparse_002dheaders_002dhook-1050"></a>Hook run before parsing any headers.
+
+     <br><dt><code>gnus-alter-header-function</code><dd><a name="index-gnus_002dalter_002dheader_002dfunction-1051"></a>If non-<code>nil</code>, this function will be called to allow alteration of
+article header structures.  The function is called with one parameter,
+the article header vector, which it may alter in any way.  For instance,
+if you have a mail-to-news gateway which alters the <code>Message-ID</code>s
+in systematic ways (by adding prefixes and such), you can use this
+variable to un-scramble the <code>Message-ID</code>s so that they are more
+meaningful.  Here's one example:
+
+     <pre class="lisp">          (setq gnus-alter-header-function 'my-alter-message-id)
+          
+          (defun my-alter-message-id (header)
+            (let ((id (mail-header-id header)))
+              (when (string-match
+                     "\\(&lt;[^&lt;&gt;@]*\\)\\.?cygnus\\..*@\\([^&lt;&gt;@]*&gt;\\)" id)
+                (mail-header-set-id
+                 (concat (match-string 1 id) "@" (match-string 2 id))
+                 header))))
+</pre>
+     </dl>
+
+   </body></html>
+

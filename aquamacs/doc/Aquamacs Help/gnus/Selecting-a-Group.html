@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Selecting a Group - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Group-Buffer.html#Group-Buffer" title="Group Buffer">
+<link rel="prev" href="Group-Maneuvering.html#Group-Maneuvering" title="Group Maneuvering">
+<link rel="next" href="Subscription-Commands.html#Subscription-Commands" title="Subscription Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Selecting-a-Group"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Subscription-Commands.html#Subscription-Commands">Subscription Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Group-Maneuvering.html#Group-Maneuvering">Group Maneuvering</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Group-Buffer.html#Group-Buffer">Group Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">2.3 Selecting a Group</h3>
+
+<p><a name="index-group-selection-119"></a>
+     <dl>
+<dt><kbd>SPACE</kbd><dd><a name="index-SPACE-_0028Group_0029-120"></a><a name="index-gnus_002dgroup_002dread_002dgroup-121"></a>Select the current group, switch to the summary buffer and display the
+first unread article (<code>gnus-group-read-group</code>).  If there are no
+unread articles in the group, or if you give a non-numerical prefix to
+this command, Gnus will offer to fetch all the old articles in this
+group from the server.  If you give a numerical prefix <var>n</var>, <var>n</var>
+determines the number of articles Gnus will fetch.  If <var>n</var> is
+positive, Gnus fetches the <var>n</var> newest articles, if <var>n</var> is
+negative, Gnus fetches the <code>abs(</code><var>n</var><code>)</code> oldest articles.
+
+     <p>Thus, <kbd>SPC</kbd> enters the group normally, <kbd>C-u SPC</kbd> offers old
+articles, <kbd>C-u 4 2 SPC</kbd> fetches the 42 newest articles, and <kbd>C-u
+- 4 2 SPC</kbd> fetches the 42 oldest ones.
+
+     <p>When you are in the group (in the Summary buffer), you can type
+<kbd>M-g</kbd> to fetch new articles, or <kbd>C-u M-g</kbd> to also show the old
+ones.
+
+     <br><dt><kbd>RET</kbd><dd><a name="index-RET-_0028Group_0029-122"></a><a name="index-gnus_002dgroup_002dselect_002dgroup-123"></a>Select the current group and switch to the summary buffer
+(<code>gnus-group-select-group</code>).  Takes the same arguments as
+<code>gnus-group-read-group</code>&mdash;the only difference is that this command
+does not display the first unread article automatically upon group
+entry.
+
+     <br><dt><kbd>M-RET</kbd><dd><a name="index-M_002dRET-_0028Group_0029-124"></a><a name="index-gnus_002dgroup_002dquick_002dselect_002dgroup-125"></a>This does the same as the command above, but tries to do it with the
+minimum amount of fuzz (<code>gnus-group-quick-select-group</code>).  No
+scoring/killing will be performed, there will be no highlights and no
+expunging.  This might be useful if you're in a real hurry and have to
+enter some humongous group.  If you give a 0 prefix to this command
+(i.e., <kbd>0 M-RET</kbd>), Gnus won't even generate the summary buffer,
+which is useful if you want to toggle threading before generating the
+summary buffer (see <a href="Summary-Generation-Commands.html#Summary-Generation-Commands">Summary Generation Commands</a>).
+
+     <br><dt><kbd>M-SPACE</kbd><dd><a name="index-M_002dSPACE-_0028Group_0029-126"></a><a name="index-gnus_002dgroup_002dvisible_002dselect_002dgroup-127"></a>This is yet one more command that does the same as the <kbd>RET</kbd>
+command, but this one does it without expunging and hiding dormants
+(<code>gnus-group-visible-select-group</code>).
+
+     <br><dt><kbd>C-M-RET</kbd><dd><a name="index-C_002dM_002dRET-_0028Group_0029-128"></a><a name="index-gnus_002dgroup_002dselect_002dgroup_002dephemerally-129"></a>Finally, this command selects the current group ephemerally without
+doing any processing of its contents
+(<code>gnus-group-select-group-ephemerally</code>).  Even threading has been
+turned off.  Everything you do in the group after selecting it in this
+manner will have no permanent effects.
+
+   </dl>
+
+   <p><a name="index-gnus_002dlarge_002dnewsgroup-130"></a>The <code>gnus-large-newsgroup</code> variable says what Gnus should
+consider to be a big group.  If it is <code>nil</code>, no groups are
+considered big.  The default value is 200.  If the group has more
+(unread and/or ticked) articles than this, Gnus will query the user
+before entering the group.  The user can then specify how many
+articles should be fetched from the server.  If the user specifies a
+negative number (<var>-n</var>), the <var>n</var> oldest articles will be
+fetched.  If it is positive, the <var>n</var> articles that have arrived
+most recently will be fetched.
+
+   <p><a name="index-gnus_002dlarge_002dephemeral_002dnewsgroup-131"></a><code>gnus-large-ephemeral-newsgroup</code> is the same as
+<code>gnus-large-newsgroup</code>, but is only used for ephemeral
+newsgroups.
+
+   <p><a name="index-gnus_002dnewsgroup_002dmaximum_002darticles-132"></a>In groups in some news servers, there might be a big gap between a few
+very old articles that will never be expired and the recent ones.  In
+such a case, the server will return the data like <code>(1 . 30000000)</code>
+for the <code>LIST ACTIVE group</code> command, for example.  Even if there
+are actually only the articles 1-10 and 29999900-30000000, Gnus doesn't
+know it at first and prepares for getting 30000000 articles.  However,
+it will consume hundreds megabytes of memories and might make Emacs get
+stuck as the case may be.  If you use such news servers, set the
+variable <code>gnus-newsgroup-maximum-articles</code> to a positive number. 
+The value means that Gnus ignores articles other than this number of the
+latest ones in every group.  For instance, the value 10000 makes Gnus
+get only the articles 29990001-30000000 (if the latest article number is
+30000000 in a group).  Note that setting this variable to a number might
+prevent you from reading very old articles.  The default value of the
+variable <code>gnus-newsgroup-maximum-articles</code> is <code>nil</code>, which
+means Gnus never ignores old articles.
+
+   <p><a name="index-gnus_002dselect_002dgroup_002dhook-133"></a><a name="index-gnus_002dauto_002dselect_002dfirst-134"></a><a name="index-gnus_002dauto_002dselect_002dsubject-135"></a>If <code>gnus-auto-select-first</code> is non-<code>nil</code>, select an article
+automatically when entering a group with the <kbd>SPACE</kbd> command. 
+Which article this is controlled by the
+<code>gnus-auto-select-subject</code> variable.  Valid values for this
+variable are:
+
+     <dl>
+<dt><code>unread</code><dd>Place point on the subject line of the first unread article.
+
+     <br><dt><code>first</code><dd>Place point on the subject line of the first article.
+
+     <br><dt><code>unseen</code><dd>Place point on the subject line of the first unseen article.
+
+     <br><dt><code>unseen-or-unread</code><dd>Place point on the subject line of the first unseen article, and if
+there is no such article, place point on the subject line of the first
+unread article.
+
+     <br><dt><code>best</code><dd>Place point on the subject line of the highest-scored unread article.
+
+   </dl>
+
+   <p>This variable can also be a function.  In that case, that function
+will be called to place point on a subject line.
+
+   <p>If you want to prevent automatic selection in some group (say, in a
+binary group with Huge articles) you can set the
+<code>gnus-auto-select-first</code> variable to <code>nil</code> in
+<code>gnus-select-group-hook</code>, which is called when a group is
+selected.
+
+   </body></html>
+

@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>Grabbing From Buffers - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Kill-and-Yank.html#Kill-and-Yank" title="Kill and Yank">
+<link rel="prev" href="Inserting-From-Registers.html#Inserting-From-Registers" title="Inserting From Registers">
+<link rel="next" href="Yanking-Into-Buffers.html#Yanking-Into-Buffers" title="Yanking Into Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Grabbing-From-Buffers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Yanking-Into-Buffers.html#Yanking-Into-Buffers">Yanking Into Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inserting-From-Registers.html#Inserting-From-Registers">Inserting From Registers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a>
+<hr>
+</div>
+
+<h3 class="section">15.5 Grabbing from Other Buffers</h3>
+
+<p class="noindent"><a name="index-C_002dx-_002a-g-2202"></a><a name="index-calc_002dgrab_002dregion-2203"></a>The <kbd>C-x * g</kbd> (<code>calc-grab-region</code>) command takes the text between
+point and mark in the current buffer and attempts to parse it as a
+vector of values.  Basically, it wraps the text in vector brackets
+&lsquo;<samp><span class="samp">[ ]</span></samp>&rsquo; unless the text already is enclosed in vector brackets,
+then reads the text as if it were an algebraic entry.  The contents
+of the vector may be numbers, formulas, or any other Calc objects. 
+If the <kbd>C-x * g</kbd> command works successfully, it does an automatic
+<kbd>C-x * c</kbd> to enter the Calculator buffer.
+
+   <p>A numeric prefix argument grabs the specified number of lines around
+point, ignoring the mark.  A positive prefix grabs from point to the
+&lsquo;<samp><span class="samp">n</span></samp>&rsquo;th following newline (so that <kbd>M-1 C-x * g</kbd> grabs from point
+to the end of the current line); a negative prefix grabs from point
+back to the &lsquo;<samp><span class="samp">n+1</span></samp>&rsquo;st preceding newline.  In these cases the text
+that is grabbed is exactly the same as the text that <kbd>C-k</kbd> would
+delete given that prefix argument.
+
+   <p>A prefix of zero grabs the current line; point may be anywhere on the
+line.
+
+   <p>A plain <kbd>C-u</kbd> prefix interprets the region between point and mark
+as a single number or formula rather than a vector.  For example,
+<kbd>C-x * g</kbd> on the text &lsquo;<samp><span class="samp">2 a b</span></samp>&rsquo; produces the vector of three
+values &lsquo;<samp><span class="samp">[2, a, b]</span></samp>&rsquo;, but <kbd>C-u C-x * g</kbd> on the same region
+reads a formula which is a product of three things:  &lsquo;<samp><span class="samp">2 a b</span></samp>&rsquo;. 
+(The text &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo;, on the other hand, will be grabbed as a
+vector of one element by plain <kbd>C-x * g</kbd> because the interpretation
+&lsquo;<samp><span class="samp">[a, +, b]</span></samp>&rsquo; would be a syntax error.)
+
+   <p>If a different language has been specified (see <a href="Language-Modes.html#Language-Modes">Language Modes</a>),
+the grabbed text will be interpreted according to that language.
+
+   <p><a name="index-C_002dx-_002a-r-2204"></a><a name="index-calc_002dgrab_002drectangle-2205"></a>The <kbd>C-x * r</kbd> (<code>calc-grab-rectangle</code>) command takes the text between
+point and mark and attempts to parse it as a matrix.  If point and mark
+are both in the leftmost column, the lines in between are parsed in their
+entirety.  Otherwise, point and mark define the corners of a rectangle
+whose contents are parsed.
+
+   <p>Each line of the grabbed area becomes a row of the matrix.  The result
+will actually be a vector of vectors, which Calc will treat as a matrix
+only if every row contains the same number of values.
+
+   <p>If a line contains a portion surrounded by square brackets (or curly
+braces), that portion is interpreted as a vector which becomes a row
+of the matrix.  Any text surrounding the bracketed portion on the line
+is ignored.
+
+   <p>Otherwise, the entire line is interpreted as a row vector as if it
+were surrounded by square brackets.  Leading line numbers (in the
+format used in the Calc stack buffer) are ignored.  If you wish to
+force this interpretation (even if the line contains bracketed
+portions), give a negative numeric prefix argument to the
+<kbd>C-x * r</kbd> command.
+
+   <p>If you give a numeric prefix argument of zero or plain <kbd>C-u</kbd>, each
+line is instead interpreted as a single formula which is converted into
+a one-element vector.  Thus the result of <kbd>C-u C-x * r</kbd> will be a
+one-column matrix.  For example, suppose one line of the data is the
+expression &lsquo;<samp><span class="samp">2 a</span></samp>&rsquo;.  A plain <kbd>C-x&nbsp;*&nbsp;r</kbd><!-- /@w --> will interpret this as
+&lsquo;<samp><span class="samp">[2 a]</span></samp>&rsquo;, which in turn is read as a two-element vector that forms
+one row of the matrix.  But a <kbd>C-u C-x * r</kbd> will interpret this row
+as &lsquo;<samp><span class="samp">[2*a]</span></samp>&rsquo;.
+
+   <p>If you give a positive numeric prefix argument <var>n</var>, then each line
+will be split up into columns of width <var>n</var>; each column is parsed
+separately as a matrix element.  If a line contained
+&lsquo;<samp><span class="samp">2&nbsp;+/-&nbsp;3&nbsp;4&nbsp;+/-&nbsp;5</span></samp>&rsquo;<!-- /@w -->, then grabbing with a prefix argument of 8
+would correctly split the line into two error forms.
+
+   <p>See <a href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>, to see how to pull the matrix apart into its
+constituent rows and columns.  (If it is a
+<!-- @math{1\times1} -->
+1x1
+matrix, just hit <kbd>v u</kbd> (<code>calc-unpack</code>) twice.)
+
+   <p><a name="index-C_002dx-_002a-_003a-2206"></a><a name="index-C_002dx-_002a-_005f-2207"></a><a name="index-calc_002dgrab_002dsum_002dacross-2208"></a><a name="index-calc_002dgrab_002dsum_002ddown-2209"></a><a name="index-Summing-rows-and-columns-of-data-2210"></a>The <kbd>C-x * :</kbd> (<code>calc-grab-sum-down</code>) command is a handy way to
+grab a rectangle of data and sum its columns.  It is equivalent to
+typing <kbd>C-x * r</kbd>, followed by <kbd>V R : +</kbd> (the vector reduction
+command that sums the columns of a matrix; see <a href="Reducing.html#Reducing">Reducing</a>).  The
+result of the command will be a vector of numbers, one for each column
+in the input data.  The <kbd>C-x * _</kbd> (<code>calc-grab-sum-across</code>) command
+similarly grabs a rectangle and sums its rows by executing <kbd>V&nbsp;R&nbsp;_&nbsp;+</kbd><!-- /@w -->.
+
+   <p>As well as being more convenient, <kbd>C-x * :</kbd> and <kbd>C-x * _</kbd> are also
+much faster because they don't actually place the grabbed vector on
+the stack.  In a <kbd>C-x * r V R : +</kbd> sequence, formatting the vector
+for display on the stack takes a large fraction of the total time
+(unless you have planned ahead and used <kbd>v .</kbd> and <kbd>t .</kbd> modes).
+
+   <p>For example, suppose we have a column of numbers in a file which we
+wish to sum.  Go to one corner of the column and press <kbd>C-@</kbd> to
+set the mark; go to the other corner and type <kbd>C-x * :</kbd>.  Since there
+is only one column, the result will be a vector of one number, the sum. 
+(You can type <kbd>v u</kbd> to unpack this vector into a plain number if
+you want to do further arithmetic with it.)
+
+   <p>To compute the product of the column of numbers, we would have to do
+it &ldquo;by hand&rdquo; since there's no special grab-and-multiply command. 
+Use <kbd>C-x * r</kbd> to grab the column of numbers into the calculator in
+the form of a column matrix.  The statistics command <kbd>u *</kbd> is a
+handy way to find the product of a vector or matrix of numbers. 
+See <a href="Statistical-Operations.html#Statistical-Operations">Statistical Operations</a>.  Another approach would be to use
+an explicit column reduction command, <kbd>V R : *</kbd>.
+
+   </body></html>
+

@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Padding Operators - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Actions.html#Actions" title="Actions">
+<link rel="prev" href="Block-Boundary-Check.html#Block-Boundary-Check" title="Block Boundary Check">
+<link rel="next" href="Case-Changes.html#Case-Changes" title="Case Changes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Padding-Operators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Case-Changes.html#Case-Changes">Case Changes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Block-Boundary-Check.html#Block-Boundary-Check">Block Boundary Check</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Actions.html#Actions">Actions</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.9.2 Padding Operators</h4>
+
+<p><a name="index-Padding-operators-with-spaces-197"></a><a name="index-Operators_002c-padding-with-spaces-198"></a><a name="index-Space_002c-around-operators-199"></a>
+Some operators can be automatically surrounded by spaces.  This can
+happen when the operator is typed, or later when the line is indented. 
+IDLWAVE can pad the operators &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, &lsquo;<samp><span class="samp">=</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo;, as well as the modified assignment operators
+(&lsquo;<samp><span class="samp">AND=</span></samp>&rsquo;, &lsquo;<samp><span class="samp">OR=</span></samp>&rsquo;, etc.).  This feature is turned off by default. 
+If you want to turn it on, customize the variables
+<code>idlwave-surround-by-blank</code> and <code>idlwave-do-actions</code> and turn
+both on.  You can also define similar actions for other operators by
+using the function <code>idlwave-action-and-binding</code> in the mode hook. 
+For example, to enforce space padding of the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; and &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+operators (outside of strings and comments, of course), try this in
+<samp><span class="file">.emacs</span></samp>
+
+<pre class="lisp">     (add-hook 'idlwave-mode-hook
+       (lambda ()
+          (setq idlwave-surround-by-blank t)  ; Turn this type of actions on
+          (idlwave-action-and-binding "*" '(idlwave-surround 1 1))
+          (idlwave-action-and-binding "+" '(idlwave-surround 1 1))))
+</pre>
+   <p>Note that the modified assignment operators which begin with a word
+(&lsquo;<samp><span class="samp">AND=</span></samp>&rsquo;, &lsquo;<samp><span class="samp">OR=</span></samp>&rsquo;, &lsquo;<samp><span class="samp">NOT=</span></samp>&rsquo;, etc.) require a leading space to
+be recognized (e.g <code>vAND=4</code> would be interpreted as a variable
+<code>vAND</code>).  Also note that, since e.g., <code>&gt;</code> and <code>&gt;=</code> are
+both valid operators, it is impossible to surround both by blanks while
+they are being typed.  Similarly with <code>&amp;</code> and <code>&amp;&amp;</code>.  For
+these, a compromise is made: the padding is placed on the left, and if
+the longer operator is keyed in, on the right as well (otherwise you
+must insert spaces to pad right yourself, or press simply press Tab to
+repad everything if <code>idlwave-do-actions</code> is on).
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-surround-by-blank</b> (<code>nil</code>)<var><a name="index-idlwave_002dsurround_002dby_002dblank-200"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means enable <code>idlwave-surround</code>.  If non-<code>nil</code>,
+&lsquo;<samp><span class="samp">=</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo;, and the
+modified assignment operators (&lsquo;<samp><span class="samp">AND=</span></samp>&rsquo;, &lsquo;<samp><span class="samp">OR=</span></samp>&rsquo;, etc.) are
+surrounded with spaces by <code>idlwave-surround</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-pad-keyword</b> (<code>t</code>)<var><a name="index-idlwave_002dpad_002dkeyword-201"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means space-pad the &lsquo;<samp><span class="samp">=</span></samp>&rsquo; in keyword assignments. 
+</p></blockquote></div>
+
+   </body></html>
+

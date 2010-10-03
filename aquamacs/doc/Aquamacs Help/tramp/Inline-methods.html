@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+<title>Inline methods - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Connection-types.html#Connection-types" title="Connection types">
+<link rel="next" href="External-methods.html#External-methods" title="External methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Inline-methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="External-methods.html#External-methods">External methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Connection-types.html#Connection-types">Connection types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Inline methods</h3>
+
+<p><a name="index-inline-methods-15"></a><a name="index-methods_002c-inline-16"></a>
+The inline methods in <span class="sc">tramp</span> are quite powerful and can work in
+situations where you cannot use an external transfer program to connect. 
+Inline methods are the only methods that work when connecting to the
+remote machine via telnet.  (There are also strange inline methods which
+allow you to transfer files between <em>user identities</em> rather than
+hosts, see below.)
+
+   <p>These methods depend on the existence of a suitable encoding and
+decoding command on remote machine.  Locally, <span class="sc">tramp</span> may be able to
+use features of GNU Emacs to decode and encode the files or
+it may require access to external commands to perform that task.
+
+   <p><a name="index-uuencode-17"></a><a name="index-mimencode-18"></a><a name="index-base_002d64-encoding-19"></a><span class="sc">tramp</span> checks the availability and usability of commands like
+<samp><span class="command">mimencode</span></samp> (part of the <samp><span class="command">metamail</span></samp> package) or
+<samp><span class="command">uuencode</span></samp> on the remote host.  The first reliable command
+will be used.  The search path can be customized, see <a href="Remote-Programs.html#Remote-Programs">Remote Programs</a>.
+
+   <p>If both commands aren't available on the remote host, <span class="sc">tramp</span>
+transfers a small piece of Perl code to the remote host, and tries to
+apply it for encoding and decoding.
+
+   <p>The variable <var>tramp-inline-compress-start-size</var> controls, whether
+a file shall be compressed before encoding.  This could increase
+transfer speed for large text files.
+
+     <dl>
+<dt><samp><span class="option">rsh</span></samp><dd><a name="index-method-rsh-20"></a><a name="index-rsh-method-21"></a>
+Connect to the remote host with <samp><span class="command">rsh</span></samp>.  Due to the unsecure
+connection it is recommended for very local host topology only.
+
+     <p>On operating systems which provide the command <samp><span class="command">remsh</span></samp> instead
+of <samp><span class="command">rsh</span></samp>, you can use the method <samp><span class="option">remsh</span></samp>.  This is true
+for HP-UX or Cray UNICOS, for example.
+
+     <br><dt><samp><span class="option">ssh</span></samp><dd><a name="index-method-ssh-22"></a><a name="index-ssh-method-23"></a>
+Connect to the remote host with <samp><span class="command">ssh</span></samp>.  This is identical to
+the previous option except that the <samp><span class="command">ssh</span></samp> package is used,
+making the connection more secure.
+
+     <p>There are also two variants, <samp><span class="option">ssh1</span></samp> and <samp><span class="option">ssh2</span></samp>, that
+call &lsquo;<samp><span class="samp">ssh -1</span></samp>&rsquo; and &lsquo;<samp><span class="samp">ssh -2</span></samp>&rsquo;, respectively.  This way, you can
+explicitly select whether you want to use the SSH protocol version 1
+or 2 to connect to the remote host.  (You can also specify in
+<samp><span class="file">~/.ssh/config</span></samp>, the SSH configuration file, which protocol
+should be used, and use the regular <samp><span class="option">ssh</span></samp> method.)
+
+     <p>Two other variants, <samp><span class="option">ssh1_old</span></samp> and <samp><span class="option">ssh2_old</span></samp>, use the
+<samp><span class="command">ssh1</span></samp> and <samp><span class="command">ssh2</span></samp> commands explicitly.  If you don't
+know what these are, you do not need these options.
+
+     <p>All the methods based on <samp><span class="command">ssh</span></samp> have an additional feature: you
+can specify a host name which looks like <samp><span class="file">host#42</span></samp> (the real host
+name, then a hash sign, then a port number).  This means to connect to
+the given host but to also pass <code>-p 42</code> as arguments to the
+<samp><span class="command">ssh</span></samp> command.
+
+     <br><dt><samp><span class="option">telnet</span></samp><dd><a name="index-method-telnet-24"></a><a name="index-telnet-method-25"></a>
+Connect to the remote host with <samp><span class="command">telnet</span></samp>.  This is as unsecure
+as the <samp><span class="option">rsh</span></samp> method.
+
+     <br><dt><samp><span class="option">su</span></samp><dd><a name="index-method-su-26"></a><a name="index-su-method-27"></a>
+This method does not connect to a remote host at all, rather it uses
+the <samp><span class="command">su</span></samp> program to allow you to edit files as another user. 
+That means, the specified host name in the file name must be either
+&lsquo;<samp><span class="samp">localhost</span></samp>&rsquo; or the host name as returned by the function
+<samp><span class="command">(system-name)</span></samp>.  For an exception of this rule see
+<a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>.
+
+     <br><dt><samp><span class="option">sudo</span></samp><dd><a name="index-method-sudo-28"></a><a name="index-sudo-method-29"></a>
+This is similar to the <samp><span class="option">su</span></samp> method, but it uses <samp><span class="command">sudo</span></samp>
+rather than <samp><span class="command">su</span></samp> to become a different user.
+
+     <p>Note that <samp><span class="command">sudo</span></samp> must be configured to allow you to start a
+shell as the user.  It would be nice if it was sufficient if
+<samp><span class="command">ls</span></samp> and <samp><span class="command">mimencode</span></samp> were allowed, but that is not
+easy to implement, so I haven't got around to it, yet.
+
+     <br><dt><samp><span class="option">sshx</span></samp><dd><a name="index-method-sshx-30"></a><a name="index-sshx-method-31"></a>
+As you would expect, this is similar to <samp><span class="option">ssh</span></samp>, only a little
+different.  Whereas <samp><span class="option">ssh</span></samp> opens a normal interactive shell on
+the remote host, this option uses &lsquo;<samp><span class="samp">ssh -t -t </span><var>host</var><span class="samp"> -l
+</span><var>user</var><span class="samp"> /bin/sh</span></samp>&rsquo; to open a connection.  This is useful for users
+where the normal login shell is set up to ask them a number of
+questions when logging in.  This procedure avoids these questions, and
+just gives <span class="sc">tramp</span> a more-or-less `standard' login shell to work
+with.
+
+     <p>Note that this procedure does not eliminate questions asked by
+<samp><span class="command">ssh</span></samp> itself.  For example, <samp><span class="command">ssh</span></samp> might ask &ldquo;Are you
+sure you want to continue connecting?&rdquo; if the host key of the remote
+host is not known.  <span class="sc">tramp</span> does not know how to deal with such a
+question (yet), therefore you will need to make sure that you can log
+in without such questions.
+
+     <p>This is also useful for Windows users where <samp><span class="command">ssh</span></samp>, when
+invoked from an GNU Emacs buffer, tells them that it is not
+allocating a pseudo tty.  When this happens, the login shell is wont
+to not print any shell prompt, which confuses <span class="sc">tramp</span> mightily.
+
+     <p>This supports the &lsquo;<samp><span class="samp">-p</span></samp>&rsquo; argument.
+
+     <br><dt><samp><span class="option">krlogin</span></samp><dd><a name="index-method-krlogin-32"></a><a name="index-krlogin-method-33"></a><a name="index-Kerberos-_0028with-krlogin-method_0029-34"></a>
+This method is also similar to <samp><span class="option">ssh</span></samp>.  It only uses the
+<samp><span class="command">krlogin -x</span></samp> command to log in to the remote host.
+
+     <br><dt><samp><span class="option">plink</span></samp><dd><a name="index-method-plink-35"></a><a name="index-plink-method-36"></a>
+This method is mostly interesting for Windows users using the PuTTY
+implementation of SSH.  It uses &lsquo;<samp><span class="samp">plink -ssh</span></samp>&rsquo; to log in to the
+remote host.
+
+     <p>This supports the &lsquo;<samp><span class="samp">-P</span></samp>&rsquo; argument.
+
+     <p>Additionally, the methods <samp><span class="option">plink1</span></samp> and <samp><span class="option">plink2</span></samp> are
+provided, which call &lsquo;<samp><span class="samp">plink -1 -ssh</span></samp>&rsquo; or &lsquo;<samp><span class="samp">plink -2 -ssh</span></samp>&rsquo; in
+order to use SSH protocol version 1 or 2 explicitly.
+
+     <p>CCC: Do we have to connect to the remote host once from the command
+line to accept the SSH key?  Maybe this can be made automatic?
+
+     <p>CCC: Say something about the first shell command failing.  This might
+be due to a wrong setting of <code>tramp-rsh-end-of-line</code>.
+
+     <br><dt><samp><span class="option">plinkx</span></samp><dd><a name="index-method-plinkx-37"></a><a name="index-plinkx-method-38"></a>
+Another method using PuTTY on Windows.  Instead of host names, it
+expects PuTTY session names, calling &lsquo;<samp><span class="samp">plink -load </span><var>session</var><span class="samp">
+-t"</span></samp>&rsquo;.  User names are relevant only in case the corresponding session
+hasn't defined a user name.  Different port numbers must be defined in
+the session.
+
+     <br><dt><samp><span class="option">fish</span></samp><dd><a name="index-method-fish-39"></a><a name="index-fish-method-40"></a>
+This is an experimental implementation of the fish protocol, known from
+the GNU Midnight Commander or the KDE Konqueror.  <span class="sc">tramp</span> expects
+the fish server implementation from the KDE kioslave.  That means, the
+file <samp><span class="file">~/.fishsrv.pl</span></samp> is expected to reside on the remote host.
+
+     <p>The implementation lacks good performance.  The code is offered anyway,
+maybe somebody can improve the performance.
+
+   </dl>
+
+   </body></html>
+

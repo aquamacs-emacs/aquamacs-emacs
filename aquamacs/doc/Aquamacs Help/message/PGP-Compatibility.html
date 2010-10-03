@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>PGP Compatibility - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Security.html#Security" title="Security">
+<link rel="prev" href="Using-PGP_002fMIME.html#Using-PGP_002fMIME" title="Using PGP/MIME">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="PGP-Compatibility"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-PGP_002fMIME.html#Using-PGP_002fMIME">Using PGP/MIME</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Security.html#Security">Security</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.7.4 Compatibility with older implementations</h4>
+
+<p><a name="index-gpg_002dtemp_002ddirectory-163"></a>Note, if you are using the <code>gpg.el</code> you must make sure that the
+directory specified by <code>gpg-temp-directory</code> have permissions
+0700.
+
+   <p>Creating your own key is described in detail in the documentation of
+your PGP implementation, so we refer to it.
+
+   <p>If you have imported your old PGP 2.x key into GnuPG, and want to send
+signed and encrypted messages to your fellow PGP 2.x users, you'll
+discover that the receiver cannot understand what you send. One
+solution is to use PGP 2.x instead (i.e., if you use <code>pgg</code>, set
+<code>pgg-default-scheme</code> to <code>pgp</code>).  If you do want to use
+GnuPG, you can use a compatibility script called <code>gpg-2comp</code>
+available from
+<a href="http://muppet.faveve.uni-stuttgart.de/~gero/gpg-2comp/">http://muppet.faveve.uni-stuttgart.de/~gero/gpg-2comp/</a>.  You
+could also convince your fellow PGP 2.x users to convert to GnuPG. 
+<a name="index-mml_002dsignencrypt_002dstyle_002dalist-164"></a>As a final workaround, you can make the sign and encryption work in
+two steps; separately sign, then encrypt a message.  If you would like
+to change this behavior you can customize the
+<code>mml-signencrypt-style-alist</code> variable.  For example:
+
+<pre class="lisp">     (setq mml-signencrypt-style-alist '(("smime" separate)
+                                         ("pgp" separate)
+                                         ("pgpauto" separate)
+                                         ("pgpmime" separate)))
+</pre>
+   <p>This causes to sign and encrypt in two passes, thus generating a
+message that can be understood by PGP version 2.
+
+   <p>(Refer to <a href="http://www.gnupg.org/gph/en/pgp2x.html">http://www.gnupg.org/gph/en/pgp2x.html</a> for more
+information about the problem.)
+
+   </body></html>
+

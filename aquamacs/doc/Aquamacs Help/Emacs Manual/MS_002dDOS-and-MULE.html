@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>MS-DOS and MULE - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="prev" href="MS_002dDOS-Printing.html#MS_002dDOS-Printing" title="MS-DOS Printing">
+<link rel="next" href="MS_002dDOS-Processes.html#MS_002dDOS-Processes" title="MS-DOS Processes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-and-MULE"></a>
+<a name="MS_002dDOS-and-MULE"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS-Processes.html#MS_002dDOS-Processes">MS-DOS Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS_002dDOS-Printing.html#MS_002dDOS-Printing">MS-DOS Printing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.6 International Support on MS-DOS</h4>
+
+<p><a name="index-international-support-_0040r_007b_0028MS_002dDOS_0029_007d-4441"></a>
+  Emacs on MS-DOS supports the same international character sets as it
+does on GNU, Unix and other platforms
+(see <a href="International.html#International">International</a>),
+including coding systems for converting between the different
+character sets.  However, due to incompatibilities between
+MS-DOS/MS-Windows and other systems, there are several DOS-specific
+aspects of this support that you should be aware of.  This section
+describes these aspects.
+
+   <p>The description below is largely specific to the MS-DOS port of
+Emacs, especially where it talks about practical implications for
+Emacs users.
+
+     <dl>
+<dt><kbd>M-x dos-codepage-setup</kbd><dd>Set up Emacs display and coding systems as appropriate for the current
+DOS codepage. 
+</dl>
+
+   <p><a name="index-codepage_002c-MS_002dDOS-4442"></a><a name="index-DOS-codepages-4443"></a>  MS-DOS is designed to support one character set of 256 characters at
+any given time, but gives you a variety of character sets to choose
+from.  The alternative character sets are known as <dfn>DOS codepages</dfn>. 
+Each codepage includes all 128 <acronym>ASCII</acronym> characters, but the other 128
+characters (codes 128 through 255) vary from one codepage to another. 
+Each DOS codepage is identified by a 3-digit number, such as 850, 862,
+etc.
+
+   <p>In contrast to X, which lets you use several fonts at the same time,
+MS-DOS normally doesn't allow use of several codepages in a single
+session.  MS-DOS was designed to load a single codepage at system
+startup, and require you to reboot in order to change
+it<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Much the same limitation applies when you run DOS
+executables on other systems such as MS-Windows.
+
+   <p><a name="index-dos_002dcodepage-4444"></a>  For multibyte operation on MS-DOS, Emacs needs to know which
+characters the chosen DOS codepage can display.  So it queries the
+system shortly after startup to get the chosen codepage number, and
+stores the number in the variable <code>dos-codepage</code>.  Some systems
+return the default value 437 for the current codepage, even though the
+actual codepage is different.  (This typically happens when you use the
+codepage built into the display hardware.)  You can specify a different
+codepage for Emacs to use by setting the variable <code>dos-codepage</code> in
+your init file.
+
+   <p><a name="index-language-environment_002c-automatic-selection-on-_0040r_007bMS_002dDOS_007d-4445"></a>  Multibyte Emacs supports only certain DOS codepages: those which can
+display Far-Eastern scripts, like the Japanese codepage 932, and those
+that encode a single ISO 8859 character set.
+
+   <p>The Far-Eastern codepages can directly display one of the MULE
+character sets for these countries, so Emacs simply sets up to use the
+appropriate terminal coding system that is supported by the codepage. 
+The special features described in the rest of this section mostly
+pertain to codepages that encode ISO 8859 character sets.
+
+   <p>For the codepages which correspond to one of the ISO character sets,
+Emacs knows the character set based on the codepage number.  Emacs
+automatically creates a coding system to support reading and writing
+files that use the current codepage, and uses this coding system by
+default.  The name of this coding system is <code>cp</code><var>nnn</var>, where
+<var>nnn</var> is the codepage number.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>
+
+   <p><a name="index-mode-line-_0040r_007b_0028MS_002dDOS_0029_007d-4446"></a>  All the <code>cp</code><var>nnn</var> coding systems use the letter &lsquo;<samp><span class="samp">D</span></samp>&rsquo;
+(for &ldquo;DOS&rdquo;) as their mode-line mnemonic.  Since both the terminal
+coding system and the default coding system for file I/O are set to
+the proper <code>cp</code><var>nnn</var> coding system at startup, it is normal
+for the mode line on MS-DOS to begin with &lsquo;<samp><span class="samp">-DD\-</span></samp>&rsquo;. 
+See <a href="Mode-Line.html#Mode-Line">Mode Line</a>. 
+Far-Eastern DOS terminals do not use the <code>cp</code><var>nnn</var> coding
+systems, and thus their initial mode line looks like the Emacs
+default.
+
+   <p>Since the codepage number also indicates which script you are using,
+Emacs automatically runs <code>set-language-environment</code> to select the
+language environment for that script
+(see <a href="Language-Environments.html#Language-Environments">Language Environments</a>).
+
+   <p>If a buffer contains a character belonging to some other ISO 8859
+character set, not the one that the chosen DOS codepage supports, Emacs
+displays it using a sequence of <acronym>ASCII</acronym> characters.  For example, if the
+current codepage doesn't have a glyph for the letter &lsquo;<samp><span class="samp">&ograve;</span></samp>&rsquo; (small
+&lsquo;<samp><span class="samp">o</span></samp>&rsquo; with a grave accent), it is displayed as &lsquo;<samp><span class="samp">{`o}</span></samp>&rsquo;, where
+the braces serve as a visual indication that this is a single character. 
+(This may look awkward for some non-Latin characters, such as those from
+Greek or Hebrew alphabets, but it is still readable by a person who
+knows the language.)  Even though the character may occupy several
+columns on the screen, it is really still just a single character, and
+all Emacs commands treat it as one.
+
+   <p><a name="index-MS_002dWindows-codepages-4447"></a>  MS-Windows provides its own codepages, which are different from the
+DOS codepages for the same locale.  For example, DOS codepage 850
+supports the same character set as Windows codepage 1252; DOS codepage
+855 supports the same character set as Windows codepage 1251, etc. 
+The MS-Windows version of Emacs uses the current codepage for display
+when invoked with the &lsquo;<samp><span class="samp">-nw</span></samp>&rsquo; option.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Normally, one particular codepage is burnt into the
+display memory, while other codepages can be installed by modifying
+system configuration files, such as <samp><span class="file">CONFIG.SYS</span></samp>, and rebooting. 
+While there is third-party software that allows changing the codepage
+without rebooting, we describe here how a stock MS-DOS system
+behaves.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The standard Emacs coding
+systems for ISO 8859 are not quite right for the purpose, because
+typically the DOS codepage does not match the standard ISO character
+codes.  For example, the letter &lsquo;<samp><span class="samp">&ccedil;</span></samp>&rsquo; (&lsquo;<samp><span class="samp">c</span></samp>&rsquo; with cedilla) has
+code 231 in the standard Latin-1 character set, but the corresponding
+DOS codepage 850 uses code 135 for this glyph.</p>
+
+   <hr></div>
+
+   </body></html>
+

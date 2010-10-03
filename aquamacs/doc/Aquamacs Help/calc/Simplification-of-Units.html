@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Simplification of Units - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Simplifying-Formulas.html#Simplifying-Formulas" title="Simplifying Formulas">
+<link rel="prev" href="Unsafe-Simplifications.html#Unsafe-Simplifications" title="Unsafe Simplifications">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Simplification-of-Units"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.3.4 Simplification of Units</h4>
+
+<p class="noindent">The simplifications described in this section are applied by the
+<kbd>u s</kbd> (<code>calc-simplify-units</code>) command.  These are in addition
+to the regular <kbd>a s</kbd> (but not <kbd>a e</kbd>) simplifications described
+earlier.  See <a href="Basic-Operations-on-Units.html#Basic-Operations-on-Units">Basic Operations on Units</a>.
+
+   <p>The variable <code>UnitSimpRules</code> contains rewrites to be applied by
+the <kbd>u s</kbd> command.  These are applied in addition to <code>EvalRules</code>
+and <code>AlgSimpRules</code>.
+
+   <p>Scalar mode is automatically put into effect when simplifying units. 
+See <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>.
+
+   <p>Sums &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo; involving units are simplified by extracting the
+units of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; as if by the <kbd>u x</kbd> command (call the result
+&lsquo;<samp><span class="samp">u_a</span></samp>&rsquo;), then simplifying the expression &lsquo;<samp><span class="samp">b / u_a</span></samp>&rsquo;
+using <kbd>u b</kbd> and <kbd>u s</kbd>.  If the result has units then the sum
+is inconsistent and is left alone.  Otherwise, it is rewritten
+in terms of the units &lsquo;<samp><span class="samp">u_a</span></samp>&rsquo;.
+
+   <p>If units auto-ranging mode is enabled, products or quotients in
+which the first argument is a number which is out of range for the
+leading unit are modified accordingly.
+
+   <p>When cancelling and combining units in products and quotients,
+Calc accounts for unit names that differ only in the prefix letter. 
+For example, &lsquo;<samp><span class="samp">2 km m</span></samp>&rsquo; is simplified to &lsquo;<samp><span class="samp">2000 m^2</span></samp>&rsquo;. 
+However, compatible but different units like <code>ft</code> and <code>in</code>
+are not combined in this way.
+
+   <p>Quotients &lsquo;<samp><span class="samp">a / b</span></samp>&rsquo; are simplified in three additional ways.  First,
+if &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is a number or a product beginning with a number, Calc
+computes the reciprocal of this number and moves it to the numerator.
+
+   <p>Second, for each pair of unit names from the numerator and denominator
+of a quotient, if the units are compatible (e.g., they are both
+units of area) then they are replaced by the ratio between those
+units.  For example, in &lsquo;<samp><span class="samp">3 s in N / kg cm</span></samp>&rsquo; the units
+&lsquo;<samp><span class="samp">in / cm</span></samp>&rsquo; will be replaced by &lsquo;<samp><span class="samp">2.54</span></samp>&rsquo;.
+
+   <p>Third, if the units in the quotient exactly cancel out, so that
+a <kbd>u b</kbd> command on the quotient would produce a dimensionless
+number for an answer, then the quotient simplifies to that number.
+
+   <p>For powers and square roots, the &ldquo;unsafe&rdquo; simplifications
+&lsquo;<samp><span class="samp">(a b)^c</span></samp>&rsquo; to &lsquo;<samp><span class="samp">a^c b^c</span></samp>&rsquo;, &lsquo;<samp><span class="samp">(a/b)^c</span></samp>&rsquo; to &lsquo;<samp><span class="samp">a^c / b^c</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">(a^b)^c</span></samp>&rsquo; to
+<!-- @math{a^{b c}} -->
+&lsquo;<samp><span class="samp">a^(b c)</span></samp>&rsquo;
+are done if the powers are real numbers.  (These are safe in the context
+of units because all numbers involved can reasonably be assumed to be
+real.)
+
+   <p>Also, if a unit name is raised to a fractional power, and the
+base units in that unit name all occur to powers which are a
+multiple of the denominator of the power, then the unit name
+is expanded out into its base units, which can then be simplified
+according to the previous paragraph.  For example, &lsquo;<samp><span class="samp">acre^1.5</span></samp>&rsquo;
+is simplified by noting that &lsquo;<samp><span class="samp">1.5 = 3:2</span></samp>&rsquo;, that &lsquo;<samp><span class="samp">acre</span></samp>&rsquo;
+is defined in terms of &lsquo;<samp><span class="samp">m^2</span></samp>&rsquo;, and that the 2 in the power of
+<code>m</code> is a multiple of 2 in &lsquo;<samp><span class="samp">3:2</span></samp>&rsquo;.  Thus, <code>acre^1.5</code> is
+replaced by approximately
+<!-- @math{(4046 m^2)^{1.5}} -->
+&lsquo;<samp><span class="samp">(4046 m^2)^1.5</span></samp>&rsquo;,
+which is then changed to
+<!-- @math{4046^{1.5} \, (m^2)^{1.5}}, -->
+&lsquo;<samp><span class="samp">4046^1.5 (m^2)^1.5</span></samp>&rsquo;,
+then to &lsquo;<samp><span class="samp">257440 m^3</span></samp>&rsquo;.
+
+   <p>The functions <code>float</code>, <code>frac</code>, <code>clean</code>, <code>abs</code>,
+as well as <code>floor</code> and the other integer truncation functions,
+applied to unit names or products or quotients involving units, are
+simplified.  For example, &lsquo;<samp><span class="samp">round(1.6 in)</span></samp>&rsquo; is changed to
+&lsquo;<samp><span class="samp">round(1.6) round(in)</span></samp>&rsquo;; the lefthand term evaluates to 2,
+and the righthand term simplifies to <code>in</code>.
+
+   <p>The functions <code>sin</code>, <code>cos</code>, and <code>tan</code> with arguments
+that have angular units like <code>rad</code> or <code>arcmin</code> are
+simplified by converting to base units (radians), then evaluating
+with the angular mode temporarily set to radians.
+
+   </body></html>
+

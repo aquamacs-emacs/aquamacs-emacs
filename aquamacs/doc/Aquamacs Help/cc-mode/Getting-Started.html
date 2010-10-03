@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<title>Getting Started - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Overview.html#Overview" title="Overview">
+<link rel="next" href="Commands.html#Commands" title="Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Getting-Started"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Commands.html#Commands">Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">3 Getting Started</h2>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>If you got this version of CC Mode with Emacs or XEmacs, it should
+work just fine right out of the box.  Note however that you might not
+have the latest CC Mode release and might want to upgrade your copy
+(see below).
+
+   <p>You should probably start by skimming through the entire Commands chapter
+(see <a href="Commands.html#Commands">Commands</a>) to get an overview of CC Mode's capabilities.
+
+   <p>After trying out some commands, you may dislike some aspects of
+CC Mode's default configuration.  Here is an outline of how to
+change some of the settings that newcomers to CC Mode most often
+want to change:
+
+     <dl>
+<dt>c-basic-offset<dd>This Lisp variable holds an integer, the number of columns CC Mode
+indents nested code.  To set this value to 6, customize
+<code>c-basic-offset</code> or put this into your <samp><span class="file">.emacs</span></samp>:
+
+     <pre class="example">          (setq c-basic-offset 6)
+</pre>
+     <br><dt>The (indentation) style<dd>The basic &ldquo;shape&rdquo; of indentation created by CC Mode&mdash;by default,
+this is <code>gnu</code> style (except for Java and AWK buffers).  A list of
+the available styles and their descriptions can be found in
+<a href="Built_002din-Styles.html#Built_002din-Styles">Built-in Styles</a>.  A complete specification of the CC Mode
+style system, including how to create your own style, can be found in
+the chapter <a href="Styles.html#Styles">Styles</a>.  To set your style to <code>linux</code>, either
+customize <code>c-default-style</code> or put this into your <samp><span class="file">.emacs</span></samp>:
+
+     <pre class="example">          (setq c-default-style '((java-mode . "java")
+                                  (awk-mode . "awk")
+                                  (other . "linux")))
+</pre>
+     <br><dt>Electric Indentation<dd>Normally, when you type &ldquo;punctuation&rdquo; characters such as &lsquo;<samp><span class="samp">;</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">{</span></samp>&rsquo;, CC Mode instantly reindents the current line.  This can
+be disconcerting until you get used to it.  To disable <dfn>electric
+indentation</dfn> in the current buffer, type <kbd>C-c C-l</kbd>.  Type the same
+thing to enable it again.  To have electric indentation disabled by
+default, put the following into your <samp><span class="file">.emacs</span></samp> file<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>:
+
+     <pre class="example">          (setq-default c-electric-flag nil)
+</pre>
+     <p class="noindent">Details of this and other similar &ldquo;Minor Modes&rdquo; appear in the
+section <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.
+
+     <br><dt>Making the &lt;RET&gt; key indent the new line<dd>The standard Emacs binding for &lt;RET&gt; just adds a new line.  If you
+want it to reindent the new line as well, rebind the key.  Note that
+the action of rebinding would fail if the pertinent keymap didn't yet
+exist&mdash;we thus need to delay the action until after CC Mode has
+been loaded.  Put the following code into your <samp><span class="file">.emacs</span></samp>:
+
+     <pre class="example">          (defun my-make-CR-do-indent ()
+            (define-key c-mode-base-map "\C-m" 'c-context-line-break))
+          (add-hook 'c-initialization-hook 'my-make-CR-do-indent)
+</pre>
+     <p class="noindent">This example demonstrates the use of a very powerful CC Mode (and
+Emacs) facility, the hook.  The use of CC Mode's hooks is described
+in <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a>. 
+</dl>
+
+   <p>All these settings should occur in your <samp><span class="file">.emacs</span></samp> <em>before</em>
+any CC Mode buffers get loaded&mdash;in particular, before any call of
+<code>desktop-read</code>.
+
+   <p>As you get to know the mode better, you may want to make more
+ambitious changes to your configuration.  For this, you should start
+reading the chapter <a href="Config-Basics.html#Config-Basics">Config Basics</a>.
+
+   <p>If you are upgrading an existing CC Mode installation, please see
+the <samp><span class="file">README</span></samp> file for installation details.  In particular, if
+you are going to be editing AWK files, <samp><span class="file">README</span></samp> describes how to
+configure your (X)Emacs so that CC Mode will supersede the obsolete
+<code>awk-mode.el</code> which might have been supplied with your (X)Emacs. 
+CC Mode might not work with older versions of Emacs or XEmacs.  See
+the CC Mode release notes at <a href="http://cc-mode.sourceforge.net">http://cc-mode.sourceforge.net</a>
+for the latest information on Emacs version and package compatibility
+(see <a href="Updating-CC-Mode.html#Updating-CC-Mode">Updating CC Mode</a>).
+
+<div class="defun">
+&mdash; Command: <b>c-version</b><var><a name="index-c_002dversion-13"></a></var><br>
+<blockquote><p><a name="index-version-_0028c_002d_0029-14"></a>You can find out what version of CC Mode you are using by visiting a C
+file and entering <kbd>M-x c-version RET</kbd>.  You should see this message in
+the echo area:
+
+     <pre class="example">          Using CC Mode version 5.XX
+</pre>
+        <p class="noindent">where &lsquo;<samp><span class="samp">XX</span></samp>&rsquo; is the minor release number. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> There
+is no &ldquo;easy customization&rdquo; facility for making this change.</p>
+
+   <hr></div>
+
+   </body></html>
+

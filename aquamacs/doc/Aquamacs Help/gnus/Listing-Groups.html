@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Listing Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Group-Buffer.html#Group-Buffer" title="Group Buffer">
+<link rel="prev" href="Group-Parameters.html#Group-Parameters" title="Group Parameters">
+<link rel="next" href="Sorting-Groups.html#Sorting-Groups" title="Sorting Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Listing-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Group-Parameters.html#Group-Parameters">Group Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Group-Buffer.html#Group-Buffer">Group Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">2.11 Listing Groups</h3>
+
+<p><a name="index-group-listing-301"></a>
+These commands all list various slices of the groups available.
+
+     <dl>
+<dt><kbd>l</kbd><dt><kbd>A s</kbd><dd><a name="index-A-s-_0028Group_0029-302"></a><a name="index-l-_0028Group_0029-303"></a><a name="index-gnus_002dgroup_002dlist_002dgroups-304"></a>List all groups that have unread articles
+(<code>gnus-group-list-groups</code>).  If the numeric prefix is used, this
+command will list only groups of level ARG and lower.  By default, it
+only lists groups of level five (i.e.,
+<code>gnus-group-default-list-level</code>) or lower (i.e., just subscribed
+groups).
+
+     <br><dt><kbd>L</kbd><dt><kbd>A u</kbd><dd><a name="index-A-u-_0028Group_0029-305"></a><a name="index-L-_0028Group_0029-306"></a><a name="index-gnus_002dgroup_002dlist_002dall_002dgroups-307"></a>List all groups, whether they have unread articles or not
+(<code>gnus-group-list-all-groups</code>).  If the numeric prefix is used,
+this command will list only groups of level ARG and lower.  By default,
+it lists groups of level seven or lower (i.e., just subscribed and
+unsubscribed groups).
+
+     <br><dt><kbd>A l</kbd><dd><a name="index-A-l-_0028Group_0029-308"></a><a name="index-gnus_002dgroup_002dlist_002dlevel-309"></a>List all unread groups on a specific level
+(<code>gnus-group-list-level</code>).  If given a prefix, also list the groups
+with no unread articles.
+
+     <br><dt><kbd>A k</kbd><dd><a name="index-A-k-_0028Group_0029-310"></a><a name="index-gnus_002dgroup_002dlist_002dkilled-311"></a>List all killed groups (<code>gnus-group-list-killed</code>).  If given a
+prefix argument, really list all groups that are available, but aren't
+currently (un)subscribed.  This could entail reading the active file
+from the server.
+
+     <br><dt><kbd>A z</kbd><dd><a name="index-A-z-_0028Group_0029-312"></a><a name="index-gnus_002dgroup_002dlist_002dzombies-313"></a>List all zombie groups (<code>gnus-group-list-zombies</code>).
+
+     <br><dt><kbd>A m</kbd><dd><a name="index-A-m-_0028Group_0029-314"></a><a name="index-gnus_002dgroup_002dlist_002dmatching-315"></a>List all unread, subscribed groups with names that match a regexp
+(<code>gnus-group-list-matching</code>).
+
+     <br><dt><kbd>A M</kbd><dd><a name="index-A-M-_0028Group_0029-316"></a><a name="index-gnus_002dgroup_002dlist_002dall_002dmatching-317"></a>List groups that match a regexp (<code>gnus-group-list-all-matching</code>).
+
+     <br><dt><kbd>A A</kbd><dd><a name="index-A-A-_0028Group_0029-318"></a><a name="index-gnus_002dgroup_002dlist_002dactive-319"></a>List absolutely all groups in the active file(s) of the
+server(s) you are connected to (<code>gnus-group-list-active</code>).  This
+might very well take quite a while.  It might actually be a better idea
+to do a <kbd>A M</kbd> to list all matching, and just give &lsquo;<samp><span class="samp">.</span></samp>&rsquo; as the
+thing to match on.  Also note that this command may list groups that
+don't exist (yet)&mdash;these will be listed as if they were killed groups. 
+Take the output with some grains of salt.
+
+     <br><dt><kbd>A a</kbd><dd><a name="index-A-a-_0028Group_0029-320"></a><a name="index-gnus_002dgroup_002dapropos-321"></a>List all groups that have names that match a regexp
+(<code>gnus-group-apropos</code>).
+
+     <br><dt><kbd>A d</kbd><dd><a name="index-A-d-_0028Group_0029-322"></a><a name="index-gnus_002dgroup_002ddescription_002dapropos-323"></a>List all groups that have names or descriptions that match a regexp
+(<code>gnus-group-description-apropos</code>).
+
+     <br><dt><kbd>A c</kbd><dd><a name="index-A-c-_0028Group_0029-324"></a><a name="index-gnus_002dgroup_002dlist_002dcached-325"></a>List all groups with cached articles (<code>gnus-group-list-cached</code>).
+
+     <br><dt><kbd>A ?</kbd><dd><a name="index-A-_003f-_0028Group_0029-326"></a><a name="index-gnus_002dgroup_002dlist_002ddormant-327"></a>List all groups with dormant articles (<code>gnus-group-list-dormant</code>).
+
+     <br><dt><kbd>A /</kbd><dd><a name="index-A-_002f-_0028Group_0029-328"></a><a name="index-gnus_002dgroup_002dlist_002dlimit-329"></a>List groups limited within the current selection
+(<code>gnus-group-list-limit</code>).
+
+     <br><dt><kbd>A f</kbd><dd><a name="index-A-f-_0028Group_0029-330"></a><a name="index-gnus_002dgroup_002dlist_002dflush-331"></a>Flush groups from the current selection (<code>gnus-group-list-flush</code>).
+
+     <br><dt><kbd>A p</kbd><dd><a name="index-A-p-_0028Group_0029-332"></a><a name="index-gnus_002dgroup_002dlist_002dplus-333"></a>List groups plus the current selection (<code>gnus-group-list-plus</code>).
+
+   </dl>
+
+   <p><a name="index-gnus_002dpermanently_002dvisible_002dgroups-334"></a><a name="index-visible-group-parameter-335"></a>Groups that match the <code>gnus-permanently-visible-groups</code> regexp will
+always be shown, whether they have unread articles or not.  You can also
+add the <code>visible</code> element to the group parameters in question to
+get the same effect.
+
+   <p><a name="index-gnus_002dlist_002dgroups_002dwith_002dticked_002darticles-336"></a>Groups that have just ticked articles in it are normally listed in the
+group buffer.  If <code>gnus-list-groups-with-ticked-articles</code> is
+<code>nil</code>, these groups will be treated just like totally empty
+groups.  It is <code>t</code> by default.
+
+   </body></html>
+

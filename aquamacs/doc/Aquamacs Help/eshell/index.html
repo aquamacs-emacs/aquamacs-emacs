@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Eshell: The Emacs Shell</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Eshell: The Emacs Shell">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Eshell, the Emacs shell.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">Eshell: The Emacs Shell</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">Eshell</a>
+<li><a name="toc_What-is-Eshell_003f" href="What-is-Eshell_003f.html#What-is-Eshell_003f">1 What is Eshell?</a>
+<ul>
+<li><a href="Contributors-to-Eshell.html#Contributors-to-Eshell">1.1 Contributors to Eshell</a>
+</li></ul>
+<li><a name="toc_Command-basics" href="Command-basics.html#Command-basics">2 Basic overview</a>
+<ul>
+<li><a href="Commands-verbs.html#Commands-verbs">2.1 Commands verbs</a>
+<li><a href="Command-arguments.html#Command-arguments">2.2 Command arguments</a>
+</li></ul>
+<li><a name="toc_Commands" href="Commands.html#Commands">3 Commands</a>
+<ul>
+<li><a href="Invocation.html#Invocation">3.1 Invocation</a>
+<li><a href="Completion.html#Completion">3.2 Completion</a>
+<li><a href="Aliases.html#Aliases">3.3 Aliases</a>
+<li><a href="History.html#History">3.4 History</a>
+<li><a href="Scripts.html#Scripts">3.5 Scripts</a>
+<li><a href="Built_002dins.html#Built_002dins">3.6 Built-in commands</a>
+</li></ul>
+<li><a name="toc_Arguments" href="Arguments.html#Arguments">4 Arguments</a>
+<ul>
+<li><a href="The-Parser.html#The-Parser">4.1 The Parser</a>
+<li><a href="Variables.html#Variables">4.2 Variables</a>
+<li><a href="Substitution.html#Substitution">4.3 Substitution</a>
+<li><a href="Globbing.html#Globbing">4.4 Globbing</a>
+<li><a href="Predicates.html#Predicates">4.5 Predicates</a>
+</li></ul>
+<li><a name="toc_Input_002fOutput" href="Input_002fOutput.html#Input_002fOutput">5 Input/Output</a>
+<li><a name="toc_Process-control" href="Process-control.html#Process-control">6 Process control</a>
+<li><a name="toc_Extension-modules" href="Extension-modules.html#Extension-modules">7 Extension modules</a>
+<ul>
+<li><a href="Writing-a-module.html#Writing-a-module">7.1 Writing a module</a>
+<li><a href="Module-testing.html#Module-testing">7.2 Module testing</a>
+<li><a href="Directory-handling.html#Directory-handling">7.3 Directory handling</a>
+<li><a href="Key-rebinding.html#Key-rebinding">7.4 Key rebinding</a>
+<li><a href="Smart-scrolling.html#Smart-scrolling">7.5 Smart scrolling</a>
+<li><a href="Terminal-emulation.html#Terminal-emulation">7.6 Terminal emulation</a>
+<li><a href="Built_002din-UNIX-commands.html#Built_002din-UNIX-commands">7.7 Built-in UNIX commands</a>
+</li></ul>
+<li><a name="toc_Extras-and-Goodies" href="Extras-and-Goodies.html#Extras-and-Goodies">8 Extras and Goodies</a>
+<li><a name="toc_Bugs-and-ideas" href="Bugs-and-ideas.html#Bugs-and-ideas">9 Bugs and ideas</a>
+<ul>
+<li><a href="Known-problems.html#Known-problems">9.1 Known problems</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Concept-Index" href="Concept-Index.html#Concept-Index">Concept Index</a>
+<li><a name="toc_Function-and-Variable-Index" href="Function-and-Variable-Index.html#Function-and-Variable-Index">Function and Variable Index</a>
+<li><a name="toc_Key-Index" href="Key-Index.html#Key-Index">Key Index</a>
+</li></ul>
+</div>
+
+
+
+<!-- ================================================================ -->
+<!-- The real text starts here -->
+<!-- ================================================================ -->
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="What-is-Eshell_003f.html#What-is-Eshell_003f">What is Eshell?</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Eshell</h2>
+
+<p>Eshell is a shell-like command interpretor
+implemented in Emacs Lisp.  It invokes no external processes except for
+those requested by the user.  It is intended to be a functional
+replacement for command shells such as <samp><span class="command">bash</span></samp>, <samp><span class="command">zsh</span></samp>,
+<samp><span class="command">rc</span></samp>, or <samp><span class="command">4dos</span></samp>; since Emacs itself is capable of
+handling the sort of tasks accomplished by those tools. 
+<!-- This manual is updated to release 2.4 of Eshell. -->
+
+   <p>This manual is for Eshell, the Emacs shell.
+
+   <p>Copyright &copy; 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="What-is-Eshell_003f.html#What-is-Eshell_003f">What is Eshell?</a>:              A brief introduction to the Emacs Shell. 
+<li><a accesskey="2" href="Command-basics.html#Command-basics">Command basics</a>:               The basics of command usage. 
+<li><a accesskey="3" href="Commands.html#Commands">Commands</a>
+<li><a accesskey="4" href="Arguments.html#Arguments">Arguments</a>
+<li><a accesskey="5" href="Input_002fOutput.html#Input_002fOutput">Input/Output</a>
+<li><a accesskey="6" href="Process-control.html#Process-control">Process control</a>
+<li><a accesskey="7" href="Extension-modules.html#Extension-modules">Extension modules</a>
+<li><a accesskey="8" href="Extras-and-Goodies.html#Extras-and-Goodies">Extras and Goodies</a>
+<li><a accesskey="9" href="Bugs-and-ideas.html#Bugs-and-ideas">Bugs and ideas</a>:               Known problems, and future ideas. 
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a href="Concept-Index.html#Concept-Index">Concept Index</a>
+<li><a href="Function-and-Variable-Index.html#Function-and-Variable-Index">Function and Variable Index</a>
+<li><a href="Key-Index.html#Key-Index">Key Index</a>
+</ul>
+
+   </body></html>
+

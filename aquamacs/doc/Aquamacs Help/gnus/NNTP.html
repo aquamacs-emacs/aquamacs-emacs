@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+<title>NNTP - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-News.html#Getting-News" title="Getting News">
+<link rel="next" href="News-Spool.html#News-Spool" title="News Spool">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="NNTP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="News-Spool.html#News-Spool">News Spool</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-News.html#Getting-News">Getting News</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.2.1 NNTP</h4>
+
+<p><a name="index-nntp-2046"></a>
+Subscribing to a foreign group from an <acronym>NNTP</acronym> server is rather easy. 
+You just specify <code>nntp</code> as method and the address of the <acronym>NNTP</acronym>
+server as the, uhm, address.
+
+   <p>If the <acronym>NNTP</acronym> server is located at a non-standard port, setting the
+third element of the select method to this port number should allow you
+to connect to the right port.  You'll have to edit the group info for
+that (see <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>).
+
+   <p>The name of the foreign group can be the same as a native group.  In
+fact, you can subscribe to the same group from as many different servers
+you feel like.  There will be no name collisions.
+
+   <p>The following variables can be used to create a virtual <code>nntp</code>
+server:
+
+     <dl>
+<dt><code>nntp-server-opened-hook</code><dd><a name="index-nntp_002dserver_002dopened_002dhook-2047"></a><a name="index-g_t_0040sc_007bmode-reader_007d-2048"></a><a name="index-authinfo-2049"></a><a name="index-authentication-2050"></a><a name="index-nntp-authentication-2051"></a><a name="index-nntp_002dsend_002dauthinfo-2052"></a><a name="index-nntp_002dsend_002dmode_002dreader-2053"></a>is run after a connection has been made.  It can be used to send
+commands to the <acronym>NNTP</acronym> server after it has been contacted.  By
+default it sends the command <code>MODE READER</code> to the server with the
+<code>nntp-send-mode-reader</code> function.  This function should always be
+present in this hook.
+
+     <br><dt><code>nntp-authinfo-function</code><dd><a name="index-nntp_002dauthinfo_002dfunction-2054"></a><a name="index-nntp_002dsend_002dauthinfo-2055"></a><a name="index-nntp_002dauthinfo_002dfile-2056"></a>This function will be used to send &lsquo;<samp><span class="samp">AUTHINFO</span></samp>&rsquo; to the <acronym>NNTP</acronym>
+server.  The default function is <code>nntp-send-authinfo</code>, which looks
+through your <samp><span class="file">~/.authinfo</span></samp> (or whatever you've set the
+<code>nntp-authinfo-file</code> variable to) for applicable entries.  If none
+are found, it will prompt you for a login name and a password.  The
+format of the <samp><span class="file">~/.authinfo</span></samp> file is (almost) the same as the
+<code>ftp</code> <samp><span class="file">~/.netrc</span></samp> file, which is defined in the <code>ftp</code>
+manual page, but here are the salient facts:
+
+          <ol type=1 start=1>
+<li>The file contains one or more line, each of which define one server.
+
+          <li>Each line may contain an arbitrary number of token/value pairs.
+
+          <p>The valid tokens include &lsquo;<samp><span class="samp">machine</span></samp>&rsquo;, &lsquo;<samp><span class="samp">login</span></samp>&rsquo;, &lsquo;<samp><span class="samp">password</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">default</span></samp>&rsquo;.  In addition Gnus introduces two new tokens, not present
+in the original <samp><span class="file">.netrc</span></samp>/<code>ftp</code> syntax, namely &lsquo;<samp><span class="samp">port</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">force</span></samp>&rsquo;.  (This is the only way the <samp><span class="file">.authinfo</span></samp> file format
+deviates from the <samp><span class="file">.netrc</span></samp> file format.)  &lsquo;<samp><span class="samp">port</span></samp>&rsquo; is used to
+indicate what port on the server the credentials apply to and
+&lsquo;<samp><span class="samp">force</span></samp>&rsquo; is explained below.
+
+          </ol>
+
+     <p>Here's an example file:
+
+     <pre class="example">          machine news.uio.no login larsi password geheimnis
+          machine nntp.ifi.uio.no login larsi force yes
+</pre>
+     <p>The token/value pairs may appear in any order; &lsquo;<samp><span class="samp">machine</span></samp>&rsquo; doesn't
+have to be first, for instance.
+
+     <p>In this example, both login name and password have been supplied for the
+former server, while the latter has only the login name listed, and the
+user will be prompted for the password.  The latter also has the
+&lsquo;<samp><span class="samp">force</span></samp>&rsquo; tag, which means that the authinfo will be sent to the
+<var>nntp</var> server upon connection; the default (i.e., when there is not
+&lsquo;<samp><span class="samp">force</span></samp>&rsquo; tag) is to not send authinfo to the <var>nntp</var> server
+until the <var>nntp</var> server asks for it.
+
+     <p>You can also add &lsquo;<samp><span class="samp">default</span></samp>&rsquo; lines that will apply to all servers
+that don't have matching &lsquo;<samp><span class="samp">machine</span></samp>&rsquo; lines.
+
+     <pre class="example">          default force yes
+</pre>
+     <p>This will force sending &lsquo;<samp><span class="samp">AUTHINFO</span></samp>&rsquo; commands to all servers not
+previously mentioned.
+
+     <p>Remember to not leave the <samp><span class="file">~/.authinfo</span></samp> file world-readable.
+
+     <br><dt><code>nntp-server-action-alist</code><dd><a name="index-nntp_002dserver_002daction_002dalist-2057"></a>This is a list of regexps to match on server types and actions to be
+taken when matches are made.  For instance, if you want Gnus to beep
+every time you connect to innd, you could say something like:
+
+     <pre class="lisp">          (setq nntp-server-action-alist
+                '(("innd" (ding))))
+</pre>
+     <p>You probably don't want to do that, though.
+
+     <p>The default value is
+
+     <pre class="lisp">          '(("nntpd 1\\.5\\.11t"
+             (remove-hook 'nntp-server-opened-hook
+                          'nntp-send-mode-reader)))
+</pre>
+     <p>This ensures that Gnus doesn't send the <code>MODE READER</code> command to
+nntpd 1.5.11t, since that command chokes that server, I've been told.
+
+     <br><dt><code>nntp-maximum-request</code><dd><a name="index-nntp_002dmaximum_002drequest-2058"></a>If the <acronym>NNTP</acronym> server doesn't support <acronym>NOV</acronym> headers, this back end
+will collect headers by sending a series of <code>head</code> commands.  To
+speed things up, the back end sends lots of these commands without
+waiting for reply, and then reads all the replies.  This is controlled
+by the <code>nntp-maximum-request</code> variable, and is 400 by default.  If
+your network is buggy, you should set this to 1.
+
+     <br><dt><code>nntp-connection-timeout</code><dd><a name="index-nntp_002dconnection_002dtimeout-2059"></a>If you have lots of foreign <code>nntp</code> groups that you connect to
+regularly, you're sure to have problems with <acronym>NNTP</acronym> servers not
+responding properly, or being too loaded to reply within reasonable
+time.  This is can lead to awkward problems, which can be helped
+somewhat by setting <code>nntp-connection-timeout</code>.  This is an integer
+that says how many seconds the <code>nntp</code> back end should wait for a
+connection before giving up.  If it is <code>nil</code>, which is the default,
+no timeouts are done.
+
+     <br><dt><code>nntp-nov-is-evil</code><dd><a name="index-nntp_002dnov_002dis_002devil-2060"></a>If the <acronym>NNTP</acronym> server does not support <acronym>NOV</acronym>, you could set this
+variable to <code>t</code>, but <code>nntp</code> usually checks automatically whether <acronym>NOV</acronym>
+can be used.
+
+     <br><dt><code>nntp-xover-commands</code><dd><a name="index-nntp_002dxover_002dcommands-2061"></a><a name="index-g_t_0040acronym_007bNOV_007d-2062"></a><a name="index-XOVER-2063"></a>List of strings used as commands to fetch <acronym>NOV</acronym> lines from a
+server.  The default value of this variable is <code>("XOVER"
+"XOVERVIEW")</code>.
+
+     <br><dt><code>nntp-nov-gap</code><dd><a name="index-nntp_002dnov_002dgap-2064"></a><code>nntp</code> normally sends just one big request for <acronym>NOV</acronym> lines to
+the server.  The server responds with one huge list of lines.  However,
+if you have read articles 2-5000 in the group, and only want to read
+article 1 and 5001, that means that <code>nntp</code> will fetch 4999 <acronym>NOV</acronym>
+lines that you will not need.  This variable says how
+big a gap between two consecutive articles is allowed to be before the
+<code>XOVER</code> request is split into several request.  Note that if your
+network is fast, setting this variable to a really small number means
+that fetching will probably be slower.  If this variable is <code>nil</code>,
+<code>nntp</code> will never split requests.  The default is 5.
+
+     <br><dt><code>nntp-xref-number-is-evil</code><dd><a name="index-nntp_002dxref_002dnumber_002dis_002devil-2065"></a>When Gnus refers to an article having the <code>Message-ID</code> that a user
+specifies or having the <code>Message-ID</code> of the parent article of the
+current one (see <a href="Finding-the-Parent.html#Finding-the-Parent">Finding the Parent</a>), Gnus sends a <code>HEAD</code>
+command to the <acronym>NNTP</acronym> server to know where it is, and the server
+returns the data containing the pairs of a group and an article number
+in the <code>Xref</code> header.  Gnus normally uses the article number to
+refer to the article if the data shows that that article is in the
+current group, while it uses the <code>Message-ID</code> otherwise.  However,
+some news servers, e.g., ones running Diablo, run multiple engines
+having the same articles but article numbers are not kept synchronized
+between them.  In that case, the article number that appears in the
+<code>Xref</code> header varies by which engine is chosen, so you cannot refer
+to the parent article that is in the current group, for instance.  If
+you connect to such a server, set this variable to a non-<code>nil</code>
+value, and Gnus never uses article numbers.  For example:
+
+     <pre class="lisp">          (setq gnus-select-method
+                '(nntp "newszilla"
+                       (nntp-address "newszilla.example.com")
+                       (nntp-xref-number-is-evil t)
+                       ...))
+</pre>
+     <p>The default value of this server variable is <code>nil</code>.
+
+     <br><dt><code>nntp-prepare-server-hook</code><dd><a name="index-nntp_002dprepare_002dserver_002dhook-2066"></a>A hook run before attempting to connect to an <acronym>NNTP</acronym> server.
+
+     <br><dt><code>nntp-record-commands</code><dd><a name="index-nntp_002drecord_002dcommands-2067"></a>If non-<code>nil</code>, <code>nntp</code> will log all commands it sends to the
+<acronym>NNTP</acronym> server (along with a timestamp) in the &lsquo;<samp><span class="samp">*nntp-log*</span></samp>&rsquo;
+buffer.  This is useful if you are debugging a Gnus/<acronym>NNTP</acronym> connection
+that doesn't seem to work.
+
+     <br><dt><code>nntp-open-connection-function</code><dd><a name="index-nntp_002dopen_002dconnection_002dfunction-2068"></a>It is possible to customize how the connection to the nntp server will
+be opened.  If you specify an <code>nntp-open-connection-function</code>
+parameter, Gnus will use that function to establish the connection. 
+Seven pre-made functions are supplied.  These functions can be grouped
+in two categories: direct connection functions (four pre-made), and
+indirect ones (three pre-made).
+
+     <br><dt><code>nntp-never-echoes-commands</code><dd><a name="index-nntp_002dnever_002dechoes_002dcommands-2069"></a>Non-<code>nil</code> means the nntp server never echoes commands.  It is
+reported that some nntps server doesn't echo commands.  So, you may want
+to set this to non-<code>nil</code> in the method for such a server setting
+<code>nntp-open-connection-function</code> to <code>nntp-open-ssl-stream</code> for
+example.  The default value is <code>nil</code>.  Note that the
+<code>nntp-open-connection-functions-never-echo-commands</code> variable
+overrides the <code>nil</code> value of this variable.
+
+     <br><dt><code>nntp-open-connection-functions-never-echo-commands</code><dd><a name="index-nntp_002dopen_002dconnection_002dfunctions_002dnever_002decho_002dcommands-2070"></a>List of functions that never echo commands.  Add or set a function which
+you set to <code>nntp-open-connection-function</code> to this list if it does
+not echo commands.  Note that a non-<code>nil</code> value of the
+<code>nntp-never-echoes-commands</code> variable overrides this variable.  The
+default value is <code>(nntp-open-network-stream)</code>.
+
+     <br><dt><code>nntp-prepare-post-hook</code><dd><a name="index-nntp_002dprepare_002dpost_002dhook-2071"></a>A hook run just before posting an article.  If there is no
+<code>Message-ID</code> header in the article and the news server provides the
+recommended ID, it will be added to the article before running this
+hook.  It is useful to make <code>Cancel-Lock</code> headers even if you
+inhibit Gnus to add a <code>Message-ID</code> header, you could say:
+
+     <pre class="lisp">          (add-hook 'nntp-prepare-post-hook 'canlock-insert-header)
+</pre>
+     <p>Note that not all servers support the recommended ID.  This works for
+INN versions 2.3.0 and later, for instance.
+
+   </dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Direct-Functions.html#Direct-Functions">Direct Functions</a>:             Connecting directly to the server. 
+<li><a accesskey="2" href="Indirect-Functions.html#Indirect-Functions">Indirect Functions</a>:           Connecting indirectly to the server. 
+<li><a accesskey="3" href="Common-Variables.html#Common-Variables">Common Variables</a>:             Understood by several connection functions. 
+<li><a accesskey="4" href="NNTP-marks.html#NNTP-marks">NNTP marks</a>:                   Storing marks for <acronym>NNTP</acronym> servers. 
+</ul>
+
+   </body></html>
+

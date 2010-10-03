@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Rings - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Association-Lists.html#Association-Lists" title="Association Lists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+
+corresponding to Emacs version 23.2.50.
+
+Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Rings"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Association-Lists.html#Association-Lists">Association Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">5.9 Managing a Fixed-Size Ring of Objects</h3>
+
+<p><a name="index-ring-data-structure-369"></a>  This section describes functions for operating on rings.  A
+<dfn>ring</dfn> is a fixed-size data structure that supports insertion,
+deletion, rotation, and modulo-indexed reference and traversal.
+
+<div class="defun">
+&mdash; Function: <b>make-ring</b><var> size<a name="index-make_002dring-370"></a></var><br>
+<blockquote><p>This returns a new ring capable of holding <var>size</var> objects. 
+<var>size</var> should be an integer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-p</b><var> object<a name="index-ring_002dp-371"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>object</var> is a ring, <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-size</b><var> ring<a name="index-ring_002dsize-372"></a></var><br>
+<blockquote><p>This returns the maximum capacity of the <var>ring</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-length</b><var> ring<a name="index-ring_002dlength-373"></a></var><br>
+<blockquote><p>This returns the number of objects that <var>ring</var> currently contains. 
+The value will never exceed that returned by <code>ring-size</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-elements</b><var> ring<a name="index-ring_002delements-374"></a></var><br>
+<blockquote><p>This returns a list of the objects in <var>ring</var>, in order, newest first. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-copy</b><var> ring<a name="index-ring_002dcopy-375"></a></var><br>
+<blockquote><p>This returns a new ring which is a copy of <var>ring</var>. 
+The new ring contains the same (<code>eq</code>) objects as <var>ring</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-empty-p</b><var> ring<a name="index-ring_002dempty_002dp-376"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>ring</var> is empty, <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+   <p>The newest element in the ring always has index 0.  Higher indices
+correspond to older elements.  Indices are computed modulo the ring
+length.  General_General_General_General_General_General_General_General_General_Index &minus;1 corresponds to the oldest element, &minus;2
+to the next-oldest, and so forth.
+
+<div class="defun">
+&mdash; Function: <b>ring-ref</b><var> ring index<a name="index-ring_002dref-377"></a></var><br>
+<blockquote><p>This returns the object in <var>ring</var> found at index <var>index</var>. 
+<var>index</var> may be negative or greater than the ring length.  If
+<var>ring</var> is empty, <code>ring-ref</code> signals an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-insert</b><var> ring object<a name="index-ring_002dinsert-378"></a></var><br>
+<blockquote><p>This inserts <var>object</var> into <var>ring</var>, making it the newest
+element, and returns <var>object</var>.
+
+        <p>If the ring is full, insertion removes the oldest element to
+make room for the new element. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-remove</b><var> ring &amp;optional index<a name="index-ring_002dremove-379"></a></var><br>
+<blockquote><p>Remove an object from <var>ring</var>, and return that object.  The
+argument <var>index</var> specifies which item to remove; if it is
+<code>nil</code>, that means to remove the oldest item.  If <var>ring</var> is
+empty, <code>ring-remove</code> signals an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ring-insert-at-beginning</b><var> ring object<a name="index-ring_002dinsert_002dat_002dbeginning-380"></a></var><br>
+<blockquote><p>This inserts <var>object</var> into <var>ring</var>, treating it as the oldest
+element.  The return value is not significant.
+
+        <p>If the ring is full, this function removes the newest element to make
+room for the inserted element. 
+</p></blockquote></div>
+
+   <p><a name="index-fifo-data-structure-381"></a>  If you are careful not to exceed the ring size, you can
+use the ring as a first-in-first-out queue.  For example:
+
+<pre class="lisp">     (let ((fifo (make-ring 5)))
+       (mapc (lambda (obj) (ring-insert fifo obj))
+             '(0 one "two"))
+       (list (ring-remove fifo) t
+             (ring-remove fifo) t
+             (ring-remove fifo)))
+          &rArr; (0 t one t "two")
+</pre>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
+<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
+<!-- Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

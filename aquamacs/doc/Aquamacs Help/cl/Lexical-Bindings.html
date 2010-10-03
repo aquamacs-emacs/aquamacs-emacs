@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+<title>Lexical Bindings - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
+<link rel="prev" href="Dynamic-Bindings.html#Dynamic-Bindings" title="Dynamic Bindings">
+<link rel="next" href="Function-Bindings.html#Function-Bindings" title="Function Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Lexical-Bindings"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Bindings.html#Function-Bindings">Function Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dynamic-Bindings.html#Dynamic-Bindings">Dynamic Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.3.2 Lexical Bindings</h4>
+
+<p class="noindent">The <dfn>CL</dfn> package defines the following macro which
+more closely follows the Common Lisp <code>let</code> form:
+
+<div class="defun">
+&mdash; Special Form: <b>lexical-let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-lexical_002dlet-32"></a></var><br>
+<blockquote><p>This form is exactly like <code>let</code> except that the bindings it
+establishes are purely lexical.  Lexical bindings are similar to
+local variables in a language like C:  Only the code physically
+within the body of the <code>lexical-let</code> (after macro expansion)
+may refer to the bound variables.
+
+     <pre class="example">          (setq a 5)
+          (defun foo (b) (+ a b))
+          (let ((a 2)) (foo a))
+               &rArr; 4
+          (lexical-let ((a 2)) (foo a))
+               &rArr; 7
+</pre>
+        <p class="noindent">In this example, a regular <code>let</code> binding of <code>a</code> actually
+makes a temporary change to the global variable <code>a</code>, so <code>foo</code>
+is able to see the binding of <code>a</code> to 2.  But <code>lexical-let</code>
+actually creates a distinct local variable <code>a</code> for use within its
+body, without any effect on the global variable of the same name.
+
+        <p>The most important use of lexical bindings is to create <dfn>closures</dfn>. 
+A closure is a function object that refers to an outside lexical
+variable.  For example:
+
+     <pre class="example">          (defun make-adder (n)
+            (lexical-let ((n n))
+              (function (lambda (m) (+ n m)))))
+          (setq add17 (make-adder 17))
+          (funcall add17 4)
+               &rArr; 21
+</pre>
+        <p class="noindent">The call <code>(make-adder 17)</code> returns a function object which adds
+17 to its argument.  If <code>let</code> had been used instead of
+<code>lexical-let</code>, the function object would have referred to the
+global <code>n</code>, which would have been bound to 17 only during the
+call to <code>make-adder</code> itself.
+
+     <pre class="example">          (defun make-counter ()
+            (lexical-let ((n 0))
+              (function* (lambda (&amp;optional (m 1)) (incf n m)))))
+          (setq count-1 (make-counter))
+          (funcall count-1 3)
+               &rArr; 3
+          (funcall count-1 14)
+               &rArr; 17
+          (setq count-2 (make-counter))
+          (funcall count-2 5)
+               &rArr; 5
+          (funcall count-1 2)
+               &rArr; 19
+          (funcall count-2)
+               &rArr; 6
+</pre>
+        <p class="noindent">Here we see that each call to <code>make-counter</code> creates a distinct
+local variable <code>n</code>, which serves as a private counter for the
+function object that is returned.
+
+        <p>Closed-over lexical variables persist until the last reference to
+them goes away, just like all other Lisp objects.  For example,
+<code>count-2</code> refers to a function object which refers to an
+instance of the variable <code>n</code>; this is the only reference
+to that variable, so after <code>(setq count-2 nil)</code> the garbage
+collector would be able to delete this instance of <code>n</code>. 
+Of course, if a <code>lexical-let</code> does not actually create any
+closures, then the lexical variables are free as soon as the
+<code>lexical-let</code> returns.
+
+        <p>Many closures are used only during the extent of the bindings they
+refer to; these are known as &ldquo;downward funargs&rdquo; in Lisp parlance. 
+When a closure is used in this way, regular Emacs Lisp dynamic
+bindings suffice and will be more efficient than <code>lexical-let</code>
+closures:
+
+     <pre class="example">          (defun add-to-list (x list)
+            (mapcar (lambda (y) (+ x y))) list)
+          (add-to-list 7 '(1 2 5))
+               &rArr; (8 9 12)
+</pre>
+        <p class="noindent">Since this lambda is only used while <code>x</code> is still bound,
+it is not necessary to make a true closure out of it.
+
+        <p>You can use <code>defun</code> or <code>flet</code> inside a <code>lexical-let</code>
+to create a named closure.  If several closures are created in the
+body of a single <code>lexical-let</code>, they all close over the same
+instance of the lexical variable.
+
+        <p>The <code>lexical-let</code> form is an extension to Common Lisp.  In
+true Common Lisp, all bindings are lexical unless declared otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>lexical-let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-lexical_002dlet_002a-33"></a></var><br>
+<blockquote><p>This form is just like <code>lexical-let</code>, except that the bindings
+are made sequentially in the manner of <code>let*</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

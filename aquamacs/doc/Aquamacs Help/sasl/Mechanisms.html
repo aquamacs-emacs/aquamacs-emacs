@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Mechanisms - Emacs SASL Library 0.2</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SASL Library 0.2">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-types.html#Data-types" title="Data types">
+<link rel="next" href="Clients.html#Clients" title="Clients">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes the Emacs SASL library, version 0.2.
+
+Copyright (C) 2000, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mechanisms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Clients.html#Clients">Clients</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-types.html#Data-types">Data types</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Mechanisms</h3>
+
+<p>A mechanism (<code>sasl-mechanism</code> object) is a schema of the <span class="sc">sasl</span>
+authentication mechanism driver.
+
+<div class="defun">
+&mdash; Variable: <b>sasl-mechanisms</b><var><a name="index-sasl_002dmechanisms-1"></a></var><br>
+<blockquote><p>A list of mechanism names. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sasl-find-mechanism</b><var> mechanisms<a name="index-sasl_002dfind_002dmechanism-2"></a></var><br>
+<blockquote>
+        <p>Retrieve an appropriate mechanism. 
+This function compares <var>mechanisms</var> and <code>sasl-mechanisms</code> then
+returns appropriate <code>sasl-mechanism</code> object.
+
+     <pre class="example">          (let ((sasl-mechanisms '("CRAM-MD5" "DIGEST-MD5")))
+            (setq mechanism (sasl-find-mechanism server-supported-mechanisms)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>sasl-mechanism-name</b><var> mechanism<a name="index-sasl_002dmechanism_002dname-3"></a></var><br>
+<blockquote><p>Return name of mechanism, a string. 
+</p></blockquote></div>
+
+   <p>If you want to write an authentication mechanism driver (<a href="Back-end-drivers.html#Back-end-drivers">Back end drivers</a>), use <code>sasl-make-mechanism</code> and modify
+<code>sasl-mechanisms</code> and <code>sasl-mechanism-alist</code> correctly.
+
+<div class="defun">
+&mdash; Function: <b>sasl-make-mechanism</b><var> name steps<a name="index-sasl_002dmake_002dmechanism-4"></a></var><br>
+<blockquote><p>Allocate a <code>sasl-mechanism</code> object. 
+This function takes two parameters&mdash;name of the mechanism, and a list
+of authentication functions.
+
+     <pre class="example">          (defconst sasl-anonymous-steps
+            '(identity                            ;no initial response
+              sasl-anonymous-response))
+          
+          (put 'sasl-anonymous 'sasl-mechanism
+               (sasl-make-mechanism "ANONYMOUS" sasl-anonymous-steps))
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

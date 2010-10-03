@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Trail Commands - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Stack-and-Trail.html#Stack-and-Trail" title="Stack and Trail">
+<link rel="prev" href="Editing-Stack-Entries.html#Editing-Stack-Entries" title="Editing Stack Entries">
+<link rel="next" href="Keep-Arguments.html#Keep-Arguments" title="Keep Arguments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Trail-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Keep-Arguments.html#Keep-Arguments">Keep Arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack Entries</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>
+<hr>
+</div>
+
+<h3 class="section">6.3 Trail Commands</h3>
+
+<p class="noindent"><a name="index-Trail-buffer-347"></a>The commands for manipulating the Calc Trail buffer are two-key sequences
+beginning with the <kbd>t</kbd> prefix.
+
+   <p><a name="index-t-d-348"></a><a name="index-calc_002dtrail_002ddisplay-349"></a>The <kbd>t d</kbd> (<code>calc-trail-display</code>) command turns display of the
+trail on and off.  Normally the trail display is toggled on if it was off,
+off if it was on.  With a numeric prefix of zero, this command always
+turns the trail off; with a prefix of one, it always turns the trail on. 
+The other trail-manipulation commands described here automatically turn
+the trail on.  Note that when the trail is off values are still recorded
+there; they are simply not displayed.  To set Emacs to turn the trail
+off by default, type <kbd>t d</kbd> and then save the mode settings with
+<kbd>m m</kbd> (<code>calc-save-modes</code>).
+
+   <p><a name="index-t-i-350"></a><a name="index-calc_002dtrail_002din-351"></a><a name="index-t-o-352"></a><a name="index-calc_002dtrail_002dout-353"></a>The <kbd>t i</kbd> (<code>calc-trail-in</code>) and <kbd>t o</kbd>
+(<code>calc-trail-out</code>) commands switch the cursor into and out of the
+Calc Trail window.  In practice they are rarely used, since the commands
+shown below are a more convenient way to move around in the
+trail, and they work &ldquo;by remote control&rdquo; when the cursor is still
+in the Calculator window.
+
+   <p><a name="index-Trail-pointer-354"></a>There is a <dfn>trail pointer</dfn> which selects some entry of the trail at
+any given time.  The trail pointer looks like a &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; symbol right
+before the selected number.  The following commands operate on the
+trail pointer in various ways.
+
+   <p><a name="index-t-y-355"></a><a name="index-calc_002dtrail_002dyank-356"></a><a name="index-Retrieving-previous-results-357"></a>The <kbd>t y</kbd> (<code>calc-trail-yank</code>) command reads the selected value in
+the trail and pushes it onto the Calculator stack.  It allows you to
+re-use any previously computed value without retyping.  With a numeric
+prefix argument <var>n</var>, it yanks the value <var>n</var> lines above the current
+trail pointer.
+
+   <p><a name="index-t-_003c-358"></a><a name="index-calc_002dtrail_002dscroll_002dleft-359"></a><a name="index-t-_003e-360"></a><a name="index-calc_002dtrail_002dscroll_002dright-361"></a>The <kbd>t &lt;</kbd> (<code>calc-trail-scroll-left</code>) and <kbd>t &gt;</kbd>
+(<code>calc-trail-scroll-right</code>) commands horizontally scroll the trail
+window left or right by one half of its width.
+
+   <p><a name="index-t-n-362"></a><a name="index-calc_002dtrail_002dnext-363"></a><a name="index-t-p-364"></a><a name="index-calc_002dtrail_002dprevious-365"></a><a name="index-t-f-366"></a><a name="index-calc_002dtrail_002dforward-367"></a><a name="index-t-b-368"></a><a name="index-calc_002dtrail_002dbackward-369"></a>The <kbd>t n</kbd> (<code>calc-trail-next</code>) and <kbd>t p</kbd>
+(<code>calc-trail-previous)</code> commands move the trail pointer down or up
+one line.  The <kbd>t f</kbd> (<code>calc-trail-forward</code>) and <kbd>t b</kbd>
+(<code>calc-trail-backward</code>) commands move the trail pointer down or up
+one screenful at a time.  All of these commands accept numeric prefix
+arguments to move several lines or screenfuls at a time.
+
+   <p><a name="index-t-_005b-370"></a><a name="index-calc_002dtrail_002dfirst-371"></a><a name="index-t-_005d-372"></a><a name="index-calc_002dtrail_002dlast-373"></a><a name="index-t-h-374"></a><a name="index-calc_002dtrail_002dhere-375"></a>The <kbd>t [</kbd> (<code>calc-trail-first</code>) and <kbd>t ]</kbd>
+(<code>calc-trail-last</code>) commands move the trail pointer to the first or
+last line of the trail.  The <kbd>t h</kbd> (<code>calc-trail-here</code>) command
+moves the trail pointer to the cursor position; unlike the other trail
+commands, <kbd>t h</kbd> works only when Calc Trail is the selected window.
+
+   <p><a name="index-t-s-376"></a><a name="index-calc_002dtrail_002disearch_002dforward-377"></a><a name="index-t-r-378"></a><a name="index-calc_002dtrail_002disearch_002dbackward-379"></a>The <kbd>t s</kbd> (<code>calc-trail-isearch-forward</code>) and <kbd>t r</kbd>
+(<code>calc-trail-isearch-backward</code>) commands perform an incremental
+search forward or backward through the trail.  You can press &lt;RET&gt;
+to terminate the search; the trail pointer moves to the current line. 
+If you cancel the search with <kbd>C-g</kbd>, the trail pointer stays where
+it was when the search began.
+
+   <p><a name="index-t-m-380"></a><a name="index-calc_002dtrail_002dmarker-381"></a>The <kbd>t m</kbd> (<code>calc-trail-marker</code>) command allows you to enter a
+line of text of your own choosing into the trail.  The text is inserted
+after the line containing the trail pointer; this usually means it is
+added to the end of the trail.  Trail markers are useful mainly as the
+targets for later incremental searches in the trail.
+
+   <p><a name="index-t-k-382"></a><a name="index-calc_002dtrail_002dkill-383"></a>The <kbd>t k</kbd> (<code>calc-trail-kill</code>) command removes the selected line
+from the trail.  The line is saved in the Emacs kill ring suitable for
+yanking into another buffer, but it is not easy to yank the text back
+into the trail buffer.  With a numeric prefix argument, this command
+kills the <var>n</var> lines below or above the selected one.
+
+   <p>The <kbd>t .</kbd> (<code>calc-full-trail-vectors</code>) command is described
+elsewhere; see <a href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector and Matrix Formats</a>.
+
+   </body></html>
+

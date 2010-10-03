@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Miscellaneous Commands - Dired Extra Version 2 User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Extra Version 2 User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Find-File-At-Point.html#Find-File-At-Point" title="Find File At Point">
+<link rel="next" href="Bugs.html#Bugs" title="Bugs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Miscellaneous-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Bugs.html#Bugs">Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Find-File-At-Point.html#Find-File-At-Point">Find File At Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">9 Miscellaneous Commands</h2>
+
+<p>Miscellaneous features not fitting anywhere else:
+
+     <dl>
+<dt><code>dired-find-subdir</code><dd><a name="index-dired_002dfind_002dsubdir-81"></a>Default: <code>nil</code>
+
+     <p>If non-<code>nil</code>, Dired does not make a new buffer for a directory if it can
+be found (perhaps as subdirectory) in some existing Dired buffer.
+
+     <p>If there are several Dired buffers for a directory, the most recently
+used is chosen.
+
+     <p>Dired avoids switching to the current buffer, so that if you have a
+normal and a wildcard buffer for the same directory, <kbd>C-x d RET</kbd>
+will toggle between those two. 
+</dl>
+
+     
+<a name="index-dired_002dgoto_002dsubdir-82"></a>
+<a name="index-M_002dG-83"></a>
+<dl><dt><kbd>M-G</kbd><dd>(<code>dired-goto-subdir</code>) Go to the header line of an inserted directory. 
+This command reads its argument, with completion derived from the names of the
+inserted subdirectories. 
+</dl>
+
+     <dl>
+<dt><code>dired-smart-shell-command</code><dd><a name="index-dired_002dsmart_002dshell_002dcommand-84"></a><a name="index-shell_002dcommand-85"></a><a name="index-M_002d_0021-86"></a>Like function <code>shell-command</code>, but in the current Dired directory. 
+Bound to <kbd>M-!</kbd> in Dired buffers.
+
+     <br><dt><code>dired-jump</code><dd><a name="index-dired_002djump-87"></a><a name="index-C_002dx-C_002dj-88"></a><a name="index-Jumping-to-Dired-listing-containing-file_002e-89"></a>Bound to <kbd>C-x C-j</kbd>.  Jump back to Dired: If in a file, edit the current
+directory and move to file's line.  If in Dired already, pop up a level and
+go to old directory's line.  In case the proper Dired file line cannot be
+found, refresh the Dired buffer and try again.
+
+     <br><dt><code>dired-jump-other-window</code><dd><a name="index-dired_002djump_002dother_002dwindow-90"></a><a name="index-C_002dx-4-C_002dj-91"></a>Bound to <kbd>C-x 4 C-j</kbd>. Like <code>dired-jump</code>, but to other window.
+
+     <p>These functions can be autoloaded so they work even though <samp><span class="file">dired-x.el</span></samp>
+has not been loaded yet (see <a href="Optional-Installation-Dired-Jump.html#Optional-Installation-Dired-Jump">Optional Installation Dired Jump</a>).
+
+     <p><a name="index-dired_002dbind_002djump-92"></a>If the variable <code>dired-bind-jump</code> is <code>nil</code>, <code>dired-jump</code> will not be
+bound to <kbd>C-x C-j</kbd> and <code>dired-jump-other-window</code> will not be bound to
+<kbd>C-x 4 C-j</kbd>.
+
+     <br><dt><code>dired-vm</code><dd><a name="index-Reading-mail_002e-93"></a><a name="index-V-94"></a><a name="index-dired_002dvm-95"></a>Bound to <kbd>V</kbd> if <code>dired-bind-vm</code> is <code>t</code>.  Run VM on this
+file (assumed to be a UNIX mail folder).
+
+     <p><a name="index-dired_002dvm_002dread_002donly_002dfolders-96"></a>If you give this command a prefix argument, it will visit the folder
+read-only.  This only works in VM 5, not VM 4.
+
+     <p>If the variable <code>dired-vm-read-only-folders</code> is <code>t</code>,
+<code>dired-vm</code> will
+visit all folders read-only.  If it is neither <code>nil</code> nor <code>t</code>, e.g.,
+the symbol <code>if-file-read-only</code>, only files not writable by you are
+visited read-only.  This is the recommended value if you run VM 5.
+
+     <p><a name="index-dired_002dbind_002dvm-97"></a>If the variable <code>dired-bind-vm</code> is <code>t</code>, <code>dired-vm</code> will be bound
+to <kbd>V</kbd>.  Otherwise, <code>dired-bind-rmail</code> will be bound.
+
+     <br><dt><code>dired-rmail</code><dd><a name="index-Reading-mail_002e-98"></a><a name="index-dired_002drmail-99"></a>Bound to <kbd>V</kbd> if <code>dired-bind-vm</code> is <code>nil</code>.  Run Rmail on this
+file (assumed to be mail folder in Rmail format).
+
+     <br><dt><code>dired-info</code><dd><a name="index-I-100"></a><a name="index-Running-info_002e-101"></a><a name="index-dired_002dinfo-102"></a>Bound to <kbd>I</kbd>.  Run Info on this file (assumed to be a file in Info
+format).
+
+     <p><a name="index-dired_002dbind_002dinfo-103"></a>If the variable <code>dired-bind-info</code> is <code>nil</code>, <code>dired-info</code> will
+not be bound to <kbd>I</kbd>.
+
+     <br><dt><code>dired-man</code><dd><a name="index-Running-man_002e-104"></a><a name="index-N-105"></a><a name="index-dired_002dman-106"></a>Bound to <kbd>N</kbd>.  Run man on this file (assumed to be a file in <code>nroff</code>
+format).
+
+     <p><a name="index-dired_002dbind_002dman-107"></a>If the variable <code>dired-bind-man</code> is <code>nil</code>, <code>dired-man</code> will not
+be bound to <kbd>N</kbd>.
+
+     <br><dt><code>dired-do-relsymlink</code><dd><a name="index-Relative-symbolic-links_002e-108"></a><a name="index-Y-109"></a><a name="index-dired_002ddo_002drelsymlink-110"></a>Bound to <kbd>Y</kbd>.  Relative symlink all marked (or next ARG) files into a
+directory, or make a relative symbolic link to the current file.  This creates
+relative symbolic links like
+
+     <pre class="example">              foo -&gt; ../bar/foo
+</pre>
+     <p class="noindent">not absolute ones like
+
+     <pre class="example">              foo -&gt; /ugly/path/that/may/change/any/day/bar/foo
+</pre>
+     <br><dt><code>dired-do-relsymlink-regexp</code><dd><a name="index-g_t_0025Y-111"></a><a name="index-dired_002ddo_002drelsymlink_002dregexp-112"></a>Bound to <kbd>%Y</kbd>.  Relative symlink all marked files containing
+<var>regexp</var> to <var>newname</var>.  See functions
+<code>dired-do-rename-regexp</code> and <code>dired-do-relsymlink</code> for more
+info. 
+</dl>
+
+   </body></html>
+

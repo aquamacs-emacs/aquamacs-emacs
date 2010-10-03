@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Future Value - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Financial-Functions.html#Financial-Functions" title="Financial Functions">
+<link rel="prev" href="Percentages.html#Percentages" title="Percentages">
+<link rel="next" href="Present-Value.html#Present-Value" title="Present Value">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Future-Value"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Present-Value.html#Present-Value">Present Value</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Percentages.html#Percentages">Percentages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Financial-Functions.html#Financial-Functions">Financial Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.6.2 Future Value</h4>
+
+<p class="noindent"><a name="index-b-F-869"></a><a name="index-calc_002dfin_002dfv-870"></a><a name="index-fv-871"></a>The <kbd>b F</kbd> (<code>calc-fin-fv</code>) [<code>fv</code>] command computes
+the future value of an investment.  It takes three arguments
+from the stack:  &lsquo;<samp><span class="samp">fv(</span><var>rate</var><span class="samp">, </span><var>n</var><span class="samp">, </span><var>payment</var><span class="samp">)</span></samp>&rsquo;. 
+If you give payments of <var>payment</var> every year for <var>n</var>
+years, and the money you have paid earns interest at <var>rate</var> per
+year, then this function tells you what your investment would be
+worth at the end of the period.  (The actual interval doesn't
+have to be years, as long as <var>n</var> and <var>rate</var> are expressed
+in terms of the same intervals.)  This function assumes payments
+occur at the <em>end</em> of each interval.
+
+   <p><a name="index-I-b-F-872"></a><a name="index-fvb-873"></a>The <kbd>I b F</kbd> [<code>fvb</code>] command does the same computation,
+but assuming your payments are at the beginning of each interval. 
+Suppose you plan to deposit $1000 per year in a savings account
+earning 5.4% interest, starting right now.  How much will be
+in the account after five years?  <code>fvb(5.4%, 5, 1000) = 5870.73</code>. 
+Thus you will have earned $870 worth of interest over the years. 
+Using the stack, this calculation would have been
+<kbd>5.4 M-% 5 &lt;RET&gt; 1000 I b F</kbd>.  Note that the rate is expressed
+as a number between 0 and 1, <em>not</em> as a percentage.
+
+   <p><a name="index-H-b-F-874"></a><a name="index-fvl-875"></a>The <kbd>H b F</kbd> [<code>fvl</code>] command computes the future value
+of an initial lump sum investment.  Suppose you could deposit
+those five thousand dollars in the bank right now; how much would
+they be worth in five years?  <code>fvl(5.4%, 5, 5000) = 6503.89</code>.
+
+   <p>The algebraic functions <code>fv</code> and <code>fvb</code> accept an optional
+fourth argument, which is used as an initial lump sum in the sense
+of <code>fvl</code>.  In other words, <code>fv(</code><var>rate</var><code>, </code><var>n</var><code>,
+</code><var>payment</var><code>, </code><var>initial</var><code>) = fv(</code><var>rate</var><code>, </code><var>n</var><code>, </code><var>payment</var><code>)
++ fvl(</code><var>rate</var><code>, </code><var>n</var><code>, </code><var>initial</var><code>)</code>.
+
+   <p>To illustrate the relationships between these functions, we could
+do the <code>fvb</code> calculation &ldquo;by hand&rdquo; using <code>fvl</code>.  The
+final balance will be the sum of the contributions of our five
+deposits at various times.  The first deposit earns interest for
+five years:  <code>fvl(5.4%, 5, 1000) = 1300.78</code>.  The second
+deposit only earns interest for four years:  <code>fvl(5.4%, 4, 1000) =
+1234.13</code>.  And so on down to the last deposit, which earns one
+year's interest:  <code>fvl(5.4%, 1, 1000) = 1054.00</code>.  The sum of
+these five values is, sure enough, $5870.73, just as was computed
+by <code>fvb</code> directly.
+
+   <p>What does <code>fv(5.4%, 5, 1000) = 5569.96</code> mean?  The payments
+are now at the ends of the periods.  The end of one year is the same
+as the beginning of the next, so what this really means is that we've
+lost the payment at year zero (which contributed $1300.78), but we're
+now counting the payment at year five (which, since it didn't have
+a chance to earn interest, counts as $1000).  Indeed, &lsquo;<samp><span class="samp">5569.96 =
+5870.73 - 1300.78 + 1000</span></samp>&rsquo; (give or take a bit of roundoff error).
+
+   </body></html>
+

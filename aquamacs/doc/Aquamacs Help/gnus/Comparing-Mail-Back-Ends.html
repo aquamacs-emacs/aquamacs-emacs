@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+<title>Comparing Mail Back Ends - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" title="Choosing a Mail Back End">
+<link rel="prev" href="Mail-Folders.html#Mail-Folders" title="Mail Folders">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Comparing-Mail-Back-Ends"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Folders.html#Mail-Folders">Mail Folders</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End">Choosing a Mail Back End</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.3.13.11 Comparing Mail Back Ends</h5>
+
+<p>First, just for terminology, the <dfn>back end</dfn> is the common word for a
+low-level access method&mdash;a transport, if you will, by which something
+is acquired.  The sense is that one's mail has to come from somewhere,
+and so selection of a suitable back end is required in order to get that
+mail within spitting distance of Gnus.
+
+   <p>The same concept exists for Usenet itself: Though access to articles is
+typically done by <acronym>NNTP</acronym> these days, once upon a midnight dreary, everyone
+in the world got at Usenet by running a reader on the machine where the
+articles lay (the machine which today we call an <acronym>NNTP</acronym> server), and
+access was by the reader stepping into the articles' directory spool
+area directly.  One can still select between either the <code>nntp</code> or
+<code>nnspool</code> back ends, to select between these methods, if one happens
+actually to live on the server (or can see its spool directly, anyway,
+via NFS).
+
+   <p>The goal in selecting a mail back end is to pick one which
+simultaneously represents a suitable way of dealing with the original
+format plus leaving mail in a form that is convenient to use in the
+future.  Here are some high and low points on each:
+
+     <dl>
+<dt><code>nnmbox</code><dd>
+UNIX systems have historically had a single, very common, and well-
+defined format.  All messages arrive in a single <dfn>spool file</dfn>, and
+they are delineated by a line whose regular expression matches
+&lsquo;<samp><span class="samp">^From_</span></samp>&rsquo;.  (My notational use of &lsquo;<samp><span class="samp">_</span></samp>&rsquo; is to indicate a space,
+to make it clear in this instance that this is not the RFC-specified
+&lsquo;<samp><span class="samp">From:</span></samp>&rsquo; header.)  Because Emacs and therefore Gnus emanate
+historically from the Unix environment, it is simplest if one does not
+mess a great deal with the original mailbox format, so if one chooses
+this back end, Gnus' primary activity in getting mail from the real spool
+area to Gnus' preferred directory is simply to copy it, with no
+(appreciable) format change in the process.  It is the &ldquo;dumbest&rdquo; way
+to move mail into availability in the Gnus environment.  This makes it
+fast to move into place, but slow to parse, when Gnus has to look at
+what's where.
+
+     <br><dt><code>nnbabyl</code><dd>
+Once upon a time, there was the DEC-10 and DEC-20, running operating
+systems called TOPS and related things, and the usual (only?) mail
+reading environment was a thing called Babyl.  I don't know what format
+was used for mail landing on the system, but Babyl had its own internal
+format to which mail was converted, primarily involving creating a
+spool-file-like entity with a scheme for inserting Babyl-specific
+headers and status bits above the top of each message in the file. 
+Rmail was Emacs' first mail reader, it was written by Richard Stallman,
+and Stallman came out of that TOPS/Babyl environment, so he wrote Rmail
+to understand the mail files folks already had in existence.  Gnus (and
+VM, for that matter) continue to support this format because it's
+perceived as having some good qualities in those mailer-specific
+headers/status bits stuff.  Rmail itself still exists as well, of
+course, and is still maintained within Emacs.  Since Emacs 23, it
+uses standard mbox format rather than Babyl.
+
+     <p>Both of the above forms leave your mail in a single file on your
+file system, and they must parse that entire file each time you take a
+look at your mail.
+
+     <br><dt><code>nnml</code><dd>
+<code>nnml</code> is the back end which smells the most as though you were
+actually operating with an <code>nnspool</code>-accessed Usenet system.  (In
+fact, I believe <code>nnml</code> actually derived from <code>nnspool</code> code,
+lo these years ago.)  One's mail is taken from the original spool file,
+and is then cut up into individual message files, 1:1.  It maintains a
+Usenet-style active file (analogous to what one finds in an INN- or
+CNews-based news system in (for instance) <samp><span class="file">/var/lib/news/active</span></samp>,
+or what is returned via the &lsquo;<samp><span class="samp">NNTP LIST</span></samp>&rsquo; verb) and also creates
+<dfn>overview</dfn> files for efficient group entry, as has been defined for
+<acronym>NNTP</acronym> servers for some years now.  It is slower in mail-splitting,
+due to the creation of lots of files, updates to the <code>nnml</code> active
+file, and additions to overview files on a per-message basis, but it is
+extremely fast on access because of what amounts to the indexing support
+provided by the active file and overviews.
+
+     <p><code>nnml</code> costs <dfn>inodes</dfn> in a big way; that is, it soaks up the
+resource which defines available places in the file system to put new
+files.  Sysadmins take a dim view of heavy inode occupation within
+tight, shared file systems.  But if you live on a personal machine where
+the file system is your own and space is not at a premium, <code>nnml</code>
+wins big.
+
+     <p>It is also problematic using this back end if you are living in a
+FAT16-based Windows world, since much space will be wasted on all these
+tiny files.
+
+     <br><dt><code>nnmh</code><dd>
+The Rand MH mail-reading system has been around UNIX systems for a very
+long time; it operates by splitting one's spool file of messages into
+individual files, but with little or no indexing support&mdash;<code>nnmh</code>
+is considered to be semantically equivalent to &ldquo;<code>nnml</code> without
+active file or overviews&rdquo;.  This is arguably the worst choice, because
+one gets the slowness of individual file creation married to the
+slowness of access parsing when learning what's new in one's groups.
+
+     <br><dt><code>nnfolder</code><dd>
+Basically the effect of <code>nnfolder</code> is <code>nnmbox</code> (the first
+method described above) on a per-group basis.  That is, <code>nnmbox</code>
+itself puts <em>all</em> one's mail in one file; <code>nnfolder</code> provides a
+little bit of optimization to this so that each of one's mail groups has
+a Unix mail box file.  It's faster than <code>nnmbox</code> because each group
+can be parsed separately, and still provides the simple Unix mail box
+format requiring minimal effort in moving the mail around.  In addition,
+it maintains an &ldquo;active&rdquo; file making it much faster for Gnus to figure
+out how many messages there are in each separate group.
+
+     <p>If you have groups that are expected to have a massive amount of
+messages, <code>nnfolder</code> is not the best choice, but if you receive
+only a moderate amount of mail, <code>nnfolder</code> is probably the most
+friendly mail back end all over.
+
+     <br><dt><code>nnmaildir</code><dd>
+For configuring expiry and other things, <code>nnmaildir</code> uses
+incompatible group parameters, slightly different from those of other
+mail back ends.
+
+     <p><code>nnmaildir</code> is largely similar to <code>nnml</code>, with some notable
+differences.  Each message is stored in a separate file, but the
+filename is unrelated to the article number in Gnus.  <code>nnmaildir</code>
+also stores the equivalent of <code>nnml</code>'s overview files in one file
+per article, so it uses about twice as many inodes as <code>nnml</code>.  (Use
+<code>df -i</code> to see how plentiful your inode supply is.)  If this slows
+you down or takes up very much space, consider switching to
+<a href="http://www.namesys.com/">ReiserFS</a> or another non-block-structured
+file system.
+
+     <p>Since maildirs don't require locking for delivery, the maildirs you use
+as groups can also be the maildirs your mail is directly delivered to. 
+This means you can skip Gnus' mail splitting if your mail is already
+organized into different mailboxes during delivery.  A <code>directory</code>
+entry in <code>mail-sources</code> would have a similar effect, but would
+require one set of mailboxes for spooling deliveries (in mbox format,
+thus damaging message bodies), and another set to be used as groups (in
+whatever format you like).  A maildir has a built-in spool, in the
+<code>new/</code> subdirectory.  Beware that currently, mail moved from
+<code>new/</code> to <code>cur/</code> instead of via mail splitting will not
+undergo treatment such as duplicate checking.
+
+     <p><code>nnmaildir</code> stores article marks for a given group in the
+corresponding maildir, in a way designed so that it's easy to manipulate
+them from outside Gnus.  You can tar up a maildir, unpack it somewhere
+else, and still have your marks.  <code>nnml</code> also stores marks, but
+it's not as easy to work with them from outside Gnus as with
+<code>nnmaildir</code>.
+
+     <p><code>nnmaildir</code> uses a significant amount of memory to speed things up. 
+(It keeps in memory some of the things that <code>nnml</code> stores in files
+and that <code>nnmh</code> repeatedly parses out of message files.)  If this
+is a problem for you, you can set the <code>nov-cache-size</code> group
+parameter to something small (0 would probably not work, but 1 probably
+would) to make it use less memory.  This caching will probably be
+removed in the future.
+
+     <p>Startup is likely to be slower with <code>nnmaildir</code> than with other
+back ends.  Everything else is likely to be faster, depending in part
+on your file system.
+
+     <p><code>nnmaildir</code> does not use <code>nnoo</code>, so you cannot use <code>nnoo</code>
+to write an <code>nnmaildir</code>-derived back end.
+
+   </dl>
+
+   </body></html>
+

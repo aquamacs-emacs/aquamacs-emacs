@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Kibozed Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Combined-Groups.html#Combined-Groups" title="Combined Groups">
+<link rel="prev" href="Virtual-Groups.html#Virtual-Groups" title="Virtual Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Kibozed-Groups"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Virtual-Groups.html#Virtual-Groups">Virtual Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Combined-Groups.html#Combined-Groups">Combined Groups</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.7.2 Kibozed Groups</h4>
+
+<p><a name="index-nnkiboze-2451"></a><a name="index-kibozing-2452"></a>
+<dfn>Kibozing</dfn> is defined by the <acronym>OED</acronym> as &ldquo;grepping through
+(parts of) the news feed&rdquo;.  <code>nnkiboze</code> is a back end that will
+do this for you.  Oh joy!  Now you can grind any <acronym>NNTP</acronym> server
+down to a halt with useless requests!  Oh happiness!
+
+   <p><a name="index-G-k-_0028Group_0029-2453"></a>To create a kibozed group, use the <kbd>G k</kbd> command in the group
+buffer.
+
+   <p>The address field of the <code>nnkiboze</code> method is, as with
+<code>nnvirtual</code>, a regexp to match groups to be &ldquo;included&rdquo; in the
+<code>nnkiboze</code> group.  That's where most similarities between
+<code>nnkiboze</code> and <code>nnvirtual</code> end.
+
+   <p>In addition to this regexp detailing component groups, an
+<code>nnkiboze</code> group must have a score file to say what articles are
+to be included in the group (see <a href="Scoring.html#Scoring">Scoring</a>).
+
+   <p><a name="index-M_002dx-nnkiboze_002dgenerate_002dgroups-2454"></a><a name="index-nnkiboze_002dgenerate_002dgroups-2455"></a>You must run <kbd>M-x nnkiboze-generate-groups</kbd> after creating the
+<code>nnkiboze</code> groups you want to have.  This command will take time. 
+Lots of time.  Oodles and oodles of time.  Gnus has to fetch the
+headers from all the articles in all the component groups and run them
+through the scoring process to determine if there are any articles in
+the groups that are to be part of the <code>nnkiboze</code> groups.
+
+   <p>Please limit the number of component groups by using restrictive
+regexps.  Otherwise your sysadmin may become annoyed with you, and the
+<acronym>NNTP</acronym> site may throw you off and never let you back in again. 
+Stranger things have happened.
+
+   <p><code>nnkiboze</code> component groups do not have to be alive&mdash;they can be dead,
+and they can be foreign.  No restrictions.
+
+   <p><a name="index-nnkiboze_002ddirectory-2456"></a>The generation of an <code>nnkiboze</code> group means writing two files in
+<code>nnkiboze-directory</code>, which is <samp><span class="file">~/News/kiboze/</span></samp> by default. 
+One contains the <acronym>NOV</acronym> header lines for all the articles in
+the group, and the other is an additional <samp><span class="file">.newsrc</span></samp> file to store
+information on what groups have been searched through to find
+component articles.
+
+   <p>Articles marked as read in the <code>nnkiboze</code> group will have
+their <acronym>NOV</acronym> lines removed from the <acronym>NOV</acronym> file.
+
+   </body></html>
+

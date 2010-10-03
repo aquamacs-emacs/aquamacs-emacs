@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Basic Graphics - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Graphics.html#Graphics" title="Graphics">
+<link rel="next" href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics" title="Three Dimensional Graphics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Graphics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics">Three Dimensional Graphics</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Graphics.html#Graphics">Graphics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">14.1 Basic Graphics</h3>
+
+<p class="noindent"><a name="index-g-f-2091"></a><a name="index-calc_002dgraph_002dfast-2092"></a>The easiest graphics command is <kbd>g f</kbd> (<code>calc-graph-fast</code>). 
+This command takes two vectors of equal length from the stack. 
+The vector at the top of the stack represents the &ldquo;y&rdquo; values of
+the various data points.  The vector in the second-to-top position
+represents the corresponding &ldquo;x&rdquo; values.  This command runs
+GNUPLOT (if it has not already been started by previous graphing
+commands) and displays the set of data points.  The points will
+be connected by lines, and there will also be some kind of symbol
+to indicate the points themselves.
+
+   <p>The &ldquo;x&rdquo; entry may instead be an interval form, in which case suitable
+&ldquo;x&rdquo; values are interpolated between the minimum and maximum values of
+the interval (whether the interval is open or closed is ignored).
+
+   <p>The &ldquo;x&rdquo; entry may also be a number, in which case Calc uses the
+sequence of &ldquo;x&rdquo; values &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x+1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x+2</span></samp>&rsquo;, etc. 
+(Generally the number 0 or 1 would be used for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; in this case.)
+
+   <p>The &ldquo;y&rdquo; entry may be any formula instead of a vector.  Calc effectively
+uses <kbd>N</kbd> (<code>calc-eval-num</code>) to evaluate variables in the formula;
+the result of this must be a formula in a single (unassigned) variable. 
+The formula is plotted with this variable taking on the various &ldquo;x&rdquo;
+values.  Graphs of formulas by default use lines without symbols at the
+computed data points.  Note that if neither &ldquo;x&rdquo; nor &ldquo;y&rdquo; is a vector,
+Calc guesses at a reasonable number of data points to use.  See the
+<kbd>g N</kbd> command below.  (The &ldquo;x&rdquo; values must be either a vector
+or an interval if &ldquo;y&rdquo; is a formula.)
+
+   <p><a name="index-xy-2093"></a>If &ldquo;y&rdquo; is (or evaluates to) a formula of the form
+&lsquo;<samp><span class="samp">xy(</span><var>x</var><span class="samp">, </span><var>y</var><span class="samp">)</span></samp>&rsquo; then the result is a
+parametric plot.  The two arguments of the fictitious <code>xy</code> function
+are used as the &ldquo;x&rdquo; and &ldquo;y&rdquo; coordinates of the curve, respectively. 
+In this case the &ldquo;x&rdquo; vector or interval you specified is not directly
+visible in the graph.  For example, if &ldquo;x&rdquo; is the interval &lsquo;<samp><span class="samp">[0..360]</span></samp>&rsquo;
+and &ldquo;y&rdquo; is the formula &lsquo;<samp><span class="samp">xy(sin(t), cos(t))</span></samp>&rsquo;, the resulting graph
+will be a circle.
+
+   <p>Also, &ldquo;x&rdquo; and &ldquo;y&rdquo; may each be variable names, in which case Calc
+looks for suitable vectors, intervals, or formulas stored in those
+variables.
+
+   <p>The &ldquo;x&rdquo; and &ldquo;y&rdquo; values for the data points (as pulled from the vectors,
+calculated from the formulas, or interpolated from the intervals) should
+be real numbers (integers, fractions, or floats).  One exception to this
+is that the &ldquo;y&rdquo; entry can consist of a vector of numbers combined with
+error forms, in which case the points will be plotted with the
+appropriate error bars.  Other than this, if either the &ldquo;x&rdquo;
+value or the &ldquo;y&rdquo; value of a given data point is not a real number, that
+data point will be omitted from the graph.  The points on either side
+of the invalid point will <em>not</em> be connected by a line.
+
+   <p>See the documentation for <kbd>g a</kbd> below for a description of the way
+numeric prefix arguments affect <kbd>g f</kbd>.
+
+   <p><a name="index-g_t_0040code_007bPlotRejects_007d-variable-2094"></a><a name="index-PlotRejects-2095"></a>If you store an empty vector in the variable <code>PlotRejects</code>
+(i.e., <kbd>[ ] s t PlotRejects</kbd>), Calc will append information to
+this vector for every data point which was rejected because its
+&ldquo;x&rdquo; or &ldquo;y&rdquo; values were not real numbers.  The result will be
+a matrix where each row holds the curve number, data point number,
+&ldquo;x&rdquo; value, and &ldquo;y&rdquo; value for a rejected data point. 
+See <a href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">Evaluates-To Operator</a>, for a handy way to keep tabs on the
+current value of <code>PlotRejects</code>.  See <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>,
+for the <kbd>s R</kbd> command which is another easy way to examine
+<code>PlotRejects</code>.
+
+   <p><a name="index-g-c-2096"></a><a name="index-calc_002dgraph_002dclear-2097"></a>To clear the graphics display, type <kbd>g c</kbd> (<code>calc-graph-clear</code>). 
+If the GNUPLOT output device is an X window, the window will go away. 
+Effects on other kinds of output devices will vary.  You don't need
+to use <kbd>g c</kbd> if you don't want to&mdash;if you give another <kbd>g f</kbd>
+or <kbd>g p</kbd> command later on, it will reuse the existing graphics
+window if there is one.
+
+   </body></html>
+

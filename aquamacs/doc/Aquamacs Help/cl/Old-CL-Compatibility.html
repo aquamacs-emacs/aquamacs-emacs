@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+<title>Old CL Compatibility - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" title="Common Lisp Compatibility">
+<link rel="next" href="Porting-Common-Lisp.html#Porting-Common-Lisp" title="Porting Common Lisp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Old-CL-Compatibility"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Porting-Common-Lisp.html#Porting-Common-Lisp">Porting Common Lisp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility">Common Lisp Compatibility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix C Old CL Compatibility</h2>
+
+<p class="noindent">Following is a list of all known incompatibilities between this package
+and the older Quiroz <samp><span class="file">cl.el</span></samp> package.
+
+   <p>This package's emulation of multiple return values in functions is
+incompatible with that of the older package.  That package attempted
+to come as close as possible to true Common Lisp multiple return
+values; unfortunately, it could not be 100% reliable and so was prone
+to occasional surprises if used freely.  This package uses a simpler
+method, namely replacing multiple values with lists of values, which
+is more predictable though more noticeably different from Common Lisp.
+
+   <p>The <code>defkeyword</code> form and <code>keywordp</code> function are not
+implemented in this package.
+
+   <p>The <code>member</code>, <code>floor</code>, <code>ceiling</code>, <code>truncate</code>,
+<code>round</code>, <code>mod</code>, and <code>rem</code> functions are suffixed
+by &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in this package to avoid collision with existing
+functions in Emacs.  The older package simply
+redefined these functions, overwriting the built-in meanings and
+causing serious portability problems.  (Some more
+recent versions of the Quiroz package changed the names to
+<code>cl-member</code>, etc.; this package defines the latter names as
+aliases for <code>member*</code>, etc.)
+
+   <p>Certain functions in the old package which were buggy or inconsistent
+with the Common Lisp standard are incompatible with the conforming
+versions in this package.  For example, <code>eql</code> and <code>member</code>
+were synonyms for <code>eq</code> and <code>memq</code> in that package, <code>setf</code>
+failed to preserve correct order of evaluation of its arguments, etc.
+
+   <p>Finally, unlike the older package, this package is careful to
+prefix all of its internal names with <code>cl-</code>.  Except for a
+few functions which are explicitly defined as additional features
+(such as <code>floatp-safe</code> and <code>letf</code>), this package does not
+export any non-&lsquo;<samp><span class="samp">cl-</span></samp>&rsquo; symbols which are not also part of Common
+Lisp.
+
+<h3 class="appendixsec">C.1 The <code>cl-compat</code> package</h3>
+
+<p class="noindent">The <dfn>CL</dfn> package includes emulations of some features of the
+old <samp><span class="file">cl.el</span></samp>, in the form of a compatibility package
+<code>cl-compat</code>.  To use it, put <code>(require 'cl-compat)</code> in
+your program.
+
+   <p>The old package defined a number of internal routines without
+<code>cl-</code> prefixes or other annotations.  Call to these routines
+may have crept into existing Lisp code.  <code>cl-compat</code>
+provides emulations of the following internal routines:
+<code>pair-with-newsyms</code>, <code>zip-lists</code>, <code>unzip-lists</code>,
+<code>reassemble-arglists</code>, <code>duplicate-symbols-p</code>,
+<code>safe-idiv</code>.
+
+   <p>Some <code>setf</code> forms translated into calls to internal
+functions that user code might call directly.  The functions
+<code>setnth</code>, <code>setnthcdr</code>, and <code>setelt</code> fall in
+this category; they are defined by <code>cl-compat</code>, but the
+best fix is to change to use <code>setf</code> properly.
+
+   <p>The <code>cl-compat</code> file defines the keyword functions
+<code>keywordp</code>, <code>keyword-of</code>, and <code>defkeyword</code>,
+which are not defined by the new <dfn>CL</dfn> package because the
+use of keywords as data is discouraged.
+
+   <p>The <code>build-klist</code> mechanism for parsing keyword arguments
+is emulated by <code>cl-compat</code>; the <code>with-keyword-args</code>
+macro is not, however, and in any case it's best to change to
+use the more natural keyword argument processing offered by
+<code>defun*</code>.
+
+   <p>Multiple return values are treated differently by the two
+Common Lisp packages.  The old package's method was more
+compatible with true Common Lisp, though it used heuristics
+that caused it to report spurious multiple return values in
+certain cases.  The <code>cl-compat</code> package defines a set
+of multiple-value macros that are compatible with the old
+CL package; again, they are heuristic in nature, but they
+are guaranteed to work in any case where the old package's
+macros worked.  To avoid name collision with the &ldquo;official&rdquo;
+multiple-value facilities, the ones in <code>cl-compat</code> have
+capitalized names:  <code>Values</code>, <code>Values-list</code>,
+<code>Multiple-value-bind</code>, etc.
+
+   <p>The functions <code>cl-floor</code>, <code>cl-ceiling</code>, <code>cl-truncate</code>,
+and <code>cl-round</code> are defined by <code>cl-compat</code> to use the
+old-style multiple-value mechanism, just as they did in the old
+package.  The newer <code>floor*</code> and friends return their two
+results in a list rather than as multiple values.  Note that
+older versions of the old package used the unadorned names
+<code>floor</code>, <code>ceiling</code>, etc.; <code>cl-compat</code> cannot use
+these names because they conflict with Emacs built-ins.
+
+   </body></html>
+

@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Style Variables - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Config-Basics.html#Config-Basics" title="Config Basics">
+<link rel="prev" href="CC-Hooks.html#CC-Hooks" title="CC Hooks">
+<link rel="next" href="Styles.html#Styles" title="Styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Style-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Styles.html#Styles">Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="CC-Hooks.html#CC-Hooks">CC Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Config-Basics.html#Config-Basics">Config Basics</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">6.2 Style Variables</h3>
+
+<p><a name="index-styles-278"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p><a name="index-style-variables-279"></a>The variables that CC Mode's style system control are called
+<dfn>style variables</dfn>.  Note that style variables are ordinary Lisp
+variables, which the style system initializes; you can change their
+values at any time (e.g. in a hook function).  The style system can
+also set other variables, to some extent.  See <a href="Styles.html#Styles">Styles</a>.
+
+   <p><dfn>Style variables</dfn> are handled specially in several ways:
+
+     <ul>
+<li>Style variables are by default buffer-local variables.  However, they
+can instead be made global by setting
+<code>c-style-variables-are-local-p</code> to <code>nil</code> before CC Mode is
+initialized.
+
+     <li><a name="index-c_002dold_002dstyle_002dvariable_002dbehavior-280"></a><a name="index-old_002dstyle_002dvariable_002dbehavior-_0028c_002d_0029-281"></a>The default global binding of any style variable (with two exceptions
+- see below) is the special symbol <code>set-from-style</code>.  When the
+style system initializes a buffer-local copy of a style variable for a
+CC Mode buffer, if its global binding is still that symbol then it
+will be set from the current style.  Otherwise it will retain its
+global default<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This
+&ldquo;otherwise&rdquo; happens, for example, when you've set the variable with
+<code>setq</code> at the top level of your <samp><span class="file">.emacs</span></samp> (see <a href="Config-Basics.html#Config-Basics">Config Basics</a>).
+
+     <li>The style variable <code>c-offsets-alist</code> (see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>) is
+an association list with an element for each syntactic symbol.  It's
+handled a little differently from the other style variables.  It's
+default global binding is the empty list <code>nil</code>, rather than
+<code>set-from-style</code>.  Before the style system is initialized, you
+can add individual elements to <code>c-offsets-alist</code> by calling
+<code>c-set-offset</code>(see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>) just like you would set
+other style variables with <code>setq</code>.  Those elements will then
+prevail when the style system later initializes a buffer-local copy of
+<code>c-offsets-alist</code>.
+
+     <li>The style variable <code>c-special-indent-hook</code> is also handled in a
+special way.  Styles can only add functions to this hook, not remove
+them, so any global settings you put on it are always
+preserved<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  The value
+you give this variable in a style definition can be either a function
+or a list of functions.
+
+     <li>The global bindings of the style variables get captured in the special
+<code>user</code> style when the style system is first initialized. 
+See <a href="Built_002din-Styles.html#Built_002din-Styles">Built-in Styles</a>, for details. 
+</ul>
+
+   <p>The style variables are:<br>
+<code>c-indent-comment-alist</code>,
+<code>c-indent-comments-syntactically-p</code> (see <a href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>);<br>
+<code>c-doc-comment-style</code> (see <a href="Doc-Comments.html#Doc-Comments">Doc Comments</a>);<br>
+<code>c-block-comment-prefix</code>, <code>c-comment-prefix-regexp</code>
+(see <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom Filling and Breaking</a>);<br>
+<code>c-hanging-braces-alist</code> (see <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>);<br>
+<code>c-hanging-colons-alist</code> (see <a href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>);<br>
+<code>c-hanging-semi&amp;comma-criteria</code> (see <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>);<br>
+<code>c-cleanup-list</code> (see <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a>);<br>
+<code>c-basic-offset</code> (see <a href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>);<br>
+<code>c-offsets-alist</code> (see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>);<br>
+<code>c-comment-only-line-offset</code> (see <a href="Comment-Line_002dUp.html#Comment-Line_002dUp">Comment Line-Up</a>);<br>
+<code>c-special-indent-hook</code>, <code>c-label-minimum-indentation</code>
+(see <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>);<br>
+<code>c-backslash-column</code>, <code>c-backslash-max-column</code>
+(see <a href="Custom-Macros.html#Custom-Macros">Custom Macros</a>).
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This is a big change from versions of
+CC Mode earlier than 5.26, where such settings would get overridden
+by the style system unless special precautions were taken.  That was
+changed since it was counterintuitive and confusing, especially to
+novice users.  If your configuration depends on the old overriding
+behavior, you can set the variable
+<code>c-old-style-variable-behavior</code> to non-<code>nil</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> This did not change in version 5.26.</p>
+
+   <hr></div>
+
+   </body></html>
+

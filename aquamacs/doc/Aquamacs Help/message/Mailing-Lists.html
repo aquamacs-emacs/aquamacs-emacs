@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Mailing Lists - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Interface.html#Interface" title="Interface">
+<link rel="prev" href="Bouncing.html#Bouncing" title="Bouncing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mailing-Lists"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Bouncing.html#Bouncing">Bouncing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Interface.html#Interface">Interface</a>
+<hr>
+</div>
+
+<h3 class="section">1.11 Mailing Lists</h3>
+
+<p><a name="index-Mail_002dFollowup_002dTo-30"></a>Sometimes while posting to mailing lists, the poster needs to direct
+followups to the post to specific places.  The Mail-Followup-To (MFT)
+was created to enable just this.  Three example scenarios where this is
+useful:
+
+     <ul>
+<li>A mailing list poster can use MFT to express that responses should be
+sent to just the list, and not the poster as well.  This will happen
+if the poster is already subscribed to the list.
+
+     <li>A mailing list poster can use MFT to express that responses should be
+sent to the list and the poster as well.  This will happen if the poster
+is not subscribed to the list.
+
+     <li>If a message is posted to several mailing lists, MFT may also be used
+to direct the following discussion to one list only, because
+discussions that are spread over several lists tend to be fragmented
+and very difficult to follow.
+
+   </ul>
+
+   <p>Gnus honors the MFT header in other's messages (i.e. while following
+up to someone else's post) and also provides support for generating
+sensible MFT headers for outgoing messages as well.
+
+<!-- @menu -->
+<!-- * Honoring an MFT post::        What to do when one already exists -->
+<!-- * Composing with a MFT header:: Creating one from scratch. -->
+<!-- @end menu -->
+<!-- @node Composing with a MFT header -->
+<h4 class="subsection">1.11.1 Composing a correct MFT header automagically</h4>
+
+<p>The first step in getting Gnus to automagically generate a MFT header
+in posts you make is to give Gnus a list of the mailing lists
+addresses you are subscribed to.  You can do this in more than one
+way.  The following variables would come in handy.
+
+     
+<a name="index-message_002dsubscribed_002daddresses-31"></a>
+<dl><dt><code>message-subscribed-addresses</code><dd>This should be a list of addresses the user is subscribed to.  Its
+default value is <code>nil</code>.  Example:
+     <pre class="lisp">          (setq message-subscribed-addresses
+                '("ding@gnus.org" "bing@noose.org"))
+</pre>
+     <p><a name="index-message_002dsubscribed_002dregexps-32"></a><br><dt><code>message-subscribed-regexps</code><dd>This should be a list of regexps denoting the addresses of mailing
+lists subscribed to.  Default value is <code>nil</code>.  Example: If you
+want to achieve the same result as above:
+     <pre class="lisp">          (setq message-subscribed-regexps
+                '("\\(ding@gnus\\)\\|\\(bing@noose\\)\\.org")
+</pre>
+     <p><a name="index-message_002dsubscribed_002daddress_002dfunctions-33"></a><br><dt><code>message-subscribed-address-functions</code><dd>This can be a list of functions to be called (one at a time!!) to
+determine the value of MFT headers.  It is advisable that these
+functions not take any arguments.  Default value is <code>nil</code>.
+
+     <p>There is a pre-defined function in Gnus that is a good candidate for
+this variable.  <code>gnus-find-subscribed-addresses</code> is a function
+that returns a list of addresses corresponding to the groups that have
+the <code>subscribed</code> (see <a href="../gnus/Group-Parameters.html#Group-Parameters">Group Parameters</a>) group parameter set to a non-<code>nil</code> value. 
+This is how you would do it.
+
+     <pre class="lisp">          (setq message-subscribed-address-functions
+                '(gnus-find-subscribed-addresses))
+</pre>
+     <p><a name="index-message_002dsubscribed_002daddress_002dfile-34"></a><br><dt><code>message-subscribed-address-file</code><dd>You might be one organized human freak and have a list of addresses of
+all subscribed mailing lists in a separate file!  Then you can just
+set this variable to the name of the file and life would be good.
+
+   </dl>
+
+   <p>You can use one or more of the above variables.  All their values are
+&ldquo;added&rdquo; in some way that works :-)
+
+   <p>Now you are all set.  Just start composing a message as you normally do. 
+And just send it; as always.  Just before the message is sent out, Gnus'
+MFT generation thingy kicks in and checks if the message already has a
+MFT field.  If there is one, it is left alone.  (Except if it's empty -
+in that case, the field is removed and is not replaced with an
+automatically generated one.  This lets you disable MFT generation on a
+per-message basis.)  If there is none, then the list of recipient
+addresses (in the To: and Cc: headers) is checked to see if one of them
+is a list address you are subscribed to.  If none of them is a list
+address, then no MFT is generated; otherwise, a MFT is added to the
+other headers and set to the value of all addresses in To: and Cc:
+
+   <p><a name="index-C_002dc-C_002df-C_002da-35"></a><a name="index-message_002dgenerate_002dunsubscribed_002dmail_002dfollowup_002dto-36"></a><a name="index-C_002dc-C_002df-C_002dm-37"></a><a name="index-message_002dgoto_002dmail_002dfollowup_002dto-38"></a>Hm.  &ldquo;So&rdquo;, you ask, &ldquo;what if I send an email to a list I am not
+subscribed to?  I want my MFT to say that I want an extra copy.&rdquo;  (This
+is supposed to be interpreted by others the same way as if there were no
+MFT, but you can use an explicit MFT to override someone else's
+to-address group parameter.)  The function
+<code>message-generate-unsubscribed-mail-followup-to</code> might come in
+handy.  It is bound to <kbd>C-c C-f C-a</kbd> by default.  In any case, you
+can insert a MFT of your own choice; <kbd>C-c C-f C-m</kbd>
+(<code>message-goto-mail-followup-to</code>) will help you get started.
+
+<!-- @node Honoring an MFT post -->
+<h4 class="subsection">1.11.2 Honoring an MFT post</h4>
+
+<p><a name="index-message_002duse_002dmail_002dfollowup_002dto-39"></a>When you followup to a post on a mailing list, and the post has a MFT
+header, Gnus' action will depend on the value of the variable
+<code>message-use-mail-followup-to</code>.  This variable can be one of:
+
+     <dl>
+<dt><code>use</code><dd> Always honor MFTs.  The To: and Cc: headers in your followup will be
+ derived from the MFT header of the original post.  This is the default.
+
+     <br><dt><code>nil</code><dd> Always dishonor MFTs (just ignore the darned thing)
+
+     <br><dt><code>ask</code><dd>Gnus will prompt you for an action.
+
+   </dl>
+
+   <p>It is considered good netiquette to honor MFT, as it is assumed the
+fellow who posted a message knows where the followups need to go
+better than you do.
+
+   </body></html>
+

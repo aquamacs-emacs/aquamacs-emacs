@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Hanging Semicolons and Commas - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines" title="Custom Auto-newlines">
+<link rel="prev" href="Hanging-Colons.html#Hanging-Colons" title="Hanging Colons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hanging-Semicolons-and-Commas"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">8.3 Hanging Semicolons and Commas</h3>
+
+<p><a name="index-hanging-semicolons-357"></a><a name="index-hanging-commas-358"></a><a name="index-customization_002c-semicolon-newlines-359"></a><a name="index-customization_002c-comma-newlines-360"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+<div class="defun">
+&mdash; User Option: <b>c-hanging-semi&amp;comma-criteria</b><var><a name="index-c_002dhanging_002dsemi_0026comma_002dcriteria-361"></a></var><br>
+<blockquote><p><a name="index-hanging_002dsemi_0026comma_002dcriteria-_0028c_002d_0029-362"></a>This style variable takes a list of functions; these get called when
+you type a semicolon or comma.  The functions are called in order
+without arguments.  When these functions are entered, point is just
+after the newly inserted &lsquo;<samp><span class="samp">;</span></samp>&rsquo; or &lsquo;<samp><span class="samp">,</span></samp>&rsquo; and they must preserve
+point (e.g., by using <code>save-excursion</code>).  During the call, the
+variable <code>c-syntactic-context</code> is bound to the syntactic context
+of the current line<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> see <a href="Custom-Braces.html#Custom-Braces">Custom Braces</a>.  These functions don't insert newlines
+themselves, rather they direct CC Mode whether or not to do so. 
+They should return one of the following values:
+
+          <dl>
+<dt><code>t</code><dd>A newline is to be inserted after the &lsquo;<samp><span class="samp">;</span></samp>&rsquo; or &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, and no
+more functions from the list are to be called. 
+<br><dt><code>stop</code><dd>No more functions from the list are to be called, and no newline is to
+be inserted. 
+<br><dt><code>nil</code><dd>No determination has been made, and the next function in the list is
+to be called. 
+</dl>
+
+        <p>Note that auto-newlines are never inserted <em>before</em> a semicolon
+or comma.  If every function in the list is called without a
+determination being made, then no newline is added.
+
+        <p>In AWK mode, this variable is set by default to <code>nil</code>.  In the
+other modes, the default value is a list containing a single function,
+<code>c-semi&amp;comma-inside-parenlist</code>.  This inserts newlines after all
+semicolons, apart from those separating <code>for</code>-clause statements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>c-semi&amp;comma-no-newlines-before-nonblanks</b><var><a name="index-c_002dsemi_0026comma_002dno_002dnewlines_002dbefore_002dnonblanks-363"></a></var><br>
+<blockquote><p><a name="index-semi_0026comma_002dno_002dnewlines_002dbefore_002dnonblanks-_0028c_002d_0029-364"></a>This is an example of a criteria function, provided by CC Mode.  It
+prevents newlines from being inserted after semicolons when there is a
+non-blank following line.  Otherwise, it makes no determination.  To
+use, add this function to the front of the
+<code>c-hanging-semi&amp;comma-criteria</code> list.
+
+     <pre class="example">          (defun c-semi&amp;comma-no-newlines-before-nonblanks ()
+            (save-excursion
+              (if (and (eq last-command-char ?\;)
+                       (zerop (forward-line 1))
+                       (not (looking-at "^[ \t]*$")))
+                  'stop
+                nil)))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>c-semi&amp;comma-inside-parenlist</b><var><a name="index-c_002dsemi_0026comma_002dinside_002dparenlist-365"></a></var><br>
+<blockquote><p><a name="index-semi_0026comma_002dinside_002dparenlist-_0028c_002d_0029-366"></a>
+
+   &mdash; Function: <b>c-semi&amp;comma-no-newlines-for-oneline-inliners</b><var><a name="index-c_002dsemi_0026comma_002dno_002dnewlines_002dfor_002doneline_002dinliners-367"></a></var><br>
+<blockquote><p><a name="index-semi_0026comma_002dno_002dnewlines_002dfor_002doneline_002dinliners-_0028c_002d_0029-368"></a>The function <code>c-semi&amp;comma-inside-parenlist</code> is what prevents
+newlines from being inserted inside the parenthesis list of <code>for</code>
+statements.  In addition to
+<code>c-semi&amp;comma-no-newlines-before-nonblanks</code> described above,
+CC Mode also comes with the criteria function
+<code>c-semi&amp;comma-no-newlines-for-oneline-inliners</code>, which suppresses
+newlines after semicolons inside one-line inline method definitions
+(e.g. in C++ or Java). 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This was first introduced in CC Mode
+5.31.</p>
+
+   <hr></div>
+
+   </body></html>
+

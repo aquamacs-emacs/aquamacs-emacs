@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>Splitting in IMAP - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="IMAP.html#IMAP" title="IMAP">
+<link rel="next" href="Expiring-in-IMAP.html#Expiring-in-IMAP" title="Expiring in IMAP">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Splitting-in-IMAP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Expiring-in-IMAP.html#Expiring-in-IMAP">Expiring in IMAP</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="IMAP.html#IMAP">IMAP</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.5.1 Splitting in IMAP</h4>
+
+<p><a name="index-splitting-imap-mail-2357"></a>
+Splitting is something Gnus users have loved and used for years, and now
+the rest of the world is catching up.  Yeah, dream on, not many
+<acronym>IMAP</acronym> servers have server side splitting and those that have
+splitting seem to use some non-standard protocol.  This means that
+<acronym>IMAP</acronym> support for Gnus has to do its own splitting.
+
+   <p>And it does.
+
+   <p>(Incidentally, people seem to have been dreaming on, and Sieve has
+gaining a market share and is supported by several IMAP servers. 
+Fortunately, Gnus support it too, See <a href="Sieve-Commands.html#Sieve-Commands">Sieve Commands</a>.)
+
+   <p>Here are the variables of interest:
+
+     <dl>
+<dt><code>nnimap-split-crosspost</code><dd><a name="index-splitting_002c-crosspost-2358"></a><a name="index-crosspost-2359"></a><a name="index-nnimap_002dsplit_002dcrosspost-2360"></a>
+If non-<code>nil</code>, do crossposting if several split methods match the
+mail.  If <code>nil</code>, the first match in <code>nnimap-split-rule</code>
+found will be used.
+
+     <p>Nnmail equivalent: <code>nnmail-crosspost</code>.
+
+     <br><dt><code>nnimap-split-inbox</code><dd><a name="index-splitting_002c-inbox-2361"></a><a name="index-inbox-2362"></a><a name="index-nnimap_002dsplit_002dinbox-2363"></a>
+A string or a list of strings that gives the name(s) of <acronym>IMAP</acronym>
+mailboxes to split from.  Defaults to <code>nil</code>, which means that
+splitting is disabled!
+
+     <pre class="lisp">          (setq nnimap-split-inbox
+                '("INBOX" ("~/friend/Mail" . "lists/*") "lists.imap"))
+</pre>
+     <p>No nnmail equivalent.
+
+     <br><dt><code>nnimap-split-rule</code><dd><a name="index-splitting_002c-rules-2364"></a><a name="index-nnimap_002dsplit_002drule-2365"></a>
+New mail found in <code>nnimap-split-inbox</code> will be split according to
+this variable.
+
+     <p>This variable contains a list of lists, where the first element in the
+sublist gives the name of the <acronym>IMAP</acronym> mailbox to move articles
+matching the regexp in the second element in the sublist.  Got that? 
+Neither did I, we need examples.
+
+     <pre class="lisp">          (setq nnimap-split-rule
+                '(("INBOX.nnimap"
+                   "^Sender: owner-nnimap@vic20.globalcom.se")
+                  ("INBOX.junk"    "^Subject:.*MAKE MONEY")
+                  ("INBOX.private" "")))
+</pre>
+     <p>This will put all articles from the nnimap mailing list into mailbox
+INBOX.nnimap, all articles containing MAKE MONEY in the Subject: line
+into INBOX.junk and everything else in INBOX.private.
+
+     <p>The first string may contain &lsquo;<samp><span class="samp">\\1</span></samp>&rsquo; forms, like the ones used by
+replace-match to insert sub-expressions from the matched text.  For
+instance:
+
+     <pre class="lisp">          ("INBOX.lists.\\1"     "^Sender: owner-\\([a-z-]+\\)@")
+</pre>
+     <p>The first element can also be the symbol <code>junk</code> to indicate that
+matching messages should simply be deleted.  Use with care.
+
+     <p>The second element can also be a function.  In that case, it will be
+called with the first element of the rule as the argument, in a buffer
+containing the headers of the article.  It should return a
+non-<code>nil</code> value if it thinks that the mail belongs in that group.
+
+     <p>Nnmail users might recollect that the last regexp had to be empty to
+match all articles (like in the example above).  This is not required in
+nnimap.  Articles not matching any of the regexps will not be moved out
+of your inbox.  (This might affect performance if you keep lots of
+unread articles in your inbox, since the splitting code would go over
+them every time you fetch new mail.)
+
+     <p>These rules are processed from the beginning of the alist toward the
+end.  The first rule to make a match will &ldquo;win&rdquo;, unless you have
+crossposting enabled.  In that case, all matching rules will &ldquo;win&rdquo;.
+
+     <p>This variable can also have a function as its value, the function will
+be called with the headers narrowed and should return a group where it
+thinks the article should be split to.  See <code>nnimap-split-fancy</code>.
+
+     <p>The splitting code tries to create mailboxes if it needs to.
+
+     <p>To allow for different split rules on different virtual servers, and
+even different split rules in different inboxes on the same server,
+the syntax of this variable have been extended along the lines of:
+
+     <pre class="lisp">          (setq nnimap-split-rule
+                '(("my1server"    (".*" (("ding"    "ding@gnus.org")
+                                         ("junk"    "From:.*Simon"))))
+                  ("my2server"    ("INBOX" nnimap-split-fancy))
+                  ("my[34]server" (".*" (("private" "To:.*Simon")
+                                         ("junk"    my-junk-func))))))
+</pre>
+     <p>The virtual server name is in fact a regexp, so that the same rules
+may apply to several servers.  In the example, the servers
+<code>my3server</code> and <code>my4server</code> both use the same rules. 
+Similarly, the inbox string is also a regexp.  The actual splitting
+rules are as before, either a function, or a list with group/regexp or
+group/function elements.
+
+     <p>Nnmail equivalent: <code>nnmail-split-methods</code>.
+
+     <br><dt><code>nnimap-split-predicate</code><dd><a name="index-splitting-2366"></a><a name="index-nnimap_002dsplit_002dpredicate-2367"></a>
+Mail matching this predicate in <code>nnimap-split-inbox</code> will be
+split, it is a string and the default is &lsquo;<samp><span class="samp">UNSEEN UNDELETED</span></samp>&rsquo;.
+
+     <p>This might be useful if you use another <acronym>IMAP</acronym> client to read mail in
+your inbox but would like Gnus to split all articles in the inbox
+regardless of readedness.  Then you might change this to
+&lsquo;<samp><span class="samp">UNDELETED</span></samp>&rsquo;.
+
+     <br><dt><code>nnimap-split-fancy</code><dd><a name="index-splitting_002c-fancy-2368"></a><a name="index-nnimap_002dsplit_002dfancy-2369"></a><a name="index-nnimap_002dsplit_002dfancy-2370"></a>
+It's possible to set <code>nnimap-split-rule</code> to
+<code>nnmail-split-fancy</code> if you want to use fancy
+splitting.  See <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>.
+
+     <p>However, to be able to have different fancy split rules for nnmail and
+nnimap back ends you can set <code>nnimap-split-rule</code> to
+<code>nnimap-split-fancy</code> and define the nnimap specific fancy split
+rule in <code>nnimap-split-fancy</code>.
+
+     <p>Example:
+
+     <pre class="lisp">          (setq nnimap-split-rule 'nnimap-split-fancy
+                nnimap-split-fancy ...)
+</pre>
+     <p>Nnmail equivalent: <code>nnmail-split-fancy</code>.
+
+     <br><dt><code>nnimap-split-download-body</code><dd><a name="index-nnimap_002dsplit_002ddownload_002dbody-2371"></a><a name="index-nnimap_002dsplit_002ddownload_002dbody-2372"></a>
+Set to non-<code>nil</code> to download entire articles during splitting. 
+This is generally not required, and will slow things down
+considerably.  You may need it if you want to use an advanced
+splitting function that analyzes the body to split the article.
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Examining Variables - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" title="The IDLWAVE Shell">
+<link rel="prev" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" title="Debugging IDL Programs">
+<link rel="next" href="Custom-Expression-Examination.html#Custom-Expression-Examination" title="Custom Expression Examination">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Examining-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Examining Variables</h3>
+
+<p><a name="index-g_t_0040code_007bPRINT_007d-expressions-319"></a><a name="index-g_t_0040code_007bHELP_007d_002c-on-expressions-320"></a><a name="index-Expressions_002c-printing-_0026-help-321"></a><a name="index-Examining-expressions-322"></a><a name="index-Printing-expressions-323"></a><a name="index-Mouse-binding-to-print-expressions-324"></a>
+<a name="index-C_002dc-C_002dd-C_002dp-325"></a>Do you find yourself repeatedly typing, e.g. <code>print,n_elements(x)</code>,
+and similar statements to remind yourself of the
+type/size/structure/value/etc. of variables and expressions in your code
+or at the command line?  IDLWAVE has a suite of special commands to
+automate these types of variable or expression examinations.  They work
+by sending statements to the shell formatted to include the indicated
+expression, and can be accessed in several ways.
+
+   <p>These <em>examine</em> commands can be used in the shell or buffer at any
+time (as long as the shell is running), and are very useful when
+execution is stopped in a buffer due to a triggered breakpoint or error,
+or while composing a long command in the IDLWAVE shell.  In the latter
+case, the command is sent to the shell and its output is visible, but
+point remains unmoved in the command being composed &mdash; you can inspect
+the constituents of a command you're building without interrupting the
+process of building it!  You can even print arbitrary expressions from
+older input or output further up in the shell window &mdash; any expression,
+variable, number, or function you see can be examined.
+
+   <p>If the variable <code>idlwave-shell-separate-examine-output</code> is
+non-<code>nil</code> (the default), all examine output will be sent to a
+special <samp><span class="file">*Examine*</span></samp> buffer, rather than the shell.  The output of
+prior examine commands is saved in this buffer.  In this buffer &lt;c&gt;
+clears the contents, and &lt;q&gt; hides the buffer.
+
+   <p>The two most basic examine commands are bound to <kbd>C-c C-d C-p</kbd>, to
+print the expression at point, and <kbd>C-c C-d ?</kbd>, to invoke help on
+this expression<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  The expression at point is
+either an array expression or a function call, or the contents of a pair
+of parentheses.  The chosen expression is highlighted, and
+simultaneously the resulting output is highlighted in the shell or
+separate output buffer.  Calling the above commands with a prefix
+argument will use the current region as expression instead of using the
+one at point. which can be useful for examining complicated, multi-line
+expressions.  Two prefix arguments (<kbd>C-u C-u C-c C-d C-p</kbd>) will
+prompt for an expression to print directly.  By default, when invoking
+print, only an initial portion of long arrays will be printed, up to
+<code>idlwave-shell-max-print-length</code>.
+
+   <p>For added speed and convenience, there are mouse bindings which allow
+you to click on expressions and examine their values.  Use
+<kbd>S-Mouse-2</kbd> to print an expression and <kbd>C-M-Mouse-2</kbd> to invoke
+help (i.e. you need to hold down &lt;META&gt; and &lt;CONTROL&gt; while
+clicking with the middle mouse button).  If you simply click, the
+nearest expression will be selected in the same manner as described
+above.  You can also <em>drag</em> the mouse in order to highlight
+exactly the specific expression or sub-expression you want to examine. 
+For custom expression examination, and the powerful customizable
+pop-up examine selection, See <a href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a>.
+
+   <p><a name="index-Printing-expressions_002c-on-calling-stack-326"></a><a name="index-Restrictions-for-expression-printing-327"></a>The same variable inspection commands work both in the IDL Shell and
+IDLWAVE buffers, and even for variables at higher levels of the calling
+stack.  For instance, if you're stopped at a breakpoint in a routine,
+you can examine the values of variables and expressions inside its
+calling routine, and so on, all the way up through the calling stack. 
+Simply step up the stack, and print variables as you see them
+(see <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack">Walking the Calling Stack</a>, for information on stepping back
+through the calling stack).  The following restrictions apply for all
+levels except the current:
+
+     <ul>
+<li>Array expressions must use the &lsquo;<samp><span class="samp">[ ]</span></samp>&rsquo; index delimiters.  Identifiers
+with a &lsquo;<samp><span class="samp">( )</span></samp>&rsquo; will be interpreted as function calls. 
+<li><a name="index-ROUTINE_005fNAMES_002c-IDL-procedure-328"></a>N.B.: printing values of expressions on higher levels of the calling
+stack uses the <em>unsupported</em> IDL routine <code>ROUTINE_NAMES</code>,
+which may or may not be available in future versions of IDL.  Caveat
+Examinor. 
+</ul>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-expression-face</b><var><a name="index-idlwave_002dshell_002dexpression_002dface-329"></a></var><br>
+<blockquote><p>The face for <code>idlwave-shell-expression-overlay</code>. 
+Allows you to choose the font, color and other properties for
+the expression printed by IDL. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-output-face</b><var><a name="index-idlwave_002dshell_002doutput_002dface-330"></a></var><br>
+<blockquote><p>The face for <code>idlwave-shell-output-overlay</code>. 
+Allows to choose the font, color and other properties for the most
+recent output of IDL when examining an expression." 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-separate-examine-output</b> (<code>t</code>)<var><a name="index-idlwave_002dshell_002dseparate_002dexamine_002doutput-331"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, re-direct the output of examine commands to a special
+<samp><span class="file">*Examine*</span></samp> buffer, instead of in the shell itself. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-shell-max-print-length</b> (<var>200</var>)<var><a name="index-idlwave_002dshell_002dmax_002dprint_002dlength-332"></a></var><br>
+<blockquote><p>The maximum number of leading array entries to print, when examining
+array expressions. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Available as <kbd>p</kbd> and <kbd>?</kbd> in Electric
+Debug Mode (see <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a>)</p>
+
+   <hr></div>
+
+   </body></html>
+

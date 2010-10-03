@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+<title>Operator Line-Up - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Line_002dUp-Functions.html#Line_002dUp-Functions" title="Line-Up Functions">
+<link rel="prev" href="List-Line_002dUp.html#List-Line_002dUp" title="List Line-Up">
+<link rel="next" href="Comment-Line_002dUp.html#Comment-Line_002dUp" title="Comment Line-Up">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Operator-Line-Up"></a>
+<a name="Operator-Line_002dUp"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Comment-Line_002dUp.html#Comment-Line_002dUp">Comment Line-Up</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="List-Line_002dUp.html#List-Line_002dUp">List Line-Up</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">11.3.3 Operator Line-Up Functions</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>The line-up functions here calculate the indentation for lines which
+start with an operator, by lining it up with something on the previous
+line.
+
+<div class="defun">
+&mdash; Function: <b>c-lineup-argcont</b><var><a name="index-c_002dlineup_002dargcont-531"></a></var><br>
+<blockquote><p><a name="index-lineup_002dargcont-_0028c_002d_0029-532"></a>Line up a continued argument.  E.g:
+
+     <pre class="example">          foo (xyz, aaa + bbb + ccc
+                    + ddd + eee + fff);  &lt;- <i>c-lineup-argcont</i>
+</pre>
+        <p>Only continuation lines like this are touched, <code>nil</code> is returned on
+lines which are the start of an argument.
+
+        <p>Within a gcc <code>asm</code> block, <code>:</code> is recognized as an argument
+separator, but of course only between operand specifications, not in the
+expressions for the operands.
+
+        <p><em>Works with: </em> <code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-arglist-operators</b><var><a name="index-c_002dlineup_002darglist_002doperators-533"></a></var><br>
+<blockquote><p><a name="index-lineup_002darglist_002doperators-_0028c_002d_0029-534"></a>Line up lines starting with an infix operator under the open paren. 
+Return <code>nil</code> on lines that don't start with an operator, to leave
+those cases to other line-up functions.  Example:
+
+     <pre class="example">          if (  x &lt; 10
+             || at_limit (x,     &lt;- <i>c-lineup-arglist-operators</i>
+                          list)  &lt;- <i>c-lineup-arglist-operators</i><span class="roman"> returns nil</span>
+             )
+</pre>
+        <p>Since this function doesn't do anything for lines without an infix
+operator you typically want to use it together with some other lineup
+settings, e.g. as follows (the <code>arglist-close</code> setting is just a
+suggestion to get a consistent style):
+
+     <pre class="example">          (c-set-offset 'arglist-cont
+                        '(c-lineup-arglist-operators 0))
+          (c-set-offset 'arglist-cont-nonempty
+                        '(c-lineup-arglist-operators c-lineup-arglist))
+          (c-set-offset 'arglist-close
+                        '(c-lineup-arglist-close-under-paren))
+</pre>
+        <p><em>Works with: </em> <code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-assignments</b><var><a name="index-c_002dlineup_002dassignments-535"></a></var><br>
+<blockquote><p><a name="index-lineup_002dassignments-_0028c_002d_0029-536"></a>Line up the current line after the assignment operator on the first line
+in the statement.  If there isn't any, return nil to allow stacking with
+other line-up functions.  If the current line contains an assignment
+operator too, try to align it with the first one.
+
+        <p><em>Works with: </em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
+
+        </blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-math</b><var><a name="index-c_002dlineup_002dmath-537"></a></var><br>
+<blockquote><p><a name="index-lineup_002dmath-_0028c_002d_0029-538"></a>Like <code>c-lineup-assignments</code> but indent with <code>c-basic-offset</code>
+if no assignment operator was found on the first line.  I.e. this
+function is the same as specifying a list <code>(c-lineup-assignments
++)</code>.  It's provided for compatibility with old configurations.
+
+        <p><em>Works with: </em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-cascaded-calls</b><var><a name="index-c_002dlineup_002dcascaded_002dcalls-539"></a></var><br>
+<blockquote><p><a name="index-lineup_002dcascaded_002dcalls-_0028c_002d_0029-540"></a>Line up &ldquo;cascaded calls&rdquo; under each other.  If the line begins with
+<code>-&gt;</code> or <code>.</code> and the preceding line ends with one or more
+function calls preceded by the same token, then the arrow is lined up
+with the first of those tokens.  E.g:
+
+     <pre class="example">          r = proc-&gt;add(17)-&gt;add(18)
+                  -&gt;add(19) +         &lt;- <i>c-lineup-cascaded-calls</i>
+            offset;                   &lt;- <i>c-lineup-cascaded-calls</i><span class="roman"> (inactive)</span>
+</pre>
+        <p>In any other situation <code>nil</code> is returned to allow use in list
+expressions.
+
+        <p><em>Works with: </em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-streamop</b><var><a name="index-c_002dlineup_002dstreamop-541"></a></var><br>
+<blockquote><p><a name="index-lineup_002dstreamop-_0028c_002d_0029-542"></a>Line up C++ stream operators (i.e. &lsquo;<samp><span class="samp">&lt;&lt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&gt;&gt;</span></samp>&rsquo;).
+
+        <p><em>Works with: </em> <code>stream-op</code>. 
+</p></blockquote></div>
+
+<!--  -->
+<div class="defun">
+&mdash; Function: <b>c-lineup-string-cont</b><var><a name="index-c_002dlineup_002dstring_002dcont-543"></a></var><br>
+<blockquote><p><a name="index-lineup_002dstring_002dcont-_0028c_002d_0029-544"></a>Line up a continued string under the one it continues.  A continued
+string in this sense is where a string literal follows directly after
+another one.  E.g:
+
+     <pre class="example">          result = prefix + "A message "
+                            "string.";    &lt;- <i>c-lineup-string-cont</i>
+</pre>
+        <p><code>nil</code> is returned in other situations, to allow stacking with other
+lineup functions.
+
+        <p><em>Works with: </em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>. 
+</p></blockquote></div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

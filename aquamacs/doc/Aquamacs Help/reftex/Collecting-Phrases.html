@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Collecting Phrases - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Index-Phrases-File.html#The-Index-Phrases-File" title="The Index Phrases File">
+<link rel="next" href="Consistency-Checks.html#Consistency-Checks" title="Consistency Checks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Collecting-Phrases"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.1 Collecting Phrases</h4>
+
+<p><a name="index-Collecting-index-phrases-244"></a><a name="index-Index-phrases_002c-collection-245"></a><a name="index-Phrases_002c-collecting-246"></a>
+Phrases for indexing can be collected while writing the document.  The
+command <kbd>C-c \</kbd> (<code>reftex-index-phrase-selection-or-word</code>)
+copies the current selection (if active) or the word near point into the
+phrases buffer.  It then selects this buffer, so that the phrase line
+can be edited.  To return to the LaTeX document, press <kbd>C-c C-c</kbd>
+(<code>reftex-index-phrases-save-and-return</code>).
+
+   <p>You can also prepare the list of index phrases in a different way and
+copy it into the phrases file.  For example you might want to start from
+a word list of the document and remove all words which should not be
+indexed.
+
+   <p>The phrase lines in the phrase buffer must have a specific format. 
+<b>RefTeX</b> will use font-lock to indicate if a line has the proper
+format.  A phrase line looks like this:
+
+<pre class="example">     [<var>key</var>] &lt;TABs&gt; <var>phrase</var> [&lt;TABs&gt; <var>arg</var>[&amp;&amp;<var>arg</var>]... [ || <var>arg</var>]...]
+</pre>
+   <p><code>&lt;TABs&gt;</code> stands for white space containing at least one &lt;TAB&gt;. 
+<var>key</var> must be at the start of the line and is the character
+identifying one of the macros defined in the file header.  It is
+optional - when omitted, the first macro definition line in the file
+will be used for this phrase.  The <var>phrase</var> is the phrase to be
+searched for when indexing.  It may contain several words separated by
+spaces.  By default the search phrase is also the text entered as
+argument of the index macro.  If you want the index entry to be
+different from the search phrase, enter another &lt;TAB&gt; and the index
+argument <var>arg</var>.  If you want to have each match produce several
+index entries, separate the different index arguments with &lsquo;<samp><span class="samp"> &amp;&amp;
+</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If you want to be
+able to choose at each match between several different index arguments,
+separate them with &lsquo;<samp><span class="samp"> || </span></samp>&rsquo;<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  Here is an
+example:
+
+<pre class="example">     %--------------------------------------------------------------------
+     I     Sun
+     i     Planet         Planets
+     i     Vega           Stars!Vega
+           Jupiter        Planets!Jupiter
+     i     Mars           Planets!Mars || Gods!Mars || Chocolate Bars!Mars
+     i     Pluto          Planets!Pluto &amp;&amp; Kuiper Belt Objects!Pluto
+</pre>
+   <p>So &lsquo;<samp><span class="samp">Sun</span></samp>&rsquo; will be indexed directly as &lsquo;<samp><span class="samp">\index*{Sun}</span></samp>&rsquo;, while
+&lsquo;<samp><span class="samp">Planet</span></samp>&rsquo; will be indexed as &lsquo;<samp><span class="samp">\index{Planets}Planet</span></samp>&rsquo;. 
+&lsquo;<samp><span class="samp">Vega</span></samp>&rsquo; will be indexed as a subitem of &lsquo;<samp><span class="samp">Stars</span></samp>&rsquo;.  The
+&lsquo;<samp><span class="samp">Jupiter</span></samp>&rsquo; line will also use the &lsquo;<samp><span class="samp">i</span></samp>&rsquo; macro as it was the first
+macro definition in the file header (see above example).  At each
+occurrence of &lsquo;<samp><span class="samp">Mars</span></samp>&rsquo; you will be able choose between indexing it as
+a subitem of &lsquo;<samp><span class="samp">Planets</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Gods</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Chocolate Bars</span></samp>&rsquo;. 
+Finally, every occurrence of &lsquo;<samp><span class="samp">Pluto</span></samp>&rsquo; will be indexed as
+&lsquo;<samp><span class="samp">\index{Planets!Pluto}\index{Kuiper Belt Objects!Pluto}Pluto</span></samp>&rsquo;
+and will therefore create two different index entries.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> &lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo; with optional spaces, see
+<code>reftex-index-phrases-logical-and-regexp</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> &lsquo;<samp><span class="samp">||</span></samp>&rsquo; with optional spaces,
+see <code>reftex-index-phrases-logical-or-regexp</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

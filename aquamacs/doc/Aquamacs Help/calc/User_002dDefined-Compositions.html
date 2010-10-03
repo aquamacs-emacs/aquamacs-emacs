@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+<title>User-Defined Compositions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compositions.html#Compositions" title="Compositions">
+<link rel="prev" href="Information-about-Compositions.html#Information-about-Compositions" title="Information about Compositions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="User-Defined-Compositions"></a>
+<a name="User_002dDefined-Compositions"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Information-about-Compositions.html#Information-about-Compositions">Information about Compositions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compositions.html#Compositions">Compositions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">7.8.10.6 User-Defined Compositions</h5>
+
+<p class="noindent"><a name="index-Z-C-634"></a><a name="index-calc_002duser_002ddefine_002dcomposition-635"></a>The <kbd>Z C</kbd> (<code>calc-user-define-composition</code>) command lets you
+define the display format for any algebraic function.  You provide a
+formula containing a certain number of argument variables on the stack. 
+Any time Calc formats a call to the specified function in the current
+language mode and with that number of arguments, Calc effectively
+replaces the function call with that formula with the arguments
+replaced.
+
+   <p>Calc builds the default argument list by sorting all the variable names
+that appear in the formula into alphabetical order.  You can edit this
+argument list before pressing &lt;RET&gt; if you wish.  Any variables in
+the formula that do not appear in the argument list will be displayed
+literally; any arguments that do not appear in the formula will not
+affect the display at all.
+
+   <p>You can define formats for built-in functions, for functions you have
+defined with <kbd>Z F</kbd> (see <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>), or for functions
+which have no definitions but are being used as purely syntactic objects. 
+You can define different formats for each language mode, and for each
+number of arguments, using a succession of <kbd>Z C</kbd> commands.  When
+Calc formats a function call, it first searches for a format defined
+for the current language mode (and number of arguments); if there is
+none, it uses the format defined for the Normal language mode.  If
+neither format exists, Calc uses its built-in standard format for that
+function (usually just &lsquo;<samp><var>func</var><span class="samp">(</span><var>args</var><span class="samp">)</span></samp>&rsquo;).
+
+   <p>If you execute <kbd>Z C</kbd> with the number 0 on the stack instead of a
+formula, any defined formats for the function in the current language
+mode will be removed.  The function will revert to its standard format.
+
+   <p>For example, the default format for the binomial coefficient function
+&lsquo;<samp><span class="samp">choose(n, m)</span></samp>&rsquo; in the Big language mode is
+
+<pre class="example">      n
+     ( )
+      m
+</pre>
+   <p class="noindent">You might prefer the notation,
+
+<pre class="example">      C
+     n m
+</pre>
+   <p class="noindent">To define this notation, first make sure you are in Big mode,
+then put the formula
+
+<pre class="smallexample">     choriz([cvert([cvspace(1), n]), C, cvert([cvspace(1), m])])
+</pre>
+   <p class="noindent">on the stack and type <kbd>Z C</kbd>.  Answer the first prompt with
+<code>choose</code>.  The second prompt will be the default argument list
+of &lsquo;<samp><span class="samp">(C m n)</span></samp>&rsquo;.  Edit this list to be &lsquo;<samp><span class="samp">(n m)</span></samp>&rsquo; and press
+&lt;RET&gt;.  Now, try it out:  For example, turn simplification
+off with <kbd>m O</kbd> and enter &lsquo;<samp><span class="samp">choose(a,b) + choose(7,3)</span></samp>&rsquo;
+as an algebraic entry.
+
+<pre class="example">      C  +  C
+     a b   7 3
+</pre>
+   <p>As another example, let's define the usual notation for Stirling
+numbers of the first kind, &lsquo;<samp><span class="samp">stir1(n, m)</span></samp>&rsquo;.  This is just like
+the regular format for binomial coefficients but with square brackets
+instead of parentheses.
+
+<pre class="smallexample">     choriz([string("["), cvert([n, cbase(cvspace(1)), m]), string("]")])
+</pre>
+   <p>Now type <kbd>Z C stir1 &lt;RET&gt;</kbd>, edit the argument list to
+&lsquo;<samp><span class="samp">(n m)</span></samp>&rsquo;, and type &lt;RET&gt;.
+
+   <p>The formula provided to <kbd>Z C</kbd> usually will involve composition
+functions, but it doesn't have to.  Putting the formula &lsquo;<samp><span class="samp">a + b + c</span></samp>&rsquo;
+onto the stack and typing <kbd>Z C foo &lt;RET&gt; &lt;RET&gt;</kbd> would define
+the function &lsquo;<samp><span class="samp">foo(x,y,z)</span></samp>&rsquo; to display like &lsquo;<samp><span class="samp">x + y + z</span></samp>&rsquo;. 
+This &ldquo;sum&rdquo; will act exactly like a real sum for all formatting
+purposes (it will be parenthesized the same, and so on).  However
+it will be computationally unrelated to a sum.  For example, the
+formula &lsquo;<samp><span class="samp">2 * foo(1, 2, 3)</span></samp>&rsquo; will display as &lsquo;<samp><span class="samp">2 (1 + 2 + 3)</span></samp>&rsquo;. 
+Operator precedences have caused the &ldquo;sum&rdquo; to be written in
+parentheses, but the arguments have not actually been summed. 
+(Generally a display format like this would be undesirable, since
+it can easily be confused with a real sum.)
+
+   <p>The special function <code>eval</code> can be used inside a <kbd>Z C</kbd>
+composition formula to cause all or part of the formula to be
+evaluated at display time.  For example, if the formula is
+&lsquo;<samp><span class="samp">a + eval(b + c)</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">foo(1, 2, 3)</span></samp>&rsquo; will be displayed
+as &lsquo;<samp><span class="samp">1 + 5</span></samp>&rsquo;.  Evaluation will use the default simplifications,
+regardless of the current simplification mode.  There are also
+<code>evalsimp</code> and <code>evalextsimp</code> which simplify as if by
+<kbd>a s</kbd> and <kbd>a e</kbd> (respectively).  Note that these &ldquo;functions&rdquo;
+operate only in the context of composition formulas (and also in
+rewrite rules, where they serve a similar purpose; see <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>).  On the stack, a call to <code>eval</code> will be left in
+symbolic form.
+
+   <p>It is not a good idea to use <code>eval</code> except as a last resort. 
+It can cause the display of formulas to be extremely slow.  For
+example, while &lsquo;<samp><span class="samp">eval(a + b)</span></samp>&rsquo; might seem quite fast and simple,
+there are several situations where it could be slow.  For example,
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; and/or &lsquo;<samp><span class="samp">b</span></samp>&rsquo; could be polar complex numbers, in which
+case doing the sum requires trigonometry.  Or, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; could be
+the factorial &lsquo;<samp><span class="samp">fact(100)</span></samp>&rsquo; which is unevaluated because you
+have typed <kbd>m O</kbd>; <code>eval</code> will evaluate it anyway to
+produce a large, unwieldy integer.
+
+   <p>You can save your display formats permanently using the <kbd>Z P</kbd>
+command (see <a href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>).
+
+   </body></html>
+

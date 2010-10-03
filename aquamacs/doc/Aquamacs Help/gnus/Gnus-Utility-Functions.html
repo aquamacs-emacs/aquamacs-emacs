@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Gnus Utility Functions - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
+<link rel="next" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Gnus-Utility-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.7.1 Gnus Utility Functions</h4>
+
+<p><a name="index-Gnus-utility-functions-3157"></a><a name="index-utility-functions-3158"></a><a name="index-functions-3159"></a><a name="index-internal-variables-3160"></a>
+When writing small functions to be run from hooks (and stuff), it's
+vital to have access to the Gnus internal functions and variables. 
+Below is a list of the most common ones.
+
+     <dl>
+<dt><code>gnus-newsgroup-name</code><dd><a name="index-gnus_002dnewsgroup_002dname-3161"></a>This variable holds the name of the current newsgroup.
+
+     <br><dt><code>gnus-find-method-for-group</code><dd><a name="index-gnus_002dfind_002dmethod_002dfor_002dgroup-3162"></a>A function that returns the select method for <var>group</var>.
+
+     <br><dt><code>gnus-group-real-name</code><dd><a name="index-gnus_002dgroup_002dreal_002dname-3163"></a>Takes a full (prefixed) Gnus group name, and returns the unprefixed
+name.
+
+     <br><dt><code>gnus-group-prefixed-name</code><dd><a name="index-gnus_002dgroup_002dprefixed_002dname-3164"></a>Takes an unprefixed group name and a select method, and returns the full
+(prefixed) Gnus group name.
+
+     <br><dt><code>gnus-get-info</code><dd><a name="index-gnus_002dget_002dinfo-3165"></a>Returns the group info list for <var>group</var>.
+
+     <br><dt><code>gnus-group-unread</code><dd><a name="index-gnus_002dgroup_002dunread-3166"></a>The number of unread articles in <var>group</var>, or <code>t</code> if that is
+unknown.
+
+     <br><dt><code>gnus-active</code><dd><a name="index-gnus_002dactive-3167"></a>The active entry for <var>group</var>.
+
+     <br><dt><code>gnus-set-active</code><dd><a name="index-gnus_002dset_002dactive-3168"></a>Set the active entry for <var>group</var>.
+
+     <br><dt><code>gnus-add-current-to-buffer-list</code><dd><a name="index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist-3169"></a>Adds the current buffer to the list of buffers to be killed on Gnus
+exit.
+
+     <br><dt><code>gnus-continuum-version</code><dd><a name="index-gnus_002dcontinuum_002dversion-3170"></a>Takes a Gnus version string as a parameter and returns a floating point
+number.  Earlier versions will always get a lower number than later
+versions.
+
+     <br><dt><code>gnus-group-read-only-p</code><dd><a name="index-gnus_002dgroup_002dread_002donly_002dp-3171"></a>Says whether <var>group</var> is read-only or not.
+
+     <br><dt><code>gnus-news-group-p</code><dd><a name="index-gnus_002dnews_002dgroup_002dp-3172"></a>Says whether <var>group</var> came from a news back end.
+
+     <br><dt><code>gnus-ephemeral-group-p</code><dd><a name="index-gnus_002dephemeral_002dgroup_002dp-3173"></a>Says whether <var>group</var> is ephemeral or not.
+
+     <br><dt><code>gnus-server-to-method</code><dd><a name="index-gnus_002dserver_002dto_002dmethod-3174"></a>Returns the select method corresponding to <var>server</var>.
+
+     <br><dt><code>gnus-server-equal</code><dd><a name="index-gnus_002dserver_002dequal-3175"></a>Says whether two virtual servers are equal.
+
+     <br><dt><code>gnus-group-native-p</code><dd><a name="index-gnus_002dgroup_002dnative_002dp-3176"></a>Says whether <var>group</var> is native or not.
+
+     <br><dt><code>gnus-group-secondary-p</code><dd><a name="index-gnus_002dgroup_002dsecondary_002dp-3177"></a>Says whether <var>group</var> is secondary or not.
+
+     <br><dt><code>gnus-group-foreign-p</code><dd><a name="index-gnus_002dgroup_002dforeign_002dp-3178"></a>Says whether <var>group</var> is foreign or not.
+
+     <br><dt><code>gnus-group-find-parameter</code><dd><a name="index-gnus_002dgroup_002dfind_002dparameter-3179"></a>Returns the parameter list of <var>group</var>.  If given a second parameter,
+returns the value of that parameter for <var>group</var>.
+
+     <br><dt><code>gnus-group-set-parameter</code><dd><a name="index-gnus_002dgroup_002dset_002dparameter-3180"></a>Takes three parameters; <var>group</var>, <var>parameter</var> and <var>value</var>.
+
+     <br><dt><code>gnus-narrow-to-body</code><dd><a name="index-gnus_002dnarrow_002dto_002dbody-3181"></a>Narrows the current buffer to the body of the article.
+
+     <br><dt><code>gnus-check-backend-function</code><dd><a name="index-gnus_002dcheck_002dbackend_002dfunction-3182"></a>Takes two parameters, <var>function</var> and <var>group</var>.  If the back end
+<var>group</var> comes from supports <var>function</var>, return non-<code>nil</code>.
+
+     <pre class="lisp">          (gnus-check-backend-function "request-scan" "nnml:misc")
+          &rArr; t
+</pre>
+     <br><dt><code>gnus-read-method</code><dd><a name="index-gnus_002dread_002dmethod-3183"></a>Prompts the user for a select method.
+
+   </dl>
+
+   </body></html>
+

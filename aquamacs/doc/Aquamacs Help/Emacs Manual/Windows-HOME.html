@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Windows HOME - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
+<link rel="prev" href="ls-in-Lisp.html#ls-in-Lisp" title="ls in Lisp">
+<link rel="next" href="Windows-Keyboard.html#Windows-Keyboard" title="Windows Keyboard">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-HOME"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Keyboard.html#Windows-Keyboard">Windows Keyboard</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ls-in-Lisp.html#ls-in-Lisp">ls in Lisp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
+<hr>
+</div>
+
+<h3 class="section">G.4 HOME Directory on MS-Windows</h3>
+
+<p><a name="index-g_t_0040code_007bHOME_007d-directory-on-MS_002dWindows-4338"></a>
+  The Windows equivalent of the <code>HOME</code> directory is the
+<dfn>user-specific application data directory</dfn>.  The actual location
+depends on your Windows version and system configuration; typical values
+are <samp><span class="file">C:\Documents and Settings\</span><var>username</var><span class="file">\Application Data</span></samp> on
+Windows 2K/XP and later, and either <samp><span class="file">C:\WINDOWS\Application Data</span></samp>
+or <samp><span class="file">C:\WINDOWS\Profiles\</span><var>username</var><span class="file">\Application Data</span></samp> on the
+older Windows 9X/ME systems.
+
+   <p><a name="index-init-file-_0040file_007b_002eemacs_007d-on-MS_002dWindows-4339"></a>  The home directory is where your init file <samp><span class="file">.emacs</span></samp> is stored. 
+When Emacs starts, it first checks whether the environment variable
+<samp><span class="env">HOME</span></samp> is set.  If it is, it looks for the init file in the
+directory pointed by <samp><span class="env">HOME</span></samp>.  If <samp><span class="env">HOME</span></samp> is not defined, Emacs
+checks for an existing <samp><span class="file">.emacs</span></samp> file in <samp><span class="file">C:\</span></samp>, the root
+directory of drive <samp><span class="file">C:</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If there's no such file in <samp><span class="file">C:\</span></samp>, Emacs next uses the Windows
+system calls to find out the exact location of your application data
+directory.  If that system call fails, Emacs falls back to <samp><span class="file">C:\</span></samp>.
+
+   <p>Whatever the final place is, Emacs sets the value of the <samp><span class="env">HOME</span></samp>
+environment variable to point to it, and it will use that location for
+other files and directories it normally creates in the user's home
+directory.
+
+   <p>You can always find out where Emacs thinks is your home directory's
+location by typing <kbd>C-x d ~/ &lt;RET&gt;</kbd>.  This should present the
+list of files in the home directory, and show its full name on the
+first line.  Likewise, to visit your init file, type <kbd>C-x C-f
+~/.emacs &lt;RET&gt;</kbd>.
+
+   <p><a name="index-g_t_0040file_007b_005femacs_007d-init-file_002c-MS_002dWindows-4340"></a>  Because MS-DOS does not allow file names with leading dots, and
+because older Windows systems made it hard to create files with such
+names, the Windows port of Emacs supports an alternative name
+<samp><span class="file">_emacs</span></samp> as a fallback, if such a file exists in the home
+directory, whereas <samp><span class="file">.emacs</span></samp> does not.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+The check in <samp><span class="file">C:\</span></samp> is for compatibility with older versions of Emacs,
+which didn't check the application data directory. 
+</p>
+
+   <hr></div>
+
+   </body></html>
+

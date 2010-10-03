@@ -1,0 +1,198 @@
+<html lang="en">
+<head>
+<title>Hanging Braces - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines" title="Custom Auto-newlines">
+<link rel="prev" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines" title="Custom Auto-newlines">
+<link rel="next" href="Hanging-Colons.html#Hanging-Colons" title="Hanging Colons">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hanging-Braces"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">8.1 Hanging Braces</h3>
+
+<p><a name="index-hanging-braces-340"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>To specify which kinds of braces you want auto-newlines put around,
+you set the style variable <code>c-hanging-braces-alist</code>.  Its
+structure and semantics are described in this section.  Details of how
+to set it up, and its relationship to CC Mode's style system are given
+in <a href="Style-Variables.html#Style-Variables">Style Variables</a>.
+
+   <p>Say you wanted an auto-newline after (but not before) the following
+&lsquo;<samp><span class="samp">{</span></samp>&rsquo;:
+
+<pre class="example">     if (foo &lt; 17) {
+</pre>
+   <p class="noindent">First you need to find the <dfn>syntactic context</dfn> of the brace&mdash;type
+a &lt;RET&gt; before the brace to get it on a line of its
+own<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, then type <kbd>C-c C-s</kbd>.  That will tell you
+something like:
+
+<pre class="example">     ((substatement-open 1061))
+</pre>
+   <p class="noindent">So here you need to put the entry <code>(substatement-open . (after))</code>
+into <code>c-hanging-braces-alist</code>.
+
+   <p>If you don't want any auto-newlines for a particular syntactic symbol,
+put this into <code>c-hanging-braces-alist</code>:
+
+<pre class="example">     (brace-entry-open)
+</pre>
+   <p>If some brace syntactic symbol is not in <code>c-hanging-brace-alist</code>,
+its entry is taken by default as <code>(before after)</code>&mdash;insert a
+newline both before and after the brace.  In place of a
+&ldquo;before/after&rdquo; list you can specify a function in this alist&mdash;this
+is useful when the auto newlines depend on the code around the brace.
+
+<div class="defun">
+&mdash; User Option: <b>c-hanging-braces-alist</b><var><a name="index-c_002dhanging_002dbraces_002dalist-341"></a></var><br>
+<blockquote><p><a name="index-hanging_002dbraces_002dalist-_0028c_002d_0029-342"></a>
+This variable is an association list which maps syntactic symbols to
+lists of places to insert a newline.  See <a href="../elisp/Association-Lists.html#Association-Lists">Association Lists</a>.  The key of each element is the
+syntactic symbol, the associated value is either <code>nil</code>, a list,
+or a function.
+
+          <dl>
+<dt>The Key - the syntactic symbol<dd>The syntactic symbols that are useful as keys in this list are
+<code>brace-list-intro</code>, <code>statement-cont</code>,
+<code>inexpr-class-open</code>, <code>inexpr-class-close</code>, and all the
+<code>*-open</code> and <code>*-close</code> symbols.  See <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
+for a more detailed description of these syntactic symbols, except for
+<code>inexpr-class-open</code> and <code>inexpr-class-close</code>, which aren't
+actual syntactic symbols.  Elements with any other value as a key get
+ignored.
+
+          <p>The braces of anonymous inner classes in Java are given the special
+symbols <code>inexpr-class-open</code> and <code>inexpr-class-close</code>, so that
+they can be distinguished from the braces of normal classes<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.
+
+          <p>Note that the aggregate constructs in Pike mode, &lsquo;<samp><span class="samp">({</span></samp>&rsquo;, &lsquo;<samp><span class="samp">})</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">([</span></samp>&rsquo;, &lsquo;<samp><span class="samp">])</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">(&lt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;)</span></samp>&rsquo;, do not count as brace
+lists in this regard, even though they do for normal indentation
+purposes.  It's currently not possible to set automatic newlines on
+these constructs.
+
+          <br><dt>The associated value - the &ldquo;ACTION&rdquo; list or function<dd>The value associated with each syntactic symbol in this association
+list is called an <var>action</var>, which can be either a list or a
+function which returns a list.  See <a href="Custom-Braces.html#Custom-Braces">Custom Braces</a>, for how to use
+a function as a brace hanging <var>action</var>.
+
+          <p>The list <var>action</var> (or the list returned by <var>action</var> when it's
+a function) contains some combination of the symbols <code>before</code> and
+<code>after</code>, directing CC Mode where to put newlines in
+relationship to the brace being inserted.  Thus, if the list contains
+only the symbol <code>after</code>, then the brace hangs on the right side
+of the line, as in:
+
+          <pre class="example">               // here, open braces always `hang'
+               void spam( int i ) {
+                   if( i == 7 ) {
+                       dosomething(i);
+                   }
+               }
+</pre>
+          <p>When the list contains both <code>after</code> and <code>before</code>, the braces
+will appear on a line by themselves, as shown by the close braces in
+the above example.  The list can also be empty, in which case newlines
+are added neither before nor after the brace. 
+</dl>
+
+        <p>If a syntactic symbol is missing entirely from
+<code>c-hanging-braces-alist</code>, it's treated in the same way as an
+<var>action</var> with a list containing <code>before</code> and <code>after</code>, so
+that braces by default end up on their own line.
+
+        <p>For example, the default value of <code>c-hanging-braces-alist</code> is:
+
+     <pre class="example">          ((brace-list-open)
+           (brace-entry-open)
+           (statement-cont)
+           (substatement-open after)
+           (block-close . c-snug-do-while)
+           (extern-lang-open after)
+           (namespace-open after)
+           (module-open after)
+           (composition-open after)
+           (inexpr-class-open after)
+           (inexpr-class-close before))
+</pre>
+        <p class="noindent">which says that <code>brace-list-open</code>,
+<code>brace-entry-open</code> and <code>statement-cont</code><a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a> braces
+should both hang on the right side and allow subsequent text to follow
+on the same line as the brace.  Also, <code>substatement-open</code>,
+<code>extern-lang-open</code>, and <code>inexpr-class-open</code> braces should hang
+on the right side, but subsequent text should follow on the next line. 
+The opposite holds for <code>inexpr-class-close</code> braces; they won't
+hang, but the following text continues on the same line.  Here, in the
+<code>block-close</code> entry, you also see an example of using a function as
+an <var>action</var>.  In all other cases, braces are put on a line by
+themselves. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Custom-Braces.html#Custom-Braces">Custom Braces</a>
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Also insert a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; at the end of the previous line if
+you're in AWK Mode.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The
+braces of anonymous classes produce a combination of
+<code>inexpr-class</code>, and <code>class-open</code> or <code>class-close</code> in
+normal indentation analysis.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> Brace lists
+inside statements, such as initializers for static array variables
+inside functions in C, are recognized as <code>statement-cont</code>.  All
+normal substatement blocks are recognized with other symbols.</p>
+
+   <hr></div>
+
+   </body></html>
+

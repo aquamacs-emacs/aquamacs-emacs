@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Setting Options - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Custom-agenda-views.html#Custom-agenda-views" title="Custom agenda views">
+<link rel="prev" href="Block-agenda.html#Block-agenda" title="Block agenda">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Setting-Options"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Block-agenda.html#Block-agenda">Block agenda</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.6.3 Setting options for custom commands</h4>
+
+<p><a name="index-options_002c-for-custom-agenda-views-932"></a>
+<a name="index-org_002dagenda_002dcustom_002dcommands-933"></a>Org mode contains a number of variables regulating agenda construction
+and display.  The global variables define the behavior for all agenda
+commands, including the custom commands.  However, if you want to change
+some settings just for a single custom view, you can do so.  Setting
+options requires inserting a list of variable names and values at the
+right spot in <code>org-agenda-custom-commands</code>.  For example:
+
+<pre class="lisp">     (setq org-agenda-custom-commands
+           '(("w" todo "WAITING"
+              ((org-agenda-sorting-strategy '(priority-down))
+               (org-agenda-prefix-format "  Mixed: ")))
+             ("U" tags-tree "+boss-urgent"
+              ((org-show-following-heading nil)
+               (org-show-hierarchy-above nil)))
+             ("N" search ""
+              ((org-agenda-files '("~org/notes.org"))
+               (org-agenda-text-search-extra-files nil)))))
+</pre>
+   <p class="noindent">Now the <kbd>C-c a w</kbd> command will sort the collected entries only by
+priority, and the prefix format is modified to just say &lsquo;<samp><span class="samp">  Mixed: </span></samp>&rsquo;
+instead of giving the category of the entry.  The sparse tags tree of
+<kbd>C-c a U</kbd> will now turn out ultra-compact, because neither the
+headline hierarchy above the match, nor the headline following the match
+will be shown.  The command <kbd>C-c a N</kbd> will do a text search limited
+to only a single file.
+
+   <p><a name="index-org_002dagenda_002dcustom_002dcommands-934"></a>For command sets creating a block agenda,
+<code>org-agenda-custom-commands</code> has two separate spots for setting
+options.  You can add options that should be valid for just a single
+command in the set, and options that should be valid for all commands in
+the set.  The former are just added to the command entry, the latter
+must come after the list of command entries.  Going back to the block
+agenda example (see <a href="Block-agenda.html#Block-agenda">Block agenda</a>), let's change the sorting strategy
+for the <kbd>C-c a h</kbd> commands to <code>priority-down</code>, but let's sort
+the results for GARDEN tags query in the opposite order,
+<code>priority-up</code>.  This would look like this:
+
+<pre class="lisp">     (setq org-agenda-custom-commands
+           '(("h" "Agenda and Home-related tasks"
+              ((agenda)
+               (tags-todo "home")
+               (tags "garden"
+                     ((org-agenda-sorting-strategy '(priority-up)))))
+              ((org-agenda-sorting-strategy '(priority-down))))
+             ("o" "Agenda and Office-related tasks"
+              ((agenda)
+               (tags-todo "work")
+               (tags "office")))))
+</pre>
+   <p>As you see, the values and parentheses setting is a little complex. 
+When in doubt, use the customize interface to set this variable&mdash;it
+fully supports its structure.  Just one caveat: when setting options in
+this interface, the <em>values</em> are just Lisp expressions.  So if the
+value is a string, you need to add the double-quotes around the value
+yourself.
+
+   </body></html>
+

@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+<title>More About Embedded Mode - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Embedded-Mode.html#Embedded-Mode" title="Embedded Mode">
+<link rel="prev" href="Basic-Embedded-Mode.html#Basic-Embedded-Mode" title="Basic Embedded Mode">
+<link rel="next" href="Assignments-in-Embedded-Mode.html#Assignments-in-Embedded-Mode" title="Assignments in Embedded Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="More-About-Embedded-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Assignments-in-Embedded-Mode.html#Assignments-in-Embedded-Mode">Assignments in Embedded Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Embedded-Mode.html#Basic-Embedded-Mode">Basic Embedded Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>
+<hr>
+</div>
+
+<h3 class="section">17.2 More About Embedded Mode</h3>
+
+<p class="noindent">When Embedded mode &ldquo;activates&rdquo; a formula, i.e., when it examines
+the formula for the first time since the buffer was created or
+loaded, Calc tries to sense the language in which the formula was
+written.  If the formula contains any LaTeX-like &lsquo;<samp><span class="samp">\</span></samp>&rsquo; sequences,
+it is parsed (i.e., read) in LaTeX mode.  If the formula appears to
+be written in multi-line Big mode, it is parsed in Big mode.  Otherwise,
+it is parsed according to the current language mode.
+
+   <p>Note that Calc does not change the current language mode according
+the formula it reads in.  Even though it can read a LaTeX formula when
+not in LaTeX mode, it will immediately rewrite this formula using
+whatever language mode is in effect.
+
+   <p><a name="index-d-p-2221"></a><a name="index-calc_002dshow_002dplain-2222"></a>Calc's parser is unable to read certain kinds of formulas.  For
+example, with <kbd>v ]</kbd> (<code>calc-matrix-brackets</code>) you can
+specify matrix display styles which the parser is unable to
+recognize as matrices.  The <kbd>d p</kbd> (<code>calc-show-plain</code>)
+command turns on a mode in which a &ldquo;plain&rdquo; version of a
+formula is placed in front of the fully-formatted version. 
+When Calc reads a formula that has such a plain version in
+front, it reads the plain version and ignores the formatted
+version.
+
+   <p>Plain formulas are preceded and followed by &lsquo;<samp><span class="samp">%%%</span></samp>&rsquo; signs
+by default.  This notation has the advantage that the &lsquo;<samp><span class="samp">%</span></samp>&rsquo;
+character begins a comment in TeX and LaTeX, so if your formula is
+embedded in a TeX or LaTeX document its plain version will be
+invisible in the final printed copy.  Certain major modes have different
+delimiters to ensure that the &ldquo;plain&rdquo; version will be
+in a comment for those modes, also. 
+See <a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">Customizing Embedded Mode</a> to see how to change the &ldquo;plain&rdquo;
+formula delimiters.
+
+   <p>There are several notations which Calc's parser for &ldquo;big&rdquo;
+formatted formulas can't yet recognize.  In particular, it can't
+read the large symbols for <code>sum</code>, <code>prod</code>, and <code>integ</code>,
+and it can't handle &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; with the righthand argument omitted. 
+Also, Calc won't recognize special formats you have defined with
+the <kbd>Z C</kbd> command (see <a href="User_002dDefined-Compositions.html#User_002dDefined-Compositions">User-Defined Compositions</a>).  In
+these cases it is important to use &ldquo;plain&rdquo; mode to make sure
+Calc will be able to read your formula later.
+
+   <p>Another example where &ldquo;plain&rdquo; mode is important is if you have
+specified a float mode with few digits of precision.  Normally
+any digits that are computed but not displayed will simply be
+lost when you save and re-load your embedded buffer, but &ldquo;plain&rdquo;
+mode allows you to make sure that the complete number is present
+in the file as well as the rounded-down number.
+
+   <p>Embedded buffers remember active formulas for as long as they
+exist in Emacs memory.  Suppose you have an embedded formula
+which is &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; to the normal 12 decimal places, and then
+type <kbd>C-u&nbsp;5&nbsp;d&nbsp;n</kbd><!-- /@w --> to display only five decimal places. 
+If you then type <kbd>d n</kbd>, all 12 places reappear because the
+full number is still there on the Calc stack.  More surprisingly,
+even if you exit Embedded mode and later re-enter it for that
+formula, typing <kbd>d n</kbd> will restore all 12 places because
+each buffer remembers all its active formulas.  However, if you
+save the buffer in a file and reload it in a new Emacs session,
+all non-displayed digits will have been lost unless you used
+&ldquo;plain&rdquo; mode.
+
+   <p>In some applications of Embedded mode, you will want to have a
+sequence of copies of a formula that show its evolution as you
+work on it.  For example, you might want to have a sequence
+like this in your file (elaborating here on the example from
+the &ldquo;Getting Started&rdquo; chapter):
+
+<pre class="smallexample">     The derivative of
+     
+                                   ln(ln(x))
+     
+     is
+     
+                       <span class="roman">(the derivative of </span>ln(ln(x))<span class="roman">)</span>
+     
+     whose value at x = 2 is
+     
+                                 <span class="roman">(the value)</span>
+     
+     and at x = 3 is
+     
+                                 <span class="roman">(the value)</span>
+</pre>
+   <p><a name="index-C_002dx-_002a-d-2223"></a><a name="index-calc_002dembedded_002dduplicate-2224"></a>The <kbd>C-x * d</kbd> (<code>calc-embedded-duplicate</code>) command is a
+handy way to make sequences like this.  If you type <kbd>C-x * d</kbd>,
+the formula under the cursor (which may or may not have Embedded
+mode enabled for it at the time) is copied immediately below and
+Embedded mode is then enabled for that copy.
+
+   <p>For this example, you would start with just
+
+<pre class="smallexample">     The derivative of
+     
+                                   ln(ln(x))
+</pre>
+   <p class="noindent">and press <kbd>C-x * d</kbd> with the cursor on this formula.  The result
+is
+
+<pre class="smallexample">     The derivative of
+     
+                                   ln(ln(x))
+     
+     
+                                   ln(ln(x))
+</pre>
+   <p class="noindent">with the second copy of the formula enabled in Embedded mode. 
+You can now press <kbd>a d x &lt;RET&gt;</kbd> to take the derivative, and
+<kbd>C-x * d C-x * d</kbd> to make two more copies of the derivative. 
+To complete the computations, type <kbd>3 s l x &lt;RET&gt;</kbd> to evaluate
+the last formula, then move up to the second-to-last formula
+and type <kbd>2 s l x &lt;RET&gt;</kbd>.
+
+   <p>Finally, you would want to press <kbd>C-x * e</kbd> to exit Embedded
+mode, then go up and insert the necessary text in between the
+various formulas and numbers.
+
+   <p><a name="index-C_002dx-_002a-f-2225"></a><a name="index-C_002dx-_002a-_0027-2226"></a><a name="index-calc_002dembedded_002dnew_002dformula-2227"></a>The <kbd>C-x * f</kbd> (<code>calc-embedded-new-formula</code>) command
+creates a new embedded formula at the current point.  It inserts
+some default delimiters, which are usually just blank lines,
+and then does an algebraic entry to get the formula (which is
+then enabled for Embedded mode).  This is just shorthand for
+typing the delimiters yourself, positioning the cursor between
+the new delimiters, and pressing <kbd>C-x * e</kbd>.  The key sequence
+<kbd>C-x * '</kbd> is equivalent to <kbd>C-x * f</kbd>.
+
+   <p><a name="index-C_002dx-_002a-n-2228"></a><a name="index-C_002dx-_002a-p-2229"></a><a name="index-calc_002dembedded_002dnext-2230"></a><a name="index-calc_002dembedded_002dprevious-2231"></a>The <kbd>C-x * n</kbd> (<code>calc-embedded-next</code>) and <kbd>C-x * p</kbd>
+(<code>calc-embedded-previous</code>) commands move the cursor to the
+next or previous active embedded formula in the buffer.  They
+can take positive or negative prefix arguments to move by several
+formulas.  Note that these commands do not actually examine the
+text of the buffer looking for formulas; they only see formulas
+which have previously been activated in Embedded mode.  In fact,
+<kbd>C-x * n</kbd> and <kbd>C-x * p</kbd> are a useful way to tell which
+embedded formulas are currently active.  Also, note that these
+commands do not enable Embedded mode on the next or previous
+formula, they just move the cursor.
+
+   <p><a name="index-C_002dx-_002a-_0060-2232"></a><a name="index-calc_002dembedded_002dedit-2233"></a>The <kbd>C-x * `</kbd> (<code>calc-embedded-edit</code>) command edits the
+embedded formula at the current point as if by <kbd>`</kbd> (<code>calc-edit</code>). 
+Embedded mode does not have to be enabled for this to work.  Press
+<kbd>C-c C-c</kbd> to finish the edit, or <kbd>C-x k</kbd> to cancel.
+
+   </body></html>
+

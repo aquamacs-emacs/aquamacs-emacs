@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+<title>Window and Frame Configuration - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Quick-Help-Customization.html#Quick-Help-Customization" title="Quick Help Customization">
+<link rel="next" href="Selective-Browsing.html#Selective-Browsing" title="Selective Browsing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Window-and-Frame-Configuration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selective-Browsing.html#Selective-Browsing">Selective Browsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quick-Help-Customization.html#Quick-Help-Customization">Quick Help Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.3 Window and Frame Configuration</h3>
+
+<p>On a non-windowing display, Ediff sets things up in one frame, splitting
+it between a small control window and the windows for buffers A, B, and C. 
+The split between these windows can be horizontal or
+vertical, which can be changed interactively by typing <kbd>|</kbd> while the
+cursor is in the control window.
+
+   <p>On a window display, Ediff sets up a dedicated frame for Ediff Control
+Panel and then it chooses windows as follows: If one of the buffers
+is invisible, it is displayed in the currently selected frame.  If
+a buffer is visible, it is displayed in the frame where it is visible. 
+If, according to the above criteria, the two buffers fall into the same
+frame, then so be it&mdash;the frame will be shared by the two.  The same
+algorithm works when you type <kbd>C-l</kbd> (<code>ediff-recenter</code>), <kbd>p</kbd>
+(<code>ediff-previous-difference</code>), <kbd>n</kbd>
+(<code>ediff-next-difference</code>), etc.
+
+   <p>The above behavior also depends on whether the current frame is splittable,
+dedicated, etc.  Unfortunately, the margin of this book is too narrow to
+present the details of this remarkable algorithm.
+
+   <p>The upshot of all this is that you can compare buffers in one frame or
+in different frames.  The former is done by default, while the latter can
+be achieved by arranging buffers A, B (and C, if applicable) to be seen in
+different frames.  Ediff respects these arrangements, automatically
+adapting itself to the multi-frame mode.
+
+   <p>Ediff uses the following variables to set up its control panel
+(a.k.a. control buffer, a.k.a. quick help window):
+
+     <dl>
+<dt><code>ediff-control-frame-parameters</code><dd><a name="index-ediff_002dcontrol_002dframe_002dparameters-150"></a>You can change or augment this variable including the font, color,
+etc.  The X resource name of Ediff Control Panel frames is &lsquo;<samp><span class="samp">Ediff</span></samp>&rsquo;.  Under
+X-windows, you can use this name to set up preferences in your
+<samp><span class="file">~/.Xdefaults</span></samp>, <samp><span class="file">~/.xrdb</span></samp>, or whatever X resource file is in
+use.  Usually this is preferable to changing
+<code>ediff-control-frame-parameters</code> directly.  For instance, you can
+specify in <samp><span class="file">~/.Xdefaults</span></samp> the color of the control frame
+using the resource &lsquo;<samp><span class="samp">Ediff*background</span></samp>&rsquo;.
+
+     <p>In general, any X resource pertaining the control frame can be reached
+via the prefix <code>Ediff*</code>.
+
+     <br><dt><code>ediff-control-frame-position-function</code><dd><a name="index-ediff_002dcontrol_002dframe_002dposition_002dfunction-151"></a>The preferred way of specifying the position of the control frame is by
+setting the variable <code>ediff-control-frame-position-function</code> to an
+appropriate function. 
+The default value of this variable is
+<code>ediff-make-frame-position</code>.  This function places the control frame in
+the vicinity of the North-East corner of the frame displaying buffer A.
+
+     <p><a name="index-ediff_002dmake_002dframe_002dposition-152"></a></dl>
+
+   <p>The following variables can be used to adjust the location produced by
+<code>ediff-make-frame-position</code> and for related customization.
+
+     <dl>
+<dt><code>ediff-narrow-control-frame-leftward-shift</code><dd><a name="index-ediff_002dnarrow_002dcontrol_002dframe_002dleftward_002dshift-153"></a>Specifies the number of characters for shifting
+the control frame from the rightmost edge of frame A when the control
+frame is displayed as a small window.
+
+     <br><dt><code>ediff-wide-control-frame-rightward-shift</code><dd><a name="index-ediff_002dwide_002dcontrol_002dframe_002drightward_002dshift-154"></a>Specifies the rightward shift of the control frame
+from the left edge of frame A when the control frame shows the full
+menu of options.
+
+     <br><dt><code>ediff-control-frame-upward-shift</code><dd><a name="index-ediff_002dcontrol_002dframe_002dupward_002dshift-155"></a>Specifies the number of pixels for the upward shift
+of the control frame.
+
+     <br><dt><code>ediff-prefer-iconified-control-frame</code><dd><a name="index-ediff_002dprefer_002diconified_002dcontrol_002dframe-156"></a>If this variable is <code>t</code>, the control frame becomes iconified
+automatically when you toggle the quick help message off.  This saves
+valuable real estate on the screen.  Toggling help back will deiconify
+the control frame.
+
+     <p>To start Ediff with an iconified Control Panel, you should set this
+variable to <code>t</code> and <code>ediff-prefer-long-help-message</code> to
+<code>nil</code> (see <a href="Quick-Help-Customization.html#Quick-Help-Customization">Quick Help Customization</a>).  This behavior is useful
+only if icons are allowed to accept keyboard input (which depends on the
+window manager and other factors). 
+</dl>
+
+   <p><a name="index-ediff_002dsetup_002dwindows-157"></a>To make more creative changes in the way Ediff sets up windows, you can
+rewrite the function <code>ediff-setup-windows</code>.  However, we believe
+that detaching Ediff Control Panel from the rest and making it into a
+separate frame offers an important opportunity by allowing you to
+iconify that frame.  The icon will usually accept all of the Ediff
+commands, but will free up valuable real estate on your screen (this may
+depend on your window manager, though).
+
+   <p>The following variable controls how windows are set up:
+
+     <dl>
+<dt><code>ediff-window-setup-function</code><dd><a name="index-ediff_002dwindow_002dsetup_002dfunction-158"></a>The multiframe setup is done by the
+<code>ediff-setup-windows-multiframe</code> function, which is the default on
+windowing displays.  The plain setup, one where all windows are always
+in one frame, is done by <code>ediff-setup-windows-plain</code>, which is the
+default on a non-windowing display (or in an xterm window).  In fact,
+under Emacs, you can switch freely between these two setups by executing
+the command <code>ediff-toggle-multiframe</code> using the Minibuffer of the
+Menubar. 
+<a name="index-ediff_002dsetup_002dwindows_002dmultiframe-159"></a><a name="index-ediff_002dsetup_002dwindows_002dplain-160"></a><a name="index-ediff_002dtoggle_002dmultiframe-161"></a>
+If you don't like any of these setups, write your own function.  See the
+documentation for <code>ediff-window-setup-function</code> for the basic
+guidelines.  However, writing window setups is not easy, so you should
+first take a close look at <code>ediff-setup-windows-plain</code> and
+<code>ediff-setup-windows-multiframe</code>. 
+</dl>
+
+   <p>You can run multiple Ediff sessions at once, by invoking Ediff several
+times without exiting previous Ediff sessions.  Different sessions
+may even operate on the same pair of files.
+
+   <p>Each session has its own Ediff Control Panel and all the regarding a
+particular session is local to the associated control panel buffer.  You
+can switch between sessions by suspending one session and then switching
+to another control panel.  (Different control panel buffers are
+distinguished by a numerical suffix, e.g., &lsquo;<samp><span class="samp">Ediff Control Panel&lt;3&gt;</span></samp>&rsquo;.)
+
+   </body></html>
+

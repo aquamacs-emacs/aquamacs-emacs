@@ -1,0 +1,297 @@
+<html lang="en">
+<head>
+<title>Score File Format - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scoring.html#Scoring" title="Scoring">
+<link rel="prev" href="Score-Variables.html#Score-Variables" title="Score Variables">
+<link rel="next" href="Score-File-Editing.html#Score-File-Editing" title="Score File Editing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Score-File-Format"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Score-File-Editing.html#Score-File-Editing">Score File Editing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Score-Variables.html#Score-Variables">Score Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
+<hr>
+</div>
+
+<h3 class="section">7.4 Score File Format</h3>
+
+<p><a name="index-score-file-format-2649"></a>
+A score file is an <code>emacs-lisp</code> file that normally contains just a
+single form.  Casual users are not expected to edit these files;
+everything can be changed from the summary buffer.
+
+   <p>Anyway, if you'd like to dig into it yourself, here's an example:
+
+<pre class="lisp">     (("from"
+       ("Lars Ingebrigtsen" -10000)
+       ("Per Abrahamsen")
+       ("larsi\\|lmi" -50000 nil R))
+      ("subject"
+       ("Ding is Badd" nil 728373))
+      ("xref"
+       ("alt.politics" -1000 728372 s))
+      ("lines"
+       (2 -100 nil &lt;))
+      (mark 0)
+      (expunge -1000)
+      (mark-and-expunge -10)
+      (read-only nil)
+      (orphan -10)
+      (adapt t)
+      (files "/hom/larsi/News/gnu.SCORE")
+      (exclude-files "all.SCORE")
+      (local (gnus-newsgroup-auto-expire t)
+             (gnus-summary-make-false-root empty))
+      (eval (ding)))
+</pre>
+   <p>This example demonstrates most score file elements.  See <a href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>, for a different approach.
+
+   <p>Even though this looks much like Lisp code, nothing here is actually
+<code>eval</code>ed.  The Lisp reader is used to read this form, though, so it
+has to be valid syntactically, if not semantically.
+
+   <p>Six keys are supported by this alist:
+
+     <dl>
+<dt><code>STRING</code><dd>If the key is a string, it is the name of the header to perform the
+match on.  Scoring can only be performed on these eight headers:
+<code>From</code>, <code>Subject</code>, <code>References</code>, <code>Message-ID</code>,
+<code>Xref</code>, <code>Lines</code>, <code>Chars</code> and <code>Date</code>.  In addition to
+these headers, there are three strings to tell Gnus to fetch the entire
+article and do the match on larger parts of the article: <code>Body</code>
+will perform the match on the body of the article, <code>Head</code> will
+perform the match on the head of the article, and <code>All</code> will
+perform the match on the entire article.  Note that using any of these
+last three keys will slow down group entry <em>considerably</em>.  The
+final &ldquo;header&rdquo; you can score on is <code>Followup</code>.  These score
+entries will result in new score entries being added for all follow-ups
+to articles that matches these score entries.
+
+     <p>Following this key is an arbitrary number of score entries, where each
+score entry has one to four elements.
+          <ol type=1 start=1>
+
+          <li>The first element is the <dfn>match element</dfn>.  On most headers this will
+be a string, but on the Lines and Chars headers, this must be an
+integer.
+
+          <li>If the second element is present, it should be a number&mdash;the <dfn>score
+element</dfn>.  This number should be an integer in the neginf to posinf
+interval.  This number is added to the score of the article if the match
+is successful.  If this element is not present, the
+<code>gnus-score-interactive-default-score</code> number will be used
+instead.  This is 1000 by default.
+
+          <li>If the third element is present, it should be a number&mdash;the <dfn>date
+element</dfn>.  This date says when the last time this score entry matched,
+which provides a mechanism for expiring the score entries.  It this
+element is not present, the score entry is permanent.  The date is
+represented by the number of days since December 31, 1 BCE.
+
+          <li>If the fourth element is present, it should be a symbol&mdash;the <dfn>type
+element</dfn>.  This element specifies what function should be used to see
+whether this score entry matches the article.  What match types that can
+be used depends on what header you wish to perform the match on.
+               <dl>
+<dt><dfn>From, Subject, References, Xref, Message-ID</dfn><dd>For most header types, there are the <code>r</code> and <code>R</code> (regexp), as
+well as <code>s</code> and <code>S</code> (substring) types, and <code>e</code> and
+<code>E</code> (exact match), and <code>w</code> (word match) types.  If this
+element is not present, Gnus will assume that substring matching should
+be used.  <code>R</code>, <code>S</code>, and <code>E</code> differ from the others in
+that the matches will be done in a case-sensitive manner.  All these
+one-letter types are really just abbreviations for the <code>regexp</code>,
+<code>string</code>, <code>exact</code>, and <code>word</code> types, which you can use
+instead, if you feel like.
+
+               <br><dt><dfn>Extra</dfn><dd>Just as for the standard string overview headers, if you are using
+gnus-extra-headers, you can score on these headers' values.  In this
+case, there is a 5th element in the score entry, being the name of the
+header to be scored.  The following entry is useful in your
+<samp><span class="file">all.SCORE</span></samp> file in case of spam attacks from a single origin
+host, if your <acronym>NNTP</acronym> server tracks &lsquo;<samp><span class="samp">NNTP-Posting-Host</span></samp>&rsquo; in
+overviews:
+
+               <pre class="lisp">                    ("111.222.333.444" -1000 nil s
+                     "NNTP-Posting-Host")
+</pre>
+               <br><dt><dfn>Lines, Chars</dfn><dd>These two headers use different match types: <code>&lt;</code>, <code>&gt;</code>,
+<code>=</code>, <code>&gt;=</code> and <code>&lt;=</code>.
+
+               <p>These predicates are true if
+
+               <pre class="example">                    (PREDICATE HEADER MATCH)
+</pre>
+               <p>evaluates to non-<code>nil</code>.  For instance, the advanced match
+<code>("lines" 4 &lt;)</code> (see <a href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>) will result in the
+following form:
+
+               <pre class="lisp">                    (&lt; header-value 4)
+</pre>
+               <p>Or to put it another way: When using <code>&lt;</code> on <code>Lines</code> with 4 as
+the match, we get the score added if the article has less than 4 lines. 
+(It's easy to get confused and think it's the other way around.  But
+it's not.  I think.)
+
+               <p>When matching on <code>Lines</code>, be careful because some back ends (like
+<code>nndir</code>) do not generate <code>Lines</code> header, so every article ends
+up being marked as having 0 lines.  This can lead to strange results if
+you happen to lower score of the articles with few lines.
+
+               <br><dt><dfn>Date</dfn><dd>For the Date header we have three kinda silly match types:
+<code>before</code>, <code>at</code> and <code>after</code>.  I can't really imagine this
+ever being useful, but, like, it would feel kinda silly not to provide
+this function.  Just in case.  You never know.  Better safe than sorry. 
+Once burnt, twice shy.  Don't judge a book by its cover.  Never not have
+sex on a first date.  (I have been told that at least one person, and I
+quote, &ldquo;found this function indispensable&rdquo;, however.)
+
+               <p><a name="index-ISO8601-2650"></a><a name="index-date-2651"></a>A more useful match type is <code>regexp</code>.  With it, you can match the
+date string using a regular expression.  The date is normalized to
+ISO8601 compact format first&mdash;<var>YYYYMMDD</var><code>T</code><var>HHMMSS</var>.  If
+you want to match all articles that have been posted on April 1st in
+every year, you could use &lsquo;<samp><span class="samp">....0401.........</span></samp>&rsquo; as a match string,
+for instance.  (Note that the date is kept in its original time zone, so
+this will match articles that were posted when it was April 1st where
+the article was posted from.  Time zones are such wholesome fun for the
+whole family, eh?)
+
+               <br><dt><dfn>Head, Body, All</dfn><dd>These three match keys use the same match types as the <code>From</code> (etc)
+header uses.
+
+               <br><dt><dfn>Followup</dfn><dd>This match key is somewhat special, in that it will match the
+<code>From</code> header, and affect the score of not only the matching
+articles, but also all followups to the matching articles.  This allows
+you e.g. increase the score of followups to your own articles, or
+decrease the score of followups to the articles of some known
+trouble-maker.  Uses the same match types as the <code>From</code> header
+uses.  (Using this match key will lead to creation of <samp><span class="file">ADAPT</span></samp>
+files.)
+
+               <br><dt><dfn>Thread</dfn><dd>This match key works along the same lines as the <code>Followup</code> match
+key.  If you say that you want to score on a (sub-)thread started by an
+article with a <code>Message-ID</code> <var>x</var>, then you add a &lsquo;<samp><span class="samp">thread</span></samp>&rsquo;
+match.  This will add a new &lsquo;<samp><span class="samp">thread</span></samp>&rsquo; match for each article that
+has <var>x</var> in its <code>References</code> header.  (These new &lsquo;<samp><span class="samp">thread</span></samp>&rsquo;
+matches will use the <code>Message-ID</code>s of these matching articles.) 
+This will ensure that you can raise/lower the score of an entire thread,
+even though some articles in the thread may not have complete
+<code>References</code> headers.  Note that using this may lead to
+undeterministic scores of the articles in the thread.  (Using this match
+key will lead to creation of <samp><span class="file">ADAPT</span></samp> files.) 
+</dl>
+          </ol>
+
+     <p><a name="index-score-file-atoms-2652"></a><br><dt><code>mark</code><dd>The value of this entry should be a number.  Any articles with a score
+lower than this number will be marked as read.
+
+     <br><dt><code>expunge</code><dd>The value of this entry should be a number.  Any articles with a score
+lower than this number will be removed from the summary buffer.
+
+     <br><dt><code>mark-and-expunge</code><dd>The value of this entry should be a number.  Any articles with a score
+lower than this number will be marked as read and removed from the
+summary buffer.
+
+     <br><dt><code>thread-mark-and-expunge</code><dd>The value of this entry should be a number.  All articles that belong to
+a thread that has a total score below this number will be marked as read
+and removed from the summary buffer.  <code>gnus-thread-score-function</code>
+says how to compute the total score for a thread.
+
+     <br><dt><code>files</code><dd>The value of this entry should be any number of file names.  These files
+are assumed to be score files as well, and will be loaded the same way
+this one was.
+
+     <br><dt><code>exclude-files</code><dd>The clue of this entry should be any number of files.  These files will
+not be loaded, even though they would normally be so, for some reason or
+other.
+
+     <br><dt><code>eval</code><dd>The value of this entry will be <code>eval</code>ed.  This element will be
+ignored when handling global score files.
+
+     <br><dt><code>read-only</code><dd>Read-only score files will not be updated or saved.  Global score files
+should feature this atom (see <a href="Global-Score-Files.html#Global-Score-Files">Global Score Files</a>).  (Note:
+<dfn>Global</dfn> here really means <dfn>global</dfn>; not your personal
+apply-to-all-groups score files.)
+
+     <br><dt><code>orphan</code><dd>The value of this entry should be a number.  Articles that do not have
+parents will get this number added to their scores.  Imagine you follow
+some high-volume newsgroup, like &lsquo;<samp><span class="samp">comp.lang.c</span></samp>&rsquo;.  Most likely you
+will only follow a few of the threads, also want to see any new threads.
+
+     <p>You can do this with the following two score file entries:
+
+     <pre class="example">                  (orphan -500)
+                  (mark-and-expunge -100)
+</pre>
+     <p>When you enter the group the first time, you will only see the new
+threads.  You then raise the score of the threads that you find
+interesting (with <kbd>I T</kbd> or <kbd>I S</kbd>), and ignore (<kbd>c y</kbd>) the
+rest.  Next time you enter the group, you will see new articles in the
+interesting threads, plus any new threads.
+
+     <p>I.e.&mdash;the orphan score atom is for high-volume groups where a few
+interesting threads which can't be found automatically by ordinary
+scoring rules exist.
+
+     <br><dt><code>adapt</code><dd>This entry controls the adaptive scoring.  If it is <code>t</code>, the
+default adaptive scoring rules will be used.  If it is <code>ignore</code>, no
+adaptive scoring will be performed on this group.  If it is a list, this
+list will be used as the adaptive scoring rules.  If it isn't present,
+or is something other than <code>t</code> or <code>ignore</code>, the default
+adaptive scoring rules will be used.  If you want to use adaptive
+scoring on most groups, you'd set <code>gnus-use-adaptive-scoring</code> to
+<code>t</code>, and insert an <code>(adapt ignore)</code> in the groups where you do
+not want adaptive scoring.  If you only want adaptive scoring in a few
+groups, you'd set <code>gnus-use-adaptive-scoring</code> to <code>nil</code>, and
+insert <code>(adapt t)</code> in the score files of the groups where you want
+it.
+
+     <br><dt><code>adapt-file</code><dd>All adaptive score entries will go to the file named by this entry.  It
+will also be applied when entering the group.  This atom might be handy
+if you want to adapt on several groups at once, using the same adaptive
+file for a number of groups.
+
+     <br><dt><code>local</code><dd><a name="index-local-variables-2653"></a>The value of this entry should be a list of <code>(</code><var>var</var>
+<var>value</var><code>)</code> pairs.  Each <var>var</var> will be made buffer-local to the
+current summary buffer, and set to the value specified.  This is a
+convenient, if somewhat strange, way of setting variables in some
+groups if you don't like hooks much.  Note that the <var>value</var> won't
+be evaluated. 
+</dl>
+
+   </body></html>
+

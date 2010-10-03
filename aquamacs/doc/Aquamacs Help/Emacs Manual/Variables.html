@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Variables - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="next" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">57.3 Variables</h3>
+
+<p><a name="index-variable-3976"></a><a name="index-option_002c-user-3977"></a><a name="index-user-option-3978"></a>
+  A <dfn>variable</dfn> is a Lisp symbol which has a value.  The symbol's
+name is also called the <dfn>variable name</dfn>.  A variable name can
+contain any characters that can appear in a file, but most variable
+names consist of ordinary words separated by hyphens.
+
+   <p>The name of the variable serves as a compact description of its
+role.  Most variables also have a <dfn>documentation string</dfn>, which
+describes what the variable's purpose is, what kind of value it should
+have, and how the value will be used.  You can view this documentation
+using the help command <kbd>C-h v</kbd> (<code>describe-variable</code>). 
+See <a href="Examining.html#Examining">Examining</a>.
+
+   <p>Emacs uses many Lisp variables for internal record keeping, but the
+most interesting variables for a non-programmer user are those meant
+for users to change&mdash;these are called <dfn>user options</dfn>.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>, for information about using the Customize facility to
+set user options.  In the following sections, we describe will other
+aspects of Emacs variables, such as how to set them outside Customize.
+
+   <p>Emacs Lisp allows any variable (with a few exceptions) to have any
+kind of value.  However, many variables are meaningful only if
+assigned values of a certain type.  For example, only numbers are
+meaningful values for <code>kill-ring-max</code>, which specifies the
+maximum length of the kill ring (see <a href="Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>); if you give
+<code>kill-ring-max</code> a string value, commands such as <kbd>C-y</kbd>
+(<code>yank</code>) will signal an error.  On the other hand, some variables
+don't care about type; for instance, if a variable has one effect for
+<code>nil</code> values and another effect for &ldquo;non-<code>nil</code>&rdquo; values,
+then any value that is not the symbol <code>nil</code> induces the second
+effect, regardless of its type (by convention, we usually use the
+value <code>t</code>&mdash;a symbol which stands for &ldquo;true&rdquo;&mdash;to specify a
+non-<code>nil</code> value).  If you set a variable using the customization
+buffer, you need not worry about giving it an invalid type: the
+customization buffer usually only allows you to enter meaningful
+values.  When in doubt, use <kbd>C-h v</kbd> (<code>describe-variable</code>) to
+check the variable's documentation string to see kind of value it
+expects (see <a href="Examining.html#Examining">Examining</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Examining.html#Examining">Examining</a>:            Examining or setting one variable's value. 
+<li><a accesskey="2" href="Hooks.html#Hooks">Hooks</a>:                Hook variables let you specify programs for parts
+                          of Emacs to run on particular occasions. 
+<li><a accesskey="3" href="Locals.html#Locals">Locals</a>:               Per-buffer values of variables. 
+<li><a accesskey="4" href="File-Variables.html#File-Variables">File Variables</a>:       How files can specify variable values. 
+<li><a accesskey="5" href="Directory-Variables.html#Directory-Variables">Directory Variables</a>:  How variable values can be specified by directory. 
+</ul>
+
+   </body></html>
+

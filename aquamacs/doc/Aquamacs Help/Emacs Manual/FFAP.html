@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>FFAP - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hyperlinking.html#Hyperlinking" title="Hyperlinking">
+<link rel="prev" href="Goto-Address-mode.html#Goto-Address-mode" title="Goto Address mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="FFAP"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Goto-Address-mode.html#Goto-Address-mode">Goto Address mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinking.html#Hyperlinking">Hyperlinking</a>
+<hr>
+</div>
+
+<h3 class="section">54.3 Finding Files and URLs at Point</h3>
+
+<p><a name="index-find_002dfile_002dat_002dpoint-3860"></a><a name="index-ffap-3861"></a><a name="index-dired_002dat_002dpoint-3862"></a><a name="index-ffap_002dnext-3863"></a><a name="index-ffap_002dmenu-3864"></a><a name="index-finding-file-at-point-3865"></a>
+  FFAP mode replaces certain key bindings for finding files, including
+<kbd>C-x C-f</kbd>, with commands that provide more sensitive defaults. 
+These commands behave like the ordinary ones when given a prefix
+argument.  Otherwise, they get the default file name or URL from the
+text around point.  If what is found in the buffer has the form of a
+URL rather than a file name, the commands use <code>browse-url</code> to
+view it.
+
+   <p>This feature is useful for following references in mail or news
+buffers, <samp><span class="file">README</span></samp> files, <samp><span class="file">MANIFEST</span></samp> files, and so on.  The
+&lsquo;<samp><span class="samp">ffap</span></samp>&rsquo; package's commentary available via <kbd>C-h p</kbd> under the
+&lsquo;<samp><span class="samp">files</span></samp>&rsquo; keyword and the <code>ffap</code> Custom group provide details.
+
+   <p><a name="index-FFAP-minor-mode-3866"></a><a name="index-ffap_002dmode-3867"></a>  You can turn on FFAP minor mode by calling <code>ffap-bindings</code> to
+make the following key bindings and to install hooks for using
+<code>ffap</code> in Rmail, Gnus and VM article buffers.
+
+     <dl>
+<dt><kbd>C-x C-f </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-C_002dx-C_002df-_0040r_007b_0028FFAP_0029_007d-3868"></a>Find <var>filename</var>, guessing a default from text around point
+(<code>find-file-at-point</code>). 
+<br><dt><kbd>C-x C-r</kbd><dd><a name="index-C_002dx-C_002dr-_0040r_007b_0028FFAP_0029_007d-3869"></a><code>ffap-read-only</code>, analogous to <code>find-file-read-only</code>. 
+<br><dt><kbd>C-x C-v</kbd><dd><a name="index-C_002dx-C_002dv-_0040r_007b_0028FFAP_0029_007d-3870"></a><code>ffap-alternate-file</code>, analogous to <code>find-alternate-file</code>. 
+<br><dt><kbd>C-x d </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-C_002dx-d-_0040r_007b_0028FFAP_0029_007d-3871"></a>Start Dired on <var>directory</var>, defaulting to the directory name at
+point (<code>dired-at-point</code>). 
+<br><dt><kbd>C-x C-d</kbd><dd><code>ffap-list-directory</code>, analogous to <code>list-directory</code>. 
+<br><dt><kbd>C-x 4 f</kbd><dd><a name="index-C_002dx-4-f-_0040r_007b_0028FFAP_0029_007d-3872"></a><code>ffap-other-window</code>, analogous to <code>find-file-other-window</code>. 
+<br><dt><kbd>C-x 4 r</kbd><dd><code>ffap-read-only-other-window</code>, analogous to
+<code>find-file-read-only-other-window</code>. 
+<br><dt><kbd>C-x 4 d</kbd><dd><code>ffap-dired-other-window</code>, analogous to <code>dired-other-window</code>. 
+<br><dt><kbd>C-x 5 f</kbd><dd><a name="index-C_002dx-5-f-_0040r_007b_0028FFAP_0029_007d-3873"></a><code>ffap-other-frame</code>, analogous to <code>find-file-other-frame</code>. 
+<br><dt><kbd>C-x 5 r</kbd><dd><code>ffap-read-only-other-frame</code>, analogous to
+<code>find-file-read-only-other-frame</code>. 
+<br><dt><kbd>C-x 5 d</kbd><dd><code>ffap-dired-other-frame</code>, analogous to <code>dired-other-frame</code>. 
+<br><dt><kbd>M-x ffap-next</kbd><dd>Search buffer for next file name or URL, then find that file or URL. 
+<br><dt><kbd>S-Mouse-3</kbd><dd><a name="index-S_002dMouse_002d3-_0040r_007b_0028FFAP_0029_007d-3874"></a><code>ffap-at-mouse</code> finds the file guessed from text around the position
+of a mouse click. 
+<br><dt><kbd>C-S-Mouse-3</kbd><dd><a name="index-C_002dS_002dMouse_002d3-_0040r_007b_0028FFAP_0029_007d-3875"></a>Display a menu of files and URLs mentioned in current buffer, then
+find the one you select (<code>ffap-menu</code>). 
+</dl>
+
+   </body></html>
+

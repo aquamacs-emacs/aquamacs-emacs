@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Skeleton Language - Features for Automatic Typing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Features for Automatic Typing">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" title="Skeletons as Abbrevs">
+<link rel="next" href="Inserting-Pairs.html#Inserting-Pairs" title="Inserting Pairs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Skeleton-Language"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inserting-Pairs.html#Inserting-Pairs">Inserting Pairs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs">Skeletons as Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Skeleton Language</h2>
+
+<p><a name="index-skeleton-language-5"></a>
+<a name="index-skeleton_002dinsert-6"></a>  Skeletons are an shorthand extension to the Lisp language, where various
+atoms directly perform either actions on the current buffer or rudimentary
+flow control mechanisms.  Skeletons are interpreted by the function
+<code>skeleton-insert</code>.
+
+   <p>A skeleton is a list starting with an interactor, which is usually a
+prompt-string, or <code>nil</code> when not needed, but can also be a Lisp
+expression for complex read functions or for returning some calculated value. 
+The rest of the list are any number of elements as described in the following
+table:
+
+     <dl>
+<dt><code>"</code><var>string</var><code>"</code>, <code>?</code><var>c</var>, <code>?\</code><var>c</var><dd><a name="index-skeleton_002dtransformation-7"></a>Insert string or character.  Literal strings and characters are passed through
+<code>skeleton-transformation</code> when that is non-<code>nil</code>. 
+<br><dt><code>?\n</code><dd><!-- ??? something seems very wrong here. -->
+Insert a newline and align under current line.  Use newline character
+<code>?\n</code> to prevent alignment. 
+<br><dt><code>_</code><dd>Interesting point.  When wrapping skeletons around successive regions, they are
+put at these places.  Point is left at first <code>_</code> where nothing is wrapped. 
+<br><dt><code>&gt;</code><dd>Indent line according to major mode.  When following element is <code>_</code>, and
+there is a interregion that will be wrapped here, indent that interregion. 
+<br><dt><code>&amp;</code><dd>Logical and.  Iff preceding element moved point, i.e. usually inserted
+something, do following element. 
+<br><dt><code>|</code><dd>Logical xor.  Iff preceding element didn't move point, i.e. usually inserted
+nothing, do following element. 
+<br><dt><code>-</code><var>number</var><dd>Delete preceding number characters.  Depends on value of
+<code>skeleton-untabify</code>. 
+<br><dt><code>()</code> or <code>nil</code><dd>Ignored. 
+<br><dt><var>lisp-expression</var><dd>Evaluated, and the return value is again interpreted as a skeleton element. 
+<br><dt><code>str</code><dd>A special variable that, when evaluated the first time, usually prompts
+for input according to the skeleton's interactor.  It is then set to the
+return value resulting from the interactor.  Each subskeleton has its local
+copy of this variable. 
+<br><dt><code>v1</code>, <code>v2</code><dd>Skeleton-local user variables. 
+<br><dt><code>'</code><var>expression</var><dd>Evaluate following Lisp expression for its side-effect, but prevent it from
+being interpreted as a skeleton element. 
+<br><dt><var>skeleton</var><dd>Subskeletons are inserted recursively, not once, but as often as the user
+enters something at the subskeletons interactor.  Thus there must be a
+<code>str</code> in the subskeleton.  They can also be used non-interactively, when
+prompt is a lisp-expression that returns successive list-elements. 
+<br><dt><code>resume:</code><dd>Ignored.  Execution resumes here if the user quits during skeleton
+interpretation. 
+<br><dt><code>quit</code><dd>A constant which is non-<code>nil</code> when the <code>resume:</code> section was entered
+because the user quit. 
+</dl>
+
+   <p><a name="index-skeleton_002dfurther_002delements-8"></a>  Some modes also use other skeleton elements they themselves defined.  For
+example in shell script mode's skeletons you will find <code>&lt;</code> which does a
+rigid indentation backwards, or in CC mode's skeletons you find the
+self-inserting elements <code>{</code> and <code>}</code>.  These are defined by the
+buffer-local variable <code>skeleton-further-elements</code> which is a list of
+variables bound while interpreting a skeleton.
+
+   <p><a name="index-define_002dskeleton-9"></a>  The macro <code>define-skeleton</code> defines a command for interpreting a
+skeleton.  The first argument is the command name, the second is a
+documentation string, and the rest is an interactor and any number of skeleton
+elements together forming a skeleton.  This skeleton is assigned to a variable
+of the same name as the command and can thus be overridden from your
+<samp><span class="file">~/.emacs</span></samp> file (see <a href="../emacs/Init-File.html#g_t_0028emacs_0029Init-File">(emacs)Init File</a>).
+
+   </body></html>
+

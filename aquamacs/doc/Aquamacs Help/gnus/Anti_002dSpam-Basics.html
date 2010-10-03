@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Anti-Spam Basics - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" title="Thwarting Email Spam">
+<link rel="prev" href="The-problem-of-spam.html#The-problem-of-spam" title="The problem of spam">
+<link rel="next" href="SpamAssassin.html#SpamAssassin" title="SpamAssassin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Anti-Spam-Basics"></a>
+<a name="Anti_002dSpam-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SpamAssassin.html#SpamAssassin">SpamAssassin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-problem-of-spam.html#The-problem-of-spam">The problem of spam</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam">Thwarting Email Spam</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.19.2 Anti-Spam Basics</h4>
+
+<p><a name="index-email-spam-2859"></a><a name="index-spam-2860"></a><a name="index-UCE-2861"></a><a name="index-unsolicited-commercial-email-2862"></a>
+One way of dealing with spam is having Gnus split out all spam into a
+&lsquo;<samp><span class="samp">spam</span></samp>&rsquo; mail group (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>).
+
+   <p>First, pick one (1) valid mail address that you can be reached at, and
+put it in your <code>From</code> header of all your news articles.  (I've
+chosen &lsquo;<samp><span class="samp">larsi@trym.ifi.uio.no</span></samp>&rsquo;, but for many addresses on the form
+&lsquo;<samp><span class="samp">larsi+usenet@ifi.uio.no</span></samp>&rsquo; will be a better choice.  Ask your
+sysadmin whether your sendmail installation accepts keywords in the local
+part of the mail address.)
+
+<pre class="lisp">     (setq message-default-news-headers
+           "From: Lars Magne Ingebrigtsen &lt;larsi@trym.ifi.uio.no&gt;\n")
+</pre>
+   <p>Then put the following split rule in <code>nnmail-split-fancy</code>
+(see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>):
+
+<pre class="lisp">     (...
+      (to "larsi@trym.ifi.uio.no"
+          (| ("subject" "re:.*" "misc")
+             ("references" ".*@.*" "misc")
+             "spam"))
+      ...)
+</pre>
+   <p>This says that all mail to this address is suspect, but if it has a
+<code>Subject</code> that starts with a &lsquo;<samp><span class="samp">Re:</span></samp>&rsquo; or has a <code>References</code>
+header, it's probably ok.  All the rest goes to the &lsquo;<samp><span class="samp">spam</span></samp>&rsquo; group. 
+(This idea probably comes from Tim Pierce.)
+
+   <p>In addition, many mail spammers talk directly to your <acronym>SMTP</acronym> server
+and do not include your email address explicitly in the <code>To</code>
+header.  Why they do this is unknown&mdash;perhaps it's to thwart this
+thwarting scheme?  In any case, this is trivial to deal with&mdash;you just
+put anything not addressed to you in the &lsquo;<samp><span class="samp">spam</span></samp>&rsquo; group by ending
+your fancy split rule in this way:
+
+<pre class="lisp">     (
+      ...
+      (to "larsi" "misc")
+      "spam")
+</pre>
+   <p>In my experience, this will sort virtually everything into the right
+group.  You still have to check the &lsquo;<samp><span class="samp">spam</span></samp>&rsquo; group from time to time to
+check for legitimate mail, though.  If you feel like being a good net
+citizen, you can even send off complaints to the proper authorities on
+each unsolicited commercial email&mdash;at your leisure.
+
+   <p>This works for me.  It allows people an easy way to contact me (they can
+just press <kbd>r</kbd> in the usual way), and I'm not bothered at all with
+spam.  It's a win-win situation.  Forging <code>From</code> headers to point
+to non-existent domains is yucky, in my opinion.
+
+   <p>Be careful with this approach.  Spammers are wise to it.
+
+   </body></html>
+

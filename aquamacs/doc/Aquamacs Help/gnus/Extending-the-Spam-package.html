@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>Extending the Spam package - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
+<link rel="prev" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
+<link rel="next" href="Spam-Statistics-Package.html#Spam-Statistics-Package" title="Spam Statistics Package">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Extending-the-Spam-package"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Spam-Statistics-Package.html#Spam-Statistics-Package">Spam Statistics Package</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.20.7 Extending the Spam package</h4>
+
+<p><a name="index-spam-filtering-2994"></a><a name="index-spam-elisp-package_002c-extending-2995"></a><a name="index-extending-the-spam-elisp-package-2996"></a>
+Say you want to add a new back end called blackbox.  For filtering
+incoming mail, provide the following:
+
+     <ol type=1 start=1>
+
+     <li>Code
+
+     <pre class="lisp">          (defvar spam-use-blackbox nil
+            "True if blackbox should be used.")
+</pre>
+     <p>Write <code>spam-check-blackbox</code> if Blackbox can check incoming mail.
+
+     <p>Write <code>spam-blackbox-register-routine</code> and
+<code>spam-blackbox-unregister-routine</code> using the bogofilter
+register/unregister routines as a start, or other restister/unregister
+routines more appropriate to Blackbox, if Blackbox can
+register/unregister spam and ham.
+
+     <li>Functionality
+
+     <p>The <code>spam-check-blackbox</code> function should return &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; or
+<code>spam-split-group</code>, observing the other conventions.  See the
+existing <code>spam-check-*</code> functions for examples of what you can
+do, and stick to the template unless you fully understand the reasons
+why you aren't.
+
+        </ol>
+
+   <p>For processing spam and ham messages, provide the following:
+
+     <ol type=1 start=1>
+
+     <li>Code
+
+     <p>Note you don't have to provide a spam or a ham processor.  Only
+provide them if Blackbox supports spam or ham processing.
+
+     <p>Also, ham and spam processors are being phased out as single
+variables.  Instead the form <code>(spam spam-use-blackbox)</code> or
+<code>(ham spam-use-blackbox)</code> is favored.  For now, spam/ham
+processor variables are still around but they won't be for long.
+
+     <pre class="lisp">          (defvar gnus-group-spam-exit-processor-blackbox "blackbox-spam"
+            "The Blackbox summary exit spam processor.
+          Only applicable to spam groups.")
+          
+          (defvar gnus-group-ham-exit-processor-blackbox "blackbox-ham"
+            "The whitelist summary exit ham processor.
+          Only applicable to non-spam (unclassified and ham) groups.")
+          
+</pre>
+     <li>Gnus parameters
+
+     <p>Add
+     <pre class="lisp">          (const :tag "Spam: Blackbox" (spam spam-use-blackbox))
+          (const :tag "Ham: Blackbox"  (ham spam-use-blackbox))
+</pre>
+     <p>to the <code>spam-process</code> group parameter in <code>gnus.el</code>.  Make
+sure you do it twice, once for the parameter and once for the
+variable customization.
+
+     <p>Add
+     <pre class="lisp">          (variable-item spam-use-blackbox)
+</pre>
+     <p>to the <code>spam-autodetect-methods</code> group parameter in
+<code>gnus.el</code> if Blackbox can check incoming mail for spam contents.
+
+     <p>Finally, use the appropriate <code>spam-install-*-backend</code> function in
+<code>spam.el</code>.  Here are the available functions.
+
+          <ol type=1 start=1>
+
+          <li><code>spam-install-backend-alias</code>
+
+          <p>This function will simply install an alias for a back end that does
+everything like the original back end.  It is currently only used to
+make <code>spam-use-BBDB-exclusive</code> act like <code>spam-use-BBDB</code>.
+
+          <li><code>spam-install-nocheck-backend</code>
+
+          <p>This function installs a back end that has no check function, but can
+register/unregister ham or spam.  The <code>spam-use-gmane</code> back end is
+such a back end.
+
+          <li><code>spam-install-checkonly-backend</code>
+
+          <p>This function will install a back end that can only check incoming mail
+for spam contents.  It can't register or unregister messages. 
+<code>spam-use-blackholes</code> and <code>spam-use-hashcash</code> are such
+back ends.
+
+          <li><code>spam-install-statistical-checkonly-backend</code>
+
+          <p>This function installs a statistical back end (one which requires the
+full body of a message to check it) that can only check incoming mail
+for contents.  <code>spam-use-regex-body</code> is such a filter.
+
+          <li><code>spam-install-statistical-backend</code>
+
+          <p>This function install a statistical back end with incoming checks and
+registration/unregistration routines.  <code>spam-use-bogofilter</code> is
+set up this way.
+
+          <li><code>spam-install-backend</code>
+
+          <p>This is the most normal back end installation, where a back end that can
+check and register/unregister messages is set up without statistical
+abilities.  The <code>spam-use-BBDB</code> is such a back end.
+
+          <li><code>spam-install-mover-backend</code>
+
+          <p>Mover back ends are internal to <code>spam.el</code> and specifically move
+articles around when the summary is exited.  You will very probably
+never install such a back end.
+          </ol>
+
+        </ol>
+
+   </body></html>
+

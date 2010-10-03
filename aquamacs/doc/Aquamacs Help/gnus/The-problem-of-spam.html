@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>The problem of spam - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" title="Thwarting Email Spam">
+<link rel="next" href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" title="Anti-Spam Basics">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="The-problem-of-spam"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics">Anti-Spam Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam">Thwarting Email Spam</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.19.1 The problem of spam</h4>
+
+<p><a name="index-email-spam-2854"></a><a name="index-spam-filtering-approaches-2855"></a><a name="index-filtering-approaches_002c-spam-2856"></a><a name="index-UCE-2857"></a><a name="index-unsolicited-commercial-email-2858"></a>
+First, some background on spam.
+
+   <p>If you have access to e-mail, you are familiar with spam (technically
+termed <acronym>UCE</acronym>, Unsolicited Commercial E-mail).  Simply put, it
+exists because e-mail delivery is very cheap compared to paper mail,
+so only a very small percentage of people need to respond to an UCE to
+make it worthwhile to the advertiser.  Ironically, one of the most
+common spams is the one offering a database of e-mail addresses for
+further spamming.  Senders of spam are usually called <em>spammers</em>,
+but terms like <em>vermin</em>, <em>scum</em>, <em>sociopaths</em>, and
+<em>morons</em> are in common use as well.
+
+   <p>Spam comes from a wide variety of sources.  It is simply impossible to
+dispose of all spam without discarding useful messages.  A good
+example is the TMDA system, which requires senders
+unknown to you to confirm themselves as legitimate senders before
+their e-mail can reach you.  Without getting into the technical side
+of TMDA, a downside is clearly that e-mail from legitimate sources may
+be discarded if those sources can't or won't confirm themselves
+through the TMDA system.  Another problem with TMDA is that it
+requires its users to have a basic understanding of e-mail delivery
+and processing.
+
+   <p>The simplest approach to filtering spam is filtering, at the mail
+server or when you sort through incoming mail.  If you get 200 spam
+messages per day from &lsquo;<samp><span class="samp">random-address@vmadmin.com</span></samp>&rsquo;, you block
+&lsquo;<samp><span class="samp">vmadmin.com</span></samp>&rsquo;.  If you get 200 messages about &lsquo;<samp><span class="samp">VIAGRA</span></samp>&rsquo;, you
+discard all messages with &lsquo;<samp><span class="samp">VIAGRA</span></samp>&rsquo; in the message.  If you get
+lots of spam from Bulgaria, for example, you try to filter all mail
+from Bulgarian IPs.
+
+   <p>This, unfortunately, is a great way to discard legitimate e-mail.  The
+risks of blocking a whole country (Bulgaria, Norway, Nigeria, China,
+etc.) or even a continent (Asia, Africa, Europe, etc.) from contacting
+you should be obvious, so don't do it if you have the choice.
+
+   <p>In another instance, the very informative and useful RISKS digest has
+been blocked by overzealous mail filters because it <strong>contained</strong>
+words that were common in spam messages.  Nevertheless, in isolated
+cases, with great care, direct filtering of mail can be useful.
+
+   <p>Another approach to filtering e-mail is the distributed spam
+processing, for instance DCC implements such a system.  In essence,
+<var>N</var> systems around the world agree that a machine <var>X</var> in
+Ghana, Estonia, or California is sending out spam e-mail, and these
+<var>N</var> systems enter <var>X</var> or the spam e-mail from <var>X</var> into a
+database.  The criteria for spam detection vary&mdash;it may be the number
+of messages sent, the content of the messages, and so on.  When a user
+of the distributed processing system wants to find out if a message is
+spam, he consults one of those <var>N</var> systems.
+
+   <p>Distributed spam processing works very well against spammers that send
+a large number of messages at once, but it requires the user to set up
+fairly complicated checks.  There are commercial and free distributed
+spam processing systems.  Distributed spam processing has its risks as
+well.  For instance legitimate e-mail senders have been accused of
+sending spam, and their web sites and mailing lists have been shut
+down for some time because of the incident.
+
+   <p>The statistical approach to spam filtering is also popular.  It is
+based on a statistical analysis of previous spam messages.  Usually
+the analysis is a simple word frequency count, with perhaps pairs of
+words or 3-word combinations thrown into the mix.  Statistical
+analysis of spam works very well in most of the cases, but it can
+classify legitimate e-mail as spam in some cases.  It takes time to
+run the analysis, the full message must be analyzed, and the user has
+to store the database of spam analysis.  Statistical analysis on the
+server is gaining popularity.  This has the advantage of letting the
+user Just Read Mail, but has the disadvantage that it's harder to tell
+the server that it has misclassified mail.
+
+   <p>Fighting spam is not easy, no matter what anyone says.  There is no
+magic switch that will distinguish Viagra ads from Mom's e-mails. 
+Even people are having a hard time telling spam apart from non-spam,
+because spammers are actively looking to fool us into thinking they
+are Mom, essentially.  Spamming is irritating, irresponsible, and
+idiotic behavior from a bunch of people who think the world owes them
+a favor.  We hope the following sections will help you in fighting the
+spam plague.
+
+   </body></html>
+

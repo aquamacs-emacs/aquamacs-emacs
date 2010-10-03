@@ -1,0 +1,373 @@
+<html lang="en">
+<head>
+<title>IMAP - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Select-Methods.html#Select-Methods" title="Select Methods">
+<link rel="prev" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
+<link rel="next" href="Other-Sources.html#Other-Sources" title="Other Sources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="IMAP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Sources.html#Other-Sources">Other Sources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Select-Methods.html#Select-Methods">Select Methods</a>
+<hr>
+</div>
+
+<h3 class="section">6.5 IMAP</h3>
+
+<p><a name="index-nnimap-2330"></a><a name="index-g_t_0040acronym_007bIMAP_007d-2331"></a>
+<acronym>IMAP</acronym> is a network protocol for reading mail (or news, or <small class="dots">...</small>),
+think of it as a modernized <acronym>NNTP</acronym>.  Connecting to a <acronym>IMAP</acronym>
+server is much similar to connecting to a news server, you just
+specify the network address of the server.
+
+   <p><acronym>IMAP</acronym> has two properties.  First, <acronym>IMAP</acronym> can do
+everything that <acronym>POP</acronym> can, it can hence be viewed as a
+<acronym>POP++</acronym>.  Secondly, <acronym>IMAP</acronym> is a mail storage protocol,
+similar to <acronym>NNTP</acronym> being a news storage protocol&mdash;however,
+<acronym>IMAP</acronym> offers more features than <acronym>NNTP</acronym> because news
+is more or less read-only whereas mail is read-write.
+
+   <p>If you want to use <acronym>IMAP</acronym> as a <acronym>POP++</acronym>, use an imap
+entry in <code>mail-sources</code>.  With this, Gnus will fetch mails from
+the <acronym>IMAP</acronym> server and store them on the local disk.  This is
+not the usage described in this section&mdash;See <a href="Mail-Sources.html#Mail-Sources">Mail Sources</a>.
+
+   <p>If you want to use <acronym>IMAP</acronym> as a mail storage protocol, use an nnimap
+entry in <code>gnus-secondary-select-methods</code>.  With this, Gnus will
+manipulate mails stored on the <acronym>IMAP</acronym> server.  This is the kind of
+usage explained in this section.
+
+   <p>A server configuration in <samp><span class="file">~/.gnus.el</span></samp> with a few <acronym>IMAP</acronym>
+servers might look something like the following.  (Note that for
+<acronym>TLS</acronym>/<acronym>SSL</acronym>, you need external programs and libraries,
+see below.)
+
+<pre class="lisp">     (setq gnus-secondary-select-methods
+           '((nnimap "simpleserver") ; <span class="roman">no special configuration</span>
+             ; <span class="roman">perhaps a ssh port forwarded server:</span>
+             (nnimap "dolk"
+                     (nnimap-address "localhost")
+                     (nnimap-server-port 1430))
+             ; <span class="roman">a UW server running on localhost</span>
+             (nnimap "barbar"
+                     (nnimap-server-port 143)
+                     (nnimap-address "localhost")
+                     (nnimap-list-pattern ("INBOX" "mail/*")))
+             ; <span class="roman">anonymous public cyrus server:</span>
+             (nnimap "cyrus.andrew.cmu.edu"
+                     (nnimap-authenticator anonymous)
+                     (nnimap-list-pattern "archive.*")
+                     (nnimap-stream network))
+             ; <span class="roman">a ssl server on a non-standard port:</span>
+             (nnimap "vic20"
+                     (nnimap-address "vic20.somewhere.com")
+                     (nnimap-server-port 9930)
+                     (nnimap-stream ssl))))
+</pre>
+   <p>After defining the new server, you can subscribe to groups on the
+server using normal Gnus commands such as <kbd>U</kbd> in the Group Buffer
+(see <a href="Subscription-Commands.html#Subscription-Commands">Subscription Commands</a>) or via the Server Buffer
+(see <a href="Server-Buffer.html#Server-Buffer">Server Buffer</a>).
+
+   <p>The following variables can be used to create a virtual <code>nnimap</code>
+server:
+
+     <dl>
+<dt><code>nnimap-address</code><dd><a name="index-nnimap_002daddress-2332"></a>
+The address of the remote <acronym>IMAP</acronym> server.  Defaults to the virtual
+server name if not specified.
+
+     <br><dt><code>nnimap-server-port</code><dd><a name="index-nnimap_002dserver_002dport-2333"></a>Port on server to contact.  Defaults to port 143, or 993 for <acronym>TLS</acronym>/<acronym>SSL</acronym>.
+
+     <p>Note that this should be an integer, example server specification:
+
+     <pre class="lisp">          (nnimap "mail.server.com"
+                  (nnimap-server-port 4711))
+</pre>
+     <br><dt><code>nnimap-list-pattern</code><dd><a name="index-nnimap_002dlist_002dpattern-2334"></a>String or list of strings of mailboxes to limit available groups to. 
+This is used when the server has very many mailboxes and you're only
+interested in a few&mdash;some servers export your home directory via
+<acronym>IMAP</acronym>, you'll probably want to limit the mailboxes to those in
+<samp><span class="file">~/Mail/*</span></samp> then.
+
+     <p>The string can also be a cons of REFERENCE and the string as above, what
+REFERENCE is used for is server specific, but on the University of
+Washington server it's a directory that will be concatenated with the
+mailbox.
+
+     <p>Example server specification:
+
+     <pre class="lisp">          (nnimap "mail.server.com"
+                  (nnimap-list-pattern ("INBOX" "Mail/*" "alt.sex.*"
+                                         ("~friend/Mail/" . "list/*"))))
+</pre>
+     <br><dt><code>nnimap-stream</code><dd><a name="index-nnimap_002dstream-2335"></a>The type of stream used to connect to your server.  By default, nnimap
+will detect and automatically use all of the below, with the exception
+of <acronym>TLS</acronym>/<acronym>SSL</acronym>.  (<acronym>IMAP</acronym> over
+<acronym>TLS</acronym>/<acronym>SSL</acronym> is being replaced by STARTTLS, which can
+be automatically detected, but it's not widely deployed yet.)
+
+     <p>Example server specification:
+
+     <pre class="lisp">          (nnimap "mail.server.com"
+                  (nnimap-stream ssl))
+</pre>
+     <p>Please note that the value of <code>nnimap-stream</code> is a symbol!
+
+          <ul>
+<li><dfn>gssapi:</dfn> Connect with GSSAPI (usually Kerberos 5).  Requires the
+&lsquo;<samp><span class="samp">gsasl</span></samp>&rsquo; or &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo; program. 
+<li><dfn>kerberos4:</dfn> Connect with Kerberos 4.  Requires the &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo; program. 
+<li><dfn>starttls:</dfn> Connect via the STARTTLS extension (similar to
+<acronym>TLS</acronym>/<acronym>SSL</acronym>).  Requires the external library &lsquo;<samp><span class="samp">starttls.el</span></samp>&rsquo; and program
+&lsquo;<samp><span class="samp">starttls</span></samp>&rsquo;. 
+<li><dfn>tls:</dfn> Connect through <acronym>TLS</acronym>.  Requires GNUTLS (the program
+&lsquo;<samp><span class="samp">gnutls-cli</span></samp>&rsquo;). 
+<li><dfn>ssl:</dfn> Connect through <acronym>SSL</acronym>.  Requires OpenSSL (the program
+&lsquo;<samp><span class="samp">openssl</span></samp>&rsquo;) or SSLeay (&lsquo;<samp><span class="samp">s_client</span></samp>&rsquo;). 
+<li><dfn>shell:</dfn> Use a shell command to start <acronym>IMAP</acronym> connection. 
+<li><dfn>network:</dfn> Plain, TCP/IP network connection. 
+</ul>
+
+     <p><a name="index-imap_002dkerberos4_002dprogram-2336"></a>The &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo; program is shipped with Cyrus IMAPD.  If you're
+using &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo; from Cyrus IMAPD &lt; 2.0.14 (which includes version
+1.5.x and 1.6.x) you need to frob <code>imap-process-connection-type</code>
+to make <code>imap.el</code> use a pty instead of a pipe when communicating
+with &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo;.  You will then suffer from a line length
+restrictions on <acronym>IMAP</acronym> commands, which might make Gnus seem to hang
+indefinitely if you have many articles in a mailbox.  The variable
+<code>imap-kerberos4-program</code> contain parameters to pass to the imtest
+program.
+
+     <p>For <acronym>TLS</acronym> connection, the <code>gnutls-cli</code> program from GNUTLS is
+needed.  It is available from
+<a href="http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a>.
+
+     <p><a name="index-imap_002dgssapi_002dprogram-2337"></a>This parameter specifies a list of command lines that invoke a GSSAPI
+authenticated <acronym>IMAP</acronym> stream in a subshell.  They are tried
+sequentially until a connection is made, or the list has been
+exhausted.  By default, &lsquo;<samp><span class="samp">gsasl</span></samp>&rsquo; from GNU SASL, available from
+<a href="http://www.gnu.org/software/gsasl/">http://www.gnu.org/software/gsasl/</a>, and the &lsquo;<samp><span class="samp">imtest</span></samp>&rsquo;
+program from Cyrus IMAPD (see <code>imap-kerberos4-program</code>), are
+tried.
+
+     <p><a name="index-imap_002dssl_002dprogram-2338"></a>For <acronym>SSL</acronym> connections, the OpenSSL program is available from
+<a href="http://www.openssl.org/">http://www.openssl.org/</a>.  OpenSSL was formerly known as SSLeay,
+and nnimap support it too&mdash;although the most recent versions of
+SSLeay, 0.9.x, are known to have serious bugs making it
+useless.  Earlier versions, especially 0.8.x, of SSLeay are known to
+work.  The variable <code>imap-ssl-program</code> contain parameters to pass
+to OpenSSL/SSLeay.
+
+     <p><a name="index-imap_002dshell_002dprogram-2339"></a><a name="index-imap_002dshell_002dhost-2340"></a>For <acronym>IMAP</acronym> connections using the <code>shell</code> stream, the
+variable <code>imap-shell-program</code> specify what program to call.  Make
+sure nothing is interfering with the output of the program, e.g., don't
+forget to redirect the error output to the void.
+
+     <br><dt><code>nnimap-authenticator</code><dd><a name="index-nnimap_002dauthenticator-2341"></a>
+The authenticator used to connect to the server.  By default, nnimap
+will use the most secure authenticator your server is capable of.
+
+     <p>Example server specification:
+
+     <pre class="lisp">          (nnimap "mail.server.com"
+                  (nnimap-authenticator anonymous))
+</pre>
+     <p>Please note that the value of <code>nnimap-authenticator</code> is a symbol!
+
+          <ul>
+<li><dfn>gssapi:</dfn> GSSAPI (usually kerberos 5) authentication.  Requires
+external program <code>gsasl</code> or <code>imtest</code>. 
+<li><dfn>kerberos4:</dfn> Kerberos 4 authentication.  Requires external program
+<code>imtest</code>. 
+<li><dfn>digest-md5:</dfn> Encrypted username/password via DIGEST-MD5.  Requires
+external library <code>digest-md5.el</code>. 
+<li><dfn>cram-md5:</dfn> Encrypted username/password via CRAM-MD5. 
+<li><dfn>login:</dfn> Plain-text username/password via LOGIN. 
+<li><dfn>anonymous:</dfn> Login as &ldquo;anonymous&rdquo;, supplying your email address as password. 
+</ul>
+
+     <br><dt><code>nnimap-expunge-on-close</code><dd><a name="index-expunging-2342"></a><a name="index-nnimap_002dexpunge_002don_002dclose-2343"></a>Unlike Parmenides the <acronym>IMAP</acronym> designers have decided things that
+don't exist actually do exist.  More specifically, <acronym>IMAP</acronym> has
+this concept of marking articles <code>Deleted</code> which doesn't actually
+delete them, and this (marking them <code>Deleted</code>, that is) is what
+nnimap does when you delete an article in Gnus (with <kbd>B DEL</kbd> or
+similar).
+
+     <p>Since the articles aren't really removed when we mark them with the
+<code>Deleted</code> flag we'll need a way to actually delete them.  Feel like
+running in circles yet?
+
+     <p>Traditionally, nnimap has removed all articles marked as <code>Deleted</code>
+when closing a mailbox but this is now configurable by this server
+variable.
+
+     <p>The possible options are:
+
+          <dl>
+<dt><code>always</code><dd>The default behavior, delete all articles marked as &ldquo;Deleted&rdquo; when
+closing a mailbox. 
+<br><dt><code>never</code><dd>Never actually delete articles.  Currently there is no way of showing
+the articles marked for deletion in nnimap, but other <acronym>IMAP</acronym> clients
+may allow you to do this.  If you ever want to run the EXPUNGE command
+manually, See <a href="Expunging-mailboxes.html#Expunging-mailboxes">Expunging mailboxes</a>. 
+<br><dt><code>ask</code><dd>When closing mailboxes, nnimap will ask if you wish to expunge deleted
+articles or not.
+
+     </dl>
+
+     <br><dt><code>nnimap-importantize-dormant</code><dd><a name="index-nnimap_002dimportantize_002ddormant-2344"></a>
+If non-<code>nil</code> (the default), marks dormant articles as ticked (as
+well), for other <acronym>IMAP</acronym> clients.  Within Gnus, dormant articles will
+naturally still (only) be marked as dormant.  This is to make dormant
+articles stand out, just like ticked articles, in other <acronym>IMAP</acronym>
+clients.  (In other words, Gnus has two &ldquo;Tick&rdquo; marks and <acronym>IMAP</acronym>
+has only one.)
+
+     <p>Probably the only reason for frobbing this would be if you're trying
+enable per-user persistent dormant flags, using something like:
+
+     <pre class="lisp">          (setcdr (assq 'dormant nnimap-mark-to-flag-alist)
+                  (format "gnus-dormant-%s" (user-login-name)))
+          (setcdr (assq 'dormant nnimap-mark-to-predicate-alist)
+                  (format "KEYWORD gnus-dormant-%s" (user-login-name)))
+</pre>
+     <p>In this case, you would not want the per-user dormant flag showing up
+as ticked for other users.
+
+     <br><dt><code>nnimap-expunge-search-string</code><dd><a name="index-expunging-2345"></a><a name="index-nnimap_002dexpunge_002dsearch_002dstring-2346"></a><a name="index-expiring-_0040acronym_007bIMAP_007d-mail-2347"></a>
+This variable contain the <acronym>IMAP</acronym> search command sent to server when
+searching for articles eligible for expiring.  The default is
+<code>"UID %s NOT SINCE %s"</code>, where the first <code>%s</code> is replaced by
+UID set and the second <code>%s</code> is replaced by a date.
+
+     <p>Probably the only useful value to change this to is
+<code>"UID %s NOT SENTSINCE %s"</code>, which makes nnimap use the Date: in
+messages instead of the internal article date.  See section 6.4.4 of
+RFC 2060 for more information on valid strings.
+
+     <p>However, if <code>nnimap-search-uids-not-since-is-evil</code>
+is true, this variable has no effect since the search logic
+is reversed, as described below.
+
+     <br><dt><code>nnimap-authinfo-file</code><dd><a name="index-nnimap_002dauthinfo_002dfile-2348"></a>
+A file containing credentials used to log in on servers.  The format is
+(almost) the same as the <code>ftp</code> <samp><span class="file">~/.netrc</span></samp> file.  See the
+variable <code>nntp-authinfo-file</code> for exact syntax; also see
+<a href="NNTP.html#NNTP">NNTP</a>.  An example of an .authinfo line for an IMAP server, is:
+
+     <pre class="example">          machine students.uio.no login larsi password geheimnis port imap
+</pre>
+     <p>Note that it should be <code>port imap</code>, or <code>port 143</code>, if you
+use a <code>nnimap-stream</code> of <code>tls</code> or <code>ssl</code>, even if the
+actual port number used is port 993 for secured IMAP.  For
+convenience, Gnus will accept <code>port imaps</code> as a synonym of
+<code>port imap</code>.
+
+     <br><dt><code>nnimap-need-unselect-to-notice-new-mail</code><dd><a name="index-nnimap_002dneed_002dunselect_002dto_002dnotice_002dnew_002dmail-2349"></a>
+Unselect mailboxes before looking for new mail in them.  Some servers
+seem to need this under some circumstances; it was reported that
+Courier 1.7.1 did.
+
+     <br><dt><code>nnimap-nov-is-evil</code><dd><a name="index-nnimap_002dnov_002dis_002devil-2350"></a><a name="index-Courier-_0040acronym_007bIMAP_007d-server-2351"></a><a name="index-g_t_0040acronym_007bNOV_007d-2352"></a>
+Never generate or use a local <acronym>NOV</acronym> database. Defaults to the
+value of <code>gnus-agent</code>.
+
+     <p>Using a <acronym>NOV</acronym> database usually makes header fetching much
+faster, but it uses the <code>UID SEARCH UID</code> command, which is very
+slow on some servers (notably some versions of Courier). Since the Gnus
+Agent caches the information in the <acronym>NOV</acronym> database without using
+the slow command, this variable defaults to true if the Agent is in use,
+and false otherwise.
+
+     <br><dt><code>nnimap-search-uids-not-since-is-evil</code><dd><a name="index-nnimap_002dsearch_002duids_002dnot_002dsince_002dis_002devil-2353"></a><a name="index-Courier-_0040acronym_007bIMAP_007d-server-2354"></a><a name="index-expiring-_0040acronym_007bIMAP_007d-mail-2355"></a>
+Avoid the <code>UID SEARCH UID </code><var>message numbers</var><code> NOT SINCE
+</code><var>date</var> command, which is slow on some <acronym>IMAP</acronym> servers
+(notably, some versions of Courier). Instead, use <code>UID SEARCH SINCE
+</code><var>date</var> and prune the list of expirable articles within Gnus.
+
+     <p>When Gnus expires your mail (see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>), it starts with a
+list of expirable articles and asks the IMAP server questions like &ldquo;Of
+these articles, which ones are older than a week?&rdquo; While this seems
+like a perfectly reasonable question, some IMAP servers take a long time
+to answer it, since they seemingly go looking into every old article to
+see if it is one of the expirable ones. Curiously, the question &ldquo;Of
+<em>all</em> articles, which ones are newer than a week?&rdquo; seems to be
+much faster to answer, so setting this variable causes Gnus to ask this
+question and figure out the answer to the real question itself.
+
+     <p>This problem can really sneak up on you: when you first configure Gnus,
+everything works fine, but once you accumulate a couple thousand
+messages, you start cursing Gnus for being so slow. On the other hand,
+if you get a lot of email within a week, setting this variable will
+cause a lot of network traffic between Gnus and the IMAP server.
+
+     <br><dt><code>nnimap-logout-timeout</code><dd><a name="index-nnimap_002dlogout_002dtimeout-2356"></a>
+There is a case where a connection to a <acronym>IMAP</acronym> server is unable
+to close, when connecting to the server via a certain kind of network,
+e.g. <acronym>VPN</acronym>.  In that case, it will be observed that a connection
+between Emacs and the local network looks alive even if the server has
+closed a connection for some reason (typically, a timeout). 
+Consequently, Emacs continues waiting for a response from the server for
+the <code>LOGOUT</code> command that Emacs sent, or hangs in other words.  If
+you are in such a network, setting this variable to a number of seconds
+will be helpful.  If it is set, a hung connection will be closed
+forcibly, after this number of seconds from the time Emacs sends the
+<code>LOGOUT</code> command.  It should not be too small value but too large
+value will be inconvenient too.  Perhaps the value 1.0 will be a good
+candidate but it might be worth trying some other values.
+
+     <p>Example server specification:
+
+     <pre class="lisp">          (nnimap "mail.server.com"
+                  (nnimap-logout-timeout 1.0))
+</pre>
+     </dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Splitting-in-IMAP.html#Splitting-in-IMAP">Splitting in IMAP</a>:            Splitting mail with nnimap. 
+<li><a accesskey="2" href="Expiring-in-IMAP.html#Expiring-in-IMAP">Expiring in IMAP</a>:             Expiring mail with nnimap. 
+<li><a accesskey="3" href="Editing-IMAP-ACLs.html#Editing-IMAP-ACLs">Editing IMAP ACLs</a>:            Limiting/enabling other users access to a mailbox. 
+<li><a accesskey="4" href="Expunging-mailboxes.html#Expunging-mailboxes">Expunging mailboxes</a>:          Equivalent of a ``compress mailbox'' button. 
+<li><a accesskey="5" href="A-note-on-namespaces.html#A-note-on-namespaces">A note on namespaces</a>:         How to (not) use <acronym>IMAP</acronym> namespace in Gnus. 
+<li><a accesskey="6" href="Debugging-IMAP.html#Debugging-IMAP">Debugging IMAP</a>:               What to do when things don't work. 
+</ul>
+
+   </body></html>
+

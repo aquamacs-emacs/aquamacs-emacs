@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Pick and Read - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alternative-Approaches.html#Alternative-Approaches" title="Alternative Approaches">
+<link rel="next" href="Binary-Groups.html#Binary-Groups" title="Binary Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Pick-and-Read"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Binary-Groups.html#Binary-Groups">Binary Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alternative-Approaches.html#Alternative-Approaches">Alternative Approaches</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.24.1 Pick and Read</h4>
+
+<p><a name="index-pick-and-read-1612"></a>
+Some newsreaders (like <code>nn</code> and, uhm, <code>Netnews</code> on VM/CMS) use
+a two-phased reading interface.  The user first marks in a summary
+buffer the articles she wants to read.  Then she starts reading the
+articles with just an article buffer displayed.
+
+   <p><a name="index-gnus_002dpick_002dmode-1613"></a><a name="index-M_002dx-gnus_002dpick_002dmode-1614"></a>Gnus provides a summary buffer minor mode that allows
+this&mdash;<code>gnus-pick-mode</code>.  This basically means that a few process
+mark commands become one-keystroke commands to allow easy marking, and
+it provides one additional command for switching to the summary buffer.
+
+   <p>Here are the available keystrokes when using pick mode:
+
+     <dl>
+<dt><kbd>.</kbd><dd><a name="index-g_t_002e-_0028Pick_0029-1615"></a><a name="index-gnus_002dpick_002darticle_002dor_002dthread-1616"></a>Pick the article or thread on the current line
+(<code>gnus-pick-article-or-thread</code>).  If the variable
+<code>gnus-thread-hide-subtree</code> is true, then this key selects the
+entire thread when used at the first article of the thread.  Otherwise,
+it selects just the article.  If given a numerical prefix, go to that
+thread or article and pick it.  (The line number is normally displayed
+at the beginning of the summary pick lines.)
+
+     <br><dt><kbd>SPACE</kbd><dd><a name="index-SPACE-_0028Pick_0029-1617"></a><a name="index-gnus_002dpick_002dnext_002dpage-1618"></a>Scroll the summary buffer up one page (<code>gnus-pick-next-page</code>).  If
+at the end of the buffer, start reading the picked articles.
+
+     <br><dt><kbd>u</kbd><dd><a name="index-u-_0028Pick_0029-1619"></a><a name="index-gnus_002dpick_002dunmark_002darticle_002dor_002dthread_002e-1620"></a>Unpick the thread or article
+(<code>gnus-pick-unmark-article-or-thread</code>).  If the variable
+<code>gnus-thread-hide-subtree</code> is true, then this key unpicks the
+thread if used at the first article of the thread.  Otherwise it unpicks
+just the article.  You can give this key a numerical prefix to unpick
+the thread or article at that line.
+
+     <br><dt><kbd>RET</kbd><dd><a name="index-RET-_0028Pick_0029-1621"></a><a name="index-gnus_002dpick_002dstart_002dreading-1622"></a><a name="index-gnus_002dpick_002ddisplay_002dsummary-1623"></a>Start reading the picked articles (<code>gnus-pick-start-reading</code>).  If
+given a prefix, mark all unpicked articles as read first.  If
+<code>gnus-pick-display-summary</code> is non-<code>nil</code>, the summary buffer
+will still be visible when you are reading.
+
+   </dl>
+
+   <p>All the normal summary mode commands are still available in the
+pick-mode, with the exception of <kbd>u</kbd>.  However <kbd>!</kbd> is available
+which is mapped to the same function
+<code>gnus-summary-tick-article-forward</code>.
+
+   <p>If this sounds like a good idea to you, you could say:
+
+<pre class="lisp">     (add-hook 'gnus-summary-mode-hook 'gnus-pick-mode)
+</pre>
+   <p><a name="index-gnus_002dpick_002dmode_002dhook-1624"></a><code>gnus-pick-mode-hook</code> is run in pick minor mode buffers.
+
+   <p><a name="index-gnus_002dmark_002dunpicked_002darticles_002das_002dread-1625"></a>If <code>gnus-mark-unpicked-articles-as-read</code> is non-<code>nil</code>, mark
+all unpicked articles as read.  The default is <code>nil</code>.
+
+   <p><a name="index-gnus_002dsummary_002dpick_002dline_002dformat-1626"></a>The summary line format in pick mode is slightly different from the
+standard format.  At the beginning of each line the line number is
+displayed.  The pick mode line format is controlled by the
+<code>gnus-summary-pick-line-format</code> variable (see <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>).  It accepts the same format specs that
+<code>gnus-summary-line-format</code> does (see <a href="Summary-Buffer-Lines.html#Summary-Buffer-Lines">Summary Buffer Lines</a>).
+
+   </body></html>
+

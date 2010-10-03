@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Structure editing - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Document-Structure.html#Document-Structure" title="Document Structure">
+<link rel="prev" href="Motion.html#Motion" title="Motion">
+<link rel="next" href="Sparse-trees.html#Sparse-trees" title="Sparse trees">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Structure-editing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sparse-trees.html#Sparse-trees">Sparse trees</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion.html#Motion">Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Document-Structure.html#Document-Structure">Document Structure</a>
+<hr>
+</div>
+
+<h3 class="section">2.5 Structure editing</h3>
+
+<p><a name="index-structure-editing-67"></a><a name="index-headline_002c-promotion-and-demotion-68"></a><a name="index-promotion_002c-of-subtrees-69"></a><a name="index-demotion_002c-of-subtrees-70"></a><a name="index-subtree_002c-cut-and-paste-71"></a><a name="index-pasting_002c-of-subtrees-72"></a><a name="index-cutting_002c-of-subtrees-73"></a><a name="index-copying_002c-of-subtrees-74"></a><a name="index-sorting_002c-of-subtrees-75"></a><a name="index-subtrees_002c-cut-and-paste-76"></a>
+     
+<a name="index-M_002d_0040key_007bRET_007d-77"></a>
+<dl><dt><kbd>M-&lt;RET&gt;</kbd><dd><a name="index-org_002dM_002dRET_002dmay_002dsplit_002dline-78"></a>Insert new heading with same level as current.  If the cursor is in a
+plain list item, a new item is created (see <a href="Plain-lists.html#Plain-lists">Plain lists</a>).  To force
+creation of a new headline, use a prefix argument, or first press &lt;RET&gt;
+to get to the beginning of the next line.  When this command is used in
+the middle of a line, the line is split and the rest of the line becomes
+the new headline<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If the
+command is used at the beginning of a headline, the new headline is
+created before the current line.  If at the beginning of any other line,
+the content of that line is made the new heading.  If the command is
+used at the end of a folded subtree (i.e. behind the ellipses at the end
+of a headline), then a headline like the current one will be inserted
+after the end of the subtree. 
+<a name="index-C_002d_0040key_007bRET_007d-79"></a><br><dt><kbd>C-&lt;RET&gt;</kbd><dd>Just like <kbd>M-&lt;RET&gt;</kbd>, except when adding a new heading below the
+current heading, the new heading is placed after the body instead of before
+it.  This command works from anywhere in the entry. 
+<a name="index-M_002dS_002d_0040key_007bRET_007d-80"></a><br><dt><kbd>M-S-&lt;RET&gt;</kbd><dd><a name="index-org_002dtreat_002dinsert_002dtodo_002dheading_002das_002dstate_002dchange-81"></a>Insert new TODO entry with same level as current heading.  See also the
+variable <code>org-treat-insert-todo-heading-as-state-change</code>. 
+<a name="index-C_002dS_002d_0040key_007bRET_007d-82"></a><br><dt><kbd>C-S-&lt;RET&gt;</kbd><dd>Insert new TODO entry with same level as current heading.  Like
+<kbd>C-&lt;RET&gt;</kbd>, the new headline will be inserted after the current
+subtree. 
+<a name="index-g_t_0040key_007bTAB_007d-83"></a><br><dt><kbd>&lt;TAB&gt; </kbd><span class="roman">in new, empty entry</span><dd>In a new entry with no text yet, the first &lt;TAB&gt; demotes the entry to
+become a child of the previous one.  The next &lt;TAB&gt; makes it a parent,
+and so on, all the way to top level.  Yet another &lt;TAB&gt;, and you are back
+to the initial level. 
+<a name="index-M_002d_0040key_007bleft_007d-84"></a><br><dt><kbd>M-&lt;left&gt;</kbd><dd>Promote current heading by one level. 
+<a name="index-M_002d_0040key_007bright_007d-85"></a><br><dt><kbd>M-&lt;right&gt;</kbd><dd>Demote current heading by one level. 
+<a name="index-M_002dS_002d_0040key_007bleft_007d-86"></a><br><dt><kbd>M-S-&lt;left&gt;</kbd><dd>Promote the current subtree by one level. 
+<a name="index-M_002dS_002d_0040key_007bright_007d-87"></a><br><dt><kbd>M-S-&lt;right&gt;</kbd><dd>Demote the current subtree by one level. 
+<a name="index-M_002dS_002d_0040key_007bup_007d-88"></a><br><dt><kbd>M-S-&lt;up&gt;</kbd><dd>Move subtree up (swap with previous subtree of same
+level). 
+<a name="index-M_002dS_002d_0040key_007bdown_007d-89"></a><br><dt><kbd>M-S-&lt;down&gt;</kbd><dd>Move subtree down (swap with next subtree of same level). 
+<a name="index-C_002dc-C_002dx-C_002dw-90"></a><br><dt><kbd>C-c C-x C-w</kbd><dd>Kill subtree, i.e. remove it from buffer but save in kill ring. 
+With a numeric prefix argument N, kill N sequential subtrees. 
+<a name="index-C_002dc-C_002dx-M_002dw-91"></a><br><dt><kbd>C-c C-x M-w</kbd><dd>Copy subtree to kill ring.  With a numeric prefix argument N, copy the N
+sequential subtrees. 
+<a name="index-C_002dc-C_002dx-C_002dy-92"></a><br><dt><kbd>C-c C-x C-y</kbd><dd>Yank subtree from kill ring.  This does modify the level of the subtree to
+make sure the tree fits in nicely at the yank position.  The yank level can
+also be specified with a numeric prefix argument, or by yanking after a
+headline marker like &lsquo;<samp><span class="samp">****</span></samp>&rsquo;. 
+<a name="index-C_002dy-93"></a><br><dt><kbd>C-y</kbd><dd><a name="index-org_002dyank_002dadjusted_002dsubtrees-94"></a><a name="index-org_002dyank_002dfolded_002dsubtrees-95"></a>Depending on the variables <code>org-yank-adjusted-subtrees</code> and
+<code>org-yank-folded-subtrees</code>, Org's internal <code>yank</code> command will
+paste subtrees folded and in a clever way, using the same command as <kbd>C-c
+C-x C-y</kbd>.  With the default settings, no level adjustment will take place,
+but the yanked tree will be folded unless doing so would swallow text
+previously visible.  Any prefix argument to this command will force a normal
+<code>yank</code> to be executed, with the prefix passed along.  A good way to
+force a normal yank is <kbd>C-u C-y</kbd>.  If you use <code>yank-pop</code> after a
+yank, it will yank previous kill items plainly, without adjustment and
+folding. 
+<a name="index-C_002dc-C_002dx-c-96"></a><br><dt><kbd>C-c C-x c</kbd><dd>Clone a subtree by making a number of sibling copies of it.  You will be
+prompted for the number of copies to make, and you can also specify if any
+timestamps in the entry should be shifted.  This can be useful, for example,
+to create a number of tasks related to a series of lectures to prepare.  For
+more details, see the docstring of the command
+<code>org-clone-subtree-with-time-shift</code>. 
+<a name="index-C_002dc-C_002dw-97"></a><br><dt><kbd>C-c C-w</kbd><dd>Refile entry or region to a different location.  See <a href="Refiling-notes.html#Refiling-notes">Refiling notes</a>. 
+<a name="index-C_002dc-_005e-98"></a><br><dt><kbd>C-c ^</kbd><dd>Sort same-level entries.  When there is an active region, all entries in the
+region will be sorted.  Otherwise the children of the current headline are
+sorted.  The command prompts for the sorting method, which can be
+alphabetically, numerically, by time (first timestamp with active preferred,
+creation time, scheduled time, deadline time), by priority, by TODO keyword
+(in the sequence the keywords have been defined in the setup) or by the value
+of a property.  Reverse sorting is possible as well.  You can also supply
+your own function to extract the sorting key.  With a <kbd>C-u</kbd> prefix,
+sorting will be case-sensitive.  With two <kbd>C-u C-u</kbd> prefixes, duplicate
+entries will also be removed. 
+<a name="index-C_002dx-n-s-99"></a><br><dt><kbd>C-x n s</kbd><dd>Narrow buffer to current subtree. 
+<a name="index-C_002dx-n-w-100"></a><br><dt><kbd>C-x n w</kbd><dd>Widen buffer to remove narrowing. 
+<a name="index-C_002dc-_002a-101"></a><br><dt><kbd>C-c *</kbd><dd>Turn a normal line or plain list item into a headline (so that it becomes a
+subheading at its location).  Also turn a headline into a normal line by
+removing the stars.  If there is an active region, turn all lines in the
+region into headlines.  If the first line in the region was an item, turn
+only the item lines into headlines.  Finally, if the first line is a
+headline, remove the stars from all headlines in the region. 
+</dl>
+
+   <p><a name="index-region_002c-active-102"></a><a name="index-active-region-103"></a><a name="index-transient-mark-mode-104"></a>When there is an active region (Transient Mark mode), promotion and
+demotion work on all headlines in the region.  To select a region of
+headlines, it is best to place both point and mark at the beginning of a
+line, mark at the beginning of the first headline, and point at the line
+just after the last headline to change.  Note that when the cursor is
+inside a table (see <a href="Tables.html#Tables">Tables</a>), the Meta-Cursor keys have different
+functionality.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If you do not want the line to be split,
+customize the variable <code>org-M-RET-may-split-line</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

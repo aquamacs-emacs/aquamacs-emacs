@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Insert State - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="States-in-Viper.html#States-in-Viper" title="States in Viper">
+<link rel="prev" href="Vi-State.html#Vi-State" title="Vi State">
+<link rel="next" href="Replace-State.html#Replace-State" title="Replace State">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Insert-State"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Replace-State.html#Replace-State">Replace State</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vi-State.html#Vi-State">Vi State</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="States-in-Viper.html#States-in-Viper">States in Viper</a>
+<hr>
+</div>
+
+<h4 class="subsection">1.3.3 Insert State</h4>
+
+<p><a name="index-Insert-state-53"></a>
+To avoid confusing the beginner (at Viper level 1 and 2), Viper makes only the
+standard Vi keys available in Insert state.  The implication is that
+Emacs major modes cannot be used in Insert state. 
+It is strongly recommended that as soon as you are comfortable, make the
+Emacs state bindings visible (by changing your user level to 3 or higher). 
+See <a href="Customization.html#Customization">Customization</a>,
+to see how to do this.
+
+   <p>Once this is done, it is possible to do quite a bit of editing in
+Insert state.  For instance, Emacs has a <dfn>yank</dfn> command, <kbd>C-y</kbd>,
+which is similar to Vi's <kbd>p</kbd>.  However, unlike <kbd>p</kbd>, <kbd>C-y</kbd> can be
+used in Insert state of Viper.  Emacs also has a kill ring where it keeps
+pieces of text you deleted while editing buffers.  The command <kbd>M-y</kbd> is
+used to delete the text previously put back by Emacs' <kbd>C-y</kbd> or by Vi's
+<kbd>p</kbd> command and reinsert text that was placed on the kill-ring earlier.
+
+   <p>This works both in Vi and Insert states. 
+In Vi state, <kbd>M-y</kbd> is a much better alternative to the usual Vi's way
+of recovering the 10 previously deleted chunks of text.  In Insert state,
+you can
+use this as follows.  Suppose you deleted a piece of text and now you need
+to re-insert it while editing in Insert mode.  The key <kbd>C-y</kbd> will put
+back the most recently deleted chunk.  If this is not what you want, type
+<kbd>M-y</kbd> repeatedly and, hopefully, you will find the chunk you want.
+
+   <p>Finally, in Insert and Replace states, Viper provides the history of
+pieces of text inserted in previous insert or replace commands.  These
+strings of text can be recovered by repeatedly typing <kbd>C-c M-p</kbd> or
+<kbd>C-c M-n</kbd> while in Insert or Replace state.  (This feature is disabled
+in the minibuffer: the above keys are usually bound to other histories,
+which are more appropriate in the minibuffer.)
+
+   <p><a name="index-Meta-key-54"></a>
+You can call Meta functions from Insert state.  As in Vi state, the Meta key
+is <kbd>C-\</kbd>.  Thus <kbd>M-x</kbd> is typed as <kbd>C-\ x</kbd>.
+
+   <p>Other Emacs commands that are useful in Insert state are <kbd>C-e</kbd>
+and <kbd>C-a</kbd>, which move the cursor to the end and the beginning of the
+current line, respectively.  You can also use <kbd>M-f</kbd> and <kbd>M-b</kbd>,
+which move the cursor forward (or backward) one word. 
+If your display has a Meta key, these functions are invoked by holding the
+Meta key and then typing <kbd>f</kbd> and <kbd>b</kbd>, respectively.  On displays
+without the Meta key, these functions are invoked by typing
+<kbd>C-\ f</kbd> and <kbd>C-\ b</kbd> (<kbd>C-\</kbd> simulates the Meta key in Insert
+state, as explained above).
+
+   <p>The key <kbd>C-z</kbd> is sometimes also useful in Insert state: it allows you
+to execute a single command in Vi state without leaving the Insert state! 
+For instance, <kbd>C-z d2w</kbd> will delete the next two words without leaving
+the Insert state.
+
+   <p>When Viper is in Insert state, you will see &lt;I&gt; in the mode line.
+
+   </body></html>
+

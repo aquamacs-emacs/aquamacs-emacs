@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Advanced Scoring Syntax - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced-Scoring.html#Advanced-Scoring" title="Advanced Scoring">
+<link rel="next" href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" title="Advanced Scoring Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Advanced-Scoring-Syntax"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples">Advanced Scoring Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.15.1 Advanced Scoring Syntax</h4>
+
+<p>Ordinary scoring rules have a string as the first element in the rule. 
+Advanced scoring rules have a list as the first element.  The second
+element is the score to be applied if the first element evaluated to a
+non-<code>nil</code> value.
+
+   <p>These lists may consist of three logical operators, one redirection
+operator, and various match operators.
+
+   <p>Logical operators:
+
+     <dl>
+<dt><code>&amp;</code><dt><code>and</code><dd>This logical operator will evaluate each of its arguments until it finds
+one that evaluates to <code>false</code>, and then it'll stop.  If all arguments
+evaluate to <code>true</code> values, then this operator will return
+<code>true</code>.
+
+     <br><dt><code>|</code><dt><code>or</code><dd>This logical operator will evaluate each of its arguments until it finds
+one that evaluates to <code>true</code>.  If no arguments are <code>true</code>,
+then this operator will return <code>false</code>.
+
+     <br><dt><code>!</code><dt><code>not</code><dt><code>¬</code><dd>This logical operator only takes a single argument.  It returns the
+logical negation of the value of its argument.
+
+   </dl>
+
+   <p>There is an <dfn>indirection operator</dfn> that will make its arguments
+apply to the ancestors of the current article being scored.  For
+instance, <code>1-</code> will make score rules apply to the parent of the
+current article.  <code>2-</code> will make score rules apply to the
+grandparent of the current article.  Alternatively, you can write
+<code>^^</code>, where the number of <code>^</code>s (carets) says how far back into
+the ancestry you want to go.
+
+   <p>Finally, we have the match operators.  These are the ones that do the
+real work.  Match operators are header name strings followed by a match
+and a match type.  A typical match operator looks like &lsquo;<samp><span class="samp">("from"
+"Lars Ingebrigtsen" s)</span></samp>&rsquo;.  The header names are the same as when using
+simple scoring, and the match types are also the same.
+
+   </body></html>
+

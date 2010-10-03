@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Emacs Preliminaries - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Overview.html#Overview" title="Overview">
+<link rel="prev" href="Overview.html#Overview" title="Overview">
+<link rel="next" href="Loading-Viper.html#Loading-Viper" title="Loading Viper">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Emacs-Preliminaries"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Loading-Viper.html#Loading-Viper">Loading Viper</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Overview.html#Overview">Overview</a>
+<hr>
+</div>
+
+<h3 class="section">1.1 Emacs Preliminaries</h3>
+
+<p><a name="index-buffer-1"></a><a name="index-point-2"></a><a name="index-mark-3"></a><a name="index-text-4"></a><a name="index-looking-at-5"></a><a name="index-end-_0028of-buffer_0029-6"></a><a name="index-end-_0028of-line_0029-7"></a><a name="index-region-8"></a>
+Emacs can edit several files at once.  A file in Emacs is placed in a
+<dfn>buffer</dfn> that usually has the same name as the file.  Buffers are also used
+for other purposes, such as shell interfaces, directory editing, etc. 
+See <a href="../emacs/Dired.html#Dired">Directory Editor</a>, for an example.
+
+   <p>A buffer has a distinguished position called the <dfn>point</dfn>. 
+A <dfn>point</dfn> is always between 2 characters, and is <dfn>looking at</dfn>
+the right hand character.  The cursor is positioned on the right hand
+character.  Thus, when the <dfn>point</dfn> is looking at the end-of-line,
+the cursor is on the end-of-line character, i.e. beyond the last
+character on the line.  This is the default Emacs behavior.
+
+   <p>The default settings of Viper try to mimic the behavior of Vi, preventing
+the cursor from going beyond the last character on the line.  By using
+Emacs commands directly (such as those bound to arrow keys), it is possible
+to get the cursor beyond the end-of-line.  However, this won't (or
+shouldn't) happen if you restrict yourself to standard Vi keys, unless you
+modify the default editing style.  See <a href="Customization.html#Customization">Customization</a>.
+
+   <p>In addition to the <dfn>point</dfn>, there is another distinguished buffer
+position called the <dfn>mark</dfn>.  See <a href="../emacs/Mark.html#Mark">Mark</a>, for more info on the mark.  The text between the <dfn>point</dfn> and
+the <dfn>mark</dfn> is called the <dfn>region</dfn> of the buffer.  For the Viper
+user, this simply means that in addition to the Vi textmarkers a&ndash;z, there
+is another marker called <dfn>mark</dfn>.  This is similar to the unnamed Vi
+marker used by the jump commands <kbd>``</kbd> and <kbd>''</kbd>, which move the
+cursor to the position of the last absolute jump.  Viper provides access to
+the region in most text manipulation commands as <kbd>r</kbd> and <kbd>R</kbd> suffix
+to commands that operate on text regions, e.g., <kbd>dr</kbd> to delete region,
+etc.
+
+   <p>Furthermore, Viper lets Ex-style commands to work on the current region. 
+This is done by typing a digit argument before <kbd>:</kbd>.  For instance,
+typing <kbd>1:</kbd> will prompt you with something like <em>:123,135</em>,
+assuming that the current region starts at line 123 and ends at line
+135.  There is no need to type the line numbers, since Viper inserts them
+automatically in front of the Ex command.
+
+   <p>See <a href="Basics.html#Basics">Basics</a>, for more info.
+
+   <p><a name="index-window-9"></a><a name="index-mode-line-10"></a><a name="index-buffer-information-11"></a><a name="index-Minibuffer-12"></a><a name="index-command-line-13"></a><a name="index-buffer-_0028modified_0029-14"></a>
+Emacs divides the screen into tiled <dfn>windows</dfn>.  You can see the
+contents of a buffer through the window associated with the buffer.  The
+cursor of the screen is positioned on the character after <dfn>point</dfn>. 
+Every window has a <dfn>mode line</dfn> that displays information about the buffer. 
+You can change the format of the mode
+line, but normally if you see &lsquo;<samp><span class="samp">**</span></samp>&rsquo; at the beginning of a mode line it
+means that the buffer is <dfn>modified</dfn>.  If you write out the contents of
+a buffer to a file, then the buffer will become not modified.  Also if
+you see &lsquo;<samp><span class="samp">%%</span></samp>&rsquo; at the beginning of the mode line, it means that the file
+associated with the buffer is write protected.  The mode line will also
+show the buffer name and current major and minor modes (see below). 
+A special buffer called <dfn>Minibuffer</dfn> is displayed as the last line
+in a minibuffer window.  The minibuffer window is used for command input
+output.  Viper uses minibuffer window for <kbd>/</kbd> and <kbd>:</kbd>
+commands.
+
+   <p><a name="index-mode-15"></a><a name="index-keymap-16"></a><a name="index-local-keymap-17"></a><a name="index-global-keymap-18"></a><a name="index-major-mode-19"></a><a name="index-minor-mode-20"></a>
+An Emacs buffer can have a <dfn>major mode</dfn> that customizes Emacs for
+editing text of a particular sort by changing the functionality of the keys. 
+Keys are defined using a <dfn>keymap</dfn> that records the bindings between
+keystrokes and
+functions.  The <dfn>global keymap</dfn> is common to all the
+buffers.  Additionally, each buffer has its <dfn>local keymap</dfn> that determines the
+<dfn>mode</dfn> of the buffer.  If a function is bound to some key in the local
+keymap then that function will be executed when you type the key. 
+If no function is bound to a key in the
+local map, however, the function bound to the key in the global map
+will be executed.  See <a href="../emacs/Major-Modes.html#Major-Modes">Major Modes</a>, for more information.
+
+   <p>A buffer can also have a <dfn>minor mode</dfn>.  Minor modes are options that
+you can use or not.  A buffer in <code>text-mode</code> can have
+<code>auto-fill-mode</code> as minor mode, which can be turned off or on at
+any time.  In Emacs, a minor mode may have it own keymap,
+which overrides the local keymap when the minor mode is turned on.  For
+more information, see <a href="../emacs/Minor-Modes.html#Minor-Modes">Minor Modes</a>
+
+   <p><a name="index-Viper-as-minor-mode-21"></a><a name="index-Control-keys-22"></a><a name="index-Meta-key-23"></a>
+Viper is implemented as a collection of minor modes.  Different minor modes
+are involved when Viper emulates Vi command mode, Vi insert mode, etc. 
+You can also turn Viper on and off at any time while in Vi command mode. 
+See <a href="States-in-Viper.html#States-in-Viper">States in Viper</a>, for
+more information.
+
+   <p>Emacs uses Control and Meta modifiers.  These are denoted as C and M,
+e.g. <kbd>^Z</kbd> as <kbd>C-z</kbd> and <kbd>Meta-x</kbd> as <kbd>M-x</kbd>.  The Meta key is
+usually located on each side of the Space bar; it is used in a manner
+similar to the Control key, e.g., <kbd>M-x</kbd> means typing <kbd>x</kbd> while
+holding the Meta key down.  For keyboards that do not have a Meta key,
+&lt;ESC&gt; is used as Meta.  Thus <kbd>M-x</kbd> is typed as <kbd>&lt;ESC&gt;
+x</kbd>.  Viper uses &lt;ESC&gt; to switch from Insert state to Vi state.  Therefore
+Viper defines <kbd>C-\</kbd> as its Meta key in Vi state.  See <a href="Vi-State.html#Vi-State">Vi State</a>, for
+more info.
+
+   <p>Emacs is structured as a Lisp interpreter around a C core.  Emacs keys
+cause Lisp functions to be called.  It is possible to call these
+functions directly, by typing <kbd>M-x function-name</kbd>.
+
+   </body></html>
+

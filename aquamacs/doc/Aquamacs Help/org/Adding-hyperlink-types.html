@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Adding hyperlink types - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Add_002don-packages.html#Add_002don-packages" title="Add-on packages">
+<link rel="next" href="Context_002dsensitive-commands.html#Context_002dsensitive-commands" title="Context-sensitive commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Adding-hyperlink-types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Context_002dsensitive-commands.html#Context_002dsensitive-commands">Context-sensitive commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Add_002don-packages.html#Add_002don-packages">Add-on packages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.3 Adding hyperlink types</h3>
+
+<p><a name="index-hyperlinks_002c-adding-new-types-1410"></a>
+Org has a large number of hyperlink types built-in
+(see <a href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>).  If you would like to add new link types, Org
+provides an interface for doing so.  Let's look at an example file,
+<samp><span class="file">org-man.el</span></samp>, that will add support for creating links like
+&lsquo;<samp><span class="samp">[[man:printf][The printf manpage]]</span></samp>&rsquo; to show Unix manual pages inside
+Emacs:
+
+<pre class="lisp">     ;;; org-man.el - Support for links to manpages in Org
+     
+     (require 'org)
+     
+     (org-add-link-type "man" 'org-man-open)
+     (add-hook 'org-store-link-functions 'org-man-store-link)
+     
+     (defcustom org-man-command 'man
+       "The Emacs command to be used to display a man page."
+       :group 'org-link
+       :type '(choice (const man) (const woman)))
+     
+     (defun org-man-open (path)
+       "Visit the manpage on PATH.
+     PATH should be a topic that can be thrown at the man command."
+       (funcall org-man-command path))
+     
+     (defun org-man-store-link ()
+       "Store a link to a manpage."
+       (when (memq major-mode '(Man-mode woman-mode))
+         ;; This is a man page, we do make this link
+         (let* ((page (org-man-get-page-name))
+                (link (concat "man:" page))
+                (description (format "Manpage for %s" page)))
+           (org-store-link-props
+            :type "man"
+            :link link
+            :description description))))
+     
+     (defun org-man-get-page-name ()
+       "Extract the page name from the buffer name."
+       ;; This works for both `Man-mode' and `woman-mode'.
+       (if (string-match " \\(\\S-+\\)\\*" (buffer-name))
+           (match-string 1 (buffer-name))
+         (error "Cannot create link to this man page")))
+     
+     (provide 'org-man)
+     
+     ;;; org-man.el ends here
+</pre>
+   <p class="noindent">You would activate this new link type in <samp><span class="file">.emacs</span></samp> with
+
+<pre class="lisp">     (require 'org-man)
+</pre>
+   <p class="noindent">Let's go through the file and see what it does.
+     <ol type=1 start=1>
+<li>It does <code>(require 'org)</code> to make sure that <samp><span class="file">org.el</span></samp> has been
+loaded. 
+<li>The next line calls <code>org-add-link-type</code> to define a new link type
+with prefix &lsquo;<samp><span class="samp">man</span></samp>&rsquo;.  The call also contains the name of a function
+that will be called to follow such a link. 
+<li><a name="index-org_002dstore_002dlink_002dfunctions-1411"></a>The next line adds a function to <code>org-store-link-functions</code>, in
+order to allow the command <kbd>C-c l</kbd> to record a useful link in a
+buffer displaying a man page.
+        </ol>
+
+   <p>The rest of the file defines the necessary variables and functions. 
+First there is a customization variable that determines which Emacs
+command should be used to display man pages.  There are two options,
+<code>man</code> and <code>woman</code>.  Then the function to follow a link is
+defined.  It gets the link path as an argument&mdash;in this case the link
+path is just a topic for the manual command.  The function calls the
+value of <code>org-man-command</code> to display the man page.
+
+   <p>Finally the function <code>org-man-store-link</code> is defined.  When you try
+to store a link with <kbd>C-c l</kbd>, this function will be called to
+try to make a link.  The function must first decide if it is supposed to
+create the link for this buffer type; we do this by checking the value
+of the variable <code>major-mode</code>.  If not, the function must exit and
+return the value <code>nil</code>.  If yes, the link is created by getting the
+manual topic from the buffer name and prefixing it with the string
+&lsquo;<samp><span class="samp">man:</span></samp>&rsquo;.  Then it must call the command <code>org-store-link-props</code>
+and set the <code>:type</code> and <code>:link</code> properties.  Optionally you
+can also set the <code>:description</code> property to provide a default for
+the link description when the link is later inserted into an Org
+buffer with <kbd>C-c C-l</kbd>.
+
+   <p>When is makes sense for your new link type, you may also define a function
+<code>org-PREFIX-complete-link</code> that implements special (e.g. completion)
+support for inserting such a link with <kbd>C-c C-l</kbd>.  Such a function should
+not accept any arguments, and return the full link with prefix.
+
+   </body></html>
+

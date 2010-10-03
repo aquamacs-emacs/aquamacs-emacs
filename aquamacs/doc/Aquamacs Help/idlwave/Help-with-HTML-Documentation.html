@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Help with HTML Documentation - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Online-Help.html#Online-Help" title="Online Help">
+<link rel="prev" href="Online-Help.html#Online-Help" title="Online Help">
+<link rel="next" href="Help-with-Source.html#Help-with-Source" title="Help with Source">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Help-with-HTML-Documentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Help-with-Source.html#Help-with-Source">Help with Source</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Online-Help.html#Online-Help">Online Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Online-Help.html#Online-Help">Online Help</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.3.1 Help with HTML Documentation</h4>
+
+<p><a name="index-HTML-Help-100"></a><a name="index-Help-using-HTML-manuals-101"></a><a name="index-IDL-manual_002c-HTML-version-102"></a><a name="index-IDL-Assistant-103"></a>
+Help using the HTML documentation is invoked with the built-in Emacs
+command <code>browse-url</code>, which displays the relevant help topic in a
+browser of your choosing.  Beginning with version 6.2, IDL comes with
+the help browser <em>IDL Assistant</em>, which it uses by default for
+displaying online help on all supported platforms.  This browser
+offers topical searches, an index, and is also now the default and
+recommended IDLWAVE help browser.  The variable
+<code>idlwave-help-use-assistant</code> controls whether this browser is
+used.  Note that, due to limitations in the Assistant, invoking help
+within IDLWAVE and <code>? topic</code> within IDL will result in two
+running copies of Assistant.
+
+   <p>Aside from the IDL Assistant, there are many possible browsers to choose
+among, with differing advantages and disadvantages.  The variable
+<code>idlwave-help-browser-function</code> controls which browser help is sent
+to (as long as <code>idlwave-help-use-assistant</code> is not set).  This
+function is used to set the variable <code>browse-url-browser-function</code>
+locally for IDLWAVE help only.  Customize the latter variable to see
+what choices of browsers your system offers.  Certain browsers like
+<code>w3</code> (bundled with many versions of Emacs) and <code>w3m</code>
+(<a href="http://emacs-w3m.namazu.org/">http://emacs-w3m.namazu.org/</a>) are run within Emacs, and use
+Emacs buffers to display the HTML help.  This can be convenient,
+especially on small displays, and images can even be displayed in-line
+on newer Emacs versions.  However, better formatting results are often
+achieved with external browsers, like Mozilla.  IDLWAVE assumes any
+browser function containing "w3" is displayed in a local buffer.  If you
+are using another Emacs-local browser for which this is not true, set
+the variable <code>idlwave-help-browser-is-local</code>.
+
+   <p>With IDL 6.2 or later, it is important to ensure that the variable
+<code>idlwave-system-directory</code> is set (see <a href="Catalogs.html#Catalogs">Catalogs</a>).  One easy way
+to ensure this is to run the IDL Shell (<kbd>C-c C-s</kbd>).  It will be
+queried for this directory, and the results will be cached to file for
+subsequent use.
+
+   <p>See <a href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">HTML Help Browser Tips</a>, for more information on selecting and
+configuring a browser for use with IDL's HTML help system.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-html-system-help-location</b> <samp><span class="file">help/online_help</span></samp><var><a name="index-idlwave_002dhtml_002dsystem_002dhelp_002dlocation-104"></a></var><br>
+<blockquote><p>Relative directory of the system-supplied HTML help directory,
+considered with respect to <code>idlwave-system-directory</code>.  Relevant
+for IDL 6.2 and greater.  Should not change. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-html-help-location</b> <samp><span class="file">/usr/local/etc/</span></samp><var><a name="index-idlwave_002dhtml_002dhelp_002dlocation-105"></a></var><br>
+<blockquote><p>The directory where the <samp><span class="file">idl_html_help</span></samp> HTML directory live. 
+Obsolete and ignored for IDL 6.2 and greater
+(<code>idlwave-html-system-help-location</code> is used instead). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-use-assistant</b> <code>t</code><var><a name="index-idlwave_002dhelp_002duse_002dassistant-106"></a></var><br>
+<blockquote><p>If set, use the IDL Assistant if possible for online HTML help,
+otherwise use the browser function specified in
+<code>idlwave-help-browser-function</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-browser-function</b><var><a name="index-idlwave_002dhelp_002dbrowser_002dfunction-107"></a></var><br>
+<blockquote><p>The browser function to use to display IDLWAVE HTML help.  Should be
+one of the functions available for setting
+<code>browse-url-browser-function</code>, which see. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-browser-is-local</b><var><a name="index-idlwave_002dhelp_002dbrowser_002dis_002dlocal-108"></a></var><br>
+<blockquote><p>Is the browser selected in <code>idlwave-help-browser-function</code> run in a
+local Emacs buffer or window?  Defaults to <code>t</code> if the function
+contains "-w3". 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-help-link-face</b><var><a name="index-idlwave_002dhelp_002dlink_002dface-109"></a></var><br>
+<blockquote><p>The face for links to IDLWAVE online help. 
+</p></blockquote></div>
+
+   </body></html>
+

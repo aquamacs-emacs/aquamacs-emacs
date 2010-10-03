@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Checkboxes - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="TODO-Items.html#TODO-Items" title="TODO Items">
+<link rel="prev" href="Breaking-down-tasks.html#Breaking-down-tasks" title="Breaking down tasks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Checkboxes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Breaking-down-tasks.html#Breaking-down-tasks">Breaking down tasks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TODO-Items.html#TODO-Items">TODO Items</a>
+<hr>
+</div>
+
+<h3 class="section">5.6 Checkboxes</h3>
+
+<p><a name="index-checkboxes-428"></a>
+Every item in a plain list (see <a href="Plain-lists.html#Plain-lists">Plain lists</a>) can be made into a
+checkbox by starting it with the string &lsquo;<samp><span class="samp">[ ]</span></samp>&rsquo;.  This feature is
+similar to TODO items (see <a href="TODO-Items.html#TODO-Items">TODO Items</a>), but is more lightweight. 
+Checkboxes are not included into the global TODO list, so they are often
+great to split a task into a number of simple steps.  Or you can use
+them in a shopping list.  To toggle a checkbox, use <kbd>C-c C-c</kbd>, or
+use the mouse (thanks to Piotr Zielinski's <samp><span class="file">org-mouse.el</span></samp>).
+
+   <p>Here is an example of a checkbox list.
+
+<pre class="example">     * TODO Organize party [2/4]
+       - [-] call people [1/3]
+         - [ ] Peter
+         - [X] Sarah
+         - [ ] Sam
+       - [X] order food
+       - [ ] think about what music to play
+       - [X] talk to the neighbors
+</pre>
+   <p>Checkboxes work hierarchically, so if a checkbox item has children that
+are checkboxes, toggling one of the children checkboxes will make the
+parent checkbox reflect if none, some, or all of the children are
+checked.
+
+   <p><a name="index-statistics_002c-for-checkboxes-429"></a><a name="index-checkbox-statistics-430"></a><a name="index-property_002c-COOKIE_005fDATA-431"></a><a name="index-org_002dhierarchical_002dcheckbox_002dstatistics-432"></a>The &lsquo;<samp><span class="samp">[2/4]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[1/3]</span></samp>&rsquo; in the first and second line are cookies
+indicating how many checkboxes present in this entry have been checked off,
+and the total number of checkboxes present.  This can give you an idea on how
+many checkboxes remain, even without opening a folded entry.  The cookies can
+be placed into a headline or into (the first line of) a plain list item. 
+Each cookie covers checkboxes of direct children structurally below the
+headline/item on which the cookie appears<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  You have to insert the cookie yourself by typing either
+&lsquo;<samp><span class="samp">[/]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[%]</span></samp>&rsquo;.  With &lsquo;<samp><span class="samp">[/]</span></samp>&rsquo; you get an &lsquo;<samp><span class="samp">n out of m</span></samp>&rsquo;
+result, as in the examples above.  With &lsquo;<samp><span class="samp">[%]</span></samp>&rsquo; you get information about
+the percentage of checkboxes checked (in the above example, this would be
+&lsquo;<samp><span class="samp">[50%]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[33%]</span></samp>&rsquo;, respectively).  In a headline, a cookie can
+count either checkboxes below the heading or TODO states of children, and it
+will display whatever was changed last.  Set the property <code>COOKIE_DATA</code>
+to either &lsquo;<samp><span class="samp">checkbox</span></samp>&rsquo; or &lsquo;<samp><span class="samp">todo</span></samp>&rsquo; to resolve this issue.
+
+   <p><a name="index-blocking_002c-of-checkboxes-433"></a><a name="index-checkbox-blocking-434"></a><a name="index-property_002c-ORDERED-435"></a>If the current outline node has an <code>ORDERED</code> property, checkboxes must
+be checked off in sequence, and an error will be thrown if you try to check
+off a box while there are unchecked boxes above it.
+
+<p class="noindent">The following commands work with checkboxes:
+
+     
+<a name="index-C_002dc-C_002dc-436"></a>
+<dl><dt><kbd>C-c C-c</kbd><dd>Toggle checkbox status or (with prefix arg) checkbox presence at point.  With
+double prefix argument, set it to &lsquo;<samp><span class="samp">[-]</span></samp>&rsquo;, which is considered to be an
+intermediate state. 
+<a name="index-C_002dc-C_002dx-C_002db-437"></a><br><dt><kbd>C-c C-x C-b</kbd><dd>Toggle checkbox status or (with prefix arg) checkbox presence at point.  With
+double prefix argument, set it to &lsquo;<samp><span class="samp">[-]</span></samp>&rsquo;, which is considered to be an
+intermediate state.
+          <ul>
+<li>If there is an active region, toggle the first checkbox in the region
+and set all remaining boxes to the same status as the first.  With a prefix
+arg, add or remove the checkbox for all items in the region. 
+<li>If the cursor is in a headline, toggle checkboxes in the region between
+this headline and the next (so <em>not</em> the entire subtree). 
+<li>If there is no active region, just toggle the checkbox at point. 
+</ul>
+     <a name="index-M_002dS_002d_0040key_007bRET_007d-438"></a><br><dt><kbd>M-S-&lt;RET&gt;</kbd><dd>Insert a new item with a checkbox. 
+This works only if the cursor is already in a plain list item
+(see <a href="Plain-lists.html#Plain-lists">Plain lists</a>). 
+<a name="index-C_002dc-C_002dx-o-439"></a><br><dt><kbd>C-c C-x o</kbd><dd><a name="index-org_002dtrack_002dordered_002dproperty_002dwith_002dtag-440"></a><a name="index-property_002c-ORDERED-441"></a>Toggle the <code>ORDERED</code> property of the entry, to toggle if checkboxes must
+be checked off in sequence.  A property is used for this behavior because
+this should be local to the current entry, not inherited like a tag. 
+However, if you would like to <i>track</i> the value of this property with a tag
+for better visibility, customize the variable
+<code>org-track-ordered-property-with-tag</code>. 
+<a name="index-C_002dc-_0023-442"></a><br><dt><kbd>C-c #</kbd><dd>Update the statistics cookie in the current outline entry.  When called with
+a <kbd>C-u</kbd> prefix, update the entire file.  Checkbox statistic cookies are
+updated automatically if you toggle checkboxes with <kbd>C-c C-c</kbd> and make
+new ones with <kbd>M-S-&lt;RET&gt;</kbd>.  TODO statistics cookies update when
+changing TODO states.  If you delete boxes/entries or add/change them by
+hand, use this command to get things back into sync.  Or simply toggle any
+entry twice (checkboxes with <kbd>C-c C-c</kbd>). 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Set the variable
+<code>org-hierarchical-checkbox-statistics</code> if you want such cookies to
+represent the all checkboxes below the cookie, not just the direct
+children.</p>
+
+   <hr></div>
+
+   </body></html>
+

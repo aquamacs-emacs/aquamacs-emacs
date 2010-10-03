@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Spam Statistics Filtering - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
+<link rel="prev" href="ifile-spam-filtering.html#ifile-spam-filtering" title="ifile spam filtering">
+<link rel="next" href="SpamOracle.html#SpamOracle" title="SpamOracle">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Spam-Statistics-Filtering"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="SpamOracle.html#SpamOracle">SpamOracle</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ifile-spam-filtering.html#ifile-spam-filtering">ifile spam filtering</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">8.20.6.10 Spam Statistics Filtering</h5>
+
+<p><a name="index-spam-filtering-2978"></a><a name="index-spam_002dstat_002c-spam-filtering-2979"></a><a name="index-spam_002dstat-2980"></a><a name="index-spam-2981"></a>
+This back end uses the Spam Statistics Emacs Lisp package to perform
+statistics-based filtering (see <a href="Spam-Statistics-Package.html#Spam-Statistics-Package">Spam Statistics Package</a>).  Before
+using this, you may want to perform some additional steps to
+initialize your Spam Statistics dictionary.  See <a href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary">Creating a spam-stat dictionary</a>.
+
+<div class="defun">
+&mdash; Variable: <b>spam-use-stat</b><var><a name="index-spam_002duse_002dstat-2982"></a></var><br>
+
+        </div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-spam-exit-processor-stat</b><var><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dstat-2983"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameters or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
+added to a group's <code>spam-process</code> parameter, the spam-marked
+articles will be added to the spam-stat database of spam messages.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-spam-exit-processor-stat</code>, it is recommended
+that you use <code>(spam spam-use-stat)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>gnus-group-ham-exit-processor-stat</b><var><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dstat-2984"></a></var><br>
+<blockquote><p>Add this symbol to a group's <code>spam-process</code> parameter by
+customizing the group parameters or the
+<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
+added to a group's <code>spam-process</code> parameter, the ham-marked
+articles in <em>ham</em> groups will be added to the spam-stat database
+of non-spam messages.
+
+        <p><em>WARNING</em>
+
+        <p>Instead of the obsolete
+<code>gnus-group-ham-exit-processor-stat</code>, it is recommended
+that you use <code>(ham spam-use-stat)</code>.  Everything will work
+the same way, we promise. 
+</p></blockquote></div>
+
+   <p>This enables <code>spam.el</code> to cooperate with <samp><span class="file">spam-stat.el</span></samp>. 
+<samp><span class="file">spam-stat.el</span></samp> provides an internal (Lisp-only) spam database,
+which unlike ifile or Bogofilter does not require external programs. 
+A spam and a ham processor, and the <code>spam-use-stat</code> variable for
+<code>spam-split</code> are provided.
+
+   </body></html>
+

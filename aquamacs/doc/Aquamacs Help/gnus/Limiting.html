@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Limiting - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Marking-Articles.html#Marking-Articles" title="Marking Articles">
+<link rel="next" href="Threading.html#Threading" title="Threading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Limiting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Threading.html#Threading">Threading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marking-Articles.html#Marking-Articles">Marking Articles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.8 Limiting</h3>
+
+<p><a name="index-limiting-958"></a>
+It can be convenient to limit the summary buffer to just show some
+subset of the articles currently in the group.  The effect most limit
+commands have is to remove a few (or many) articles from the summary
+buffer.
+
+   <p>Limiting commands work on subsets of the articles already fetched from
+the servers.  These commands don't query the server for additional
+articles.
+
+     <dl>
+<dt><kbd>/ /</kbd><dt><kbd>/ s</kbd><dd><a name="index-g_t_002f-_002f-_0028Summary_0029-959"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dsubject-960"></a>Limit the summary buffer to articles that match some subject
+(<code>gnus-summary-limit-to-subject</code>).  If given a prefix, exclude
+matching articles.
+
+     <br><dt><kbd>/ a</kbd><dd><a name="index-g_t_002f-a-_0028Summary_0029-961"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dauthor-962"></a>Limit the summary buffer to articles that match some author
+(<code>gnus-summary-limit-to-author</code>).  If given a prefix, exclude
+matching articles.
+
+     <br><dt><kbd>/ R</kbd><dd><a name="index-g_t_002f-R-_0028Summary_0029-963"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002drecipient-964"></a>Limit the summary buffer to articles that match some recipient
+(<code>gnus-summary-limit-to-recipient</code>).  If given a prefix, exclude
+matching articles.
+
+     <br><dt><kbd>/ A</kbd><dd><a name="index-g_t_002f-A-_0028Summary_0029-965"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002daddress-966"></a>Limit the summary buffer to articles in which contents of From, To or Cc
+header match a given address (<code>gnus-summary-limit-to-address</code>).  If
+given a prefix, exclude matching articles.
+
+     <br><dt><kbd>/ S</kbd><dd><a name="index-g_t_002f-S-_0028Summary_0029-967"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dsingletons-968"></a>Limit the summary buffer to articles that aren't part of any displayed
+threads (<code>gnus-summary-limit-to-singletons</code>).  If given a prefix,
+limit to articles that are part of displayed threads.
+
+     <br><dt><kbd>/ x</kbd><dd><a name="index-g_t_002f-x-_0028Summary_0029-969"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dextra-970"></a>Limit the summary buffer to articles that match one of the &ldquo;extra&rdquo;
+headers (see <a href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>)
+(<code>gnus-summary-limit-to-extra</code>).  If given a prefix, exclude
+matching articles.
+
+     <br><dt><kbd>/ u</kbd><dt><kbd>x</kbd><dd><a name="index-g_t_002f-u-_0028Summary_0029-971"></a><a name="index-x-_0028Summary_0029-972"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dunread-973"></a>Limit the summary buffer to articles not marked as read
+(<code>gnus-summary-limit-to-unread</code>).  If given a prefix, limit the
+buffer to articles strictly unread.  This means that ticked and
+dormant articles will also be excluded.
+
+     <br><dt><kbd>/ m</kbd><dd><a name="index-g_t_002f-m-_0028Summary_0029-974"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dmarks-975"></a>Ask for a mark and then limit to all articles that have been marked
+with that mark (<code>gnus-summary-limit-to-marks</code>).
+
+     <br><dt><kbd>/ t</kbd><dd><a name="index-g_t_002f-t-_0028Summary_0029-976"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dage-977"></a>Ask for a number and then limit the summary buffer to articles older than (or equal to) that number of days
+(<code>gnus-summary-limit-to-age</code>).  If given a prefix, limit to
+articles younger than that number of days.
+
+     <br><dt><kbd>/ n</kbd><dd><a name="index-g_t_002f-n-_0028Summary_0029-978"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002darticles-979"></a>With prefix &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, limit the summary buffer to the next &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
+articles.  If not given a prefix, use the process marked articles
+instead.  (<code>gnus-summary-limit-to-articles</code>).
+
+     <br><dt><kbd>/ w</kbd><dd><a name="index-g_t_002f-w-_0028Summary_0029-980"></a><a name="index-gnus_002dsummary_002dpop_002dlimit-981"></a>Pop the previous limit off the stack and restore it
+(<code>gnus-summary-pop-limit</code>).  If given a prefix, pop all limits off
+the stack.
+
+     <br><dt><kbd>/ .</kbd><dd><a name="index-g_t_002f-_002e-_0028Summary_0029-982"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dunseen-983"></a>Limit the summary buffer to the unseen articles
+(<code>gnus-summary-limit-to-unseen</code>).
+
+     <br><dt><kbd>/ v</kbd><dd><a name="index-g_t_002f-v-_0028Summary_0029-984"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dscore-985"></a>Limit the summary buffer to articles that have a score at or above some
+score (<code>gnus-summary-limit-to-score</code>).
+
+     <br><dt><kbd>/ p</kbd><dd><a name="index-g_t_002f-p-_0028Summary_0029-986"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002ddisplay_002dpredicate-987"></a>Limit the summary buffer to articles that satisfy the <code>display</code>
+group parameter predicate
+(<code>gnus-summary-limit-to-display-predicate</code>).  See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>, for more on this predicate.
+
+     <br><dt><kbd>/ r</kbd><dd><a name="index-g_t_002f-r-_0028Summary_0029-988"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dreplied-989"></a>Limit the summary buffer to replied articles
+(<code>gnus-summary-limit-to-replied</code>).  If given a prefix, exclude
+replied articles.
+
+     <br><dt><kbd>/ E</kbd><dt><kbd>M S</kbd><dd><a name="index-M-S-_0028Summary_0029-990"></a><a name="index-g_t_002f-E-_0028Summary_0029-991"></a><a name="index-gnus_002dsummary_002dlimit_002dinclude_002dexpunged-992"></a>Include all expunged articles in the limit
+(<code>gnus-summary-limit-include-expunged</code>).
+
+     <br><dt><kbd>/ D</kbd><dd><a name="index-g_t_002f-D-_0028Summary_0029-993"></a><a name="index-gnus_002dsummary_002dlimit_002dinclude_002ddormant-994"></a>Include all dormant articles in the limit
+(<code>gnus-summary-limit-include-dormant</code>).
+
+     <br><dt><kbd>/ *</kbd><dd><a name="index-g_t_002f-_002a-_0028Summary_0029-995"></a><a name="index-gnus_002dsummary_002dlimit_002dinclude_002dcached-996"></a>Include all cached articles in the limit
+(<code>gnus-summary-limit-include-cached</code>).
+
+     <br><dt><kbd>/ d</kbd><dd><a name="index-g_t_002f-d-_0028Summary_0029-997"></a><a name="index-gnus_002dsummary_002dlimit_002dexclude_002ddormant-998"></a>Exclude all dormant articles from the limit
+(<code>gnus-summary-limit-exclude-dormant</code>).
+
+     <br><dt><kbd>/ M</kbd><dd><a name="index-g_t_002f-M-_0028Summary_0029-999"></a><a name="index-gnus_002dsummary_002dlimit_002dexclude_002dmarks-1000"></a>Exclude all marked articles (<code>gnus-summary-limit-exclude-marks</code>).
+
+     <br><dt><kbd>/ T</kbd><dd><a name="index-g_t_002f-T-_0028Summary_0029-1001"></a><a name="index-gnus_002dsummary_002dlimit_002dinclude_002dthread-1002"></a>Include all the articles in the current thread in the limit.
+
+     <br><dt><kbd>/ c</kbd><dd><a name="index-g_t_002f-c-_0028Summary_0029-1003"></a><a name="index-gnus_002dsummary_002dlimit_002dexclude_002dchildless_002ddormant-1004"></a>Exclude all dormant articles that have no children from the limit<br>
+(<code>gnus-summary-limit-exclude-childless-dormant</code>).
+
+     <br><dt><kbd>/ C</kbd><dd><a name="index-g_t_002f-C-_0028Summary_0029-1005"></a><a name="index-gnus_002dsummary_002dlimit_002dmark_002dexcluded_002das_002dread-1006"></a>Mark all excluded unread articles as read
+(<code>gnus-summary-limit-mark-excluded-as-read</code>).  If given a prefix,
+also mark excluded ticked and dormant articles as read.
+
+     <br><dt><kbd>/ b</kbd><dd><a name="index-g_t_002f-b-_0028Summary_0029-1007"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dbodies-1008"></a>Limit the summary buffer to articles that have bodies that match a
+certain regexp (<code>gnus-summary-limit-to-bodies</code>).  If given a
+prefix, reverse the limit.  This command is quite slow since it
+requires selecting each article to find the matches.
+
+     <br><dt><kbd>/ h</kbd><dd><a name="index-g_t_002f-h-_0028Summary_0029-1009"></a><a name="index-gnus_002dsummary_002dlimit_002dto_002dheaders-1010"></a>Like the previous command, only limit to headers instead
+(<code>gnus-summary-limit-to-headers</code>).
+
+   </dl>
+
+   <p>The following commands aren't limiting commands, but use the <kbd>/</kbd>
+prefix as well.
+
+     <dl>
+<dt><kbd>/ N</kbd><dd><a name="index-g_t_002f-N-_0028Summary_0029-1011"></a><a name="index-gnus_002dsummary_002dinsert_002dnew_002darticles-1012"></a>Insert all new articles in the summary buffer.  It scans for new emails
+if <var>back-end</var><code>-get-new-mail</code> is non-<code>nil</code>.
+
+     <br><dt><kbd>/ o</kbd><dd><a name="index-g_t_002f-o-_0028Summary_0029-1013"></a><a name="index-gnus_002dsummary_002dinsert_002dold_002darticles-1014"></a>Insert all old articles in the summary buffer.  If given a numbered
+prefix, fetch this number of articles.
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Sorting of agenda items - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Presentation-and-sorting.html#Presentation-and-sorting" title="Presentation and sorting">
+<link rel="prev" href="Time_002dof_002dday-specifications.html#Time_002dof_002dday-specifications" title="Time-of-day specifications">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sorting-of-agenda-items"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Time_002dof_002dday-specifications.html#Time_002dof_002dday-specifications">Time-of-day specifications</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Presentation-and-sorting.html#Presentation-and-sorting">Presentation and sorting</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.4.3 Sorting of agenda items</h4>
+
+<p><a name="index-sorting_002c-of-agenda-items-796"></a><a name="index-priorities_002c-of-agenda-items-797"></a>Before being inserted into a view, the items are sorted.  How this is
+done depends on the type of view.
+     <ul>
+<li><a name="index-org_002dagenda_002dfiles-798"></a>For the daily/weekly agenda, the items for each day are sorted.  The
+default order is to first collect all items containing an explicit
+time-of-day specification.  These entries will be shown at the beginning
+of the list, as a <em>schedule</em> for the day.  After that, items remain
+grouped in categories, in the sequence given by <code>org-agenda-files</code>. 
+Within each category, items are sorted by priority (see <a href="Priorities.html#Priorities">Priorities</a>),
+which is composed of the base priority (2000 for priority &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, 1000
+for &lsquo;<samp><span class="samp">B</span></samp>&rsquo;, and 0 for &lsquo;<samp><span class="samp">C</span></samp>&rsquo;), plus additional increments for
+overdue scheduled or deadline items. 
+<li>For the TODO list, items remain in the order of categories, but within
+each category, sorting takes place according to priority
+(see <a href="Priorities.html#Priorities">Priorities</a>).  The priority used for sorting derives from the
+priority cookie, with additions depending on how close an item is to its due
+or scheduled date. 
+<li>For tags matches, items are not sorted at all, but just appear in the
+sequence in which they are found in the agenda files. 
+</ul>
+
+   <p><a name="index-org_002dagenda_002dsorting_002dstrategy-799"></a>Sorting can be customized using the variable
+<code>org-agenda-sorting-strategy</code>, and may also include criteria based on
+the estimated effort of an entry (see <a href="Effort-estimates.html#Effort-estimates">Effort estimates</a>).
+
+   </body></html>
+

@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Windows Printing - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Microsoft-Windows.html#Microsoft-Windows" title="Microsoft Windows">
+<link rel="prev" href="Windows-Processes.html#Windows-Processes" title="Windows Processes">
+<link rel="next" href="Windows-Fonts.html#Windows-Fonts" title="Windows Fonts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-Printing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Fonts.html#Windows-Fonts">Windows Fonts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Windows-Processes.html#Windows-Processes">Windows Processes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Windows">Microsoft Windows</a>
+<hr>
+</div>
+
+<h3 class="section">G.8 Printing and MS-Windows</h3>
+
+<p>Printing commands, such as <code>lpr-buffer</code> (see <a href="Printing.html#Printing">Printing</a>) and
+<code>ps-print-buffer</code> (see <a href="PostScript.html#PostScript">PostScript</a>) work in MS-DOS and
+MS-Windows by sending the output to one of the printer ports, if a
+Posix-style <code>lpr</code> program is unavailable.  The same Emacs
+variables control printing on all systems, but in some cases they have
+different default values on MS-DOS and MS-Windows.
+
+   <p>Emacs on Windows automatically determines your default printer and
+sets the variable <code>printer-name</code> to that printer's name.  But in
+some rare cases this can fail, or you may wish to use a different
+printer from within Emacs.  The rest of this section explains how to
+tell Emacs which printer to use.
+
+   <p><a name="index-printer_002dname_0040r_007b_002c-_0028MS_002dDOS_002fMS_002dWindows_0029_007d-4378"></a>  If you want to use your local printer, then set the Lisp variable
+<code>lpr-command</code> to <code>""</code> (its default value on Windows) and
+<code>printer-name</code> to the name of the printer port&mdash;for example,
+<code>"PRN"</code>, the usual local printer port or <code>"LPT2"</code>, or
+<code>"COM1"</code> for a serial printer.  You can also set
+<code>printer-name</code> to a file name, in which case &ldquo;printed&rdquo; output
+is actually appended to that file.  If you set <code>printer-name</code> to
+<code>"NUL"</code>, printed output is silently discarded (sent to the system
+null device).
+
+   <p>You can also use a printer shared by another machine by setting
+<code>printer-name</code> to the UNC share name for that printer&mdash;for
+example, <code>"//joes_pc/hp4si"</code>.  (It doesn't matter whether you use
+forward slashes or backslashes here.)  To find out the names of shared
+printers, run the command &lsquo;<samp><span class="samp">net view</span></samp>&rsquo; from the command prompt to
+obtain a list of servers, and &lsquo;<samp><span class="samp">net view </span><var>server-name</var></samp>&rsquo; to see
+the names of printers (and directories) shared by that server. 
+Alternatively, click the &lsquo;<samp><span class="samp">Network Neighborhood</span></samp>&rsquo; icon on your
+desktop, and look for machines which share their printers via the
+network.
+
+   <p><a name="index-g_t_0040samp_007bnet-use_007d_002c-and-printing-on-MS_002dWindows-4379"></a><a name="index-networked-printers-_0028MS_002dWindows_0029-4380"></a>  If the printer doesn't appear in the output of &lsquo;<samp><span class="samp">net view</span></samp>&rsquo;, or
+if setting <code>printer-name</code> to the UNC share name doesn't produce a
+hardcopy on that printer, you can use the &lsquo;<samp><span class="samp">net use</span></samp>&rsquo; command to
+connect a local print port such as <code>"LPT2"</code> to the networked
+printer.  For example, typing <kbd>net use LPT2: \\joes_pc\hp4si</kbd><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+causes Windows to <dfn>capture</dfn> the <code>LPT2</code> port and redirect the
+printed material to the printer connected to the machine <code>joes_pc</code>. 
+After this command, setting <code>printer-name</code> to <code>"LPT2"</code>
+should produce the hardcopy on the networked printer.
+
+   <p>With some varieties of Windows network software, you can instruct
+Windows to capture a specific printer port such as <code>"LPT2"</code>, and
+redirect it to a networked printer via the <code>Control&nbsp;Panel-&gt;Printers</code><!-- /@w --> applet instead of &lsquo;<samp><span class="samp">net use</span></samp>&rsquo;.
+
+   <p>If you set <code>printer-name</code> to a file name, it's best to use an
+absolute file name.  Emacs changes the working directory according to
+the default directory of the current buffer, so if the file name in
+<code>printer-name</code> is relative, you will end up with several such
+files, each one in the directory of the buffer from which the printing
+was done.
+
+   <p>If the value of <code>printer-name</code> is correct, but printing does
+not produce the hardcopy on your printer, it is possible that your
+printer does not support printing plain text (some cheap printers omit
+this functionality).  In that case, try the PostScript print commands,
+described below.
+
+   <p><a name="index-print_002dbuffer-_0040r_007b_0028MS_002dDOS_0029_007d-4381"></a><a name="index-print_002dregion-_0040r_007b_0028MS_002dDOS_0029_007d-4382"></a><a name="index-lpr_002dheaders_002dswitches-_0040r_007b_0028MS_002dDOS_0029_007d-4383"></a>  The commands <code>print-buffer</code> and <code>print-region</code> call the
+<code>pr</code> program, or use special switches to the <code>lpr</code> program, to
+produce headers on each printed page.  MS-DOS and MS-Windows don't
+normally have these programs, so by default, the variable
+<code>lpr-headers-switches</code> is set so that the requests to print page
+headers are silently ignored.  Thus, <code>print-buffer</code> and
+<code>print-region</code> produce the same output as <code>lpr-buffer</code> and
+<code>lpr-region</code>, respectively.  If you do have a suitable <code>pr</code>
+program (for example, from GNU Coreutils), set
+<code>lpr-headers-switches</code> to <code>nil</code>; Emacs will then call
+<code>pr</code> to produce the page headers, and print the resulting output as
+specified by <code>printer-name</code>.
+
+   <p><a name="index-print_002dregion_002dfunction-_0040r_007b_0028MS_002dDOS_0029_007d-4384"></a><a name="index-lpr-usage-under-MS_002dDOS-4385"></a><a name="index-lpr_002dcommand-_0040r_007b_0028MS_002dDOS_0029_007d-4386"></a><a name="index-lpr_002dswitches-_0040r_007b_0028MS_002dDOS_0029_007d-4387"></a>  Finally, if you do have an <code>lpr</code> work-alike, you can set the
+variable <code>lpr-command</code> to <code>"lpr"</code>.  Then Emacs will use
+<code>lpr</code> for printing, as on other systems.  (If the name of the
+program isn't <code>lpr</code>, set <code>lpr-command</code> to specify where to
+find it.)  The variable <code>lpr-switches</code> has its standard meaning
+when <code>lpr-command</code> is not <code>""</code>.  If the variable
+<code>printer-name</code> has a string value, it is used as the value for the
+<code>-P</code> option to <code>lpr</code>, as on Unix.
+
+   <p><a name="index-ps_002dprint_002dbuffer-_0040r_007b_0028MS_002dDOS_0029_007d-4388"></a><a name="index-ps_002dspool_002dbuffer-_0040r_007b_0028MS_002dDOS_0029_007d-4389"></a><a name="index-ps_002dprinter_002dname-_0040r_007b_0028MS_002dDOS_0029_007d-4390"></a><a name="index-ps_002dlpr_002dcommand-_0040r_007b_0028MS_002dDOS_0029_007d-4391"></a><a name="index-ps_002dlpr_002dswitches-_0040r_007b_0028MS_002dDOS_0029_007d-4392"></a>  A parallel set of variables, <code>ps-lpr-command</code>,
+<code>ps-lpr-switches</code>, and <code>ps-printer-name</code> (see <a href="PostScript-Variables.html#PostScript-Variables">PostScript Variables</a>), defines how PostScript files should be printed.  These
+variables are used in the same way as the corresponding variables
+described above for non-PostScript printing.  Thus, the value of
+<code>ps-printer-name</code> is used as the name of the device (or file) to
+which PostScript output is sent, just as <code>printer-name</code> is used
+for non-PostScript printing.  (There are two distinct sets of
+variables in case you have two printers attached to two different
+ports, and only one of them is a PostScript printer.)
+
+   <p><a name="index-Ghostscript_002c-use-for-PostScript-printing-4393"></a>  The default value of the variable <code>ps-lpr-command</code> is <code>""</code>,
+which causes PostScript output to be sent to the printer port specified
+by <code>ps-printer-name</code>, but <code>ps-lpr-command</code> can also be set to
+the name of a program which will accept PostScript files.  Thus, if you
+have a non-PostScript printer, you can set this variable to the name of
+a PostScript interpreter program (such as Ghostscript).  Any switches
+that need to be passed to the interpreter program are specified using
+<code>ps-lpr-switches</code>.  (If the value of <code>ps-printer-name</code> is a
+string, it will be added to the list of switches as the value for the
+<code>-P</code> option.  This is probably only useful if you are using
+<code>lpr</code>, so when using an interpreter typically you would set
+<code>ps-printer-name</code> to something other than a string so it is
+ignored.)
+
+   <p>For example, to use Ghostscript for printing on the system's default
+printer, put this in your <samp><span class="file">.emacs</span></samp> file:
+
+<pre class="example">     (setq ps-printer-name t)
+     (setq ps-lpr-command "D:/gs6.01/bin/gswin32c.exe")
+     (setq ps-lpr-switches '("-q" "-dNOPAUSE" "-dBATCH"
+                             "-sDEVICE=mswinpr2"
+                             "-sPAPERSIZE=a4"))
+</pre>
+   <p class="noindent">(This assumes that Ghostscript is installed in the
+<samp><span class="file">D:/gs6.01</span></samp> directory.)
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+Note that the &lsquo;<samp><span class="samp">net use</span></samp>&rsquo; command requires the UNC share name to be
+typed with the Windows-style backslashes, while the value of
+<code>printer-name</code> can be set with either forward- or backslashes.</p>
+
+   <hr></div>
+
+   </body></html>
+

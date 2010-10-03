@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Declaration Basics - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Declarations.html#Declarations" title="Declarations">
+<link rel="prev" href="Declarations.html#Declarations" title="Declarations">
+<link rel="next" href="Kinds-of-Declarations.html#Kinds-of-Declarations" title="Kinds of Declarations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Declaration-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Kinds-of-Declarations.html#Kinds-of-Declarations">Kinds of Declarations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Declarations.html#Declarations">Declarations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Declarations.html#Declarations">Declarations</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.6.1 Declaration Basics</h4>
+
+<p class="noindent"><a name="index-s-d-457"></a><a name="index-calc_002ddeclare_002dvariable-458"></a>The <kbd>s d</kbd> (<code>calc-declare-variable</code>) command is the easiest
+way to make a declaration for a variable.  This command prompts for
+the variable name, then prompts for the declaration.  The default
+at the declaration prompt is the previous declaration, if any. 
+You can edit this declaration, or press <kbd>C-k</kbd> to erase it and
+type a new declaration.  (Or, erase it and press &lt;RET&gt; to clear
+the declaration, effectively &ldquo;undeclaring&rdquo; the variable.)
+
+   <p>A declaration is in general a vector of <dfn>type symbols</dfn> and
+<dfn>range</dfn> values.  If there is only one type symbol or range value,
+you can write it directly rather than enclosing it in a vector. 
+For example, <kbd>s d foo &lt;RET&gt; real &lt;RET&gt;</kbd> declares <code>foo</code> to
+be a real number, and <kbd>s d bar &lt;RET&gt; [int, const, [1..6]] &lt;RET&gt;</kbd>
+declares <code>bar</code> to be a constant integer between 1 and 6. 
+(Actually, you can omit the outermost brackets and Calc will
+provide them for you: <kbd>s d bar &lt;RET&gt; int, const, [1..6] &lt;RET&gt;</kbd>.)
+
+   <p><a name="index-g_t_0040code_007bDecls_007d-variable-459"></a><a name="index-Decls-460"></a>Declarations in Calc are kept in a special variable called <code>Decls</code>. 
+This variable encodes the set of all outstanding declarations in
+the form of a matrix.  Each row has two elements:  A variable or
+vector of variables declared by that row, and the declaration
+specifier as described above.  You can use the <kbd>s D</kbd> command to
+edit this variable if you wish to see all the declarations at once. 
+See <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>, for a description of this command
+and the <kbd>s p</kbd> command that allows you to save your declarations
+permanently if you wish.
+
+   <p>Items being declared can also be function calls.  The arguments in
+the call are ignored; the effect is to say that this function returns
+values of the declared type for any valid arguments.  The <kbd>s d</kbd>
+command declares only variables, so if you wish to make a function
+declaration you will have to edit the <code>Decls</code> matrix yourself.
+
+   <p>For example, the declaration matrix
+
+<pre class="smallexample">     [ [ foo,       real       ]
+       [ [j, k, n], int        ]
+       [ f(1,2,3),  [0 .. inf) ] ]
+</pre>
+   <p class="noindent">declares that <code>foo</code> represents a real number, <code>j</code>, <code>k</code>
+and <code>n</code> represent integers, and the function <code>f</code> always
+returns a real number in the interval shown.
+
+   <p><a name="index-All-461"></a>If there is a declaration for the variable <code>All</code>, then that
+declaration applies to all variables that are not otherwise declared. 
+It does not apply to function names.  For example, using the row
+&lsquo;<samp><span class="samp">[All, real]</span></samp>&rsquo; says that all your variables are real unless they
+are explicitly declared without <code>real</code> in some other row. 
+The <kbd>s d</kbd> command declares <code>All</code> if you give a blank
+response to the variable-name prompt.
+
+   </body></html>
+

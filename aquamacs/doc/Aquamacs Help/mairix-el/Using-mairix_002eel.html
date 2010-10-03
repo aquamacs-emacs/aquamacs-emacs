@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+<title>Using mairix.el - Emacs Interface for Mairix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Emacs Interface for Mairix">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Setting-up-mairix_002eel.html#Setting-up-mairix_002eel" title="Setting up mairix.el">
+<link rel="next" href="Extending-mairix_002eel.html#Extending-mairix_002eel" title="Extending mairix.el">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-mairix.el"></a>
+<a name="Using-mairix_002eel"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Extending-mairix_002eel.html#Extending-mairix_002eel">Extending mairix.el</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setting-up-mairix_002eel.html#Setting-up-mairix_002eel">Setting up mairix.el</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Using mairix.el</h2>
+
+<p>There are currently no default key bindings for mairix.el, since those
+should depend on the used mail program and I personally do not use
+RMail, so I wouldn't know which key bindings are reasonable.  I hope some
+day this will change and <code>mairix.el</code> will come with some good
+key bindings for the different mail programs.  Feel free to send me your
+suggestions.  Until then, define some bindings yourself.  Here's a quick
+and dirty solution with global key definitions I currently use, which
+might or might not collide with some other modes.  Simply include them
+in your <samp><span class="file">.emacs</span></samp> and adapt to your needs:
+
+<pre class="lisp">     (global-set-key (kbd "C-c C-o m") 'mairix-search)
+     (global-set-key (kbd "C-c C-o w") 'mairix-widget-search)
+     (global-set-key (kbd "C-c C-o u") 'mairix-update-database)
+     (global-set-key (kbd "C-c C-o f") 'mairix-search-from-this-article)
+     (global-set-key (kbd "C-c C-o t") 'mairix-search-thread-this-article)
+     (global-set-key (kbd "C-c C-o b") 'mairix-widget-search-based-on-article)
+     (global-set-key (kbd "C-c C-o s") 'mairix-save-search)
+     (global-set-key (kbd "C-c C-o i") 'mairix-use-saved-search)
+     (global-set-key (kbd "C-c C-o e") 'mairix-edit-saved-searches)
+</pre>
+   <p>Here's a description of the available interactive functions:
+
+     <dl>
+<dt><code>mairix-search</code><dd><a name="index-M_002dx-mairix_002dsearch-1"></a><a name="index-mairix_002dsearch-2"></a><a name="index-mairix_002dsearch_002dfile-3"></a><a name="index-mairix_002dfile_002dpath-4"></a><a name="index-mairix_002dcommand-5"></a><a name="index-mairix_002dsearch_002doptions-6"></a>Call mairix with a search query.  You will also be asked if you want to
+include whole threads.  The results are saved by mairix in the default
+mail file, which is set through the variable `mairix-search-file', which
+again is prefixed by `mairix-file-path'.  The results will then be
+displayed with the chosen mail program.  The command used to call mairix
+is specified by the variable `mairix-command', together with the options
+`mairix-search-options'.  The latter has the default &ldquo;-F&rdquo; for making
+searching faster.
+
+     <br><dt><code>mairix-widget-search</code><dd><a name="index-M_002dx-mairix_002dwidget_002dsearch-7"></a><a name="index-mairix_002dwidget_002dsearch-8"></a><a name="index-mairix_002dwidget_002dfields_002dlist-9"></a>Creates a mairix query using graphical widgets.  Very handy if you're
+not (yet) familiar with the mairix search syntax.  Just call it to see
+how it works.  You can then directly call mairix with the search term or
+save it for future use.  Since mairix allows almost arbitrary
+combinations of search commands (like &ldquo;tc&rdquo; for &ldquo;to or cc&rdquo;), you
+might want to include some other fields.  This can be easily done by
+modifying `mairix-widget-fields-list'.
+
+     <br><dt><code>mairix-widget-search-based-on-article</code><dd><a name="index-M_002dx-mairix_002dwidget_002dsearch_002dbased_002don_002darticle-10"></a><a name="index-mairix_002dwidget_002dsearch_002dbased_002don_002darticle-11"></a>Create a mairix query using graphical widgets, but based on the
+currently displayed article, i.e. the available fields will be filled
+with the current header values.
+
+     <br><dt><code>mairix-search-from-this-article</code><dd><a name="index-M_002dx-mairix_002dsearch_002dfrom_002dthis_002darticle-12"></a><a name="index-mairix_002dsearch_002dfrom_002dthis_002darticle-13"></a>Search messages from sender of the current article.  This is effectively
+a shortcut for calling <code>mairix-search</code> with <code>f:current_from</code>. 
+If used with a prefix, include whole threads of the found messages.
+
+     <br><dt><code>mairix-search-thread-this-article</code><dd><a name="index-M_002dx-mairix_002dsearch_002dthread_002dthis_002darticle-14"></a><a name="index-mairix_002dsearch_002dthread_002dthis_002darticle-15"></a>Search thread for the current article.  This is effectively a shortcut
+for calling <code>mairix-search</code> with <code>m:msgid</code> of the current article and
+enabled threads.
+
+     <br><dt><code>mairix-save-search</code><dd><a name="index-M_002dx-mairix_002dsave_002dsearch-16"></a><a name="index-mairix_002dsave_002dsearch-17"></a>Save the last search for future use.  You will have to specify a name
+for the search and will then be asked if you want to save your saved
+searches in your <samp><span class="file">.emacs</span></samp>.  If you answer with yes, the variable
+<code>mairix-saved-searches</code> will be saved in the customize section of
+your <samp><span class="file">.emacs</span></samp>.  You can also do this later by using
+`mairix-edit-saved-searches'.
+
+     <br><dt><code>mairix-use-saved-search</code><dd><a name="index-M_002dx-mairix_002duse_002dsaved_002dsearch-18"></a><a name="index-mairix_002duse_002dsaved_002dsearch-19"></a>Call mairix with a previously saved search.  You will be asked for the
+name of the saved search (use <kbd>TAB</kbd> for completion).
+
+     <br><dt><code>mairix-edit-saved-searches</code><dd><a name="index-M_002dx-mairix_002dedit_002dsaved_002dsearches-20"></a><a name="index-mairix_002dedit_002dsaved_002dsearches-21"></a>Edit your current mairix searches.  This is a simple major mode for
+editing the contents of the variable <code>mairix-saved-searches</code>.  You
+can edit and delete searches and save them in your <samp><span class="file">.emacs</span></samp>.  You
+can also use this mode to call mairix with one of the saved searches. 
+Additionally, you can specify a file name for mairix to use for a
+certain search instead of the default one.  This is useful if you want
+to open different searches at the same time, or if you want to regularly
+access certain searches without the need to call mairix.
+
+     <br><dt><code>mairix-edit-saved-searches-customize</code><dd><a name="index-M_002dx-mairix_002dedit_002dsaved_002dsearches_002dcustomize-22"></a><a name="index-mairix_002dedit_002dsaved_002dsearches_002dcustomize-23"></a>Edit the variable <code>mairix-saved-searches</code> in a normal customization
+buffer.  This function exists more or less for historic reasons, but
+maybe you like it.
+
+     <br><dt><code>mairix-update-database</code><dd><a name="index-M_002dx-mairix_002dupdate_002ddatabase-24"></a><a name="index-mairix_002dupdate_002ddatabase-25"></a><a name="index-mairix_002dupdate_002doptions-26"></a><a name="index-mairix_002dsynchronous_002dupdate-27"></a>Call mairix to update the database.  Mairix will be called with the
+options `mairix-update-options'; the default is &ldquo;-F&rdquo; and &ldquo;-Q&rdquo; to
+make updates as fast as possible.  Note that by using these options,
+absolutely no integrity checking is done.  If your database somehow gets
+corrupted, simply delete it and update.  If `mairix-synchronous-update'
+is nil (the default), mairix will be called in a subprocess so Emacs
+will still be usable while the update is done.
+
+   </dl>
+
+   </body></html>
+

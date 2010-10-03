@@ -1,0 +1,310 @@
+<html lang="en">
+<head>
+<title>Saving Articles - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Article-Backlog.html#Article-Backlog" title="Article Backlog">
+<link rel="next" href="Decoding-Articles.html#Decoding-Articles" title="Decoding Articles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Saving-Articles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Decoding-Articles.html#Decoding-Articles">Decoding Articles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Article-Backlog.html#Article-Backlog">Article Backlog</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.16 Saving Articles</h3>
+
+<p><a name="index-saving-articles-1155"></a>
+Gnus can save articles in a number of ways.  Below is the documentation
+for saving articles in a fairly straight-forward fashion (i.e., little
+processing of the article is done before it is saved).  For a different
+approach (uudecoding, unsharing) you should use <code>gnus-uu</code>
+(see <a href="Decoding-Articles.html#Decoding-Articles">Decoding Articles</a>).
+
+   <p>For the commands listed here, the target is a file.  If you want to
+save to a group, see the <kbd>B c</kbd> (<code>gnus-summary-copy-article</code>)
+command (see <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>).
+
+   <p><a name="index-gnus_002dsave_002dall_002dheaders-1156"></a>If <code>gnus-save-all-headers</code> is non-<code>nil</code>, Gnus will not delete
+unwanted headers before saving the article.
+
+   <p><a name="index-gnus_002dsaved_002dheaders-1157"></a>If the preceding variable is <code>nil</code>, all headers that match the
+<code>gnus-saved-headers</code> regexp will be kept, while the rest will be
+deleted before saving.
+
+     <dl>
+<dt><kbd>O o</kbd><dt><kbd>o</kbd><dd><a name="index-O-o-_0028Summary_0029-1158"></a><a name="index-o-_0028Summary_0029-1159"></a><a name="index-gnus_002dsummary_002dsave_002darticle-1160"></a><!-- @icon{gnus-summary-save-article} -->
+Save the current article using the default article saver
+(<code>gnus-summary-save-article</code>).
+
+     <br><dt><kbd>O m</kbd><dd><a name="index-O-m-_0028Summary_0029-1161"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002dmail-1162"></a>Save the current article in a Unix mail box (mbox) file
+(<code>gnus-summary-save-article-mail</code>).
+
+     <br><dt><kbd>O r</kbd><dd><a name="index-O-r-_0028Summary_0029-1163"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002drmail-1164"></a>Save the current article in Rmail format
+(<code>gnus-summary-save-article-rmail</code>).  This is mbox since Emacs 23,
+Babyl in older versions.
+
+     <br><dt><kbd>O f</kbd><dd><a name="index-O-f-_0028Summary_0029-1165"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002dfile-1166"></a><!-- @icon{gnus-summary-save-article-file} -->
+Save the current article in plain file format
+(<code>gnus-summary-save-article-file</code>).
+
+     <br><dt><kbd>O F</kbd><dd><a name="index-O-F-_0028Summary_0029-1167"></a><a name="index-gnus_002dsummary_002dwrite_002darticle_002dfile-1168"></a>Write the current article in plain file format, overwriting any previous
+file contents (<code>gnus-summary-write-article-file</code>).
+
+     <br><dt><kbd>O b</kbd><dd><a name="index-O-b-_0028Summary_0029-1169"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002dbody_002dfile-1170"></a>Save the current article body in plain file format
+(<code>gnus-summary-save-article-body-file</code>).
+
+     <br><dt><kbd>O h</kbd><dd><a name="index-O-h-_0028Summary_0029-1171"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002dfolder-1172"></a>Save the current article in mh folder format
+(<code>gnus-summary-save-article-folder</code>).
+
+     <br><dt><kbd>O v</kbd><dd><a name="index-O-v-_0028Summary_0029-1173"></a><a name="index-gnus_002dsummary_002dsave_002darticle_002dvm-1174"></a>Save the current article in a VM folder
+(<code>gnus-summary-save-article-vm</code>).
+
+     <br><dt><kbd>O p</kbd><dt><kbd>|</kbd><dd><a name="index-O-p-_0028Summary_0029-1175"></a><a name="index-g_t_007c-_0028Summary_0029-1176"></a><a name="index-gnus_002dsummary_002dpipe_002doutput-1177"></a><a name="index-gnus_002dsummary_002dpipe_002doutput_002ddefault_002dcommand-1178"></a>Save the current article in a pipe.  Uhm, like, what I mean is&mdash;Pipe
+the current article to a process (<code>gnus-summary-pipe-output</code>). 
+If given a symbolic prefix (see <a href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>), include the
+complete headers in the piped output.  The symbolic prefix <code>r</code> is
+special; it lets this command pipe a raw article including all headers. 
+The <code>gnus-summary-pipe-output-default-command</code> variable can be set
+to a string containing the default command and options (default
+<code>nil</code>).
+
+     <br><dt><kbd>O P</kbd><dd><a name="index-O-P-_0028Summary_0029-1179"></a><a name="index-gnus_002dsummary_002dmuttprint-1180"></a><a name="index-gnus_002dsummary_002dmuttprint_002dprogram-1181"></a>Save the current article into muttprint.  That is, print it using the
+external program <a href="http://muttprint.sourceforge.net/">Muttprint</a>.  The program name and options to use is controlled by the
+variable <code>gnus-summary-muttprint-program</code>. 
+(<code>gnus-summary-muttprint</code>).
+
+   </dl>
+
+   <p><a name="index-gnus_002dprompt_002dbefore_002dsaving-1182"></a>All these commands use the process/prefix convention
+(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).  If you save bunches of articles using these
+functions, you might get tired of being prompted for files to save each
+and every article in.  The prompting action is controlled by
+the <code>gnus-prompt-before-saving</code> variable, which is <code>always</code> by
+default, giving you that excessive prompting action you know and
+loathe.  If you set this variable to <code>t</code> instead, you'll be prompted
+just once for each series of articles you save.  If you like to really
+have Gnus do all your thinking for you, you can even set this variable
+to <code>nil</code>, which means that you will never be prompted for files to
+save articles in.  Gnus will simply save all the articles in the default
+files.
+
+   <p><a name="index-gnus_002ddefault_002darticle_002dsaver-1183"></a>You can customize the <code>gnus-default-article-saver</code> variable to make
+Gnus do what you want it to.  You can use any of the eight ready-made
+functions below, or you can create your own.
+
+     <dl>
+<dt><code>gnus-summary-save-in-rmail</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002drmail-1184"></a><a name="index-gnus_002drmail_002dsave_002dname-1185"></a><a name="index-gnus_002dplain_002dsave_002dname-1186"></a>This is the default format, that used by the Rmail package.  Since Emacs
+23, Rmail uses standard mbox format.  Before this, it used the
+<dfn>Babyl</dfn> format.  Accordingly, this command writes mbox format since
+Emacs 23, unless appending to an existing Babyl file.  In older versions
+of Emacs, it always uses Babyl format.  Uses the function in the
+<code>gnus-rmail-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-plain-save-name</code>.
+
+     <br><dt><code>gnus-summary-save-in-mail</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002dmail-1187"></a><a name="index-gnus_002dmail_002dsave_002dname-1188"></a>Save in a Unix mail (mbox) file.  Uses the function in the
+<code>gnus-mail-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-plain-save-name</code>.
+
+     <br><dt><code>gnus-summary-save-in-file</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002dfile-1189"></a><a name="index-gnus_002dfile_002dsave_002dname-1190"></a><a name="index-gnus_002dnumeric_002dsave_002dname-1191"></a>Append the article straight to an ordinary file.  Uses the function in
+the <code>gnus-file-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-numeric-save-name</code>.
+
+     <br><dt><code>gnus-summary-write-to-file</code><dd><a name="index-gnus_002dsummary_002dwrite_002dto_002dfile-1192"></a>Write the article straight to an ordinary file.  The file is
+overwritten if it exists.  Uses the function in the
+<code>gnus-file-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-numeric-save-name</code>.
+
+     <br><dt><code>gnus-summary-save-body-in-file</code><dd><a name="index-gnus_002dsummary_002dsave_002dbody_002din_002dfile-1193"></a>Append the article body to an ordinary file.  Uses the function in the
+<code>gnus-file-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-numeric-save-name</code>.
+
+     <br><dt><code>gnus-summary-write-body-to-file</code><dd><a name="index-gnus_002dsummary_002dwrite_002dbody_002dto_002dfile-1194"></a>Write the article body straight to an ordinary file.  The file is
+overwritten if it exists.  Uses the function in the
+<code>gnus-file-save-name</code> variable to get a file name to save the
+article in.  The default is <code>gnus-numeric-save-name</code>.
+
+     <br><dt><code>gnus-summary-save-in-folder</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002dfolder-1195"></a><a name="index-gnus_002dfolder_002dsave_002dname-1196"></a><a name="index-gnus_002dFolder_002dsave_002dname-1197"></a><a name="index-gnus_002dfolder_002dsave_002dname-1198"></a><a name="index-rcvstore-1199"></a><a name="index-MH-folders-1200"></a>Save the article to an MH folder using <code>rcvstore</code> from the MH
+library.  Uses the function in the <code>gnus-folder-save-name</code> variable
+to get a file name to save the article in.  The default is
+<code>gnus-folder-save-name</code>, but you can also use
+<code>gnus-Folder-save-name</code>, which creates capitalized names.
+
+     <br><dt><code>gnus-summary-save-in-vm</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002dvm-1201"></a>Save the article in a VM folder.  You have to have the VM mail
+reader to use this setting.
+
+     <br><dt><code>gnus-summary-save-in-pipe</code><dd><a name="index-gnus_002dsummary_002dsave_002din_002dpipe-1202"></a>Pipe the article to a shell command.  This function takes optional two
+arguments COMMAND and RAW.  Valid values for COMMAND include:
+
+          <ul>
+<li>a string<br>
+The executable command name and possibly arguments. 
+<li><code>nil</code><br>
+You will be prompted for the command in the minibuffer. 
+<li>the symbol <code>default</code><br>
+It will be replaced with the command which the variable
+<code>gnus-summary-pipe-output-default-command</code> holds or the command
+last used for saving. 
+</ul>
+
+     <p>Non-<code>nil</code> value for RAW overrides <code>:decode</code> and
+<code>:headers</code> properties (see below) and the raw article including all
+headers will be piped. 
+</dl>
+
+   <p>The symbol of each function may have the following properties:
+
+     <dl>
+<dt><code>:decode</code><dd>The value non-<code>nil</code> means save decoded articles.  This is
+meaningful only with <code>gnus-summary-save-in-file</code>,
+<code>gnus-summary-save-body-in-file</code>,
+<code>gnus-summary-write-to-file</code>,
+<code>gnus-summary-write-body-to-file</code>, and
+<code>gnus-summary-save-in-pipe</code>.
+
+     <br><dt><code>:function</code><dd>The value specifies an alternative function which appends, not
+overwrites, articles to a file.  This implies that when saving many
+articles at a time, <code>gnus-prompt-before-saving</code> is bound to
+<code>t</code> and all articles are saved in a single file.  This is
+meaningful only with <code>gnus-summary-write-to-file</code> and
+<code>gnus-summary-write-body-to-file</code>.
+
+     <br><dt><code>:headers</code><dd>The value specifies the symbol of a variable of which the value
+specifies headers to be saved.  If it is omitted,
+<code>gnus-save-all-headers</code> and <code>gnus-saved-headers</code> control what
+headers should be saved. 
+</dl>
+
+   <p><a name="index-gnus_002darticle_002dsave_002ddirectory-1203"></a>All of these functions, except for the last one, will save the article
+in the <code>gnus-article-save-directory</code>, which is initialized from the
+<samp><span class="env">SAVEDIR</span></samp> environment variable.  This is <samp><span class="file">~/News/</span></samp> by
+default.
+
+   <p>As you can see above, the functions use different functions to find a
+suitable name of a file to save the article in.  Below is a list of
+available functions that generate names:
+
+     <dl>
+<dt><code>gnus-Numeric-save-name</code><dd><a name="index-gnus_002dNumeric_002dsave_002dname-1204"></a>File names like <samp><span class="file">~/News/Alt.andrea-dworkin/45</span></samp>.
+
+     <br><dt><code>gnus-numeric-save-name</code><dd><a name="index-gnus_002dnumeric_002dsave_002dname-1205"></a>File names like <samp><span class="file">~/News/alt.andrea-dworkin/45</span></samp>.
+
+     <br><dt><code>gnus-Plain-save-name</code><dd><a name="index-gnus_002dPlain_002dsave_002dname-1206"></a>File names like <samp><span class="file">~/News/Alt.andrea-dworkin</span></samp>.
+
+     <br><dt><code>gnus-plain-save-name</code><dd><a name="index-gnus_002dplain_002dsave_002dname-1207"></a>File names like <samp><span class="file">~/News/alt.andrea-dworkin</span></samp>.
+
+     <br><dt><code>gnus-sender-save-name</code><dd><a name="index-gnus_002dsender_002dsave_002dname-1208"></a>File names like <samp><span class="file">~/News/larsi</span></samp>. 
+</dl>
+
+   <p><a name="index-gnus_002dsplit_002dmethods-1209"></a>You can have Gnus suggest where to save articles by plonking a regexp into
+the <code>gnus-split-methods</code> alist.  For instance, if you would like to
+save articles related to Gnus in the file <samp><span class="file">gnus-stuff</span></samp>, and articles
+related to VM in <samp><span class="file">vm-stuff</span></samp>, you could set this variable to something
+like:
+
+<pre class="lisp">     (("^Subject:.*gnus\\|^Newsgroups:.*gnus" "gnus-stuff")
+      ("^Subject:.*vm\\|^Xref:.*vm" "vm-stuff")
+      (my-choosing-function "../other-dir/my-stuff")
+      ((equal gnus-newsgroup-name "mail.misc") "mail-stuff"))
+</pre>
+   <p>We see that this is a list where each element is a list that has two
+elements&mdash;the <dfn>match</dfn> and the <dfn>file</dfn>.  The match can either be
+a string (in which case it is used as a regexp to match on the article
+head); it can be a symbol (which will be called as a function with the
+group name as a parameter); or it can be a list (which will be
+<code>eval</code>ed).  If any of these actions have a non-<code>nil</code> result,
+the <dfn>file</dfn> will be used as a default prompt.  In addition, the
+result of the operation itself will be used if the function or form
+called returns a string or a list of strings.
+
+   <p>You basically end up with a list of file names that might be used when
+saving the current article.  (All &ldquo;matches&rdquo; will be used.)  You will
+then be prompted for what you really want to use as a name, with file
+name completion over the results from applying this variable.
+
+   <p>This variable is <code>((gnus-article-archive-name))</code> by default, which
+means that Gnus will look at the articles it saves for an
+<code>Archive-name</code> line and use that as a suggestion for the file
+name.
+
+   <p>Here's an example function to clean up file names somewhat.  If you have
+lots of mail groups called things like
+&lsquo;<samp><span class="samp">nnml:mail.whatever</span></samp>&rsquo;, you may want to chop off the beginning of
+these group names before creating the file name to save to.  The
+following will do just that:
+
+<pre class="lisp">     (defun my-save-name (group)
+       (when (string-match "^nnml:mail." group)
+         (substring group (match-end 0))))
+     
+     (setq gnus-split-methods
+           '((gnus-article-archive-name)
+             (my-save-name)))
+</pre>
+   <p><a name="index-gnus_002duse_002dlong_002dfile_002dname-1210"></a>Finally, you have the <code>gnus-use-long-file-name</code> variable.  If it is
+<code>nil</code>, all the preceding functions will replace all periods
+(&lsquo;<samp><span class="samp">.</span></samp>&rsquo;) in the group names with slashes (&lsquo;<samp><span class="samp">/</span></samp>&rsquo;)&mdash;which means that
+the functions will generate hierarchies of directories instead of having
+all the files in the top level directory
+(<samp><span class="file">~/News/alt/andrea-dworkin</span></samp> instead of
+<samp><span class="file">~/News/alt.andrea-dworkin</span></samp>.)  This variable is <code>t</code> by default
+on most systems.  However, for historical reasons, this is <code>nil</code> on
+Xenix and usg-unix-v machines by default.
+
+   <p>This function also affects kill and score file names.  If this variable
+is a list, and the list contains the element <code>not-score</code>, long file
+names will not be used for score files, if it contains the element
+<code>not-save</code>, long file names will not be used for saving, and if it
+contains the element <code>not-kill</code>, long file names will not be used
+for kill files.
+
+   <p>If you'd like to save articles in a hierarchy that looks something like
+a spool, you could
+
+<pre class="lisp">     (setq gnus-use-long-file-name '(not-save)) ; <span class="roman">to get a hierarchy</span>
+     (setq gnus-default-article-saver
+           'gnus-summary-save-in-file)          ; <span class="roman">no encoding</span>
+</pre>
+   <p>Then just save with <kbd>o</kbd>.  You'd then read this hierarchy with
+ephemeral <code>nneething</code> groups&mdash;<kbd>G D</kbd> in the group buffer, and
+the top level directory as the argument (<samp><span class="file">~/News/</span></samp>).  Then just walk
+around to the groups/directories with <code>nneething</code>.
+
+   </body></html>
+

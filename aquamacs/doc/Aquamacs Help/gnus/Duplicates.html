@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Duplicates - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Washing-Mail.html#Washing-Mail" title="Washing Mail">
+<link rel="next" href="Not-Reading-Mail.html#Not-Reading-Mail" title="Not Reading Mail">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Duplicates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Not-Reading-Mail.html#Not-Reading-Mail">Not Reading Mail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Washing-Mail.html#Washing-Mail">Washing Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.11 Duplicates</h4>
+
+<p><a name="index-nnmail_002dtreat_002dduplicates-2214"></a><a name="index-nnmail_002dmessage_002did_002dcache_002dlength-2215"></a><a name="index-nnmail_002dmessage_002did_002dcache_002dfile-2216"></a><a name="index-duplicate-mails-2217"></a>If you are a member of a couple of mailing lists, you will sometimes
+receive two copies of the same mail.  This can be quite annoying, so
+<code>nnmail</code> checks for and treats any duplicates it might find.  To do
+this, it keeps a cache of old <code>Message-ID</code>s&mdash;
+<code>nnmail-message-id-cache-file</code>, which is <samp><span class="file">~/.nnmail-cache</span></samp> by
+default.  The approximate maximum number of <code>Message-ID</code>s stored
+there is controlled by the <code>nnmail-message-id-cache-length</code>
+variable, which is 1000 by default.  (So 1000 <code>Message-ID</code>s will be
+stored.) If all this sounds scary to you, you can set
+<code>nnmail-treat-duplicates</code> to <code>warn</code> (which is what it is by
+default), and <code>nnmail</code> won't delete duplicate mails.  Instead it
+will insert a warning into the head of the mail saying that it thinks
+that this is a duplicate of a different message.
+
+   <p>This variable can also be a function.  If that's the case, the function
+will be called from a buffer narrowed to the message in question with
+the <code>Message-ID</code> as a parameter.  The function must return either
+<code>nil</code>, <code>warn</code>, or <code>delete</code>.
+
+   <p>You can turn this feature off completely by setting the variable to
+<code>nil</code>.
+
+   <p>If you want all the duplicate mails to be put into a special
+<dfn>duplicates</dfn> group, you could do that using the normal mail split
+methods:
+
+<pre class="lisp">     (setq nnmail-split-fancy
+           '(| ;; <span class="roman">Messages duplicates go to a separate group.</span>
+             ("gnus-warning" "duplicat\\(e\\|ion\\) of message" "duplicate")
+             ;; <span class="roman">Message from daemons, postmaster, and the like to another.</span>
+             (any mail "mail.misc")
+             ;; <span class="roman">Other rules.</span>
+             [...] ))
+</pre>
+   <p class="noindent">Or something like:
+<pre class="lisp">     (setq nnmail-split-methods
+           '(("duplicates" "^Gnus-Warning:.*duplicate")
+             ;; <span class="roman">Other rules.</span>
+             [...]))
+</pre>
+   <p>Here's a neat feature: If you know that the recipient reads her mail
+with Gnus, and that she has <code>nnmail-treat-duplicates</code> set to
+<code>delete</code>, you can send her as many insults as you like, just by
+using a <code>Message-ID</code> of a mail that you know that she's already
+received.  Think of all the fun!  She'll never see any of it!  Whee!
+
+   </body></html>
+

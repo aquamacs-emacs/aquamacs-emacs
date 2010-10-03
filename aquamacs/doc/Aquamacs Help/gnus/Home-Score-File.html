@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>Home Score File - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scoring.html#Scoring" title="Scoring">
+<link rel="prev" href="Adaptive-Scoring.html#Adaptive-Scoring" title="Adaptive Scoring">
+<link rel="next" href="Followups-To-Yourself.html#Followups-To-Yourself" title="Followups To Yourself">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Home-Score-File"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Followups-To-Yourself.html#Followups-To-Yourself">Followups To Yourself</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
+<hr>
+</div>
+
+<h3 class="section">7.7 Home Score File</h3>
+
+<p>The score file where new score file entries will go is called the
+<dfn>home score file</dfn>.  This is normally (and by default) the score file
+for the group itself.  For instance, the home score file for
+&lsquo;<samp><span class="samp">gnu.emacs.gnus</span></samp>&rsquo; is <samp><span class="file">gnu.emacs.gnus.SCORE</span></samp>.
+
+   <p>However, this may not be what you want.  It is often convenient to share
+a common home score file among many groups&mdash;all &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo; groups
+could perhaps use the same home score file.
+
+   <p><a name="index-gnus_002dhome_002dscore_002dfile-2674"></a>The variable that controls this is <code>gnus-home-score-file</code>.  It can
+be:
+
+     <ol type=1 start=1>
+<li>A string.  Then this file will be used as the home score file for all
+groups.
+
+     <li>A function.  The result of this function will be used as the home score
+file.  The function will be called with the name of the group as the
+parameter.
+
+     <li>A list.  The elements in this list can be:
+
+          <ol type=1 start=1>
+<li><code>(</code><var>regexp</var> <var>file-name</var><code>)</code>.  If the <var>regexp</var> matches the
+group name, the <var>file-name</var> will be used as the home score file.
+
+          <li>A function.  If the function returns non-<code>nil</code>, the result will
+be used as the home score file.  The function will be called with the
+name of the group as the parameter.
+
+          <li>A string.  Use the string as the home score file.
+          </ol>
+
+     <p>The list will be traversed from the beginning towards the end looking
+for matches.
+
+        </ol>
+
+   <p>So, if you want to use just a single score file, you could say:
+
+<pre class="lisp">     (setq gnus-home-score-file
+           "my-total-score-file.SCORE")
+</pre>
+   <p>If you want to use <samp><span class="file">gnu.SCORE</span></samp> for all &lsquo;<samp><span class="samp">gnu</span></samp>&rsquo; groups and
+<samp><span class="file">rec.SCORE</span></samp> for all &lsquo;<samp><span class="samp">rec</span></samp>&rsquo; groups (and so on), you can say:
+
+   <p><a name="index-gnus_002dhierarchial_002dhome_002dscore_002dfile-2675"></a>
+<pre class="lisp">     (setq gnus-home-score-file
+           'gnus-hierarchial-home-score-file)
+</pre>
+   <p>This is a ready-made function provided for your convenience. 
+Other functions include
+
+     <dl>
+<dt><code>gnus-current-home-score-file</code><dd><a name="index-gnus_002dcurrent_002dhome_002dscore_002dfile-2676"></a>Return the &ldquo;current&rdquo; regular score file.  This will make scoring
+commands add entry to the &ldquo;innermost&rdquo; matching score file.
+
+   </dl>
+
+   <p>If you want to have one score file for the &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo; groups and
+another for the &lsquo;<samp><span class="samp">comp</span></samp>&rsquo; groups, while letting all other groups use
+their own home score files:
+
+<pre class="lisp">     (setq gnus-home-score-file
+           ;; <span class="roman">All groups that match the regexp </span><code>"\\.emacs"</code>
+           '(("\\.emacs" "emacs.SCORE")
+             ;; <span class="roman">All the comp groups in one score file</span>
+             ("^comp" "comp.SCORE")))
+</pre>
+   <p><a name="index-gnus_002dhome_002dadapt_002dfile-2677"></a><code>gnus-home-adapt-file</code> works exactly the same way as
+<code>gnus-home-score-file</code>, but says what the home adaptive score file
+is instead.  All new adaptive file entries will go into the file
+specified by this variable, and the same syntax is allowed.
+
+   <p>In addition to using <code>gnus-home-score-file</code> and
+<code>gnus-home-adapt-file</code>, you can also use group parameters
+(see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) and topic parameters (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>) to achieve much the same.  Group and topic parameters take
+precedence over this variable.
+
+   </body></html>
+

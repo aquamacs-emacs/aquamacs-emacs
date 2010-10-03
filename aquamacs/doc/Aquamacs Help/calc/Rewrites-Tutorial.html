@@ -1,0 +1,410 @@
+<html lang="en">
+<head>
+<title>Rewrites Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Algebra-Tutorial.html#Algebra-Tutorial" title="Algebra Tutorial">
+<link rel="prev" href="Basic-Algebra-Tutorial.html#Basic-Algebra-Tutorial" title="Basic Algebra Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rewrites-Tutorial"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Algebra-Tutorial.html#Basic-Algebra-Tutorial">Basic Algebra Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Algebra-Tutorial.html#Algebra-Tutorial">Algebra Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.5.2 Rewrite Rules</h4>
+
+<p class="noindent">No matter how many built-in commands Calc provided for doing algebra,
+there would always be something you wanted to do that Calc didn't have
+in its repertoire.  So Calc also provides a <dfn>rewrite rule</dfn> system
+that you can use to define your own algebraic manipulations.
+
+   <p>Suppose we want to simplify this trigonometric formula:
+
+<pre class="smallexample">     1:  2 / cos(x)^2 - 2 tan(x)^2
+         .
+     
+         ' 2/cos(x)^2 - 2tan(x)^2 &lt;RET&gt;   s 1
+</pre>
+   <p class="noindent">If we were simplifying this by hand, we'd probably replace the
+&lsquo;<samp><span class="samp">tan</span></samp>&rsquo; with a &lsquo;<samp><span class="samp">sin/cos</span></samp>&rsquo; first, then combine over a common
+denominator.  The <kbd>I a s</kbd> command will do the former and the <kbd>a n</kbd>
+algebra command will do the latter, but we'll do both with rewrite
+rules just for practice.
+
+   <p>Rewrite rules are written with the &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; symbol.
+
+<pre class="smallexample">     1:  2 / cos(x)^2 - 2 sin(x)^2 / cos(x)^2
+         .
+     
+         a r tan(a) := sin(a)/cos(a) &lt;RET&gt;
+</pre>
+   <p class="noindent">(The &ldquo;assignment operator&rdquo; &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; has several uses in Calc.  All
+by itself the formula &lsquo;<samp><span class="samp">tan(a) := sin(a)/cos(a)</span></samp>&rsquo; doesn't do anything,
+but when it is given to the <kbd>a r</kbd> command, that command interprets
+it as a rewrite rule.)
+
+   <p>The lefthand side, &lsquo;<samp><span class="samp">tan(a)</span></samp>&rsquo;, is called the <dfn>pattern</dfn> of the
+rewrite rule.  Calc searches the formula on the stack for parts that
+match the pattern.  Variables in a rewrite pattern are called
+<dfn>meta-variables</dfn>, and when matching the pattern each meta-variable
+can match any sub-formula.  Here, the meta-variable &lsquo;<samp><span class="samp">a</span></samp>&rsquo; matched
+the actual variable &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p>When the pattern part of a rewrite rule matches a part of the formula,
+that part is replaced by the righthand side with all the meta-variables
+substituted with the things they matched.  So the result is
+&lsquo;<samp><span class="samp">sin(x) / cos(x)</span></samp>&rsquo;.  Calc's normal algebraic simplifications then
+mix this in with the rest of the original formula.
+
+   <p>To merge over a common denominator, we can use another simple rule:
+
+<pre class="smallexample">     1:  (2 - 2 sin(x)^2) / cos(x)^2
+         .
+     
+         a r a/x + b/x := (a+b)/x &lt;RET&gt;
+</pre>
+   <p>This rule points out several interesting features of rewrite patterns. 
+First, if a meta-variable appears several times in a pattern, it must
+match the same thing everywhere.  This rule detects common denominators
+because the same meta-variable &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is used in both of the
+denominators.
+
+   <p>Second, meta-variable names are independent from variables in the
+target formula.  Notice that the meta-variable &lsquo;<samp><span class="samp">x</span></samp>&rsquo; here matches
+the subformula &lsquo;<samp><span class="samp">cos(x)^2</span></samp>&rsquo;; Calc never confuses the two meanings of
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p>And third, rewrite patterns know a little bit about the algebraic
+properties of formulas.  The pattern called for a sum of two quotients;
+Calc was able to match a difference of two quotients by matching
+&lsquo;<samp><span class="samp">a = 2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">b = -2 sin(x)^2</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">x = cos(x)^2</span></samp>&rsquo;.
+
+<!-- [fix-ref Algebraic Properties of Rewrite Rules] -->
+   <p>We could just as easily have written &lsquo;<samp><span class="samp">a/x - b/x := (a-b)/x</span></samp>&rsquo; for
+the rule.  It would have worked just the same in all cases.  (If we
+really wanted the rule to apply only to &lsquo;<samp><span class="samp">+</span></samp>&rsquo; or only to &lsquo;<samp><span class="samp">-</span></samp>&rsquo;,
+we could have used the <code>plain</code> symbol.  See <a href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules">Algebraic Properties of Rewrite Rules</a>, for some examples of this.)
+
+   <p>One more rewrite will complete the job.  We want to use the identity
+&lsquo;<samp><span class="samp">sin(x)^2 + cos(x)^2 = 1</span></samp>&rsquo;, but of course we must first rearrange
+the identity in a way that matches our formula.  The obvious rule
+would be &lsquo;<samp><span class="samp">2&nbsp;-&nbsp;2&nbsp;sin(x)^2<!-- /@w --> := 2 cos(x)^2</span></samp>&rsquo;, but a little thought shows
+that the rule &lsquo;<samp><span class="samp">sin(x)^2 := 1 - cos(x)^2</span></samp>&rsquo; will also work.  The
+latter rule has a more general pattern so it will work in many other
+situations, too.
+
+<pre class="smallexample">     1:  (2 + 2 cos(x)^2 - 2) / cos(x)^2           1:  2
+         .                                            .
+     
+         a r sin(x)^2 := 1 - cos(x)^2 &lt;RET&gt;          a s
+</pre>
+   <p>You may ask, what's the point of using the most general rule if you
+have to type it in every time anyway?  The answer is that Calc allows
+you to store a rewrite rule in a variable, then give the variable
+name in the <kbd>a r</kbd> command.  In fact, this is the preferred way to
+use rewrites.  For one, if you need a rule once you'll most likely
+need it again later.  Also, if the rule doesn't work quite right you
+can simply Undo, edit the variable, and run the rule again without
+having to retype it.
+
+<pre class="smallexample">     ' tan(x) := sin(x)/cos(x) &lt;RET&gt;      s t tsc &lt;RET&gt;
+     ' a/x + b/x := (a+b)/x &lt;RET&gt;         s t merge &lt;RET&gt;
+     ' sin(x)^2 := 1 - cos(x)^2 &lt;RET&gt;     s t sinsqr &lt;RET&gt;
+     
+     1:  2 / cos(x)^2 - 2 tan(x)^2      1:  2
+         .                                  .
+     
+         r 1                a r tsc &lt;RET&gt;  a r merge &lt;RET&gt;  a r sinsqr &lt;RET&gt;  a s
+</pre>
+   <p>To edit a variable, type <kbd>s e</kbd> and the variable name, use regular
+Emacs editing commands as necessary, then type <kbd>C-c C-c</kbd> to store
+the edited value back into the variable. 
+You can also use <kbd>s&nbsp;e</kbd><!-- /@w --> to create a new variable if you wish.
+
+   <p>Notice that the first time you use each rule, Calc puts up a &ldquo;compiling&rdquo;
+message briefly.  The pattern matcher converts rules into a special
+optimized pattern-matching language rather than using them directly. 
+This allows <kbd>a r</kbd> to apply even rather complicated rules very
+efficiently.  If the rule is stored in a variable, Calc compiles it
+only once and stores the compiled form along with the variable.  That's
+another good reason to store your rules in variables rather than
+entering them on the fly.
+
+   <p>(&bull;) <strong>Exercise 1.</strong>  Type <kbd>m s</kbd> to get Symbolic
+mode, then enter the formula &lsquo;<samp><span class="samp">(2&nbsp;+&nbsp;sqrt(2))<!-- /@w --> / (1&nbsp;+&nbsp;sqrt(2))<!-- /@w --></span></samp>&rsquo;. 
+Using a rewrite rule, simplify this formula by multiplying the top and
+bottom by the conjugate &lsquo;<samp><span class="samp">1&nbsp;-&nbsp;sqrt(2)</span></samp>&rsquo;<!-- /@w -->.  The result will have
+to be expanded by the distributive law; do this with another
+rewrite.  See <a href="Rewrites-Answer-1.html#Rewrites-Answer-1">1</a>. (&bull;)
+
+   <p>The <kbd>a r</kbd> command can also accept a vector of rewrite rules, or
+a variable containing a vector of rules.
+
+<pre class="smallexample">     1:  [tsc, merge, sinsqr]          1:  [tan(x) := sin(x) / cos(x), ... ]
+         .                                 .
+     
+         ' [tsc,merge,sinsqr] &lt;RET&gt;          =
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  1 / cos(x) - sin(x) tan(x)    1:  cos(x)
+         .                                 .
+     
+         s t trig &lt;RET&gt;  r 1                 a r trig &lt;RET&gt;  a s
+</pre>
+   <!-- [fix-ref Nested Formulas with Rewrite Rules] -->
+   <p>Calc tries all the rules you give against all parts of the formula,
+repeating until no further change is possible.  (The exact order in
+which things are tried is rather complex, but for simple rules like
+the ones we've used here the order doesn't really matter. 
+See <a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">Nested Formulas with Rewrite Rules</a>.)
+
+   <p>Calc actually repeats only up to 100 times, just in case your rule set
+has gotten into an infinite loop.  You can give a numeric prefix argument
+to <kbd>a r</kbd> to specify any limit.  In particular, <kbd>M-1 a r</kbd> does
+only one rewrite at a time.
+
+<pre class="smallexample">     1:  1 / cos(x) - sin(x)^2 / cos(x)    1:  (1 - sin(x)^2) / cos(x)
+         .                                     .
+     
+         r 1  M-1 a r trig &lt;RET&gt;                 M-1 a r trig &lt;RET&gt;
+</pre>
+   <p>You can type <kbd>M-0 a r</kbd> if you want no limit at all on the number
+of rewrites that occur.
+
+   <p>Rewrite rules can also be <dfn>conditional</dfn>.  Simply follow the rule
+with a &lsquo;<samp><span class="samp">::</span></samp>&rsquo; symbol and the desired condition.  For example,
+
+<pre class="smallexample">     1:  exp(2 pi i) + exp(3 pi i) + exp(4 pi i)
+         .
+     
+         ' exp(2 pi i) + exp(3 pi i) + exp(4 pi i) &lt;RET&gt;
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  1 + exp(3 pi i) + 1
+         .
+     
+         a r exp(k pi i) := 1 :: k % 2 = 0 &lt;RET&gt;
+</pre>
+   <p class="noindent">(Recall, &lsquo;<samp><span class="samp">k % 2</span></samp>&rsquo; is the remainder from dividing &lsquo;<samp><span class="samp">k</span></samp>&rsquo; by 2,
+which will be zero only when &lsquo;<samp><span class="samp">k</span></samp>&rsquo; is an even integer.)
+
+   <p>An interesting point is that the variables &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; and &lsquo;<samp><span class="samp">i</span></samp>&rsquo;
+were matched literally rather than acting as meta-variables. 
+This is because they are special-constant variables.  The special
+constants &lsquo;<samp><span class="samp">e</span></samp>&rsquo;, &lsquo;<samp><span class="samp">phi</span></samp>&rsquo;, and so on also match literally. 
+A common error with rewrite
+rules is to write, say, &lsquo;<samp><span class="samp">f(a,b,c,d,e) := g(a+b+c+d+e)</span></samp>&rsquo;, expecting
+to match any &lsquo;<samp><span class="samp">f</span></samp>&rsquo; with five arguments but in fact matching
+only when the fifth argument is literally &lsquo;<samp><span class="samp">e</span></samp>&rsquo;!
+
+   <p><a name="index-Fibonacci-numbers-69"></a><a name="index-fib-70"></a>Rewrite rules provide an interesting way to define your own functions. 
+Suppose we want to define &lsquo;<samp><span class="samp">fib(n)</span></samp>&rsquo; to produce the <var>n</var>th
+Fibonacci number.  The first two Fibonacci numbers are each 1;
+later numbers are formed by summing the two preceding numbers in
+the sequence.  This is easy to express in a set of three rules:
+
+<pre class="smallexample">     ' [fib(1) := 1, fib(2) := 1, fib(n) := fib(n-1) + fib(n-2)] &lt;RET&gt;  s t fib
+     
+     1:  fib(7)               1:  13
+         .                        .
+     
+         ' fib(7) &lt;RET&gt;             a r fib &lt;RET&gt;
+</pre>
+   <p>One thing that is guaranteed about the order that rewrites are tried
+is that, for any given subformula, earlier rules in the rule set will
+be tried for that subformula before later ones.  So even though the
+first and third rules both match &lsquo;<samp><span class="samp">fib(1)</span></samp>&rsquo;, we know the first will
+be used preferentially.
+
+   <p>This rule set has one dangerous bug:  Suppose we apply it to the
+formula &lsquo;<samp><span class="samp">fib(x)</span></samp>&rsquo;?  (Don't actually try this.)  The third rule
+will match &lsquo;<samp><span class="samp">fib(x)</span></samp>&rsquo; and replace it with &lsquo;<samp><span class="samp">fib(x-1)&nbsp;+&nbsp;fib(x-2)</span></samp>&rsquo;<!-- /@w -->. 
+Each of these will then be replaced to get &lsquo;<samp><span class="samp">fib(x-2) + 2 fib(x-3) +
+fib(x-4)</span></samp>&rsquo;, and so on, expanding forever.  What we really want is to apply
+the third rule only when &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is an integer greater than two.  Type
+<kbd>s&nbsp;e&nbsp;fib&nbsp;&lt;RET&gt;</kbd><!-- /@w -->, then edit the third rule to:
+
+<pre class="smallexample">     fib(n) := fib(n-1) + fib(n-2) :: integer(n) :: n &gt; 2
+</pre>
+   <p class="noindent">Now:
+
+<pre class="smallexample">     1:  fib(6) + fib(x) + fib(0)      1:  8 + fib(x) + fib(0)
+         .                                 .
+     
+         ' fib(6)+fib(x)+fib(0) &lt;RET&gt;        a r fib &lt;RET&gt;
+</pre>
+   <p class="noindent">We've created a new function, <code>fib</code>, and a new command,
+<kbd>a&nbsp;r&nbsp;fib&nbsp;&lt;RET&gt;</kbd><!-- /@w -->, which means &ldquo;evaluate all <code>fib</code> calls in
+this formula.&rdquo;  To make things easier still, we can tell Calc to
+apply these rules automatically by storing them in the special
+variable <code>EvalRules</code>.
+
+<pre class="smallexample">     1:  [fib(1) := ...]    .                1:  [8, 13]
+         .                                       .
+     
+         s r fib &lt;RET&gt;        s t EvalRules &lt;RET&gt;    ' [fib(6), fib(7)] &lt;RET&gt;
+</pre>
+   <p>It turns out that this rule set has the problem that it does far
+more work than it needs to when &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is large.  Consider the
+first few steps of the computation of &lsquo;<samp><span class="samp">fib(6)</span></samp>&rsquo;:
+
+<pre class="smallexample">     fib(6) =
+     fib(5)              +               fib(4) =
+     fib(4)     +      fib(3)     +      fib(3)     +      fib(2) =
+     fib(3) + fib(2) + fib(2) + fib(1) + fib(2) + fib(1) + 1 = ...
+</pre>
+   <p class="noindent">Note that &lsquo;<samp><span class="samp">fib(3)</span></samp>&rsquo; appears three times here.  Unless Calc's
+algebraic simplifier notices the multiple &lsquo;<samp><span class="samp">fib(3)</span></samp>&rsquo;s and combines
+them (and, as it happens, it doesn't), this rule set does lots of
+needless recomputation.  To cure the problem, type <code>s e EvalRules</code>
+to edit the rules (or just <kbd>s E</kbd>, a shorthand command for editing
+<code>EvalRules</code>) and add another condition:
+
+<pre class="smallexample">     fib(n) := fib(n-1) + fib(n-2) :: integer(n) :: n &gt; 2 :: remember
+</pre>
+   <p class="noindent">If a &lsquo;<samp><span class="samp">:: remember</span></samp>&rsquo; condition appears anywhere in a rule, then if
+that rule succeeds Calc will add another rule that describes that match
+to the front of the rule set.  (Remembering works in any rule set, but
+for technical reasons it is most effective in <code>EvalRules</code>.)  For
+example, if the rule rewrites &lsquo;<samp><span class="samp">fib(7)</span></samp>&rsquo; to something that evaluates
+to 13, then the rule &lsquo;<samp><span class="samp">fib(7) := 13</span></samp>&rsquo; will be added to the rule set.
+
+   <p>Type <kbd>' fib(8) &lt;RET&gt;</kbd> to compute the eighth Fibonacci number, then
+type <kbd>s E</kbd> again to see what has happened to the rule set.
+
+   <p>With the <code>remember</code> feature, our rule set can now compute
+&lsquo;<samp><span class="samp">fib(</span><var>n</var><span class="samp">)</span></samp>&rsquo; in just <var>n</var> steps.  In the process it builds
+up a table of all Fibonacci numbers up to <var>n</var>.  After we have
+computed the result for a particular <var>n</var>, we can get it back
+(and the results for all smaller <var>n</var>) later in just one step.
+
+   <p>All Calc operations will run somewhat slower whenever <code>EvalRules</code>
+contains any rules.  You should type <kbd>s u EvalRules &lt;RET&gt;</kbd> now to
+un-store the variable.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Sometimes it is possible to reformulate
+a problem to reduce the amount of recursion necessary to solve it. 
+Create a rule that, in about <var>n</var> simple steps and without recourse
+to the <code>remember</code> option, replaces &lsquo;<samp><span class="samp">fib(</span><var>n</var><span class="samp">, 1, 1)</span></samp>&rsquo; with
+&lsquo;<samp><span class="samp">fib(1, </span><var>x</var><span class="samp">, </span><var>y</var><span class="samp">)</span></samp>&rsquo; where <var>x</var> and <var>y</var> are the
+<var>n</var>th and <var>n+1</var>st Fibonacci numbers, respectively.  This rule is
+rather clunky to use, so add a couple more rules to make the &ldquo;user
+interface&rdquo; the same as for our first version: enter &lsquo;<samp><span class="samp">fib(</span><var>n</var><span class="samp">)</span></samp>&rsquo;,
+get back a plain number.  See <a href="Rewrites-Answer-2.html#Rewrites-Answer-2">2</a>. (&bull;)
+
+   <p>There are many more things that rewrites can do.  For example, there
+are &lsquo;<samp><span class="samp">&amp;&amp;&amp;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">|||</span></samp>&rsquo; pattern operators that create &ldquo;and&rdquo;
+and &ldquo;or&rdquo; combinations of rules.  As one really simple example, we
+could combine our first two Fibonacci rules thusly:
+
+<pre class="example">     [fib(1 ||| 2) := 1, fib(n) := ... ]
+</pre>
+   <p class="noindent">That means &ldquo;<code>fib</code> of something matching either 1 or 2 rewrites
+to 1.&rdquo;
+
+   <p>You can also make meta-variables optional by enclosing them in <code>opt</code>. 
+For example, the pattern &lsquo;<samp><span class="samp">a + b x</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">2 + 3 x</span></samp>&rsquo; but not
+&lsquo;<samp><span class="samp">2 + x</span></samp>&rsquo; or &lsquo;<samp><span class="samp">3 x</span></samp>&rsquo; or &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  The pattern &lsquo;<samp><span class="samp">opt(a) + opt(b) x</span></samp>&rsquo;
+matches all of these forms, filling in a default of zero for &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+and one for &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.
+
+   <p>(&bull;) <strong>Exercise 3.</strong>  Your friend Joe had &lsquo;<samp><span class="samp">2 + 3 x</span></samp>&rsquo;
+on the stack and tried to use the rule
+&lsquo;<samp><span class="samp">opt(a) + opt(b) x := f(a, b, x)</span></samp>&rsquo;.  What happened? 
+See <a href="Rewrites-Answer-3.html#Rewrites-Answer-3">3</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 4.</strong>  Starting with a positive integer &lsquo;<samp><span class="samp">a</span></samp>&rsquo;,
+divide &lsquo;<samp><span class="samp">a</span></samp>&rsquo; by two if it is even, otherwise compute &lsquo;<samp><span class="samp">3 a + 1</span></samp>&rsquo;. 
+Now repeat this step over and over.  A famous unproved conjecture
+is that for any starting &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, the sequence always eventually
+reaches 1.  Given the formula &lsquo;<samp><span class="samp">seq(</span><var>a</var><span class="samp">, 0)</span></samp>&rsquo;, write a set of
+rules that convert this into &lsquo;<samp><span class="samp">seq(1, </span><var>n</var><span class="samp">)</span></samp>&rsquo; where <var>n</var>
+is the number of steps it took the sequence to reach the value 1. 
+Now enhance the rules to accept &lsquo;<samp><span class="samp">seq(</span><var>a</var><span class="samp">)</span></samp>&rsquo; as a starting
+configuration, and to stop with just the number <var>n</var> by itself. 
+Now make the result be a vector of values in the sequence, from <var>a</var>
+to 1.  (The formula &lsquo;<samp><var>x</var><span class="samp">|</span><var>y</var></samp>&rsquo; appends the vectors <var>x</var>
+and <var>y</var>.)  For example, rewriting &lsquo;<samp><span class="samp">seq(6)</span></samp>&rsquo; should yield the
+vector &lsquo;<samp><span class="samp">[6, 3, 10, 5, 16, 8, 4, 2, 1]</span></samp>&rsquo;. 
+See <a href="Rewrites-Answer-4.html#Rewrites-Answer-4">4</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 5.</strong>  Define, using rewrite rules, a function
+&lsquo;<samp><span class="samp">nterms(</span><var>x</var><span class="samp">)</span></samp>&rsquo; that returns the number of terms in the sum
+<var>x</var>, or 1 if <var>x</var> is not a sum.  (A <dfn>sum</dfn> for our purposes
+is one or more non-sum terms separated by &lsquo;<samp><span class="samp">+</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-</span></samp>&rsquo; signs,
+so that &lsquo;<samp><span class="samp">2 - 3 (x + y) + x y</span></samp>&rsquo; is a sum of three terms.) 
+See <a href="Rewrites-Answer-5.html#Rewrites-Answer-5">5</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 6.</strong>  A Taylor series for a function is an
+infinite series that exactly equals the value of that function at
+values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; near zero.
+
+<pre class="example">     cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
+</pre>
+   <p>The <kbd>a t</kbd> command produces a <dfn>truncated Taylor series</dfn> which
+is obtained by dropping all the terms higher than, say, &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo;. 
+Calc represents the truncated Taylor series as a polynomial in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;. 
+Mathematicians often write a truncated series using a &ldquo;big-O&rdquo; notation
+that records what was the lowest term that was truncated.
+
+<pre class="example">     cos(x) = 1 - x^2 / 2! + O(x^3)
+</pre>
+   <p class="noindent">The meaning of &lsquo;<samp><span class="samp">O(x^3)</span></samp>&rsquo; is &ldquo;a quantity which is negligibly small
+if &lsquo;<samp><span class="samp">x^3</span></samp>&rsquo; is considered negligibly small as &lsquo;<samp><span class="samp">x</span></samp>&rsquo; goes to zero.&rdquo;
+
+   <p>The exercise is to create rewrite rules that simplify sums and products of
+power series represented as &lsquo;<samp><var>polynomial</var><span class="samp"> + O(</span><var>var</var><span class="samp">^</span><var>n</var><span class="samp">)</span></samp>&rsquo;. 
+For example, given &lsquo;<samp><span class="samp">1 - x^2 / 2 + O(x^3)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x - x^3 / 6 + O(x^4)</span></samp>&rsquo;
+on the stack, we want to be able to type <kbd>*</kbd> and get the result
+&lsquo;<samp><span class="samp">x - 2:3 x^3 + O(x^4)</span></samp>&rsquo;.  Don't worry if the terms of the sum are
+rearranged or if <kbd>a s</kbd> needs to be typed after rewriting.  (This one
+is rather tricky; the solution at the end of this chapter uses 6 rewrite
+rules.  Hint:  The &lsquo;<samp><span class="samp">constant(x)</span></samp>&rsquo; condition tests whether &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is
+a number.)  See <a href="Rewrites-Answer-6.html#Rewrites-Answer-6">6</a>. (&bull;)
+
+   <p>Just for kicks, try adding the rule <code>2+3 := 6</code> to <code>EvalRules</code>. 
+What happens?  (Be sure to remove this rule afterward, or you might get
+a nasty surprise when you use Calc to balance your checkbook!)
+
+   <p>See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>, for the whole story on rewrite rules.
+
+   </body></html>
+

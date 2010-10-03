@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Interactive Lisp Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Data-Type-Formats.html#Data-Type-Formats" title="Data Type Formats">
+<link rel="next" href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" title="Stack Lisp Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interactive-Lisp-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Stack-Lisp-Functions.html#Stack-Lisp-Functions">Stack Lisp Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Data-Type-Formats.html#Data-Type-Formats">Data Type Formats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.2 Interactive Functions</h5>
+
+<p class="noindent">The functions described here are used in implementing interactive Calc
+commands.  Note that this list is not exhaustive!  If there is an
+existing command that behaves similarly to the one you want to define,
+you may find helpful tricks by checking the source code for that command.
+
+<div class="defun">
+&mdash; Function: <b>calc-set-command-flag</b><var> flag<a name="index-calc_002dset_002dcommand_002dflag-2338"></a></var><br>
+<blockquote><p>Set the command flag <var>flag</var>.  This is generally a Lisp symbol, but
+may in fact be anything.  The effect is to add <var>flag</var> to the list
+stored in the variable <code>calc-command-flags</code>, unless it is already
+there.  See <a href="Defining-Simple-Commands.html#Defining-Simple-Commands">Defining Simple Commands</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-clear-command-flag</b><var> flag<a name="index-calc_002dclear_002dcommand_002dflag-2339"></a></var><br>
+<blockquote><p>If <var>flag</var> appears among the list of currently-set command flags,
+remove it from that list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-record-undo</b><var> rec<a name="index-calc_002drecord_002dundo-2340"></a></var><br>
+<blockquote><p>Add the &ldquo;undo record&rdquo; <var>rec</var> to the list of steps to take if the
+current operation should need to be undone.  Stack push and pop functions
+automatically call <code>calc-record-undo</code>, so the kinds of undo records
+you might need to create take the form &lsquo;<samp><span class="samp">(set </span><var>sym</var> <var>value</var><span class="samp">)</span></samp>&rsquo;,
+which says that the Lisp variable <var>sym</var> was changed and had previously
+contained <var>value</var>; &lsquo;<samp><span class="samp">(store </span><var>var</var> <var>value</var><span class="samp">)</span></samp>&rsquo; which says that
+the Calc variable <var>var</var> (a string which is the name of the symbol that
+contains the variable's value) was stored and its previous value was
+<var>value</var> (either a Calc data object, or <code>nil</code> if the variable was
+previously void); or &lsquo;<samp><span class="samp">(eval </span><var>undo</var> <var>redo</var> <var>args</var><span class="samp"> ...)</span></samp>&rsquo;,
+which means that to undo requires calling the function &lsquo;<samp><span class="samp">(</span><var>undo</var>
+<var>args</var><span class="samp"> ...)</span></samp>&rsquo; and, if the undo is later redone, calling
+&lsquo;<samp><span class="samp">(</span><var>redo</var> <var>args</var><span class="samp"> ...)</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-record-why</b><var> msg args<a name="index-calc_002drecord_002dwhy-2341"></a></var><br>
+<blockquote><p>Record the error or warning message <var>msg</var>, which is normally a string. 
+This message will be replayed if the user types <kbd>w</kbd> (<code>calc-why</code>);
+if the message string begins with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, it is considered important
+enough to display even if the user doesn't type <kbd>w</kbd>.  If one or more
+<var>args</var> are present, the displayed message will be of the form,
+&lsquo;<samp><var>msg</var><span class="samp">: </span><var>arg1</var><span class="samp">, </span><var>arg2</var><span class="samp">, ...</span></samp>&rsquo;, where the arguments are
+formatted on the assumption that they are either strings or Calc objects of
+some sort.  If <var>msg</var> is a symbol, it is the name of a Calc predicate
+(such as <code>integerp</code> or <code>numvecp</code>) which the arguments did not
+satisfy; it is expanded to a suitable string such as &ldquo;Expected an
+integer.&rdquo;  The <code>reject-arg</code> function calls <code>calc-record-why</code>
+automatically; see <a href="Predicates.html#Predicates">Predicates</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-is-inverse</b><var><a name="index-calc_002dis_002dinverse-2342"></a></var><br>
+<blockquote><p>This predicate returns true if the current command is inverse,
+i.e., if the Inverse (<kbd>I</kbd> key) flag was set. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-is-hyperbolic</b><var><a name="index-calc_002dis_002dhyperbolic-2343"></a></var><br>
+<blockquote><p>This predicate is the analogous function for the <kbd>H</kbd> key. 
+</p></blockquote></div>
+
+   </body></html>
+

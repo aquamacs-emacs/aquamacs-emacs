@@ -1,0 +1,256 @@
+<html lang="en">
+<head>
+<title>Rearranging with Selections - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Selecting-Subformulas.html#Selecting-Subformulas" title="Selecting Subformulas">
+<link rel="prev" href="Operating-on-Selections.html#Operating-on-Selections" title="Operating on Selections">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rearranging-with-Selections"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operating-on-Selections.html#Operating-on-Selections">Operating on Selections</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.1.5 Rearranging Formulas using Selections</h4>
+
+<p class="noindent"><a name="index-j-R-1631"></a><a name="index-calc_002dcommute_002dright-1632"></a>The <kbd>j R</kbd> (<code>calc-commute-right</code>) command moves the selected
+sub-formula to the right in its surrounding formula.  Generally the
+selection is one term of a sum or product; the sum or product is
+rearranged according to the commutative laws of algebra.
+
+   <p>As with <kbd>j '</kbd> and <kbd>j &lt;DEL&gt;</kbd>, the term under the cursor is used
+if there is no selection in the current formula.  All commands described
+in this section share this property.  In this example, we place the
+cursor on the &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and type <kbd>j R</kbd>, then repeat.
+
+<pre class="smallexample">     1:  a + b - c          1:  b + a - c          1:  b - c + a
+</pre>
+   <p class="noindent">Note that in the final step above, the &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is switched with
+the &lsquo;<samp><span class="samp">c</span></samp>&rsquo; but the signs are adjusted accordingly.  When moving
+terms of sums and products, <kbd>j R</kbd> will never change the
+mathematical meaning of the formula.
+
+   <p>The selected term may also be an element of a vector or an argument
+of a function.  The term is exchanged with the one to its right. 
+In this case, the &ldquo;meaning&rdquo; of the vector or function may of
+course be drastically changed.
+
+<pre class="smallexample">     1:  [a, b, c]          1:  [b, a, c]          1:  [b, c, a]
+     
+     1:  f(a, b, c)         1:  f(b, a, c)         1:  f(b, c, a)
+</pre>
+   <p><a name="index-j-L-1633"></a><a name="index-calc_002dcommute_002dleft-1634"></a>The <kbd>j L</kbd> (<code>calc-commute-left</code>) command is like <kbd>j R</kbd>
+except that it swaps the selected term with the one to its left.
+
+   <p>With numeric prefix arguments, these commands move the selected
+term several steps at a time.  It is an error to try to move a
+term left or right past the end of its enclosing formula. 
+With numeric prefix arguments of zero, these commands move the
+selected term as far as possible in the given direction.
+
+   <p><a name="index-j-D-1635"></a><a name="index-calc_002dsel_002ddistribute-1636"></a>The <kbd>j D</kbd> (<code>calc-sel-distribute</code>) command mixes the selected
+sum or product into the surrounding formula using the distributive
+law.  For example, in &lsquo;<samp><span class="samp">a * (b - c)</span></samp>&rsquo; with the &lsquo;<samp><span class="samp">b - c</span></samp>&rsquo;
+selected, the result is &lsquo;<samp><span class="samp">a b - a c</span></samp>&rsquo;.  This also distributes
+products or quotients into surrounding powers, and can also do
+transformations like &lsquo;<samp><span class="samp">exp(a + b)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">exp(a) exp(b)</span></samp>&rsquo;,
+where &lsquo;<samp><span class="samp">a + b</span></samp>&rsquo; is the selected term, and &lsquo;<samp><span class="samp">ln(a ^ b)</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">ln(a) b</span></samp>&rsquo;, where &lsquo;<samp><span class="samp">a ^ b</span></samp>&rsquo; is the selected term.
+
+   <p>For multiple-term sums or products, <kbd>j D</kbd> takes off one term
+at a time:  &lsquo;<samp><span class="samp">a * (b + c - d)</span></samp>&rsquo; goes to &lsquo;<samp><span class="samp">a * (c - d) + a b</span></samp>&rsquo;
+with the &lsquo;<samp><span class="samp">c - d</span></samp>&rsquo; selected so that you can type <kbd>j D</kbd>
+repeatedly to expand completely.  The <kbd>j D</kbd> command allows a
+numeric prefix argument which specifies the maximum number of
+times to expand at once; the default is one time only.
+
+   <p><a name="index-DistribRules-1637"></a>The <kbd>j D</kbd> command is implemented using rewrite rules. 
+See <a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>.  The rules are stored in
+the Calc variable <code>DistribRules</code>.  A convenient way to view
+these rules is to use <kbd>s e</kbd> (<code>calc-edit-variable</code>) which
+displays and edits the stored value of a variable.  Press <kbd>C-c C-c</kbd>
+to return from editing mode; be careful not to make any actual changes
+or else you will affect the behavior of future <kbd>j D</kbd> commands!
+
+   <p>To extend <kbd>j D</kbd> to handle new cases, just edit <code>DistribRules</code>
+as described above.  You can then use the <kbd>s p</kbd> command to save
+this variable's value permanently for future Calc sessions. 
+See <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+
+   <p><a name="index-j-M-1638"></a><a name="index-calc_002dsel_002dmerge-1639"></a><a name="index-MergeRules-1640"></a>The <kbd>j M</kbd> (<code>calc-sel-merge</code>) command is the complement
+of <kbd>j D</kbd>; given &lsquo;<samp><span class="samp">a b - a c</span></samp>&rsquo; with either &lsquo;<samp><span class="samp">a b</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">a c</span></samp>&rsquo; selected, the result is &lsquo;<samp><span class="samp">a * (b - c)</span></samp>&rsquo;.  Once
+again, <kbd>j M</kbd> can also merge calls to functions like <code>exp</code>
+and <code>ln</code>; examine the variable <code>MergeRules</code> to see all
+the relevant rules.
+
+   <p><a name="index-j-C-1641"></a><a name="index-calc_002dsel_002dcommute-1642"></a><a name="index-CommuteRules-1643"></a>The <kbd>j C</kbd> (<code>calc-sel-commute</code>) command swaps the arguments
+of the selected sum, product, or equation.  It always behaves as
+if <kbd>j b</kbd> mode were in effect, i.e., the sum &lsquo;<samp><span class="samp">a + b + c</span></samp>&rsquo; is
+treated as the nested sums &lsquo;<samp><span class="samp">(a + b) + c</span></samp>&rsquo; by this command. 
+If you put the cursor on the first &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, the result is
+&lsquo;<samp><span class="samp">(b + a) + c</span></samp>&rsquo;; if you put the cursor on the second &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, the
+result is &lsquo;<samp><span class="samp">c + (a + b)</span></samp>&rsquo; (which the default simplifications
+will rearrange to &lsquo;<samp><span class="samp">(c + a) + b</span></samp>&rsquo;).  The relevant rules are stored
+in the variable <code>CommuteRules</code>.
+
+   <p>You may need to turn default simplifications off (with the <kbd>m O</kbd>
+command) in order to get the full benefit of <kbd>j C</kbd>.  For example,
+commuting &lsquo;<samp><span class="samp">a - b</span></samp>&rsquo; produces &lsquo;<samp><span class="samp">-b + a</span></samp>&rsquo;, but the default
+simplifications will &ldquo;simplify&rdquo; this right back to &lsquo;<samp><span class="samp">a - b</span></samp>&rsquo; if
+you don't turn them off.  The same is true of some of the other
+manipulations described in this section.
+
+   <p><a name="index-j-N-1644"></a><a name="index-calc_002dsel_002dnegate-1645"></a><a name="index-NegateRules-1646"></a>The <kbd>j N</kbd> (<code>calc-sel-negate</code>) command replaces the selected
+term with the negative of that term, then adjusts the surrounding
+formula in order to preserve the meaning.  For example, given
+&lsquo;<samp><span class="samp">exp(a - b)</span></samp>&rsquo; where &lsquo;<samp><span class="samp">a - b</span></samp>&rsquo; is selected, the result is
+&lsquo;<samp><span class="samp">1 / exp(b - a)</span></samp>&rsquo;.  By contrast, selecting a term and using the
+regular <kbd>n</kbd> (<code>calc-change-sign</code>) command negates the
+term without adjusting the surroundings, thus changing the meaning
+of the formula as a whole.  The rules variable is <code>NegateRules</code>.
+
+   <p><a name="index-j-_0026-1647"></a><a name="index-calc_002dsel_002dinvert-1648"></a><a name="index-InvertRules-1649"></a>The <kbd>j &amp;</kbd> (<code>calc-sel-invert</code>) command is similar to <kbd>j N</kbd>
+except it takes the reciprocal of the selected term.  For example,
+given &lsquo;<samp><span class="samp">a - ln(b)</span></samp>&rsquo; with &lsquo;<samp><span class="samp">b</span></samp>&rsquo; selected, the result is
+&lsquo;<samp><span class="samp">a + ln(1/b)</span></samp>&rsquo;.  The rules variable is <code>InvertRules</code>.
+
+   <p><a name="index-j-E-1650"></a><a name="index-calc_002dsel_002djump_002dequals-1651"></a><a name="index-JumpRules-1652"></a>The <kbd>j E</kbd> (<code>calc-sel-jump-equals</code>) command moves the
+selected term from one side of an equation to the other.  Given
+&lsquo;<samp><span class="samp">a + b = c + d</span></samp>&rsquo; with &lsquo;<samp><span class="samp">c</span></samp>&rsquo; selected, the result is
+&lsquo;<samp><span class="samp">a + b - c = d</span></samp>&rsquo;.  This command also works if the selected
+term is part of a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">^</span></samp>&rsquo; formula.  The
+relevant rules variable is <code>JumpRules</code>.
+
+   <p><a name="index-j-I-1653"></a><a name="index-H-j-I-1654"></a><a name="index-calc_002dsel_002disolate-1655"></a>The <kbd>j I</kbd> (<code>calc-sel-isolate</code>) command isolates the
+selected term on its side of an equation.  It uses the <kbd>a S</kbd>
+(<code>calc-solve-for</code>) command to solve the equation, and the
+Hyperbolic flag affects it in the same way.  See <a href="Solving-Equations.html#Solving-Equations">Solving Equations</a>. 
+When it applies, <kbd>j I</kbd> is often easier to use than <kbd>j E</kbd>. 
+It understands more rules of algebra, and works for inequalities
+as well as equations.
+
+   <p><a name="index-j-_002a-1656"></a><a name="index-j-_002f-1657"></a><a name="index-calc_002dsel_002dmult_002dboth_002dsides-1658"></a><a name="index-calc_002dsel_002ddiv_002dboth_002dsides-1659"></a>The <kbd>j *</kbd> (<code>calc-sel-mult-both-sides</code>) command prompts for a
+formula using algebraic entry, then multiplies both sides of the
+selected quotient or equation by that formula.  It simplifies each
+side with <kbd>a s</kbd> (<code>calc-simplify</code>) before re-forming the
+quotient or equation.  You can suppress this simplification by
+providing a prefix argument: <kbd>C-u j *</kbd>.  There is also a <kbd>j /</kbd>
+(<code>calc-sel-div-both-sides</code>) which is similar to <kbd>j *</kbd> but
+dividing instead of multiplying by the factor you enter.
+
+   <p>If the selection is a quotient with numerator 1, then Calc's default
+simplifications would normally cancel the new factors.  To prevent
+this, when the <kbd>j *</kbd> command is used on a selection whose numerator is
+1 or -1, the denominator is expanded at the top level using the
+distributive law (as if using the <kbd>C-u 1 a x</kbd> command).  Suppose the
+formula on the stack is &lsquo;<samp><span class="samp">1 / (a + 1)</span></samp>&rsquo; and you wish to multiplying the
+top and bottom by &lsquo;<samp><span class="samp">a - 1</span></samp>&rsquo;.  Calc's default simplifications would
+normally change the result &lsquo;<samp><span class="samp">(a - 1) /(a + 1) (a - 1)</span></samp>&rsquo; back
+to the original form by cancellation; when <kbd>j *</kbd> is used, Calc
+expands the denominator to  &lsquo;<samp><span class="samp">a (a - 1) + a - 1</span></samp>&rsquo; to prevent this.
+
+   <p>If you wish the <kbd>j *</kbd> command to completely expand the denominator
+of a quotient you can call it with a zero prefix: <kbd>C-u 0 j *</kbd>.  For
+example, if the formula on the stack is &lsquo;<samp><span class="samp">1 / (sqrt(a) + 1)</span></samp>&rsquo;, you may
+wish to eliminate the square root in the denominator by multiplying
+the top and bottom by &lsquo;<samp><span class="samp">sqrt(a) - 1</span></samp>&rsquo;.  If you did this simply by using
+a simple <kbd>j *</kbd> command, you would get
+&lsquo;<samp><span class="samp">(sqrt(a)-1)/ (sqrt(a) (sqrt(a) - 1) + sqrt(a) - 1)</span></samp>&rsquo;.  Instead,
+you would probably want to use <kbd>C-u 0 j *</kbd>, which would expand the
+bottom and give you the desired result &lsquo;<samp><span class="samp">(sqrt(a)-1)/(a-1)</span></samp>&rsquo;.  More
+generally, if <kbd>j *</kbd> is called with an argument of a positive
+integer <var>n</var>, then the denominator of the expression will be
+expanded <var>n</var> times (as if with the <kbd>C-u </kbd><var>n</var><kbd> a x</kbd> command).
+
+   <p>If the selection is an inequality, <kbd>j *</kbd> and <kbd>j /</kbd> will
+accept any factor, but will warn unless they can prove the factor
+is either positive or negative.  (In the latter case the direction
+of the inequality will be switched appropriately.)  See <a href="Declarations.html#Declarations">Declarations</a>,
+for ways to inform Calc that a given variable is positive or
+negative.  If Calc can't tell for sure what the sign of the factor
+will be, it will assume it is positive and display a warning
+message.
+
+   <p>For selections that are not quotients, equations, or inequalities,
+these commands pull out a multiplicative factor:  They divide (or
+multiply) by the entered formula, simplify, then multiply (or divide)
+back by the formula.
+
+   <p><a name="index-j-_002b-1660"></a><a name="index-j-_002d-1661"></a><a name="index-calc_002dsel_002dadd_002dboth_002dsides-1662"></a><a name="index-calc_002dsel_002dsub_002dboth_002dsides-1663"></a>The <kbd>j +</kbd> (<code>calc-sel-add-both-sides</code>) and <kbd>j -</kbd>
+(<code>calc-sel-sub-both-sides</code>) commands analogously add to or
+subtract from both sides of an equation or inequality.  For other
+types of selections, they extract an additive factor.  A numeric
+prefix argument suppresses simplification of the intermediate
+results.
+
+   <p><a name="index-j-U-1664"></a><a name="index-calc_002dsel_002dunpack-1665"></a>The <kbd>j U</kbd> (<code>calc-sel-unpack</code>) command replaces the
+selected function call with its argument.  For example, given
+&lsquo;<samp><span class="samp">a + sin(x^2)</span></samp>&rsquo; with &lsquo;<samp><span class="samp">sin(x^2)</span></samp>&rsquo; selected, the result
+is &lsquo;<samp><span class="samp">a + x^2</span></samp>&rsquo;.  (The &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; will remain selected; if you
+wanted to change the <code>sin</code> to <code>cos</code>, just press <kbd>C</kbd>
+now to take the cosine of the selected part.)
+
+   <p><a name="index-j-v-1666"></a><a name="index-calc_002dsel_002devaluate-1667"></a>The <kbd>j v</kbd> (<code>calc-sel-evaluate</code>) command performs the
+normal default simplifications on the selected sub-formula. 
+These are the simplifications that are normally done automatically
+on all results, but which may have been partially inhibited by
+previous selection-related operations, or turned off altogether
+by the <kbd>m O</kbd> command.  This command is just an auto-selecting
+version of the <kbd>a&nbsp;v</kbd><!-- /@w --> command (see <a href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>).
+
+   <p>With a numeric prefix argument of 2, <kbd>C-u 2 j v</kbd> applies
+the <kbd>a s</kbd> (<code>calc-simplify</code>) command to the selected
+sub-formula.  With a prefix argument of 3 or more, e.g., <kbd>C-u j v</kbd>
+applies the <kbd>a e</kbd> (<code>calc-simplify-extended</code>) command. 
+See <a href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>.  With a negative prefix argument
+it simplifies at the top level only, just as with <kbd>a v</kbd>. 
+Here the &ldquo;top&rdquo; level refers to the top level of the selected
+sub-formula.
+
+   <p><a name="index-j-_0022-1668"></a><a name="index-calc_002dsel_002dexpand_002dformula-1669"></a>The <kbd>j "</kbd> (<code>calc-sel-expand-formula</code>) command is to <kbd>a "</kbd>
+(see <a href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>) what <kbd>j v</kbd> is to <kbd>a v</kbd>.
+
+   <p>You can use the <kbd>j r</kbd> (<code>calc-rewrite-selection</code>) command
+to define other algebraic operations on sub-formulas.  See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.
+
+   </body></html>
+

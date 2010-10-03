@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+<title>Using the mapping API - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking.html#Hacking" title="Hacking">
+<link rel="prev" href="Using-the-property-API.html#Using-the-property-API" title="Using the property API">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-the-mapping-API"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-the-property-API.html#Using-the-property-API">Using the property API</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking.html#Hacking">Hacking</a>
+<hr>
+</div>
+
+<h3 class="section">A.10 Using the mapping API</h3>
+
+<p><a name="index-API_002c-for-mapping-1452"></a><a name="index-mapping-entries_002c-API-1453"></a>
+Org has sophisticated mapping capabilities to find all entries satisfying
+certain criteria.  Internally, this functionality is used to produce agenda
+views, but there is also an API that can be used to execute arbitrary
+functions for each or selected entries.  The main entry point for this API
+is:
+
+<div class="defun">
+&mdash; Function: <b>org-map-entries</b><var> func &amp;optional match scope &amp;rest skip<a name="index-org_002dmap_002dentries-1454"></a></var><br>
+<blockquote><p>Call FUNC at each headline selected by MATCH in SCOPE.
+
+        <p>FUNC is a function or a Lisp form.  The function will be called without
+arguments, with the cursor positioned at the beginning of the headline. 
+The return values of all calls to the function will be collected and
+returned as a list.
+
+        <p>The call to FUNC will be wrapped into a save-excursion form, so FUNC
+does not need to preserve point.  After evaluation, the cursor will be
+moved to the end of the line (presumably of the headline of the
+processed entry) and search continues from there.  Under some
+circumstances, this may not produce the wanted results.  For example,
+if you have removed (e.g. archived) the current (sub)tree it could
+mean that the next entry will be skipped entirely.  In such cases, you
+can specify the position from where search should continue by making
+FUNC set the variable `org-map-continue-from' to the desired buffer
+position.
+
+        <p>MATCH is a tags/property/todo match as it is used in the agenda match view. 
+Only headlines that are matched by this query will be considered during
+the iteration.  When MATCH is nil or t, all headlines will be
+visited by the iteration.
+
+        <p>SCOPE determines the scope of this command.  It can be any of:
+
+     <pre class="example">          nil     <span class="roman">the current buffer, respecting the restriction if any</span>
+          tree    <span class="roman">the subtree started with the entry at point</span>
+          file    <span class="roman">the current buffer, without restriction</span>
+          file-with-archives
+                  <span class="roman">the current buffer, and any archives associated with it</span>
+          agenda  <span class="roman">all agenda files</span>
+          agenda-with-archives
+                  <span class="roman">all agenda files with any archive files associated with them</span>
+          (file1 file2 ...)
+                  <span class="roman">if this is a list, all files in the list will be scanned</span>
+</pre>
+        <p class="noindent">The remaining args are treated as settings for the skipping facilities of
+the scanner.  The following items can be given here:
+
+        <p><a name="index-org_002dagenda_002dskip_002dfunction-1455"></a>
+     <pre class="example">          archive   <span class="roman">skip trees with the archive tag</span>
+          comment   <span class="roman">skip trees with the COMMENT keyword</span>
+          function or Lisp form
+                    <span class="roman">will be used as value for </span><code>org-agenda-skip-function</code><span class="roman">,</span>
+                    <span class="roman">so whenever the function returns t, FUNC</span>
+                    <span class="roman">will not be called for that entry and search will</span>
+                    <span class="roman">continue from the point where the function leaves it</span>
+</pre>
+        </blockquote></div>
+
+   <p>The function given to that mapping routine can really do anything you like. 
+It can use the property API (see <a href="Using-the-property-API.html#Using-the-property-API">Using the property API</a>) to gather more
+information about the entry, or in order to change metadata in the entry. 
+Here are a couple of functions that might be handy:
+
+<div class="defun">
+&mdash; Function: <b>org-todo</b><var> &amp;optional arg<a name="index-org_002dtodo-1456"></a></var><br>
+<blockquote><p>Change the TODO state of the entry, see the docstring of the functions for
+the many possible values for the argument ARG. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-priority</b><var> &amp;optional action<a name="index-org_002dpriority-1457"></a></var><br>
+<blockquote><p>Change the priority of the entry, see the docstring of this function for the
+possible values for ACTION. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-toggle-tag</b><var> tag &amp;optional onoff<a name="index-org_002dtoggle_002dtag-1458"></a></var><br>
+<blockquote><p>Toggle the tag TAG in the current entry.  Setting ONOFF to either <code>on</code>
+or <code>off</code> will not toggle tag, but ensure that it is either on or off. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-promote</b><var><a name="index-org_002dpromote-1459"></a></var><br>
+<blockquote><p>Promote the current entry. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>org-demote</b><var><a name="index-org_002ddemote-1460"></a></var><br>
+<blockquote><p>Demote the current entry. 
+</p></blockquote></div>
+
+   <p>Here is a simple example that will turn all entries in the current file with
+a tag <code>TOMORROW</code> into TODO entries with the keyword <code>UPCOMING</code>. 
+Entries in comment trees and in archive trees will be ignored.
+
+<pre class="lisp">     (org-map-entries
+        '(org-todo "UPCOMING")
+        "+TOMORROW" 'file 'archive 'comment)
+</pre>
+   <p>The following example counts the number of entries with TODO keyword
+<code>WAITING</code>, in all agenda files.
+
+<pre class="lisp">     (length (org-map-entries t "/+WAITING" 'agenda))
+</pre>
+   </body></html>
+

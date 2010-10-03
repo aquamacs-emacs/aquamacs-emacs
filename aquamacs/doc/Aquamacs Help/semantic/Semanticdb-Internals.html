@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Semanticdb Internals - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Semantic-Internals.html#Semantic-Internals" title="Semantic Internals">
+<link rel="prev" href="Tag-handling.html#Tag-handling" title="Tag handling">
+<link rel="next" href="Analyzer-Internals.html#Analyzer-Internals" title="Analyzer Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Semanticdb-Internals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Analyzer-Internals.html#Analyzer-Internals">Analyzer Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tag-handling.html#Tag-handling">Tag handling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Semantic-Internals.html#Semantic-Internals">Semantic Internals</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Semanticdb Internals</h3>
+
+<p><acronym>Semanticdb</acronym> complexity is certainly an issue.  It is a rather
+hairy problem to try and solve.
+
+     <dl>
+<dt><samp><span class="file">semanticdb.el</span></samp><dd>Defines a <dfn>database</dfn> and a <dfn>table</dfn> base class.  You can
+instantiate these classes, and use them, but they are not persistent.
+
+     <p>This file also provides support for <code>semanticdb-minor-mode</code>,
+which automatically associates files with tables in databases so that
+tags are <em>saved</em> while a buffer is not in memory.
+
+     <p>The database and tables both also provide applicate cache information,
+and cache flushing system.  The semanticdb search routines use caches
+to save datastructures that are complex to calculate.
+
+     <p>Lastly, it provides the concept of <dfn>project root</dfn>.  It is a system
+by which a file can be associated with the root of a project, so if
+you have a tree of directories and source files, it can find the root,
+and allow a tag-search to span all available databases in that
+directory hierarchy.
+
+     <br><dt><samp><span class="file">semanticdb-file.el</span></samp><dd>Provides a subclass of the basic table so that it can be saved to
+disk.  Implements all the code needed to unbind/rebind tags to a
+buffer and writing them to a file.
+
+     <br><dt><samp><span class="file">semanticdb-el.el</span></samp><dd>Implements a special kind of <dfn>system</dfn> database that uses Emacs
+internals to perform queries.
+
+     <br><dt><samp><span class="file">semanticdb-ebrowse.el</span></samp><dd>Implements a system database that uses Ebrowse to parse files into a
+table that can be queried for tag names.  Successful tag hits during a
+find causes <i>Semantic</i> to pick up and parse the reference files to
+get the full details.
+
+     <br><dt><samp><span class="file">semanticdb-find.el</span></samp><dd>Infrastructure for searching groups <i>Semantic</i> databases, and dealing
+with the search results format.
+
+     <br><dt><samp><span class="file">semanticdb-ref.el</span></samp><dd>Tracks crossreferences.   Cross references are needed when buffer is
+reparsed, and must alert other tables that any dependant caches may
+need to be flushed.  References are in the form of include files.
+
+   </dl>
+
+   </body></html>
+

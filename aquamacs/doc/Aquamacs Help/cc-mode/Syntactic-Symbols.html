@@ -1,0 +1,201 @@
+<html lang="en">
+<head>
+<title>Syntactic Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" title="Indentation Engine Basics">
+<link rel="prev" href="Syntactic-Analysis.html#Syntactic-Analysis" title="Syntactic Analysis">
+<link rel="next" href="Indentation-Calculation.html#Indentation-Calculation" title="Indentation Calculation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Syntactic-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Indentation-Calculation.html#Indentation-Calculation">Indentation Calculation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">10.2 Syntactic Symbols</h3>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a name="index-syntactic-symbols_002c-brief-list-392"></a><a name="index-c_002doffsets_002dalist-393"></a><a name="index-offsets_002dalist-_0028c_002d_0029-394"></a>This section is a complete list of the syntactic symbols which appear
+in the <code>c-offsets-alist</code> style variable, along with brief
+descriptions.  The previous section (see <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>)
+states what syntactic symbols are and how the indentation engine uses
+them.
+
+   <p>More detailed descriptions of these symbols, together with snippets of
+source code to which they apply, appear in the examples in the
+subsections below.  Note that, in the interests of brevity, the anchor
+position associated with most syntactic symbols is <em>not</em>
+specified.  In cases of doubt, type <kbd>C-c C-s</kbd> on a pertinent
+line&mdash;this highlights the anchor position.
+
+   <p><a name="index-g_t_002dopen-symbols-395"></a><a name="index-g_t_002dclose-symbols-396"></a><a name="index-g_t_002dblock_002dintro-symbols-397"></a>The syntactic symbols which indicate brace constructs follow a general
+naming convention.  When a line begins with an open or close brace,
+its syntactic symbol will contain the suffix <code>-open</code> or
+<code>-close</code> respectively.  The first line within the brace block
+construct will contain the suffix <code>-block-intro</code>.
+
+   <p><a name="index-g_t_002dintro-symbols-398"></a><a name="index-g_t_002dcont-symbols-399"></a>In constructs which can span several lines, a distinction is usually
+made between the first line that introduces the construct and the
+lines that continue it.  The syntactic symbols that indicate these
+lines will contain the suffixes <code>-intro</code> or <code>-cont</code>
+respectively.
+
+   <p>The best way to understand how all this works is by looking at some
+examples.  Remember that you can see the syntax of any source code
+line by using <kbd>C-c C-s</kbd>.
+
+     <dl>
+<dt><code>string</code><dd>Inside a multiline string.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>c</code><dd>Inside a multiline C style block comment.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>defun-open</code><dd>Brace that opens a top-level function definition.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>defun-close</code><dd>Brace that closes a top-level function definition.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>defun-block-intro</code><dd>The first line in a top-level defun.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>class-open</code><dd>Brace that opens a class definition.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>class-close</code><dd>Brace that closes a class definition.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>inline-open</code><dd>Brace that opens an in-class inline method.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>inline-close</code><dd>Brace that closes an in-class inline method.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>func-decl-cont</code><dd>The region between a function definition's argument list and the
+function opening brace (excluding K&amp;R argument declarations).  In C,
+you cannot put anything but whitespace and comments in this region,
+however in C++ and Java, <code>throws</code> declarations and other things
+can appear here.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. <!-- @emph{FIXME!!!  Can it not -->
+<!-- go somewhere better?} -->
+<br><dt><code>knr-argdecl-intro</code><dd>First line of a K&amp;R C argument declaration.  <a href="K_0026R-Symbols.html#K_0026R-Symbols">K&amp;R Symbols</a>. 
+<br><dt><code>knr-argdecl</code><dd>Subsequent lines in a K&amp;R C argument declaration.  <a href="K_0026R-Symbols.html#K_0026R-Symbols">K&amp;R Symbols</a>. 
+<br><dt><code>topmost-intro</code><dd>The first line in a &ldquo;topmost&rdquo; definition.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>topmost-intro-cont</code><dd>Topmost definition continuation lines.  This is only used in the parts
+that aren't covered by other symbols such as <code>func-decl-cont</code> and
+<code>knr-argdecl</code>.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>member-init-intro</code><dd>First line in a member initialization list.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>member-init-cont</code><dd>Subsequent member initialization list lines.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>inher-intro</code><dd>First line of a multiple inheritance list.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>inher-cont</code><dd>Subsequent multiple inheritance lines.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>block-open</code><dd>Statement block open brace.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>block-close</code><dd>Statement block close brace.  <a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>brace-list-open</code><dd>Open brace of an enum or static array list.  <a href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>. 
+<br><dt><code>brace-list-close</code><dd>Close brace of an enum or static array list.  <a href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>. 
+<br><dt><code>brace-list-intro</code><dd>First line in an enum or static array list.  <a href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>. 
+<br><dt><code>brace-list-entry</code><dd>Subsequent lines in an enum or static array list.  <a href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>. 
+<br><dt><code>brace-entry-open</code><dd>Subsequent lines in an enum or static array list where the line begins
+with an open brace.  <a href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>. 
+<br><dt><code>statement</code><dd>A statement.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>statement-cont</code><dd>A continuation of a statement.  <a href="Function-Symbols.html#Function-Symbols">Function Symbols</a>. 
+<br><dt><code>statement-block-intro</code><dd>The first line in a new statement block.  <a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>statement-case-intro</code><dd>The first line in a case block.  <a href="Switch-Statement-Symbols.html#Switch-Statement-Symbols">Switch Statement Symbols</a>. 
+<br><dt><code>statement-case-open</code><dd>The first line in a case block that starts with a brace.  <a href="Switch-Statement-Symbols.html#Switch-Statement-Symbols">Switch Statement Symbols</a>. 
+<br><dt><code>substatement</code><dd>The first line after a conditional or loop construct. 
+<a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>substatement-open</code><dd>The brace that opens a substatement block.  <a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>substatement-label</code><dd>The first line after a conditional or loop construct if it's a label. 
+<a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>case-label</code><dd>A label in a <code>switch</code> block.  <a href="Switch-Statement-Symbols.html#Switch-Statement-Symbols">Switch Statement Symbols</a>. 
+<br><dt><code>access-label</code><dd>C++ access control label.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>label</code><dd>Any other label.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>do-while-closure</code><dd>The <code>while</code> line that ends a <code>do</code>-<code>while</code> construct. 
+<a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>else-clause</code><dd>The <code>else</code> line of an <code>if</code>-<code>else</code> construct. 
+<a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>catch-clause</code><dd>The <code>catch</code> or <code>finally</code> (in Java) line of a
+<code>try</code>-<code>catch</code> construct.  <a href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>. 
+<br><dt><code>comment-intro</code><dd>A line containing only a comment introduction.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>arglist-intro</code><dd>The first line in an argument list.  <a href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>. 
+<br><dt><code>arglist-cont</code><dd>Subsequent argument list lines when no arguments follow on the same
+line as the arglist opening paren.  <a href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>. 
+<br><dt><code>arglist-cont-nonempty</code><dd>Subsequent argument list lines when at least one argument follows on
+the same line as the arglist opening paren.  <a href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>. 
+<br><dt><code>arglist-close</code><dd>The solo close paren of an argument list.  <a href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>. 
+<br><dt><code>stream-op</code><dd>Lines continuing a stream operator (C++ only).  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. <!-- @emph{FIXME!!!  Can this not be moved somewhere better?} -->
+<br><dt><code>inclass</code><dd>The line is nested inside a class definition.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>cpp-macro</code><dd>The start of a preprocessor macro definition.  <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>. 
+<br><dt><code>cpp-define-intro</code><dd>The first line inside a multiline preprocessor macro if
+<code>c-syntactic-indentation-in-macros</code> is set.  <a href="Multiline-Macro-Symbols.html#Multiline-Macro-Symbols">Multiline Macro Symbols</a>. 
+<br><dt><code>cpp-macro-cont</code><dd>All lines inside multiline preprocessor macros if
+<code>c-syntactic-indentation-in-macros</code> is <code>nil</code>. 
+<a href="Multiline-Macro-Symbols.html#Multiline-Macro-Symbols">Multiline Macro Symbols</a>. 
+<br><dt><code>friend</code><dd>A C++ friend declaration.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>objc-method-intro</code><dd>The first line of an Objective-C method definition.  <a href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols">Objective-C Method Symbols</a>. 
+<br><dt><code>objc-method-args-cont</code><dd>Lines continuing an Objective-C method definition.  <a href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols">Objective-C Method Symbols</a>. 
+<br><dt><code>objc-method-call-cont</code><dd>Lines continuing an Objective-C method call.  <a href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols">Objective-C Method Symbols</a>. 
+<br><dt><code>extern-lang-open</code><dd>Brace that opens an <code>extern</code> block (e.g. <code>extern "C"
+{...}</code>).  <a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>extern-lang-close</code><dd>Brace that closes an <code>extern</code> block.  <a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>inextern-lang</code><dd>Analogous to <code>inclass</code> syntactic symbol, but used inside
+<code>extern</code> blocks.  <a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>namespace-open</code><dt><code>namespace-close</code><dt><code>innamespace</code><dd>These are analogous to the three <code>extern-lang</code> symbols above, but
+are returned for C++ namespace blocks.  <a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>module-open</code><dt><code>module-close</code><dt><code>inmodule</code><dd>Analogous to the above, but for CORBA IDL <code>module</code> blocks. 
+<a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>composition-open</code><dt><code>composition-close</code><dt><code>incomposition</code><dd>Analogous to the above, but for CORBA CIDL <code>composition</code> blocks. 
+<a href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>. 
+<br><dt><code>template-args-cont</code><dd>C++ template argument list continuations.  <a href="Class-Symbols.html#Class-Symbols">Class Symbols</a>. 
+<br><dt><code>inlambda</code><dd>Analogous to <code>inclass</code> syntactic symbol, but used inside lambda
+(i.e. anonymous) functions.  Only used in Pike mode.  <a href="Statement-Block-Symbols.html#Statement-Block-Symbols">Statement Block Symbols</a>. 
+<br><dt><code>lambda-intro-cont</code><dd>Lines continuing the header of a lambda function, i.e. between the
+<code>lambda</code> keyword and the function body.  Only used in Pike mode. 
+<a href="Statement-Block-Symbols.html#Statement-Block-Symbols">Statement Block Symbols</a>. 
+<br><dt><code>inexpr-statement</code><dd>A statement block inside an expression.  The gcc C and C++ extension
+for this is recognized.  It's also used for the special functions that
+take a statement block as an argument in Pike.  <a href="Statement-Block-Symbols.html#Statement-Block-Symbols">Statement Block Symbols</a>. 
+<br><dt><code>inexpr-class</code><dd>A class definition inside an expression.  This is used for anonymous
+classes in Java.  It's also used for anonymous array initializers in
+Java.  <a href="Anonymous-Class-Symbol.html#Anonymous-Class-Symbol">Anonymous Class Symbol</a>. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="Function-Symbols.html#Function-Symbols">Function Symbols</a>
+<li><a accesskey="2" href="Class-Symbols.html#Class-Symbols">Class Symbols</a>
+<li><a accesskey="3" href="Conditional-Construct-Symbols.html#Conditional-Construct-Symbols">Conditional Construct Symbols</a>
+<li><a accesskey="4" href="Switch-Statement-Symbols.html#Switch-Statement-Symbols">Switch Statement Symbols</a>
+<li><a accesskey="5" href="Brace-List-Symbols.html#Brace-List-Symbols">Brace List Symbols</a>
+<li><a accesskey="6" href="External-Scope-Symbols.html#External-Scope-Symbols">External Scope Symbols</a>
+<li><a accesskey="7" href="Paren-List-Symbols.html#Paren-List-Symbols">Paren List Symbols</a>
+<li><a accesskey="8" href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>
+<li><a accesskey="9" href="Multiline-Macro-Symbols.html#Multiline-Macro-Symbols">Multiline Macro Symbols</a>
+<li><a href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols">Objective-C Method Symbols</a>
+<li><a href="Anonymous-Class-Symbol.html#Anonymous-Class-Symbol">Anonymous Class Symbol</a>
+<li><a href="Statement-Block-Symbols.html#Statement-Block-Symbols">Statement Block Symbols</a>
+<li><a href="K_0026R-Symbols.html#K_0026R-Symbols">K&amp;R Symbols</a>
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

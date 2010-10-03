@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Really Various Summary Commands - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various-Summary-Stuff.html#Various-Summary-Stuff" title="Various Summary Stuff">
+<link rel="prev" href="Summary-Generation-Commands.html#Summary-Generation-Commands" title="Summary Generation Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Really-Various-Summary-Commands"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summary-Generation-Commands.html#Summary-Generation-Commands">Summary Generation Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various-Summary-Stuff.html#Various-Summary-Stuff">Various Summary Stuff</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.27.4 Really Various Summary Commands</h4>
+
+     <dl>
+<dt><kbd>A D</kbd><dt><kbd>C-d</kbd><dd><a name="index-C_002dd-_0028Summary_0029-1727"></a><a name="index-A-D-_0028Summary_0029-1728"></a><a name="index-gnus_002dsummary_002denter_002ddigest_002dgroup-1729"></a>If the current article is a collection of other articles (for instance,
+a digest), you might use this command to enter a group based on the that
+article (<code>gnus-summary-enter-digest-group</code>).  Gnus will try to
+guess what article type is currently displayed unless you give a prefix
+to this command, which forces a &ldquo;digest&rdquo; interpretation.  Basically,
+whenever you see a message that is a collection of other messages of
+some format, you <kbd>C-d</kbd> and read these messages in a more convenient
+fashion.
+
+     <p><a name="index-gnus_002dauto_002dselect_002don_002dephemeral_002dexit-1730"></a>The variable <code>gnus-auto-select-on-ephemeral-exit</code> controls what
+article should be selected after exiting a digest group.  Valid values
+include:
+
+          <dl>
+<dt><code>next</code><dd>Select the next article.
+
+          <br><dt><code>next-unread</code><dd>Select the next unread article.
+
+          <br><dt><code>next-noselect</code><dd>Move the cursor to the next article.  This is the default.
+
+          <br><dt><code>next-unread-noselect</code><dd>Move the cursor to the next unread article. 
+</dl>
+
+     <p>If it has any other value or there is no next (unread) article, the
+article selected before entering to the digest group will appear.
+
+     <br><dt><kbd>C-M-d</kbd><dd><a name="index-C_002dM_002dd-_0028Summary_0029-1731"></a><a name="index-gnus_002dsummary_002dread_002ddocument-1732"></a>This command is very similar to the one above, but lets you gather
+several documents into one biiig group
+(<code>gnus-summary-read-document</code>).  It does this by opening several
+<code>nndoc</code> groups for each document, and then opening an
+<code>nnvirtual</code> group on top of these <code>nndoc</code> groups.  This
+command understands the process/prefix convention
+(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
+
+     <br><dt><kbd>C-t</kbd><dd><a name="index-C_002dt-_0028Summary_0029-1733"></a><a name="index-gnus_002dsummary_002dtoggle_002dtruncation-1734"></a>Toggle truncation of summary lines
+(<code>gnus-summary-toggle-truncation</code>).  This will probably confuse the
+line centering function in the summary buffer, so it's not a good idea
+to have truncation switched off while reading articles.
+
+     <br><dt><kbd>=</kbd><dd><a name="index-g_t_003d-_0028Summary_0029-1735"></a><a name="index-gnus_002dsummary_002dexpand_002dwindow-1736"></a>Expand the summary buffer window (<code>gnus-summary-expand-window</code>). 
+If given a prefix, force an <code>article</code> window configuration.
+
+     <br><dt><kbd>C-M-e</kbd><dd><a name="index-C_002dM_002de-_0028Summary_0029-1737"></a><a name="index-gnus_002dsummary_002dedit_002dparameters-1738"></a>Edit the group parameters (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) of the current
+group (<code>gnus-summary-edit-parameters</code>).
+
+     <br><dt><kbd>C-M-a</kbd><dd><a name="index-C_002dM_002da-_0028Summary_0029-1739"></a><a name="index-gnus_002dsummary_002dcustomize_002dparameters-1740"></a>Customize the group parameters (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) of the current
+group (<code>gnus-summary-customize-parameters</code>).
+
+</dl>
+
+   </body></html>
+

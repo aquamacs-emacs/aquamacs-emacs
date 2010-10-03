@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Interpolation - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Curve-Fitting-Details.html#Curve-Fitting-Details" title="Curve Fitting Details">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interpolation"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Curve-Fitting-Details.html#Curve-Fitting-Details">Curve Fitting Details</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.6 Polynomial Interpolation</h4>
+
+<p><a name="index-a-p-1819"></a><a name="index-calc_002dpoly_002dinterp-1820"></a><a name="index-polint-1821"></a>The <kbd>a p</kbd> (<code>calc-poly-interp</code>) [<code>polint</code>] command does
+a polynomial interpolation at a particular &lsquo;<samp><span class="samp">x</span></samp>&rsquo; value.  It takes
+two arguments from the stack:  A data matrix of the sort used by
+<kbd>a F</kbd>, and a single number which represents the desired &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+value.  Calc effectively does an exact polynomial fit as if by <kbd>a F i</kbd>,
+then substitutes the &lsquo;<samp><span class="samp">x</span></samp>&rsquo; value into the result in order to get an
+approximate &lsquo;<samp><span class="samp">y</span></samp>&rsquo; value based on the fit.  (Calc does not actually
+use <kbd>a F i</kbd>, however; it uses a direct method which is both more
+efficient and more numerically stable.)
+
+   <p>The result of <kbd>a p</kbd> is actually a vector of two values:  The &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+value approximation, and an error measure &lsquo;<samp><span class="samp">dy</span></samp>&rsquo; that reflects Calc's
+estimation of the probable error of the approximation at that value of
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  If the input &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is equal to any of the &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values
+in the data matrix, the output &lsquo;<samp><span class="samp">y</span></samp>&rsquo; will be the corresponding &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+value from the matrix, and the output &lsquo;<samp><span class="samp">dy</span></samp>&rsquo; will be exactly zero.
+
+   <p>A prefix argument of 2 causes <kbd>a p</kbd> to take separate x- and
+y-vectors from the stack instead of one data matrix.
+
+   <p>If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is a vector of numbers, <kbd>a p</kbd> will return a matrix of
+interpolated results for each of those &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values.  (The matrix will
+have two columns, the &lsquo;<samp><span class="samp">y</span></samp>&rsquo; values and the &lsquo;<samp><span class="samp">dy</span></samp>&rsquo; values.) 
+If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is a formula instead of a number, the <code>polint</code> function
+remains in symbolic form; use the <kbd>a "</kbd> command to expand it out to
+a formula that describes the fit in symbolic terms.
+
+   <p>In all cases, the <kbd>a p</kbd> command leaves the data vectors or matrix
+on the stack.  Only the &lsquo;<samp><span class="samp">x</span></samp>&rsquo; value is replaced by the result.
+
+   <p><a name="index-H-a-p-1822"></a><a name="index-ratint-1823"></a>The <kbd>H a p</kbd> [<code>ratint</code>] command does a rational function
+interpolation.  It is used exactly like <kbd>a p</kbd>, except that it
+uses as its model the quotient of two polynomials.  If there are
+&lsquo;<samp><span class="samp">N</span></samp>&rsquo; data points, the numerator and denominator polynomials will
+each have degree &lsquo;<samp><span class="samp">N/2</span></samp>&rsquo; (if &lsquo;<samp><span class="samp">N</span></samp>&rsquo; is odd, the denominator will
+have degree one higher than the numerator).
+
+   <p>Rational approximations have the advantage that they can accurately
+describe functions that have poles (points at which the function's value
+goes to infinity, so that the denominator polynomial of the approximation
+goes to zero).  If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; corresponds to a pole of the fitted rational
+function, then the result will be a division by zero.  If Infinite mode
+is enabled, the result will be &lsquo;<samp><span class="samp">[uinf, uinf]</span></samp>&rsquo;.
+
+   <p>There is no way to get the actual coefficients of the rational function
+used by <kbd>H a p</kbd>.  (The algorithm never generates these coefficients
+explicitly, and quotients of polynomials are beyond <kbd>a&nbsp;F</kbd><!-- /@w -->'s
+capabilities to fit.)
+
+   </body></html>
+

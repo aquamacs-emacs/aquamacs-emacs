@@ -1,0 +1,259 @@
+<html lang="en">
+<head>
+<title>Matrix Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
+<link rel="prev" href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial" title="Vector Analysis Tutorial">
+<link rel="next" href="List-Tutorial.html#List-Tutorial" title="List Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Matrix-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="List-Tutorial.html#List-Tutorial">List Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial">Vector Analysis Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.3.2 Matrices</h4>
+
+<p class="noindent">A <dfn>matrix</dfn> is just a vector of vectors, all the same length. 
+This means you can enter a matrix using nested brackets.  You can
+also use the semicolon character to enter a matrix.  We'll show
+both methods here:
+
+<pre class="smallexample">     1:  [ [ 1, 2, 3 ]             1:  [ [ 1, 2, 3 ]
+           [ 4, 5, 6 ] ]                 [ 4, 5, 6 ] ]
+         .                             .
+     
+       [[1 2 3] [4 5 6]]             ' [1 2 3; 4 5 6] &lt;RET&gt;
+</pre>
+   <p class="noindent">We'll be using this matrix again, so type <kbd>s 4</kbd> to save it now.
+
+   <p>Note that semicolons work with incomplete vectors, but they work
+better in algebraic entry.  That's why we use the apostrophe in
+the second example.
+
+   <p>When two matrices are multiplied, the lefthand matrix must have
+the same number of columns as the righthand matrix has rows. 
+Row &lsquo;<samp><span class="samp">i</span></samp>&rsquo;, column &lsquo;<samp><span class="samp">j</span></samp>&rsquo; of the result is effectively the
+dot product of row &lsquo;<samp><span class="samp">i</span></samp>&rsquo; of the left matrix by column &lsquo;<samp><span class="samp">j</span></samp>&rsquo;
+of the right matrix.
+
+   <p>If we try to duplicate this matrix and multiply it by itself,
+the dimensions are wrong and the multiplication cannot take place:
+
+<pre class="smallexample">     1:  [ [ 1, 2, 3 ]   * [ [ 1, 2, 3 ]
+           [ 4, 5, 6 ] ]     [ 4, 5, 6 ] ]
+         .
+     
+         &lt;RET&gt; *
+</pre>
+   <p class="noindent">Though rather hard to read, this is a formula which shows the product
+of two matrices.  The &lsquo;<samp><span class="samp">*</span></samp>&rsquo; function, having invalid arguments, has
+been left in symbolic form.
+
+   <p>We can multiply the matrices if we <dfn>transpose</dfn> one of them first.
+
+<pre class="smallexample">     2:  [ [ 1, 2, 3 ]       1:  [ [ 14, 32 ]      1:  [ [ 17, 22, 27 ]
+           [ 4, 5, 6 ] ]           [ 32, 77 ] ]          [ 22, 29, 36 ]
+     1:  [ [ 1, 4 ]              .                       [ 27, 36, 45 ] ]
+           [ 2, 5 ]                                    .
+           [ 3, 6 ] ]
+         .
+     
+         U v t                   *                     U &lt;TAB&gt; *
+</pre>
+   <p>Matrix multiplication is not commutative; indeed, switching the
+order of the operands can even change the dimensions of the result
+matrix, as happened here!
+
+   <p>If you multiply a plain vector by a matrix, it is treated as a
+single row or column depending on which side of the matrix it is
+on.  The result is a plain vector which should also be interpreted
+as a row or column as appropriate.
+
+<pre class="smallexample">     2:  [ [ 1, 2, 3 ]      1:  [14, 32]
+           [ 4, 5, 6 ] ]        .
+     1:  [1, 2, 3]
+         .
+     
+         r 4 r 1                *
+</pre>
+   <p>Multiplying in the other order wouldn't work because the number of
+rows in the matrix is different from the number of elements in the
+vector.
+
+   <p>(&bull;) <strong>Exercise 1.</strong>  Use &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to sum along the rows
+of the above
+<!-- @math{2\times3} -->
+2x3
+matrix to get &lsquo;<samp><span class="samp">[6, 15]</span></samp>&rsquo;.  Now use &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to sum along the columns
+to get &lsquo;<samp><span class="samp">[5, 7, 9]</span></samp>&rsquo;. 
+See <a href="Matrix-Answer-1.html#Matrix-Answer-1">1</a>. (&bull;)
+
+   <p><a name="index-Identity-matrix-38"></a>An <dfn>identity matrix</dfn> is a square matrix with ones along the
+diagonal and zeros elsewhere.  It has the property that multiplication
+by an identity matrix, on the left or on the right, always produces
+the original matrix.
+
+<pre class="smallexample">     1:  [ [ 1, 2, 3 ]      2:  [ [ 1, 2, 3 ]      1:  [ [ 1, 2, 3 ]
+           [ 4, 5, 6 ] ]          [ 4, 5, 6 ] ]          [ 4, 5, 6 ] ]
+         .                  1:  [ [ 1, 0, 0 ]          .
+                                  [ 0, 1, 0 ]
+                                  [ 0, 0, 1 ] ]
+                                .
+     
+         r 4                    v i 3 &lt;RET&gt;              *
+</pre>
+   <p>If a matrix is square, it is often possible to find its <dfn>inverse</dfn>,
+that is, a matrix which, when multiplied by the original matrix, yields
+an identity matrix.  The <kbd>&amp;</kbd> (reciprocal) key also computes the
+inverse of a matrix.
+
+<pre class="smallexample">     1:  [ [ 1, 2, 3 ]      1:  [ [   -2.4,     1.2,   -0.2 ]
+           [ 4, 5, 6 ]            [    2.8,    -1.4,    0.4 ]
+           [ 7, 6, 0 ] ]          [ -0.73333, 0.53333, -0.2 ] ]
+         .                      .
+     
+         r 4 r 2 |  s 5         &amp;
+</pre>
+   <p class="noindent">The vertical bar <kbd>|</kbd> <dfn>concatenates</dfn> numbers, vectors, and
+matrices together.  Here we have used it to add a new row onto
+our matrix to make it square.
+
+   <p>We can multiply these two matrices in either order to get an identity.
+
+<pre class="smallexample">     1:  [ [ 1., 0., 0. ]      1:  [ [ 1., 0., 0. ]
+           [ 0., 1., 0. ]            [ 0., 1., 0. ]
+           [ 0., 0., 1. ] ]          [ 0., 0., 1. ] ]
+         .                         .
+     
+         M-&lt;RET&gt;  *                  U &lt;TAB&gt; *
+</pre>
+   <p><a name="index-Systems-of-linear-equations-39"></a><a name="index-Linear-equations_002c-systems-of-40"></a>Matrix inverses are related to systems of linear equations in algebra. 
+Suppose we had the following set of equations:
+
+<pre class="example">         a + 2b + 3c = 6
+        4a + 5b + 6c = 2
+        7a + 6b      = 3
+</pre>
+<p class="noindent">This can be cast into the matrix equation,
+
+<pre class="example">        [ [ 1, 2, 3 ]     [ [ a ]     [ [ 6 ]
+          [ 4, 5, 6 ]   *   [ b ]   =   [ 2 ]
+          [ 7, 6, 0 ] ]     [ c ] ]     [ 3 ] ]
+</pre>
+   <p>We can solve this system of equations by multiplying both sides by the
+inverse of the matrix.  Calc can do this all in one step:
+
+<pre class="smallexample">     2:  [6, 2, 3]          1:  [-12.6, 15.2, -3.93333]
+     1:  [ [ 1, 2, 3 ]          .
+           [ 4, 5, 6 ]
+           [ 7, 6, 0 ] ]
+         .
+     
+         [6,2,3] r 5            /
+</pre>
+   <p class="noindent">The result is the &lsquo;<samp><span class="samp">[a, b, c]</span></samp>&rsquo; vector that solves the equations. 
+(Dividing by a square matrix is equivalent to multiplying by its
+inverse.)
+
+   <p>Let's verify this solution:
+
+<pre class="smallexample">     2:  [ [ 1, 2, 3 ]                1:  [6., 2., 3.]
+           [ 4, 5, 6 ]                    .
+           [ 7, 6, 0 ] ]
+     1:  [-12.6, 15.2, -3.93333]
+         .
+     
+         r 5  &lt;TAB&gt;                         *
+</pre>
+   <p class="noindent">Note that we had to be careful about the order in which we multiplied
+the matrix and vector.  If we multiplied in the other order, Calc would
+assume the vector was a row vector in order to make the dimensions
+come out right, and the answer would be incorrect.  If you
+don't feel safe letting Calc take either interpretation of your
+vectors, use explicit
+<!-- @math{N\times1} -->
+Nx1
+or
+<!-- @math{1\times N} -->
+1xN
+matrices instead.  In this case, you would enter the original column
+vector as &lsquo;<samp><span class="samp">[[6], [2], [3]]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[6; 2; 3]</span></samp>&rsquo;.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Algebraic entry allows you to make
+vectors and matrices that include variables.  Solve the following
+system of equations to get expressions for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+in terms of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.
+
+<pre class="example">        x + a y = 6
+        x + b y = 10
+</pre>
+<p class="noindent">See <a href="Matrix-Answer-2.html#Matrix-Answer-2">2</a>. (&bull;)
+
+   <p><a name="index-Least_002dsquares-for-over_002ddetermined-systems-41"></a><a name="index-Over_002ddetermined-systems-of-equations-42"></a>(&bull;) <strong>Exercise 3.</strong>  A system of equations is &ldquo;over-determined&rdquo;
+if it has more equations than variables.  It is often the case that
+there are no values for the variables that will satisfy all the
+equations at once, but it is still useful to find a set of values
+which &ldquo;nearly&rdquo; satisfy all the equations.  In terms of matrix equations,
+you can't solve &lsquo;<samp><span class="samp">A X = B</span></samp>&rsquo; directly because the matrix &lsquo;<samp><span class="samp">A</span></samp>&rsquo;
+is not square for an over-determined system.  Matrix inversion works
+only for square matrices.  One common trick is to multiply both sides
+on the left by the transpose of &lsquo;<samp><span class="samp">A</span></samp>&rsquo;:
+&lsquo;<samp><span class="samp">trn(A)*A*X = trn(A)*B</span></samp>&rsquo;. 
+Now
+<!-- @math{A^T A} -->
+&lsquo;<samp><span class="samp">trn(A)*A</span></samp>&rsquo;
+is a square matrix so a solution is possible.  It turns out that the
+&lsquo;<samp><span class="samp">X</span></samp>&rsquo; vector you compute in this way will be a &ldquo;least-squares&rdquo;
+solution, which can be regarded as the &ldquo;closest&rdquo; solution to the set
+of equations.  Use Calc to solve the following over-determined
+system:
+
+<pre class="example">         a + 2b + 3c = 6
+        4a + 5b + 6c = 2
+        7a + 6b      = 3
+        2a + 4b + 6c = 11
+</pre>
+<p class="noindent">See <a href="Matrix-Answer-3.html#Matrix-Answer-3">3</a>. (&bull;)
+
+   </body></html>
+

@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>General Mode Commands - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="prev" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
+<link rel="next" href="Precision.html#Precision" title="Precision">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="General-Mode-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Precision.html#Precision">Precision</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 General Mode Commands</h3>
+
+<p class="noindent"><a name="index-m-m-386"></a><a name="index-calc_002dsave_002dmodes-387"></a><a name="index-Continuous-memory-388"></a><a name="index-Saving-mode-settings-389"></a><a name="index-Permanent-mode-settings-390"></a><a name="index-Calc-init-file_002c-mode-settings-391"></a>You can save all of the current mode settings in your Calc init file
+(the file given by the variable <code>calc-settings-file</code>, typically
+<samp><span class="file">~/.emacs.d/calc.el</span></samp>) with the <kbd>m m</kbd> (<code>calc-save-modes</code>)
+command.  This will cause Emacs to reestablish these modes each time
+it starts up.  The modes saved in the file include everything
+controlled by the <kbd>m</kbd> and <kbd>d</kbd> prefix keys, the current
+precision and binary word size, whether or not the trail is displayed,
+the current height of the Calc window, and more.  The current
+interface (used when you type <kbd>C-x * *</kbd>) is also saved.  If there
+were already saved mode settings in the file, they are replaced. 
+Otherwise, the new mode information is appended to the end of the
+file.
+
+   <p><a name="index-m-R-392"></a><a name="index-calc_002dmode_002drecord_002dmode-393"></a>The <kbd>m R</kbd> (<code>calc-mode-record-mode</code>) command tells Calc to
+record all the mode settings (as if by pressing <kbd>m m</kbd>) every
+time a mode setting changes.  If the modes are saved this way, then this
+&ldquo;automatic mode recording&rdquo; mode is also saved. 
+Type <kbd>m R</kbd> again to disable this method of recording the mode
+settings.  To turn it off permanently, the <kbd>m m</kbd> command will also be
+necessary.   (If Embedded mode is enabled, other options for recording
+the modes are available; see <a href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode">Mode Settings in Embedded Mode</a>.)
+
+   <p><a name="index-m-F-394"></a><a name="index-calc_002dsettings_002dfile_002dname-395"></a>The <kbd>m F</kbd> (<code>calc-settings-file-name</code>) command allows you to
+choose a different file than the current value of <code>calc-settings-file</code>
+for <kbd>m m</kbd>, <kbd>Z P</kbd>, and similar commands to save permanent information. 
+You are prompted for a file name.  All Calc modes are then reset to
+their default values, then settings from the file you named are loaded
+if this file exists, and this file becomes the one that Calc will
+use in the future for commands like <kbd>m m</kbd>.  The default settings
+file name is <samp><span class="file">~/.calc.el</span></samp>.  You can see the current file name by
+giving a blank response to the <kbd>m F</kbd> prompt.  See also the
+discussion of the <code>calc-settings-file</code> variable; see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>.
+
+   <p>If the file name you give is your user init file (typically
+<samp><span class="file">~/.emacs</span></samp>), <kbd>m F</kbd> will not automatically load the new file.  This
+is because your user init file may contain other things you don't want
+to reread.  You can give
+a numeric prefix argument of 1 to <kbd>m F</kbd> to force it to read the
+file no matter what.  Conversely, an argument of <i>-1</i> tells
+<kbd>m F</kbd> <em>not</em> to read the new file.  An argument of 2 or <i>-2</i>
+tells <kbd>m F</kbd> not to reset the modes to their defaults beforehand,
+which is useful if you intend your new file to have a variant of the
+modes present in the file you were using before.
+
+   <p><a name="index-m-x-396"></a><a name="index-calc_002dalways_002dload_002dextensions-397"></a>The <kbd>m x</kbd> (<code>calc-always-load-extensions</code>) command enables a mode
+in which the first use of Calc loads the entire program, including all
+extensions modules.  Otherwise, the extensions modules will not be loaded
+until the various advanced Calc features are used.  Since this mode only
+has effect when Calc is first loaded, <kbd>m x</kbd> is usually followed by
+<kbd>m m</kbd> to make the mode-setting permanent.  To load all of Calc just
+once, rather than always in the future, you can press <kbd>C-x * L</kbd>.
+
+   <p><a name="index-m-S-398"></a><a name="index-calc_002dshift_002dprefix-399"></a>The <kbd>m S</kbd> (<code>calc-shift-prefix</code>) command enables a mode in which
+all of Calc's letter prefix keys may be typed shifted as well as unshifted. 
+If you are typing, say, <kbd>a S</kbd> (<code>calc-solve-for</code>) quite often
+you might find it easier to turn this mode on so that you can type
+<kbd>A S</kbd> instead.  When this mode is enabled, the commands that used to
+be on those single shifted letters (e.g., <kbd>A</kbd> (<code>calc-abs</code>)) can
+now be invoked by pressing the shifted letter twice: <kbd>A A</kbd>.  Note
+that the <kbd>v</kbd> prefix key always works both shifted and unshifted, and
+the <kbd>z</kbd> and <kbd>Z</kbd> prefix keys are always distinct.  Also, the <kbd>h</kbd>
+prefix is not affected by this mode.  Press <kbd>m S</kbd> again to disable
+shifted-prefix mode.
+
+   </body></html>
+

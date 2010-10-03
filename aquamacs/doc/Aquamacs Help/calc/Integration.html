@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Integration - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Calculus.html#Calculus" title="Calculus">
+<link rel="prev" href="Differentiation.html#Differentiation" title="Differentiation">
+<link rel="next" href="Customizing-the-Integrator.html#Customizing-the-Integrator" title="Customizing the Integrator">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Integration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-the-Integrator.html#Customizing-the-Integrator">Customizing the Integrator</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Differentiation.html#Differentiation">Differentiation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calculus.html#Calculus">Calculus</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.5.2 Integration</h4>
+
+<p class="noindent"><a name="index-a-i-1737"></a><a name="index-calc_002dintegral-1738"></a><a name="index-integ-1739"></a>The <kbd>a i</kbd> (<code>calc-integral</code>) [<code>integ</code>] command computes the
+indefinite integral of the expression on the top of the stack with
+respect to a prompted-for variable.  The integrator is not guaranteed to
+work for all integrable functions, but it is able to integrate several
+large classes of formulas.  In particular, any polynomial or rational
+function (a polynomial divided by a polynomial) is acceptable. 
+(Rational functions don't have to be in explicit quotient form, however;
+<!-- @math{x/(1+x^{-2})} -->
+&lsquo;<samp><span class="samp">x/(1+x^-2)</span></samp>&rsquo;
+is not strictly a quotient of polynomials, but it is equivalent to
+&lsquo;<samp><span class="samp">x^3/(x^2+1)</span></samp>&rsquo;, which is.)  Also, square roots of terms involving
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; may appear in rational functions being
+integrated.  Finally, rational functions involving trigonometric or
+hyperbolic functions can be integrated.
+
+   <p>With an argument (<kbd>C-u a i</kbd>), this command will compute the definite
+integral of the expression on top of the stack.  In this case, the
+command will again prompt for an integration variable, then prompt for a
+lower limit and an upper limit.
+
+   <p>If you use the <code>integ</code> function directly in an algebraic formula,
+you can also write &lsquo;<samp><span class="samp">integ(f,x,v)</span></samp>&rsquo; which expresses the resulting
+indefinite integral in terms of variable <code>v</code> instead of <code>x</code>. 
+With four arguments, &lsquo;<samp><span class="samp">integ(f(x),x,a,b)</span></samp>&rsquo; represents a definite
+integral from <code>a</code> to <code>b</code>.
+
+   <p>Please note that the current implementation of Calc's integrator sometimes
+produces results that are significantly more complex than they need to
+be.  For example, the integral Calc finds for
+<!-- @math{1/(x+\sqrt{x^2+1})} -->
+&lsquo;<samp><span class="samp">1/(x+sqrt(x^2+1))</span></samp>&rsquo;
+is several times more complicated than the answer Mathematica
+returns for the same input, although the two forms are numerically
+equivalent.  Also, any indefinite integral should be considered to have
+an arbitrary constant of integration added to it, although Calc does not
+write an explicit constant of integration in its result.  For example,
+Calc's solution for
+<!-- @math{1/(1+\tan x)} -->
+&lsquo;<samp><span class="samp">1/(1+tan(x))</span></samp>&rsquo;
+differs from the solution given in the <em>CRC Math Tables</em> by a
+constant factor of
+<!-- @math{\pi i / 2} -->
+&lsquo;<samp><span class="samp">pi i / 2</span></samp>&rsquo;,
+due to a different choice of constant of integration.
+
+   <p>The Calculator remembers all the integrals it has done.  If conditions
+change in a way that would invalidate the old integrals, say, a switch
+from Degrees to Radians mode, then they will be thrown out.  If you
+suspect this is not happening when it should, use the
+<code>calc-flush-caches</code> command; see <a href="Caches.html#Caches">Caches</a>.
+
+   <p><a name="index-IntegLimit-1740"></a>Calc normally will pursue integration by substitution or integration by
+parts up to 3 nested times before abandoning an approach as fruitless. 
+If the integrator is taking too long, you can lower this limit by storing
+a number (like 2) in the variable <code>IntegLimit</code>.  (The <kbd>s I</kbd>
+command is a convenient way to edit <code>IntegLimit</code>.)  If this variable
+has no stored value or does not contain a nonnegative integer, a limit
+of 3 is used.  The lower this limit is, the greater the chance that Calc
+will be unable to integrate a function it could otherwise handle.  Raising
+this limit allows the Calculator to solve more integrals, though the time
+it takes may grow exponentially.  You can monitor the integrator's actions
+by creating an Emacs buffer called <code>*Trace*</code>.  If such a buffer
+exists, the <kbd>a i</kbd> command will write a log of its actions there.
+
+   <p>If you want to manipulate integrals in a purely symbolic way, you can
+set the integration nesting limit to 0 to prevent all but fast
+table-lookup solutions of integrals.  You might then wish to define
+rewrite rules for integration by parts, various kinds of substitutions,
+and so on.  See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.
+
+   </body></html>
+

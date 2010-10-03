@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Online Help - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
+<link rel="prev" href="Routine-Info.html#Routine-Info" title="Routine Info">
+<link rel="next" href="Completion.html#Completion" title="Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Online-Help"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion.html#Completion">Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Routine-Info.html#Routine-Info">Routine Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Online Help</h3>
+
+<p><a name="index-Online-Help-90"></a><a name="index-g_t_0040file_007bidlw_002dhelp_002etxt_007d-91"></a><a name="index-g_t_0040file_007bidlw_002dhelp_002eel_007d-92"></a><a name="index-Installing-online-help-93"></a><a name="index-Online-Help_002c-Installation-94"></a><a name="index-Speed_002c-of-online-help-95"></a><a name="index-XML-Help-Catalog-96"></a>
+For IDL system routines, extensive documentation is supplied with IDL. 
+IDLWAVE can access the HTML version of this documentation very quickly
+and accurately, based on the local context.  This can be <em>much</em>
+faster than using the IDL online help application, because IDLWAVE
+usually gets you to the right place in the documentation directly &mdash;
+e.g. a specific keyword of a routine &mdash; without any additional browsing
+and scrolling.
+
+   <p>For this online help to work, an HTML version of the IDL documentation
+is required.  Beginning with IDL 6.2, HTML documentation is distributed
+directly with IDL, along with an XML-based catalog of routine
+information.  By default, IDLWAVE automatically attempts to convert this
+XML catalog into a format Emacs can more easily understand, and caches
+this information in your <code>idlwave_config_directory</code>
+(<samp><span class="file">~/.idlwave/</span></samp>, by default).  It also re-scans the XML catalog if
+it is newer than the current cached version.  You can force rescan with
+the menu entry <code>IDLWAVE-&gt;Routine Info-&gt;Rescan XML Help Catalog</code>.
+
+   <p>Before IDL 6.2, the HTML help was not distributed with IDL, and was not
+part of the standalone IDLWAVE distribution, but had to be downloaded
+separately.  This is no longer necessary: all help and routine
+information is supplied with IDL versions 6.2 and later.
+
+   <p>There are a variety of options for displaying the HTML help: see below. 
+Help for routines without HTML documentation is also available, by using
+the routine documentation header and/or routine source.
+
+   <p><a name="index-M_002d_003f-97"></a>In any IDL program (or, as with most IDLWAVE commands, in the IDL
+Shell), press <kbd>M-?</kbd> (<code>idlwave-context-help</code>), or click with
+<kbd>S-Mouse-3</kbd> to access context sensitive online help.  The following
+locations are recognized context for help:
+
+   <p><a name="index-Context_002c-for-online-help-98"></a>
+   <p><table summary=""><tr align="left"><td valign="top" width="25%"><i>Routine names</i>
+</td><td valign="top" width="75%">The name of a routine (function, procedure, method). 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Keyword Parameters</i>
+</td><td valign="top" width="75%">A keyword parameter of a routine. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>System Variables</i>
+</td><td valign="top" width="75%">System variables like <code>!DPI</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>System Variable Tags</i>
+</td><td valign="top" width="75%">System variables tags like <code>!D.X_SIZE</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>IDL Statements</i>
+</td><td valign="top" width="75%">Statements like <code>PRO</code>, <code>REPEAT</code>, <code>COMPILE_OPT</code>, etc. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>IDL Controls</i>
+</td><td valign="top" width="75%">Control structures like <code>FOR</code>, <code>SWITCH</code>, etc. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Class names</i>
+</td><td valign="top" width="75%">A class name in an <code>OBJ_NEW</code> call. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Class Init Keywords</i>
+</td><td valign="top" width="75%">Beyond the class name in an <code>OBJ_NEW</code> call. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Executive Command</i>
+</td><td valign="top" width="75%">An executive command like <code>.RUN</code>.  Mostly useful in the shell. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Structure Tags</i>
+</td><td valign="top" width="75%">Structure tags like <code>state.xsize</code>
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Class Tags</i>
+</td><td valign="top" width="75%">Class tags like <code>self.value</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="25%"><i>Default</i>
+</td><td valign="top" width="75%">The routine that would be selected for routine info display.
+   <br></td></tr></table>
+
+   <p><a name="index-g_t_0040code_007bOBJ_005fNEW_007d_002c-special-online-help-99"></a>Note that the <code>OBJ_NEW</code> function is special in that the help
+displayed depends on the cursor position.  If the cursor is on the
+&lsquo;<samp><span class="samp">OBJ_NEW</span></samp>&rsquo;, this function is described.  If it is on the class
+name inside the quotes, the documentation for the class is pulled up. 
+If the cursor is <em>after</em> the class name, anywhere in the argument
+list, the documentation for the corresponding <code>Init</code> method and
+its keywords is targeted.
+
+   <p>Apart from an IDLWAVE buffer or shell, there are two more places from
+which online help can be accessed.
+
+     <ul>
+<li>Online help for routines and keywords can be accessed through the
+Routine Info display.  Click with <kbd>Mouse-3</kbd> on an item to see the
+corresponding help (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>). 
+<li>When using completion and Emacs pops up a <samp><span class="file">*Completions*</span></samp> buffer
+with possible completions, clicking with <kbd>Mouse-3</kbd> on a completion
+item invokes help on that item (see <a href="Completion.html#Completion">Completion</a>).  Items for which
+help is available in the online system documentation (vs. just the
+program source itself) will be emphasized (e.g. colored blue). 
+</ul>
+   In both cases, a blue face indicates that the item is documented in
+the IDL manual, but an attempt will be made to visit non-blue items
+directly in the originating source file.
+
+<ul class="menu">
+<li><a accesskey="1" href="Help-with-HTML-Documentation.html#Help-with-HTML-Documentation">Help with HTML Documentation</a>
+<li><a accesskey="2" href="Help-with-Source.html#Help-with-Source">Help with Source</a>
+</ul>
+
+   </body></html>
+

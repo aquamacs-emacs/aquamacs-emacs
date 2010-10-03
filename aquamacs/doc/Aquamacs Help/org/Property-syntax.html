@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Property syntax - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Properties-and-Columns.html#Properties-and-Columns" title="Properties and Columns">
+<link rel="prev" href="Properties-and-Columns.html#Properties-and-Columns" title="Properties and Columns">
+<link rel="next" href="Special-properties.html#Special-properties" title="Special properties">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Property-syntax"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Special-properties.html#Special-properties">Special properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>
+<hr>
+</div>
+
+<h3 class="section">7.1 Property syntax</h3>
+
+<p><a name="index-property-syntax-477"></a><a name="index-drawer_002c-for-properties-478"></a>
+Properties are key-value pairs.  They need to be inserted into a special
+drawer (see <a href="Drawers.html#Drawers">Drawers</a>) with the name <code>PROPERTIES</code>.  Each property
+is specified on a single line, with the key (surrounded by colons)
+first, and the value after it.  Here is an example:
+
+<pre class="example">     * CD collection
+     ** Classic
+     *** Goldberg Variations
+         :PROPERTIES:
+         :Title:     Goldberg Variations
+         :Composer:  J.S. Bach
+         :Artist:    Glen Gould
+         :Publisher: Deutsche Grammophon
+         :NDisks:    1
+         :END:
+</pre>
+   <p>You may define the allowed values for a particular property &lsquo;<samp><span class="samp">:Xyz:</span></samp>&rsquo;
+by setting a property &lsquo;<samp><span class="samp">:Xyz_ALL:</span></samp>&rsquo;.  This special property is
+<em>inherited</em>, so if you set it in a level 1 entry, it will apply to
+the entire tree.  When allowed values are defined, setting the
+corresponding property becomes easier and is less prone to typing
+errors.  For the example with the CD collection, we can predefine
+publishers and the number of disks in a box like this:
+
+<pre class="example">     * CD collection
+       :PROPERTIES:
+       :NDisks_ALL:  1 2 3 4
+       :Publisher_ALL: "Deutsche Grammophon" Philips EMI
+       :END:
+</pre>
+   <p>If you want to set properties that can be inherited by any entry in a
+file, use a line like
+<a name="index-property_002c-_005fALL-479"></a><a name="index-g_t_0023_002bPROPERTY-480"></a>
+<pre class="example">     #+PROPERTY: NDisks_ALL 1 2 3 4
+</pre>
+   <p><a name="index-org_002dglobal_002dproperties-481"></a>Property values set with the global variable
+<code>org-global-properties</code> can be inherited by all entries in all
+Org files.
+
+<p class="noindent">The following commands help to work with properties:
+
+     
+<a name="index-M_002d_0040key_007bTAB_007d-482"></a>
+<dl><dt><kbd>M-&lt;TAB&gt;</kbd><dd>After an initial colon in a line, complete property keys.  All keys used
+in the current file will be offered as possible completions. 
+<a name="index-C_002dc-C_002dx-p-483"></a><br><dt><kbd>C-c C-x p</kbd><dd>Set a property.  This prompts for a property name and a value.  If
+necessary, the property drawer is created as well. 
+<br><dt><kbd>M-x org-insert-property-drawer</kbd><dd>Insert a property drawer into the current entry.  The drawer will be
+inserted early in the entry, but after the lines with planning
+information like deadlines. 
+<a name="index-C_002dc-C_002dc-484"></a><br><dt><kbd>C-c C-c</kbd><dd>With the cursor in a property drawer, this executes property commands. 
+<br><dt><kbd>C-c C-c s</kbd><dd>Set a property in the current entry.  Both the property and the value
+can be inserted using completion. 
+<a name="index-S_002d_0040key_007bright_007d-485"></a><a name="index-S_002d_0040key_007bleft_007d-486"></a><br><dt><kbd>S-&lt;left&gt;/&lt;right&gt;</kbd><dd>Switch property at point to the next/previous allowed value. 
+<br><dt><kbd>C-c C-c d</kbd><dd>Remove a property from the current entry. 
+<br><dt><kbd>C-c C-c D</kbd><dd>Globally remove a property, from all entries in the current file. 
+<br><dt><kbd>C-c C-c c</kbd><dd>Compute the property at point, using the operator and scope from the
+nearest column format definition. 
+</dl>
+
+   </body></html>
+

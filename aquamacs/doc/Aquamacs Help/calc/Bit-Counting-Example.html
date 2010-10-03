@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Bit Counting Example - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
+<link rel="prev" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
+<link rel="next" href="Sine-Example.html#Sine-Example" title="Sine Example">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Bit-Counting-Example"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sine-Example.html#Sine-Example">Sine Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.5.1 Bit-Counting</h5>
+
+<p class="noindent"><a name="index-bcount-2335"></a>Calc does not include a built-in function for counting the number of
+&ldquo;one&rdquo; bits in a binary integer.  It's easy to invent one using <kbd>b u</kbd>
+to convert the integer to a set, and <kbd>V #</kbd> to count the elements of
+that set; let's write a function that counts the bits without having to
+create an intermediate set.
+
+<pre class="smallexample">     (defmath bcount ((natnum n))
+       (interactive 1 "bcnt")
+       (let ((count 0))
+         (while (&gt; n 0)
+           (if (oddp n)
+               (setq count (1+ count)))
+           (setq n (lsh n -1)))
+         count))
+</pre>
+   <p class="noindent">When this is expanded by <code>defmath</code>, it will become the following
+Emacs Lisp function:
+
+<pre class="smallexample">     (defun calcFunc-bcount (n)
+       (setq n (math-check-natnum n))
+       (let ((count 0))
+         (while (math-posp n)
+           (if (math-oddp n)
+               (setq count (math-add count 1)))
+           (setq n (calcFunc-lsh n -1)))
+         count))
+</pre>
+   <p>If the input numbers are large, this function involves a fair amount
+of arithmetic.  A binary right shift is essentially a division by two;
+recall that Calc stores integers in decimal form so bit shifts must
+involve actual division.
+
+   <p>To gain a bit more efficiency, we could divide the integer into
+<var>n</var>-bit chunks, each of which can be handled quickly because
+they fit into Lisp integers.  It turns out that Calc's arithmetic
+routines are especially fast when dividing by an integer less than
+1000, so we can set <var>n = 9</var> bits and use repeated division by 512:
+
+<pre class="smallexample">     (defmath bcount ((natnum n))
+       (interactive 1 "bcnt")
+       (let ((count 0))
+         (while (not (fixnump n))
+           (let ((qr (idivmod n 512)))
+             (setq count (+ count (bcount-fixnum (cdr qr)))
+                   n (car qr))))
+         (+ count (bcount-fixnum n))))
+     
+     (defun bcount-fixnum (n)
+       (let ((count 0))
+         (while (&gt; n 0)
+           (setq count (+ count (logand n 1))
+                 n (lsh n -1)))
+         count))
+</pre>
+   <p class="noindent">Note that the second function uses <code>defun</code>, not <code>defmath</code>. 
+Because this function deals only with native Lisp integers (&ldquo;fixnums&rdquo;),
+it can use the actual Emacs <code>+</code> and related functions rather
+than the slower but more general Calc equivalents which <code>defmath</code>
+uses.
+
+   <p>The <code>idivmod</code> function does an integer division, returning both
+the quotient and the remainder at once.  Again, note that while it
+might seem that &lsquo;<samp><span class="samp">(logand n 511)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">(lsh n -9)</span></samp>&rsquo; are
+more efficient ways to split off the bottom nine bits of <code>n</code>,
+actually they are less efficient because each operation is really
+a division by 512 in disguise; <code>idivmod</code> allows us to do the
+same thing with a single division by 512.
+
+   </body></html>
+

@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Cooperation - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Interaction.html#Interaction" title="Interaction">
+<link rel="prev" href="Interaction.html#Interaction" title="Interaction">
+<link rel="next" href="Conflicts.html#Conflicts" title="Conflicts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Cooperation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conflicts.html#Conflicts">Conflicts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interaction.html#Interaction">Interaction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Interaction.html#Interaction">Interaction</a>
+<hr>
+</div>
+
+<h4 class="subsection">14.8.1 Packages that Org cooperates with</h4>
+
+     
+<a name="index-g_t_0040file_007bcalc_002eel_007d-1375"></a>
+<a name="index-Gillespie_002c-Dave-1376"></a>
+<dl><dt><samp><span class="file">calc.el</span></samp> by Dave Gillespie<dd>Org uses the Calc package for implementing spreadsheet
+functionality in its tables (see <a href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>).  Org
+checks for the availability of Calc by looking for the function
+<code>calc-eval</code> which will have been autoloaded during setup if Calc has
+been installed properly.  As of Emacs 22, Calc is part of the Emacs
+distribution.  Another possibility for interaction between the two
+packages is using Calc for embedded calculations. See <a href="../Calc/Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>. 
+<br><dt><samp><span class="file">constants.el</span></samp> by Carsten Dominik<dd><a name="index-g_t_0040file_007bconstants_002eel_007d-1377"></a><a name="index-Dominik_002c-Carsten-1378"></a><a name="index-org_002dtable_002dformula_002dconstants-1379"></a>In a table formula (see <a href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>), it is possible to use
+names for natural constants or units.  Instead of defining your own
+constants in the variable <code>org-table-formula-constants</code>, install
+the <samp><span class="file">constants</span></samp> package which defines a large number of constants
+and units, and lets you use unit prefixes like &lsquo;<samp><span class="samp">M</span></samp>&rsquo; for
+&lsquo;<samp><span class="samp">Mega</span></samp>&rsquo;, etc.  You will need version 2.0 of this package, available
+at <a href="http://www.astro.uva.nl/~dominik/Tools">http://www.astro.uva.nl/~dominik/Tools</a>. Org checks for
+the function <code>constants-get</code>, which has to be autoloaded in your
+setup.  See the installation instructions in the file
+<samp><span class="file">constants.el</span></samp>. 
+<br><dt><samp><span class="file">cdlatex.el</span></samp> by Carsten Dominik<dd><a name="index-g_t_0040file_007bcdlatex_002eel_007d-1380"></a><a name="index-Dominik_002c-Carsten-1381"></a>Org mode can make use of the CDLaTeX package to efficiently enter
+LaTeX fragments into Org files.  See <a href="CDLaTeX-mode.html#CDLaTeX-mode">CDLaTeX mode</a>. 
+<br><dt><samp><span class="file">imenu.el</span></samp> by Ake Stenhoff and Lars Lindberg<dd><a name="index-g_t_0040file_007bimenu_002eel_007d-1382"></a>Imenu allows menu access to an index of items in a file.  Org mode
+supports Imenu&mdash;all you need to do to get the index is the following:
+     <pre class="lisp">          (add-hook 'org-mode-hook
+                    (lambda () (imenu-add-to-menubar "Imenu")))
+</pre>
+     <p><a name="index-org_002dimenu_002ddepth-1383"></a>By default the index is two levels deep&mdash;you can modify the depth using
+the option <code>org-imenu-depth</code>. 
+<br><dt><samp><span class="file">remember.el</span></samp> by John Wiegley<dd><a name="index-g_t_0040file_007bremember_002eel_007d-1384"></a><a name="index-Wiegley_002c-John-1385"></a>Org cooperates with remember, see <a href="Remember.html#Remember">Remember</a>. 
+<samp><span class="file">Remember.el</span></samp> is not part of Emacs, find it on the web. 
+<br><dt><samp><span class="file">speedbar.el</span></samp> by Eric M. Ludlam<dd><a name="index-g_t_0040file_007bspeedbar_002eel_007d-1386"></a><a name="index-Ludlam_002c-Eric-M_002e-1387"></a>Speedbar is a package that creates a special frame displaying files and
+index items in files.  Org mode supports Speedbar and allows you to
+drill into Org files directly from the Speedbar.  It also allows you to
+restrict the scope of agenda commands to a file or a subtree by using
+the command <kbd>&lt;</kbd> in the Speedbar frame. 
+<a name="index-g_t_0040file_007btable_002eel_007d-1388"></a><br><dt><samp><span class="file">table.el</span></samp> by Takaaki Ota<dd><a name="index-C_002dc-C_002dc-1389"></a><a name="index-table-editor_002c-_0040file_007btable_002eel_007d-1390"></a><a name="index-g_t_0040file_007btable_002eel_007d-1391"></a><a name="index-Ota_002c-Takaaki-1392"></a>
+Complex ASCII tables with automatic line wrapping, column- and
+row-spanning, and alignment can be created using the Emacs table
+package by Takaaki Ota (<a href="http://sourceforge.net/projects/table">http://sourceforge.net/projects/table</a>,
+and also part of Emacs 22). 
+When &lt;TAB&gt; or <kbd>C-c C-c</kbd> is pressed in such a table, Org mode
+will call <samp><span class="command">table-recognize-table</span></samp> and move the cursor into the
+table.  Inside a table, the keymap of Org mode is inactive.  In order
+to execute Org mode-related commands, leave the table.
+
+          
+<a name="index-C_002dc-C_002dc-1393"></a>
+<dl><dt><kbd>C-c C-c</kbd><dd>Recognize <samp><span class="file">table.el</span></samp> table.  Works when the cursor is in a
+table.el table. 
+<a name="index-C_002dc-_007e-1394"></a><br><dt><kbd>C-c ~</kbd><dd>Insert a <samp><span class="file">table.el</span></samp> table.  If there is already a table at point, this
+command converts it between the <samp><span class="file">table.el</span></samp> format and the Org-mode
+format.  See the documentation string of the command
+<code>org-convert-table</code> for the restrictions under which this is
+possible. 
+</dl>
+     <samp><span class="file">table.el</span></samp> is part of Emacs 22. 
+<br><dt><samp><span class="file">footnote.el</span></samp> by Steven L. Baur<dd><a name="index-g_t_0040file_007bfootnote_002eel_007d-1395"></a><a name="index-Baur_002c-Steven-L_002e-1396"></a>Org mode recognizes numerical footnotes as provided by this package. 
+However, Org mode also has its own footnote support (see <a href="Footnotes.html#Footnotes">Footnotes</a>),
+which makes using <samp><span class="file">footnote.el</span></samp> unnecessary. 
+</dl>
+
+   </body></html>
+

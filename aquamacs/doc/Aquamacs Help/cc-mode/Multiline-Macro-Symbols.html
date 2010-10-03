@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Multiline Macro Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="Literal-Symbols.html#Literal-Symbols" title="Literal Symbols">
+<link rel="next" href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols" title="Objective-C Method Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multiline-Macro-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Objective_002dC-Method-Symbols.html#Objective_002dC-Method-Symbols">Objective-C Method Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.9 Multiline Macro Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a name="index-multiline-macros-463"></a><a name="index-syntactic-whitespace-464"></a><a name="index-cpp_002ddefine_002dintro-465"></a><a name="index-cpp_002dmacro_002dcont-466"></a>Multiline preprocessor macro definitions are normally handled just like
+other code, i.e. the lines inside them are indented according to the
+syntactic analysis of the preceding lines inside the macro.  The first
+line inside a macro definition (i.e. the line after the starting line of
+the cpp directive itself) gets <code>cpp-define-intro</code>.  In this example:
+
+<pre class="example">      1: #define LIST_LOOP(cons, listp)                         \
+      2:   for (cons = listp; !NILP (cons); cons = XCDR (cons)) \
+      3:     if (!CONSP (cons))                                 \
+      4:       signal_error ("Invalid list format", listp);     \
+      5:     else
+</pre>
+   <p class="noindent">line 1 is given the syntactic symbol <code>cpp-macro</code>.  The first line
+of a cpp directive is always given that symbol.  Line 2 is given
+<code>cpp-define-intro</code>, so that you can give the macro body as a whole
+some extra indentation.  Lines 3 through 5 are then analyzed as normal
+code, i.e. <code>substatement</code> on lines 3 and 4, and <code>else-clause</code>
+on line 5.
+
+   <p>The syntactic analysis inside macros can be turned off with
+<code>c-syntactic-indentation-in-macros</code> (see <a href="Custom-Macros.html#Custom-Macros">Custom Macros</a>).  In
+that case, lines 2 through 5 would all be given <code>cpp-macro-cont</code>
+with an anchor position pointing to the <code>#</code> which starts the cpp
+directive<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p>See <a href="Custom-Macros.html#Custom-Macros">Custom Macros</a>, for more info about the treatment of macros.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This is how CC Mode 5.28 and earlier analyzed
+macros.</p>
+
+   <hr></div>
+
+   </body></html>
+

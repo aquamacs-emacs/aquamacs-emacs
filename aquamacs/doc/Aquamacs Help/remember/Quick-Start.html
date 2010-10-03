@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Quick Start - Remember Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Remember Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Implementation.html#Implementation" title="Implementation">
+<link rel="next" href="Function-Reference.html#Function-Reference" title="Function Reference">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Remember Mode, version 1.9
+
+Copyright (C) 2001, 2004, 2005, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Quick-Start"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Reference.html#Function-Reference">Function Reference</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Implementation.html#Implementation">Implementation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">5 Quick Start</h2>
+
+     <ul>
+<li>Load <samp><span class="file">remember.el</span></samp>.
+
+     <li>Type <kbd>M-x remember</kbd>. The &lsquo;<samp><span class="samp">*Remember*</span></samp>&rsquo; buffer should be
+displayed.
+
+     <li>Type in what you want to remember. The first line will be treated as
+the headline, and the rest of the buffer will contain the body of the
+note.
+
+     <li>Type <kbd>C-c C-c</kbd> (<code>remember-finalize</code>) to save the note and close
+the &lsquo;<samp><span class="samp">*Remember*</span></samp>&rsquo; buffer. 
+</ul>
+
+   <p>By default, <code>remember-finalize</code> saves the note in <samp><span class="file">~/.notes</span></samp>. 
+You can edit it now to see the remembered and timestamped note. You
+can edit this file however you want. New entries will always be added
+to the end.
+
+   <p>To remember a region of text, use the universal prefix. <kbd>C-u M-x
+remember</kbd> displays a &lsquo;<samp><span class="samp">*Remember*</span></samp>&rsquo; buffer with the region as the
+initial contents.
+
+   <p>As a simple beginning, you can start by using the Text File backend,
+keeping your <samp><span class="file">~/.notes</span></samp> file in outline-mode format, with a final
+entry called &lsquo;<samp><span class="samp">* Raw data</span></samp>&rsquo;. Remembered data will be added to the
+end of the file. Every so often, you can move the data that gets
+appended there into other files, or reorganize your document.
+
+   <p>You can also store remembered data in other backends. 
+(see <a href="Backends.html#Backends">Backends</a>)
+
+   <p>Here is one way to map the remember functions in your <samp><span class="file">.emacs</span></samp> to
+very accessible keystrokes facilities using the mode:
+
+<pre class="lisp">     (autoload 'remember ``remember'' nil t)
+     (autoload 'remember-region ``remember'' nil t)
+     
+     (define-key global-map (kbd "&lt;f9&gt; r") 'remember)
+     (define-key global-map (kbd "&lt;f9&gt; R") 'remember-region)
+</pre>
+   <p>By default, remember uses the first annotation returned by
+<code>remember-annotation-functions</code>. To include all of the annotations,
+set <code>remember-run-all-annotation-functions-flag</code> to non-nil.
+
+<div class="defun">
+&mdash; User Option: <b>remember-run-all-annotation-functions-flag</b><var><a name="index-remember_002drun_002dall_002dannotation_002dfunctions_002dflag-1"></a></var><br>
+<blockquote><p>Non-nil means use all annotations returned by
+<code>remember-annotation-functions</code>. 
+</p></blockquote></div>
+
+   <p>You can write custom functions that use a different set of
+remember-annotation-functions. For example:
+
+<pre class="lisp">     (defun my/remember-with-filename ()
+      "Always use the filename."
+      (interactive)
+      (let ((remember-annotation-functions '(buffer-file-name)))
+       (call-interactively 'remember)))
+</pre>
+   </body></html>
+

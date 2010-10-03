@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Article Button Levels - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Article-Treatment.html#Article-Treatment" title="Article Treatment">
+<link rel="prev" href="Article-Buttons.html#Article-Buttons" title="Article Buttons">
+<link rel="next" href="Article-Date.html#Article-Date" title="Article Date">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Article-Button-Levels"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Article-Date.html#Article-Date">Article Date</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Article-Buttons.html#Article-Buttons">Article Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Article-Treatment.html#Article-Treatment">Article Treatment</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.18.7 Article button levels</h4>
+
+<p><a name="index-button-levels-1462"></a>The higher the value of the variables <code>gnus-button-</code><var>*</var><code>-level</code>,
+the more buttons will appear.  If the level is zero, no corresponding
+buttons are displayed.  With the default value (which is 5) you should
+already see quite a lot of buttons.  With higher levels, you will see
+more buttons, but you may also get more false positives.  To avoid them,
+you can set the variables <code>gnus-button-</code><var>*</var><code>-level</code> local to
+specific groups (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).  Here's an example for the
+variable <code>gnus-parameters</code>:
+
+<pre class="lisp">     ;; <span class="roman">increase </span><code>gnus-button-*-level</code><span class="roman"> in some groups:</span>
+     (setq gnus-parameters
+           '(("\\&lt;\\(emacs\\|gnus\\)\\&gt;" (gnus-button-emacs-level 10))
+             ("\\&lt;unix\\&gt;"               (gnus-button-man-level 10))
+             ("\\&lt;tex\\&gt;"                (gnus-button-tex-level 10))))
+</pre>
+     <dl>
+<dt><code>gnus-button-browse-level</code><dd><a name="index-gnus_002dbutton_002dbrowse_002dlevel-1463"></a>Controls the display of references to message IDs, mail addresses and
+news URLs.  Related variables and functions include
+<code>gnus-button-url-regexp</code>, <code>browse-url</code>, and
+<code>browse-url-browser-function</code>.
+
+     <br><dt><code>gnus-button-emacs-level</code><dd><a name="index-gnus_002dbutton_002demacs_002dlevel-1464"></a>Controls the display of Emacs or Gnus references.  Related functions are
+<code>gnus-button-handle-custom</code>,
+<code>gnus-button-handle-describe-function</code>,
+<code>gnus-button-handle-describe-variable</code>,
+<code>gnus-button-handle-symbol</code>,
+<code>gnus-button-handle-describe-key</code>,
+<code>gnus-button-handle-apropos</code>,
+<code>gnus-button-handle-apropos-command</code>,
+<code>gnus-button-handle-apropos-variable</code>,
+<code>gnus-button-handle-apropos-documentation</code>, and
+<code>gnus-button-handle-library</code>.
+
+     <br><dt><code>gnus-button-man-level</code><dd><a name="index-gnus_002dbutton_002dman_002dlevel-1465"></a>Controls the display of references to (Unix) man pages. 
+See <code>gnus-button-man-handler</code>.
+
+     <br><dt><code>gnus-button-message-level</code><dd><a name="index-gnus_002dbutton_002dmessage_002dlevel-1466"></a>Controls the display of message IDs, mail addresses and news URLs. 
+Related variables and functions include
+<code>gnus-button-mid-or-mail-regexp</code>,
+<code>gnus-button-prefer-mid-or-mail</code>,
+<code>gnus-button-mid-or-mail-heuristic</code>, and
+<code>gnus-button-mid-or-mail-heuristic-alist</code>.
+
+     <br><dt><code>gnus-button-tex-level</code><dd><a name="index-gnus_002dbutton_002dtex_002dlevel-1467"></a>Controls the display of references to TeX or LaTeX stuff, e.g. for CTAN
+URLs.  See the variables <code>gnus-ctan-url</code>,
+<code>gnus-button-ctan-handler</code>,
+<code>gnus-button-ctan-directory-regexp</code>, and
+<code>gnus-button-handle-ctan-bogus-regexp</code>.
+
+   </dl>
+
+   </body></html>
+

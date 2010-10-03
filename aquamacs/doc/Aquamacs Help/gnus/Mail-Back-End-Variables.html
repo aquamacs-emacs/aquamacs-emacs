@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Mail Back End Variables - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Mail-Sources.html#Mail-Sources" title="Mail Sources">
+<link rel="next" href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" title="Fancy Mail Splitting">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mail-Back-End-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Sources.html#Mail-Sources">Mail Sources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.5 Mail Back End Variables</h4>
+
+<p>These variables are (for the most part) pertinent to all the various
+mail back ends.
+
+     
+<a name="index-nnmail_002dread_002dincoming_002dhook-2154"></a>
+<dl><dt><code>nnmail-read-incoming-hook</code><dd>The mail back ends all call this hook after reading new mail.  You can
+use this hook to notify any mail watch programs, if you want to.
+
+     <p><a name="index-nnmail_002dsplit_002dhook-2155"></a><br><dt><code>nnmail-split-hook</code><dd><a name="index-gnus_002darticle_002ddecode_002dencoded_002dwords-2156"></a><a name="index-RFC-1522-decoding-2157"></a><a name="index-RFC-2047-decoding-2158"></a>Hook run in the buffer where the mail headers of each message is kept
+just before the splitting based on these headers is done.  The hook is
+free to modify the buffer contents in any way it sees fit&mdash;the buffer
+is discarded after the splitting has been done, and no changes performed
+in the buffer will show up in any files. 
+<code>gnus-article-decode-encoded-words</code> is one likely function to add
+to this hook.
+
+     <p><a name="index-nnmail_002dpre_002dget_002dnew_002dmail_002dhook-2159"></a><a name="index-nnmail_002dpost_002dget_002dnew_002dmail_002dhook-2160"></a><br><dt><code>nnmail-pre-get-new-mail-hook</code><dt><code>nnmail-post-get-new-mail-hook</code><dd>These are two useful hooks executed when treating new incoming
+mail&mdash;<code>nnmail-pre-get-new-mail-hook</code> (is called just before
+starting to handle the new mail) and
+<code>nnmail-post-get-new-mail-hook</code> (is called when the mail handling
+is done).  Here's and example of using these two hooks to change the
+default file modes the new mail files get:
+
+     <pre class="lisp">          (add-hook 'nnmail-pre-get-new-mail-hook
+                    (lambda () (set-default-file-modes 511)))
+          
+          (add-hook 'nnmail-post-get-new-mail-hook
+                    (lambda () (set-default-file-modes 551)))
+</pre>
+     <br><dt><code>nnmail-use-long-file-names</code><dd><a name="index-nnmail_002duse_002dlong_002dfile_002dnames-2161"></a>If non-<code>nil</code>, the mail back ends will use long file and directory
+names.  Groups like &lsquo;<samp><span class="samp">mail.misc</span></samp>&rsquo; will end up in directories
+(assuming use of <code>nnml</code> back end) or files (assuming use of
+<code>nnfolder</code> back end) like <samp><span class="file">mail.misc</span></samp>.  If it is <code>nil</code>,
+the same group will end up in <samp><span class="file">mail/misc</span></samp>.
+
+     <br><dt><code>nnmail-delete-file-function</code><dd><a name="index-nnmail_002ddelete_002dfile_002dfunction-2162"></a><a name="index-delete_002dfile-2163"></a>Function called to delete files.  It is <code>delete-file</code> by default.
+
+     <br><dt><code>nnmail-cache-accepted-message-ids</code><dd><a name="index-nnmail_002dcache_002daccepted_002dmessage_002dids-2164"></a>If non-<code>nil</code>, put the <code>Message-ID</code>s of articles imported into
+the back end (via <code>Gcc</code>, for instance) into the mail duplication
+discovery cache.  The default is <code>nil</code>.
+
+     <br><dt><code>nnmail-cache-ignore-groups</code><dd><a name="index-nnmail_002dcache_002dignore_002dgroups-2165"></a>This can be a regular expression or a list of regular expressions. 
+Group names that match any of the regular expressions will never be
+recorded in the <code>Message-ID</code> cache.
+
+     <p>This can be useful, for example, when using Fancy Splitting
+(see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>) together with the function
+<code>nnmail-split-fancy-with-parent</code>.
+
+   </dl>
+
+   </body></html>
+

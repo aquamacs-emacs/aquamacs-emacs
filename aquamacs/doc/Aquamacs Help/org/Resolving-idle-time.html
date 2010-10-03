@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Resolving idle time - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Clocking-work-time.html#Clocking-work-time" title="Clocking work time">
+<link rel="next" href="Effort-estimates.html#Effort-estimates" title="Effort estimates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Resolving-idle-time"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Effort-estimates.html#Effort-estimates">Effort estimates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clocking-work-time.html#Clocking-work-time">Clocking work time</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.5 Resolving idle time</h3>
+
+<p><a name="index-resolve-idle-time-637"></a>
+<a name="index-idle_002c-resolve_002c-dangling-638"></a>If you clock in on a work item, and then walk away from your
+computer&mdash;perhaps to take a phone call&mdash;you often need to &ldquo;resolve&rdquo; the
+time you were away by either subtracting it from the current clock, or
+applying it to another one.
+
+   <p><a name="index-org_002dclock_002didle_002dtime-639"></a>By customizing the variable <code>org-clock-idle-time</code> to some integer, such
+as 10 or 15, Emacs can alert you when you get back to your computer after
+being idle for that many minutes<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, and ask what you want to do with the idle time.  There will be a
+question waiting for you when you get back, indicating how much idle time has
+passed (constantly updated with the current amount), as well as a set of
+choices to correct the discrepancy:
+
+     <dl>
+<dt><kbd>k</kbd><dd>To keep some or all of the minutes and stay clocked in, press <kbd>k</kbd>.  Org
+will ask how many of the minutes to keep.  Press &lt;RET&gt; to keep them all,
+effectively changing nothing, or enter a number to keep that many minutes. 
+<br><dt><kbd>K</kbd><dd>If you use the shift key and press <kbd>K</kbd>, it will keep however many minutes
+you request and then immediately clock out of that task.  If you keep all of
+the minutes, this is the same as just clocking out of the current task. 
+<br><dt><kbd>s</kbd><dd>To keep none of the minutes, use <kbd>s</kbd> to subtract all the away time from
+the clock, and then check back in from the moment you returned. 
+<br><dt><kbd>S</kbd><dd>To keep none of the minutes and just clock out at the start of the away time,
+use the shift key and press <kbd>S</kbd>.  Remember that using shift will always
+leave you clocked out, no matter which option you choose. 
+<br><dt><kbd>C</kbd><dd>To cancel the clock altogether, use <kbd>C</kbd>.  Note that if instead of
+cancelling you subtract the away time, and the resulting clock amount is less
+than a minute, the clock will still be cancelled rather than clutter up the
+log with an empty entry. 
+</dl>
+
+   <p>What if you subtracted those away minutes from the current clock, and now
+want to apply them to a new clock?  Simply clock in to any task immediately
+after the subtraction.  Org will notice that you have subtracted time &ldquo;on
+the books&rdquo;, so to speak, and will ask if you want to apply those minutes to
+the next task you clock in on.
+
+   <p>There is one other instance when this clock resolution magic occurs.  Say you
+were clocked in and hacking away, and suddenly your cat chased a mouse who
+scared a hamster that crashed into your UPS's power button!  You suddenly
+lose all your buffers, but thanks to auto-save you still have your recent Org
+mode changes, including your last clock in.
+
+   <p>If you restart Emacs and clock into any task, Org will notice that you have a
+dangling clock which was never clocked out from your last session.  Using
+that clock's starting time as the beginning of the unaccounted-for period,
+Org will ask how you want to resolve that time.  The logic and behavior is
+identical to dealing with away time due to idleness, it's just happening due
+to a recovery event rather than a set amount of idle time.
+
+   <p>You can also check all the files visited by your Org agenda for dangling
+clocks at any time using <kbd>M-x org-resolve-clocks</kbd>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> On computers using Mac OS X,
+idleness is based on actual user idleness, not just Emacs' idle time.  For
+X11, you can install a utility program <samp><span class="file">x11idle.c</span></samp>, available in the
+UTILITIES directory of the Org git distribution, to get the same general
+treatment of idleness.  On other systems, idle time refers to Emacs idle time
+only.</p>
+
+   <hr></div>
+
+   </body></html>
+

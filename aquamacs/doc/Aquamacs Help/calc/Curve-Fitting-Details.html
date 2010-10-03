@@ -1,0 +1,359 @@
+<html lang="en">
+<head>
+<title>Curve Fitting Details - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models" title="Standard Nonlinear Models">
+<link rel="next" href="Interpolation.html#Interpolation" title="Interpolation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Curve-Fitting-Details"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interpolation.html#Interpolation">Interpolation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models">Standard Nonlinear Models</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.5 Curve Fitting Details</h4>
+
+<p class="noindent">Calc's internal least-squares fitter can only handle multilinear
+models.  More precisely, it can handle any model of the form
+&lsquo;<samp><span class="samp">a f(x,y,z) + b g(x,y,z) + c h(x,y,z)</span></samp>&rsquo;, where &lsquo;<samp><span class="samp">a,b,c</span></samp>&rsquo;
+are the parameters and &lsquo;<samp><span class="samp">x,y,z</span></samp>&rsquo; are the independent variables
+(of course there can be any number of each, not just three).
+
+   <p>In a simple multilinear or polynomial fit, it is easy to see how
+to convert the model into this form.  For example, if the model
+is &lsquo;<samp><span class="samp">a + b x + c x^2</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">f(x) = 1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">g(x) = x</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">h(x) = x^2</span></samp>&rsquo; are suitable functions.
+
+   <p>For most other models, Calc uses a variety of algebraic manipulations
+to try to put the problem into the form
+
+<pre class="smallexample">     Y(x,y,z) = A(a,b,c) F(x,y,z) + B(a,b,c) G(x,y,z) + C(a,b,c) H(x,y,z)
+</pre>
+   <p class="noindent">where &lsquo;<samp><span class="samp">Y,A,B,C,F,G,H</span></samp>&rsquo; are arbitrary functions.  It computes
+&lsquo;<samp><span class="samp">Y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">F</span></samp>&rsquo;, &lsquo;<samp><span class="samp">G</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">H</span></samp>&rsquo; for all the data points,
+does a standard linear fit to find the values of &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">C</span></samp>&rsquo;, then uses the equation solver to solve for &lsquo;<samp><span class="samp">a,b,c</span></samp>&rsquo;
+in terms of &lsquo;<samp><span class="samp">A,B,C</span></samp>&rsquo;.
+
+   <p>A remarkable number of models can be cast into this general form. 
+We'll look at two examples here to see how it works.  The power-law
+model &lsquo;<samp><span class="samp">y = a x^b</span></samp>&rsquo; with two independent variables and two parameters
+can be rewritten as follows:
+
+<pre class="example">     y = a x^b
+     y = a exp(b ln(x))
+     y = exp(ln(a) + b ln(x))
+     ln(y) = ln(a) + b ln(x)
+</pre>
+   <p class="noindent">which matches the desired form with
+<!-- @math{Y = \ln(y)}, -->
+&lsquo;<samp><span class="samp">Y = ln(y)</span></samp>&rsquo;,
+<!-- @math{A = \ln(a)}, -->
+&lsquo;<samp><span class="samp">A = ln(a)</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">F = 1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B = b</span></samp>&rsquo;, and
+<!-- @math{G = \ln(x)}. -->
+&lsquo;<samp><span class="samp">G = ln(x)</span></samp>&rsquo;. 
+Calc thus computes the logarithms of your &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; values,
+does a linear fit for &lsquo;<samp><span class="samp">A</span></samp>&rsquo; and &lsquo;<samp><span class="samp">B</span></samp>&rsquo;, then solves to get
+<!-- @math{a = \exp(A)} -->
+&lsquo;<samp><span class="samp">a = exp(A)</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">b = B</span></samp>&rsquo;.
+
+   <p>Another interesting example is the &ldquo;quadratic&rdquo; model, which can
+be handled by expanding according to the distributive law.
+
+<pre class="example">     y = a + b*(x - c)^2
+     y = a + b c^2 - 2 b c x + b x^2
+</pre>
+   <p class="noindent">which matches with &lsquo;<samp><span class="samp">Y = y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">A = a + b c^2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">F = 1</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">B = -2 b c</span></samp>&rsquo;, &lsquo;<samp><span class="samp">G = x</span></samp>&rsquo; (the <i>-2</i> factor could just as easily
+have been put into &lsquo;<samp><span class="samp">G</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">B</span></samp>&rsquo;), &lsquo;<samp><span class="samp">C = b</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">H = x^2</span></samp>&rsquo;.
+
+   <p>The Gaussian model looks quite complicated, but a closer examination
+shows that it's actually similar to the quadratic model but with an
+exponential that can be brought to the top and moved into &lsquo;<samp><span class="samp">Y</span></samp>&rsquo;.
+
+   <p>The logistic models cannot be put into general linear form.  For these
+models, and the Hubbert linearization, Calc computes a rough
+approximation for the parameters, then uses the Levenberg-Marquardt
+iterative method to refine the approximations.
+
+   <p>Another model that cannot be put into general linear
+form is a Gaussian with a constant background added on, i.e.,
+&lsquo;<samp><span class="samp">d</span></samp>&rsquo; + the regular Gaussian formula.  If you have a model like
+this, your best bet is to replace enough of your parameters with
+constants to make the model linearizable, then adjust the constants
+manually by doing a series of fits.  You can compare the fits by
+graphing them, by examining the goodness-of-fit measures returned by
+<kbd>I a F</kbd>, or by some other method suitable to your application. 
+Note that some models can be linearized in several ways.  The
+Gaussian-plus-<var>d</var> model can be linearized by setting &lsquo;<samp><span class="samp">d</span></samp>&rsquo;
+(the background) to a constant, or by setting &lsquo;<samp><span class="samp">b</span></samp>&rsquo; (the standard
+deviation) and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; (the mean) to constants.
+
+   <p>To fit a model with constants substituted for some parameters, just
+store suitable values in those parameter variables, then omit them
+from the list of parameters when you answer the variables prompt.
+
+   <p>A last desperate step would be to use the general-purpose
+<code>minimize</code> function rather than <code>fit</code>.  After all, both
+functions solve the problem of minimizing an expression (the
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+sum) by adjusting certain parameters in the expression.  The <kbd>a F</kbd>
+command is able to use a vastly more efficient algorithm due to its
+special knowledge about linear chi-square sums, but the <kbd>a N</kbd>
+command can do the same thing by brute force.
+
+   <p>A compromise would be to pick out a few parameters without which the
+fit is linearizable, and use <code>minimize</code> on a call to <code>fit</code>
+which efficiently takes care of the rest of the parameters.  The thing
+to be minimized would be the value of
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+returned as the fifth result of the <code>xfit</code> function:
+
+<pre class="smallexample">     minimize(xfit(gaus(a,b,c,d,x), x, [a,b,c], data)_5, d, guess)
+</pre>
+   <p class="noindent">where <code>gaus</code> represents the Gaussian model with background,
+<code>data</code> represents the data matrix, and <code>guess</code> represents
+the initial guess for &lsquo;<samp><span class="samp">d</span></samp>&rsquo; that <code>minimize</code> requires. 
+This operation will only be, shall we say, extraordinarily slow
+rather than astronomically slow (as would be the case if <code>minimize</code>
+were used by itself to solve the problem).
+
+   <p>The <kbd>I a F</kbd> [<code>xfit</code>] command is somewhat trickier when
+nonlinear models are used.  The second item in the result is the
+vector of &ldquo;raw&rdquo; parameters &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B</span></samp>&rsquo;, &lsquo;<samp><span class="samp">C</span></samp>&rsquo;.  The
+covariance matrix is written in terms of those raw parameters. 
+The fifth item is a vector of <dfn>filter</dfn> expressions.  This
+is the empty vector &lsquo;<samp><span class="samp">[]</span></samp>&rsquo; if the raw parameters were the same
+as the requested parameters, i.e., if &lsquo;<samp><span class="samp">A = a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B = b</span></samp>&rsquo;,
+and so on (which is always true if the model is already linear
+in the parameters as written, e.g., for polynomial fits).  If the
+parameters had to be rearranged, the fifth item is instead a vector
+of one formula per parameter in the original model.  The raw
+parameters are expressed in these &ldquo;filter&rdquo; formulas as
+&lsquo;<samp><span class="samp">fitdummy(1)</span></samp>&rsquo; for &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, &lsquo;<samp><span class="samp">fitdummy(2)</span></samp>&rsquo; for &lsquo;<samp><span class="samp">B</span></samp>&rsquo;,
+and so on.
+
+   <p>When Calc needs to modify the model to return the result, it replaces
+&lsquo;<samp><span class="samp">fitdummy(1)</span></samp>&rsquo; in all the filters with the first item in the raw
+parameters list, and so on for the other raw parameters, then
+evaluates the resulting filter formulas to get the actual parameter
+values to be substituted into the original model.  In the case of
+<kbd>H a F</kbd> and <kbd>I a F</kbd> where the parameters must be error forms,
+Calc uses the square roots of the diagonal entries of the covariance
+matrix as error values for the raw parameters, then lets Calc's
+standard error-form arithmetic take it from there.
+
+   <p>If you use <kbd>I a F</kbd> with a nonlinear model, be sure to remember
+that the covariance matrix is in terms of the raw parameters,
+<em>not</em> the actual requested parameters.  It's up to you to
+figure out how to interpret the covariances in the presence of
+nontrivial filter functions.
+
+   <p>Things are also complicated when the input contains error forms. 
+Suppose there are three independent and dependent variables, &lsquo;<samp><span class="samp">x</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">y</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, one or more of which are error forms in the
+data.  Calc combines all the error values by taking the square root
+of the sum of the squares of the errors.  It then changes &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; to be plain numbers, and makes &lsquo;<samp><span class="samp">z</span></samp>&rsquo; into an error
+form with this combined error.  The &lsquo;<samp><span class="samp">Y(x,y,z)</span></samp>&rsquo; part of the
+linearized model is evaluated, and the result should be an error
+form.  The error part of that result is used for
+<!-- @math{\sigma_i} -->
+&lsquo;<samp><span class="samp">sigma_i</span></samp>&rsquo;
+for the data point.  If for some reason &lsquo;<samp><span class="samp">Y(x,y,z)</span></samp>&rsquo; does not return
+an error form, the combined error from &lsquo;<samp><span class="samp">z</span></samp>&rsquo; is used directly for
+<!-- @math{\sigma_i}. -->
+&lsquo;<samp><span class="samp">sigma_i</span></samp>&rsquo;. 
+Finally, &lsquo;<samp><span class="samp">z</span></samp>&rsquo; is also stripped of its error
+for use in computing &lsquo;<samp><span class="samp">F(x,y,z)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">G(x,y,z)</span></samp>&rsquo; and so on;
+the righthand side of the linearized model is computed in regular
+arithmetic with no error forms.
+
+   <p>(While these rules may seem complicated, they are designed to do
+the most reasonable thing in the typical case that &lsquo;<samp><span class="samp">Y(x,y,z)</span></samp>&rsquo;
+depends only on the dependent variable &lsquo;<samp><span class="samp">z</span></samp>&rsquo;, and in fact is
+often simply equal to &lsquo;<samp><span class="samp">z</span></samp>&rsquo;.  For common cases like polynomials
+and multilinear models, the combined error is simply used as the
+<!-- @math{\sigma} -->
+&lsquo;<samp><span class="samp">sigma</span></samp>&rsquo;
+for the data point with no further ado.)
+
+   <p><a name="index-FitRules-1811"></a>It may be the case that the model you wish to use is linearizable,
+but Calc's built-in rules are unable to figure it out.  Calc uses
+its algebraic rewrite mechanism to linearize a model.  The rewrite
+rules are kept in the variable <code>FitRules</code>.  You can edit this
+variable using the <kbd>s e FitRules</kbd> command; in fact, there is
+a special <kbd>s F</kbd> command just for editing <code>FitRules</code>. 
+See <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>.
+
+   <p>See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>, for a discussion of rewrite rules.
+
+   <p><a name="index-fitvar-1812"></a><a name="index-fitparam-1813"></a><a name="index-fitmodel-1814"></a><a name="index-fitsystem-1815"></a><a name="index-fitdummy-1816"></a>Calc uses <code>FitRules</code> as follows.  First, it converts the model
+to an equation if necessary and encloses the model equation in a
+call to the function <code>fitmodel</code> (which is not actually a defined
+function in Calc; it is only used as a placeholder by the rewrite rules). 
+Parameter variables are renamed to function calls &lsquo;<samp><span class="samp">fitparam(1)</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">fitparam(2)</span></samp>&rsquo;, and so on, and independent variables are renamed
+to &lsquo;<samp><span class="samp">fitvar(1)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">fitvar(2)</span></samp>&rsquo;, etc.  The dependent variable
+is the highest-numbered <code>fitvar</code>.  For example, the power law
+model &lsquo;<samp><span class="samp">a x^b</span></samp>&rsquo; is converted to &lsquo;<samp><span class="samp">y = a x^b</span></samp>&rsquo;, then to
+
+<pre class="smallexample">     fitmodel(fitvar(2) = fitparam(1) fitvar(1)^fitparam(2))
+</pre>
+   <p>Calc then applies the rewrites as if by &lsquo;<samp><span class="samp">C-u 0 a r FitRules</span></samp>&rsquo;. 
+(The zero prefix means that rewriting should continue until no further
+changes are possible.)
+
+   <p>When rewriting is complete, the <code>fitmodel</code> call should have
+been replaced by a <code>fitsystem</code> call that looks like this:
+
+<pre class="example">     fitsystem(<var>Y</var>, <var>FGH</var>, <var>abc</var>)
+</pre>
+   <p class="noindent">where <var>Y</var> is a formula that describes the function &lsquo;<samp><span class="samp">Y(x,y,z)</span></samp>&rsquo;,
+<var>FGH</var> is the vector of formulas &lsquo;<samp><span class="samp">[F(x,y,z), G(x,y,z), H(x,y,z)]</span></samp>&rsquo;,
+and <var>abc</var> is the vector of parameter filters which refer to the
+raw parameters as &lsquo;<samp><span class="samp">fitdummy(1)</span></samp>&rsquo; for &lsquo;<samp><span class="samp">A</span></samp>&rsquo;, &lsquo;<samp><span class="samp">fitdummy(2)</span></samp>&rsquo;
+for &lsquo;<samp><span class="samp">B</span></samp>&rsquo;, etc.  While the number of raw parameters (the length of
+the <var>FGH</var> vector) is usually the same as the number of original
+parameters (the length of the <var>abc</var> vector), this is not required.
+
+   <p>The power law model eventually boils down to
+
+<pre class="smallexample">     fitsystem(ln(fitvar(2)),
+               [1, ln(fitvar(1))],
+               [exp(fitdummy(1)), fitdummy(2)])
+</pre>
+   <p>The actual implementation of <code>FitRules</code> is complicated; it
+proceeds in four phases.  First, common rearrangements are done
+to try to bring linear terms together and to isolate functions like
+<code>exp</code> and <code>ln</code> either all the way &ldquo;out&rdquo; (so that they
+can be put into <var>Y</var>) or all the way &ldquo;in&rdquo; (so that they can
+be put into <var>abc</var> or <var>FGH</var>).  In particular, all
+non-constant powers are converted to logs-and-exponentials form,
+and the distributive law is used to expand products of sums. 
+Quotients are rewritten to use the &lsquo;<samp><span class="samp">fitinv</span></samp>&rsquo; function, where
+&lsquo;<samp><span class="samp">fitinv(x)</span></samp>&rsquo; represents &lsquo;<samp><span class="samp">1/x</span></samp>&rsquo; while the <code>FitRules</code>
+are operating.  (The use of <code>fitinv</code> makes recognition of
+linear-looking forms easier.)  If you modify <code>FitRules</code>, you
+will probably only need to modify the rules for this phase.
+
+   <p>Phase two, whose rules can actually also apply during phases one
+and three, first rewrites <code>fitmodel</code> to a two-argument
+form &lsquo;<samp><span class="samp">fitmodel(</span><var>Y</var><span class="samp">, </span><var>model</var><span class="samp">)</span></samp>&rsquo;, where <var>Y</var> is
+initially zero and <var>model</var> has been changed from &lsquo;<samp><span class="samp">a=b</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">a-b</span></samp>&rsquo; form.  It then tries to peel off invertible functions
+from the outside of <var>model</var> and put them into <var>Y</var> instead,
+calling the equation solver to invert the functions.  Finally, when
+this is no longer possible, the <code>fitmodel</code> is changed to a
+four-argument <code>fitsystem</code>, where the fourth argument is
+<var>model</var> and the <var>FGH</var> and <var>abc</var> vectors are initially
+empty.  (The last vector is really <var>ABC</var>, corresponding to
+raw parameters, for now.)
+
+   <p>Phase three converts a sum of items in the <var>model</var> to a sum
+of &lsquo;<samp><span class="samp">fitpart(</span><var>a</var><span class="samp">, </span><var>b</var><span class="samp">, </span><var>c</var><span class="samp">)</span></samp>&rsquo; terms which represent
+terms &lsquo;<samp><var>a</var><span class="samp">*</span><var>b</var><span class="samp">*</span><var>c</var></samp>&rsquo; of the sum, where <var>a</var>
+is all factors that do not involve any variables, <var>b</var> is all
+factors that involve only parameters, and <var>c</var> is the factors
+that involve only independent variables.  (If this decomposition
+is not possible, the rule set will not complete and Calc will
+complain that the model is too complex.)  Then <code>fitpart</code>s
+with equal <var>b</var> or <var>c</var> components are merged back together
+using the distributive law in order to minimize the number of
+raw parameters needed.
+
+   <p>Phase four moves the <code>fitpart</code> terms into the <var>FGH</var> and
+<var>ABC</var> vectors.  Also, some of the algebraic expansions that
+were done in phase 1 are undone now to make the formulas more
+computationally efficient.  Finally, it calls the solver one more
+time to convert the <var>ABC</var> vector to an <var>abc</var> vector, and
+removes the fourth <var>model</var> argument (which by now will be zero)
+to obtain the three-argument <code>fitsystem</code> that the linear
+least-squares solver wants to see.
+
+   <p><a name="index-hasfitparams-1817"></a><a name="index-hasfitvars-1818"></a>Two functions which are useful in connection with <code>FitRules</code>
+are &lsquo;<samp><span class="samp">hasfitparams(x)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">hasfitvars(x)</span></samp>&rsquo;, which check
+whether &lsquo;<samp><span class="samp">x</span></samp>&rsquo; refers to any parameters or independent variables,
+respectively.  Specifically, these functions return &ldquo;true&rdquo; if the
+argument contains any <code>fitparam</code> (or <code>fitvar</code>) function
+calls, and &ldquo;false&rdquo; otherwise.  (Recall that &ldquo;true&rdquo; means a
+nonzero number, and &ldquo;false&rdquo; means zero.  The actual nonzero number
+returned is the largest <var>n</var> from all the &lsquo;<samp><span class="samp">fitparam(</span><var>n</var><span class="samp">)</span></samp>&rsquo;s
+or &lsquo;<samp><span class="samp">fitvar(</span><var>n</var><span class="samp">)</span></samp>&rsquo;s, respectively, that appear in the formula.)
+
+   <p>The <code>fit</code> function in algebraic notation normally takes four
+arguments, &lsquo;<samp><span class="samp">fit(</span><var>model</var><span class="samp">, </span><var>vars</var><span class="samp">, </span><var>params</var><span class="samp">, </span><var>data</var><span class="samp">)</span></samp>&rsquo;,
+where <var>model</var> is the model formula as it would be typed after
+<kbd>a F '</kbd>, <var>vars</var> is the independent variable or a vector of
+independent variables, <var>params</var> likewise gives the parameter(s),
+and <var>data</var> is the data matrix.  Note that the length of <var>vars</var>
+must be equal to the number of rows in <var>data</var> if <var>model</var> is
+an equation, or one less than the number of rows if <var>model</var> is
+a plain formula.  (Actually, a name for the dependent variable is
+allowed but will be ignored in the plain-formula case.)
+
+   <p>If <var>params</var> is omitted, the parameters are all variables in
+<var>model</var> except those that appear in <var>vars</var>.  If <var>vars</var>
+is also omitted, Calc sorts all the variables that appear in
+<var>model</var> alphabetically and uses the higher ones for <var>vars</var>
+and the lower ones for <var>params</var>.
+
+   <p>Alternatively, &lsquo;<samp><span class="samp">fit(</span><var>modelvec</var><span class="samp">, </span><var>data</var><span class="samp">)</span></samp>&rsquo; is allowed
+where <var>modelvec</var> is a 2- or 3-vector describing the model
+and variables, as discussed previously.
+
+   <p>If Calc is unable to do the fit, the <code>fit</code> function is left
+in symbolic form, ordinarily with an explanatory message.  The
+message will be &ldquo;Model expression is too complex&rdquo; if the
+linearizer was unable to put the model into the required form.
+
+   <p>The <code>efit</code> (corresponding to <kbd>H a F</kbd>) and <code>xfit</code>
+(for <kbd>I a F</kbd>) functions are completely analogous.
+
+   </body></html>
+

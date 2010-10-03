@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Customizing Articles - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Article-Buffer.html#Article-Buffer" title="Article Buffer">
+<link rel="prev" href="Using-MIME.html#Using-MIME" title="Using MIME">
+<link rel="next" href="Article-Keymap.html#Article-Keymap" title="Article Keymap">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-Articles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Article-Keymap.html#Article-Keymap">Article Keymap</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-MIME.html#Using-MIME">Using MIME</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Article-Buffer.html#Article-Buffer">Article Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Customizing Articles</h3>
+
+<p><a name="index-article-customization-1857"></a>
+A slew of functions for customizing how the articles are to look like
+exist.  You can call these functions interactively
+(see <a href="Article-Washing.html#Article-Washing">Article Washing</a>), or you can have them
+called automatically when you select the articles.
+
+   <p>To have them called automatically, you should set the corresponding
+&ldquo;treatment&rdquo; variable.  For instance, to have headers hidden, you'd set
+<code>gnus-treat-hide-headers</code>.  Below is a list of variables that can
+be set, but first we discuss the values these variables can have.
+
+   <p>Note: Some values, while valid, make little sense.  Check the list below
+for sensible values.
+
+     <ol type=1 start=1>
+<li><code>nil</code>: Don't do this treatment.
+
+     <li><code>t</code>: Do this treatment on all body parts.
+
+     <li><code>head</code>: Do the treatment on the headers.
+
+     <li><code>first</code>: Do this treatment on the first body part.
+
+     <li><code>last</code>: Do this treatment on the last body part.
+
+     <li>An integer: Do this treatment on all body parts that have a length less
+than this number.
+
+     <li>A list of strings: Do this treatment on all body parts that are in
+articles that are read in groups that have names that match one of the
+regexps in the list.
+
+     <li>A list where the first element is not a string:
+
+     <p>The list is evaluated recursively.  The first element of the list is a
+predicate.  The following predicates are recognized: <code>or</code>,
+<code>and</code>, <code>not</code> and <code>typep</code>.  Here's an example:
+
+     <pre class="lisp">          (or last
+              (typep "text/x-vcard"))
+</pre>
+        </ol>
+
+   <p>You may have noticed that the word <dfn>part</dfn> is used here.  This refers
+to the fact that some messages are <acronym>MIME</acronym> multipart articles that may
+be divided into several parts.  Articles that are not multiparts are
+considered to contain just a single part.
+
+   <p><a name="index-gnus_002darticle_002dtreat_002dtypes-1858"></a>Are the treatments applied to all sorts of multipart parts?  Yes, if you
+want to, but by default, only &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; parts are given the
+treatment.  This is controlled by the <code>gnus-article-treat-types</code>
+variable, which is a list of regular expressions that are matched to the
+type of the part.  This variable is ignored if the value of the
+controlling variable is a predicate list, as described above.
+
+   <p>The following treatment options are available.  The easiest way to
+customize this is to examine the <code>gnus-article-treat</code> customization
+group.  Values in parenthesis are suggested sensible values.  Others are
+possible but those listed are probably sufficient for most people.
+
+     <dl>
+<dt><code>gnus-treat-buttonize (t, integer)</code><br><dt><code>gnus-treat-buttonize-head (head)</code><dd>
+See <a href="Article-Buttons.html#Article-Buttons">Article Buttons</a>.
+
+     <br><dt><code>gnus-treat-capitalize-sentences (t, integer)</code><br><dt><code>gnus-treat-overstrike (t, integer)</code><br><dt><code>gnus-treat-strip-cr (t, integer)</code><br><dt><code>gnus-treat-strip-headers-in-body (t, integer)</code><br><dt><code>gnus-treat-strip-leading-blank-lines (t, first, integer)</code><br><dt><code>gnus-treat-strip-multiple-blank-lines (t, integer)</code><br><dt><code>gnus-treat-strip-pem (t, last, integer)</code><br><dt><code>gnus-treat-strip-trailing-blank-lines (t, last, integer)</code><br><dt><code>gnus-treat-unsplit-urls (t, integer)</code><br><dt><code>gnus-treat-wash-html (t, integer)</code><dd>
+See <a href="Article-Washing.html#Article-Washing">Article Washing</a>.
+
+     <br><dt><code>gnus-treat-date-english (head)</code><br><dt><code>gnus-treat-date-iso8601 (head)</code><br><dt><code>gnus-treat-date-lapsed (head)</code><br><dt><code>gnus-treat-date-local (head)</code><br><dt><code>gnus-treat-date-original (head)</code><br><dt><code>gnus-treat-date-user-defined (head)</code><br><dt><code>gnus-treat-date-ut (head)</code><dd>
+See <a href="Article-Date.html#Article-Date">Article Date</a>.
+
+     <br><dt><code>gnus-treat-from-picon (head)</code><br><dt><code>gnus-treat-mail-picon (head)</code><br><dt><code>gnus-treat-newsgroups-picon (head)</code><dd>
+See <a href="Picons.html#Picons">Picons</a>.
+
+     <br><dt><code>gnus-treat-display-smileys (t, integer)</code>
+<br><dt><code>gnus-treat-body-boundary (head)</code><dd>
+<a name="index-gnus_002dbody_002dboundary_002ddelimiter-1859"></a>Adds a delimiter between header and body, the string used as delimiter
+is controlled by <code>gnus-body-boundary-delimiter</code>.
+
+     <p>See <a href="Smileys.html#Smileys">Smileys</a>.
+
+     <p><a name="index-gnus_002dtreat_002ddisplay_002dx_002dface-1860"></a><br><dt><code>gnus-treat-display-x-face (head)</code><dd>
+See <a href="X_002dFace.html#X_002dFace">X-Face</a>.
+
+     <p><a name="index-gnus_002dtreat_002ddisplay_002dface-1861"></a><br><dt><code>gnus-treat-display-face (head)</code><dd>
+See <a href="Face.html#Face">Face</a>.
+
+     <p><a name="index-gnus_002dtreat_002demphasize-1862"></a><br><dt><code>gnus-treat-emphasize (t, head, integer)</code><dd><a name="index-gnus_002dtreat_002dfill_002darticle-1863"></a><br><dt><code>gnus-treat-fill-article (t, integer)</code><dd><a name="index-gnus_002dtreat_002dfill_002dlong_002dlines-1864"></a><br><dt><code>gnus-treat-fill-long-lines (t, integer)</code><dd><a name="index-gnus_002dtreat_002dhide_002dboring_002dheaders-1865"></a><br><dt><code>gnus-treat-hide-boring-headers (head)</code><dd><a name="index-gnus_002dtreat_002dhide_002dcitation-1866"></a><br><dt><code>gnus-treat-hide-citation (t, integer)</code><dd><a name="index-gnus_002dtreat_002dhide_002dcitation_002dmaybe-1867"></a><br><dt><code>gnus-treat-hide-citation-maybe (t, integer)</code><dd><a name="index-gnus_002dtreat_002dhide_002dheaders-1868"></a><br><dt><code>gnus-treat-hide-headers (head)</code><dd><a name="index-gnus_002dtreat_002dhide_002dsignature-1869"></a><br><dt><code>gnus-treat-hide-signature (t, last)</code><dd><a name="index-gnus_002dtreat_002dstrip_002dbanner-1870"></a><br><dt><code>gnus-treat-strip-banner (t, last)</code><dd><a name="index-gnus_002dtreat_002dstrip_002dlist_002didentifiers-1871"></a><br><dt><code>gnus-treat-strip-list-identifiers (head)</code><dd>
+See <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>.
+
+     <p><a name="index-gnus_002dtreat_002dhighlight_002dcitation-1872"></a><br><dt><code>gnus-treat-highlight-citation (t, integer)</code><dd><a name="index-gnus_002dtreat_002dhighlight_002dheaders-1873"></a><br><dt><code>gnus-treat-highlight-headers (head)</code><dd><a name="index-gnus_002dtreat_002dhighlight_002dsignature-1874"></a><br><dt><code>gnus-treat-highlight-signature (t, last, integer)</code><dd>
+See <a href="Article-Highlighting.html#Article-Highlighting">Article Highlighting</a>.
+
+     <p><a name="index-gnus_002dtreat_002dplay_002dsounds-1875"></a><br><dt><code>gnus-treat-play-sounds</code><dd><a name="index-gnus_002dtreat_002dtranslate-1876"></a><br><dt><code>gnus-treat-translate</code><br><dt><code>gnus-treat-ansi-sequences (t)</code><dd><a name="index-gnus_002dtreat_002dx_002dpgp_002dsig-1877"></a><br><dt><code>gnus-treat-x-pgp-sig (head)</code><dd>
+<a name="index-gnus_002dtreat_002dunfold_002dheaders-1878"></a><br><dt><code>gnus-treat-unfold-headers (head)</code><dd><a name="index-gnus_002dtreat_002dfold_002dheaders-1879"></a><br><dt><code>gnus-treat-fold-headers (head)</code><dd><a name="index-gnus_002dtreat_002dfold_002dnewsgroups-1880"></a><br><dt><code>gnus-treat-fold-newsgroups (head)</code><dd><a name="index-gnus_002dtreat_002dleading_002dwhitespace-1881"></a><br><dt><code>gnus-treat-leading-whitespace (head)</code><dd>
+See <a href="Article-Header.html#Article-Header">Article Header</a>.
+
+   </dl>
+
+   <p><a name="index-gnus_002dpart_002ddisplay_002dhook-1882"></a>You can, of course, write your own functions to be called from
+<code>gnus-part-display-hook</code>.  The functions are called narrowed to the
+part, and you can do anything you like, pretty much.  There is no
+information that you have to keep in the buffer&mdash;you can change
+everything.
+
+   </body></html>
+

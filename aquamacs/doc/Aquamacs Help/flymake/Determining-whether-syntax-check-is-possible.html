@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Determining whether syntax check is possible - GNU Flymake 0.3</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Flymake 0.3">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
+<link rel="next" href="Making-a-temporary-copy.html#Making-a-temporary-copy" title="Making a temporary copy">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Flymake (version 0.3, April 2004),
+which is a universal on-the-fly syntax checker for GNU Emacs.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Determining-whether-syntax-check-is-possible"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Making-a-temporary-copy.html#Making-a-temporary-copy">Making a temporary copy</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 Determining whether syntax check is possible</h3>
+
+<p><a name="index-Syntax-check-models-17"></a><a name="index-Master-file-18"></a>
+Syntax check is considered possible if there's an entry in
+<code>flymake-allowed-file-name-masks</code> matching buffer's filename and
+its <code>init-function</code> returns non-<code>nil</code> value.
+
+   <p>Two syntax check modes are distinguished:
+
+     <ol type=1 start=1>
+
+     <li>Buffer can be syntax checked in a standalone fashion, that is, the
+file (its temporary copy, in fact) can be passed over to the compiler to
+do the syntax check. Examples are C/C++ (.c, .cpp) and Java (.java)
+sources.
+
+     <li>Buffer can be syntax checked, but additional file, called master file,
+is required to perform this operation. A master file is a file that
+includes the current file, so that running a syntax check tool on it
+will also check syntax in the current file. Examples are C/C++ (.h,
+.hpp) headers.
+
+        </ol>
+
+   <p>These modes are handled inside init/cleanup/getfname functions, see
+<a href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>.
+
+   <p>Flymake contains implementations of all functionality required to
+support different syntax check modes described above (making
+temporary copies, finding master files, etc.), as well as some
+tool-specific (routines for <code>make</code>, <code>Ant</code>, etc.) code.
+
+   </body></html>
+

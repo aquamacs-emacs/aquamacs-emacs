@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Compile commands - Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compiling-Executing.html#Compiling-Executing" title="Compiling Executing">
+<link rel="prev" href="Compiling-Executing.html#Compiling-Executing" title="Compiling Executing">
+<link rel="next" href="Compiler-errors.html#Compiler-errors" title="Compiler errors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Compile-commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Compiler-errors.html#Compiler-errors">Compiler errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-Executing.html#Compiling-Executing">Compiling Executing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compiling-Executing.html#Compiling-Executing">Compiling Executing</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Compile commands</h3>
+
+<p>Here are the commands for building and using an Ada project, as
+listed in the Ada menu.
+
+   <p>In multi-file projects, there must be one file that is the main
+program. That is given by the <code>main</code> project file variable;
+it defaults to the current file if not yet set, but is also set by the
+&ldquo;set main and build&rdquo; command.
+
+     <dl>
+<dt><code>Check file</code><dd>Compiles the current file in syntax check mode, by running
+<code>check_cmd</code> defined in the current project file. This typically
+runs faster than full compile mode, speeding up finding and fixing
+compilation errors.
+
+     <p>This sets <code>main</code> only if it has not been set yet.
+
+     <br><dt><code>Compile file</code><dd>Compiles the current file, by running <code>comp_cmd</code> from the current
+project file.
+
+     <p>This does not set <code>main</code>.
+
+     <br><dt><code>Set main and Build</code><dd>Sets <code>main</code> to the current file, then executes the Build
+command.
+
+     <br><dt><code>Show main</code><dd>Display <code>main</code> in the message buffer.
+
+     <br><dt><code>Build</code><dd>Compiles all obsolete units of the current <code>main</code>, and links
+<code>main</code>, by running <code>make_cmd</code> from the current project.
+
+     <p>This sets <code>main</code> only if it has not been set yet.
+
+     <br><dt><code>Run</code><dd>Executes the main program in a shell, displayed in a separate Emacs
+buffer. This runs <code>run_cmd</code> from the current project. The
+execution buffer allows for interactive input/output.
+
+     <p>To modify the run command, in particular to provide or change the
+command line arguments, type <kbd>C-u</kbd> before invoking the command.
+
+     <p>This command is not available for a cross-compilation toolchain.
+
+   </dl>
+   It is important when using these commands to understand how
+<code>main</code> is used and changed.
+
+   <p>Build runs 'gnatmake' on the main unit. During a typical edit/compile
+session, this is the only command you need to invoke, which is why it
+is bound to <kbd>C-c C-c</kbd>. It will compile all files needed by the
+main unit, and display compilation errors in any of them.
+
+   <p>Note that Build can be invoked from any Ada buffer; typically you will
+be fixing errors in files other than the main, but you don't have to
+switch back to the main to invoke the compiler again.
+
+   <p>Novices and students typically work on single-file Ada projects. In
+this case, <kbd>C-c C-m</kbd> will normally be the only command needed; it
+will build the current file, rather than the last-built main.
+
+   <p>There are three ways to change <code>main</code>:
+
+     <ol type=1 start=1>
+<li>Invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;, which sets <code>main</code> to
+the current file.
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;, edit <code>main</code> and
+<code>main</code>, and click &lsquo;<samp><span class="samp">[save]</span></samp>&rsquo;
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;, and load a project file that specifies <code>main</code>
+
+        </ol>
+
+   </body></html>
+

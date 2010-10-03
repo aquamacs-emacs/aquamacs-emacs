@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Insertion Variables - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="News-Variables.html#News-Variables" title="News Variables">
+<link rel="next" href="Various-Message-Variables.html#Various-Message-Variables" title="Various Message Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Insertion-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Various-Message-Variables.html#Various-Message-Variables">Various Message Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="News-Variables.html#News-Variables">News Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Insertion Variables</h3>
+
+     <dl>
+<dt><code>message-ignored-cited-headers</code><dd><a name="index-message_002dignored_002dcited_002dheaders-274"></a>All headers that match this regexp will be removed from yanked
+messages.  The default is &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, which means that all headers will be
+removed.
+
+     <br><dt><code>message-cite-prefix-regexp</code><dd><a name="index-message_002dcite_002dprefix_002dregexp-275"></a>Regexp matching the longest possible citation prefix on a line.
+
+     <br><dt><code>message-citation-line-function</code><dd><a name="index-message_002dcitation_002dline_002dfunction-276"></a><a name="index-attribution-line-277"></a>Function called to insert the citation line.  The default is
+<code>message-insert-citation-line</code>, which will lead to citation lines
+that look like:
+
+     <pre class="example">          Hallvard B Furuseth &lt;h.b.furuseth@usit.uio.no&gt; writes:
+</pre>
+     <!-- FIXME: Add `message-insert-formated-citation-line' and -->
+     <!-- `message-citation-line-format' -->
+     <p>Point will be at the beginning of the body of the message when this
+function is called.
+
+     <p>Note that Gnus provides a feature where clicking on `writes:' hides the
+cited text.  If you change the citation line too much, readers of your
+messages will have to adjust their Gnus, too.  See the variable
+<code>gnus-cite-attribution-suffix</code>.  See <a href="../gnus/Article-Highlighting.html#Article-Highlighting">Article Highlighting</a>, for details.
+
+     <br><dt><code>message-yank-prefix</code><dd><a name="index-message_002dyank_002dprefix-278"></a><a name="index-yanking-279"></a><a name="index-quoting-280"></a>When you are replying to or following up an article, you normally want
+to quote the person you are answering.  Inserting quoted text is done by
+<dfn>yanking</dfn>, and each line you yank will have
+<code>message-yank-prefix</code> prepended to it (except for quoted lines
+which use <code>message-yank-cited-prefix</code> and empty lines which use
+<code>message-yank-empty-prefix</code>).  The default is &lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo;.
+
+     <br><dt><code>message-yank-cited-prefix</code><dd><a name="index-message_002dyank_002dcited_002dprefix-281"></a><a name="index-yanking-282"></a><a name="index-cited-283"></a><a name="index-quoting-284"></a>When yanking text from an article which contains already cited text,
+each line will be prefixed with the contents of this variable.  The
+default is &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;.  See also <code>message-yank-prefix</code>.
+
+     <br><dt><code>message-yank-empty-prefix</code><dd><a name="index-message_002dyank_002dempty_002dprefix-285"></a><a name="index-yanking-286"></a><a name="index-quoting-287"></a>When yanking text from an article, each empty line will be prefixed with
+the contents of this variable.  The default is &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;.  You can set
+this variable to an empty string to split the cited text into paragraphs
+automatically.  See also <code>message-yank-prefix</code>.
+
+     <br><dt><code>message-indentation-spaces</code><dd><a name="index-message_002dindentation_002dspaces-288"></a>Number of spaces to indent yanked messages.
+
+     <br><dt><code>message-cite-function</code><dd><a name="index-message_002dcite_002dfunction-289"></a><a name="index-message_002dcite_002doriginal-290"></a><a name="index-message_002dcite_002doriginal_002dwithout_002dsignature-291"></a>Function for citing an original message.  The default is
+<code>message-cite-original</code>, which simply inserts the original message
+and prepends &lsquo;<samp><span class="samp">&gt; </span></samp>&rsquo; to each line. 
+<code>message-cite-original-without-signature</code> does the same, but elides
+the signature.
+
+     <br><dt><code>message-indent-citation-function</code><dd><a name="index-message_002dindent_002dcitation_002dfunction-292"></a>Function for modifying a citation just inserted in the mail buffer. 
+This can also be a list of functions.  Each function can find the
+citation between <code>(point)</code> and <code>(mark t)</code>.  And each function
+should leave point and mark around the citation text as modified.
+
+     <br><dt><code>message-mark-insert-begin</code><dd><a name="index-message_002dmark_002dinsert_002dbegin-293"></a>String to mark the beginning of some inserted text.
+
+     <br><dt><code>message-mark-insert-end</code><dd><a name="index-message_002dmark_002dinsert_002dend-294"></a>String to mark the end of some inserted text.
+
+     <br><dt><code>message-signature</code><dd><a name="index-message_002dsignature-295"></a>String to be inserted at the end of the message buffer.  If <code>t</code>
+(which is the default), the <code>message-signature-file</code> file will be
+inserted instead.  If a function, the result from the function will be
+used instead.  If a form, the result from the form will be used instead. 
+If this variable is <code>nil</code>, no signature will be inserted at all.
+
+     <br><dt><code>message-signature-file</code><dd><a name="index-message_002dsignature_002dfile-296"></a>File containing the signature to be inserted at the end of the buffer. 
+If a path is specified, the value of
+<code>message-signature-directory</code> is ignored, even if set. 
+The default is <samp><span class="file">~/.signature</span></samp>.
+
+     <br><dt><code>message-signature-directory</code><dd><a name="index-message_002dsignature_002ddirectory-297"></a>Name of directory containing signature files.  Comes in handy if you
+have many such files, handled via Gnus posting styles for instance. 
+If <code>nil</code> (the default), <code>message-signature-file</code> is expected
+to specify the directory if needed.
+
+     <br><dt><code>message-signature-insert-empty-line</code><dd><a name="index-message_002dsignature_002dinsert_002dempty_002dline-298"></a>If <code>t</code> (the default value) an empty line is inserted before the
+signature separator.
+
+</dl>
+
+   <p>Note that RFC1036bis says that a signature should be preceded by the three
+characters &lsquo;<samp><span class="samp">-- </span></samp>&rsquo; on a line by themselves.  This is to make it
+easier for the recipient to automatically recognize and process the
+signature.  So don't remove those characters, even though you might feel
+that they ruin your beautiful design, like, totally.
+
+   <p>Also note that no signature should be more than four lines long. 
+Including <acronym>ASCII</acronym> graphics is an efficient way to get
+everybody to believe that you are silly and have nothing important to
+say.
+
+   </body></html>
+

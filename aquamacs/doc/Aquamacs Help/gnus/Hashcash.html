@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Hashcash - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" title="Thwarting Email Spam">
+<link rel="prev" href="SpamAssassin.html#SpamAssassin" title="SpamAssassin">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Hashcash"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="SpamAssassin.html#SpamAssassin">SpamAssassin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam">Thwarting Email Spam</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.19.4 Hashcash</h4>
+
+<p><a name="index-hashcash-2866"></a>
+A novel technique to fight spam is to require senders to do something
+costly and demonstrably unique for each message they send.  This has
+the obvious drawback that you cannot rely on everyone in the world
+using this technique, since it is not part of the Internet standards,
+but it may be useful in smaller communities.
+
+   <p>While the tools in the previous section work well in practice, they
+work only because the tools are constantly maintained and updated as
+new form of spam appears.  This means that a small percentage of spam
+will always get through.  It also means that somewhere, someone needs
+to read lots of spam to update these tools.  Hashcash avoids that, but
+instead prefers that everyone you contact through e-mail supports the
+scheme.  You can view the two approaches as pragmatic vs dogmatic. 
+The approaches have their own advantages and disadvantages, but as
+often in the real world, a combination of them is stronger than either
+one of them separately.
+
+   <p><a name="index-X_002dHashcash-2867"></a>The &ldquo;something costly&rdquo; is to burn CPU time, more specifically to
+compute a hash collision up to a certain number of bits.  The
+resulting hashcash cookie is inserted in a &lsquo;<samp><span class="samp">X-Hashcash:</span></samp>&rsquo; header. 
+For more details, and for the external application <code>hashcash</code> you
+need to install to use this feature, see
+<a href="http://www.hashcash.org/">http://www.hashcash.org/</a>.  Even more information can be found
+at <a href="http://www.camram.org/">http://www.camram.org/</a>.
+
+   <p>If you wish to generate hashcash for each message you send, you can
+customize <code>message-generate-hashcash</code> (see <a href="../message/Mail-Headers.html#Mail-Headers">Mail Headers</a>), as in:
+
+<pre class="lisp">     (setq message-generate-hashcash t)
+</pre>
+   <p>You will need to set up some additional variables as well:
+
+     <dl>
+<dt><code>hashcash-default-payment</code><dd><a name="index-hashcash_002ddefault_002dpayment-2868"></a>This variable indicates the default number of bits the hash collision
+should consist of.  By default this is 20.  Suggested useful values
+include 17 to 29.
+
+     <br><dt><code>hashcash-payment-alist</code><dd><a name="index-hashcash_002dpayment_002dalist-2869"></a>Some receivers may require you to spend burn more CPU time than the
+default.  This variable contains a list of &lsquo;<samp><span class="samp">(</span><var>addr</var>
+<var>amount</var><span class="samp">)</span></samp>&rsquo; cells, where <var>addr</var> is the receiver (email address
+or newsgroup) and <var>amount</var> is the number of bits in the collision
+that is needed.  It can also contain &lsquo;<samp><span class="samp">(</span><var>addr</var> <var>string</var>
+<var>amount</var><span class="samp">)</span></samp>&rsquo; cells, where the <var>string</var> is the string to use
+(normally the email address or newsgroup name is used).
+
+     <br><dt><code>hashcash-path</code><dd><a name="index-hashcash_002dpath-2870"></a>Where the <code>hashcash</code> binary is installed.  This variable should
+be automatically set by <code>executable-find</code>, but if it's <code>nil</code>
+(usually because the <code>hashcash</code> binary is not in your path)
+you'll get a warning when you check hashcash payments and an error
+when you generate hashcash payments.
+
+   </dl>
+
+   <p>Gnus can verify hashcash cookies, although this can also be done by
+hand customized mail filtering scripts.  To verify a hashcash cookie
+in a message, use the <code>mail-check-payment</code> function in the
+<code>hashcash.el</code> library.  You can also use the <code>spam.el</code>
+package with the <code>spam-use-hashcash</code> back end to validate hashcash
+cookies in incoming mail and filter mail accordingly (see <a href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments">Anti-spam Hashcash Payments</a>).
+
+   </body></html>
+

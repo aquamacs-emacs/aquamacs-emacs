@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Methods - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Writing-Methods.html#Writing-Methods" title="Writing Methods">
+<link rel="prev" href="Generics.html#Generics" title="Generics">
+<link rel="next" href="Static-Methods.html#Static-Methods" title="Static Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Static-Methods.html#Static-Methods">Static Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Generics.html#Generics">Generics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Writing-Methods.html#Writing-Methods">Writing Methods</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 Methods</h3>
+
+<p>A method is a function that is executed if the first argument passed
+to it matches the method's class.  Different <i>EIEIO</i> classes may
+share the same method names.
+
+   <p>Methods are created with the <code>defmethod</code> macro, which is similar
+to <code>defun</code>.
+
+<div class="defun">
+&mdash; Macro: <b>defmethod</b><var> method </var>[<var>:before | :primary | :after | :static </var>]<var> arglist </var>[<var>doc-string</var>]<var> forms<a name="index-defmethod-19"></a></var><br>
+<blockquote>
+        <p><var>method</var> is the name of the function to create.
+
+        <p><code>:before</code> and <code>:after</code> specify execution order (i.e., when
+this form is called).  If neither of these symbols are present, the
+default priority is used (before <code>:after</code> and after
+<code>:before</code>); this default priority is represented in CLOS as
+<code>:primary</code>.
+
+        <p><b>Note:</b> The <code>:BEFORE</code>, <code>:PRIMARY</code>, <code>:AFTER</code>, and
+<code>:STATIC</code> method tags were in all capital letters in previous
+versions of <i>EIEIO</i>.
+
+        <p><var>arglist</var> is the list of arguments to this method.  The first
+argument in this list&mdash;and <em>only</em> the first argument&mdash;may have
+a type specifier (see the example below).  If no type specifier is
+supplied, the method applies to any object.
+
+        <p><var>doc-string</var> is the documentation attached to the implementation. 
+All method doc-strings are incorporated into the generic method's
+function documentation.
+
+        <p><var>forms</var> is the body of the function.
+
+        </blockquote></div>
+
+<p class="noindent">In the following example, we create a method <code>mymethod</code> for the
+<code>classname</code> class:
+
+<pre class="example">     (defmethod mymethod ((obj classname) secondarg)
+       "Doc string" )
+</pre>
+   <p class="noindent">This method only executes if the <var>obj</var> argument passed to it is an
+<i>EIEIO</i> object of class <code>classname</code>.
+
+   <p>A method with no type specifier is a <dfn>default method</dfn>.  If a given
+class has no implementation, then the default method is called when
+that method is used on a given object of that class.
+
+   <p>Only one default method per execution specifier (<code>:before</code>,
+<code>:primary</code>, or <code>:after</code>) is allowed.  If two
+<code>defmethod</code>s appear with <var>arglist</var>s lacking a type specifier,
+and having the same execution specifier, then the first implementation
+is replaced.
+
+   <p>When a method is called on an object, but there is no method specified
+for that object, but there is a method specified for object's parent
+class, the parent class' method is called.  If there is a method
+defined for both, only the child's method is called.  A child method
+may call a parent's method using <code>call-next-method</code>, described
+below.
+
+   <p>If multiple methods and default methods are defined for the same
+method and class, they are executed in this order:
+
+     <ol type=1 start=1>
+<li>method :before
+<li>default :before
+<li>method :primary
+<li>default :primary
+<li>method :after
+<li>default :after
+        </ol>
+
+   <p>If no methods exist, Emacs signals a <code>no-method-definition</code>
+error.  See <a href="Signals.html#Signals">Signals</a>.
+
+<div class="defun">
+&mdash; Function: <b>call-next-method</b><var> &amp;rest replacement-args<a name="index-call_002dnext_002dmethod-20"></a></var><br>
+<blockquote><p><a name="call_002dnext_002dmethod"></a>This function calls the superclass method from a subclass method. 
+This is the &ldquo;next method&rdquo; specified in the current method list.
+
+        <p>If <var>replacement-args</var> is non-<code>nil</code>, then use them instead of
+<code>eieio-generic-call-arglst</code>.  At the top level, the generic
+argument list is passed in.
+
+        <p>Use <code>next-method-p</code> to find out if there is a next method to
+call. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-method-p</b><var><a name="index-next_002dmethod_002dp-21"></a></var><br>
+<blockquote><p><a name="next_002dmethod_002dp"></a>Non-<code>nil</code> if there is a next method. 
+Returns a list of lambda expressions which is the <code>next-method</code>
+order. 
+</p></blockquote></div>
+
+   <p>At present, <i>EIEIO</i> does not implement all the features of CLOS:
+
+     <ol type=1 start=1>
+<li>There is currently no <code>:around</code> tag. 
+<li>CLOS allows multiple sets of type-cast arguments, but <i>EIEIO</i> only
+allows the first argument to be cast.
+        </ol>
+
+   </body></html>
+

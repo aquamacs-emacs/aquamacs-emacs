@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>ede-cpp-root - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Simple-projects.html#Simple-projects" title="Simple projects">
+<link rel="next" href="ede_002dsimple-subclassing.html#ede_002dsimple-subclassing" title="ede-simple subclassing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-cpp-root"></a>
+<a name="ede_002dcpp_002droot"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dsimple-subclassing.html#ede_002dsimple-subclassing">ede-simple subclassing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Simple-projects.html#Simple-projects">Simple projects</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.1.1 ede-cpp-root</h4>
+
+<p>The <code>ede-cpp-root</code> project type allows you to create a single
+object with no save-file in your <samp><span class="file">.emacs</span></samp> file.  It allows <i>EDE</i>
+to provide the <i>Semantic</i> package with the ability to find header
+files quickly.
+
+   <p>The <code>ede-cpp-root</code> class knows a few things about C++ projects,
+such as the prevalence of "include" directories, and typical
+file-layout stuff.  If this isn't sufficient, you can subclass
+<code>ede-cpp-root-project</code> and add your own tweaks in just a few
+lines.  See the end of this file for an example.
+
+   <p>In the most basic case, add this to your <samp><span class="file">.emacs</span></samp> file, modifying
+appropriate bits as needed.
+
+<pre class="example">     (ede-cpp-root-project "SOMENAME" :file "/dir/to/some/file")
+</pre>
+   <p>Replace <var>SOMENAME</var> with whatever name you want, and the filename
+to an actual file at the root of your project.  It might be a
+Makefile, a README file.  Whatever.  It doesn't matter.  It's just a
+key to hang the rest of <i>EDE</i> off of.
+
+   <p>The most likely reason to create this project, is to speed up
+searching for includes files, or to simplify bootstrapping <i>Semantic</i>'s
+ability to find files without much user interaction.  In conjunction
+with <i>Semantic</i> completion, having a short include path is key.  You can
+override the default include path and system include path like this:
+
+<pre class="example">     (ede-cpp-root-project "NAME" :file "FILENAME"
+         :include-path '( "/include" "../include" "/c/include" )
+         :system-include-path '( "/usr/include/c++/3.2.2/" )
+         :spp-table '( ("MOOSE" . "")
+                       ("CONST" . "const") ) )
+</pre>
+   <p>In this case each item in the include path list is searched.  If the
+directory starts with "/", then that expands to the project root
+directory.  If a directory does not start with "/", then it is
+relative to the default-directory of the current buffer when the file
+name is expanded.
+
+   <p>The include path only affects C/C++ header files.  Use the slot
+<code>:header-match-regexp</code> to change it.
+
+   <p>The <code>:system-include-path</code> allows you to specify full directory
+names to include directories where system header files can be found. 
+These will be applied to files in this project only.
+
+   <p>The <code>:spp-table</code> provides a list of project specific #define
+style macros that are unique to this project, passed in to the
+compiler on the command line, or are in special headers. 
+See the <code>semantic-lex-c-preprocessor-symbol-map</code> for more
+on how to format this entry.
+
+   <p>If there is a single file in your project, you can instead set the
+<code>:spp-files</code> to a list of file names relative to the root of your
+project.  Specifying this is like setting the variable
+<code>semantic-lex-c-preprocessor-symbol-file</code> in semantic.
+
+   <p>If you want to override the file-finding tool with your own
+function you can do this:
+
+<pre class="example">     (ede-cpp-root-project "NAME" :file "FILENAME" :locate-fcn 'MYFCN)
+</pre>
+   <p>Where <var>MYFCN</var> is a symbol for a function.  The locate function can
+be used in place of <code>ede-expand-filename</code> so you can quickly
+customize your custom target to use specialized local routines instead
+of the default <i>EDE</i> routines.  The function symbol must take two
+arguments:
+
+     <dl>
+<dt><var>NAME</var><dd>The name of the file to find. 
+<br><dt><var>DIR</var><dd>The directory root for this cpp-root project. 
+</dl>
+
+   <p>If the cpp-root project style is right for you, but you want a dynamic
+loader, instead of hard-coding path name values in your <samp><span class="file">.emacs</span></samp>, you
+can do that too, but you will need to write some lisp code.
+
+   <p>To do that, you need to add an entry to the
+<code>ede-project-class-files</code> list, and also provide two functions to
+teach <i>EDE</i> how to load your project pattern
+
+   <p>It would look like this:
+
+<pre class="example">     (defun MY-FILE-FOR-DIR (&amp;optional dir)
+       "Return a full file name to the project file stored in DIR."
+       &lt;write your code here, or return nil&gt;
+       )
+     
+     (defun MY-ROOT-FCN ()
+       "Return the root fcn for `default-directory'"
+       ;; You might be able to use `ede-cpp-root-project-root'
+       ;; and not write this at all.
+       )
+     
+     (defun MY-LOAD (dir)
+       "Load a project of type `cpp-root' for the directory DIR.
+     Return nil if there isn't one."
+       ;; Use your preferred constructin method here.
+       (ede-cpp-root-project "NAME" :file (expand-file-name "FILE" dir)
+                                    :locate-fcn 'MYFCN)
+       )
+     
+     (add-to-list 'ede-project-class-files
+                  (ede-project-autoload "cpp-root"
+                   :name "CPP ROOT"
+                   :file 'ede-cpp-root
+                   :proj-file 'MY-FILE-FOR-DIR
+                   :proj-root 'MY-ROOT-FCN
+                   :load-type 'MY-LOAD
+                   :class-sym 'ede-cpp-root)
+                  t)
+</pre>
+   <p>This example only creates an auto-loader, and does not create a new kind
+of project.
+
+   <p>See <a href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject">ede-cpp-root-project</a>, for details about the class that defines
+the <code>ede-cpp-root</code> project type.
+
+   </body></html>
+

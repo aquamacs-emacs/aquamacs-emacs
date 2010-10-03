@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Class and Keyword Inheritance - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell" title="Object Method Completion in the Shell">
+<link rel="next" href="Structure-Tag-Completion.html#Structure-Tag-Completion" title="Structure Tag Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Class-and-Keyword-Inheritance"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Structure-Tag-Completion.html#Structure-Tag-Completion">Structure Tag Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell">Object Method Completion in the Shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.4.4 Class and Keyword Inheritance</h4>
+
+<p><a name="index-Inheritance_002c-class-162"></a><a name="index-Keyword-inheritance-163"></a><a name="index-Inheritance_002c-keyword-164"></a>
+Class inheritance affects which methods are called in IDL.  An object of
+a class which inherits methods from one or more superclasses can
+override that method by defining its own method of the same name, extend
+the method by calling the method(s) of its superclass(es) in its
+version, or inherit the method directly by making no modifications. 
+IDLWAVE examines class definitions during completion and routine
+information display, and records all inheritance information it finds. 
+This information is displayed if appropriate with the calling sequence
+for methods (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>), as long as variable
+<code>idlwave-support-inheritance</code> is non-<code>nil</code>.
+
+   <p>In many class methods, <em>keyword</em> inheritance (<code>_EXTRA</code> and
+<code>_REF_EXTRA</code>) is used hand-in-hand with class inheritance and
+method overriding.  E.g., in a <code>SetProperty</code> method, this technique
+allows a single call <code>obj-&gt;SetProperty</code> to set properties up the
+entire class inheritance chain.  This is often referred to as
+<em>chaining</em>, and is characterized by chained method calls like
+<code>self-&gt;MySuperClass::SetProperty,_EXTRA=e</code><!-- /@w -->.
+
+   <p>IDLWAVE can accommodate this special synergy between class and keyword
+inheritance: if <code>_EXTRA</code> or <code>_REF_EXTRA</code> is detected among a
+method's keyword parameters, all keywords of superclass versions of
+the method being considered can be included in completion.  There is
+of course no guarantee that this type of keyword chaining actually
+occurs, but for some methods it's a very convenient assumption.  The
+variable <code>idlwave-keyword-class-inheritance</code> can be used to
+configure which methods have keyword inheritance treated in this
+simple, class-driven way.  By default, only <code>Init</code> and
+<code>(Get|Set)Property</code> are.  The completion buffer will label
+keywords based on their originating class.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-support-inheritance</b> (<code>t</code>)<var><a name="index-idlwave_002dsupport_002dinheritance-165"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means consider inheritance during completion, online help etc. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-keyword-class-inheritance</b><var><a name="index-idlwave_002dkeyword_002dclass_002dinheritance-166"></a></var><br>
+<blockquote><p>A list of regular expressions to match methods for which simple
+class-driven keyword inheritance will be used for Completion. 
+</p></blockquote></div>
+
+   </body></html>
+

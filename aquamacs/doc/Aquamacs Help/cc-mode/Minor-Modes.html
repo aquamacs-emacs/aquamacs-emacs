@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<title>Minor Modes - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Filling-and-Breaking.html#Filling-and-Breaking" title="Filling and Breaking">
+<link rel="next" href="Electric-Keys.html#Electric-Keys" title="Electric Keys">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Minor-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Electric-Keys.html#Electric-Keys">Electric Keys</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filling-and-Breaking.html#Filling-and-Breaking">Filling and Breaking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">4.5 Minor Modes</h3>
+
+<p><a name="index-Minor-Modes-105"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>CC Mode contains several minor-mode-like features that you might
+find useful while writing new code or editing old code:
+
+     <dl>
+<dt>electric mode<dd>When this is enabled, certain visible characters cause reformatting as
+they are typed.  This is normally helpful, but can be a nuisance when
+editing chaotically formatted code.  It can also be disconcerting,
+especially for users who are new to CC Mode. 
+<br><dt>auto-newline mode<dd>This automatically inserts newlines where you'd probably want to type
+them yourself, e.g. after typing &lsquo;<samp><span class="samp">}</span></samp>&rsquo;s.  Its action is suppressed
+when electric mode is disabled. 
+<br><dt>hungry-delete mode<dd>This lets you delete a contiguous block of whitespace with a single
+key - for example, the newline and indentation just inserted by
+auto-newline when you want to back up and write a comment after the
+last statement. 
+<br><dt>subword mode<dd>This mode makes basic word movement commands like <kbd>M-f</kbd>
+(<code>forward-word</code>) and <kbd>M-b</kbd> (<code>backward-word</code>) treat the
+parts of sillycapsed symbols as different words. 
+E.g. &lsquo;<samp><span class="samp">NSGraphicsContext</span></samp>&rsquo; is treated as three words &lsquo;<samp><span class="samp">NS</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Graphics</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">Context</span></samp>&rsquo;. 
+<br><dt>syntactic-indentation mode<dd>When this is enabled (which it normally is), indentation commands such
+as <kbd>C-j</kbd> indent lines of code according to their syntactic
+structure.  Otherwise, a line is simply indented to the same level as
+the previous one and <kbd>&lt;TAB&gt;</kbd> adjusts the indentation in steps
+of `c-basic-offset'. 
+</dl>
+
+   <p>Full details on how these minor modes work are at <a href="Electric-Keys.html#Electric-Keys">Electric Keys</a>,
+<a href="Auto_002dnewlines.html#Auto_002dnewlines">Auto-newlines</a>, <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion">Hungry WS Deletion</a>, <a href="Subword-Movement.html#Subword-Movement">Subword Movement</a>,
+and <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>.
+
+   <p>You can toggle each of these minor modes on and off, and you can
+configure CC Mode so that it starts up with your favourite
+combination of them (see <a href="Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample .emacs File</a>).  By default, when
+you initialize a buffer, electric mode and syntactic-indentation mode
+are enabled but the other two modes are disabled.
+
+   <p>CC Mode displays the current state of the first four of these minor
+modes on the modeline by appending letters to the major mode's name,
+one letter for each enabled minor mode - &lsquo;<samp><span class="samp">l</span></samp>&rsquo; for electric mode,
+&lsquo;<samp><span class="samp">a</span></samp>&rsquo; for auto-newline mode, &lsquo;<samp><span class="samp">h</span></samp>&rsquo; for hungry delete mode, and
+&lsquo;<samp><span class="samp">w</span></samp>&rsquo; for subword mode.  If all these modes were enabled, you'd see
+&lsquo;<samp><span class="samp">C/lahw</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p>Here are the commands to toggle these modes:
+
+     <dl>
+<dt><kbd>C-c C-l</kbd> (<code>c-toggle-electric-state</code>)<dd><a name="index-C_002dc-C_002dl-106"></a><a name="index-c_002dtoggle_002delectric_002dstate-107"></a><a name="index-toggle_002delectric_002dstate-_0028c_002d_0029-108"></a>Toggle electric minor mode.  When the command turns the mode off, it
+also suppresses auto-newline mode.
+
+     <br><dt><kbd>C-c C-a</kbd> (<code>c-toggle-auto-newline</code>)<dd><a name="index-C_002dc-C_002da-109"></a><a name="index-c_002dtoggle_002dauto_002dnewline-110"></a><a name="index-toggle_002dauto_002dnewline-_0028c_002d_0029-111"></a>Toggle auto-newline minor mode.  When the command turns the mode on,
+it also enables electric minor mode.
+
+     <br><dt><kbd>M-x c-toggle-hungry-state</kbd><a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a><dd><a name="index-c_002dtoggle_002dhungry_002dstate-112"></a><a name="index-toggle_002dhungry_002dstate-_0028c_002d_0029-113"></a>Toggle hungry-delete minor mode.
+
+     <br><dt><kbd>M-x c-toggle-auto-hungry-state</kbd><a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a><dd><a name="index-c_002dtoggle_002dauto_002dhungry_002dstate-114"></a><a name="index-toggle_002dauto_002dhungry_002dstate-_0028c_002d_0029-115"></a>Toggle both auto-newline and hungry delete minor modes.
+
+     <br><dt><kbd>C-c C-w</kbd> (<code>M-x subword-mode</code>)<dd><a name="index-C_002dc-C_002dw-116"></a><a name="index-subword_002dmode-117"></a>Toggle subword mode.
+
+     <br><dt><kbd>M-x c-toggle-syntactic-indentation</kbd><dd><a name="index-c_002dtoggle_002dsyntactic_002dindentation-118"></a><a name="index-toggle_002dsyntactic_002dindentation-_0028c_002d_0029-119"></a>Toggle syntactic-indentation mode. 
+</dl>
+
+   <p>Common to all the toggle functions above is that if they are called
+programmatically, they take an optional numerical argument.  A
+positive value will turn on the minor mode (or both of them in the
+case of <code>c-toggle-auto-hungry-state</code>) and a negative value will
+turn it (or them) off.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The &lsquo;<samp><span class="samp">C</span></samp>&rsquo; would be replaced with the name of
+the language in question for the other languages CC Mode supports.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Prior to CC Mode 5.31, this command was bound to <kbd>C-c C-d</kbd>.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> Prior to CC Mode 5.31, this command was bound to <kbd>C-c C-t</kbd>.</p>
+
+   <hr></div>
+
+   </body></html>
+

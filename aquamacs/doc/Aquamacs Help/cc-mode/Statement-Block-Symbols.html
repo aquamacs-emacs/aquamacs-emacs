@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Statement Block Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="Anonymous-Class-Symbol.html#Anonymous-Class-Symbol" title="Anonymous Class Symbol">
+<link rel="next" href="K_0026R-Symbols.html#K_0026R-Symbols" title="K&amp;R Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Statement-Block-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="K_0026R-Symbols.html#K_0026R-Symbols">K&amp;R Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Anonymous-Class-Symbol.html#Anonymous-Class-Symbol">Anonymous Class Symbol</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.12 Statement Block Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>There are a few occasions where a statement block might be used inside
+an expression.  One is in C or C++ code using the gcc extension for
+this, e.g:
+
+<pre class="example">      1: int res = ({
+      2:         int y = foo (); int z;
+      3:         if (y &gt; 0) z = y; else z = - y;
+      4:         z;
+      5:     });
+</pre>
+   <p><a name="index-inexpr_002dstatement-471"></a>Lines 2 and 5 get the <code>inexpr-statement</code> syntax, besides the
+symbols they'd get in a normal block.  Therefore, the indentation put on
+<code>inexpr-statement</code> is added to the normal statement block
+indentation.  An <code>inexpr-statement</code> syntactic element doesn't
+contain an anchor position.
+
+   <p>In Pike code, there are a few other situations where blocks occur inside
+statements, as illustrated here:
+
+<pre class="example">      1: array itgob()
+      2: {
+      3:     string s = map (backtrace()[-2][3..],
+      4:                     lambda
+      5:                         (mixed arg)
+      6:                     {
+      7:                         return sprintf ("%t", arg);
+      8:                     }) * ", " + "\n";
+      9:     return catch {
+     10:             write (s + "\n");
+     11:         };
+     12: }
+</pre>
+   <p><a name="index-inlambda-472"></a><a name="index-lambda_002dintro_002dcont-473"></a>Lines 4 through 8 contain a lambda function, which CC Mode recognizes
+by the <code>lambda</code> keyword.  If the function argument list is put
+on a line of its own, as in line 5, it gets the <code>lambda-intro-cont</code>
+syntax.  The function body is handled as an inline method body, with the
+addition of the <code>inlambda</code> syntactic symbol.  This means that line
+6 gets <code>inlambda</code> and <code>inline-open</code>, and line 8 gets
+<code>inline-close</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p><a name="index-inexpr_002dstatement-474"></a>On line 9, <code>catch</code> is a special function taking a statement block
+as its argument.  The block is handled as an in-expression statement
+with the <code>inexpr-statement</code> syntax, just like the gcc extended C
+example above.  The other similar special function, <code>gauge</code>, is
+handled like this too.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> You might wonder why it doesn't get
+<code>inlambda</code> too.  It's because the closing brace is relative to the
+opening brace, which stands on its own line in this example.  If the
+opening brace was hanging on the previous line, then the closing brace
+would get the <code>inlambda</code> syntax too to be indented correctly.</p>
+
+   <hr></div>
+
+   </body></html>
+

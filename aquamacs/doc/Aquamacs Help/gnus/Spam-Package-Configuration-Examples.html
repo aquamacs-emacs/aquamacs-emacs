@@ -1,0 +1,206 @@
+<html lang="en">
+<head>
+<title>Spam Package Configuration Examples - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
+<link rel="prev" href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors" title="Spam and Ham Processors">
+<link rel="next" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Spam-Package-Configuration-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and Ham Processors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.20.5 Spam Package Configuration Examples</h4>
+
+<p><a name="index-spam-filtering-2909"></a><a name="index-spam-filtering-configuration-examples-2910"></a><a name="index-spam-configuration-examples-2911"></a><a name="index-spam-2912"></a>
+
+<h5 class="subsubheading">Ted's setup</h5>
+
+<p>From Ted Zlatanov &lt;tzz@lifelogs.com&gt;.
+<pre class="example">     ;; <span class="roman">for </span><code>gnus-registry-split-fancy-with-parent</code><span class="roman"> and spam autodetection</span>
+     ;; <span class="roman">see </span><samp><span class="file">gnus-registry.el</span></samp><span class="roman"> for more information</span>
+     (gnus-registry-initialize)
+     (spam-initialize)
+     
+     (setq
+      spam-log-to-registry t     ; <span class="roman">for spam autodetection</span>
+      spam-use-BBDB t
+      spam-use-regex-headers t   ; <span class="roman">catch X-Spam-Flag (SpamAssassin)</span>
+      ;; <span class="roman">all groups with &lsquo;</span><samp><span class="samp">spam</span></samp><span class="roman">&rsquo; in the name contain spam</span>
+      gnus-spam-newsgroup-contents
+       '(("spam" gnus-group-spam-classification-spam))
+      ;; <span class="roman">see documentation for these</span>
+      spam-move-spam-nonspam-groups-only nil
+      spam-mark-only-unseen-as-spam t
+      spam-mark-ham-unread-before-move-from-spam-group t
+      nnimap-split-rule 'nnimap-split-fancy
+      ;; <span class="roman">understand what this does before you copy it to your own setup!</span>
+      nnimap-split-fancy '(|
+                           ;; <span class="roman">trace references to parents and put in their group</span>
+                           (: gnus-registry-split-fancy-with-parent)
+                           ;; <span class="roman">this will catch server-side SpamAssassin tags</span>
+                           (: spam-split 'spam-use-regex-headers)
+                           (any "ding" "ding")
+                           ;; <span class="roman">note that spam by default will go to &lsquo;</span><samp><span class="samp">spam</span></samp><span class="roman">&rsquo;</span>
+                           (: spam-split)
+                           ;; <span class="roman">default mailbox</span>
+                           "mail"))
+     
+     ;; <span class="roman">my parameters, set with </span><kbd>G p</kbd>
+     
+     ;; <span class="roman">all nnml groups, and all nnimap groups except</span>
+     ;; <span class="roman">&lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:train</span></samp><span class="roman">&rsquo; and</span>
+     ;; <span class="roman">&lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:spam</span></samp><span class="roman">&rsquo;: any spam goes to nnimap training,</span>
+     ;; <span class="roman">because it must have been detected manually</span>
+     
+     ((spam-process-destination . "nnimap+mail.lifelogs.com:train"))
+     
+     ;; <span class="roman">all <acronym>NNTP</acronym> groups</span>
+     ;; <span class="roman">autodetect spam with the blacklist and ham with the BBDB</span>
+     ((spam-autodetect-methods spam-use-blacklist spam-use-BBDB)
+     ;; <span class="roman">send all spam to the training group</span>
+      (spam-process-destination . "nnimap+mail.lifelogs.com:train"))
+     
+     ;; <span class="roman">only some <acronym>NNTP</acronym> groups, where I want to autodetect spam</span>
+     ((spam-autodetect . t))
+     
+     ;; <span class="roman">my nnimap &lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:spam</span></samp><span class="roman">&rsquo; group</span>
+     
+     ;; <span class="roman">this is a spam group</span>
+     ((spam-contents gnus-group-spam-classification-spam)
+     
+      ;; <span class="roman">any spam (which happens when I enter for all unseen messages,</span>
+      ;; <span class="roman">because of the </span><code>gnus-spam-newsgroup-contents</code><span class="roman"> setting above), goes to</span>
+      ;; <span class="roman">&lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:train</span></samp><span class="roman">&rsquo; unless I mark it as ham</span>
+     
+      (spam-process-destination "nnimap+mail.lifelogs.com:train")
+     
+      ;; <span class="roman">any ham goes to my &lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:mail</span></samp><span class="roman">&rsquo; folder, but</span>
+      ;; <span class="roman">also to my &lsquo;</span><samp><span class="samp">nnimap+mail.lifelogs.com:trainham</span></samp><span class="roman">&rsquo; folder for training</span>
+     
+      (ham-process-destination "nnimap+mail.lifelogs.com:mail"
+                               "nnimap+mail.lifelogs.com:trainham")
+      ;; <span class="roman">in this group, only &lsquo;</span><samp><span class="samp">!</span></samp><span class="roman">&rsquo; marks are ham</span>
+      (ham-marks
+       (gnus-ticked-mark))
+      ;; <span class="roman">remembers senders in the blacklist on the way out---this is</span>
+      ;; <span class="roman">definitely not needed, it just makes me feel better</span>
+      (spam-process (gnus-group-spam-exit-processor-blacklist)))
+     
+     ;; <span class="roman">Later, on the <acronym>IMAP</acronym> server I use the &lsquo;</span><samp><span class="samp">train</span></samp><span class="roman">&rsquo; group for training</span>
+     ;; <span class="roman">SpamAssassin to recognize spam, and the &lsquo;</span><samp><span class="samp">trainham</span></samp><span class="roman">&rsquo; group fora</span>
+     ;; <span class="roman">recognizing ham---but Gnus has nothing to do with it.</span>
+     
+</pre>
+   <h5 class="subsubheading">Using <code>spam.el</code> on an IMAP server with a statistical filter on the server</h5>
+
+<p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.
+
+   <p>My provider has set up bogofilter (in combination with <acronym>DCC</acronym>) on
+the mail server (<acronym>IMAP</acronym>).  Recognized spam goes to
+&lsquo;<samp><span class="samp">spam.detected</span></samp>&rsquo;, the rest goes through the normal filter rules,
+i.e. to &lsquo;<samp><span class="samp">some.folder</span></samp>&rsquo; or to &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo;.  Training on false
+positives or negatives is done by copying or moving the article to
+&lsquo;<samp><span class="samp">training.ham</span></samp>&rsquo; or &lsquo;<samp><span class="samp">training.spam</span></samp>&rsquo; respectively.  A cron job on
+the server feeds those to bogofilter with the suitable ham or spam
+options and deletes them from the &lsquo;<samp><span class="samp">training.ham</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">training.spam</span></samp>&rsquo; folders.
+
+   <p>With the following entries in <code>gnus-parameters</code>, <code>spam.el</code>
+does most of the job for me:
+
+<pre class="lisp">        ("nnimap:spam\\.detected"
+         (gnus-article-sort-functions '(gnus-article-sort-by-chars))
+         (ham-process-destination "nnimap:INBOX" "nnimap:training.ham")
+         (spam-contents gnus-group-spam-classification-spam))
+        ("nnimap:\\(INBOX\\|other-folders\\)"
+         (spam-process-destination . "nnimap:training.spam")
+         (spam-contents gnus-group-spam-classification-ham))
+</pre>
+     <ul>
+<li><b>The Spam folder:</b>
+
+     <p>In the folder &lsquo;<samp><span class="samp">spam.detected</span></samp>&rsquo;, I have to check for false positives
+(i.e. legitimate mails, that were wrongly judged as spam by
+bogofilter or DCC).
+
+     <p>Because of the <code>gnus-group-spam-classification-spam</code> entry, all
+messages are marked as spam (with <code>$</code>).  When I find a false
+positive, I mark the message with some other ham mark
+(<code>ham-marks</code>, <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and Ham Processors</a>).  On group exit,
+those messages are copied to both groups, &lsquo;<samp><span class="samp">INBOX</span></samp>&rsquo; (where I want
+to have the article) and &lsquo;<samp><span class="samp">training.ham</span></samp>&rsquo; (for training bogofilter)
+and deleted from the &lsquo;<samp><span class="samp">spam.detected</span></samp>&rsquo; folder.
+
+     <p>The <code>gnus-article-sort-by-chars</code> entry simplifies detection of
+false positives for me.  I receive lots of worms (sweN, <small class="dots">...</small>), that all
+have a similar size.  Grouping them by size (i.e. chars) makes finding
+other false positives easier.  (Of course worms aren't <i>spam</i>
+(<acronym>UCE</acronym>, <acronym>UBE</acronym>) strictly speaking.  Anyhow, bogofilter is
+an excellent tool for filtering those unwanted mails for me.)
+
+     <li><b>Ham folders:</b>
+
+     <p>In my ham folders, I just hit <kbd>S x</kbd>
+(<code>gnus-summary-mark-as-spam</code>) whenever I see an unrecognized spam
+mail (false negative).  On group exit, those messages are moved to
+&lsquo;<samp><span class="samp">training.spam</span></samp>&rsquo;. 
+</ul>
+
+<h5 class="subsubheading">Reporting spam articles in Gmane groups with <code>spam-report.el</code></h5>
+
+<p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.
+
+   <p>With following entry in <code>gnus-parameters</code>, <kbd>S x</kbd>
+(<code>gnus-summary-mark-as-spam</code>) marks articles in <code>gmane.*</code>
+groups as spam and reports the to Gmane at group exit:
+
+<pre class="lisp">        ("^gmane\\."
+         (spam-process (gnus-group-spam-exit-processor-report-gmane)))
+</pre>
+   <p>Additionally, I use <code>(setq spam-report-gmane-use-article-number nil)</code>
+because I don't read the groups directly from news.gmane.org, but
+through my local news server (leafnode).  I.e. the article numbers are
+not the same as on news.gmane.org, thus <code>spam-report.el</code> has to check
+the <code>X-Report-Spam</code> header to find the correct number.
+
+   </body></html>
+

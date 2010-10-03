@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Scoring Tips - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scoring.html#Scoring" title="Scoring">
+<link rel="prev" href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" title="Scoring On Other Headers">
+<link rel="next" href="Reverse-Scoring.html#Reverse-Scoring" title="Reverse Scoring">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Scoring-Tips"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reverse-Scoring.html#Reverse-Scoring">Reverse Scoring</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers">Scoring On Other Headers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
+<hr>
+</div>
+
+<h3 class="section">7.10 Scoring Tips</h3>
+
+<p><a name="index-scoring-tips-2683"></a>
+     <dl>
+<dt><dfn>Crossposts</dfn><dd><a name="index-crossposts-2684"></a><a name="index-scoring-crossposts-2685"></a>If you want to lower the score of crossposts, the line to match on is
+the <code>Xref</code> header.
+     <pre class="lisp">          ("xref" (" talk.politics.misc:" -1000))
+</pre>
+     <br><dt><dfn>Multiple crossposts</dfn><dd>If you want to lower the score of articles that have been crossposted to
+more than, say, 3 groups:
+     <pre class="lisp">          ("xref"
+            ("[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+"
+             -1000 nil r))
+</pre>
+     <br><dt><dfn>Matching on the body</dfn><dd>This is generally not a very good idea&mdash;it takes a very long time. 
+Gnus actually has to fetch each individual article from the server.  But
+you might want to anyway, I guess.  Even though there are three match
+keys (<code>Head</code>, <code>Body</code> and <code>All</code>), you should choose one
+and stick with it in each score file.  If you use any two, each article
+will be fetched <em>twice</em>.  If you want to match a bit on the
+<code>Head</code> and a bit on the <code>Body</code>, just use <code>All</code> for all
+the matches.
+
+     <br><dt><dfn>Marking as read</dfn><dd>You will probably want to mark articles that have scores below a certain
+number as read.  This is most easily achieved by putting the following
+in your <samp><span class="file">all.SCORE</span></samp> file:
+     <pre class="lisp">          ((mark -100))
+</pre>
+     <p>You may also consider doing something similar with <code>expunge</code>.
+
+     <br><dt><dfn>Negated character classes</dfn><dd>If you say stuff like <code>[^abcd]*</code>, you may get unexpected results. 
+That will match newlines, which might lead to, well, The Unknown.  Say
+<code>[^abcd\n]*</code> instead. 
+</dl>
+
+   </body></html>
+

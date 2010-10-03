@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>C FORTRAN Pascal - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Language-Modes.html#Language-Modes" title="Language Modes">
+<link rel="prev" href="Normal-Language-Modes.html#Normal-Language-Modes" title="Normal Language Modes">
+<link rel="next" href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes" title="TeX and LaTeX Language Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="C-FORTRAN-Pascal"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Language-Modes.html#Language-Modes">Language Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.8.2 C, FORTRAN, and Pascal Modes</h4>
+
+<p class="noindent"><a name="index-d-C-556"></a><a name="index-calc_002dc_002dlanguage-557"></a><a name="index-C-language-558"></a>The <kbd>d C</kbd> (<code>calc-c-language</code>) command selects the conventions
+of the C language for display and entry of formulas.  This differs from
+the normal language mode in a variety of (mostly minor) ways.  In
+particular, C language operators and operator precedences are used in
+place of Calc's usual ones.  For example, &lsquo;<samp><span class="samp">a^b</span></samp>&rsquo; means &lsquo;<samp><span class="samp">xor(a,b)</span></samp>&rsquo;
+in C mode; a value raised to a power is written as a function call,
+&lsquo;<samp><span class="samp">pow(a,b)</span></samp>&rsquo;.
+
+   <p>In C mode, vectors and matrices use curly braces instead of brackets. 
+Octal and hexadecimal values are written with leading &lsquo;<samp><span class="samp">0</span></samp>&rsquo; or &lsquo;<samp><span class="samp">0x</span></samp>&rsquo;
+rather than using the &lsquo;<samp><span class="samp">#</span></samp>&rsquo; symbol.  Array subscripting is
+translated into <code>subscr</code> calls, so that &lsquo;<samp><span class="samp">a[i]</span></samp>&rsquo; in C
+mode is the same as &lsquo;<samp><span class="samp">a_i</span></samp>&rsquo; in Normal mode.  Assignments
+turn into the <code>assign</code> function, which Calc normally displays
+using the &lsquo;<samp><span class="samp">:=</span></samp>&rsquo; symbol.
+
+   <p>The variables <code>pi</code> and <code>e</code> would be displayed &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">e</span></samp>&rsquo; in Normal mode, but in C mode they are displayed as
+&lsquo;<samp><span class="samp">M_PI</span></samp>&rsquo; and &lsquo;<samp><span class="samp">M_E</span></samp>&rsquo;, corresponding to the names of constants
+typically provided in the <samp><span class="file">&lt;math.h&gt;</span></samp> header.  Functions whose
+names are different in C are translated automatically for entry and
+display purposes.  For example, entering &lsquo;<samp><span class="samp">asin(x)</span></samp>&rsquo; will push the
+formula &lsquo;<samp><span class="samp">arcsin(x)</span></samp>&rsquo; onto the stack; this formula will be displayed
+as &lsquo;<samp><span class="samp">asin(x)</span></samp>&rsquo; as long as C mode is in effect.
+
+   <p><a name="index-d-P-559"></a><a name="index-calc_002dpascal_002dlanguage-560"></a><a name="index-Pascal-language-561"></a>The <kbd>d P</kbd> (<code>calc-pascal-language</code>) command selects Pascal
+conventions.  Like C mode, Pascal mode interprets array brackets and uses
+a different table of operators.  Hexadecimal numbers are entered and
+displayed with a preceding dollar sign.  (Thus the regular meaning of
+<kbd>$2</kbd> during algebraic entry does not work in Pascal mode, though
+<kbd>$</kbd> (and <kbd>$$</kbd>, etc.) not followed by digits works the same as
+always.)  No special provisions are made for other non-decimal numbers,
+vectors, and so on, since there is no universally accepted standard way
+of handling these in Pascal.
+
+   <p><a name="index-d-F-562"></a><a name="index-calc_002dfortran_002dlanguage-563"></a><a name="index-FORTRAN-language-564"></a>The <kbd>d F</kbd> (<code>calc-fortran-language</code>) command selects FORTRAN
+conventions.  Various function names are transformed into FORTRAN
+equivalents.  Vectors are written as &lsquo;<samp><span class="samp">/1, 2, 3/</span></samp>&rsquo;, and may be
+entered this way or using square brackets.  Since FORTRAN uses round
+parentheses for both function calls and array subscripts, Calc displays
+both in the same way; &lsquo;<samp><span class="samp">a(i)</span></samp>&rsquo; is interpreted as a function call
+upon reading, and subscripts must be entered as &lsquo;<samp><span class="samp">subscr(a, i)</span></samp>&rsquo;. 
+If the variable <code>a</code> has been declared to have type
+<code>vector</code> or <code>matrix</code>, however,  then &lsquo;<samp><span class="samp">a(i)</span></samp>&rsquo; will be
+parsed as a subscript.  (See <a href="Declarations.html#Declarations">Declarations</a>.)  Usually it doesn't
+matter, though; if you enter the subscript expression &lsquo;<samp><span class="samp">a(i)</span></samp>&rsquo; and
+Calc interprets it as a function call, you'll never know the difference
+unless you switch to another language mode or replace <code>a</code> with an
+actual vector (or unless <code>a</code> happens to be the name of a built-in
+function!).
+
+   <p>Underscores are allowed in variable and function names in all of these
+language modes.  The underscore here is equivalent to the &lsquo;<samp><span class="samp">#</span></samp>&rsquo; in
+Normal mode, or to hyphens in the underlying Emacs Lisp variable names.
+
+   <p>FORTRAN and Pascal modes normally do not adjust the case of letters in
+formulas.  Most built-in Calc names use lower-case letters.  If you use a
+positive numeric prefix argument with <kbd>d P</kbd> or <kbd>d F</kbd>, these
+modes will use upper-case letters exclusively for display, and will
+convert to lower-case on input.  With a negative prefix, these modes
+convert to lower-case for display and input.
+
+   </body></html>
+

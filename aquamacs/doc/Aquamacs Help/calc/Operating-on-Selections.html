@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+<title>Operating on Selections - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Selecting-Subformulas.html#Selecting-Subformulas" title="Selecting Subformulas">
+<link rel="prev" href="Displaying-Selections.html#Displaying-Selections" title="Displaying Selections">
+<link rel="next" href="Rearranging-with-Selections.html#Rearranging-with-Selections" title="Rearranging with Selections">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Operating-on-Selections"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging with Selections</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Displaying-Selections.html#Displaying-Selections">Displaying Selections</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.1.4 Operating on Selections</h4>
+
+<p class="noindent">Once a selection is made, all Calc commands that manipulate items
+on the stack will operate on the selected portions of the items
+instead.  (Note that several stack elements may have selections
+at once, though there can be only one selection at a time in any
+given stack element.)
+
+   <p><a name="index-j-e-1621"></a><a name="index-calc_002denable_002dselections-1622"></a>The <kbd>j e</kbd> (<code>calc-enable-selections</code>) command disables the
+effect that selections have on Calc commands.  The current selections
+still exist, but Calc commands operate on whole stack elements anyway. 
+This mode can be identified by the fact that the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; markers on
+the line numbers are gone, even though selections are visible.  To
+reactivate the selections, press <kbd>j e</kbd> again.
+
+   <p>To extract a sub-formula as a new formula, simply select the
+sub-formula and press &lt;RET&gt;.  This normally duplicates the top
+stack element; here it duplicates only the selected portion of that
+element.
+
+   <p>To replace a sub-formula with something different, you can enter the
+new value onto the stack and press &lt;TAB&gt;.  This normally exchanges
+the top two stack elements; here it swaps the value you entered into
+the selected portion of the formula, returning the old selected
+portion to the top of the stack.
+
+<pre class="smallexample">                3    ...                    ...                    ___
+         (a + b)  . . .           17 x y . . .           17 x y + V c
+     2*  ...............      2*  .............      2:  -------------
+             . . . .                 . . . .                2 x + 1
+     
+                                         3                      3
+     1:  17 x y               1:  (a + b)            1:  (a + b)
+</pre>
+   <p>In this example we select a sub-formula of our original example,
+enter a new formula, &lt;TAB&gt; it into place, then deselect to see
+the complete, edited formula.
+
+   <p>If you want to swap whole formulas around even though they contain
+selections, just use <kbd>j e</kbd> before and after.
+
+   <p><a name="index-j-_0027-1623"></a><a name="index-calc_002denter_002dselection-1624"></a>The <kbd>j '</kbd> (<code>calc-enter-selection</code>) command is another way
+to replace a selected sub-formula.  This command does an algebraic
+entry just like the regular <kbd>'</kbd> key.  When you press &lt;RET&gt;,
+the formula you type replaces the original selection.  You can use
+the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; symbol in the formula to refer to the original
+selection.  If there is no selection in the formula under the cursor,
+the cursor is used to make a temporary selection for the purposes of
+the command.  Thus, to change a term of a formula, all you have to
+do is move the Emacs cursor to that term and press <kbd>j '</kbd>.
+
+   <p><a name="index-j-_0060-1625"></a><a name="index-calc_002dedit_002dselection-1626"></a>The <kbd>j `</kbd> (<code>calc-edit-selection</code>) command is a similar
+analogue of the <kbd>`</kbd> (<code>calc-edit</code>) command.  It edits the
+selected sub-formula in a separate buffer.  If there is no
+selection, it edits the sub-formula indicated by the cursor.
+
+   <p>To delete a sub-formula, press &lt;DEL&gt;.  This generally replaces
+the sub-formula with the constant zero, but in a few suitable contexts
+it uses the constant one instead.  The &lt;DEL&gt; key automatically
+deselects and re-simplifies the entire formula afterwards.  Thus:
+
+<pre class="smallexample">                   ###
+         17 x y + # #          17 x y         17 # y          17 y
+     1*  -------------     1:  -------    1*  -------    1:  -------
+            2 x + 1            2 x + 1        2 x + 1        2 x + 1
+</pre>
+   <p>In this example, we first delete the &lsquo;<samp><span class="samp">sqrt(c)</span></samp>&rsquo; term; Calc
+accomplishes this by replacing &lsquo;<samp><span class="samp">sqrt(c)</span></samp>&rsquo; with zero and
+resimplifying.  We then delete the <kbd>x</kbd> in the numerator;
+since this is part of a product, Calc replaces it with &lsquo;<samp><span class="samp">1</span></samp>&rsquo;
+and resimplifies.
+
+   <p>If you select an element of a vector and press &lt;DEL&gt;, that
+element is deleted from the vector.  If you delete one side of
+an equation or inequality, only the opposite side remains.
+
+   <p><a name="index-j-_0040key_007bDEL_007d-1627"></a><a name="index-calc_002ddel_002dselection-1628"></a>The <kbd>j &lt;DEL&gt;</kbd> (<code>calc-del-selection</code>) command is like
+&lt;DEL&gt; but with the auto-selecting behavior of <kbd>j '</kbd> and
+<kbd>j `</kbd>.  It deletes the selected portion of the formula
+indicated by the cursor, or, in the absence of a selection, it
+deletes the sub-formula indicated by the cursor position.
+
+   <p><a name="index-j-_0040key_007bRET_007d-1629"></a><a name="index-calc_002dgrab_002dselection-1630"></a>(There is also an auto-selecting <kbd>j &lt;RET&gt;</kbd> (<code>calc-copy-selection</code>)
+command.)
+
+   <p>Normal arithmetic operations also apply to sub-formulas.  Here we
+select the denominator, press <kbd>5 -</kbd> to subtract five from the
+denominator, press <kbd>n</kbd> to negate the denominator, then
+press <kbd>Q</kbd> to take the square root.
+
+<pre class="smallexample">          .. .           .. .           .. .             .. .
+     1*  .......    1*  .......    1*  .......    1*  ..........
+         2 x + 1        2 x - 4        4 - 2 x         _________
+                                                      V 4 - 2 x
+</pre>
+   <p>Certain types of operations on selections are not allowed.  For
+example, for an arithmetic function like <kbd>-</kbd> no more than one of
+the arguments may be a selected sub-formula.  (As the above example
+shows, the result of the subtraction is spliced back into the argument
+which had the selection; if there were more than one selection involved,
+this would not be well-defined.)  If you try to subtract two selections,
+the command will abort with an error message.
+
+   <p>Operations on sub-formulas sometimes leave the formula as a whole
+in an &ldquo;un-natural&rdquo; state.  Consider negating the &lsquo;<samp><span class="samp">2 x</span></samp>&rsquo; term
+of our sample formula by selecting it and pressing <kbd>n</kbd>
+(<code>calc-change-sign</code>).
+
+<pre class="smallexample">            .. .                .. .
+     1*  ..........      1*  ...........
+          .........           ..........
+         . . . 2 x           . . . -2 x
+</pre>
+   <p>Unselecting the sub-formula reveals that the minus sign, which would
+normally have cancelled out with the subtraction automatically, has
+not been able to do so because the subtraction was not part of the
+selected portion.  Pressing <kbd>=</kbd> (<code>calc-evaluate</code>) or doing
+any other mathematical operation on the whole formula will cause it
+to be simplified.
+
+<pre class="smallexample">            17 y                17 y
+     1:  -----------     1:  ----------
+          __________          _________
+         V 4 - -2 x          V 4 + 2 x
+</pre>
+   </body></html>
+

@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Let Command - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Store-and-Recall.html#Store-and-Recall" title="Store and Recall">
+<link rel="prev" href="Operations-on-Variables.html#Operations-on-Variables" title="Operations on Variables">
+<link rel="next" href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator" title="Evaluates-To Operator">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Let-Command"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">Evaluates-To Operator</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>
+<hr>
+</div>
+
+<h3 class="section">13.4 The Let Command</h3>
+
+<p class="noindent"><a name="index-s-l-2074"></a><a name="index-calc_002dlet-2075"></a><a name="index-Variables_002c-temporary-assignment-2076"></a><a name="index-Temporary-assignment-to-variables-2077"></a>If you have an expression like &lsquo;<samp><span class="samp">a+b^2</span></samp>&rsquo; on the stack and you wish to
+compute its value where &lsquo;<samp><span class="samp">b=3</span></samp>&rsquo;, you can simply store 3 in &lsquo;<samp><span class="samp">b</span></samp>&rsquo; and
+then press <kbd>=</kbd> to reevaluate the formula.  This has the side-effect
+of leaving the stored value of 3 in &lsquo;<samp><span class="samp">b</span></samp>&rsquo; for future operations.
+
+   <p>The <kbd>s l</kbd> (<code>calc-let</code>) command evaluates a formula under a
+<em>temporary</em> assignment of a variable.  It stores the value on the
+top of the stack into the specified variable, then evaluates the
+second-to-top stack entry, then restores the original value (or lack of one)
+in the variable.  Thus after <kbd>'&nbsp;<!-- /@w -->a+b^2 &lt;RET&gt; 3 s l b &lt;RET&gt;</kbd>,
+the stack will contain the formula &lsquo;<samp><span class="samp">a + 9</span></samp>&rsquo;.  The subsequent command
+<kbd>5&nbsp;s&nbsp;l&nbsp;a<!-- /@w --> &lt;RET&gt;</kbd> will replace this formula with the number 14. 
+The variables &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are not permanently affected in any way
+by these commands.
+
+   <p>The value on the top of the stack may be an equation or assignment, or
+a vector of equations or assignments, in which case the default will be
+analogous to the case of <kbd>s t &lt;RET&gt;</kbd>.  See <a href="Storing-Variables.html#Storing-Variables">Storing Variables</a>.
+
+   <p>Also, you can answer the variable-name prompt with an equation or
+assignment:  <kbd>s l b=3 &lt;RET&gt;</kbd> is the same as storing 3 on the stack
+and typing <kbd>s l b &lt;RET&gt;</kbd>.
+
+   <p>The <kbd>a b</kbd> (<code>calc-substitute</code>) command is another way to substitute
+a variable with a value in a formula.  It does an actual substitution
+rather than temporarily assigning the variable and evaluating.  For
+example, letting &lsquo;<samp><span class="samp">n=2</span></samp>&rsquo; in &lsquo;<samp><span class="samp">f(n pi)</span></samp>&rsquo; with <kbd>a b</kbd> will
+produce &lsquo;<samp><span class="samp">f(2 pi)</span></samp>&rsquo;, whereas <kbd>s l</kbd> would give &lsquo;<samp><span class="samp">f(6.28)</span></samp>&rsquo;
+since the evaluation step will also evaluate <code>pi</code>.
+
+   </body></html>
+

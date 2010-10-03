@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Debugging Calc - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Troubleshooting-Commands.html#Troubleshooting-Commands" title="Troubleshooting Commands">
+<link rel="prev" href="Caches.html#Caches" title="Caches">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Debugging-Calc"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Caches.html#Caches">Caches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting Commands</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.11.4 Debugging Calc</h4>
+
+<p class="noindent">A few commands exist to help in the debugging of Calc commands. 
+See <a href="Programming.html#Programming">Programming</a>, to see the various ways that you can write
+your own Calc commands.
+
+   <p><a name="index-Z-T-234"></a><a name="index-calc_002dtiming-235"></a>The <kbd>Z T</kbd> (<code>calc-timing</code>) command turns on and off a mode
+in which the timing of slow commands is reported in the Trail. 
+Any Calc command that takes two seconds or longer writes a line
+to the Trail showing how many seconds it took.  This value is
+accurate only to within one second.
+
+   <p>All steps of executing a command are included; in particular, time
+taken to format the result for display in the stack and trail is
+counted.  Some prompts also count time taken waiting for them to
+be answered, while others do not; this depends on the exact
+implementation of the command.  For best results, if you are timing
+a sequence that includes prompts or multiple commands, define a
+keyboard macro to run the whole sequence at once.  Calc's <kbd>X</kbd>
+command (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>) will then report the time taken
+to execute the whole macro.
+
+   <p>Another advantage of the <kbd>X</kbd> command is that while it is
+executing, the stack and trail are not updated from step to step. 
+So if you expect the output of your test sequence to leave a result
+that may take a long time to format and you don't wish to count
+this formatting time, end your sequence with a &lt;DEL&gt; keystroke
+to clear the result from the stack.  When you run the sequence with
+<kbd>X</kbd>, Calc will never bother to format the large result.
+
+   <p>Another thing <kbd>Z T</kbd> does is to increase the Emacs variable
+<code>gc-cons-threshold</code> to a much higher value (two million; the
+usual default in Calc is 250,000) for the duration of each command. 
+This generally prevents garbage collection during the timing of
+the command, though it may cause your Emacs process to grow
+abnormally large.  (Garbage collection time is a major unpredictable
+factor in the timing of Emacs operations.)
+
+   <p>Another command that is useful when debugging your own Lisp
+extensions to Calc is <kbd>M-x calc-pass-errors</kbd>, which disables
+the error handler that changes the &ldquo;<code>max-lisp-eval-depth</code>
+exceeded&rdquo; message to the much more friendly &ldquo;Computation got
+stuck or ran too long.&rdquo;  This handler interferes with the Emacs
+Lisp debugger's <code>debug-on-error</code> mode.  Errors are reported
+in the handler itself rather than at the true location of the
+error.  After you have executed <code>calc-pass-errors</code>, Lisp
+errors will be reported correctly but the user-friendly message
+will be lost.
+
+   </body></html>
+

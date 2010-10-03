@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>Error Estimates for Fits - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits" title="Polynomial and Multilinear Fits">
+<link rel="next" href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models" title="Standard Nonlinear Models">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Error-Estimates-for-Fits"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models">Standard Nonlinear Models</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits">Polynomial and Multilinear Fits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.3 Error Estimates for Fits</h4>
+
+<p class="noindent"><a name="index-H-a-F-1805"></a><a name="index-efit-1806"></a>With the Hyperbolic flag, <kbd>H a F</kbd> [<code>efit</code>] performs the same
+fitting operation as <kbd>a F</kbd>, but reports the coefficients as error
+forms instead of plain numbers.  Fitting our two data matrices (first
+with 13, then with 14) to a line with <kbd>H a F</kbd> gives the results,
+
+<pre class="example">     3. + 2. x
+     2.6 +/- 0.382970843103 + 2.2 +/- 0.115470053838 x
+</pre>
+   <p>In the first case the estimated errors are zero because the linear
+fit is perfect.  In the second case, the errors are nonzero but
+moderately small, because the data are still very close to linear.
+
+   <p>It is also possible for the <em>input</em> to a fitting operation to
+contain error forms.  The data values must either all include errors
+or all be plain numbers.  Error forms can go anywhere but generally
+go on the numbers in the last row of the data matrix.  If the last
+row contains error forms
+<!-- `@var{y_i}@w{ @tfn{+/-} }@math{\sigma_i}', -->
+`<var>y_i</var>&nbsp;<tt>+/-</tt>&nbsp;<!-- /@w --><var>sigma_i</var>',
+then the
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+statistic is now,
+
+<pre class="example">     chi^2 = sum(((y_i - (a + b x_i)) / sigma_i)^2, i, 1, N)
+</pre>
+   <p class="noindent">so that data points with larger error estimates contribute less to
+the fitting operation.
+
+   <p>If there are error forms on other rows of the data matrix, all the
+errors for a given data point are combined; the square root of the
+sum of the squares of the errors forms the
+<!-- @math{\sigma_i} -->
+&lsquo;<samp><span class="samp">sigma_i</span></samp>&rsquo;
+used for the data point.
+
+   <p>Both <kbd>a F</kbd> and <kbd>H a F</kbd> can accept error forms in the input
+matrix, although if you are concerned about error analysis you will
+probably use <kbd>H a F</kbd> so that the output also contains error
+estimates.
+
+   <p>If the input contains error forms but all the
+<!-- @math{\sigma_i} -->
+&lsquo;<samp><span class="samp">sigma_i</span></samp>&rsquo;
+values are the same, it is easy to see that the resulting fitted model
+will be the same as if the input did not have error forms at all
+<!-- (@math{\chi^2} -->
+(&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+is simply scaled uniformly by
+<!-- @math{1 / \sigma^2}, -->
+&lsquo;<samp><span class="samp">1 / sigma^2</span></samp>&rsquo;,
+which doesn't affect where it has a minimum).  But there <em>will</em> be
+a difference in the estimated errors of the coefficients reported by
+<kbd>H a F</kbd>.
+
+   <p>Consult any text on statistical modeling of data for a discussion
+of where these error estimates come from and how they should be
+interpreted.
+
+   <p><a name="index-I-a-F-1807"></a><a name="index-xfit-1808"></a>With the Inverse flag, <kbd>I a F</kbd> [<code>xfit</code>] produces even more
+information.  The result is a vector of six items:
+
+     <ol type=1 start=1>
+<li>The model formula with error forms for its coefficients or
+parameters.  This is the result that <kbd>H a F</kbd> would have
+produced.
+
+     <li>A vector of &ldquo;raw&rdquo; parameter values for the model.  These are the
+polynomial coefficients or other parameters as plain numbers, in the
+same order as the parameters appeared in the final prompt of the
+<kbd>I a F</kbd> command.  For polynomials of degree &lsquo;<samp><span class="samp">d</span></samp>&rsquo;, this vector
+will have length &lsquo;<samp><span class="samp">M = d+1</span></samp>&rsquo; with the constant term first.
+
+     <li>The covariance matrix &lsquo;<samp><span class="samp">C</span></samp>&rsquo; computed from the fit.  This is
+an <var>m</var>x<var>m</var> symmetric matrix; the diagonal elements
+<!-- @math{C_{jj}} -->
+&lsquo;<samp><span class="samp">C_j_j</span></samp>&rsquo;
+are the variances
+<!-- @math{\sigma_j^2} -->
+&lsquo;<samp><span class="samp">sigma_j^2</span></samp>&rsquo;
+of the parameters.  The other elements are covariances
+<!-- @math{\sigma_{ij}^2} -->
+&lsquo;<samp><span class="samp">sigma_i_j^2</span></samp>&rsquo;
+that describe the correlation between pairs of parameters.  (A related
+set of numbers, the <dfn>linear correlation coefficients</dfn>
+<!-- @math{r_{ij}}, -->
+&lsquo;<samp><span class="samp">r_i_j</span></samp>&rsquo;,
+are defined as
+<!-- @math{\sigma_{ij}^2 / \sigma_i \, \sigma_j}.) -->
+&lsquo;<samp><span class="samp">sigma_i_j^2 / sigma_i sigma_j</span></samp>&rsquo;.)
+
+     <li>A vector of &lsquo;<samp><span class="samp">M</span></samp>&rsquo; &ldquo;parameter filter&rdquo; functions whose
+meanings are described below.  If no filters are necessary this
+will instead be an empty vector; this is always the case for the
+polynomial and multilinear fits described so far.
+
+     <li>The value of
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+for the fit, calculated by the formulas shown above.  This gives a
+measure of the quality of the fit; statisticians consider
+<!-- @math{\chi^2 \approx N - M} -->
+&lsquo;<samp><span class="samp">chi^2 = N - M</span></samp>&rsquo;
+to indicate a moderately good fit (where again &lsquo;<samp><span class="samp">N</span></samp>&rsquo; is the number of
+data points and &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is the number of parameters).
+
+     <li>A measure of goodness of fit expressed as a probability &lsquo;<samp><span class="samp">Q</span></samp>&rsquo;. 
+This is computed from the <code>utpc</code> probability distribution
+function using
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+with &lsquo;<samp><span class="samp">N - M</span></samp>&rsquo; degrees of freedom.  A
+value of 0.5 implies a good fit; some texts recommend that often
+&lsquo;<samp><span class="samp">Q = 0.1</span></samp>&rsquo; or even 0.001 can signify an acceptable fit.  In
+particular,
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+statistics assume the errors in your inputs
+follow a normal (Gaussian) distribution; if they don't, you may
+have to accept smaller values of &lsquo;<samp><span class="samp">Q</span></samp>&rsquo;.
+
+     <p>The &lsquo;<samp><span class="samp">Q</span></samp>&rsquo; value is computed only if the input included error
+estimates.  Otherwise, Calc will report the symbol <code>nan</code>
+for &lsquo;<samp><span class="samp">Q</span></samp>&rsquo;.  The reason is that in this case the
+<!-- @math{\chi^2} -->
+&lsquo;<samp><span class="samp">chi^2</span></samp>&rsquo;
+value has effectively been used to estimate the original errors
+in the input, and thus there is no redundant information left
+over to use for a confidence test.
+        </ol>
+
+   </body></html>
+

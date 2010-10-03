@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Keyboard Macros - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Programming.html#Programming" title="Programming">
+<link rel="prev" href="Creating-User-Keys.html#Creating-User-Keys" title="Creating User Keys">
+<link rel="next" href="Invocation-Macros.html#Invocation-Macros" title="Invocation Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Keyboard-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Invocation-Macros.html#Invocation-Macros">Invocation Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
+<hr>
+</div>
+
+<h3 class="section">18.2 Programming with Keyboard Macros</h3>
+
+<p class="noindent"><a name="index-X-2265"></a><a name="index-Programming-with-keyboard-macros-2266"></a><a name="index-Keyboard-macros-2267"></a>The easiest way to &ldquo;program&rdquo; the Emacs Calculator is to use standard
+keyboard macros.  Press <kbd>C-x&nbsp;(</kbd><!-- /@w --> to begin recording a macro.  From
+this point on, keystrokes you type will be saved away as well as
+performing their usual functions.  Press <kbd>C-x )</kbd> to end recording. 
+Press shift-<kbd>X</kbd> (or the standard Emacs key sequence <kbd>C-x e</kbd>) to
+execute your keyboard macro by replaying the recorded keystrokes. 
+See <a href="../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>, for further
+information.
+
+   <p>When you use <kbd>X</kbd> to invoke a keyboard macro, the entire macro is
+treated as a single command by the undo and trail features.  The stack
+display buffer is not updated during macro execution, but is instead
+fixed up once the macro completes.  Thus, commands defined with keyboard
+macros are convenient and efficient.  The <kbd>C-x e</kbd> command, on the
+other hand, invokes the keyboard macro with no special treatment: Each
+command in the macro will record its own undo information and trail entry,
+and update the stack buffer accordingly.  If your macro uses features
+outside of Calc's control to operate on the contents of the Calc stack
+buffer, or if it includes Undo, Redo, or last-arguments commands, you
+must use <kbd>C-x e</kbd> to make sure the buffer and undo list are up-to-date
+at all times.  You could also consider using <kbd>K</kbd> (<code>calc-keep-args</code>)
+instead of <kbd>M-&lt;RET&gt;</kbd> (<code>calc-last-args</code>).
+
+   <p>Calc extends the standard Emacs keyboard macros in several ways. 
+Keyboard macros can be used to create user-defined commands.  Keyboard
+macros can include conditional and iteration structures, somewhat
+analogous to those provided by a traditional programmable calculator.
+
+<ul class="menu">
+<li><a accesskey="1" href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros">Naming Keyboard Macros</a>
+<li><a accesskey="2" href="Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals in Macros</a>
+<li><a accesskey="3" href="Loops-in-Macros.html#Loops-in-Macros">Loops in Macros</a>
+<li><a accesskey="4" href="Local-Values-in-Macros.html#Local-Values-in-Macros">Local Values in Macros</a>
+<li><a accesskey="5" href="Queries-in-Macros.html#Queries-in-Macros">Queries in Macros</a>
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>SpamAssassin - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" title="Thwarting Email Spam">
+<link rel="prev" href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" title="Anti-Spam Basics">
+<link rel="next" href="Hashcash.html#Hashcash" title="Hashcash">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SpamAssassin"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hashcash.html#Hashcash">Hashcash</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics">Anti-Spam Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Thwarting-Email-Spam.html#Thwarting-Email-Spam">Thwarting Email Spam</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.19.3 SpamAssassin, Vipul's Razor, DCC, etc</h4>
+
+<p><a name="index-SpamAssassin-2863"></a><a name="index-Vipul_0027s-Razor-2864"></a><a name="index-DCC-2865"></a>
+The days where the hints in the previous section were sufficient in
+avoiding spam are coming to an end.  There are many tools out there
+that claim to reduce the amount of spam you get.  This section could
+easily become outdated fast, as new products replace old, but
+fortunately most of these tools seem to have similar interfaces.  Even
+though this section will use SpamAssassin as an example, it should be
+easy to adapt it to most other tools.
+
+   <p>Note that this section does not involve the <code>spam.el</code> package,
+which is discussed in the next section.  If you don't care for all
+the features of <code>spam.el</code>, you can make do with these simple
+recipes.
+
+   <p>If the tool you are using is not installed on the mail server, you
+need to invoke it yourself.  Ideas on how to use the
+<code>:postscript</code> mail source parameter (see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>) follow.
+
+<pre class="lisp">     (setq mail-sources
+           '((file :prescript "formail -bs spamassassin &lt; /var/mail/%u")
+             (pop :user "jrl"
+                  :server "pophost"
+                  :postscript
+                  "mv %t /tmp/foo; formail -bs spamc &lt; /tmp/foo &gt; %t")))
+</pre>
+   <p>Once you manage to process your incoming spool somehow, thus making
+the mail contain e.g. a header indicating it is spam, you are ready to
+filter it out.  Using normal split methods (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>):
+
+<pre class="lisp">     (setq nnmail-split-methods '(("spam"  "^X-Spam-Flag: YES")
+                                  ...))
+</pre>
+   <p>Or using fancy split methods (see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>):
+
+<pre class="lisp">     (setq nnmail-split-methods 'nnmail-split-fancy
+           nnmail-split-fancy '(| ("X-Spam-Flag" "YES" "spam")
+                                  ...))
+</pre>
+   <p>Some people might not like the idea of piping the mail through various
+programs using a <code>:prescript</code> (if some program is buggy, you
+might lose all mail).  If you are one of them, another solution is to
+call the external tools during splitting.  Example fancy split method:
+
+<pre class="lisp">     (setq nnmail-split-fancy '(| (: kevin-spamassassin)
+                                  ...))
+     (defun kevin-spamassassin ()
+       (save-excursion
+         (save-restriction
+           (widen)
+           (if (eq 1 (call-process-region (point-min) (point-max)
+                                          "spamc" nil nil nil "-c"))
+               "spam"))))
+</pre>
+   <p>Note that with the nnimap back end, message bodies will not be
+downloaded by default.  You need to set
+<code>nnimap-split-download-body</code> to <code>t</code> to do that
+(see <a href="Splitting-in-IMAP.html#Splitting-in-IMAP">Splitting in IMAP</a>).
+
+   <p>That is about it.  As some spam is likely to get through anyway, you
+might want to have a nifty function to call when you happen to read
+spam.  And here is the nifty function:
+
+<pre class="lisp">     (defun my-gnus-raze-spam ()
+       "Submit SPAM to Vipul's Razor, then mark it as expirable."
+       (interactive)
+       (gnus-summary-save-in-pipe "razor-report -f -d" t)
+       (gnus-summary-mark-as-expirable 1))
+</pre>
+   </body></html>
+

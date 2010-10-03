@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Anything Groups - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Other-Sources.html#Other-Sources" title="Other Sources">
+<link rel="prev" href="Directory-Groups.html#Directory-Groups" title="Directory Groups">
+<link rel="next" href="Document-Groups.html#Document-Groups" title="Document Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Anything-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Document-Groups.html#Document-Groups">Document Groups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Directory-Groups.html#Directory-Groups">Directory Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Other-Sources.html#Other-Sources">Other Sources</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.6.2 Anything Groups</h4>
+
+<p><a name="index-nneething-2391"></a>
+From the <code>nndir</code> back end (which reads a single spool-like
+directory), it's just a hop and a skip to <code>nneething</code>, which
+pretends that any arbitrary directory is a newsgroup.  Strange, but
+true.
+
+   <p>When <code>nneething</code> is presented with a directory, it will scan this
+directory and assign article numbers to each file.  When you enter such
+a group, <code>nneething</code> must create &ldquo;headers&rdquo; that Gnus can use. 
+After all, Gnus is a newsreader, in case you're forgetting. 
+<code>nneething</code> does this in a two-step process.  First, it snoops each
+file in question.  If the file looks like an article (i.e., the first
+few lines look like headers), it will use this as the head.  If this is
+just some arbitrary file without a head (e.g. a C source file),
+<code>nneething</code> will cobble up a header out of thin air.  It will use
+file ownership, name and date and do whatever it can with these
+elements.
+
+   <p>All this should happen automatically for you, and you will be presented
+with something that looks very much like a newsgroup.  Totally like a
+newsgroup, to be precise.  If you select an article, it will be displayed
+in the article buffer, just as usual.
+
+   <p>If you select a line that represents a directory, Gnus will pop you into
+a new summary buffer for this <code>nneething</code> group.  And so on.  You can
+traverse the entire disk this way, if you feel like, but remember that
+Gnus is not dired, really, and does not intend to be, either.
+
+   <p>There are two overall modes to this action&mdash;ephemeral or solid.  When
+doing the ephemeral thing (i.e., <kbd>G D</kbd> from the group buffer), Gnus
+will not store information on what files you have read, and what files
+are new, and so on.  If you create a solid <code>nneething</code> group the
+normal way with <kbd>G m</kbd>, Gnus will store a mapping table between
+article numbers and file names, and you can treat this group like any
+other groups.  When you activate a solid <code>nneething</code> group, you will
+be told how many unread articles it contains, etc., etc.
+
+   <p>Some variables:
+
+     <dl>
+<dt><code>nneething-map-file-directory</code><dd><a name="index-nneething_002dmap_002dfile_002ddirectory-2392"></a>All the mapping files for solid <code>nneething</code> groups will be stored
+in this directory, which defaults to <samp><span class="file">~/.nneething/</span></samp>.
+
+     <br><dt><code>nneething-exclude-files</code><dd><a name="index-nneething_002dexclude_002dfiles-2393"></a>All files that match this regexp will be ignored.  Nice to use to exclude
+auto-save files and the like, which is what it does by default.
+
+     <br><dt><code>nneething-include-files</code><dd><a name="index-nneething_002dinclude_002dfiles-2394"></a>Regexp saying what files to include in the group.  If this variable is
+non-<code>nil</code>, only files matching this regexp will be included.
+
+     <br><dt><code>nneething-map-file</code><dd><a name="index-nneething_002dmap_002dfile-2395"></a>Name of the map files. 
+</dl>
+
+   </body></html>
+

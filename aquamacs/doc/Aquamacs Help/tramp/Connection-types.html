@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Connection types - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="next" href="Inline-methods.html#Inline-methods" title="Inline methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Connection-types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inline-methods.html#Inline-methods">Inline methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Types of connections made to remote machines.</h3>
+
+<p><a name="index-connection-types_002c-overview-10"></a>
+There are two basic types of transfer methods, each with its own
+advantages and limitations.  Both types of connection make use of a
+remote shell access program such as <samp><span class="command">rsh</span></samp>, <samp><span class="command">ssh</span></samp> or
+<samp><span class="command">telnet</span></samp> to connect to the remote machine.
+
+   <p>This connection is used to perform many of the operations that <span class="sc">tramp</span>
+requires to make the remote file system transparently accessible from
+the local machine.  It is only when visiting files that the methods
+differ.
+
+   <p><a name="index-inline-methods-11"></a><a name="index-external-methods-12"></a><a name="index-methods_002c-inline-13"></a><a name="index-methods_002c-external-14"></a>Loading or saving a remote file requires that the content of the file
+be transfered between the two machines.  The content of the file can
+be transfered using one of two methods: the <dfn>inline method</dfn> over
+the same connection used to log in to the remote machine, or the
+<dfn>external method</dfn> through another connection using a remote copy
+program such as <samp><span class="command">rcp</span></samp>, <samp><span class="command">scp</span></samp> or <samp><span class="command">rsync</span></samp>.
+
+   <p>The performance of the external methods is generally better than that
+of the inline methods, at least for large files.  This is caused by
+the need to encode and decode the data when transferring inline.
+
+   <p>The one exception to this rule are the <samp><span class="command">scp</span></samp> based transfer
+methods.  While these methods do see better performance when actually
+transferring files, the overhead of the cryptographic negotiation at
+startup may drown out the improvement in file transfer times.
+
+   <p>External methods should be configured such a way that they don't
+require a password (with <samp><span class="command">ssh-agent</span></samp>, or such alike).  Modern
+<samp><span class="command">scp</span></samp> implementations offer options to reuse existing
+<samp><span class="command">ssh</span></samp> connections, see method <samp><span class="command">scpc</span></samp>.  If it isn't
+possible, you should consider <a href="Password-handling.html#Password-handling">Password handling</a>, otherwise you
+will be prompted for a password every copy action.
+
+   </body></html>
+

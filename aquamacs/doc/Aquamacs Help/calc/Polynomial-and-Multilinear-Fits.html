@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Polynomial and Multilinear Fits - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Curve-Fitting.html#Curve-Fitting" title="Curve Fitting">
+<link rel="prev" href="Linear-Fits.html#Linear-Fits" title="Linear Fits">
+<link rel="next" href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" title="Error Estimates for Fits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Polynomial-and-Multilinear-Fits"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits">Error Estimates for Fits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Linear-Fits.html#Linear-Fits">Linear Fits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.8.2 Polynomial and Multilinear Fits</h4>
+
+<p class="noindent">To fit the data to higher-order polynomials, just type one of the
+digits <kbd>2</kbd> through <kbd>9</kbd> when prompted for a model.  For example,
+we could fit the original data matrix from the previous section
+(with 13, not 14) to a parabola instead of a line by typing
+<kbd>a F 2 &lt;RET&gt;</kbd>.
+
+<pre class="example">     2.00000000001 x - 1.5e-12 x^2 + 2.99999999999
+</pre>
+   <p>Note that since the constant and linear terms are enough to fit the
+data exactly, it's no surprise that Calc chose a tiny contribution
+for &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo;.  (The fact that it's not exactly zero is due only
+to roundoff error.  Since our data are exact integers, we could get
+an exact answer by typing <kbd>m f</kbd> first to get Fraction mode. 
+Then the &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; term would vanish altogether.  Usually, though,
+the data being fitted will be approximate floats so Fraction mode
+won't help.)
+
+   <p>Doing the <kbd>a F 2</kbd> fit on the data set with 14 instead of 13
+gives a much larger &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; contribution, as Calc bends the
+line slightly to improve the fit.
+
+<pre class="example">     0.142857142855 x^2 + 1.34285714287 x + 3.59999999998
+</pre>
+   <p>An important result from the theory of polynomial fitting is that it
+is always possible to fit <var>n</var> data points exactly using a polynomial
+of degree <var>n</var><i>-1</i>, sometimes called an <dfn>interpolating polynomial</dfn>. 
+Using the modified (14) data matrix, a model number of 4 gives
+a polynomial that exactly matches all five data points:
+
+<pre class="example">     0.04167 x^4 - 0.4167 x^3 + 1.458 x^2 - 0.08333 x + 4.
+</pre>
+   <p>The actual coefficients we get with a precision of 12, like
+&lsquo;<samp><span class="samp">0.0416666663588</span></samp>&rsquo;, clearly suffer from loss of precision. 
+It is a good idea to increase the working precision to several
+digits beyond what you need when you do a fitting operation. 
+Or, if your data are exact, use Fraction mode to get exact
+results.
+
+   <p>You can type <kbd>i</kbd> instead of a digit at the model prompt to fit
+the data exactly to a polynomial.  This just counts the number of
+columns of the data matrix to choose the degree of the polynomial
+automatically.
+
+   <p>Fitting data &ldquo;exactly&rdquo; to high-degree polynomials is not always
+a good idea, though.  High-degree polynomials have a tendency to
+wiggle uncontrollably in between the fitting data points.  Also,
+if the exact-fit polynomial is going to be used to interpolate or
+extrapolate the data, it is numerically better to use the <kbd>a p</kbd>
+command described below.  See <a href="Interpolation.html#Interpolation">Interpolation</a>.
+
+   <p>Another generalization of the linear model is to assume the
+&lsquo;<samp><span class="samp">y</span></samp>&rsquo; values are a sum of linear contributions from several
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; values.  This is a <dfn>multilinear</dfn> fit, and it is also
+selected by the <kbd>1</kbd> digit key.  (Calc decides whether the fit
+is linear or multilinear by counting the rows in the data matrix.)
+
+   <p>Given the data matrix,
+
+<pre class="example">     [ [  1,   2,   3,    4,   5  ]
+       [  7,   2,   3,    5,   2  ]
+       [ 14.5, 15, 18.5, 22.5, 24 ] ]
+</pre>
+   <p class="noindent">the command <kbd>a F 1 &lt;RET&gt;</kbd> will call the first row &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and the
+second row &lsquo;<samp><span class="samp">y</span></samp>&rsquo;, and will fit the values in the third row to the
+model &lsquo;<samp><span class="samp">a + b x + c y</span></samp>&rsquo;.
+
+<pre class="example">     8. + 3. x + 0.5 y
+</pre>
+   <p>Calc can do multilinear fits with any number of independent variables
+(i.e., with any number of data rows).
+
+   <p>Yet another variation is <dfn>homogeneous</dfn> linear models, in which
+the constant term is known to be zero.  In the linear case, this
+means the model formula is simply &lsquo;<samp><span class="samp">a x</span></samp>&rsquo;; in the multilinear
+case, the model might be &lsquo;<samp><span class="samp">a x + b y + c z</span></samp>&rsquo;; and in the polynomial
+case, the model could be &lsquo;<samp><span class="samp">a x + b x^2 + c x^3</span></samp>&rsquo;.  You can get
+a homogeneous linear or multilinear model by pressing the letter
+<kbd>h</kbd> followed by a regular model key, like <kbd>1</kbd> or <kbd>2</kbd>. 
+This will be indicated by an &ldquo;h&rdquo; in the minibuffer after the help
+message.
+
+   <p>It is certainly possible to have other constrained linear models,
+like &lsquo;<samp><span class="samp">2.3 + a x</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a - 4 x</span></samp>&rsquo;.  While there is no single
+key to select models like these, a later section shows how to enter
+any desired model by hand.  In the first case, for example, you
+would enter <kbd>a F ' 2.3 + a x</kbd>.
+
+   <p>Another class of models that will work but must be entered by hand
+are multinomial fits, e.g., &lsquo;<samp><span class="samp">a + b x + c y + d x^2 + e y^2 + f x y</span></samp>&rsquo;.
+
+   </body></html>
+

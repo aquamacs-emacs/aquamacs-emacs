@@ -1,0 +1,209 @@
+<html lang="en">
+<head>
+<title>Routine Info - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
+<link rel="prev" href="Code-Formatting.html#Code-Formatting" title="Code Formatting">
+<link rel="next" href="Online-Help.html#Online-Help" title="Online Help">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Routine-Info"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Online-Help.html#Online-Help">Online Help</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Code-Formatting.html#Code-Formatting">Code Formatting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Routine Info</h3>
+
+<p><a name="index-Routine-info-61"></a><a name="index-Updating-routine-info-62"></a><a name="index-Scanning-buffers-for-routine-info-63"></a><a name="index-Buffers_002c-scanning-for-routine-info-64"></a><a name="index-Shell_002c-querying-for-routine-info-65"></a>
+<a name="index-C_002dc-C_002di-66"></a>IDL comes bundled with more than one thousand procedures, functions
+and object methods, and large libraries typically contain hundreds or
+even thousands more (each with a few to tens of keywords and
+arguments).  This large command set can make it difficult to remember
+the calling sequence and keywords for the routines you use, but
+IDLWAVE can help.  It builds up routine information from a wide
+variety of sources; IDLWAVE in fact knows far more about the
+&lsquo;<samp><span class="samp">.pro</span></samp>&rsquo; routines on your system than IDL itself!  It maintains a
+list of all built-in routines, with calling sequences and
+keywords<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  It also scans Emacs buffers
+for routine definitions, queries the IDLWAVE-Shell for information
+about routines currently compiled there, and automatically locates
+library and user-created catalogs.  This information is updated
+automatically, and so should usually be current.  To force a global
+update and refresh the routine information, use <kbd>C-c C-i</kbd>
+(<code>idlwave-update-routine-info</code>).
+
+   <p><a name="index-C_002dc-_003f-67"></a>To display the information about a routine, press <kbd>C-c ?</kbd>, which
+calls the command <code>idlwave-routine-info</code>.  When the current cursor
+position is on the name or in the argument list of a procedure or
+function, information will be displayed about the routine.  For example,
+consider the indicated cursor positions in the following line:
+
+<pre class="example">     plot,x,alog(x+5*sin(x) + 2),
+       |  |   |   |   |  |  |    |
+       1  2   3   4   5  6  7    8
+</pre>
+   <p><a name="index-Default-routine_002c-for-info-and-help-68"></a>On positions 1,2 and 8, information about the &lsquo;<samp><span class="samp">plot</span></samp>&rsquo; procedure will
+be shown.  On positions 3,4, and 7, the &lsquo;<samp><span class="samp">alog</span></samp>&rsquo; function will be
+described, while positions 5 and 6 will investigate the &lsquo;<samp><span class="samp">sin</span></samp>&rsquo;
+function.
+
+   <p>When you ask for routine information about an object method, and the
+method exists in several classes, IDLWAVE queries for the class of the
+object, unless the class is already known through a text property on the
+&lsquo;<samp><span class="samp">-&gt;</span></samp>&rsquo; operator (see <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a>), or by having been explicitly included in the call
+(e.g. <code>a-&gt;myclass::Foo</code>).
+
+   <p><a name="index-Calling-sequences-69"></a><a name="index-Keywords-of-a-routine-70"></a><a name="index-Routine-source-information-71"></a>The description displayed contains the calling sequence, the list of
+keywords and the source location of this routine.  It looks like this:
+
+<pre class="example">     Usage:    XMANAGER, NAME, ID
+     Keywords: BACKGROUND CATCH CLEANUP EVENT_HANDLER GROUP_LEADER
+               JUST_REG MODAL NO_BLOCK
+     Source:   SystemLib   [LCSB] /soft1/idl53/lib/xmanager.pro
+</pre>
+   <p><a name="index-Categories_002c-of-routines-72"></a><a name="index-Load_002dpath-shadows-73"></a><a name="index-Shadows_002c-load_002dpath-74"></a><a name="index-IDL-variable-_0040code_007b_0021PATH_007d-75"></a><a name="index-g_t_0040code_007b_0021PATH_007d_002c-IDL-variable-76"></a><a name="index-IDL-variable-_0040code_007b_0021DIR_007d-77"></a><a name="index-g_t_0040code_007b_0021DIR_007d_002c-IDL-variable-78"></a>
+If a definition of this routine exists in several files accessible to
+IDLWAVE, several &lsquo;<samp><span class="samp">Source</span></samp>&rsquo; lines will point to the different
+files.  This may indicate that your routine is shadowing a system
+library routine, which may or may not be what you want
+(see <a href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a>).  The information about the calling
+sequence and keywords is derived from the first source listed. 
+Library routines are available only if you have scanned your local IDL
+directories or are using pre-scanned libraries (see <a href="Catalogs.html#Catalogs">Catalogs</a>). 
+The source entry consists of a <em>source category</em>, a set of
+<em>flags</em> and the path to the <em>source file</em>.  The following
+default categories exist:
+
+   <p><table summary=""><tr align="left"><td valign="top" width="15%"><i>System</i>
+</td><td valign="top" width="85%">A system routine of unknown origin.  When the system library has
+been scanned as part of a catalog (see <a href="Catalogs.html#Catalogs">Catalogs</a>), this category
+will automatically split into the next two. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Builtin</i>
+</td><td valign="top" width="85%">A builtin system routine with no source code available. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>SystemLib</i>
+</td><td valign="top" width="85%">A library system routine in the official lib directory <samp><span class="file">!DIR/lib</span></samp>. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Obsolete</i>
+</td><td valign="top" width="85%">A library routine in the official lib directory <samp><span class="file">!DIR/lib/obsolete</span></samp>. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Library</i>
+</td><td valign="top" width="85%">A routine in a file on IDL's search path <code>!PATH</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Other</i>
+</td><td valign="top" width="85%">Any other routine with a file not known to be on the search path. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Unresolved</i>
+</td><td valign="top" width="85%">An otherwise unknown routine the shell lists as unresolved
+(referenced, but not compiled).
+   <br></td></tr></table>
+
+   <p>Any routines discovered in library catalogs (see <a href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a>), will display the category assigned during creation,
+e.g. &lsquo;<samp><span class="samp">NasaLib</span></samp>&rsquo;.  For routines not discovered in this way, you can
+create additional categories based on the routine's filename using the
+variable <code>idlwave-special-lib-alist</code>.
+
+   <p><a name="index-Flags_002c-in-routine-info-79"></a><a name="index-Duplicate-routines-80"></a><a name="index-Multiply-defined-routines-81"></a><a name="index-Routine-definitions_002c-multiple-82"></a>The flags <code>[LCSB]</code> indicate the source of the information IDLWAVE
+has regarding the file: from a library catalog (<code>[L---]</code><!-- /@w -->),
+from a user catalog (<code>[-C--]</code><!-- /@w -->, from the IDL Shell
+(<code>[--S-]</code><!-- /@w -->) or from an Emacs buffer (<code>[---B]</code><!-- /@w -->). 
+Combinations are possible (a compiled library routine visited in a
+buffer might read <code>[L-SB]</code><!-- /@w -->).  If a file contains multiple
+definitions of the same routine, the file name will be prefixed with
+&lsquo;<samp><span class="samp">(Nx)</span></samp>&rsquo; where &lsquo;<samp><span class="samp">N</span></samp>&rsquo; is the number of definitions.
+
+   <p><a name="index-Online-Help-from-the-routine-info-buffer-83"></a><a name="index-Active-text_002c-in-routine-info-84"></a><a name="index-Inserting-keywords_002c-from-routine-info-85"></a><a name="index-Source-file_002c-access-from-routine-info-86"></a>Some of the text in the <samp><span class="file">*Help*</span></samp> routine info buffer will be active
+(it is highlighted when the mouse moves over it).  Typically, clicking
+with the right mouse button invokes online help lookup, and clicking
+with the middle mouse button inserts keywords or visits files:
+
+   <p><table summary=""><tr align="left"><td valign="top" width="15%"><i>Usage</i>
+</td><td valign="top" width="85%">If online help is installed, a click with the <em>right</em> mouse
+button on the <i>Usage:</i> line will access the help for the
+routine (see <a href="Online-Help.html#Online-Help">Online Help</a>). 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Keyword</i>
+</td><td valign="top" width="85%">Online help about keywords is also available with the
+<em>right</em> mouse button.  Clicking on a keyword with the <em>middle</em>
+mouse button will insert this keyword in the buffer from where
+<code>idlwave-routine-info</code> was called.  Holding down &lt;SHIFT&gt; while
+clicking also adds the initial &lsquo;<samp><span class="samp">/</span></samp>&rsquo;. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Source</i>
+</td><td valign="top" width="85%">Clicking with the <em>middle</em> mouse button on a &lsquo;<samp><span class="samp">Source</span></samp>&rsquo; line
+finds the source file of the routine and visits it in another window. 
+Another click on the same line switches back to the buffer from which
+<kbd>C-c ?</kbd> was called.  If you use the <em>right</em> mouse button, the
+source will not be visited by a buffer, but displayed in the online help
+window. 
+<br></td></tr><tr align="left"><td valign="top" width="15%"><i>Classes</i>
+</td><td valign="top" width="85%">The <i>Classes</i> line is only included in the routine info window if
+the current class inherits from other classes.  You can click with the
+<em>middle</em> mouse button to display routine info about the current
+method in other classes on the inheritance chain, if such a method
+exists there.
+   <br></td></tr></table>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-resize-routine-help-window</b> (<code>t</code>)<var><a name="index-idlwave_002dresize_002droutine_002dhelp_002dwindow-87"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means resize the Routine-info <samp><span class="file">*Help*</span></samp> window to
+fit the content. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-special-lib-alist</b><var><a name="index-idlwave_002dspecial_002dlib_002dalist-88"></a></var><br>
+<blockquote><p>Alist of regular expressions matching special library directories. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-rinfo-max-source-lines</b> (<code>5</code>)<var><a name="index-idlwave_002drinfo_002dmax_002dsource_002dlines-89"></a></var><br>
+<blockquote><p>Maximum number of source files displayed in the Routine Info window. 
+</p></blockquote></div>
+
+   <p><A NAME="ONLINE_HELP"></A>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This list is created by scanning the IDL manuals and
+might contain (very few) errors.  Please report any errors to the
+maintainer, so that they can be fixed.</p>
+
+   <hr></div>
+
+   </body></html>
+

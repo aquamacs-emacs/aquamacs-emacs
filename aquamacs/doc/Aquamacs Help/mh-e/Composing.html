@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>Composing - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
+<link rel="prev" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
+<link rel="next" href="Replying.html#Replying" title="Replying">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Composing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Replying.html#Replying">Replying</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Composing</h3>
+
+<p><a name="index-g_t_0040file_007b_002eemacs_007d-1035"></a><a name="index-MH_002dFolder-mode-1036"></a><a name="index-composing-mail-1037"></a><a name="index-draft-1038"></a><a name="index-files_002c-_0040file_007b_002eemacs_007d-1039"></a><a name="index-modes_002c-MH_002dFolder-1040"></a><a name="index-sending-mail-1041"></a><a name="index-mh_002dsmail-1042"></a><a name="index-mh_002dsmail_002dother_002dwindow-1043"></a><a name="index-M_002dx-mh_002dsmail-1044"></a><a name="index-M_002dx-mh_002dsmail_002dother_002dwindow-1045"></a>
+Outside of an MH-Folder buffer, you must call either <kbd>M-x
+mh-smail</kbd> or <kbd>M-x mh-smail-other-window</kbd> to compose a new message. 
+The former command always creates a two-window layout with the current
+buffer on top and the draft on the bottom. Use the latter command if
+you would rather preserve the window layout. You may find adding the
+following key bindings to <samp><span class="file">~/.emacs</span></samp> useful:
+
+<pre class="smalllisp">     (global-set-key "\C-xm" 'mh-smail)
+     (global-set-key "\C-x4m" 'mh-smail-other-window)
+</pre>
+   <p><a name="index-draft-folder-1046"></a><a name="index-MH_002dLetter-mode-1047"></a><a name="index-modes_002c-MH_002dLetter-1048"></a><a name="index-mh_002dsend-1049"></a><a name="index-m-1050"></a>
+From within a MH-Folder buffer, you can simply use the command <kbd>m</kbd>
+(<code>mh-send</code>). However you invoke <code>mh-send</code>, your letter
+appears in an Emacs buffer whose mode is MH-Letter (to see what the
+buffer looks like, see <a href="Sending-Mail-Tour.html#Sending-Mail-Tour">Sending Mail Tour</a>). MH-Letter mode allows
+you to edit your message, to check the validity of the recipients, to
+insert attachments and other messages into your message, and to send
+the message. We'll go more into depth about editing a
+<dfn>draft</dfn><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> (a
+message you're composing) in just a moment (see <a href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>).
+
+   <p><a name="index-mh_002dcompose_002dprompt_002dflag-1051"></a>
+If you prefer to be prompted for the recipient and subject fields
+before the MH-Letter buffer appears, turn on the option
+<code>mh-compose-prompt-flag</code>.
+
+   <p><a name="index-header-field_002c-_0040samp_007bX_002dMailer_003a_007d-1052"></a><a name="index-g_t_0040samp_007bX_002dMailer_003a_007d-header-field-1053"></a><a name="index-mh_002dinsert_002dx_002dmailer_002dflag-1054"></a>
+MH-E adds an &lsquo;<samp><span class="samp">X-Mailer:</span></samp>&rsquo; header field to the header that includes
+the version of MH-E and Emacs that you are using. If you don't want to
+participate in our marketing, you can turn off the option
+<code>mh-insert-x-mailer-flag</code>.
+
+   <p><a name="index-g_t_0040command_007brepl_007d-1055"></a><a name="index-g_t_0040file_007bcomponents_007d-1056"></a><a name="index-MH-commands_002c-_0040command_007brepl_007d-1057"></a><a name="index-MH_002dLetter-mode-1058"></a><a name="index-Mail-mode-1059"></a><a name="index-files_002c-_0040file_007bcomponents_007d-1060"></a><a name="index-modes_002c-MH_002dLetter-1061"></a><a name="index-modes_002c-Mail-1062"></a><a name="index-mail_002dmode_002dhook-1063"></a><a name="index-mh_002dletter_002dmode_002dhook-1064"></a><a name="index-text_002dmode_002dhook-1065"></a>
+Two hooks are provided to run commands on your freshly created draft. 
+The first hook, <code>mh-letter-mode-hook</code>, allows you to do some
+processing before editing a letter<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. For example, you may wish
+to modify the header after <samp><span class="command">repl</span></samp> has done its work, or you
+may have a complicated <samp><span class="file">components</span></samp> file and need to tell MH-E
+where the cursor should go. Here's an example of how you would use
+this hook.
+
+   <p><a name="index-mh_002dinsert_002dsignature_002c-example-1066"></a>
+<pre class="smalllisp">     (defvar letter-mode-init-done-flag nil
+       "Non-nil means one-time MH-E settings have been made.")
+     
+     (defun my-mh-letter-mode-hook ()
+       "Prepare letter for editing."
+       (when (not letter-mode-init-done)     ; <span class="roman">only need to bind the keys once</span>
+         (local-set-key "\C-ctb" 'add-enriched-text)
+         (local-set-key "\C-cti" 'add-enriched-text)
+         (local-set-key "\C-ctf" 'add-enriched-text)
+         (local-set-key "\C-cts" 'add-enriched-text)
+         (local-set-key "\C-ctB" 'add-enriched-text)
+         (local-set-key "\C-ctu" 'add-enriched-text)
+         (local-set-key "\C-ctc" 'add-enriched-text)
+         (setq letter-mode-init-done t))
+       (save-excursion
+         (goto-char (point-max))             ; <span class="roman">go to end of message to</span>
+         (mh-insert-signature)))             ;   <span class="roman">insert signature</span>
+     
+     <i>Prepare draft for editing via mh-letter-mode-hook</i>
+</pre>
+   <p>The function, <code>add-enriched-text</code> is defined in the example in
+<a href="Adding-Attachments.html#Adding-Attachments">Adding Attachments</a>.
+
+   <p><a name="index-mh_002dcompose_002dletter_002dfunction-1067"></a><a name="index-mh_002dletter_002dmode_002dhook-1068"></a>
+The second hook, a function really, is
+<code>mh-compose-letter-function</code>. Like <code>mh-letter-mode-hook</code>, it
+is called just before editing a new message; however, it is the last
+function called before you edit your message. The consequence of this
+is that you can write a function to write and send the message for
+you. This function is passed three arguments: the contents of the
+&lsquo;<samp><span class="samp">To:</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Subject:</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">Cc:</span></samp>&rsquo; header fields.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> I highly recommend that you use a <dfn>draft
+folder</dfn> so that you can edit several drafts in parallel. To do so,
+create a folder named &lsquo;<samp><span class="samp">+drafts</span></samp>&rsquo; for example, and add the profile
+component &lsquo;<samp><span class="samp">Draft-Folder: drafts</span></samp>&rsquo; (see <code>mh-profile</code>(5)).</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Actually, because
+MH-Letter mode inherits from Mail mode, the hooks
+<code>text-mode-hook</code> and <code>mail-mode-hook</code> are run (in that
+order) before <code>mh-letter-mode-hook</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

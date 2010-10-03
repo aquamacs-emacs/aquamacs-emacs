@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Macros - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Control-Structure.html#Control-Structure" title="Control Structure">
+<link rel="next" href="Declarations.html#Declarations" title="Declarations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Declarations.html#Declarations">Declarations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Control-Structure.html#Control-Structure">Control Structure</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">6 Macros</h2>
+
+<p class="noindent">This package implements the various Common Lisp features of
+<code>defmacro</code>, such as destructuring, <code>&amp;environment</code>,
+and <code>&amp;body</code>.  Top-level <code>&amp;whole</code> is not implemented
+for <code>defmacro</code> due to technical difficulties. 
+See <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>.
+
+   <p>Destructuring is made available to the user by way of the
+following macro:
+
+<div class="defun">
+&mdash; Special Form: <b>destructuring-bind</b><var> arglist expr forms<small class="dots">...</small><a name="index-destructuring_002dbind-55"></a></var><br>
+<blockquote><p>This macro expands to code which executes <var>forms</var>, with
+the variables in <var>arglist</var> bound to the list of values
+returned by <var>expr</var>.  The <var>arglist</var> can include all
+the features allowed for <code>defmacro</code> argument lists,
+including destructuring.  (The <code>&amp;environment</code> keyword
+is not allowed.)  The macro expansion will signal an error
+if <var>expr</var> returns a list of the wrong number of arguments
+or with incorrect keyword arguments. 
+</p></blockquote></div>
+
+   <p>This package also includes the Common Lisp <code>define-compiler-macro</code>
+facility, which allows you to define compile-time expansions and
+optimizations for your functions.
+
+<div class="defun">
+&mdash; Special Form: <b>define-compiler-macro</b><var> name arglist forms<small class="dots">...</small><a name="index-define_002dcompiler_002dmacro-56"></a></var><br>
+<blockquote><p>This form is similar to <code>defmacro</code>, except that it only expands
+calls to <var>name</var> at compile-time; calls processed by the Lisp
+interpreter are not expanded, nor are they expanded by the
+<code>macroexpand</code> function.
+
+        <p>The argument list may begin with a <code>&amp;whole</code> keyword and a
+variable.  This variable is bound to the macro-call form itself,
+i.e., to a list of the form &lsquo;<samp><span class="samp">(</span><var>name</var> <var>args</var><span class="samp">...)</span></samp>&rsquo;. 
+If the macro expander returns this form unchanged, then the
+compiler treats it as a normal function call.  This allows
+compiler macros to work as optimizers for special cases of a
+function, leaving complicated cases alone.
+
+        <p>For example, here is a simplified version of a definition that
+appears as a standard part of this package:
+
+     <pre class="example">          (define-compiler-macro member* (&amp;whole form a list &amp;rest keys)
+            (if (and (null keys)
+                     (eq (car-safe a) 'quote)
+                     (not (floatp-safe (cadr a))))
+                (list 'memq a list)
+              form))
+</pre>
+        <p class="noindent">This definition causes <code>(member* </code><var>a</var> <var>list</var><code>)</code> to change
+to a call to the faster <code>memq</code> in the common case where <var>a</var>
+is a non-floating-point constant; if <var>a</var> is anything else, or
+if there are any keyword arguments in the call, then the original
+<code>member*</code> call is left intact.  (The actual compiler macro
+for <code>member*</code> optimizes a number of other cases, including
+common <code>:test</code> predicates.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compiler-macroexpand</b><var> form<a name="index-compiler_002dmacroexpand-57"></a></var><br>
+<blockquote><p>This function is analogous to <code>macroexpand</code>, except that it
+expands compiler macros rather than regular macros.  It returns
+<var>form</var> unchanged if it is not a call to a function for which
+a compiler macro has been defined, or if that compiler macro
+decided to punt by returning its <code>&amp;whole</code> argument.  Like
+<code>macroexpand</code>, it expands repeatedly until it reaches a form
+for which no further expansion is possible. 
+</p></blockquote></div>
+
+   <p>See <a href="Macro-Bindings.html#Macro-Bindings">Macro Bindings</a>, for descriptions of the <code>macrolet</code>
+and <code>symbol-macrolet</code> forms for making &ldquo;local&rdquo; macro
+definitions.
+
+   </body></html>
+

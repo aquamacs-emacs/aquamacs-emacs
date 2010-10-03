@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>MS-DOS Printing - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="prev" href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names" title="MS-DOS File Names">
+<link rel="next" href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE" title="MS-DOS and MULE">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-Printing"></a>
+<a name="MS_002dDOS-Printing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">MS-DOS and MULE</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">MS-DOS File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.5 Printing and MS-DOS</h4>
+
+<p>Printing commands, such as <code>lpr-buffer</code>
+(see <a href="Printing.html#Printing">Printing</a>) and <code>ps-print-buffer</code> (see <a href="PostScript.html#PostScript">PostScript</a>)
+can work on MS-DOS by sending the output to one of the printer ports,
+if a Posix-style <code>lpr</code> program is unavailable.  The same Emacs
+variables control printing on all systems, but in some cases they have
+different default values on MS-DOS.
+
+   <p>See <a href="Windows-Printing.html#Windows-Printing">Windows Printing</a>,
+for details about setting up printing to a networked printer.
+
+   <p>Some printers expect DOS codepage encoding of non-<acronym>ASCII</acronym> text, even
+though they are connected to a Windows machine which uses a different
+encoding for the same locale.  For example, in the Latin-1 locale, DOS
+uses codepage 850 whereas Windows uses codepage 1252.  See <a href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">MS-DOS and MULE</a>.  When you print to such printers from Windows, you can use the
+<kbd>C-x RET c</kbd> (<code>universal-coding-system-argument</code>) command before
+<kbd>M-x lpr-buffer</kbd>; Emacs will then convert the text to the DOS
+codepage that you specify.  For example, <kbd>C-x RET c cp850-dos RET
+M-x lpr-region RET</kbd> will print the region while converting it to the
+codepage 850 encoding.
+
+   <p><a name="index-dos_002dprinter-4439"></a><a name="index-dos_002dps_002dprinter-4440"></a>  For backwards compatibility, the value of <code>dos-printer</code>
+(<code>dos-ps-printer</code>), if it has a value, overrides the value of
+<code>printer-name</code> (<code>ps-printer-name</code>), on MS-DOS.
+
+   </body></html>
+

@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Mode Lines - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Various.html#Various" title="Various">
+<link rel="prev" href="Compilation.html#Compilation" title="Compilation">
+<link rel="next" href="Highlighting-and-Menus.html#Highlighting-and-Menus" title="Highlighting and Menus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mode-Lines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Highlighting-and-Menus.html#Highlighting-and-Menus">Highlighting and Menus</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compilation.html#Compilation">Compilation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
+<hr>
+</div>
+
+<h3 class="section">8.8 Mode Lines</h3>
+
+<p><a name="index-mode-lines-2752"></a>
+<a name="index-gnus_002dupdated_002dmode_002dlines-2753"></a><code>gnus-updated-mode-lines</code> says what buffers should keep their mode
+lines updated.  It is a list of symbols.  Supported symbols include
+<code>group</code>, <code>article</code>, <code>summary</code>, <code>server</code>,
+<code>browse</code>, and <code>tree</code>.  If the corresponding symbol is present,
+Gnus will keep that mode line updated with information that may be
+pertinent.  If this variable is <code>nil</code>, screen refresh may be
+quicker.
+
+   <p><a name="index-display_002dtime-2754"></a>
+<a name="index-gnus_002dmode_002dnon_002dstring_002dlength-2755"></a>By default, Gnus displays information on the current article in the mode
+lines of the summary and article buffers.  The information Gnus wishes
+to display (e.g. the subject of the article) is often longer than the
+mode lines, and therefore have to be cut off at some point.  The
+<code>gnus-mode-non-string-length</code> variable says how long the other
+elements on the line is (i.e., the non-info part).  If you put
+additional elements on the mode line (e.g. a clock), you should modify
+this variable:
+
+<!-- Hook written by Francesco Potorti` <pot@cnuce.cnr.it> -->
+<pre class="lisp">     (add-hook 'display-time-hook
+               (lambda () (setq gnus-mode-non-string-length
+                                (+ 21
+                                   (if line-number-mode 5 0)
+                                   (if column-number-mode 4 0)
+                                   (length display-time-string)))))
+</pre>
+   <p>If this variable is <code>nil</code> (which is the default), the mode line
+strings won't be chopped off, and they won't be padded either.  Note
+that the default is unlikely to be desirable, as even the percentage
+complete in the buffer may be crowded off the mode line; the user should
+configure this variable appropriately for her configuration.
+
+   </body></html>
+

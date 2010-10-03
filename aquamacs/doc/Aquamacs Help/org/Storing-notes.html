@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Storing notes - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Remember.html#Remember" title="Remember">
+<link rel="prev" href="Remember-templates.html#Remember-templates" title="Remember templates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Storing-notes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Remember-templates.html#Remember-templates">Remember templates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Remember.html#Remember">Remember</a>
+<hr>
+</div>
+
+<h4 class="subsection">9.1.3 Storing notes</h4>
+
+<p><a name="index-org_002dremember_002dclock_002dout_002don_002dexit-661"></a>When you are finished preparing a note with Remember, you have to press
+<kbd>C-c C-c</kbd> to file the note away.  If you have started the clock in the
+Remember buffer, you will first be asked if you want to clock out
+now<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If you answer <kbd>n</kbd>, the clock
+will continue to run after the note was filed away.
+
+   <p>The handler will then store the note in the file and under the headline
+specified in the template, or it will use the default file and headline. 
+The window configuration will be restored, sending you back to the working
+context before the call to Remember.  To re-use the location found
+during the last call to Remember, exit the Remember buffer with
+<kbd>C-0 C-c C-c</kbd>, i.e. specify a zero prefix argument to <kbd>C-c C-c</kbd>. 
+Another special case is <kbd>C-2 C-c C-c</kbd> which files the note as a child of
+the currently clocked item.
+
+   <p><a name="index-org_002dremember_002dstore_002dwithout_002dprompt-662"></a>If you want to store the note directly to a different place, use
+<kbd>C-1 C-c C-c</kbd> instead to exit Remember<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  The handler will then first prompt for a target file&mdash;if
+you press &lt;RET&gt;, the value specified for the template is used. 
+Then the command offers the headings tree of the selected file, with the
+cursor position at the default headline (if you specified one in the
+template).  You can either immediately press &lt;RET&gt; to get the note
+placed there.  Or you can use the following keys to find a different
+location:
+<pre class="example">     &lt;TAB&gt;         <span class="roman">Cycle visibility.</span>
+     &lt;down&gt; / &lt;up&gt;   <span class="roman">Next/previous visible headline.</span>
+     n / p        <span class="roman">Next/previous visible headline.</span>
+     f / b        <span class="roman">Next/previous headline same level.</span>
+     u            <span class="roman">One level up.</span>
+     <!-- 0-9          @r{Digit argument.} -->
+</pre>
+   <p class="noindent">Pressing &lt;RET&gt; or &lt;left&gt; or &lt;right&gt;
+then leads to the following result.
+
+   <p><a name="index-org_002dreverse_002dnote_002dorder-663"></a>
+   <p><table summary=""><tr align="left"><td valign="top" width="20%"><b>Cursor position</b> </td><td valign="top" width="15%"><b>Key</b> </td><td valign="top" width="65%"><b>Note gets inserted</b>
+<br></td></tr><tr align="left"><td valign="top" width="20%">on headline     </td><td valign="top" width="15%">&lt;RET&gt;              </td><td valign="top" width="65%">as sublevel of the heading at cursor, first or last
+<br></td></tr><tr align="left"><td valign="top" width="20%"></td><td valign="top" width="15%"></td><td valign="top" width="65%">depending on <code>org-reverse-note-order</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="20%"></td><td valign="top" width="15%">&lt;left&gt;/&lt;right&gt; </td><td valign="top" width="65%">as same level, before/after current heading
+<br></td></tr><tr align="left"><td valign="top" width="20%">buffer-start    </td><td valign="top" width="15%">&lt;RET&gt; </td><td valign="top" width="65%">as level 2 heading at end of file or level 1 at beginning
+<br></td></tr><tr align="left"><td valign="top" width="20%"></td><td valign="top" width="15%"></td><td valign="top" width="65%">depending on <code>org-reverse-note-order</code>. 
+<br></td></tr><tr align="left"><td valign="top" width="20%">not on headline </td><td valign="top" width="15%">&lt;RET&gt;
+      </td><td valign="top" width="65%">at cursor position, level taken from context.
+   <br></td></tr></table>
+
+   <p>Before inserting the text into a tree, the function ensures that the text has
+a headline, i.e. a first line that starts with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.  If not, a
+headline is constructed from the current date.  If you have indented the text
+of the note below the headline, the indentation will be adapted if inserting
+the note into the tree requires demotion from level 1.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> To avoid this query, configure the variable
+<code>org-remember-clock-out-on-exit</code>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Configure the
+variable <code>org-remember-store-without-prompt</code> to make this behavior
+the default.</p>
+
+   <hr></div>
+
+   </body></html>
+

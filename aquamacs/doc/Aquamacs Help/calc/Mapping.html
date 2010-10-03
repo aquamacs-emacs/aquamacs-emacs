@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Mapping - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
+<link rel="prev" href="Specifying-Operators.html#Specifying-Operators" title="Specifying Operators">
+<link rel="next" href="Reducing.html#Reducing" title="Reducing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mapping"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Reducing.html#Reducing">Reducing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Specifying-Operators.html#Specifying-Operators">Specifying Operators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>
+<hr>
+</div>
+
+<h4 class="subsection">10.8.2 Mapping</h4>
+
+<p class="noindent"><a name="index-v-M-1504"></a><a name="index-V-M-1505"></a><a name="index-calc_002dmap-1506"></a><a name="index-map-1507"></a>The <kbd>V M</kbd> (<code>calc-map</code>) [<code>map</code>] command applies a given
+operator elementwise to one or more vectors.  For example, mapping
+<code>A</code> [<code>abs</code>] produces a vector of the absolute values of the
+elements in the input vector.  Mapping <code>+</code> pops two vectors from
+the stack, which must be of equal length, and produces a vector of the
+pairwise sums of the elements.  If either argument is a non-vector, it
+is duplicated for each element of the other vector.  For example,
+<kbd>[1,2,3] 2 V M ^</kbd> squares the elements of the specified vector. 
+With the 2 listed first, it would have computed a vector of powers of
+two.  Mapping a user-defined function pops as many arguments from the
+stack as the function requires.  If you give an undefined name, you will
+be prompted for the number of arguments to use.
+
+   <p>If any argument to <kbd>V M</kbd> is a matrix, the operator is normally mapped
+across all elements of the matrix.  For example, given the matrix
+&lsquo;<samp><span class="samp">[[1, -2, 3], [-4, 5, -6]]</span></samp>&rsquo;, <kbd>V M A</kbd> takes six absolute values to
+produce another
+<!-- @math{3\times2} -->
+3x2
+matrix, &lsquo;<samp><span class="samp">[[1, 2, 3], [4, 5, 6]]</span></samp>&rsquo;.
+
+   <p><a name="index-mapr-1508"></a>The command <kbd>V M _</kbd> [<code>mapr</code>] (i.e., type an underscore at the
+operator prompt) maps by rows instead.  For example, <kbd>V M _ A</kbd> views
+the above matrix as a vector of two 3-element row vectors.  It produces
+a new vector which contains the absolute values of those row vectors,
+namely &lsquo;<samp><span class="samp">[3.74, 8.77]</span></samp>&rsquo;.  (Recall, the absolute value of a vector is
+defined as the square root of the sum of the squares of the elements.) 
+Some operators accept vectors and return new vectors; for example,
+<kbd>v v</kbd> reverses a vector, so <kbd>V M _ v v</kbd> would reverse each row
+of the matrix to get a new matrix, &lsquo;<samp><span class="samp">[[3, -2, 1], [-6, 5, -4]]</span></samp>&rsquo;.
+
+   <p>Sometimes a vector of vectors (representing, say, strings, sets, or lists)
+happens to look like a matrix.  If so, remember to use <kbd>V M _</kbd> if you
+want to map a function across the whole strings or sets rather than across
+their individual elements.
+
+   <p><a name="index-mapc-1509"></a>The command <kbd>V M :</kbd> [<code>mapc</code>] maps by columns.  Basically, it
+transposes the input matrix, maps by rows, and then, if the result is a
+matrix, transposes again.  For example, <kbd>V M : A</kbd> takes the absolute
+values of the three columns of the matrix, treating each as a 2-vector,
+and <kbd>V M : v v</kbd> reverses the columns to get the matrix
+&lsquo;<samp><span class="samp">[[-4, 5, -6], [1, -2, 3]]</span></samp>&rsquo;.
+
+   <p>(The symbols <kbd>_</kbd> and <kbd>:</kbd> were chosen because they had row-like
+and column-like appearances, and were not already taken by useful
+operators.  Also, they appear shifted on most keyboards so they are easy
+to type after <kbd>V M</kbd>.)
+
+   <p>The <kbd>_</kbd> and <kbd>:</kbd> modifiers have no effect on arguments that are
+not matrices (so if none of the arguments are matrices, they have no
+effect at all).  If some of the arguments are matrices and others are
+plain numbers, the plain numbers are held constant for all rows of the
+matrix (so that <kbd>2 V M _ ^</kbd> squares every row of a matrix; squaring
+a vector takes a dot product of the vector with itself).
+
+   <p>If some of the arguments are vectors with the same lengths as the
+rows (for <kbd>V M _</kbd>) or columns (for <kbd>V M :</kbd>) of the matrix
+arguments, those vectors are also held constant for every row or
+column.
+
+   <p>Sometimes it is useful to specify another mapping command as the operator
+to use with <kbd>V M</kbd>.  For example, <kbd>V M _ V A +</kbd> applies <kbd>V A +</kbd>
+to each row of the input matrix, which in turn adds the two values on that
+row.  If you give another vector-operator command as the operator for
+<kbd>V M</kbd>, it automatically uses map-by-rows mode if you don't specify
+otherwise; thus <kbd>V M V A +</kbd> is equivalent to <kbd>V M _ V A +</kbd>.  (If
+you really want to map-by-elements another mapping command, you can use
+a triple-nested mapping command:  <kbd>V M V M V A +</kbd> means to map
+<kbd>V M V A +</kbd> over the rows of the matrix; in turn, <kbd>V A +</kbd> is
+mapped over the elements of each row.)
+
+   <p><a name="index-mapa-1510"></a><a name="index-mapd-1511"></a>Previous versions of Calc had &ldquo;map across&rdquo; and &ldquo;map down&rdquo; modes
+that are now considered obsolete; the old &ldquo;map across&rdquo; is now simply
+<kbd>V M V A</kbd>, and &ldquo;map down&rdquo; is now <kbd>V M : V A</kbd>.  The algebraic
+functions <code>mapa</code> and <code>mapd</code> are still supported, though. 
+Note also that, while the old mapping modes were persistent (once you
+set the mode, it would apply to later mapping commands until you reset
+it), the new <kbd>:</kbd> and <kbd>_</kbd> modifiers apply only to the current
+mapping command.  The default <kbd>V M</kbd> always means map-by-elements.
+
+   <p>See <a href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>, for the <kbd>a M</kbd> command, which is like
+<kbd>V M</kbd> but for equations and inequalities instead of vectors. 
+See <a href="Storing-Variables.html#Storing-Variables">Storing Variables</a>, for the <kbd>s m</kbd> command which modifies a
+variable's stored value using a <kbd>V M</kbd>-like operator.
+
+   </body></html>
+

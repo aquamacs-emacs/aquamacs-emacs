@@ -1,0 +1,245 @@
+<html lang="en">
+<head>
+<title>Defining Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="prev" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="next" href="Defining-Simple-Commands.html#Defining-Simple-Commands" title="Defining Simple Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Defining-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Simple-Commands.html#Defining-Simple-Commands">Defining Simple Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.5.1 Defining New Functions</h4>
+
+<p class="noindent"><a name="index-defmath-2317"></a>The <code>defmath</code> function (actually a Lisp macro) is like <code>defun</code>
+except that code in the body of the definition can make use of the full
+range of Calculator data types.  The prefix &lsquo;<samp><span class="samp">calcFunc-</span></samp>&rsquo; is added
+to the specified name to get the actual Lisp function name.  As a simple
+example,
+
+<pre class="example">     (defmath myfact (n)
+       (if (&gt; n 0)
+           (* n (myfact (1- n)))
+         1))
+</pre>
+   <p class="noindent">This actually expands to the code,
+
+<pre class="example">     (defun calcFunc-myfact (n)
+       (if (math-posp n)
+           (math-mul n (calcFunc-myfact (math-add n -1)))
+         1))
+</pre>
+   <p class="noindent">This function can be used in algebraic expressions, e.g., &lsquo;<samp><span class="samp">myfact(5)</span></samp>&rsquo;.
+
+   <p>The &lsquo;<samp><span class="samp">myfact</span></samp>&rsquo; function as it is defined above has the bug that an
+expression &lsquo;<samp><span class="samp">myfact(a+b)</span></samp>&rsquo; will be simplified to 1 because the
+formula &lsquo;<samp><span class="samp">a+b</span></samp>&rsquo; is not considered to be <code>posp</code>.  A robust
+factorial function would be written along the following lines:
+
+<pre class="smallexample">     (defmath myfact (n)
+       (if (&gt; n 0)
+           (* n (myfact (1- n)))
+         (if (= n 0)
+             1
+           nil)))    ; this could be simplified as: (and (= n 0) 1)
+</pre>
+   <p>If a function returns <code>nil</code>, it is left unsimplified by the Calculator
+(except that its arguments will be simplified).  Thus, &lsquo;<samp><span class="samp">myfact(a+1+2)</span></samp>&rsquo;
+will be simplified to &lsquo;<samp><span class="samp">myfact(a+3)</span></samp>&rsquo; but no further.  Beware that every
+time the Calculator reexamines this formula it will attempt to resimplify
+it, so your function ought to detect the returning-<code>nil</code> case as
+efficiently as possible.
+
+   <p>The following standard Lisp functions are treated by <code>defmath</code>:
+<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code> or
+<code>expt</code>, <code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>,
+<code>/=</code>, <code>1+</code>, <code>1-</code>, <code>logand</code>, <code>logior</code>, <code>logxor</code>,
+<code>logandc2</code>, <code>lognot</code>.  Also, <code>~=</code> is an abbreviation for
+<code>math-nearly-equal</code>, which is useful in implementing Taylor series.
+
+   <p>For other functions <var>func</var>, if a function by the name
+&lsquo;<samp><span class="samp">calcFunc-</span><var>func</var></samp>&rsquo; exists it is used, otherwise if a function by the
+name &lsquo;<samp><span class="samp">math-</span><var>func</var></samp>&rsquo; exists it is used, otherwise if <var>func</var> itself
+is defined as a function it is used, otherwise &lsquo;<samp><span class="samp">calcFunc-</span><var>func</var></samp>&rsquo; is
+used on the assumption that this is a to-be-defined math function.  Also, if
+the function name is quoted as in &lsquo;<samp><span class="samp">('integerp a)</span></samp>&rsquo; the function name is
+always used exactly as written (but not quoted).
+
+   <p>Variable names have &lsquo;<samp><span class="samp">var-</span></samp>&rsquo; prepended to them unless they appear in
+the function's argument list or in an enclosing <code>let</code>, <code>let*</code>,
+<code>for</code>, or <code>foreach</code> form,
+or their names already contain a &lsquo;<samp><span class="samp">-</span></samp>&rsquo; character.  Thus a reference to
+&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; is the same as a reference to &lsquo;<samp><span class="samp">var-foo</span></samp>&rsquo;.
+
+   <p>A few other Lisp extensions are available in <code>defmath</code> definitions:
+
+     <ul>
+<li>The <code>elt</code> function accepts any number of index variables. 
+Note that Calc vectors are stored as Lisp lists whose first
+element is the symbol <code>vec</code>; thus, &lsquo;<samp><span class="samp">(elt v 2)</span></samp>&rsquo; yields
+the second element of vector <code>v</code>, and &lsquo;<samp><span class="samp">(elt m i j)</span></samp>&rsquo;
+yields one element of a Calc matrix.
+
+     <li>The <code>setq</code> function has been extended to act like the Common
+Lisp <code>setf</code> function.  (The name <code>setf</code> is recognized as
+a synonym of <code>setq</code>.)  Specifically, the first argument of
+<code>setq</code> can be an <code>nth</code>, <code>elt</code>, <code>car</code>, or <code>cdr</code> form,
+in which case the effect is to store into the specified
+element of a list.  Thus, &lsquo;<samp><span class="samp">(setq (elt m i j) x)</span></samp>&rsquo; stores &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+into one element of a matrix.
+
+     <li>A <code>for</code> looping construct is available.  For example,
+&lsquo;<samp><span class="samp">(for ((i 0 10)) body)</span></samp>&rsquo; executes <code>body</code> once for each
+binding of &lsquo;<samp><span class="samp">i</span></samp>&rsquo; from zero to 10.  This is like a <code>let</code>
+form in that &lsquo;<samp><span class="samp">i</span></samp>&rsquo; is temporarily bound to the loop count
+without disturbing its value outside the <code>for</code> construct. 
+Nested loops, as in &lsquo;<samp><span class="samp">(for ((i 0 10) (j 0 (1- i) 2)) body)</span></samp>&rsquo;,
+are also available.  For each value of &lsquo;<samp><span class="samp">i</span></samp>&rsquo; from zero to 10,
+&lsquo;<samp><span class="samp">j</span></samp>&rsquo; counts from 0 to &lsquo;<samp><span class="samp">i-1</span></samp>&rsquo; in steps of two.  Note that
+<code>for</code> has the same general outline as <code>let*</code>, except
+that each element of the header is a list of three or four
+things, not just two.
+
+     <li>The <code>foreach</code> construct loops over elements of a list. 
+For example, &lsquo;<samp><span class="samp">(foreach ((x (cdr v))) body)</span></samp>&rsquo; executes
+<code>body</code> with &lsquo;<samp><span class="samp">x</span></samp>&rsquo; bound to each element of Calc vector
+&lsquo;<samp><span class="samp">v</span></samp>&rsquo; in turn.  The purpose of <code>cdr</code> here is to skip over
+the initial <code>vec</code> symbol in the vector.
+
+     <li>The <code>break</code> function breaks out of the innermost enclosing
+<code>while</code>, <code>for</code>, or <code>foreach</code> loop.  If given a
+value, as in &lsquo;<samp><span class="samp">(break x)</span></samp>&rsquo;, this value is returned by the
+loop.  (Lisp loops otherwise always return <code>nil</code>.)
+
+     <li>The <code>return</code> function prematurely returns from the enclosing
+function.  For example, &lsquo;<samp><span class="samp">(return (+ x y))</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">x+y</span></samp>&rsquo;
+as the value of a function.  You can use <code>return</code> anywhere
+inside the body of the function. 
+</ul>
+
+   <p>Non-integer numbers (and extremely large integers) cannot be included
+directly into a <code>defmath</code> definition.  This is because the Lisp
+reader will fail to parse them long before <code>defmath</code> ever gets control. 
+Instead, use the notation, &lsquo;<samp><span class="samp">:"3.1415"</span></samp>&rsquo;.  In fact, any algebraic
+formula can go between the quotes.  For example,
+
+<pre class="smallexample">     (defmath sqexp (x)     ; sqexp(x) == sqrt(exp(x)) == exp(x*0.5)
+       (and (numberp x)
+            (exp :"x * 0.5")))
+</pre>
+   <p>expands to
+
+<pre class="smallexample">     (defun calcFunc-sqexp (x)
+       (and (math-numberp x)
+            (calcFunc-exp (math-mul x '(float 5 -1)))))
+</pre>
+   <p>Note the use of <code>numberp</code> as a guard to ensure that the argument is
+a number first, returning <code>nil</code> if not.  The exponential function
+could itself have been included in the expression, if we had preferred:
+&lsquo;<samp><span class="samp">:"exp(x * 0.5)"</span></samp>&rsquo;.  As another example, the multiplication-and-recursion
+step of <code>myfact</code> could have been written
+
+<pre class="example">     :"n * myfact(n-1)"
+</pre>
+   <p>A good place to put your <code>defmath</code> commands is your Calc init file
+(the file given by <code>calc-settings-file</code>, typically
+<samp><span class="file">~/.calc.el</span></samp>), which will not be loaded until Calc starts. 
+If a file named <samp><span class="file">.emacs</span></samp> exists in your home directory, Emacs reads
+and executes the Lisp forms in this file as it starts up.  While it may
+seem reasonable to put your favorite <code>defmath</code> commands there,
+this has the unfortunate side-effect that parts of the Calculator must be
+loaded in to process the <code>defmath</code> commands whether or not you will
+actually use the Calculator!  If you want to put the <code>defmath</code>
+commands there (for example, if you redefine <code>calc-settings-file</code>
+to be <samp><span class="file">.emacs</span></samp>), a better effect can be had by writing
+
+<pre class="example">     (put 'calc-define 'thing '(progn
+      (defmath ... )
+      (defmath ... )
+     ))
+</pre>
+   <p class="noindent"><a name="index-calc_002ddefine-2318"></a>The <code>put</code> function adds a <dfn>property</dfn> to a symbol.  Each Lisp
+symbol has a list of properties associated with it.  Here we add a
+property with a name of <code>thing</code> and a &lsquo;<samp><span class="samp">(progn ...)</span></samp>&rsquo; form as
+its value.  When Calc starts up, and at the start of every Calc command,
+the property list for the symbol <code>calc-define</code> is checked and the
+values of any properties found are evaluated as Lisp forms.  The
+properties are removed as they are evaluated.  The property names
+(like <code>thing</code>) are not used; you should choose something like the
+name of your project so as not to conflict with other properties.
+
+   <p>The net effect is that you can put the above code in your <samp><span class="file">.emacs</span></samp>
+file and it will not be executed until Calc is loaded.  Or, you can put
+that same code in another file which you load by hand either before or
+after Calc itself is loaded.
+
+   <p>The properties of <code>calc-define</code> are evaluated in the same order
+that they were added.  They can assume that the Calc modules <samp><span class="file">calc.el</span></samp>,
+<samp><span class="file">calc-ext.el</span></samp>, and <samp><span class="file">calc-macs.el</span></samp> have been fully loaded, and
+that the &lsquo;<samp><span class="samp">*Calculator*</span></samp>&rsquo; buffer will be the current buffer.
+
+   <p>If your <code>calc-define</code> property only defines algebraic functions,
+you can be sure that it will have been evaluated before Calc tries to
+call your function, even if the file defining the property is loaded
+after Calc is loaded.  But if the property defines commands or key
+sequences, it may not be evaluated soon enough.  (Suppose it defines the
+new command <code>tweak-calc</code>; the user can load your file, then type
+<kbd>M-x tweak-calc</kbd> before Calc has had chance to do anything.)  To
+protect against this situation, you can put
+
+<pre class="example">     (run-hooks 'calc-check-defines)
+</pre>
+   <p><a name="index-calc_002dcheck_002ddefines-2319"></a>at the end of your file.  The <code>calc-check-defines</code> function is what
+looks for and evaluates properties on <code>calc-define</code>; <code>run-hooks</code>
+has the advantage that it is quietly ignored if <code>calc-check-defines</code>
+is not yet defined because Calc has not yet been loaded.
+
+   <p>Examples of things that ought to be enclosed in a <code>calc-define</code>
+property are <code>defmath</code> calls, <code>define-key</code> calls that modify
+the Calc key map, and any calls that redefine things defined inside Calc. 
+Ordinary <code>defun</code>s need not be enclosed with <code>calc-define</code>.
+
+   </body></html>
+

@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>List Answer 13 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="List-Answer-12.html#List-Answer-12" title="List Answer 12">
+<link rel="next" href="List-Answer-14.html#List-Answer-14" title="List Answer 14">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="List-Answer-13"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="List-Answer-14.html#List-Answer-14">List Answer 14</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="List-Answer-12.html#List-Answer-12">List Answer 12</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.31 List Tutorial Exercise 13</h4>
+
+<p class="noindent">First, we put the string on the stack as a vector of ASCII codes.
+
+<pre class="smallexample">     1:  [84, 101, 115, ..., 51]
+         .
+     
+         "Testing, 1, 2, 3 &lt;RET&gt;
+</pre>
+   <p class="noindent">Note that the <kbd>"</kbd> key, like <kbd>$</kbd>, initiates algebraic entry so
+there was no need to type an apostrophe.  Also, Calc didn't mind that
+we omitted the closing <kbd>"</kbd>.  (The same goes for all closing delimiters
+like <kbd>)</kbd> and <kbd>]</kbd> at the end of a formula.
+
+   <p>We'll show two different approaches here.  In the first, we note that
+if the input vector is &lsquo;<samp><span class="samp">[a, b, c, d]</span></samp>&rsquo;, then the hash code is
+&lsquo;<samp><span class="samp">3 (3 (3a + b) + c) + d = 27a + 9b + 3c + d</span></samp>&rsquo;.  In other words,
+it's a sum of descending powers of three times the ASCII codes.
+
+<pre class="smallexample">     2:  [84, 101, 115, ..., 51]    2:  [84, 101, 115, ..., 51]
+     1:  16                         1:  [15, 14, 13, ..., 0]
+         .                              .
+     
+         &lt;RET&gt; v l                        v x 16 &lt;RET&gt; -
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     2:  [84, 101, 115, ..., 51]    1:  1960915098    1:  121
+     1:  [14348907, ..., 1]             .                 .
+         .
+     
+         3 &lt;TAB&gt; V M ^                    *                 511 %
+</pre>
+   <p class="noindent">Once again, <kbd>*</kbd> elegantly summarizes most of the computation. 
+But there's an even more elegant approach:  Reduce the formula
+<kbd>3 $$ + $</kbd> across the vector.  Recall that this represents a
+function of two arguments that computes its first argument times three
+plus its second argument.
+
+<pre class="smallexample">     1:  [84, 101, 115, ..., 51]    1:  1960915098
+         .                              .
+     
+         "Testing, 1, 2, 3 &lt;RET&gt;          V R ' 3$$+$ &lt;RET&gt;
+</pre>
+   <p class="noindent">If you did the decimal arithmetic exercise, this will be familiar. 
+Basically, we're turning a base-3 vector of digits into an integer,
+except that our &ldquo;digits&rdquo; are much larger than real digits.
+
+   <p>Instead of typing <kbd>511 %</kbd> again to reduce the result, we can be
+cleverer still and notice that rather than computing a huge integer
+and taking the modulo at the end, we can take the modulo at each step
+without affecting the result.  While this means there are more
+arithmetic operations, the numbers we operate on remain small so
+the operations are faster.
+
+<pre class="smallexample">     1:  [84, 101, 115, ..., 51]    1:  121
+         .                              .
+     
+         "Testing, 1, 2, 3 &lt;RET&gt;          V R ' (3$$+$)%511 &lt;RET&gt;
+</pre>
+   <p>Why does this work?  Think about a two-step computation:
+&lsquo;<samp><span class="samp">3&nbsp;(3a&nbsp;+&nbsp;b)&nbsp;+&nbsp;c</span></samp>&rsquo;<!-- /@w -->.  Taking a result modulo 511 basically means
+subtracting off enough 511's to put the result in the desired range. 
+So the result when we take the modulo after every step is,
+
+<pre class="example">     3 (3 a + b - 511 m) + c - 511 n
+</pre>
+   <p class="noindent">for some suitable integers &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">n</span></samp>&rsquo;.  Expanding out by
+the distributive law yields
+
+<pre class="example">     9 a + 3 b + c - 511*3 m - 511 n
+</pre>
+   <p class="noindent">The &lsquo;<samp><span class="samp">m</span></samp>&rsquo; term in the latter formula is redundant because any
+contribution it makes could just as easily be made by the &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
+term.  So we can take it out to get an equivalent formula with
+&lsquo;<samp><span class="samp">n' = 3m + n</span></samp>&rsquo;,
+
+<pre class="example">     9 a + 3 b + c - 511 n'
+</pre>
+   <p class="noindent">which is just the formula for taking the modulo only at the end of
+the calculation.  Therefore the two methods are essentially the same.
+
+   <p>Later in the tutorial we will encounter <dfn>modulo forms</dfn>, which
+basically automate the idea of reducing every intermediate result
+modulo some value <var>m</var>.
+
+   </body></html>
+

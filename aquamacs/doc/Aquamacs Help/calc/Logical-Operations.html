@@ -1,0 +1,291 @@
+<html lang="en">
+<head>
+<title>Logical Operations - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Algebra.html#Algebra" title="Algebra">
+<link rel="prev" href="Summations.html#Summations" title="Summations">
+<link rel="next" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Logical-Operations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summations.html#Summations">Summations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
+<hr>
+</div>
+
+<h3 class="section">11.10 Logical Operations</h3>
+
+<p class="noindent">The following commands and algebraic functions return true/false values,
+where 1 represents &ldquo;true&rdquo; and 0 represents &ldquo;false.&rdquo;  In cases where
+a truth value is required (such as for the condition part of a rewrite
+rule, or as the condition for a <kbd>Z&nbsp;[&nbsp;Z&nbsp;]</kbd><!-- /@w --> control structure), any
+nonzero value is accepted to mean &ldquo;true.&rdquo;  (Specifically, anything
+for which <code>dnonzero</code> returns 1 is &ldquo;true,&rdquo; and anything for
+which <code>dnonzero</code> returns 0 or cannot decide is assumed &ldquo;false.&rdquo;
+Note that this means that <kbd>Z&nbsp;[&nbsp;Z&nbsp;]</kbd><!-- /@w --> will execute the &ldquo;then&rdquo;
+portion if its condition is provably true, but it will execute the
+&ldquo;else&rdquo; portion for any condition like &lsquo;<samp><span class="samp">a = b</span></samp>&rsquo; that is not
+provably true, even if it might be true.  Algebraic functions that
+have conditions as arguments, like <code>? :</code> and <code>&amp;&amp;</code>, remain
+unevaluated if the condition is neither provably true nor provably
+false.  See <a href="Declarations.html#Declarations">Declarations</a>.)
+
+   <p><a name="index-a-_003d-1839"></a><a name="index-calc_002dequal_002dto-1840"></a><a name="index-eq-1841"></a><a name="index-g_t_003d-1842"></a><a name="index-g_t_003d_003d-1843"></a>The <kbd>a =</kbd> (<code>calc-equal-to</code>) command, or &lsquo;<samp><span class="samp">eq(a,b)</span></samp>&rsquo; function
+(which can also be written &lsquo;<samp><span class="samp">a = b</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a == b</span></samp>&rsquo; in an algebraic
+formula) is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are equal, either because they
+are identical expressions, or because they are numbers which are
+numerically equal.  (Thus the integer 1 is considered equal to the float
+1.0.)  If the equality of &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; cannot be determined,
+the comparison is left in symbolic form.  Note that as a command, this
+operation pops two values from the stack and pushes back either a 1 or
+a 0, or a formula &lsquo;<samp><span class="samp">a = b</span></samp>&rsquo; if the values' equality cannot be determined.
+
+   <p>Many Calc commands use &lsquo;<samp><span class="samp">=</span></samp>&rsquo; formulas to represent <dfn>equations</dfn>. 
+For example, the <kbd>a S</kbd> (<code>calc-solve-for</code>) command rearranges
+an equation to solve for a given variable.  The <kbd>a M</kbd>
+(<code>calc-map-equation</code>) command can be used to apply any
+function to both sides of an equation; for example, <kbd>2 a M *</kbd>
+multiplies both sides of the equation by two.  Note that just
+<kbd>2 *</kbd> would not do the same thing; it would produce the formula
+&lsquo;<samp><span class="samp">2 (a = b)</span></samp>&rsquo; which represents 2 if the equality is true or
+zero if not.
+
+   <p>The <code>eq</code> function with more than two arguments (e.g., <kbd>C-u 3 a =</kbd>
+or &lsquo;<samp><span class="samp">a = b = c</span></samp>&rsquo;) tests if all of its arguments are equal.  In
+algebraic notation, the &lsquo;<samp><span class="samp">=</span></samp>&rsquo; operator is unusual in that it is
+neither left- nor right-associative:  &lsquo;<samp><span class="samp">a = b = c</span></samp>&rsquo; is not the
+same as &lsquo;<samp><span class="samp">(a = b) = c</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a = (b = c)</span></samp>&rsquo; (which each compare
+one variable with the 1 or 0 that results from comparing two other
+variables).
+
+   <p><a name="index-a-_0023-1844"></a><a name="index-calc_002dnot_002dequal_002dto-1845"></a><a name="index-neq-1846"></a><a name="index-g_t_0021_003d-1847"></a>The <kbd>a #</kbd> (<code>calc-not-equal-to</code>) command, or &lsquo;<samp><span class="samp">neq(a,b)</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">a != b</span></samp>&rsquo; function, is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are not equal. 
+This also works with more than two arguments; &lsquo;<samp><span class="samp">a != b != c != d</span></samp>&rsquo;
+tests that all four of &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, &lsquo;<samp><span class="samp">c</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">d</span></samp>&rsquo; are
+distinct numbers.
+
+   <p><a name="index-a-_003c-1848"></a><a name="index-lt-1849"></a><a name="index-a-_003e-1850"></a><a name="index-a-_005b-1851"></a><a name="index-a-_005d-1852"></a><a name="index-calc_002dless_002dthan-1853"></a><a name="index-calc_002dgreater_002dthan-1854"></a><a name="index-calc_002dless_002dequal-1855"></a><a name="index-calc_002dgreater_002dequal-1856"></a><a name="index-gt-1857"></a><a name="index-leq-1858"></a><a name="index-geq-1859"></a><a name="index-g_t_003c-1860"></a><a name="index-g_t_003e-1861"></a><a name="index-g_t_003c_003d-1862"></a><a name="index-g_t_003e_003d-1863"></a>The <kbd>a &lt;</kbd> (<code>calc-less-than</code>) [&lsquo;<samp><span class="samp">lt(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a &lt; b</span></samp>&rsquo;]
+operation is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is less than &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  Similar functions
+are <kbd>a &gt;</kbd> (<code>calc-greater-than</code>) [&lsquo;<samp><span class="samp">gt(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a &gt; b</span></samp>&rsquo;],
+<kbd>a [</kbd> (<code>calc-less-equal</code>) [&lsquo;<samp><span class="samp">leq(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a &lt;= b</span></samp>&rsquo;], and
+<kbd>a ]</kbd> (<code>calc-greater-equal</code>) [&lsquo;<samp><span class="samp">geq(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a &gt;= b</span></samp>&rsquo;].
+
+   <p>While the inequality functions like <code>lt</code> do not accept more
+than two arguments, the syntax &lsquo;<samp><span class="samp">a&nbsp;&lt;=&nbsp;b&nbsp;&lt;&nbsp;c</span></samp>&rsquo;<!-- /@w --> is translated to an
+equivalent expression involving intervals: &lsquo;<samp><span class="samp">b in [a .. c)</span></samp>&rsquo;. 
+(See the description of <code>in</code> below.)  All four combinations
+of &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&lt;=</span></samp>&rsquo; are allowed, or any of the four combinations
+of &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&gt;=</span></samp>&rsquo;.  Four-argument constructions like
+&lsquo;<samp><span class="samp">a &lt; b &lt; c &lt; d</span></samp>&rsquo;, and mixtures like &lsquo;<samp><span class="samp">a&nbsp;&lt;&nbsp;b&nbsp;=&nbsp;c</span></samp>&rsquo;<!-- /@w --> that
+involve both equalities and inequalities, are not allowed.
+
+   <p><a name="index-a-_002e-1864"></a><a name="index-calc_002dremove_002dequal-1865"></a><a name="index-rmeq-1866"></a>The <kbd>a .</kbd> (<code>calc-remove-equal</code>) [<code>rmeq</code>] command extracts
+the righthand side of the equation or inequality on the top of the
+stack.  It also works elementwise on vectors.  For example, if
+&lsquo;<samp><span class="samp">[x = 2.34, y = z / 2]</span></samp>&rsquo; is on the stack, then <kbd>a .</kbd> produces
+&lsquo;<samp><span class="samp">[2.34, z / 2]</span></samp>&rsquo;.  As a special case, if the righthand side is a
+variable and the lefthand side is a number (as in &lsquo;<samp><span class="samp">2.34 = x</span></samp>&rsquo;), then
+Calc keeps the lefthand side instead.  Finally, this command works with
+assignments &lsquo;<samp><span class="samp">x := 2.34</span></samp>&rsquo; as well as equations, always taking the
+righthand side, and for &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; (evaluates-to) operators, always
+taking the lefthand side.
+
+   <p><a name="index-a-_0026-1867"></a><a name="index-calc_002dlogical_002dand-1868"></a><a name="index-land-1869"></a><a name="index-g_t_0026_0026-1870"></a>The <kbd>a &amp;</kbd> (<code>calc-logical-and</code>) [&lsquo;<samp><span class="samp">land(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a &amp;&amp; b</span></samp>&rsquo;]
+function is true if both of its arguments are true, i.e., are
+non-zero numbers.  In this case, the result will be either &lsquo;<samp><span class="samp">a</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo;, chosen arbitrarily.  If either argument is zero, the result is
+zero.  Otherwise, the formula is left in symbolic form.
+
+   <p><a name="index-a-_007c-1871"></a><a name="index-calc_002dlogical_002dor-1872"></a><a name="index-lor-1873"></a><a name="index-g_t_007c_007c-1874"></a>The <kbd>a |</kbd> (<code>calc-logical-or</code>) [&lsquo;<samp><span class="samp">lor(a,b)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a || b</span></samp>&rsquo;]
+function is true if either or both of its arguments are true (nonzero). 
+The result is whichever argument was nonzero, choosing arbitrarily if both
+are nonzero.  If both &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are zero, the result is
+zero.
+
+   <p><a name="index-a-_0021-1875"></a><a name="index-calc_002dlogical_002dnot-1876"></a><a name="index-lnot-1877"></a><a name="index-g_t_0021-1878"></a>The <kbd>a !</kbd> (<code>calc-logical-not</code>) [&lsquo;<samp><span class="samp">lnot(a)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">! a</span></samp>&rsquo;]
+function is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is false (zero), or false if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is
+true (nonzero).  It is left in symbolic form if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is not a
+number.
+
+   <p><a name="index-a-_003a-1879"></a><a name="index-calc_002dlogical_002dif-1880"></a><a name="index-if-1881"></a><a name="index-g_t_003f-1882"></a><a name="index-g_t_003a-1883"></a><a name="index-Arguments_002c-not-evaluated-1884"></a>The <kbd>a :</kbd> (<code>calc-logical-if</code>) [&lsquo;<samp><span class="samp">if(a,b,c)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a ? b : c</span></samp>&rsquo;]
+function is equal to either &lsquo;<samp><span class="samp">b</span></samp>&rsquo; or &lsquo;<samp><span class="samp">c</span></samp>&rsquo; if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a nonzero
+number or zero, respectively.  If &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is not a number, the test is
+left in symbolic form and neither &lsquo;<samp><span class="samp">b</span></samp>&rsquo; nor &lsquo;<samp><span class="samp">c</span></samp>&rsquo; is evaluated in
+any way.  In algebraic formulas, this is one of the few Calc functions
+whose arguments are not automatically evaluated when the function itself
+is evaluated.  The others are <code>lambda</code>, <code>quote</code>, and
+<code>condition</code>.
+
+   <p>One minor surprise to watch out for is that the formula &lsquo;<samp><span class="samp">a?3:4</span></samp>&rsquo;
+will not work because the &lsquo;<samp><span class="samp">3:4</span></samp>&rsquo; is parsed as a fraction instead of
+as three separate symbols.  Type something like &lsquo;<samp><span class="samp">a ? 3 : 4</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">a?(3):4</span></samp>&rsquo; instead.
+
+   <p>As a special case, if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; evaluates to a vector, then both &lsquo;<samp><span class="samp">b</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; are evaluated; the result is a vector of the same length
+as &lsquo;<samp><span class="samp">a</span></samp>&rsquo; whose elements are chosen from corresponding elements of
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; according to whether each element of &lsquo;<samp><span class="samp">a</span></samp>&rsquo;
+is zero or nonzero.  Each of &lsquo;<samp><span class="samp">b</span></samp>&rsquo; and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; must be either a
+vector of the same length as &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, or a non-vector which is matched
+with all elements of &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.
+
+   <p><a name="index-a-_0040_007b-1885"></a><a name="index-calc_002din_002dset-1886"></a><a name="index-in-1887"></a>The <kbd>a {</kbd> (<code>calc-in-set</code>) [&lsquo;<samp><span class="samp">in(a,b)</span></samp>&rsquo;] function is true if
+the number &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is in the set of numbers represented by &lsquo;<samp><span class="samp">b</span></samp>&rsquo;. 
+If &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is an interval form, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; must be one of the values
+encompassed by the interval.  If &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is a vector, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; must be
+equal to one of the elements of the vector.  (If any vector elements are
+intervals, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; must be in any of the intervals.)  If &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is a
+plain number, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; must be numerically equal to &lsquo;<samp><span class="samp">b</span></samp>&rsquo;. 
+See <a href="Set-Operations.html#Set-Operations">Set Operations</a>, for a group of commands that manipulate sets
+of this sort.
+
+   <p><a name="index-typeof-1888"></a>The &lsquo;<samp><span class="samp">typeof(a)</span></samp>&rsquo; function produces an integer or variable which
+characterizes &lsquo;<samp><span class="samp">a</span></samp>&rsquo;.  If &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a number, vector, or variable,
+the result will be one of the following numbers:
+
+<pre class="example">      1   Integer
+      2   Fraction
+      3   Floating-point number
+      4   HMS form
+      5   Rectangular complex number
+      6   Polar complex number
+      7   Error form
+      8   Interval form
+      9   Modulo form
+     10   Date-only form
+     11   Date/time form
+     12   Infinity (inf, uinf, or nan)
+     100  Variable
+     101  Vector (but not a matrix)
+     102  Matrix
+</pre>
+   <p>Otherwise, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a formula, and the result is a variable which
+represents the name of the top-level function call.
+
+   <p><a name="index-integer-1889"></a><a name="index-real-1890"></a><a name="index-constant-1891"></a>The &lsquo;<samp><span class="samp">integer(a)</span></samp>&rsquo; function returns true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is an integer. 
+The &lsquo;<samp><span class="samp">real(a)</span></samp>&rsquo; function
+is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a real number, either integer, fraction, or
+float.  The &lsquo;<samp><span class="samp">constant(a)</span></samp>&rsquo; function returns true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is
+any of the objects for which <code>typeof</code> would produce an integer
+code result except for variables, and provided that the components of
+an object like a vector or error form are themselves constant. 
+Note that infinities do not satisfy any of these tests, nor do
+special constants like <code>pi</code> and <code>e</code>.
+
+   <p>See <a href="Declarations.html#Declarations">Declarations</a>, for a set of similar functions that recognize
+formulas as well as actual numbers.  For example, &lsquo;<samp><span class="samp">dint(floor(x))</span></samp>&rsquo;
+is true because &lsquo;<samp><span class="samp">floor(x)</span></samp>&rsquo; is provably integer-valued, but
+&lsquo;<samp><span class="samp">integer(floor(x))</span></samp>&rsquo; does not because &lsquo;<samp><span class="samp">floor(x)</span></samp>&rsquo; is not
+literally an integer constant.
+
+   <p><a name="index-refers-1892"></a>The &lsquo;<samp><span class="samp">refers(a,b)</span></samp>&rsquo; function is true if the variable (or sub-expression)
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; appears in &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, or false otherwise.  Unlike the other
+tests described here, this function returns a definite &ldquo;no&rdquo; answer
+even if its arguments are still in symbolic form.  The only case where
+<code>refers</code> will be left unevaluated is if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a plain
+variable (different from &lsquo;<samp><span class="samp">b</span></samp>&rsquo;).
+
+   <p><a name="index-negative-1893"></a>The &lsquo;<samp><span class="samp">negative(a)</span></samp>&rsquo; function returns true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; &ldquo;looks&rdquo; negative,
+because it is a negative number, because it is of the form &lsquo;<samp><span class="samp">-x</span></samp>&rsquo;,
+or because it is a product or quotient with a term that looks negative. 
+This is most useful in rewrite rules.  Beware that &lsquo;<samp><span class="samp">negative(a)</span></samp>&rsquo;
+evaluates to 1 or 0 for <em>any</em> argument &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, so it can only
+be stored in a formula if the default simplifications are turned off
+first with <kbd>m O</kbd> (or if it appears in an unevaluated context such
+as a rewrite rule condition).
+
+   <p><a name="index-variable-1894"></a>The &lsquo;<samp><span class="samp">variable(a)</span></samp>&rsquo; function is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a variable,
+or false if not.  If &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a function call, this test is left
+in symbolic form.  Built-in variables like <code>pi</code> and <code>inf</code>
+are considered variables like any others by this test.
+
+   <p><a name="index-nonvar-1895"></a>The &lsquo;<samp><span class="samp">nonvar(a)</span></samp>&rsquo; function is true if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a non-variable. 
+If its argument is a variable it is left unsimplified; it never
+actually returns zero.  However, since Calc's condition-testing
+commands consider &ldquo;false&rdquo; anything not provably true, this is
+often good enough.
+
+   <p><a name="index-lin-1896"></a><a name="index-linnt-1897"></a><a name="index-islin-1898"></a><a name="index-islinnt-1899"></a><a name="index-Linearity-testing-1900"></a>The functions <code>lin</code>, <code>linnt</code>, <code>islin</code>, and <code>islinnt</code>
+check if an expression is &ldquo;linear,&rdquo; i.e., can be written in the form
+&lsquo;<samp><span class="samp">a + b x</span></samp>&rsquo; for some constants &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, and some
+variable or subformula &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  The function &lsquo;<samp><span class="samp">islin(f,x)</span></samp>&rsquo; checks
+if formula &lsquo;<samp><span class="samp">f</span></samp>&rsquo; is linear in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, returning 1 if so.  For
+example, &lsquo;<samp><span class="samp">islin(x,x)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">islin(-x,x)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">islin(3,x)</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">islin(x y / 3 - 2, x)</span></samp>&rsquo; all return 1.  The &lsquo;<samp><span class="samp">lin(f,x)</span></samp>&rsquo; function
+is similar, except that instead of returning 1 it returns the vector
+&lsquo;<samp><span class="samp">[a, b, x]</span></samp>&rsquo;.  For the above examples, this vector would be
+&lsquo;<samp><span class="samp">[0, 1, x]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[0, -1, x]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[3, 0, x]</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">[-2, y/3, x]</span></samp>&rsquo;, respectively.  Both <code>lin</code> and <code>islin</code>
+generally remain unevaluated for expressions which are not linear,
+e.g., &lsquo;<samp><span class="samp">lin(2 x^2, x)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">lin(sin(x), x)</span></samp>&rsquo;.  The second
+argument can also be a formula; &lsquo;<samp><span class="samp">islin(2 + 3 sin(x), sin(x))</span></samp>&rsquo;
+returns true.
+
+   <p>The <code>linnt</code> and <code>islinnt</code> functions perform a similar check,
+but require a &ldquo;non-trivial&rdquo; linear form, which means that the
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo; coefficient must be non-zero.  For example, &lsquo;<samp><span class="samp">lin(2,x)</span></samp>&rsquo;
+returns &lsquo;<samp><span class="samp">[2, 0, x]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">lin(y,x)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[y, 0, x]</span></samp>&rsquo;,
+but &lsquo;<samp><span class="samp">linnt(2,x)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">linnt(y,x)</span></samp>&rsquo; are left unevaluated
+(in other words, these formulas are considered to be only &ldquo;trivially&rdquo;
+linear in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;).
+
+   <p>All four linearity-testing functions allow you to omit the second
+argument, in which case the input may be linear in any non-constant
+formula.  Here, the &lsquo;<samp><span class="samp">a=0</span></samp>&rsquo;, &lsquo;<samp><span class="samp">b=1</span></samp>&rsquo; case is also considered
+trivial, and only constant values for &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are
+recognized.  Thus, &lsquo;<samp><span class="samp">lin(2 x y)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[0, 2, x y]</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">lin(2 - x y)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[2, -1, x y]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">lin(x y)</span></samp>&rsquo;
+returns &lsquo;<samp><span class="samp">[0, 1, x y]</span></samp>&rsquo;.  The <code>linnt</code> function would allow the
+first two cases but not the third.  Also, neither <code>lin</code> nor
+<code>linnt</code> accept plain constants as linear in the one-argument
+case: &lsquo;<samp><span class="samp">islin(2,x)</span></samp>&rsquo; is true, but &lsquo;<samp><span class="samp">islin(2)</span></samp>&rsquo; is false.
+
+   <p><a name="index-istrue-1901"></a>The &lsquo;<samp><span class="samp">istrue(a)</span></samp>&rsquo; function returns 1 if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a nonzero
+number or provably nonzero formula, or 0 if &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is anything else. 
+Calls to <code>istrue</code> can only be manipulated if <kbd>m O</kbd> mode is
+used to make sure they are not evaluated prematurely.  (Note that
+declarations are used when deciding whether a formula is true;
+<code>istrue</code> returns 1 when <code>dnonzero</code> would return 1, and
+it returns 0 when <code>dnonzero</code> would return 0 or leave itself
+in symbolic form.)
+
+   </body></html>
+

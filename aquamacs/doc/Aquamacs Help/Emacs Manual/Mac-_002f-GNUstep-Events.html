@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Mac / GNUstep Events - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Mac-OS-_002f-GNUstep.html#Mac-OS-_002f-GNUstep" title="Mac OS / GNUstep">
+<link rel="prev" href="Mac-_002f-GNUstep-Customization.html#Mac-_002f-GNUstep-Customization" title="Mac / GNUstep Customization">
+<link rel="next" href="GNUstep-Support.html#GNUstep-Support" title="GNUstep Support">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Mac-%2f-GNUstep-Events"></a>
+<a name="Mac-_002f-GNUstep-Events"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GNUstep-Support.html#GNUstep-Support">GNUstep Support</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mac-_002f-GNUstep-Customization.html#Mac-_002f-GNUstep-Customization">Mac / GNUstep Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mac-OS-_002f-GNUstep.html#Mac-OS-_002f-GNUstep">Mac OS / GNUstep</a>
+<hr>
+</div>
+
+<h3 class="section">F.3 Windowing System Events under Mac OS / GNUstep</h3>
+
+<p>Nextstep applications receive a number of special events which have
+no X equivalent.  These are sent as specially defined &ldquo;keys&rdquo;, which
+do not correspond to any sequence of keystrokes.  Under Emacs, these
+&ldquo;key&rdquo; events can be bound to functions just like ordinary
+keystrokes.  Here is a list of these events.
+
+     <dl>
+<dt>&lt;ns-open-file&gt;<dd><a name="index-ns_002dpop_002dup_002dframes-4312"></a>This event occurs when another Nextstep application requests that
+Emacs open a file.  A typical reason for this would be a user
+double-clicking a file in the Finder application.  By default, Emacs
+responds to this event by opening a new frame and visiting the file in
+that frame (<code>ns-find-file</code>).  As an exception, if the selected
+buffer is the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer, Emacs visits the file in the
+selected frame.
+
+     <p>You can change how Emacs responds to &lt;ns-open-file&gt; by changing
+the variable <code>ns-pop-up-frames</code>.  Its default value,
+<code>'fresh</code>, is what we have just described.  A value of <code>t</code>
+means to always visit the file in a new frame.  A value of <code>nil</code>
+means to always visit the file in an existing frame.
+
+     <br><dt>&lt;ns-open-temp-file&gt;<dd>This event occurs when another application requests that Emacs open a
+temporary file.  By default, this is handled by just generating a
+<code>ns-open-file</code> event, the results of which are described above.
+
+     <p>You can bind &lt;ns-pop-up-frames&gt; and &lt;ns-open-temp-file&gt; to
+other Lisp functions.  When the event is registered, the name of the
+file to open is stored in the variable <code>ns-input-file</code>.
+
+     <br><dt>&lt;ns-open-file-line&gt;<dd>Some applications, such as ProjectBuilder and gdb, request not only a
+particular file, but also a particular line or sequence of lines in
+the file.  Emacs handles this by visiting that file and highlighting
+the requested line (<code>ns-open-file-select-line</code>).
+
+     <br><dt>&lt;ns-drag-file&gt;<dd>This event occurs when a user drags files from another application
+into an Emacs frame.  The default behavior is to insert the contents
+of all the dragged files into the current buffer
+(<code>ns-insert-files</code>).  The list of dragged files is stored in the
+variable <code>ns-input-file</code>.
+
+     <br><dt>&lt;ns-drag-color&gt;<dd>This event occurs when a user drags a color from the color well (or
+some other source) into an Emacs frame.  The default behavior is to
+alter the foreground color of the area the color was dragged onto
+(<code>ns-set-foreground-at-mouse</code>).  If this event is issued with a
+&lt;Shift&gt; modifier, Emacs changes the background color instead
+(<code>ns-set-background-at-mouse</code>).  The name of the dragged color is
+stored in the variable <code>ns-input-color</code>.
+
+     <br><dt>&lt;ns-change-font&gt;<dd>This event occurs when the user selects a font in a Nextstep font
+panel (which can be opened with <kbd>Cmd-t</kbd>).  The default behavior is
+to adjust the font of the selected frame
+(<code>ns-respond-to-changefont</code>).  The name and size of the selected
+font are stored in the variables <code>ns-input-font</code> and
+<code>ns-input-fontsize</code>, respectively.
+
+     <br><dt>&lt;ns-power-off&gt;<dd>This event occurs when the user logs out and Emacs is still running, or when
+`Quit Emacs' is chosen from the application menu. 
+The default behavior is to save all file-visiting buffers. 
+</dl>
+
+   <p>Emacs also allows users to make use of Nextstep services, via a set
+of commands whose names begin with &lsquo;<samp><span class="samp">ns-service-</span></samp>&rsquo; and end with the
+name of the service.  Type <kbd>M-x ns-service-&lt;TAB&gt;&lt;TAB&gt;</kbd> to
+see a list of these commands.  These functions either operate on
+marked text (replacing it with the result) or take a string argument
+and return the result as a string.  You can also use the Lisp function
+<code>ns-perform-service</code> to pass arbitrary strings to arbitrary
+services and receive the results back.  Note that you may need to
+restart Emacs to access newly-available services.
+
+   </body></html>
+

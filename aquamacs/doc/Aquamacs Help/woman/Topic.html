@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Topic - WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Finding.html#Finding" title="Finding">
+<link rel="prev" href="Finding.html#Finding" title="Finding">
+<link rel="next" href="Filename.html#Filename" title="Filename">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents WoMan: A program to browse Unix manual pages `W.O.
+(without) man'.
+
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Topic"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filename.html#Filename">Filename</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Finding.html#Finding">Finding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Finding.html#Finding">Finding</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.1 Topic Interface</h3>
+
+<p><a name="index-topic-interface-11"></a>
+The topic interface is accessed principally via the command
+<code>woman</code>.  The same command can be accessed via the menu item
+&lsquo;<samp><span class="samp">Help-&gt;Manuals-&gt;Read Man Page (WoMan)...</span></samp>&rsquo; once WoMan has been
+loaded.  The command reads a manual topic in the minibuffer, which can
+be the <dfn>basename</dfn> of a man file anywhere in the man file
+structure.  The &ldquo;basename&rdquo; in this context means the filename
+without any directory component and without any extension or suffix
+components that relate to the file type.  So, for example, if there is
+a compressed source file in Chapter 5 of the UNIX Programmer's Manual
+with the full pathname <samp><span class="file">/usr/local/man/man5/man.conf.5.gz</span></samp> then
+the topic is <code>man.conf</code>.  Provided WoMan is configured correctly,
+this topic will appear among the completions offered by <code>woman</code>. 
+If more than one file has the same topic name then WoMan will prompt
+for which file to format.  Completion of topics is case insensitive.
+
+<p>Clearly, <code>woman</code> has to know where to look for man files and there
+are two customizable user options that store this information:
+<code>woman-manpath</code> and <code>woman-path</code>.  See <a href="Interface-Options.html#Interface-Options">Interface Options</a>.  If <code>woman-manpath</code> is not set explicitly then
+WoMan tries to pick up the information that would be used by the
+<code>man</code> command, as follows.  If the environment variable
+<code>MANPATH</code> is set, which seems to be the standard mechanism under
+UNIX, then WoMan parses that.  Otherwise, if WoMan can find a
+configuration file named (by default) <samp><span class="file">man.conf</span></samp> (or something very
+similar), which seems to be the standard mechanism under GNU/Linux, then
+it parses that.  To be precise, &ldquo;something very similar&rdquo; means
+starting with &lsquo;<samp><span class="samp">man</span></samp>&rsquo; and ending with &lsquo;<samp><span class="samp">.conf</span></samp>&rsquo; and possibly more
+lowercase letters, e.g. <samp><span class="file">manual.configuration</span></samp>. 
+The search path and/or precise full path name for this file are set by
+the value of the customizable user option <code>woman-man.conf-path</code>. 
+If all else fails, WoMan uses a plausible default man search path.
+
+<p>If the above default configuration does not work correctly for any
+reason then simply customize the value of <code>woman-manpath</code>.  To
+access man files that are not in a conventional man file hierarchy,
+customize the value of <code>woman-path</code> to include the directories
+containing the files.  In this way, <code>woman</code> can access manual files
+<em>anywhere</em> in the entire file system.
+
+<p>There are two differences between <code>woman-manpath</code> and
+<code>woman-path</code>.  Firstly, the elements of <code>woman-manpath</code> must
+be directories that contain <em>directories of</em> man files, whereas the
+elements of <code>woman-path</code> must be directories that contain man files
+<em>directly</em>.  Secondly, the last directory component of each element
+of <code>woman-path</code> is treated as a regular (Emacs) match expression
+rather than a fixed name, which allows collections of related
+directories to be specified succinctly.  Also, elements of
+<code>woman-manpath</code> can be conses, indicating a mapping from
+&lsquo;<samp><span class="samp">PATH</span></samp>&rsquo; environment variable components to man directory
+hierarchies.
+
+<p>For topic completion to work, WoMan must build a list of all the manual
+files that it can access, which can be very slow, especially if a
+network is involved.  For this reason, it caches various amounts of
+information, after which retrieving it from the cache is very fast.  If
+the cache ever gets out of synchronism with reality, running the
+<code>woman</code> command with a prefix argument (e.g. <kbd>C-u M-x woman</kbd>)
+will force it to rebuild its cache.  This is necessary only if the names
+or locations of any man files change; it is not necessary if only their
+contents change.  It would always be necessary if such a change occurred
+whilst Emacs were running and after WoMan has been loaded.  It may be
+necessary if such a change occurs between Emacs sessions and persistent
+caching is used, although WoMan can detect some changes that invalidate
+its cache and rebuild it automatically.
+
+<p>Customize the variable <code>woman-cache-filename</code> to save the cache
+between Emacs sessions.  This is recommended only if the <code>woman</code>
+command is too slow the first time it is run in an Emacs session, while
+it builds its cache in main memory, which <em>may</em> be <em>very</em>
+slow.  See <a href="Cache.html#Cache">The WoMan Topic Cache</a>, for further details.
+
+<ul class="menu">
+<li><a accesskey="1" href="Cache.html#Cache">Cache</a>:                The WoMan Topic Cache
+<li><a accesskey="2" href="Word-at-point.html#Word-at-point">Word at point</a>:        Using the ``Word at Point'' as a Topic Suggestion
+</ul>
+
+</body></html>
+

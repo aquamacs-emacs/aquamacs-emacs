@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Washing Mail - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Expiring-Mail.html#Expiring-Mail" title="Expiring Mail">
+<link rel="next" href="Duplicates.html#Duplicates" title="Duplicates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Washing-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Duplicates.html#Duplicates">Duplicates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.10 Washing Mail</h4>
+
+<p><a name="index-mail-washing-2200"></a><a name="index-list-server-brain-damage-2201"></a><a name="index-incoming-mail-treatment-2202"></a>
+Mailers and list servers are notorious for doing all sorts of really,
+really stupid things with mail.  &ldquo;Hey, RFC 822 doesn't explicitly
+prohibit us from adding the string <code>wE aRe ElItE!!!!!1!!</code> to the
+end of all lines passing through our server, so let's do that!!!!1!&rdquo;
+Yes, but RFC 822 wasn't designed to be read by morons.  Things that were
+considered to be self-evident were not discussed.  So.  Here we are.
+
+   <p>Case in point:  The German version of Microsoft Exchange adds &lsquo;<samp><span class="samp">AW:
+</span></samp>&rsquo; to the subjects of replies instead of &lsquo;<samp><span class="samp">Re: </span></samp>&rsquo;.  I could pretend to
+be shocked and dismayed by this, but I haven't got the energy.  It is to
+laugh.
+
+   <p>Gnus provides a plethora of functions for washing articles while
+displaying them, but it might be nicer to do the filtering before
+storing the mail to disk.  For that purpose, we have three hooks and
+various functions that can be put in these hooks.
+
+     <dl>
+<dt><code>nnmail-prepare-incoming-hook</code><dd><a name="index-nnmail_002dprepare_002dincoming_002dhook-2203"></a>This hook is called before doing anything with the mail and is meant for
+grand, sweeping gestures.  It is called in a buffer that contains all
+the new, incoming mail.  Functions to be used include:
+
+          <dl>
+<dt><code>nnheader-ms-strip-cr</code><dd><a name="index-nnheader_002dms_002dstrip_002dcr-2204"></a>Remove trailing carriage returns from each line.  This is default on
+Emacs running on MS machines.
+
+     </dl>
+
+     <br><dt><code>nnmail-prepare-incoming-header-hook</code><dd><a name="index-nnmail_002dprepare_002dincoming_002dheader_002dhook-2205"></a>This hook is called narrowed to each header.  It can be used when
+cleaning up the headers.  Functions that can be used include:
+
+          <dl>
+<dt><code>nnmail-remove-leading-whitespace</code><dd><a name="index-nnmail_002dremove_002dleading_002dwhitespace-2206"></a>Clear leading white space that &ldquo;helpful&rdquo; listservs have added to the
+headers to make them look nice.  Aaah.
+
+          <p>(Note that this function works on both the header on the body of all
+messages, so it is a potentially dangerous function to use (if a body
+of a message contains something that looks like a header line).  So
+rather than fix the bug, it is of course the right solution to make it
+into a feature by documenting it.)
+
+          <br><dt><code>nnmail-remove-list-identifiers</code><dd><a name="index-nnmail_002dremove_002dlist_002didentifiers-2207"></a>Some list servers add an identifier&mdash;for example, &lsquo;<samp><span class="samp">(idm)</span></samp>&rsquo;&mdash;to the
+beginning of all <code>Subject</code> headers.  I'm sure that's nice for
+people who use stone age mail readers.  This function will remove
+strings that match the <code>nnmail-list-identifiers</code> regexp, which can
+also be a list of regexp.  <code>nnmail-list-identifiers</code> may not contain
+<code>\\(..\\)</code>.
+
+          <p>For instance, if you want to remove the &lsquo;<samp><span class="samp">(idm)</span></samp>&rsquo; and the
+&lsquo;<samp><span class="samp">nagnagnag</span></samp>&rsquo; identifiers:
+
+          <pre class="lisp">               (setq nnmail-list-identifiers
+                     '("(idm)" "nagnagnag"))
+</pre>
+          <p>This can also be done non-destructively with
+<code>gnus-list-identifiers</code>, See <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>.
+
+          <br><dt><code>nnmail-remove-tabs</code><dd><a name="index-nnmail_002dremove_002dtabs-2208"></a>Translate all &lsquo;<samp><span class="samp">TAB</span></samp>&rsquo; characters into &lsquo;<samp><span class="samp">SPACE</span></samp>&rsquo; characters.
+
+          <br><dt><code>nnmail-ignore-broken-references</code><dd><a name="index-nnmail_002dignore_002dbroken_002dreferences-2209"></a><!-- @findex nnmail-fix-eudora-headers -->
+<a name="index-Eudora-2210"></a><a name="index-Pegasus-2211"></a>Some mail user agents (e.g. Eudora and Pegasus) produce broken
+<code>References</code> headers, but correct <code>In-Reply-To</code> headers.  This
+function will get rid of the <code>References</code> header if the headers
+contain a line matching the regular expression
+<code>nnmail-broken-references-mailers</code>.
+
+     </dl>
+
+     <br><dt><code>nnmail-prepare-incoming-message-hook</code><dd><a name="index-nnmail_002dprepare_002dincoming_002dmessage_002dhook-2212"></a>This hook is called narrowed to each message.  Functions to be used
+include:
+
+          <dl>
+<dt><code>article-de-quoted-unreadable</code><dd><a name="index-article_002dde_002dquoted_002dunreadable-2213"></a>Decode Quoted Readable encoding.
+
+     </dl>
+     </dl>
+
+   </body></html>
+

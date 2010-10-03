@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Article Fontisizing - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Article-Treatment.html#Article-Treatment" title="Article Treatment">
+<link rel="prev" href="Article-Highlighting.html#Article-Highlighting" title="Article Highlighting">
+<link rel="next" href="Article-Hiding.html#Article-Hiding" title="Article Hiding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Article-Fontisizing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Article-Hiding.html#Article-Hiding">Article Hiding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Article-Highlighting.html#Article-Highlighting">Article Highlighting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Article-Treatment.html#Article-Treatment">Article Treatment</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.18.2 Article Fontisizing</h4>
+
+<p><a name="index-emphasis-1307"></a><a name="index-article-emphasis-1308"></a>
+<a name="index-gnus_002darticle_002demphasize-1309"></a><a name="index-W-e-_0028Summary_0029-1310"></a>People commonly add emphasis to words in news articles by writing things
+like &lsquo;<samp><span class="samp">_this_</span></samp>&rsquo; or &lsquo;<samp><span class="samp">*this*</span></samp>&rsquo; or &lsquo;<samp><span class="samp">/this/</span></samp>&rsquo;.  Gnus can make
+this look nicer by running the article through the <kbd>W e</kbd>
+(<code>gnus-article-emphasize</code>) command.
+
+   <p><a name="index-gnus_002demphasis_002dalist-1311"></a>How the emphasis is computed is controlled by the
+<code>gnus-emphasis-alist</code> variable.  This is an alist where the first
+element is a regular expression to be matched.  The second is a number
+that says what regular expression grouping is used to find the entire
+emphasized word.  The third is a number that says what regexp grouping
+should be displayed and highlighted.  (The text between these two
+groupings will be hidden.)  The fourth is the face used for
+highlighting.
+
+<pre class="lisp">     (setq gnus-emphasis-alist
+           '(("_\\(\\w+\\)_" 0 1 gnus-emphasis-underline)
+             ("\\*\\(\\w+\\)\\*" 0 1 gnus-emphasis-bold)))
+</pre>
+   <p><a name="index-slash-1312"></a><a name="index-asterisk-1313"></a><a name="index-underline-1314"></a><a name="index-g_t_002f-1315"></a><a name="index-g_t_002a-1316"></a>
+<a name="index-gnus_002demphasis_002dunderline-1317"></a><a name="index-gnus_002demphasis_002dbold-1318"></a><a name="index-gnus_002demphasis_002ditalic-1319"></a><a name="index-gnus_002demphasis_002dunderline_002dbold-1320"></a><a name="index-gnus_002demphasis_002dunderline_002ditalic-1321"></a><a name="index-gnus_002demphasis_002dbold_002ditalic-1322"></a><a name="index-gnus_002demphasis_002dunderline_002dbold_002ditalic-1323"></a>By default, there are seven rules, and they use the following faces:
+<code>gnus-emphasis-bold</code>, <code>gnus-emphasis-italic</code>,
+<code>gnus-emphasis-underline</code>, <code>gnus-emphasis-bold-italic</code>,
+<code>gnus-emphasis-underline-italic</code>,
+<code>gnus-emphasis-underline-bold</code>, and
+<code>gnus-emphasis-underline-bold-italic</code>.
+
+   <p>If you want to change these faces, you can either use <kbd>M-x
+customize</kbd>, or you can use <code>copy-face</code>.  For instance, if you want
+to make <code>gnus-emphasis-italic</code> use a red face instead, you could
+say something like:
+
+<pre class="lisp">     (copy-face 'red 'gnus-emphasis-italic)
+</pre>
+   <p><a name="index-gnus_002dgroup_002dhighlight_002dwords_002dalist-1324"></a>
+If you want to highlight arbitrary words, you can use the
+<code>gnus-group-highlight-words-alist</code> variable, which uses the same
+syntax as <code>gnus-emphasis-alist</code>.  The <code>highlight-words</code> group
+parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) can also be used.
+
+   <p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, for how to fontize articles automatically.
+
+   </body></html>
+

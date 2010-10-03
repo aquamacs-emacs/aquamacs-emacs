@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Anonymous Attributions - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Selecting-an-Attribution.html#Selecting-an-Attribution" title="Selecting an Attribution">
+<link rel="prev" href="Attribution-Preferences.html#Attribution-Preferences" title="Attribution Preferences">
+<link rel="next" href="Author-Names.html#Author-Names" title="Author Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Anonymous-Attributions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Author-Names.html#Author-Names">Author Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Attribution-Preferences.html#Attribution-Preferences">Attribution Preferences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>
+<hr>
+</div>
+
+   <p><a name="index-sc_002ddefault_002dauthor_002dname-192"></a><a name="index-default_002dauthor_002dname-_0028sc_002d_0029-193"></a><a name="index-sc_002ddefault_002dattribution-194"></a><a name="index-default_002dattribution-_0028sc_002d_0029-195"></a>
+
+<h3 class="section">7.2 Anonymous Attributions</h3>
+
+<p>When the author's name cannot be found in the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; mail
+header, a fallback author name and attribution string must be supplied. 
+The fallback author name is contained in the variable
+<code>sc-default-author-name</code> and the fallback attribution string is
+contained in the variable <code>sc-default-attribution</code>.  Default values
+for these variables are <code>"Anonymous"</code> and <code>"Anon"</code>,
+respectively. Note that in most circumstances, getting the default
+author name or attribution is a sign that something is set up
+incorrectly.
+
+   <p><a name="index-sc_002duse_002donly_002dpreference_002dp-196"></a><a name="index-use_002donly_002dpreference_002dp-_0028sc_002d_0029-197"></a>Also, if the preferred attribution, which you specified in your
+<code>sc-preferred-attribution-list</code> variable cannot be found, a
+secondary method can be employed to find a valid attribution string. The
+variable <code>sc-use-only-preference-p</code> controls what happens in this
+case.  If the variable's value is non-<code>nil</code>, then
+<code>sc-default-author-name</code> and <code>sc-default-attribution</code> are
+used, otherwise, the following steps are taken to find a valid
+attribution string, and the first step to return a non-<code>nil</code>,
+non-empty string becomes the attribution:
+
+     <ol type=1 start=1>
+<li>Use the last selected attribution, if there is one.
+
+     <li>Use the value of the <code>"x-attribution"</code> key.
+
+     <li>Use the author's first name.
+
+     <li>Use the author's last name.
+
+     <li>Use the author's initials.
+
+     <li>Find the first non-<code>nil</code>, non-empty attribution string in the
+attribution alist.
+
+     <li><code>sc-default-attribution</code> is used.
+        </ol>
+
+   <p><a name="index-sc_002dconfirm_002dalways_002dp-198"></a><a name="index-confirm_002dalways_002dp-_0028sc_002d_0029-199"></a>Once the attribution string has been automatically selected, a number of
+things can happen. If the variable <code>sc-confirm-always-p</code> is
+non-<code>nil</code>, you are queried for confirmation of the chosen
+attribution string. The possible values for completion are those strings
+in the attribution alist, however you are not limited to these choices. 
+You can type any arbitrary string at the confirmation prompt. The string
+you enter becomes the value associated with the <code>"sc-lastchoice"</code>
+key in the attribution alist.
+
+   <p><a name="index-sc_002ddowncase_002dp-200"></a><a name="index-downcase_002dp-_0028sc_002d_0029-201"></a>Once an attribution string has been selected, Supercite will force the
+string to lower case if the variable <code>sc-downcase-p</code> is
+non-<code>nil</code>.
+
+   <p><a name="index-sc_002dattribs_002dpreselect_002dhook-202"></a><a name="index-attribs_002dpreselect_002dhook-_0028sc_002d_0029-203"></a><a name="index-sc_002dattribs_002dpostselect_002dhook-204"></a><a name="index-attribs_002dpostselect_002dhook-_0028sc_002d_0029-205"></a>
+Two hook variables provide even greater control of the attribution
+selection process.  The hook <code>sc-attribs-preselect-hook</code> is run
+before any attribution is selected.  Likewise, the hook
+<code>sc-attribs-postselect-hook</code> is run after the attribution is
+selected (and the corresponding citation string is built), but before
+these values are committed for use by Supercite.  During the
+post-selection hook, the local variables <code>attribution</code> and
+<code>citation</code> are bound to the appropriate strings.  By changing these
+variables in your hook functions, you change the attribution and
+citation strings used by Supercite.  One possible use of this would be
+to override any automatically derived attribution string when it is only
+one character long; e.g. you prefer to use <code>"initials"</code> but the
+author only has one name.
+
+   </body></html>
+

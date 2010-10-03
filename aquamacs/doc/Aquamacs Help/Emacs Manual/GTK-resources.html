@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>GTK resources - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="X-Resources.html#X-Resources" title="X Resources">
+<link rel="prev" href="LessTif-Resources.html#LessTif-Resources" title="LessTif Resources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="GTK-resources"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="LessTif-Resources.html#LessTif-Resources">LessTif Resources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resources</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">D.6 GTK resources</h3>
+
+<p><a name="index-GTK-resources-and-customization-4300"></a><a name="index-resource-files-for-GTK-4301"></a><a name="index-g_t_0040file_007b_007e_002f_002egtkrc_002d2_002e0_007d-file-4302"></a><a name="index-g_t_0040file_007b_007e_002f_002eemacs_002ed_002fgtkrc_007d-file-4303"></a>
+  If Emacs was built to use the GTK widget set, then the menu bar, tool bar,
+scroll bar and the dialogs are customized with the standard GTK
+customization file, <samp><span class="file">~/.gtkrc-2.0</span></samp>, or with the Emacs specific
+file <samp><span class="file">~/.emacs.d/gtkrc</span></samp>.  We recommend that you use
+<samp><span class="file">~/.emacs.d/gtkrc</span></samp> for customizations, since <samp><span class="file">~/.gtkrc-2.0</span></samp>
+seems to be ignored when running GConf with GNOME.  These files apply
+only to GTK widget features.  To customize Emacs font, background,
+faces, etc., use the normal X resources (see <a href="Resources.html#Resources">Resources</a>).
+
+   <p>Some GTK themes override these mechanisms, which means that using
+these mechanisms will not work to customize them.
+
+   <p>In these files you first define a style and say what it means; then
+you specify to apply the style to various widget types (see <a href="GTK-widget-names.html#GTK-widget-names">GTK widget names</a>).  Here is an example of how to change the font for
+Emacs menus:
+
+<pre class="smallexample">     # <span class="roman">Define the style &lsquo;</span><samp><span class="samp">menufont</span></samp><span class="roman">&rsquo;.</span>
+     style "menufont"
+     {
+       font_name = "helvetica bold 14"  # This is a Pango font name
+     }
+     
+     # <span class="roman">Specify that widget type &lsquo;</span><samp><span class="samp">*emacs-menuitem*</span></samp><span class="roman">&rsquo; uses &lsquo;</span><samp><span class="samp">menufont</span></samp><span class="roman">&rsquo;.</span>
+     widget "*emacs-menuitem*" style "menufont"
+</pre>
+   <p>Here is a more elaborate example, showing how to change the parts of
+the scroll bar:
+
+<pre class="smallexample">     style "scroll"
+     {
+       fg[NORMAL] = "red"     # <span class="roman">The arrow color.</span>
+       bg[NORMAL] = "yellow"  # <span class="roman">The thumb and background around the arrow.</span>
+       bg[ACTIVE] = "blue"    # <span class="roman">The trough color.</span>
+       bg[PRELIGHT] = "white" # <span class="roman">The thumb color when the mouse is over it.</span>
+     }
+     
+     widget "*verticalScrollBar*" style "scroll"
+</pre>
+   <p>There are also parameters that affect GTK as a whole.  For example,
+the property <code>gtk-font-name</code> sets the default font for GTK.  You
+must use Pango font names (see <a href="GTK-styles.html#GTK-styles">GTK styles</a>).  A GTK resources file
+that just sets a default font looks like this:
+
+<pre class="smallexample">     gtk-font-name = "courier 12"
+</pre>
+   <p>The GTK resources file is fully described in the GTK API document. 
+This can be found in
+<samp><var>prefix</var><span class="file">/share/gtk-doc/html/gtk/gtk-resource-files.html</span></samp>,
+where <samp><span class="file">prefix</span></samp> is the directory in which the GTK libraries were
+installed (usually <samp><span class="file">/usr</span></samp> or <samp><span class="file">/usr/local</span></samp>).  You can also
+find the document online, at
+<a href="http://developer.gnome.org/doc/API/2.0/gtk/gtk-Resource-Files.html">http://developer.gnome.org/doc/API/2.0/gtk/gtk-Resource-Files.html</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="GTK-widget-names.html#GTK-widget-names">GTK widget names</a>:       How widgets in GTK are named in general. 
+<li><a accesskey="2" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs">GTK Names in Emacs</a>:     GTK widget names in Emacs. 
+<li><a accesskey="3" href="GTK-styles.html#GTK-styles">GTK styles</a>:             What can be customized in a GTK widget. 
+</ul>
+
+   </body></html>
+

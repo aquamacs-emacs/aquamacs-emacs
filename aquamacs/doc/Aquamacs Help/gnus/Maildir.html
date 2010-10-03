@@ -1,0 +1,304 @@
+<html lang="en">
+<head>
+<title>Maildir - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End" title="Choosing a Mail Back End">
+<link rel="prev" href="MH-Spool.html#MH-Spool" title="MH Spool">
+<link rel="next" href="Mail-Folders.html#Mail-Folders" title="Mail Folders">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Maildir"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Folders.html#Mail-Folders">Mail Folders</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MH-Spool.html#MH-Spool">MH Spool</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Choosing-a-Mail-Back-End.html#Choosing-a-Mail-Back-End">Choosing a Mail Back End</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.3.13.5 Maildir</h5>
+
+<p><a name="index-nnmaildir-2258"></a><a name="index-maildir-2259"></a>
+<code>nnmaildir</code> stores mail in the maildir format, with each maildir
+corresponding to a group in Gnus.  This format is documented here:
+<a href="http://cr.yp.to/proto/maildir.html">http://cr.yp.to/proto/maildir.html</a> and here:
+<a href="http://www.qmail.org/man/man5/maildir.html">http://www.qmail.org/man/man5/maildir.html</a>.  <code>nnmaildir</code>
+also stores extra information in the <samp><span class="file">.nnmaildir/</span></samp> directory
+within a maildir.
+
+   <p>Maildir format was designed to allow concurrent deliveries and
+reading, without needing locks.  With other back ends, you would have
+your mail delivered to a spool of some kind, and then you would
+configure Gnus to split mail from that spool into your groups.  You
+can still do that with <code>nnmaildir</code>, but the more common
+configuration is to have your mail delivered directly to the maildirs
+that appear as group in Gnus.
+
+   <p><code>nnmaildir</code> is designed to be perfectly reliable: <kbd>C-g</kbd> will
+never corrupt its data in memory, and <code>SIGKILL</code> will never
+corrupt its data in the filesystem.
+
+   <p><code>nnmaildir</code> stores article marks and <acronym>NOV</acronym> data in each
+maildir.  So you can copy a whole maildir from one Gnus setup to
+another, and you will keep your marks.
+
+   <p>Virtual server settings:
+
+     <dl>
+<dt><code>directory</code><dd>For each of your <code>nnmaildir</code> servers (it's very unlikely that
+you'd need more than one), you need to create a directory and populate
+it with maildirs or symlinks to maildirs (and nothing else; do not
+choose a directory already used for other purposes).  Each maildir
+will be represented in Gnus as a newsgroup on that server; the
+filename of the symlink will be the name of the group.  Any filenames
+in the directory starting with &lsquo;<samp><span class="samp">.</span></samp>&rsquo; are ignored.  The directory is
+scanned when you first start Gnus, and each time you type <kbd>g</kbd> in
+the group buffer; if any maildirs have been removed or added,
+<code>nnmaildir</code> notices at these times.
+
+     <p>The value of the <code>directory</code> parameter should be a Lisp form
+which is processed by <code>eval</code> and <code>expand-file-name</code> to get
+the path of the directory for this server.  The form is <code>eval</code>ed
+only when the server is opened; the resulting string is used until the
+server is closed.  (If you don't know about forms and <code>eval</code>,
+don't worry&mdash;a simple string will work.)  This parameter is not
+optional; you must specify it.  I don't recommend using
+<code>"~/Mail"</code> or a subdirectory of it; several other parts of Gnus
+use that directory by default for various things, and may get confused
+if <code>nnmaildir</code> uses it too.  <code>"~/.nnmaildir"</code> is a typical
+value.
+
+     <br><dt><code>target-prefix</code><dd>This should be a Lisp form which is processed by <code>eval</code> and
+<code>expand-file-name</code>.  The form is <code>eval</code>ed only when the
+server is opened; the resulting string is used until the server is
+closed.
+
+     <p>When you create a group on an <code>nnmaildir</code> server, the maildir is
+created with <code>target-prefix</code> prepended to its name, and a symlink
+pointing to that maildir is created, named with the plain group name. 
+So if <code>directory</code> is <code>"~/.nnmaildir"</code> and
+<code>target-prefix</code> is <code>"../maildirs/"</code>, then when you create
+the group <code>foo</code>, <code>nnmaildir</code> will create
+<samp><span class="file">~/.nnmaildir/../maildirs/foo</span></samp> as a maildir, and will create
+<samp><span class="file">~/.nnmaildir/foo</span></samp> as a symlink pointing to
+<samp><span class="file">../maildirs/foo</span></samp>.
+
+     <p>You can set <code>target-prefix</code> to a string without any slashes to
+create both maildirs and symlinks in the same <code>directory</code>; in
+this case, any maildirs found in <code>directory</code> whose names start
+with <code>target-prefix</code> will not be listed as groups (but the
+symlinks pointing to them will be).
+
+     <p>As a special case, if <code>target-prefix</code> is <code>""</code> (the default),
+then when you create a group, the maildir will be created in
+<code>directory</code> without a corresponding symlink.  Beware that you
+cannot use <code>gnus-group-delete-group</code> on such groups without the
+<code>force</code> argument.
+
+     <br><dt><code>directory-files</code><dd>This should be a function with the same interface as
+<code>directory-files</code> (such as <code>directory-files</code> itself).  It is
+used to scan the server's <code>directory</code> for maildirs.  This
+parameter is optional; the default is
+<code>nnheader-directory-files-safe</code> if
+<code>nnheader-directory-files-is-safe</code> is <code>nil</code>, and
+<code>directory-files</code> otherwise. 
+(<code>nnheader-directory-files-is-safe</code> is checked only once when the
+server is opened; if you want to check it each time the directory is
+scanned, you'll have to provide your own function that does that.)
+
+     <br><dt><code>get-new-mail</code><dd>If non-<code>nil</code>, then after scanning for new mail in the group
+maildirs themselves as usual, this server will also incorporate mail
+the conventional Gnus way, from <code>mail-sources</code> according to
+<code>nnmail-split-methods</code> or <code>nnmail-split-fancy</code>.  The default
+value is <code>nil</code>.
+
+     <p>Do <em>not</em> use the same maildir both in <code>mail-sources</code> and as
+an <code>nnmaildir</code> group.  The results might happen to be useful, but
+that would be by chance, not by design, and the results might be
+different in the future.  If your split rules create new groups,
+remember to supply a <code>create-directory</code> server parameter. 
+</dl>
+
+<h5 class="subsubsection">6.3.13.6 Group parameters</h5>
+
+<p><code>nnmaildir</code> uses several group parameters.  It's safe to ignore
+all this; the default behavior for <code>nnmaildir</code> is the same as the
+default behavior for other mail back ends: articles are deleted after
+one week, etc.  Except for the expiry parameters, all this
+functionality is unique to <code>nnmaildir</code>, so you can ignore it if
+you're just trying to duplicate the behavior you already have with
+another back end.
+
+   <p>If the value of any of these parameters is a vector, the first element
+is evaluated as a Lisp form and the result is used, rather than the
+original value.  If the value is not a vector, the value itself is
+evaluated as a Lisp form.  (This is why these parameters use names
+different from those of other, similar parameters supported by other
+back ends: they have different, though similar, meanings.)  (For
+numbers, strings, <code>nil</code>, and <code>t</code>, you can ignore the
+<code>eval</code> business again; for other values, remember to use an extra
+quote and wrap the value in a vector when appropriate.)
+
+     <dl>
+<dt><code>expire-age</code><dd>An integer specifying the minimum age, in seconds, of an article
+before it will be expired, or the symbol <code>never</code> to specify that
+articles should never be expired.  If this parameter is not set,
+<code>nnmaildir</code> falls back to the usual
+<code>nnmail-expiry-wait</code>(<code>-function</code>) variables (the
+<code>expiry-wait</code> group parameter overrides <code>nnmail-expiry-wait</code>
+and makes <code>nnmail-expiry-wait-function</code> ineffective).  If you
+wanted a value of 3 days, you could use something like <code>[(* 3 24
+60 60)]</code>; <code>nnmaildir</code> will evaluate the form and use the result. 
+An article's age is measured starting from the article file's
+modification time.  Normally, this is the same as the article's
+delivery time, but editing an article makes it younger.  Moving an
+article (other than via expiry) may also make an article younger.
+
+     <br><dt><code>expire-group</code><dd>If this is set to a string such as a full Gnus group name, like
+     <pre class="example">          "backend+server.address.string:group.name"
+</pre>
+     <p>and if it is not the name of the same group that the parameter belongs
+to, then articles will be moved to the specified group during expiry
+before being deleted.  <em>If this is set to an </em><code>nnmaildir</code><em>
+group, the article will be just as old in the destination group as it
+was in the source group.</em>  So be careful with <code>expire-age</code> in the
+destination group.  If this is set to the name of the same group that
+the parameter belongs to, then the article is not expired at all.  If
+you use the vector form, the first element is evaluated once for each
+article.  So that form can refer to
+<code>nnmaildir-article-file-name</code>, etc., to decide where to put the
+article.  <em>Even if this parameter is not set, </em><code>nnmaildir</code><em>
+does not fall back to the </em><code>expiry-target</code><em> group parameter or the
+</em><code>nnmail-expiry-target</code><em> variable.</em>
+
+     <br><dt><code>read-only</code><dd>If this is set to <code>t</code>, <code>nnmaildir</code> will treat the articles
+in this maildir as read-only.  This means: articles are not renamed
+from <samp><span class="file">new/</span></samp> into <samp><span class="file">cur/</span></samp>; articles are only found in
+<samp><span class="file">new/</span></samp>, not <samp><span class="file">cur/</span></samp>; articles are never deleted; articles
+cannot be edited.  <samp><span class="file">new/</span></samp> is expected to be a symlink to the
+<samp><span class="file">new/</span></samp> directory of another maildir&mdash;e.g., a system-wide mailbox
+containing a mailing list of common interest.  Everything in the
+maildir outside <samp><span class="file">new/</span></samp> is <em>not</em> treated as read-only, so for
+a shared mailbox, you do still need to set up your own maildir (or
+have write permission to the shared mailbox); your maildir just won't
+contain extra copies of the articles.
+
+     <br><dt><code>directory-files</code><dd>A function with the same interface as <code>directory-files</code>.  It is
+used to scan the directories in the maildir corresponding to this
+group to find articles.  The default is the function specified by the
+server's <code>directory-files</code> parameter.
+
+     <br><dt><code>distrust-Lines:</code><dd>If non-<code>nil</code>, <code>nnmaildir</code> will always count the lines of an
+article, rather than use the <code>Lines:</code> header field.  If
+<code>nil</code>, the header field will be used if present.
+
+     <br><dt><code>always-marks</code><dd>A list of mark symbols, such as <code>['(read expire)]</code>.  Whenever
+Gnus asks <code>nnmaildir</code> for article marks, <code>nnmaildir</code> will
+say that all articles have these marks, regardless of whether the
+marks stored in the filesystem say so.  This is a proof-of-concept
+feature that will probably be removed eventually; it ought to be done
+in Gnus proper, or abandoned if it's not worthwhile.
+
+     <br><dt><code>never-marks</code><dd>A list of mark symbols, such as <code>['(tick expire)]</code>.  Whenever
+Gnus asks <code>nnmaildir</code> for article marks, <code>nnmaildir</code> will
+say that no articles have these marks, regardless of whether the marks
+stored in the filesystem say so.  <code>never-marks</code> overrides
+<code>always-marks</code>.  This is a proof-of-concept feature that will
+probably be removed eventually; it ought to be done in Gnus proper, or
+abandoned if it's not worthwhile.
+
+     <br><dt><code>nov-cache-size</code><dd>An integer specifying the size of the <acronym>NOV</acronym> memory cache.  To
+speed things up, <code>nnmaildir</code> keeps <acronym>NOV</acronym> data in memory
+for a limited number of articles in each group.  (This is probably not
+worthwhile, and will probably be removed in the future.)  This
+parameter's value is noticed only the first time a group is seen after
+the server is opened&mdash;i.e., when you first start Gnus, typically. 
+The <acronym>NOV</acronym> cache is never resized until the server is closed
+and reopened.  The default is an estimate of the number of articles
+that would be displayed in the summary buffer: a count of articles
+that are either marked with <code>tick</code> or not marked with
+<code>read</code>, plus a little extra. 
+</dl>
+
+<h5 class="subsubsection">6.3.13.7 Article identification</h5>
+
+<p>Articles are stored in the <samp><span class="file">cur/</span></samp> subdirectory of each maildir. 
+Each article file is named like <code>uniq:info</code>, where <code>uniq</code>
+contains no colons.  <code>nnmaildir</code> ignores, but preserves, the
+<code>:info</code> part.  (Other maildir readers typically use this part of
+the filename to store marks.)  The <code>uniq</code> part uniquely
+identifies the article, and is used in various places in the
+<samp><span class="file">.nnmaildir/</span></samp> subdirectory of the maildir to store information
+about the corresponding article.  The full pathname of an article is
+available in the variable <code>nnmaildir-article-file-name</code> after you
+request the article in the summary buffer.
+
+<h5 class="subsubsection">6.3.13.8 NOV data</h5>
+
+<p>An article identified by <code>uniq</code> has its <acronym>NOV</acronym> data (used
+to generate lines in the summary buffer) stored in
+<code>.nnmaildir/nov/uniq</code>.  There is no
+<code>nnmaildir-generate-nov-databases</code> function.  (There isn't much
+need for it&mdash;an article's <acronym>NOV</acronym> data is updated automatically
+when the article or <code>nnmail-extra-headers</code> has changed.)  You can
+force <code>nnmaildir</code> to regenerate the <acronym>NOV</acronym> data for a
+single article simply by deleting the corresponding <acronym>NOV</acronym>
+file, but <em>beware</em>: this will also cause <code>nnmaildir</code> to
+assign a new article number for this article, which may cause trouble
+with <code>seen</code> marks, the Agent, and the cache.
+
+<h5 class="subsubsection">6.3.13.9 Article marks</h5>
+
+<p>An article identified by <code>uniq</code> is considered to have the mark
+<code>flag</code> when the file <samp><span class="file">.nnmaildir/marks/flag/uniq</span></samp> exists. 
+When Gnus asks <code>nnmaildir</code> for a group's marks, <code>nnmaildir</code>
+looks for such files and reports the set of marks it finds.  When Gnus
+asks <code>nnmaildir</code> to store a new set of marks, <code>nnmaildir</code>
+creates and deletes the corresponding files as needed.  (Actually,
+rather than create a new file for each mark, it just creates hard
+links to <samp><span class="file">.nnmaildir/markfile</span></samp>, to save inodes.)
+
+   <p>You can invent new marks by creating a new directory in
+<samp><span class="file">.nnmaildir/marks/</span></samp>.  You can tar up a maildir and remove it from
+your server, untar it later, and keep your marks.  You can add and
+remove marks yourself by creating and deleting mark files.  If you do
+this while Gnus is running and your <code>nnmaildir</code> server is open,
+it's best to exit all summary buffers for <code>nnmaildir</code> groups and
+type <kbd>s</kbd> in the group buffer first, and to type <kbd>g</kbd> or
+<kbd>M-g</kbd> in the group buffer afterwards.  Otherwise, Gnus might not
+pick up the changes, and might undo them.
+
+   </body></html>
+

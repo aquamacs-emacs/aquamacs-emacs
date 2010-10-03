@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Remote Programs - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuration.html#Configuration" title="Configuration">
+<link rel="prev" href="Connection-caching.html#Connection-caching" title="Connection caching">
+<link rel="next" href="Remote-shell-setup.html#Remote-shell-setup" title="Remote shell setup">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Remote-Programs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-shell-setup.html#Remote-shell-setup">Remote shell setup</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Connection-caching.html#Connection-caching">Connection caching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
+<hr>
+</div>
+
+<h3 class="section">4.14 How <span class="sc">tramp</span> finds and uses programs on the remote machine.</h3>
+
+<p><span class="sc">tramp</span> depends on a number of programs on the remote host in order to
+function, including <samp><span class="command">ls</span></samp>, <samp><span class="command">test</span></samp>, <samp><span class="command">find</span></samp> and
+<samp><span class="command">cat</span></samp>.
+
+   <p>In addition to these required tools, there are various tools that may be
+required based on the connection method.  See <a href="Inline-methods.html#Inline-methods">Inline methods</a> and
+<a href="External-methods.html#External-methods">External methods</a> for details on these.
+
+   <p>Certain other tools, such as <samp><span class="command">perl</span></samp> (or <samp><span class="command">perl5</span></samp>) and
+<samp><span class="command">grep</span></samp> will be used if they can be found.  When they are
+available, they are used to improve the performance and accuracy of
+remote file access.
+
+   <p><a name="index-tramp_002dremote_002dpath-147"></a><a name="index-tramp_002ddefault_002dremote_002dpath-148"></a><a name="index-tramp_002down_002dremote_002dpath-149"></a>
+
+<div class="defun">
+&mdash; User Option: <b>tramp-remote-path</b><var><a name="index-tramp_002dremote_002dpath-150"></a></var><br>
+<blockquote><p>When <span class="sc">tramp</span> connects to the remote machine, it searches for the
+programs that it can use.  The variable <code>tramp-remote-path</code>
+controls the directories searched on the remote machine.
+
+        <p>By default, this is set to a reasonable set of defaults for most
+machines.  The symbol <code>tramp-default-remote-path</code> is a place
+holder, it is replaced by the list of directories received via the
+command <samp><span class="command">getconf PATH</span></samp> on your remote machine.  For example,
+on GNU Debian this is <samp><span class="file">/bin:/usr/bin</span></samp>, whereas on Solaris this is
+<samp><span class="file">/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin</span></samp>.  It is
+recommended to apply this symbol on top of <code>tramp-remote-path</code>.
+
+        <p>It is possible, however, that your local (or remote ;) system
+administrator has put the tools you want in some obscure local
+directory.
+
+        <p>In this case, you can still use them with <span class="sc">tramp</span>.  You simply
+need to add code to your <samp><span class="file">.emacs</span></samp> to add the directory to the
+remote path.  This will then be searched by <span class="sc">tramp</span> when you
+connect and the software found.
+
+        <p>To add a directory to the remote search path, you could use code such
+as:
+
+     <pre class="lisp">          <i>;; We load </i><span class="sc">tramp</span><i> to define the variable.</i>
+          (require 'tramp)
+          <i>;; We have </i><samp><span class="command">perl</span></samp><i> in "/usr/local/perl/bin"</i>
+          (add-to-list 'tramp-remote-path "/usr/local/perl/bin")
+</pre>
+        <p>Another possibility is to reuse the path settings of your remote
+account, when you log in.  Usually, these settings are overwritten,
+because they might not be useful for <span class="sc">tramp</span>.  The place holder
+<code>tramp-own-remote-path</code> preserves these settings.  You can
+activate it via
+
+     <pre class="lisp">          (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+</pre>
+        </blockquote></div>
+
+   <p><span class="sc">tramp</span> caches several information, like the Perl binary
+location.  The changed remote search path wouldn't affect these
+settings.  In order to force <span class="sc">tramp</span> to recompute these values,
+you must exit GNU Emacs, remove your persistency file
+(see <a href="Connection-caching.html#Connection-caching">Connection caching</a>), and restart GNU Emacs.
+
+   </body></html>
+

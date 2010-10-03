@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Article Caching - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
+<link rel="prev" href="Asynchronous-Fetching.html#Asynchronous-Fetching" title="Asynchronous Fetching">
+<link rel="next" href="Persistent-Articles.html#Persistent-Articles" title="Persistent Articles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Article-Caching"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Persistent-Articles.html#Persistent-Articles">Persistent Articles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous Fetching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">3.12 Article Caching</h3>
+
+<p><a name="index-article-caching-1125"></a><a name="index-caching-1126"></a>
+If you have an <em>extremely</em> slow <acronym>NNTP</acronym> connection, you may
+consider turning article caching on.  Each article will then be stored
+locally under your home directory.  As you may surmise, this could
+potentially use <em>huge</em> amounts of disk space, as well as eat up all
+your inodes so fast it will make your head swim.  In vodka.
+
+   <p>Used carefully, though, it could be just an easier way to save articles.
+
+   <p><a name="index-gnus_002duse_002dlong_002dfile_002dname-1127"></a><a name="index-gnus_002dcache_002ddirectory-1128"></a><a name="index-gnus_002duse_002dcache-1129"></a>To turn caching on, set <code>gnus-use-cache</code> to <code>t</code>.  By default,
+all articles ticked or marked as dormant will then be copied
+over to your local cache (<code>gnus-cache-directory</code>).  Whether this
+cache is flat or hierarchical is controlled by the
+<code>gnus-use-long-file-name</code> variable, as usual.
+
+   <p>When re-selecting a ticked or dormant article, it will be fetched from the
+cache instead of from the server.  As articles in your cache will never
+expire, this might serve as a method of saving articles while still
+keeping them where they belong.  Just mark all articles you want to save
+as dormant, and don't worry.
+
+   <p>When an article is marked as read, is it removed from the cache.
+
+   <p><a name="index-gnus_002dcache_002dremove_002darticles-1130"></a><a name="index-gnus_002dcache_002denter_002darticles-1131"></a>The entering/removal of articles from the cache is controlled by the
+<code>gnus-cache-enter-articles</code> and <code>gnus-cache-remove-articles</code>
+variables.  Both are lists of symbols.  The first is <code>(ticked
+dormant)</code> by default, meaning that ticked and dormant articles will be
+put in the cache.  The latter is <code>(read)</code> by default, meaning that
+articles marked as read are removed from the cache.  Possibly
+symbols in these two lists are <code>ticked</code>, <code>dormant</code>,
+<code>unread</code> and <code>read</code>.
+
+   <p><a name="index-gnus_002djog_002dcache-1132"></a>So where does the massive article-fetching and storing come into the
+picture?  The <code>gnus-jog-cache</code> command will go through all
+subscribed newsgroups, request all unread articles, score them, and
+store them in the cache.  You should only ever, ever ever ever, use this
+command if 1) your connection to the <acronym>NNTP</acronym> server is really, really,
+really slow and 2) you have a really, really, really huge disk. 
+Seriously.  One way to cut down on the number of articles downloaded is
+to score unwanted articles down and have them marked as read.  They will
+not then be downloaded by this command.
+
+   <p><a name="index-gnus_002duncacheable_002dgroups-1133"></a><a name="index-gnus_002dcacheable_002dgroups-1134"></a>It is likely that you do not want caching on all groups.  For instance,
+if your <code>nnml</code> mail is located under your home directory, it makes no
+sense to cache it somewhere else under your home directory.  Unless you
+feel that it's neat to use twice as much space.
+
+   <p>To limit the caching, you could set <code>gnus-cacheable-groups</code> to a
+regexp of groups to cache, &lsquo;<samp><span class="samp">^nntp</span></samp>&rsquo; for instance, or set the
+<code>gnus-uncacheable-groups</code> regexp to &lsquo;<samp><span class="samp">^nnml</span></samp>&rsquo;, for instance. 
+Both variables are <code>nil</code> by default.  If a group matches both
+variables, the group is not cached.
+
+   <p><a name="index-gnus_002dcache_002dgenerate_002dnov_002ddatabases-1135"></a><a name="index-gnus_002dcache_002dgenerate_002dactive-1136"></a><a name="index-gnus_002dcache_002dactive_002dfile-1137"></a>The cache stores information on what articles it contains in its active
+file (<code>gnus-cache-active-file</code>).  If this file (or any other parts
+of the cache) becomes all messed up for some reason or other, Gnus
+offers two functions that will try to set things right.  <kbd>M-x
+gnus-cache-generate-nov-databases</kbd> will (re)build all the <acronym>NOV</acronym>
+files, and <kbd>gnus-cache-generate-active</kbd> will (re)generate the active
+file.
+
+   <p><a name="index-gnus_002dcache_002dmove_002dcache-1138"></a><code>gnus-cache-move-cache</code> will move your whole
+<code>gnus-cache-directory</code> to some other location.  You get asked to
+where, isn't that cool?
+
+   </body></html>
+

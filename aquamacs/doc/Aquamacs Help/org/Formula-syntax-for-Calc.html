@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Formula syntax for Calc - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-spreadsheet.html#The-spreadsheet" title="The spreadsheet">
+<link rel="prev" href="References.html#References" title="References">
+<link rel="next" href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" title="Formula syntax for Lisp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Formula-syntax-for-Calc"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp">Formula syntax for Lisp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="References.html#References">References</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.5.2 Formula syntax for Calc</h4>
+
+<p><a name="index-formula-syntax_002c-Calc-231"></a><a name="index-syntax_002c-of-formulas-232"></a>
+A formula can be any algebraic expression understood by the Emacs
+<samp><span class="file">Calc</span></samp> package.  <b>Note that </b><samp><span class="file">calc</span></samp><b> has the
+non-standard convention that &lsquo;</b><samp><span class="samp">/</span></samp><b>&rsquo; has lower precedence than
+&lsquo;</b><samp><span class="samp">*</span></samp><b>&rsquo;, so that &lsquo;</b><samp><span class="samp">a/b*c</span></samp><b>&rsquo; is interpreted as &lsquo;</b><samp><span class="samp">a/(b*c)</span></samp><b>&rsquo;.</b>  Before
+evaluation by <code>calc-eval</code> (see <a href="../Calc/Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">calc-eval</a>),
+<!-- FIXME:  The link to the Calc manual in HTML does not work. -->
+variable substitution takes place according to the rules described above. 
+<a name="index-vectors_002c-in-table-calculations-233"></a>The range vectors can be directly fed into the Calc vector functions
+like &lsquo;<samp><span class="samp">vmean</span></samp>&rsquo; and &lsquo;<samp><span class="samp">vsum</span></samp>&rsquo;.
+
+   <p><a name="index-format-specifier-234"></a><a name="index-mode_002c-for-_0040file_007bcalc_007d-235"></a><a name="index-org_002dcalc_002ddefault_002dmodes-236"></a>A formula can contain an optional mode string after a semicolon.  This
+string consists of flags to influence Calc and other modes during
+execution.  By default, Org uses the standard Calc modes (precision
+12, angular units degrees, fraction and symbolic modes off).  The display
+format, however, has been changed to <code>(float 8)</code> to keep tables
+compact.  The default settings can be configured using the variable
+<code>org-calc-default-modes</code>.
+
+<pre class="example">     p20           <span class="roman">switch the internal precision to 20 digits</span>
+     n3 s3 e2 f4   <span class="roman">normal, scientific, engineering, or fixed display format</span>
+     D R           <span class="roman">angle modes: degrees, radians</span>
+     F S           <span class="roman">fraction and symbolic modes</span>
+     N             <span class="roman">interpret all fields as numbers, use 0 for non-numbers</span>
+     T             <span class="roman">force text interpretation</span>
+     E             <span class="roman">keep empty fields in ranges</span>
+     L             <span class="roman">literal</span>
+</pre>
+   <p class="noindent">In addition, you may provide a <code>printf</code> format specifier to
+reformat the final result.  A few examples:
+
+<pre class="example">     $1+$2                <span class="roman">Sum of first and second field</span>
+     $1+$2;%.2f           <span class="roman">Same, format result to two decimals</span>
+     exp($2)+exp($1)      <span class="roman">Math functions can be used</span>
+     $0;%.1f              <span class="roman">Reformat current cell to 1 decimal</span>
+     ($3-32)*5/9          <span class="roman">Degrees F -&gt; C conversion</span>
+     $c/$1/$cm            <span class="roman">Hz -&gt; cm conversion, using </span><samp><span class="file">constants.el</span></samp>
+     tan($1);Dp3s1        <span class="roman">Compute in degrees, precision 3, display SCI 1</span>
+     sin($1);Dp3%.1e      <span class="roman">Same, but use printf specifier for display</span>
+     vmean($2..$7)        <span class="roman">Compute column range mean, using vector function</span>
+     vmean($2..$7);EN     <span class="roman">Same, but treat empty fields as 0</span>
+     taylor($3,x=7,2)     <span class="roman">taylor series of $3, at x=7, second degree</span>
+</pre>
+   <p>Calc also contains a complete set of logical operations.  For example
+
+<pre class="example">     if($1&lt;20,teen,string(""))  <span class="roman">``teen'' if age $1 less than 20, else empty</span>
+</pre>
+   </body></html>
+

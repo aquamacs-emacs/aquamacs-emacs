@@ -1,0 +1,239 @@
+<html lang="en">
+<head>
+<title>Packing and Unpacking - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
+<link rel="prev" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
+<link rel="next" href="Building-Vectors.html#Building-Vectors" title="Building Vectors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Packing-and-Unpacking"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Building-Vectors.html#Building-Vectors">Building Vectors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>
+<hr>
+</div>
+
+<h3 class="section">10.1 Packing and Unpacking</h3>
+
+<p class="noindent">Calc's &ldquo;pack&rdquo; and &ldquo;unpack&rdquo; commands collect stack entries to build
+composite objects such as vectors and complex numbers.  They are
+described in this chapter because they are most often used to build
+vectors.
+
+   <p><a name="index-v-p-1193"></a><a name="index-V-p-1194"></a><a name="index-calc_002dpack-1195"></a>The <kbd>v p</kbd> (<code>calc-pack</code>) [<code>pack</code>] command collects several
+elements from the stack into a matrix, complex number, HMS form, error
+form, etc.  It uses a numeric prefix argument to specify the kind of
+object to be built; this argument is referred to as the &ldquo;packing mode.&rdquo;
+If the packing mode is a nonnegative integer, a vector of that
+length is created.  For example, <kbd>C-u 5 v p</kbd> will pop the top
+five stack elements and push back a single vector of those five
+elements.  (<kbd>C-u 0 v p</kbd> simply creates an empty vector.)
+
+   <p>The same effect can be had by pressing <kbd>[</kbd> to push an incomplete
+vector on the stack, using &lt;TAB&gt; (<code>calc-roll-down</code>) to sneak
+the incomplete object up past a certain number of elements, and
+then pressing <kbd>]</kbd> to complete the vector.
+
+   <p>Negative packing modes create other kinds of composite objects:
+
+     <dl>
+<dt><cite>-1</cite><dd>Two values are collected to build a complex number.  For example,
+<kbd>5 &lt;RET&gt; 7 C-u -1 v p</kbd> creates the complex number
+&lsquo;<samp><span class="samp">(5, 7)</span></samp>&rsquo;.  The result is always a rectangular complex
+number.  The two input values must both be real numbers,
+i.e., integers, fractions, or floats.  If they are not, Calc
+will instead build a formula like &lsquo;<samp><span class="samp">a + (0, 1) b</span></samp>&rsquo;.  (The
+other packing modes also create a symbolic answer if the
+components are not suitable.)
+
+     <br><dt><cite>-2</cite><dd>Two values are collected to build a polar complex number. 
+The first is the magnitude; the second is the phase expressed
+in either degrees or radians according to the current angular
+mode.
+
+     <br><dt><cite>-3</cite><dd>Three values are collected into an HMS form.  The first
+two values (hours and minutes) must be integers or
+integer-valued floats.  The third value may be any real
+number.
+
+     <br><dt><cite>-4</cite><dd>Two values are collected into an error form.  The inputs
+may be real numbers or formulas.
+
+     <br><dt><cite>-5</cite><dd>Two values are collected into a modulo form.  The inputs
+must be real numbers.
+
+     <br><dt><cite>-6</cite><dd>Two values are collected into the interval &lsquo;<samp><span class="samp">[a .. b]</span></samp>&rsquo;. 
+The inputs may be real numbers, HMS or date forms, or formulas.
+
+     <br><dt><cite>-7</cite><dd>Two values are collected into the interval &lsquo;<samp><span class="samp">[a .. b)</span></samp>&rsquo;.
+
+     <br><dt><cite>-8</cite><dd>Two values are collected into the interval &lsquo;<samp><span class="samp">(a .. b]</span></samp>&rsquo;.
+
+     <br><dt><cite>-9</cite><dd>Two values are collected into the interval &lsquo;<samp><span class="samp">(a .. b)</span></samp>&rsquo;.
+
+     <br><dt><cite>-10</cite><dd>Two integer values are collected into a fraction.
+
+     <br><dt><cite>-11</cite><dd>Two values are collected into a floating-point number. 
+The first is the mantissa; the second, which must be an
+integer, is the exponent.  The result is the mantissa
+times ten to the power of the exponent.
+
+     <br><dt><cite>-12</cite><dd>This is treated the same as <i>-11</i> by the <kbd>v p</kbd> command. 
+When unpacking, <i>-12</i> specifies that a floating-point mantissa
+is desired.
+
+     <br><dt><cite>-13</cite><dd>A real number is converted into a date form.
+
+     <br><dt><cite>-14</cite><dd>Three numbers (year, month, day) are packed into a pure date form.
+
+     <br><dt><cite>-15</cite><dd>Six numbers are packed into a date/time form. 
+</dl>
+
+   <p>With any of the two-input negative packing modes, either or both
+of the inputs may be vectors.  If both are vectors of the same
+length, the result is another vector made by packing corresponding
+elements of the input vectors.  If one input is a vector and the
+other is a plain number, the number is packed along with each vector
+element to produce a new vector.  For example, <kbd>C-u -4 v p</kbd>
+could be used to convert a vector of numbers and a vector of errors
+into a single vector of error forms; <kbd>C-u -5 v p</kbd> could convert
+a vector of numbers and a single number <var>M</var> into a vector of
+numbers modulo <var>M</var>.
+
+   <p>If you don't give a prefix argument to <kbd>v p</kbd>, it takes
+the packing mode from the top of the stack.  The elements to
+be packed then begin at stack level 2.  Thus
+<kbd>1 &lt;RET&gt; 2 &lt;RET&gt; 4 n v p</kbd> is another way to
+enter the error form &lsquo;<samp><span class="samp">1 +/- 2</span></samp>&rsquo;.
+
+   <p>If the packing mode taken from the stack is a vector, the result is a
+matrix with the dimensions specified by the elements of the vector,
+which must each be integers.  For example, if the packing mode is
+&lsquo;<samp><span class="samp">[2, 3]</span></samp>&rsquo;, then six numbers will be taken from the stack and
+returned in the form &lsquo;<samp><span class="samp">[[a,&nbsp;b,&nbsp;c]<!-- /@w -->, [d, e, f]]</span></samp>&rsquo;.
+
+   <p>If any elements of the vector are negative, other kinds of
+packing are done at that level as described above.  For
+example, &lsquo;<samp><span class="samp">[2, 3, -4]</span></samp>&rsquo; takes 12 objects and creates a
+<!-- @math{2\times3} -->
+2x3
+matrix of error forms: &lsquo;<samp><span class="samp">[[a +/- b, c +/- d ... ]]</span></samp>&rsquo;. 
+Also, &lsquo;<samp><span class="samp">[-4, -10]</span></samp>&rsquo; will convert four integers into an
+error form consisting of two fractions:  &lsquo;<samp><span class="samp">a:b +/- c:d</span></samp>&rsquo;.
+
+   <p><a name="index-pack-1196"></a>There is an equivalent algebraic function,
+&lsquo;<samp><span class="samp">pack(</span><var>mode</var><span class="samp">, </span><var>items</var><span class="samp">)</span></samp>&rsquo; where <var>mode</var> is a
+packing mode (an integer or a vector of integers) and <var>items</var>
+is a vector of objects to be packed (re-packed, really) according
+to that mode.  For example, &lsquo;<samp><span class="samp">pack([3, -4], [a,b,c,d,e,f])</span></samp>&rsquo;
+yields &lsquo;<samp><span class="samp">[a +/- b, c&nbsp;+/-&nbsp;d<!-- /@w -->, e +/- f]</span></samp>&rsquo;.  The function is
+left in symbolic form if the packing mode is invalid, or if the
+number of data items does not match the number of items required
+by the mode.
+
+   <p><a name="index-v-u-1197"></a><a name="index-V-u-1198"></a><a name="index-calc_002dunpack-1199"></a>The <kbd>v u</kbd> (<code>calc-unpack</code>) command takes the vector, complex
+number, HMS form, or other composite object on the top of the stack and
+&ldquo;unpacks&rdquo; it, pushing each of its elements onto the stack as separate
+objects.  Thus, it is the &ldquo;inverse&rdquo; of <kbd>v p</kbd>.  If the value
+at the top of the stack is a formula, <kbd>v u</kbd> unpacks it by pushing
+each of the arguments of the top-level operator onto the stack.
+
+   <p>You can optionally give a numeric prefix argument to <kbd>v u</kbd>
+to specify an explicit (un)packing mode.  If the packing mode is
+negative and the input is actually a vector or matrix, the result
+will be two or more similar vectors or matrices of the elements. 
+For example, given the vector &lsquo;<samp><span class="samp">[a&nbsp;+/-&nbsp;b<!-- /@w -->, c^2, d +/- 7]</span></samp>&rsquo;,
+the result of <kbd>C-u -4 v u</kbd> will be the two vectors
+&lsquo;<samp><span class="samp">[a, c^2, d]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[b,&nbsp;0,&nbsp;7]</span></samp>&rsquo;<!-- /@w -->.
+
+   <p>Note that the prefix argument can have an effect even when the input is
+not a vector.  For example, if the input is the number <i>-5</i>, then
+<kbd>c-u -1 v u</kbd> yields <i>-5</i> and 0 (the components of <i>-5</i>
+when viewed as a rectangular complex number); <kbd>C-u -2 v u</kbd> yields 5
+and 180 (assuming Degrees mode); and <kbd>C-u -10 v u</kbd> yields <i>-5</i>
+and 1 (the numerator and denominator of <i>-5</i>, viewed as a rational
+number).  Plain <kbd>v u</kbd> with this input would complain that the input
+is not a composite object.
+
+   <p>Unpacking mode <i>-11</i> converts a float into an integer mantissa and
+an integer exponent, where the mantissa is not divisible by 10
+(except that 0.0 is represented by a mantissa and exponent of 0). 
+Unpacking mode <i>-12</i> converts a float into a floating-point mantissa
+and integer exponent, where the mantissa (for non-zero numbers)
+is guaranteed to lie in the range [1 .. 10).  In both cases,
+the mantissa is shifted left or right (and the exponent adjusted
+to compensate) in order to satisfy these constraints.
+
+   <p>Positive unpacking modes are treated differently than for <kbd>v p</kbd>. 
+A mode of 1 is much like plain <kbd>v u</kbd> with no prefix argument,
+except that in addition to the components of the input object,
+a suitable packing mode to re-pack the object is also pushed. 
+Thus, <kbd>C-u 1 v u</kbd> followed by <kbd>v p</kbd> will re-build the
+original object.
+
+   <p>A mode of 2 unpacks two levels of the object; the resulting
+re-packing mode will be a vector of length 2.  This might be used
+to unpack a matrix, say, or a vector of error forms.  Higher
+unpacking modes unpack the input even more deeply.
+
+   <p><a name="index-unpack-1200"></a>There are two algebraic functions analogous to <kbd>v u</kbd>. 
+The &lsquo;<samp><span class="samp">unpack(</span><var>mode</var><span class="samp">, </span><var>item</var><span class="samp">)</span></samp>&rsquo; function unpacks the
+<var>item</var> using the given <var>mode</var>, returning the result as
+a vector of components.  Here the <var>mode</var> must be an
+integer, not a vector.  For example, &lsquo;<samp><span class="samp">unpack(-4, a +/- b)</span></samp>&rsquo;
+returns &lsquo;<samp><span class="samp">[a, b]</span></samp>&rsquo;, as does &lsquo;<samp><span class="samp">unpack(1, a +/- b)</span></samp>&rsquo;.
+
+   <p><a name="index-unpackt-1201"></a>The <code>unpackt</code> function is like <code>unpack</code> but instead
+of returning a simple vector of items, it returns a vector of
+two things:  The mode, and the vector of items.  For example,
+&lsquo;<samp><span class="samp">unpackt(1, 2:3 +/- 1:4)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[-4, [2:3, 1:4]]</span></samp>&rsquo;,
+and &lsquo;<samp><span class="samp">unpackt(2, 2:3 +/- 1:4)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[[-4, -10], [2, 3, 1, 4]]</span></samp>&rsquo;. 
+The identity for re-building the original object is
+&lsquo;<samp><span class="samp">apply(pack, unpackt(</span><var>n</var><span class="samp">, </span><var>x</var><span class="samp">)) = </span><var>x</var></samp>&rsquo;.  (The
+<code>apply</code> function builds a function call given the function
+name and a vector of arguments.)
+
+   <p><a name="index-Numerator-of-a-fraction_002c-extracting-1202"></a>Subscript notation is a useful way to extract a particular part
+of an object.  For example, to get the numerator of a rational
+number, you can use &lsquo;<samp><span class="samp">unpack(-10, </span><var>x</var><span class="samp">)_1</span></samp>&rsquo;.
+
+   </body></html>
+

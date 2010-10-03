@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Lesson II -- Customization - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Started.html#Getting-Started" title="Getting Started">
+<link rel="prev" href="Lesson-I-_002d_002d-Development-Cycle.html#Lesson-I-_002d_002d-Development-Cycle" title="Lesson I -- Development Cycle">
+<link rel="next" href="Lesson-III-_002d_002d-User-Catalog.html#Lesson-III-_002d_002d-User-Catalog" title="Lesson III -- User Catalog">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Lesson-II----Customization"></a>
+<a name="Lesson-II-_002d_002d-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Lesson-III-_002d_002d-User-Catalog.html#Lesson-III-_002d_002d-User-Catalog">Lesson III -- User Catalog</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lesson-I-_002d_002d-Development-Cycle.html#Lesson-I-_002d_002d-Development-Cycle">Lesson I -- Development Cycle</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Started.html#Getting-Started">Getting Started</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Lesson II: Customization</h3>
+
+<p>Emacs is probably the most customizable piece of software ever written,
+and it would be a shame if you did not make use of this to adapt IDLWAVE
+to your own preferences.  Customizing Emacs or IDLWAVE is accomplished
+by setting Lisp variables in the <samp><span class="file">.emacs</span></samp> file in your home
+directory &mdash; but do not be dismayed; for the most part, you can just
+copy and work from the examples given here.
+
+   <p>Let's first use a boolean variable.  These are variables which you turn
+on or off, much like a checkbox. A value of &lsquo;<samp><span class="samp">t</span></samp>&rsquo; means on, a value
+of &lsquo;<samp><span class="samp">nil</span></samp>&rsquo; means off.  Copy the following line into your
+<samp><span class="file">.emacs</span></samp> file, exit and restart Emacs.
+
+<pre class="lisp">     (setq idlwave-reserved-word-upcase t)
+</pre>
+   <p>When this option is turned on, each reserved word you type into an IDL
+source buffer will be converted to upper case when you press &lt;SPC&gt;
+or &lt;RET&gt; right after the word.  Try it out!  &lsquo;<samp><span class="samp">if</span></samp>&rsquo; changes to
+&lsquo;<samp><span class="samp">IF</span></samp>&rsquo;, &lsquo;<samp><span class="samp">begin</span></samp>&rsquo; to &lsquo;<samp><span class="samp">BEGIN</span></samp>&rsquo;.  If you don't like this
+behavior, remove the option again from your <samp><span class="file">.emacs</span></samp> file and
+restart Emacs.
+
+   <p>You likely have your own indentation preferences for IDL code.  For
+example, some may prefer to indent the main block of an IDL program
+slightly from the margin and use only 3 spaces as indentation between
+<code>BEGIN</code> and <code>END</code>.  Try the following lines in <samp><span class="file">.emacs</span></samp>:
+
+<pre class="lisp">     (setq idlwave-main-block-indent 1)
+     (setq idlwave-block-indent 3)
+     (setq idlwave-end-offset -3)
+</pre>
+   <p>Restart Emacs, and re-indent the program we developed in the first part
+of this tutorial with <kbd>C-c h</kbd> and <kbd>C-M-\</kbd>.  You may want to keep
+these lines in <samp><span class="file">.emacs</span></samp>, with values adjusted to your likings.  If
+you want to get more information about any of these variables, type,
+e.g., <kbd>C-h v idlwave-main-block-indent &lt;RET&gt;</kbd>.  To find which
+variables can be customized, look for items marked &lsquo;<samp><span class="samp">User Option:</span></samp>&rsquo;
+throughout this manual.
+
+   <p>If you cannot seem to master this Lisp customization in <samp><span class="file">.emacs</span></samp>,
+there is another, more user-friendly way to customize all the IDLWAVE
+variables.  You can access it through the IDLWAVE menu in one of the
+<samp><span class="file">.pro</span></samp> buffers, menu item <code>Customize-&gt;Browse IDLWAVE
+Group</code>. Here you'll be presented with all the various variables grouped
+into categories.  You can navigate the hierarchy (e.g. &lsquo;<samp><span class="samp">IDLWAVE
+Code Formatting-&gt;Idlwave Abbrev And Indent Action-&gt;Idlwave Expand
+Generic End</span></samp>&rsquo; to turn on <code>END</code> expansion), read about the variables,
+change them, and `Save for Future Sessions'.  Few of these variables
+need customization, but you can exercise considerable control over
+IDLWAVE's functionality with them.
+
+   <p>You may also find the key bindings used for the debugging commands too
+long and complicated.  Often we have heard complaints along the lines
+of, &ldquo;Do I really have to go through the finger gymnastics of <kbd>C-c
+C-d C-c</kbd> to run a simple command?&rdquo;  Due to Emacs rules and
+conventions, shorter bindings cannot be set by default, but you can
+easily enable them.  First, there is a way to assign all debugging
+commands in a single sweep to another simpler combination.  The only
+problem is that we have to use something which Emacs does not need for
+other important commands.  One good option is to execute debugging
+commands by holding down &lt;CONTROL&gt; and &lt;SHIFT&gt; while pressing
+a single character: <kbd>C-S-b</kbd> for setting a breakpoint, <kbd>C-S-c</kbd>
+for compiling the current source file, <kbd>C-S-a</kbd> for deleting all
+breakpoints (try it, it's easier).  You can enable this with:
+
+<pre class="lisp">     (setq idlwave-shell-debug-modifiers '(shift control))
+</pre>
+   <p class="noindent">If you have a special keyboard with, for example, a
+&lt;SUPER&gt; key, you could even shorten that:
+
+<pre class="lisp">     (setq idlwave-shell-debug-modifiers '(super))
+</pre>
+   <p class="noindent">to get compilation on <kbd>S-c</kbd>.  Often, a modifier key like
+&lt;SUPER&gt; or &lt;HYPER&gt; is bound or can be bound to an otherwise
+unused key on your keyboard &mdash; consult your system documentation.
+
+   <p>You can also assign specific commands to keys.  This you must do in the
+<em>mode-hook</em>, a special function which is run when a new IDLWAVE
+buffer gets set up.  The possibilities for key customization are
+endless.  Here we set function keys f4-f8 to common debugging commands.
+
+<pre class="lisp">     ;; First for the source buffer
+     (add-hook 'idlwave-mode-hook
+        (lambda ()
+         (local-set-key [f4] 'idlwave-shell-retall)
+         (local-set-key [f5] 'idlwave-shell-break-here)
+         (local-set-key [f6] 'idlwave-shell-clear-current-bp)
+         (local-set-key [f7] 'idlwave-shell-cont)
+         (local-set-key [f8] 'idlwave-shell-clear-all-bp)))
+     ;; Then for the shell buffer
+     (add-hook 'idlwave-shell-mode-hook
+        (lambda ()
+         (local-set-key [f4] 'idlwave-shell-retall)
+         (local-set-key [f5] 'idlwave-shell-break-here)
+         (local-set-key [f6] 'idlwave-shell-clear-current-bp)
+         (local-set-key [f7] 'idlwave-shell-cont)
+         (local-set-key [f8] 'idlwave-shell-clear-all-bp)))
+</pre>
+   </body></html>
+

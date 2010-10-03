@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Naming Conventions - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Overview.html#Overview" title="Overview">
+<link rel="prev" href="Installation.html#Installation" title="Installation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Naming-Conventions"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Installation.html#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Overview.html#Overview">Overview</a>
+<hr>
+</div>
+
+<h3 class="section">2.4 Naming Conventions</h3>
+
+<p class="noindent">Except where noted, all functions defined by this package have the
+same names and calling conventions as their Common Lisp counterparts.
+
+   <p>Following is a complete list of functions whose names were changed
+from Common Lisp, usually to avoid conflicts with Emacs.  In each
+case, a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; has been appended to the Common Lisp name to obtain
+the Emacs name:
+
+<pre class="example">     defun*        defsubst*     defmacro*     function*
+     member*       assoc*        rassoc*       get*
+     remove*       delete*       mapcar*       sort*
+     floor*        ceiling*      truncate*     round*
+     mod*          rem*          random*
+</pre>
+   <p>Internal function and variable names in the package are prefixed
+by <code>cl-</code>.  Here is a complete list of functions <em>not</em>
+prefixed by <code>cl-</code> which were not taken from Common Lisp:
+
+<pre class="example">     floatp-safe   lexical-let   lexical-let*
+     callf         callf2        letf          letf*
+     defsubst*
+</pre>
+   <p>The following simple functions and macros are defined in <samp><span class="file">cl.el</span></samp>;
+they do not cause other components like <samp><span class="file">cl-extra</span></samp> to be loaded.
+
+<pre class="example">     floatp-safe   endp
+     evenp         oddp          plusp         minusp
+     caaar .. cddddr
+     list*         ldiff         rest          first .. tenth
+     copy-list     subst         mapcar* [2]
+     adjoin [3]    acons         pairlis       pop [4]
+     push [4]      pushnew [3,4] incf [4]      decf [4]
+     proclaim      declaim
+</pre>
+   <p class="noindent">[2] Only for one sequence argument or two list arguments.
+
+<p class="noindent">[3] Only if <code>:test</code> is <code>eq</code>, <code>equal</code>, or unspecified,
+and <code>:key</code> is not used.
+
+<p class="noindent">[4] Only when <var>place</var> is a plain variable name.
+
+   </body></html>
+

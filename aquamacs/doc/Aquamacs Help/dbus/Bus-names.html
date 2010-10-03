@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Bus names - Using of D-Bus</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using of D-Bus">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Inspection.html#Inspection" title="Inspection">
+<link rel="next" href="Introspection.html#Introspection" title="Introspection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Bus-names"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Introspection.html#Introspection">Introspection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Inspection.html#Inspection">Inspection</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 Bus names.</h3>
+
+<p>There are several basic functions which inspect the buses for
+registered names.  Internally they use the basic interface
+&lsquo;<samp><span class="samp">org.freedesktop.DBus</span></samp>&rsquo;, which is supported by all objects of a bus.
+
+<div class="defun">
+&mdash; Function: <b>dbus-list-activatable-names</b><var><a name="index-dbus_002dlist_002dactivatable_002dnames-3"></a></var><br>
+<blockquote><p>This function returns the D-Bus service names, which can be activated. 
+An activatable service is described in a service registration file. 
+Under GNU/Linux, such files are located at
+<samp><span class="file">/usr/share/dbus-1/services/</span></samp>.
+
+        <p>The result is a list of strings, which is <code>nil</code> when there are no
+activatable service names at all. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-list-names</b><var> bus<a name="index-dbus_002dlist_002dnames-4"></a></var><br>
+<blockquote><p>All service names, which are registered at D-Bus <var>bus</var>, are
+returned.  The result is a list of strings, which is <code>nil</code> when
+there are no registered service names at all.  Well known names are
+strings like &lsquo;<samp><span class="samp">org.freedesktop.DBus</span></samp>&rsquo;.  Names starting with
+&lsquo;<samp><span class="samp">:</span></samp>&rsquo; are unique names for services.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-list-known-names</b><var> bus<a name="index-dbus_002dlist_002dknown_002dnames-5"></a></var><br>
+<blockquote><p>Retrieves all services which correspond to a known name in <var>bus</var>. 
+A service has a known name if it doesn't start with &lsquo;<samp><span class="samp">:</span></samp>&rsquo;.  The
+result is a list of strings, which is <code>nil</code> when there are no
+known names at all.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-list-queued-owners</b><var> bus service<a name="index-dbus_002dlist_002dqueued_002downers-6"></a></var><br>
+<blockquote><p>For a given service, registered at D-Bus <var>bus</var> under the name
+<var>service</var>, all queued unique names are returned.  The result is a
+list of strings, or <code>nil</code> when there are no queued names for
+<var>service</var> at all.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>.  <var>service</var> must be a known service name as
+string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-get-name-owner</b><var> bus service<a name="index-dbus_002dget_002dname_002downer-7"></a></var><br>
+<blockquote><p>For a given service, registered at D-Bus <var>bus</var> under the name
+<var>service</var>, the unique name of the name owner is returned.  The
+result is a string, or <code>nil</code> when there exist no name owner of
+<var>service</var>.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>.  <var>service</var> must be a known service name as
+string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-ping</b><var> bus service &amp;optional timeout<a name="index-dbus_002dping-8"></a></var><br>
+<blockquote><p>Check whether the service name <var>service</var> is registered at D-Bus
+<var>bus</var>.  <var>service</var> might not have been started yet, it is
+autostarted if possible.  The result is either <code>t</code> or <code>nil</code>.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>.  <var>service</var> must be a string.  <var>timeout</var>, a
+nonnegative integer, specifies the maximum number of milliseconds
+<code>dbus-ping</code> must return.  The default value is 25,000.  Example:
+
+     <pre class="lisp">          (message
+             "%s screensaver on board."
+             (cond
+               ((dbus-ping :session "org.gnome.ScreenSaver" 100) "Gnome")
+               ((dbus-ping :session "org.freedesktop.ScreenSaver" 100) "KDE")
+               (t "No")))
+</pre>
+        <p>If it shall be checked whether <var>service</var> is already running
+without autostarting it, one shall apply
+
+     <pre class="lisp">          (member service (dbus-list-known-names bus))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>dbus-get-unique-name</b><var> bus<a name="index-dbus_002dget_002dunique_002dname-9"></a></var><br>
+<blockquote><p>The unique name, under which Emacs is registered at D-Bus <var>bus</var>,
+is returned as string.
+
+        <p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
+<code>:session</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

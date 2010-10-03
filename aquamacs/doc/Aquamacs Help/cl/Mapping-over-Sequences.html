@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+<title>Mapping over Sequences - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences.html#Sequences" title="Sequences">
+<link rel="prev" href="Sequence-Basics.html#Sequence-Basics" title="Sequence Basics">
+<link rel="next" href="Sequence-Functions.html#Sequence-Functions" title="Sequence Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Mapping-over-Sequences"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequence-Basics.html#Sequence-Basics">Sequence Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences.html#Sequences">Sequences</a>
+<hr>
+</div>
+
+<h3 class="section">10.2 Mapping over Sequences</h3>
+
+<p class="noindent">These functions &ldquo;map&rdquo; the function you specify over the elements
+of lists or arrays.  They are all variations on the theme of the
+built-in function <code>mapcar</code>.
+
+<div class="defun">
+&mdash; Function: <b>mapcar*</b><var> function seq &amp;rest more-seqs<a name="index-mapcar_002a-97"></a></var><br>
+<blockquote><p>This function calls <var>function</var> on successive parallel sets of
+elements from its argument sequences.  Given a single <var>seq</var>
+argument it is equivalent to <code>mapcar</code>; given <var>n</var> sequences,
+it calls the function with the first elements of each of the sequences
+as the <var>n</var> arguments to yield the first element of the result
+list, then with the second elements, and so on.  The mapping stops as
+soon as the shortest sequence runs out.  The argument sequences may
+be any mixture of lists, strings, and vectors; the return sequence
+is always a list.
+
+        <p>Common Lisp's <code>mapcar</code> accepts multiple arguments but works
+only on lists; Emacs Lisp's <code>mapcar</code> accepts a single sequence
+argument.  This package's <code>mapcar*</code> works as a compatible
+superset of both. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>map</b><var> result-type function seq &amp;rest more-seqs<a name="index-map-98"></a></var><br>
+<blockquote><p>This function maps <var>function</var> over the argument sequences,
+just like <code>mapcar*</code>, but it returns a sequence of type
+<var>result-type</var> rather than a list.  <var>result-type</var> must
+be one of the following symbols: <code>vector</code>, <code>string</code>,
+<code>list</code> (in which case the effect is the same as for
+<code>mapcar*</code>), or <code>nil</code> (in which case the results are
+thrown away and <code>map</code> returns <code>nil</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>maplist</b><var> function list &amp;rest more-lists<a name="index-maplist-99"></a></var><br>
+<blockquote><p>This function calls <var>function</var> on each of its argument lists,
+then on the <code>cdr</code>s of those lists, and so on, until the
+shortest list runs out.  The results are returned in the form
+of a list.  Thus, <code>maplist</code> is like <code>mapcar*</code> except
+that it passes in the list pointers themselves rather than the
+<code>car</code>s of the advancing pointers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapc</b><var> function seq &amp;rest more-seqs<a name="index-mapc-100"></a></var><br>
+<blockquote><p>This function is like <code>mapcar*</code>, except that the values returned
+by <var>function</var> are ignored and thrown away rather than being
+collected into a list.  The return value of <code>mapc</code> is <var>seq</var>,
+the first sequence.  This function is more general than the Emacs
+primitive <code>mapc</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapl</b><var> function list &amp;rest more-lists<a name="index-mapl-101"></a></var><br>
+<blockquote><p>This function is like <code>maplist</code>, except that it throws away
+the values returned by <var>function</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapcan</b><var> function seq &amp;rest more-seqs<a name="index-mapcan-102"></a></var><br>
+<blockquote><p>This function is like <code>mapcar*</code>, except that it concatenates
+the return values (which must be lists) using <code>nconc</code>,
+rather than simply collecting them into a list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>mapcon</b><var> function list &amp;rest more-lists<a name="index-mapcon-103"></a></var><br>
+<blockquote><p>This function is like <code>maplist</code>, except that it concatenates
+the return values using <code>nconc</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>some</b><var> predicate seq &amp;rest more-seqs<a name="index-some-104"></a></var><br>
+<blockquote><p>This function calls <var>predicate</var> on each element of <var>seq</var>
+in turn; if <var>predicate</var> returns a non-<code>nil</code> value,
+<code>some</code> returns that value, otherwise it returns <code>nil</code>. 
+Given several sequence arguments, it steps through the sequences
+in parallel until the shortest one runs out, just as in
+<code>mapcar*</code>.  You can rely on the left-to-right order in which
+the elements are visited, and on the fact that mapping stops
+immediately as soon as <var>predicate</var> returns non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>every</b><var> predicate seq &amp;rest more-seqs<a name="index-every-105"></a></var><br>
+<blockquote><p>This function calls <var>predicate</var> on each element of the sequence(s)
+in turn; it returns <code>nil</code> as soon as <var>predicate</var> returns
+<code>nil</code> for any element, or <code>t</code> if the predicate was true
+for all elements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>notany</b><var> predicate seq &amp;rest more-seqs<a name="index-notany-106"></a></var><br>
+<blockquote><p>This function calls <var>predicate</var> on each element of the sequence(s)
+in turn; it returns <code>nil</code> as soon as <var>predicate</var> returns
+a non-<code>nil</code> value for any element, or <code>t</code> if the predicate
+was <code>nil</code> for all elements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>notevery</b><var> predicate seq &amp;rest more-seqs<a name="index-notevery-107"></a></var><br>
+<blockquote><p>This function calls <var>predicate</var> on each element of the sequence(s)
+in turn; it returns a non-<code>nil</code> value as soon as <var>predicate</var>
+returns <code>nil</code> for any element, or <code>t</code> if the predicate was
+true for all elements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>reduce</b><var> function seq </var><tt>&amp;key :from-end :start :end :initial-value :key</tt><var><a name="index-reduce-108"></a></var><br>
+<blockquote><p>This function combines the elements of <var>seq</var> using an associative
+binary operation.  Suppose <var>function</var> is <code>*</code> and <var>seq</var> is
+the list <code>(2 3 4 5)</code>.  The first two elements of the list are
+combined with <code>(* 2 3) = 6</code>; this is combined with the next
+element, <code>(* 6 4) = 24</code>, and that is combined with the final
+element: <code>(* 24 5) = 120</code>.  Note that the <code>*</code> function happens
+to be self-reducing, so that <code>(* 2 3 4 5)</code> has the same effect as
+an explicit call to <code>reduce</code>.
+
+        <p>If <code>:from-end</code> is true, the reduction is right-associative instead
+of left-associative:
+
+     <pre class="example">          (reduce '- '(1 2 3 4))
+               == (- (- (- 1 2) 3) 4) &rArr; -8
+          (reduce '- '(1 2 3 4) :from-end t)
+               == (- 1 (- 2 (- 3 4))) &rArr; -2
+</pre>
+        <p>If <code>:key</code> is specified, it is a function of one argument which
+is called on each of the sequence elements in turn.
+
+        <p>If <code>:initial-value</code> is specified, it is effectively added to the
+front (or rear in the case of <code>:from-end</code>) of the sequence. 
+The <code>:key</code> function is <em>not</em> applied to the initial value.
+
+        <p>If the sequence, including the initial value, has exactly one element
+then that element is returned without ever calling <var>function</var>. 
+If the sequence is empty (and there is no initial value), then
+<var>function</var> is called with no arguments to obtain the return value. 
+</p></blockquote></div>
+
+   <p>All of these mapping operations can be expressed conveniently in
+terms of the <code>loop</code> macro.  In compiled code, <code>loop</code> will
+be faster since it generates the loop as in-line code with no
+function calls.
+
+   </body></html>
+

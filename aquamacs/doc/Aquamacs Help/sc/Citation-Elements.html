@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Citation Elements - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Citations.html#Citations" title="Citations">
+<link rel="prev" href="Citations.html#Citations" title="Citations">
+<link rel="next" href="Recognizing-Citations.html#Recognizing-Citations" title="Recognizing Citations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Citation-Elements"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Recognizing-Citations.html#Recognizing-Citations">Recognizing Citations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Citations.html#Citations">Citations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Citations.html#Citations">Citations</a>
+<hr>
+</div>
+
+   <p><a name="index-citation-string-24"></a>
+
+<h3 class="section">2.1 Citation Elements</h3>
+
+<p><dfn>Citation strings</dfn> are composed of one or more elements. Non-nested
+citations are composed of four elements, three of which are directly
+user definable.  The elements are concatenated together, in this order:
+
+   <p><a name="index-citation-leader-25"></a><a name="index-citation_002dleader-_0028sc_002d_0029-26"></a><a name="index-sc_002dcitation_002dleader-27"></a>
+     <ol type=1 start=1>
+<li>The <dfn>citation leader</dfn>.  The citation leader is contained in the
+variable <code>sc-citation-leader</code>, and has the default value of a
+string containing four spaces.
+
+     <p><a name="index-attribution-string-28"></a><li>The <dfn>attribution string</dfn>.  This element is supplied automatically by
+Supercite, based on your preferences and the original message's mail
+headers, though you may be asked to confirm Supercite's choice. 
+See <a href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>, for more details.
+
+     <p><a name="index-citation-delimiter-29"></a><a name="index-sc_002dcitation_002ddelimiter-30"></a><a name="index-citation_002ddelimiter-_0028sc_002d_0029-31"></a><li>The <dfn>citation delimiter</dfn>.  This string, contained in the variable
+<code>sc-citation-delimiter</code> visually separates the citation from the
+text of the line.  This variable has a default value of <code>"&gt;"</code> and
+for best results, the string should consist of only a single character.
+
+     <p><a name="index-citation-separator-32"></a><a name="index-citation_002dseparator-_0028sc_002d_0029-33"></a><a name="index-sc_002dcitation_002dseparator-34"></a><li>The <dfn>citation separator</dfn>.  The citation separator is contained in
+the variable <code>sc-citation-separator</code>, and has the default value of
+a string containing a single space.
+        </ol>
+
+   <p>For example, suppose you were using the default values for the above
+variables, and Supercite provided the attribution string &lsquo;<samp><span class="samp">Jane</span></samp>&rsquo;. 
+In this case, the composed, non-nested citation string used might be
+something like
+<code>"    Jane&gt; "</code>. 
+This citation string will be inserted in front of
+every line in the original message that is not already cited.
+
+   <p>Nested citations, being simpler than non-nested citations, are composed
+of the same elements, sans the attribution string.  Supercite is smart
+enough to not put additional spaces between citation delimiters for
+multi-level nested citations.
+
+   </body></html>
+

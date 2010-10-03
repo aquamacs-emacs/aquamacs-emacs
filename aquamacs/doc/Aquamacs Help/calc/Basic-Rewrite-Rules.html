@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Basic Rewrite Rules - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
+<link rel="prev" href="Entering-Rewrite-Rules.html#Entering-Rewrite-Rules" title="Entering Rewrite Rules">
+<link rel="next" href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules" title="Conditional Rewrite Rules">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Rewrite-Rules"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Entering-Rewrite-Rules.html#Entering-Rewrite-Rules">Entering Rewrite Rules</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.11.2 Basic Rewrite Rules</h4>
+
+<p class="noindent">To match a particular formula &lsquo;<samp><span class="samp">x</span></samp>&rsquo; with a particular rewrite rule
+&lsquo;<samp><var>old</var><span class="samp"> := </span><var>new</var></samp>&rsquo;, Calc compares the structure of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; with
+the structure of <var>old</var>.  Variables that appear in <var>old</var> are
+treated as <dfn>meta-variables</dfn>; the corresponding positions in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+may contain any sub-formulas.  For example, the pattern &lsquo;<samp><span class="samp">f(x,y)</span></samp>&rsquo;
+would match the expression &lsquo;<samp><span class="samp">f(12, a+1)</span></samp>&rsquo; with the meta-variable
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo; corresponding to 12 and with &lsquo;<samp><span class="samp">y</span></samp>&rsquo; corresponding to
+&lsquo;<samp><span class="samp">a+1</span></samp>&rsquo;.  However, this pattern would not match &lsquo;<samp><span class="samp">f(12)</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">g(12, a+1)</span></samp>&rsquo;, since there is no assignment of the meta-variables
+that will make the pattern match these expressions.  Notice that if
+the pattern is a single meta-variable, it will match any expression.
+
+   <p>If a given meta-variable appears more than once in <var>old</var>, the
+corresponding sub-formulas of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; must be identical.  Thus
+the pattern &lsquo;<samp><span class="samp">f(x,x)</span></samp>&rsquo; would match &lsquo;<samp><span class="samp">f(12, 12)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">f(a+1, a+1)</span></samp>&rsquo; but not &lsquo;<samp><span class="samp">f(12, a+1)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">f(a+b, b+a)</span></samp>&rsquo;. 
+(See <a href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">Conditional Rewrite Rules</a>, for a way to match the latter.)
+
+   <p>Things other than variables must match exactly between the pattern
+and the target formula.  To match a particular variable exactly, use
+the pseudo-function &lsquo;<samp><span class="samp">quote(v)</span></samp>&rsquo; in the pattern.  For example, the
+pattern &lsquo;<samp><span class="samp">x+quote(y)</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">x+y</span></samp>&rsquo;, &lsquo;<samp><span class="samp">2+y</span></samp>&rsquo;, or
+&lsquo;<samp><span class="samp">sin(a)+y</span></samp>&rsquo;.
+
+   <p>The special variable names &lsquo;<samp><span class="samp">e</span></samp>&rsquo;, &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;, &lsquo;<samp><span class="samp">i</span></samp>&rsquo;, &lsquo;<samp><span class="samp">phi</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">gamma</span></samp>&rsquo;, &lsquo;<samp><span class="samp">inf</span></samp>&rsquo;, &lsquo;<samp><span class="samp">uinf</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">nan</span></samp>&rsquo; always match
+literally.  Thus the pattern &lsquo;<samp><span class="samp">sin(d + e + f)</span></samp>&rsquo; acts exactly like
+&lsquo;<samp><span class="samp">sin(d + quote(e) + f)</span></samp>&rsquo;.
+
+   <p>If the <var>old</var> pattern is found to match a given formula, that
+formula is replaced by <var>new</var>, where any occurrences in <var>new</var>
+of meta-variables from the pattern are replaced with the sub-formulas
+that they matched.  Thus, applying the rule &lsquo;<samp><span class="samp">f(x,y) := g(y+x,x)</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">f(12, a+1)</span></samp>&rsquo; would produce &lsquo;<samp><span class="samp">g(a+13, 12)</span></samp>&rsquo;.
+
+   <p>The normal <kbd>a r</kbd> command applies rewrite rules over and over
+throughout the target formula until no further changes are possible
+(up to a limit of 100 times).  Use <kbd>C-u 1 a r</kbd> to make only one
+change at a time.
+
+   </body></html>
+

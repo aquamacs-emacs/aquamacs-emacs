@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+<title>Stack Lisp Functions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions" title="Interactive Lisp Functions">
+<link rel="next" href="Predicates.html#Predicates" title="Predicates">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Stack-Lisp-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Predicates.html#Predicates">Predicates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions">Interactive Lisp Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">18.5.7.3 Stack-Oriented Functions</h5>
+
+<p class="noindent">The functions described here perform various operations on the Calc
+stack and trail.  They are to be used in interactive Calc commands.
+
+<div class="defun">
+&mdash; Function: <b>calc-push-list</b><var> vals n<a name="index-calc_002dpush_002dlist-2344"></a></var><br>
+<blockquote><p>Push the Calc objects in list <var>vals</var> onto the stack at stack level
+<var>n</var>.  If <var>n</var> is omitted it defaults to 1, so that the elements
+are pushed at the top of the stack.  If <var>n</var> is greater than 1, the
+elements will be inserted into the stack so that the last element will
+end up at level <var>n</var>, the next-to-last at level <var>n</var>+1, etc. 
+The elements of <var>vals</var> are assumed to be valid Calc objects, and
+are not evaluated, rounded, or renormalized in any way.  If <var>vals</var>
+is an empty list, nothing happens.
+
+        <p>The stack elements are pushed without any sub-formula selections. 
+You can give an optional third argument to this function, which must
+be a list the same size as <var>vals</var> of selections.  Each selection
+must be <code>eq</code> to some sub-formula of the corresponding formula
+in <var>vals</var>, or <code>nil</code> if that formula should have no selection. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-top-list</b><var> n m<a name="index-calc_002dtop_002dlist-2345"></a></var><br>
+<blockquote><p>Return a list of the <var>n</var> objects starting at level <var>m</var> of the
+stack.  If <var>m</var> is omitted it defaults to 1, so that the elements are
+taken from the top of the stack.  If <var>n</var> is omitted, it also
+defaults to 1, so that the top stack element (in the form of a
+one-element list) is returned.  If <var>m</var> is greater than 1, the
+<var>m</var>th stack element will be at the end of the list, the <var>m</var>+1st
+element will be next-to-last, etc.  If <var>n</var> or <var>m</var> are out of
+range, the command is aborted with a suitable error message.  If <var>n</var>
+is zero, the function returns an empty list.  The stack elements are not
+evaluated, rounded, or renormalized.
+
+        <p>If any stack elements contain selections, and selections have not
+been disabled by the <kbd>j e</kbd> (<code>calc-enable-selections</code>) command,
+this function returns the selected portions rather than the entire
+stack elements.  It can be given a third &ldquo;selection-mode&rdquo; argument
+which selects other behaviors.  If it is the symbol <code>t</code>, then
+a selection in any of the requested stack elements produces an
+&ldquo;invalid operation on selections&rdquo; error.  If it is the symbol <code>full</code>,
+the whole stack entry is always returned regardless of selections. 
+If it is the symbol <code>sel</code>, the selected portion is always returned,
+or <code>nil</code> if there is no selection.  (This mode ignores the <kbd>j e</kbd>
+command.)  If the symbol is <code>entry</code>, the complete stack entry in
+list form is returned; the first element of this list will be the whole
+formula, and the third element will be the selection (or <code>nil</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-pop-stack</b><var> n m<a name="index-calc_002dpop_002dstack-2346"></a></var><br>
+<blockquote><p>Remove the specified elements from the stack.  The parameters <var>n</var>
+and <var>m</var> are defined the same as for <code>calc-top-list</code>.  The return
+value of <code>calc-pop-stack</code> is uninteresting.
+
+        <p>If there are any selected sub-formulas among the popped elements, and
+<kbd>j e</kbd> has not been used to disable selections, this produces an
+error without changing the stack.  If you supply an optional third
+argument of <code>t</code>, the stack elements are popped even if they
+contain selections. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-record-list</b><var> vals tag<a name="index-calc_002drecord_002dlist-2347"></a></var><br>
+<blockquote><p>This function records one or more results in the trail.  The <var>vals</var>
+are a list of strings or Calc objects.  The <var>tag</var> is the four-character
+tag string to identify the values.  If <var>tag</var> is omitted, a blank tag
+will be used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-normalize</b><var> n<a name="index-calc_002dnormalize-2348"></a></var><br>
+<blockquote><p>This function takes a Calc object and &ldquo;normalizes&rdquo; it.  At the very
+least this involves re-rounding floating-point values according to the
+current precision and other similar jobs.  Also, unless the user has
+selected No-Simplify mode (see <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>), this involves
+actually evaluating a formula object by executing the function calls
+it contains, and possibly also doing algebraic simplification, etc. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-top-list-n</b><var> n m<a name="index-calc_002dtop_002dlist_002dn-2349"></a></var><br>
+<blockquote><p>This function is identical to <code>calc-top-list</code>, except that it calls
+<code>calc-normalize</code> on the values that it takes from the stack.  They
+are also passed through <code>check-complete</code>, so that incomplete
+objects will be rejected with an error message.  All computational
+commands should use this in preference to <code>calc-top-list</code>; the only
+standard Calc commands that operate on the stack without normalizing
+are stack management commands like <code>calc-enter</code> and <code>calc-roll-up</code>. 
+This function accepts the same optional selection-mode argument as
+<code>calc-top-list</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-top-n</b><var> m<a name="index-calc_002dtop_002dn-2350"></a></var><br>
+<blockquote><p>This function is a convenient form of <code>calc-top-list-n</code> in which only
+a single element of the stack is taken and returned, rather than a list
+of elements.  This also accepts an optional selection-mode argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-enter-result</b><var> n tag vals<a name="index-calc_002denter_002dresult-2351"></a></var><br>
+<blockquote><p>This function is a convenient interface to most of the above functions. 
+The <var>vals</var> argument should be either a single Calc object, or a list
+of Calc objects; the object or objects are normalized, and the top <var>n</var>
+stack entries are replaced by the normalized objects.  If <var>tag</var> is
+non-<code>nil</code>, the normalized objects are also recorded in the trail. 
+A typical stack-based computational command would take the form,
+
+     <pre class="smallexample">          (calc-enter-result <var>n</var> <var>tag</var> (cons 'calcFunc-<var>func</var>
+                                         (calc-top-list-n <var>n</var>)))
+</pre>
+        <p>If any of the <var>n</var> stack elements replaced contain sub-formula
+selections, and selections have not been disabled by <kbd>j e</kbd>,
+this function takes one of two courses of action.  If <var>n</var> is
+equal to the number of elements in <var>vals</var>, then each element of
+<var>vals</var> is spliced into the corresponding selection; this is what
+happens when you use the &lt;TAB&gt; key, or when you use a unary
+arithmetic operation like <code>sqrt</code>.  If <var>vals</var> has only one
+element but <var>n</var> is greater than one, there must be only one
+selection among the top <var>n</var> stack elements; the element from
+<var>vals</var> is spliced into that selection.  This is what happens when
+you use a binary arithmetic operation like <kbd>+</kbd>.  Any other
+combination of <var>n</var> and <var>vals</var> is an error when selections
+are present. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-unary-op</b><var> tag func arg<a name="index-calc_002dunary_002dop-2352"></a></var><br>
+<blockquote><p>This function implements a unary operator that allows a numeric prefix
+argument to apply the operator over many stack entries.  If the prefix
+argument <var>arg</var> is <code>nil</code>, this uses <code>calc-enter-result</code>
+as outlined above.  Otherwise, it maps the function over several stack
+elements; see <a href="Prefix-Arguments.html#Prefix-Arguments">Prefix Arguments</a>.  For example,
+
+     <pre class="smallexample">          (defun calc-zeta (arg)
+            (interactive "P")
+            (calc-unary-op "zeta" 'calcFunc-zeta arg))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-binary-op</b><var> tag func arg ident unary<a name="index-calc_002dbinary_002dop-2353"></a></var><br>
+<blockquote><p>This function implements a binary operator, analogously to
+<code>calc-unary-op</code>.  The optional <var>ident</var> and <var>unary</var>
+arguments specify the behavior when the prefix argument is zero or
+one, respectively.  If the prefix is zero, the value <var>ident</var>
+is pushed onto the stack, if specified, otherwise an error message
+is displayed.  If the prefix is one, the unary function <var>unary</var>
+is applied to the top stack element, or, if <var>unary</var> is not
+specified, nothing happens.  When the argument is two or more,
+the binary function <var>func</var> is reduced across the top <var>arg</var>
+stack elements; when the argument is negative, the function is
+mapped between the next-to-top <i>-</i><var>arg</var> stack elements and the
+top element. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-stack-size</b><var><a name="index-calc_002dstack_002dsize-2354"></a></var><br>
+<blockquote><p>Return the number of elements on the stack as an integer.  This count
+does not include elements that have been temporarily hidden by stack
+truncation; see <a href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-cursor-stack-index</b><var> n<a name="index-calc_002dcursor_002dstack_002dindex-2355"></a></var><br>
+<blockquote><p>Move the point to the <var>n</var>th stack entry.  If <var>n</var> is zero, this
+will be the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; line.  If <var>n</var> is from 1 to the current stack size,
+this will be the beginning of the first line of that stack entry's display. 
+If line numbers are enabled, this will move to the first character of the
+line number, not the stack entry itself. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-substack-height</b><var> n<a name="index-calc_002dsubstack_002dheight-2356"></a></var><br>
+<blockquote><p>Return the number of lines between the beginning of the <var>n</var>th stack
+entry and the bottom of the buffer.  If <var>n</var> is zero, this
+will be one (assuming no stack truncation).  If all stack entries are
+one line long (i.e., no matrices are displayed), the return value will
+be equal <var>n</var>+1 as long as <var>n</var> is in range.  (Note that in Big
+mode, the return value includes the blank lines that separate stack
+entries.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>calc-refresh</b><var><a name="index-calc_002drefresh-2357"></a></var><br>
+<blockquote><p>Erase the <code>*Calculator*</code> buffer and reformat its contents from memory. 
+This must be called after changing any parameter, such as the current
+display radix, which might change the appearance of existing stack
+entries.  (During a keyboard macro invoked by the <kbd>X</kbd> key, refreshing
+is suppressed, but a flag is set so that the entire stack will be refreshed
+rather than just the top few elements when the macro finishes.) 
+</p></blockquote></div>
+
+   </body></html>
+

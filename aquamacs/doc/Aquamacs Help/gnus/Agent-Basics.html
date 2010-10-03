@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Agent Basics - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Gnus-Unplugged.html#Gnus-Unplugged" title="Gnus Unplugged">
+<link rel="next" href="Agent-Categories.html#Agent-Categories" title="Agent Categories">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Agent-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Agent-Categories.html#Agent-Categories">Agent Categories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.9.1 Agent Basics</h4>
+
+<p>First, let's get some terminology out of the way.
+
+   <p>The Gnus Agent is said to be <dfn>unplugged</dfn> when you have severed the
+connection to the net (and notified the Agent that this is the case). 
+When the connection to the net is up again (and Gnus knows this), the
+Agent is <dfn>plugged</dfn>.
+
+   <p>The <dfn>local</dfn> machine is the one you're running on, and which isn't
+connected to the net continuously.
+
+   <p><dfn>Downloading</dfn> means fetching things from the net to your local
+machine.  <dfn>Uploading</dfn> is doing the opposite.
+
+   <p>You know that Gnus gives you all the opportunity you'd ever want for
+shooting yourself in the foot.  Some people call it flexibility.  Gnus
+is also customizable to a great extent, which means that the user has a
+say on how Gnus behaves.  Other newsreaders might unconditionally shoot
+you in your foot, but with Gnus, you have a choice!
+
+   <p>Gnus is never really in plugged or unplugged state.  Rather, it applies
+that state to each server individually.  This means that some servers
+can be plugged while others can be unplugged.  Additionally, some
+servers can be ignored by the Agent altogether (which means that
+they're kinda like plugged always).
+
+   <p>So when you unplug the Agent and then wonder why is Gnus opening a
+connection to the Net, the next step to do is to look whether all
+servers are agentized.  If there is an unagentized server, you found
+the culprit.
+
+   <p>Another thing is the <dfn>offline</dfn> state.  Sometimes, servers aren't
+reachable.  When Gnus notices this, it asks you whether you want the
+server to be switched to offline state.  If you say yes, then the
+server will behave somewhat as if it was unplugged, except that Gnus
+will ask you whether you want to switch it back online again.
+
+   <p>Let's take a typical Gnus session using the Agent.
+
+     <ul>
+<li><a name="index-gnus_002dunplugged-2492"></a>You start Gnus with <code>gnus-unplugged</code>.  This brings up the Gnus
+Agent in a disconnected state.  You can read all the news that you have
+already fetched while in this mode.
+
+     <li>You then decide to see whether any new news has arrived.  You connect
+your machine to the net (using PPP or whatever), and then hit <kbd>J j</kbd>
+to make Gnus become <dfn>plugged</dfn> and use <kbd>g</kbd> to check for new mail
+as usual.  To check for new mail in unplugged mode (see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>).
+
+     <li>You can then read the new news immediately, or you can download the
+news onto your local machine.  If you want to do the latter, you press
+<kbd>g</kbd> to check if there are any new news and then <kbd>J s</kbd> to fetch
+all the eligible articles in all the groups.  (To let Gnus know which
+articles you want to download, see <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>).
+
+     <li>After fetching the articles, you press <kbd>J j</kbd> to make Gnus become
+unplugged again, and you shut down the PPP thing (or whatever).  And
+then you read the news offline.
+
+     <li>And then you go to step 2. 
+</ul>
+
+   <p>Here are some things you should do the first time (or so) that you use
+the Agent.
+
+     <ul>
+<li>Decide which servers should be covered by the Agent.  If you have a mail
+back end, it would probably be nonsensical to have it covered by the
+Agent.  Go to the server buffer (<kbd>^</kbd> in the group buffer) and press
+<kbd>J a</kbd> on the server (or servers) that you wish to have covered by the
+Agent (see <a href="Server-Agent-Commands.html#Server-Agent-Commands">Server Agent Commands</a>), or <kbd>J r</kbd> on automatically
+added servers you do not wish to have covered by the Agent.  By default,
+all <code>nntp</code> and <code>nnimap</code> servers in <code>gnus-select-method</code> and
+<code>gnus-secondary-select-methods</code> are agentized.
+
+     <li>Decide on download policy.  It's fairly simple once you decide whether
+you are going to use agent categories, topic parameters, and/or group
+parameters to implement your policy.  If you're new to gnus, it
+is probably best to start with a category, See <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>.
+
+     <p>Both topic parameters (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>) and agent categories
+(see <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>) provide for setting a policy that applies
+to multiple groups.  Which you use is entirely up to you.  Topic
+parameters do override categories so, if you mix the two, you'll have
+to take that into account.  If you have a few groups that deviate from
+your policy, you can use group parameters (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) to
+configure them.
+
+     <li>Uhm<small class="dots">...</small> that's it. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>^M in the shell buffer - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bugs-and-problems.html#Bugs-and-problems" title="Bugs and problems">
+<link rel="prev" href="Problems-with-very-large-files.html#Problems-with-very-large-files" title="Problems with very large files">
+<link rel="next" href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" title="Problems with Shell Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="%5eM-in-the-shell-buffer"></a>
+<a name="g_t_005eM-in-the-shell-buffer"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode">Problems with Shell Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Problems-with-very-large-files.html#Problems-with-very-large-files">Problems with very large files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bugs-and-problems.html#Bugs-and-problems">Bugs and problems</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 How do I get rid of &lsquo;<samp><span class="samp">^M</span></samp>&rsquo; or echoed commands in my shell buffer?</h3>
+
+<p><a name="index-Shell-buffer_002c-echoed-commands-and-_0040samp_007b_005eM_007d-in-341"></a><a name="index-Echoed-commands-in-_0040code_007bshell_002dmode_007d-342"></a>
+Try typing <kbd>M-x shell-strip-ctrl-m &lt;RET&gt;</kbd> while in <code>shell-mode</code> to
+make them go away.  If that doesn't work, you have several options:
+
+   <p>For <code>tcsh</code>, put this in your <samp><span class="file">.cshrc</span></samp> (or <samp><span class="file">.tcshrc</span></samp>)
+file:
+
+<pre class="example">     if ($?EMACS) then
+         if ("$EMACS" =~ /*) then
+             if ($?tcsh) unset edit
+             stty nl
+         endif
+     endif
+</pre>
+   <p>Or put this in your <samp><span class="file">.emacs_tcsh</span></samp> or <samp><span class="file">~/.emacs.d/init_tcsh.sh</span></samp> file:
+
+<pre class="example">     unset edit
+     stty nl
+</pre>
+   <p>Alternatively, use <code>csh</code> in your shell buffers instead of
+<code>tcsh</code>.  One way is:
+
+<pre class="lisp">     (setq explicit-shell-file-name "/bin/csh")
+</pre>
+   <p class="noindent">and another is to do this in your <samp><span class="file">.cshrc</span></samp> (or <samp><span class="file">.tcshrc</span></samp>)
+file:
+
+<pre class="example">     setenv ESHELL /bin/csh
+</pre>
+   <p class="noindent">(You must start Emacs over again with the environment variable properly
+set for this to take effect.)
+
+   <p>You can also set the <code>ESHELL</code> environment variable in Emacs Lisp
+with the following Lisp form,
+
+<pre class="lisp">     (setenv "ESHELL" "/bin/csh")
+</pre>
+   <p>The above solutions try to prevent the shell from producing the
+&lsquo;<samp><span class="samp">^M</span></samp>&rsquo; characters in the first place.  If this is not possible
+(e.g., if you use a Windows shell), you can get Emacs to remove these
+characters from the buffer by adding this to your <samp><span class="file">.emacs</span></samp> init
+file:
+
+<pre class="smalllisp">     (add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m)
+</pre>
+   <p>On a related note: if your shell is echoing your input line in the shell
+buffer, you might want to customize the <code>comint-process-echoes</code>
+variable in your shell buffers, or try the following command in your
+shell start-up file:
+
+<pre class="example">     stty -icrnl -onlcr -echo susp ^Z
+</pre>
+   </body></html>
+

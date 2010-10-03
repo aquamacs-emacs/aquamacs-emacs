@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+<title>Random Numbers - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Scientific-Functions.html#Scientific-Functions" title="Scientific Functions">
+<link rel="prev" href="Branch-Cuts.html#Branch-Cuts" title="Branch Cuts">
+<link rel="next" href="Combinatorial-Functions.html#Combinatorial-Functions" title="Combinatorial Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Random-Numbers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Combinatorial-Functions.html#Combinatorial-Functions">Combinatorial Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Branch-Cuts.html#Branch-Cuts">Branch Cuts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>
+<hr>
+</div>
+
+<h3 class="section">9.5 Random Numbers</h3>
+
+<p class="noindent"><a name="index-k-r-1098"></a><a name="index-calc_002drandom-1099"></a><a name="index-random-1100"></a>The <kbd>k r</kbd> (<code>calc-random</code>) [<code>random</code>] command produces
+random numbers of various sorts.
+
+   <p>Given a positive numeric prefix argument &lsquo;<samp><span class="samp">M</span></samp>&rsquo;, it produces a random
+integer &lsquo;<samp><span class="samp">N</span></samp>&rsquo; in the range
+<!-- @math{0 \le N < M}. -->
+&lsquo;<samp><span class="samp">0 &lt;= N &lt; M</span></samp>&rsquo;. 
+Each possible value &lsquo;<samp><span class="samp">N</span></samp>&rsquo; appears with equal probability.
+
+   <p>With no numeric prefix argument, the <kbd>k r</kbd> command takes its argument
+from the stack instead.  Once again, if this is a positive integer &lsquo;<samp><span class="samp">M</span></samp>&rsquo;
+the result is a random integer less than &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.  However, note that
+while numeric prefix arguments are limited to six digits or so, an &lsquo;<samp><span class="samp">M</span></samp>&rsquo;
+taken from the stack can be arbitrarily large.  If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is negative,
+the result is a random integer in the range
+<!-- @math{M < N \le 0}. -->
+&lsquo;<samp><span class="samp">M &lt; N &lt;= 0</span></samp>&rsquo;.
+
+   <p>If the value on the stack is a floating-point number &lsquo;<samp><span class="samp">M</span></samp>&rsquo;, the result
+is a random floating-point number &lsquo;<samp><span class="samp">N</span></samp>&rsquo; in the range
+<!-- @math{0 \le N < M} -->
+&lsquo;<samp><span class="samp">0 &lt;= N &lt; M</span></samp>&rsquo;
+or
+<!-- @math{M < N \le 0}, -->
+&lsquo;<samp><span class="samp">M &lt; N &lt;= 0</span></samp>&rsquo;,
+according to the sign of &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.
+
+   <p>If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is zero, the result is a Gaussian-distributed random real
+number; the distribution has a mean of zero and a standard deviation
+of one.  The algorithm used generates random numbers in pairs; thus,
+every other call to this function will be especially fast.
+
+   <p>If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is an error form
+<!-- @math{m} @code{+/-} @math{\sigma} -->
+&lsquo;<samp><span class="samp">m +/- s</span></samp>&rsquo;
+where <var>m</var> and
+<!-- @math{\sigma} -->
+<var>s</var>
+are both real numbers, the result uses a Gaussian distribution with mean
+<var>m</var> and standard deviation
+<!-- @math{\sigma}. -->
+<var>s</var>.
+
+   <p>If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is an interval form, the lower and upper bounds specify the
+acceptable limits of the random numbers.  If both bounds are integers,
+the result is a random integer in the specified range.  If either bound
+is floating-point, the result is a random real number in the specified
+range.  If the interval is open at either end, the result will be sure
+not to equal that end value.  (This makes a big difference for integer
+intervals, but for floating-point intervals it's relatively minor:
+with a precision of 6, &lsquo;<samp><span class="samp">random([1.0..2.0))</span></samp>&rsquo; will return any of one
+million numbers from 1.00000 to 1.99999; &lsquo;<samp><span class="samp">random([1.0..2.0])</span></samp>&rsquo; may
+additionally return 2.00000, but the probability of this happening is
+extremely small.)
+
+   <p>If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is a vector, the result is one element taken at random from
+the vector.  All elements of the vector are given equal probabilities.
+
+   <p><a name="index-RandSeed-1101"></a>The sequence of numbers produced by <kbd>k r</kbd> is completely random by
+default, i.e., the sequence is seeded each time you start Calc using
+the current time and other information.  You can get a reproducible
+sequence by storing a particular &ldquo;seed value&rdquo; in the Calc variable
+<code>RandSeed</code>.  Any integer will do for a seed; integers of from 1
+to 12 digits are good.  If you later store a different integer into
+<code>RandSeed</code>, Calc will switch to a different pseudo-random
+sequence.  If you &ldquo;unstore&rdquo; <code>RandSeed</code>, Calc will re-seed itself
+from the current time.  If you store the same integer that you used
+before back into <code>RandSeed</code>, you will get the exact same sequence
+of random numbers as before.
+
+   <p><a name="index-calc_002drrandom-1102"></a>The <code>calc-rrandom</code> command (not on any key) produces a random real
+number between zero and one.  It is equivalent to &lsquo;<samp><span class="samp">random(1.0)</span></samp>&rsquo;.
+
+   <p><a name="index-k-a-1103"></a><a name="index-calc_002drandom_002dagain-1104"></a>The <kbd>k a</kbd> (<code>calc-random-again</code>) command produces another random
+number, re-using the most recent value of &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.  With a numeric
+prefix argument <var>n</var>, it produces <var>n</var> more random numbers using
+that value of &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.
+
+   <p><a name="index-k-h-1105"></a><a name="index-calc_002dshuffle-1106"></a><a name="index-shuffle-1107"></a>The <kbd>k h</kbd> (<code>calc-shuffle</code>) command produces a vector of several
+random values with no duplicates.  The value on the top of the stack
+specifies the set from which the random values are drawn, and may be any
+of the &lsquo;<samp><span class="samp">M</span></samp>&rsquo; formats described above.  The numeric prefix argument
+gives the length of the desired list.  (If you do not provide a numeric
+prefix argument, the length of the list is taken from the top of the
+stack, and &lsquo;<samp><span class="samp">M</span></samp>&rsquo; from second-to-top.)
+
+   <p>If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is a floating-point number, zero, or an error form (so
+that the random values are being drawn from the set of real numbers)
+there is little practical difference between using <kbd>k h</kbd> and using
+<kbd>k r</kbd> several times.  But if the set of possible values consists
+of just a few integers, or the elements of a vector, then there is
+a very real chance that multiple <kbd>k r</kbd>'s will produce the same
+number more than once.  The <kbd>k h</kbd> command produces a vector whose
+elements are always distinct.  (Actually, there is a slight exception:
+If &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is a vector, no given vector element will be drawn more
+than once, but if several elements of &lsquo;<samp><span class="samp">M</span></samp>&rsquo; are equal, they may
+each make it into the result vector.)
+
+   <p>One use of <kbd>k h</kbd> is to rearrange a list at random.  This happens
+if the prefix argument is equal to the number of values in the list:
+<kbd>[1, 1.5, 2, 2.5, 3] 5 k h</kbd> might produce the permuted list
+&lsquo;<samp><span class="samp">[2.5, 1, 1.5, 3, 2]</span></samp>&rsquo;.  As a convenient feature, if the argument
+<var>n</var> is negative it is replaced by the size of the set represented
+by &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.  Naturally, this is allowed only when &lsquo;<samp><span class="samp">M</span></samp>&rsquo; specifies
+a small discrete set of possibilities.
+
+   <p>To do the equivalent of <kbd>k h</kbd> but with duplications allowed,
+given &lsquo;<samp><span class="samp">M</span></samp>&rsquo; on the stack and with <var>n</var> just entered as a numeric
+prefix, use <kbd>v b</kbd> to build a vector of copies of &lsquo;<samp><span class="samp">M</span></samp>&rsquo;, then use
+<kbd>V M k r</kbd> to &ldquo;map&rdquo; the normal <kbd>k r</kbd> function over the
+elements of this vector.  See <a href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Random-Number-Generator.html#Random-Number-Generator">Random Number Generator</a>:      (Complete description of Calc's algorithm)
+</ul>
+
+   </body></html>
+

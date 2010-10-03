@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Radix Modes - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="prev" href="Display-Modes.html#Display-Modes" title="Display Modes">
+<link rel="next" href="Grouping-Digits.html#Grouping-Digits" title="Grouping Digits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Radix-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Grouping-Digits.html#Grouping-Digits">Grouping Digits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-Modes.html#Display-Modes">Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display-Modes.html#Display-Modes">Display Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.7.1 Radix Modes</h4>
+
+<p class="noindent"><a name="index-Radix-display-478"></a><a name="index-Non_002ddecimal-numbers-479"></a><a name="index-Decimal-and-non_002ddecimal-numbers-480"></a>Calc normally displays numbers in decimal (<dfn>base-10</dfn> or <dfn>radix-10</dfn>)
+notation.  Calc can actually display in any radix from two (binary) to 36. 
+When the radix is above 10, the letters <code>A</code> to <code>Z</code> are used as
+digits.  When entering such a number, letter keys are interpreted as
+potential digits rather than terminating numeric entry mode.
+
+   <p><a name="index-d-2-481"></a><a name="index-d-8-482"></a><a name="index-d-6-483"></a><a name="index-d-0-484"></a><a name="index-Hexadecimal-integers-485"></a><a name="index-Octal-integers-486"></a>The key sequences <kbd>d 2</kbd>, <kbd>d 8</kbd>, <kbd>d 6</kbd>, and <kbd>d 0</kbd> select
+binary, octal, hexadecimal, and decimal as the current display radix,
+respectively.  Numbers can always be entered in any radix, though the
+current radix is used as a default if you press <kbd>#</kbd> without any initial
+digits.  A number entered without a <kbd>#</kbd> is <em>always</em> interpreted
+as decimal.
+
+   <p><a name="index-d-r-487"></a><a name="index-calc_002dradix-488"></a>To set the radix generally, use <kbd>d r</kbd> (<code>calc-radix</code>) and enter
+an integer from 2 to 36.  You can specify the radix as a numeric prefix
+argument; otherwise you will be prompted for it.
+
+   <p><a name="index-d-z-489"></a><a name="index-calc_002dleading_002dzeros-490"></a><a name="index-Leading-zeros-491"></a>Integers normally are displayed with however many digits are necessary to
+represent the integer and no more.  The <kbd>d z</kbd> (<code>calc-leading-zeros</code>)
+command causes integers to be padded out with leading zeros according to the
+current binary word size.  (See <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>, for a discussion of
+word size.)  If the absolute value of the word size is &lsquo;<samp><span class="samp">w</span></samp>&rsquo;, all integers
+are displayed with at least enough digits to represent
+<!-- @math{2^w-1} -->
+&lsquo;<samp><span class="samp">(2^w)-1</span></samp>&rsquo;
+in the current radix.  (Larger integers will still be displayed in their
+entirety.)
+
+   <p><a name="index-Two_0027s-complements-492"></a>With the binary, octal and hexadecimal display modes, Calc can
+display &lsquo;<samp><span class="samp">w</span></samp>&rsquo;-bit integers using two's complement notation.  This
+option is selected with the key sequences <kbd>C-u d 2</kbd>, <kbd>C-u d 8</kbd>
+and <kbd>C-u d 6</kbd>, respectively, and a negative word size might be
+appropriate (see <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>). In two's complement
+notation, the integers in the (nearly) symmetric interval from
+<!-- @math{-2^{w-1}} -->
+&lsquo;<samp><span class="samp">-2^(w-1)</span></samp>&rsquo;
+to
+<!-- @math{2^{w-1}-1} -->
+&lsquo;<samp><span class="samp">2^(w-1)-1</span></samp>&rsquo;
+are represented by the integers from &lsquo;<samp><span class="samp">0</span></samp>&rsquo; to &lsquo;<samp><span class="samp">2^w-1</span></samp>&rsquo;:
+the integers from &lsquo;<samp><span class="samp">0</span></samp>&rsquo; to
+<!-- @math{2^{w-1}-1} -->
+&lsquo;<samp><span class="samp">2^(w-1)-1</span></samp>&rsquo;
+are represented by themselves and the integers from
+<!-- @math{-2^{w-1}} -->
+&lsquo;<samp><span class="samp">-2^(w-1)</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">-1</span></samp>&rsquo; are represented by the integers from
+<!-- @math{2^{w-1}} -->
+&lsquo;<samp><span class="samp">2^(w-1)</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">2^w-1</span></samp>&rsquo; (the integer &lsquo;<samp><span class="samp">k</span></samp>&rsquo; is represented by &lsquo;<samp><span class="samp">k+2^w</span></samp>&rsquo;). 
+Calc will display a two's complement integer by the radix (either
+&lsquo;<samp><span class="samp">2</span></samp>&rsquo;, &lsquo;<samp><span class="samp">8</span></samp>&rsquo; or &lsquo;<samp><span class="samp">16</span></samp>&rsquo;), two <kbd>#</kbd> symbols, and then its
+representation (including any leading zeros necessary to include all
+&lsquo;<samp><span class="samp">w</span></samp>&rsquo; bits).  In a two's complement display mode, numbers that
+are not displayed in two's complement notation (i.e., that aren't
+integers from
+<!-- @math{-2^{w-1}} -->
+&lsquo;<samp><span class="samp">-2^(w-1)</span></samp>&rsquo;
+to
+<!-- ( -->
+<!-- @math{2^{w-1}-1}) -->
+&lsquo;<samp><span class="samp">2^(w-1)-1</span></samp>&rsquo;)
+will be represented using Calc's usual notation (in the appropriate
+radix).
+
+   </body></html>
+

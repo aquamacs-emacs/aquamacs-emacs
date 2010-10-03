@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Vertical Compositions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compositions.html#Compositions" title="Compositions">
+<link rel="prev" href="Horizontal-Compositions.html#Horizontal-Compositions" title="Horizontal Compositions">
+<link rel="next" href="Other-Compositions.html#Other-Compositions" title="Other Compositions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vertical-Compositions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Compositions.html#Other-Compositions">Other Compositions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Horizontal-Compositions.html#Horizontal-Compositions">Horizontal Compositions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compositions.html#Compositions">Compositions</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">7.8.10.3 Vertical Compositions</h5>
+
+<p class="noindent"><a name="index-cvert-616"></a>The <code>cvert</code> function makes a vertical composition.  Each
+component of the vector is centered in a column.  The baseline of
+the result is by default the top line of the resulting composition. 
+For example, &lsquo;<samp><span class="samp">f(cvert([a, bb, ccc]), cvert([a^2 + 1, b^2]))</span></samp>&rsquo;
+formats in Big mode as
+
+<pre class="example">     f( a ,  2    )
+       bb   a  + 1
+       ccc     2
+              b
+</pre>
+   <p><a name="index-cbase-617"></a>There are several special composition functions that work only as
+components of a vertical composition.  The <code>cbase</code> function
+controls the baseline of the vertical composition; the baseline
+will be the same as the baseline of whatever component is enclosed
+in <code>cbase</code>.  Thus &lsquo;<samp><span class="samp">f(cvert([a, cbase(bb), ccc]),
+cvert([a^2 + 1, cbase(b^2)]))</span></samp>&rsquo; displays as
+
+<pre class="example">             2
+            a  + 1
+        a      2
+     f(bb ,   b   )
+       ccc
+</pre>
+   <p><a name="index-ctbase-618"></a><a name="index-cbbase-619"></a>There are also <code>ctbase</code> and <code>cbbase</code> functions which
+make the baseline of the vertical composition equal to the top
+or bottom line (rather than the baseline) of that component. 
+Thus &lsquo;<samp><span class="samp">cvert([cbase(a / b)]) + cvert([ctbase(a / b)]) +
+cvert([cbbase(a / b)])</span></samp>&rsquo; gives
+
+<pre class="example">             a
+     a       -
+     - + a + b
+     b   -
+         b
+</pre>
+   <p>There should be only one <code>cbase</code>, <code>ctbase</code>, or <code>cbbase</code>
+function in a given vertical composition.  These functions can also
+be written with no arguments:  &lsquo;<samp><span class="samp">ctbase()</span></samp>&rsquo; is a zero-height object
+which means the baseline is the top line of the following item, and
+&lsquo;<samp><span class="samp">cbbase()</span></samp>&rsquo; means the baseline is the bottom line of the preceding
+item.
+
+   <p><a name="index-crule-620"></a>The <code>crule</code> function builds a &ldquo;rule,&rdquo; or horizontal line,
+across a vertical composition.  By itself &lsquo;<samp><span class="samp">crule()</span></samp>&rsquo; uses &lsquo;<samp><span class="samp">-</span></samp>&rsquo;
+characters to build the rule.  You can specify any other character,
+e.g., &lsquo;<samp><span class="samp">crule("=")</span></samp>&rsquo;.  The argument must be a character code or
+vector of exactly one character code.  It is repeated to match the
+width of the widest item in the stack.  For example, a quotient
+with a thick line is &lsquo;<samp><span class="samp">cvert([a + 1, cbase(crule("=")), b^2])</span></samp>&rsquo;:
+
+<pre class="example">     a + 1
+     =====
+       2
+      b
+</pre>
+   <p><a name="index-clvert-621"></a><a name="index-crvert-622"></a>Finally, the functions <code>clvert</code> and <code>crvert</code> act exactly
+like <code>cvert</code> except that the items are left- or right-justified
+in the stack.  Thus &lsquo;<samp><span class="samp">clvert([a, bb, ccc]) + crvert([a, bb, ccc])</span></samp>&rsquo;
+gives:
+
+<pre class="example">     a   +   a
+     bb     bb
+     ccc   ccc
+</pre>
+   <p>Like <code>choriz</code>, the vertical compositions accept a second argument
+which gives the precedence to use when formatting the components. 
+Vertical compositions do not support separator strings.
+
+   </body></html>
+

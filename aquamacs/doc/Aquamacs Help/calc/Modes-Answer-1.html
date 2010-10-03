@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Modes Answer 1 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Algebraic-Answer-3.html#Algebraic-Answer-3" title="Algebraic Answer 3">
+<link rel="next" href="Modes-Answer-2.html#Modes-Answer-2" title="Modes Answer 2">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modes-Answer-1"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modes-Answer-2.html#Modes-Answer-2">Modes Answer 2</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Answer-3.html#Algebraic-Answer-3">Algebraic Answer 3</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.8 Modes Tutorial Exercise 1</h4>
+
+<p class="noindent">Calc always stores its numbers in decimal, so even though one-third has
+an exact base-3 representation (&lsquo;<samp><span class="samp">3#0.1</span></samp>&rsquo;), it is still stored as
+0.3333333 (chopped off after 12 or however many decimal digits) inside
+the calculator's memory.  When this inexact number is converted back
+to base 3 for display, it may still be slightly inexact.  When we
+multiply this number by 3, we get 0.999999, also an inexact value.
+
+   <p>When Calc displays a number in base 3, it has to decide how many digits
+to show.  If the current precision is 12 (decimal) digits, that corresponds
+to &lsquo;<samp><span class="samp">12 / log10(3) = 25.15</span></samp>&rsquo; base-3 digits.  Because 25.15 is not an
+exact integer, Calc shows only 25 digits, with the result that stored
+numbers carry a little bit of extra information that may not show up on
+the screen.  When Joe entered &lsquo;<samp><span class="samp">3#0.2</span></samp>&rsquo;, the stored number 0.666666
+happened to round to a pleasing value when it lost that last 0.15 of a
+digit, but it was still inexact in Calc's memory.  When he divided by 2,
+he still got the dreaded inexact value 0.333333.  (Actually, he divided
+0.666667 by 2 to get 0.333334, which is why he got something a little
+higher than <code>3#0.1</code> instead of a little lower.)
+
+   <p>If Joe didn't want to be bothered with all this, he could have typed
+<kbd>M-24 d n</kbd> to display with one less digit than the default.  (If
+you give <kbd>d n</kbd> a negative argument, it uses default-minus-that,
+so <kbd>M-- d n</kbd> would be an easier way to get the same effect.)  Those
+inexact results would still be lurking there, but they would now be
+rounded to nice, natural-looking values for display purposes.  (Remember,
+&lsquo;<samp><span class="samp">0.022222</span></samp>&rsquo; in base 3 is like &lsquo;<samp><span class="samp">0.099999</span></samp>&rsquo; in base 10; rounding
+off one digit will round the number up to &lsquo;<samp><span class="samp">0.1</span></samp>&rsquo;.)  Depending on the
+nature of your work, this hiding of the inexactness may be a benefit or
+a danger.  With the <kbd>d n</kbd> command, Calc gives you the choice.
+
+   <p>Incidentally, another consequence of all this is that if you type
+<kbd>M-30 d n</kbd> to display more digits than are &ldquo;really there,&rdquo;
+you'll see garbage digits at the end of the number.  (In decimal
+display mode, with decimally-stored numbers, these garbage digits are
+always zero so they vanish and you don't notice them.)  Because Calc
+rounds off that 0.15 digit, there is the danger that two numbers could
+be slightly different internally but still look the same.  If you feel
+uneasy about this, set the <kbd>d n</kbd> precision to be a little higher
+than normal; you'll get ugly garbage digits, but you'll always be able
+to tell two distinct numbers apart.
+
+   <p>An interesting side note is that most computers store their
+floating-point numbers in binary, and convert to decimal for display. 
+Thus everyday programs have the same problem:  Decimal 0.1 cannot be
+represented exactly in binary (try it: <kbd>0.1 d 2</kbd>), so &lsquo;<samp><span class="samp">0.1 * 10</span></samp>&rsquo;
+comes out as an inexact approximation to 1 on some machines (though
+they generally arrange to hide it from you by rounding off one digit as
+we did above).  Because Calc works in decimal instead of binary, you can
+be sure that numbers that look exact <em>are</em> exact as long as you stay
+in decimal display mode.
+
+   <p>It's not hard to show that any number that can be represented exactly
+in binary, octal, or hexadecimal is also exact in decimal, so the kinds
+of problems we saw in this exercise are likely to be severe only when
+you use a relatively unusual radix like 3.
+
+   </body></html>
+

@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Using multiple schema locating files - nXML Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="nXML Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
+<link rel="prev" href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" title="Using type identifiers in schema locating files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents nxml-mode, an Emacs major mode for editing
+XML with RELAX NG support.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-multiple-schema-locating-files"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files">Using type identifiers in schema locating files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.5 Using multiple schema locating files</h4>
+
+<p>The &lsquo;<samp><span class="samp">include</span></samp>&rsquo; element includes rules from another
+schema locating file.  The behavior is exactly as if the rules from
+that file were included in place of the &lsquo;<samp><span class="samp">include</span></samp>&rsquo; element. 
+Relative URIs are resolved into absolute URIs before the inclusion is
+performed. For example,
+
+<pre class="example">     &lt;include rules="../rules.xml"/&gt;
+</pre>
+   <p class="noindent">includes the rules from &lsquo;<samp><span class="samp">rules.xml</span></samp>&rsquo;.
+
+   <p>The process of locating a schema takes as input a list of schema
+locating files.  The rules in all these files and in the files they
+include are resolved into a single list of rules, which are applied
+strictly in order.  Sometimes this order is not what is needed. 
+For example, suppose you have two schema locating files, a private
+file
+
+<pre class="example">     &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+       &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml.rnc"/&gt;
+     &lt;/locatingRules&gt;
+</pre>
+   <p class="noindent">followed by a public file
+
+<pre class="example">     &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+       &lt;transformURI pathSuffix=".xml" replacePathSuffix=".rnc"/&gt;
+       &lt;namespace ns="http://www.w3.org/1999/XSL/Transform" typeId="XSLT"/&gt;
+     &lt;/locatingRules&gt;
+</pre>
+   <p class="noindent">The effect of these two files is that the XHTML &lsquo;<samp><span class="samp">namespace</span></samp>&rsquo;
+rule takes precedence over the &lsquo;<samp><span class="samp">transformURI</span></samp>&rsquo; rule, which
+is almost certainly not what is needed.  This can be solved by adding
+an &lsquo;<samp><span class="samp">applyFollowingRules</span></samp>&rsquo; to the private file.
+
+<pre class="example">     &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+       &lt;applyFollowingRules ruleType="transformURI"/&gt;
+       &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml.rnc"/&gt;
+     &lt;/locatingRules&gt;
+</pre>
+   </body></html>
+

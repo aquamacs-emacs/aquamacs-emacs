@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>TODO types - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="TODO-extensions.html#TODO-extensions" title="TODO extensions">
+<link rel="prev" href="Workflow-states.html#Workflow-states" title="Workflow states">
+<link rel="next" href="Multiple-sets-in-one-file.html#Multiple-sets-in-one-file" title="Multiple sets in one file">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="TODO-types"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Multiple-sets-in-one-file.html#Multiple-sets-in-one-file">Multiple sets in one file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Workflow-states.html#Workflow-states">Workflow states</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TODO-extensions.html#TODO-extensions">TODO extensions</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.2 TODO keywords as types</h4>
+
+<p><a name="index-TODO-types-372"></a><a name="index-names-as-TODO-keywords-373"></a><a name="index-types-as-TODO-keywords-374"></a>
+The second possibility is to use TODO keywords to indicate different
+<em>types</em> of action items.  For example, you might want to indicate
+that items are for &ldquo;work&rdquo; or &ldquo;home&rdquo;.  Or, when you work with several
+people on a single project, you might want to assign action items
+directly to persons, by using their names as TODO keywords.  This would
+be set up like this:
+
+<pre class="lisp">     (setq org-todo-keywords '((type "Fred" "Sara" "Lucy" "|" "DONE")))
+</pre>
+   <p>In this case, different keywords do not indicate a sequence, but rather
+different types.  So the normal work flow would be to assign a task to a
+person, and later to mark it DONE.  Org mode supports this style by adapting
+the workings of the command <kbd>C-c C-t</kbd><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  When used several
+times in succession, it will still cycle through all names, in order to first
+select the right type for a task.  But when you return to the item after some
+time and execute <kbd>C-c C-t</kbd> again, it will switch from any name directly
+to DONE.  Use prefix arguments or completion to quickly select a specific
+name.  You can also review the items of a specific TODO type in a sparse tree
+by using a numeric prefix to <kbd>C-c C-v</kbd>.  For example, to see all things
+Lucy has to do, you would use <kbd>C-3 C-c C-v</kbd>.  To collect Lucy's items
+from all agenda files into a single buffer, you would use the numeric prefix
+argument as well when creating the global TODO list: <kbd>C-3 C-c t</kbd>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This is also true for the
+<kbd>t</kbd> command in the timeline and agenda buffers.</p>
+
+   <hr></div>
+
+   </body></html>
+

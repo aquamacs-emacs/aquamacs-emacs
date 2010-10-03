@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Splitting Mail - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Mail.html#Getting-Mail" title="Getting Mail">
+<link rel="prev" href="Getting-Started-Reading-Mail.html#Getting-Started-Reading-Mail" title="Getting Started Reading Mail">
+<link rel="next" href="Mail-Sources.html#Mail-Sources" title="Mail Sources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Splitting-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Sources.html#Mail-Sources">Mail Sources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-Started-Reading-Mail.html#Getting-Started-Reading-Mail">Getting Started Reading Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Mail.html#Getting-Mail">Getting Mail</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.3 Splitting Mail</h4>
+
+<p><a name="index-splitting-mail-2120"></a><a name="index-mail-splitting-2121"></a><a name="index-mail-filtering-_0028splitting_0029-2122"></a>
+<a name="index-nnmail_002dsplit_002dmethods-2123"></a>The <code>nnmail-split-methods</code> variable says how the incoming mail is
+to be split into groups.
+
+<pre class="lisp">     (setq nnmail-split-methods
+       '(("mail.junk" "^From:.*Lars Ingebrigtsen")
+         ("mail.crazy" "^Subject:.*die\\|^Organization:.*flabby")
+         ("mail.other" "")))
+</pre>
+   <p>This variable is a list of lists, where the first element of each of
+these lists is the name of the mail group (they do not have to be called
+something beginning with &lsquo;<samp><span class="samp">mail</span></samp>&rsquo;, by the way), and the second
+element is a regular expression used on the header of each mail to
+determine if it belongs in this mail group.  The first string may
+contain &lsquo;<samp><span class="samp">\\1</span></samp>&rsquo; forms, like the ones used by <code>replace-match</code> to
+insert sub-expressions from the matched text.  For instance:
+
+<pre class="lisp">     ("list.\\1" "From:.* \\(.*\\)-list@majordomo.com")
+</pre>
+   <p class="noindent">In that case, <code>nnmail-split-lowercase-expanded</code> controls whether
+the inserted text should be made lowercase.  See <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>.
+
+   <p>The second element can also be a function.  In that case, it will be
+called narrowed to the headers with the first element of the rule as the
+argument.  It should return a non-<code>nil</code> value if it thinks that the
+mail belongs in that group.
+
+   <p><a name="index-g_t_0040samp_007bbogus_007d-group-2124"></a>The last of these groups should always be a general one, and the regular
+expression should <em>always</em> be &lsquo;<samp><span class="samp">""</span></samp>&rsquo; so that it matches any mails
+that haven't been matched by any of the other regexps.  (These rules are
+processed from the beginning of the alist toward the end.  The first rule
+to make a match will &ldquo;win&rdquo;, unless you have crossposting enabled.  In
+that case, all matching rules will &ldquo;win&rdquo;.)  If no rule matched, the mail
+will end up in the &lsquo;<samp><span class="samp">bogus</span></samp>&rsquo; group.  When new groups are created by
+splitting mail, you may want to run <code>gnus-group-find-new-groups</code> to
+see the new groups.  This also applies to the &lsquo;<samp><span class="samp">bogus</span></samp>&rsquo; group.
+
+   <p>If you like to tinker with this yourself, you can set this variable to a
+function of your choice.  This function will be called without any
+arguments in a buffer narrowed to the headers of an incoming mail
+message.  The function should return a list of group names that it
+thinks should carry this mail message.
+
+   <p>Note that the mail back ends are free to maul the poor, innocent,
+incoming headers all they want to.  They all add <code>Lines</code> headers;
+some add <code>X-Gnus-Group</code> headers; most rename the Unix mbox
+<code>From&lt;SPACE&gt;</code> line to something else.
+
+   <p><a name="index-nnmail_002dcrosspost-2125"></a>The mail back ends all support cross-posting.  If several regexps match,
+the mail will be &ldquo;cross-posted&rdquo; to all those groups. 
+<code>nnmail-crosspost</code> says whether to use this mechanism or not.  Note
+that no articles are crossposted to the general (&lsquo;<samp><span class="samp">""</span></samp>&rsquo;) group.
+
+   <p><a name="index-nnmail_002dcrosspost_002dlink_002dfunction-2126"></a><a name="index-crosspost-2127"></a><a name="index-links-2128"></a><code>nnmh</code> and <code>nnml</code> makes crossposts by creating hard links to
+the crossposted articles.  However, not all file systems support hard
+links.  If that's the case for you, set
+<code>nnmail-crosspost-link-function</code> to <code>copy-file</code>.  (This
+variable is <code>add-name-to-file</code> by default.)
+
+   <p><a name="index-M_002dx-nnmail_002dsplit_002dhistory-2129"></a><a name="index-nnmail_002dsplit_002dhistory-2130"></a>If you wish to see where the previous mail split put the messages, you
+can use the <kbd>M-x nnmail-split-history</kbd> command.  If you wish to see
+where re-spooling messages would put the messages, you can use
+<code>gnus-summary-respool-trace</code> and related commands (see <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>).
+
+   <p><a name="index-nnmail_002dsplit_002dheader_002dlength_002dlimit-2131"></a>Header lines longer than the value of
+<code>nnmail-split-header-length-limit</code> are excluded from the split
+function.
+
+   <p><a name="index-nnmail_002dmail_002dsplitting_002ddecodes-2132"></a><a name="index-nnmail_002dmail_002dsplitting_002dcharset-2133"></a>By default, splitting does not decode headers, so you can not match on
+non-<acronym>ASCII</acronym> strings.  But it is useful if you want to match
+articles based on the raw header data.  To enable it, set the
+<code>nnmail-mail-splitting-decodes</code> variable to a non-<code>nil</code> value. 
+In addition, the value of the <code>nnmail-mail-splitting-charset</code>
+variable is used for decoding non-<acronym>MIME</acronym> encoded string when
+<code>nnmail-mail-splitting-decodes</code> is non-<code>nil</code>.  The default
+value is <code>nil</code> which means not to decode non-<acronym>MIME</acronym> encoded
+string.  A suitable value for you will be <code>undecided</code> or be the
+charset used normally in mails you are interested in.
+
+   <p><a name="index-nnmail_002dresplit_002dincoming-2134"></a>By default, splitting is performed on all incoming messages.  If you
+specify a <code>directory</code> entry for the variable <code>mail-sources</code>
+(see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>), however, then splitting does
+<em>not</em> happen by default.  You can set the variable
+<code>nnmail-resplit-incoming</code> to a non-<code>nil</code> value to make
+splitting happen even in this case.  (This variable has no effect on
+other kinds of entries.)
+
+   <p>Gnus gives you all the opportunity you could possibly want for shooting
+yourself in the foot.  Let's say you create a group that will contain
+all the mail you get from your boss.  And then you accidentally
+unsubscribe from the group.  Gnus will still put all the mail from your
+boss in the unsubscribed group, and so, when your boss mails you &ldquo;Have
+that report ready by Monday or you're fired!&rdquo;, you'll never see it and,
+come Tuesday, you'll still believe that you're gainfully employed while
+you really should be out collecting empty bottles to save up for next
+month's rent money.
+
+   </body></html>
+

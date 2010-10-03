@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Misc Article - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Article-Buffer.html#Article-Buffer" title="Article Buffer">
+<link rel="prev" href="Article-Keymap.html#Article-Keymap" title="Article Keymap">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Misc-Article"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Article-Keymap.html#Article-Keymap">Article Keymap</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Article-Buffer.html#Article-Buffer">Article Buffer</a>
+<hr>
+</div>
+
+<h3 class="section">4.5 Misc Article</h3>
+
+     <dl>
+<dt><code>gnus-single-article-buffer</code><dd><a name="index-gnus_002dsingle_002darticle_002dbuffer-1907"></a><a name="index-article-buffers_002c-several-1908"></a>If non-<code>nil</code>, use the same article buffer for all the groups. 
+(This is the default.)  If <code>nil</code>, each group will have its own
+article buffer.
+
+     <p><a name="index-gnus_002darticle_002ddecode_002dhook-1909"></a><br><dt><code>gnus-article-decode-hook</code><dd><a name="index-g_t_0040acronym_007bMIME_007d-1910"></a>Hook used to decode <acronym>MIME</acronym> articles.  The default value is
+<code>(article-decode-charset article-decode-encoded-words)</code>
+
+     <p><a name="index-gnus_002darticle_002dprepare_002dhook-1911"></a><br><dt><code>gnus-article-prepare-hook</code><dd>This hook is called right after the article has been inserted into the
+article buffer.  It is mainly intended for functions that do something
+depending on the contents; it should probably not be used for changing
+the contents of the article buffer.
+
+     <br><dt><code>gnus-article-mode-hook</code><dd><a name="index-gnus_002darticle_002dmode_002dhook-1912"></a>Hook called in article mode buffers.
+
+     <br><dt><code>gnus-article-mode-syntax-table</code><dd><a name="index-gnus_002darticle_002dmode_002dsyntax_002dtable-1913"></a>Syntax table used in article buffers.  It is initialized from
+<code>text-mode-syntax-table</code>.
+
+     <p><a name="index-gnus_002darticle_002dover_002dscroll-1914"></a><br><dt><code>gnus-article-over-scroll</code><dd>If non-<code>nil</code>, allow scrolling the article buffer even when there
+no more new text to scroll in.  The default is <code>nil</code>.
+
+     <p><a name="index-gnus_002darticle_002dmode_002dline_002dformat-1915"></a><br><dt><code>gnus-article-mode-line-format</code><dd>This variable is a format string along the same lines as
+<code>gnus-summary-mode-line-format</code> (see <a href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary Buffer Mode Line</a>).  It accepts the same format specifications as that variable,
+with two extensions:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">w</span></samp>&rsquo;<dd>The <dfn>wash status</dfn> of the article.  This is a short string with one
+character for each possible article wash operation that may have been
+performed.  The characters and their meaning:
+
+               <dl>
+<dt>&lsquo;<samp><span class="samp">c</span></samp>&rsquo;<dd>Displayed when cited text may be hidden in the article buffer.
+
+               <br><dt>&lsquo;<samp><span class="samp">h</span></samp>&rsquo;<dd>Displayed when headers are hidden in the article buffer.
+
+               <br><dt>&lsquo;<samp><span class="samp">p</span></samp>&rsquo;<dd>Displayed when article is digitally signed or encrypted, and Gnus has
+hidden the security headers.  (N.B. does not tell anything about
+security status, i.e. good or bad signature.)
+
+               <br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>Displayed when the signature has been hidden in the Article buffer.
+
+               <br><dt>&lsquo;<samp><span class="samp">o</span></samp>&rsquo;<dd>Displayed when Gnus has treated overstrike characters in the article buffer.
+
+               <br><dt>&lsquo;<samp><span class="samp">e</span></samp>&rsquo;<dd>Displayed when Gnus has treated emphasized strings in the article buffer.
+
+          </dl>
+
+          <br><dt>&lsquo;<samp><span class="samp">m</span></samp>&rsquo;<dd>The number of <acronym>MIME</acronym> parts in the article.
+
+     </dl>
+
+     <p><a name="index-gnus_002dbreak_002dpages-1916"></a>
+<br><dt><code>gnus-break-pages</code><dd>Controls whether <dfn>page breaking</dfn> is to take place.  If this variable
+is non-<code>nil</code>, the articles will be divided into pages whenever a
+page delimiter appears in the article.  If this variable is <code>nil</code>,
+paging will not be done.
+
+     <br><dt><code>gnus-page-delimiter</code><dd><a name="index-gnus_002dpage_002ddelimiter-1917"></a>This is the delimiter mentioned above.  By default, it is &lsquo;<samp><span class="samp">^L</span></samp>&rsquo;
+(formfeed).
+
+     <p><a name="index-IDNA-1918"></a><a name="index-internationalized-domain-names-1919"></a><a name="index-gnus_002duse_002didna-1920"></a><br><dt><code>gnus-use-idna</code><dd>This variable controls whether Gnus performs IDNA decoding of
+internationalized domain names inside &lsquo;<samp><span class="samp">From</span></samp>&rsquo;, &lsquo;<samp><span class="samp">To</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Cc</span></samp>&rsquo; headers.  See <a href="../message/IDNA.html#IDNA">IDNA</a>,
+for how to compose such messages.  This requires
+<a href="http://www.gnu.org/software/libidn/">GNU Libidn</a>, and this
+variable is only enabled if you have installed it.
+
+</dl>
+
+   </body></html>
+

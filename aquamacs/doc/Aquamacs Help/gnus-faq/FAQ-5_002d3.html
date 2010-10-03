@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>FAQ 5-3 - Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Frequently Asked Questions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages" title="FAQ 5 - Composing messages">
+<link rel="prev" href="FAQ-5_002d2.html#FAQ-5_002d2" title="FAQ 5-2">
+<link rel="next" href="FAQ-5_002d4.html#FAQ-5_002d4" title="FAQ 5-4">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-5-3"></a>
+<a name="FAQ-5_002d3"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-5_002d4.html#FAQ-5_002d4">FAQ 5-4</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-5_002d2.html#FAQ-5_002d2">FAQ 5-2</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-5-_002d-Composing-messages.html#FAQ-5-_002d-Composing-messages">FAQ 5 - Composing messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 5.3</h5>
+
+<p>How to set stuff like From, Organization, Reply-To, signature...?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>There are other ways, but you should use posting styles
+for this. (See below why). 
+This example should make the syntax clear:
+
+<pre class="example">     (setq gnus-posting-styles
+       '((".*"
+          (name "Frank Schmitt")
+          (address "me@there.invalid")
+          (organization "Hamme net, kren mer och nimmi")
+          (signature-file "~/.signature")
+          ("X-SampleHeader" "foobar")
+          (eval (setq some-variable "Foo bar")))))
+</pre>
+   <p class="noindent">The ".*" means that this settings are the default ones
+(see below), valid values for the first element of the
+following lists are signature, signature-file,
+organization, address, name or body.  The attribute name
+can also be a string.  In that case, this will be used as
+a header name, and the value will be inserted in the
+headers of the article; if the value is `nil', the header
+name will be removed. You can also say (eval (foo bar)),
+then the function foo will be evaluated with argument bar
+and the result will be thrown away.
+
+   </body></html>
+

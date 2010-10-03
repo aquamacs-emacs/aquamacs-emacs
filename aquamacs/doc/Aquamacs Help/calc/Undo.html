@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Undo - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Prefix-Arguments.html#Prefix-Arguments" title="Prefix Arguments">
+<link rel="next" href="Error-Messages.html#Error-Messages" title="Error Messages">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Undo"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Error-Messages.html#Error-Messages">Error Messages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Arguments.html#Prefix-Arguments">Prefix Arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">4.8 Undoing Mistakes</h3>
+
+<p class="noindent"><a name="index-U-201"></a><a name="index-C_002d_005f-202"></a><a name="index-calc_002dundo-203"></a><a name="index-Mistakes_002c-undoing-204"></a><a name="index-Undoing-mistakes-205"></a><a name="index-Errors_002c-undoing-206"></a>The shift-<kbd>U</kbd> key (<code>calc-undo</code>) undoes the most recent operation. 
+If that operation added or dropped objects from the stack, those objects
+are removed or restored.  If it was a &ldquo;store&rdquo; operation, you are
+queried whether or not to restore the variable to its original value. 
+The <kbd>U</kbd> key may be pressed any number of times to undo successively
+farther back in time; with a numeric prefix argument it undoes a
+specified number of operations.  When the Calculator is quit, as with
+the <kbd>q</kbd> (<code>calc-quit</code>) command, the undo history will be
+truncated to the length of the customizable variable
+<code>calc-undo-length</code> (see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>), which by default
+is &lsquo;<samp><span class="samp">100</span></samp>&rsquo;. (Recall that <kbd>C-x * c</kbd> is synonymous with
+<code>calc-quit</code> while inside the Calculator; this also truncates the
+undo history.)
+
+   <p>Currently the mode-setting commands (like <code>calc-precision</code>) are not
+undoable.  You can undo past a point where you changed a mode, but you
+will need to reset the mode yourself.
+
+   <p><a name="index-D-207"></a><a name="index-calc_002dredo-208"></a><a name="index-Redoing-after-an-Undo-209"></a>The shift-<kbd>D</kbd> key (<code>calc-redo</code>) redoes an operation that was
+mistakenly undone.  Pressing <kbd>U</kbd> with a negative prefix argument is
+equivalent to executing <code>calc-redo</code>.  You can redo any number of
+times, up to the number of recent consecutive undo commands.  Redo
+information is cleared whenever you give any command that adds new undo
+information, i.e., if you undo, then enter a number on the stack or make
+any other change, then it will be too late to redo.
+
+   <p><a name="index-M_002d_0040key_007bRET_007d-210"></a><a name="index-calc_002dlast_002dargs-211"></a><a name="index-Last_002darguments-feature-212"></a><a name="index-Arguments_002c-restoring-213"></a>The <kbd>M-&lt;RET&gt;</kbd> key (<code>calc-last-args</code>) is like undo in that
+it restores the arguments of the most recent command onto the stack;
+however, it does not remove the result of that command.  Given a numeric
+prefix argument, this command applies to the &lsquo;<samp><span class="samp">n</span></samp>&rsquo;th most recent
+command which removed items from the stack; it pushes those items back
+onto the stack.
+
+   <p>The <kbd>K</kbd> (<code>calc-keep-args</code>) command provides a related function
+to <kbd>M-&lt;RET&gt;</kbd>.  See <a href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>.
+
+   <p>It is also possible to recall previous results or inputs using the trail. 
+See <a href="Trail-Commands.html#Trail-Commands">Trail Commands</a>.
+
+   <p>The standard Emacs <kbd>C-_</kbd> undo key is recognized as a synonym for <kbd>U</kbd>.
+
+   </body></html>
+

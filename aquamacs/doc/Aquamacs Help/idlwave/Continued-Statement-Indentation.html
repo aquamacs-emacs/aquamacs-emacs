@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Continued Statement Indentation - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Code-Formatting.html#Code-Formatting" title="Code Formatting">
+<link rel="prev" href="Code-Indentation.html#Code-Indentation" title="Code Indentation">
+<link rel="next" href="Comment-Indentation.html#Comment-Indentation" title="Comment Indentation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Continued-Statement-Indentation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Code-Indentation.html#Code-Indentation">Code Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Code-Formatting.html#Code-Formatting">Code Formatting</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.1.2 Continued Statement Indentation</h4>
+
+<p><a name="index-Indentation_002c-continued-statement-28"></a><a name="index-Continued-statement-indentation-29"></a>Continuation lines (following a line ending with <code>$</code>) can receive a
+fixed indentation offset from the main level, but in several situations
+IDLWAVE can use a special form of indentation which aligns continued
+statements more naturally.  Special indentation is calculated for
+continued routine definition statements and calls, enclosing parentheses
+(like function calls, structure/class definitions, explicit structures
+or lists, etc.), and continued assignments.  An attempt is made to line
+up with the first non-whitespace character after the relevant opening
+punctuation mark (<code>,</code>,<code>(</code>,<code>{</code>,<code>[</code>,<code>=</code>).  For
+lines without any non-comment characters on the line with the opening
+punctuation, the continued line(s) are aligned just past the
+punctuation.  An example:
+
+<pre class="example">     function foo, a, b,  $
+                   c, d
+       bar =  sin( a + b + $
+                   c + d)
+     end
+</pre>
+   <p class="noindent">The only drawback to this special continued statement indentation is
+that it consumes more space, e.g., for long function names or left hand
+sides of an assignment:
+
+<pre class="example">     function thisfunctionnameisverylongsoitwillleavelittleroom, a, b, $
+                                                                 c, d
+</pre>
+   <p>You can instruct IDLWAVE when to avoid using this special continuation
+indentation by setting the variable
+<code>idlwave-max-extra-continuation-indent</code>, which specifies the
+maximum additional indentation beyond the basic indent to be
+tolerated, otherwise defaulting to a fixed-offset from the enclosing
+indent (the size of which offset is set in
+<code>idlwave-continuation-indent</code>).  As a special case, continuations
+of routine calls without any arguments or keywords will <em>not</em>
+align the continued line, under the assumption that you continued
+because you needed the space.
+
+   <p>Also, since the indentation level can be somewhat dynamic in continued
+statements with special continuation indentation, especially if
+<code>idlwave-max-extra-continuation-indent</code> is small, the key
+<kbd>C-u &lt;TAB&gt;</kbd> will re-indent all lines in the current statement. 
+Note that <code>idlwave-indent-to-open-paren</code>, if non-<code>nil</code>,
+overrides the <code>idlwave-max-extra-continuation-indent</code> limit, for
+parentheses only, forcing them always to line up.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-continuation-indent</b> (<code>2</code>)<var><a name="index-idlwave_002dcontinuation_002dindent-30"></a></var><br>
+<blockquote><p>Extra indentation applied to normal continuation lines. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-max-extra-continuation-indent</b> (<code>20</code>)<var><a name="index-idlwave_002dmax_002dextra_002dcontinuation_002dindent-31"></a></var><br>
+<blockquote><p>The maximum additional indentation (over the basic continuation-indent)
+that will be permitted for special continues.  To effectively disable
+special continuation indentation, set to <code>0</code>.  To enable it
+constantly, set to a large number (like <code>100</code>).  Note that the
+indentation in a long continued statement never decreases from line to
+line, outside of nested parentheses statements. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-indent-to-open-paren</b> (<code>t</code>)<var><a name="index-idlwave_002dindent_002dto_002dopen_002dparen-32"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means indent continuation lines to innermost open
+parenthesis, regardless of whether the
+<code>idlwave-max-extra-continuation-indent</code> limit is satisfied. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Timestamps - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="prev" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
+<link rel="next" href="Creating-timestamps.html#Creating-timestamps" title="Creating timestamps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Timestamps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Creating-timestamps.html#Creating-timestamps">Creating timestamps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Timestamps, deadlines, and scheduling</h3>
+
+<p><a name="index-timestamps-547"></a><a name="index-ranges_002c-time-548"></a><a name="index-date-stamps-549"></a><a name="index-deadlines-550"></a><a name="index-scheduling-551"></a>
+A timestamp is a specification of a date (possibly with a time or a range of
+times) in a special format, either &lsquo;<samp><span class="samp">&lt;2003-09-16 Tue&gt;</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">&lt;2003-09-16 Tue 09:39&gt;</span></samp>&rsquo; or &lsquo;<samp><span class="samp">&lt;2003-09-16 Tue
+12:00-12:30&gt;</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  A
+timestamp can appear anywhere in the headline or body of an Org tree entry. 
+Its presence causes entries to be shown on specific dates in the agenda
+(see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>).  We distinguish:
+
+     <dl>
+<dt><var>Plain timestamp; Event; Appointment</var><dd><a name="index-timestamp-552"></a>A simple timestamp just assigns a date/time to an item.  This is just
+like writing down an appointment or event in a paper agenda.  In the
+timeline and agenda displays, the headline of an entry associated with a
+plain timestamp will be shown exactly on that date.
+
+     <pre class="example">          * Meet Peter at the movies &lt;2006-11-01 Wed 19:15&gt;
+          * Discussion on climate change &lt;2006-11-02 Thu 20:00-22:00&gt;
+</pre>
+     <br><dt><var>Timestamp with repeater interval</var><dd><a name="index-timestamp_002c-with-repeater-interval-553"></a>A timestamp may contain a <em>repeater interval</em>, indicating that it
+applies not only on the given date, but again and again after a certain
+interval of N days (d), weeks (w), months (m), or years (y).  The
+following will show up in the agenda every Wednesday:
+
+     <pre class="example">          * Pick up Sam at school &lt;2007-05-16 Wed 12:30 +1w&gt;
+</pre>
+     <br><dt><var>Diary-style sexp entries</var><dd>For more complex date specifications, Org mode supports using the
+special sexp diary entries implemented in the Emacs calendar/diary
+package.  For example
+
+     <pre class="example">          * The nerd meeting on every 2nd Thursday of the month
+            &lt;%%(diary-float t 4 2)&gt;
+</pre>
+     <br><dt><var>Time/Date range</var><dd><a name="index-timerange-554"></a><a name="index-date-range-555"></a>Two timestamps connected by &lsquo;<samp><span class="samp">--</span></samp>&rsquo; denote a range.  The headline
+will be shown on the first and last day of the range, and on any dates
+that are displayed and fall in the range.  Here is an example:
+
+     <pre class="example">          ** Meeting in Amsterdam
+             &lt;2004-08-23 Mon&gt;--&lt;2004-08-26 Thu&gt;
+</pre>
+     <br><dt><var>Inactive timestamp</var><dd><a name="index-timestamp_002c-inactive-556"></a><a name="index-inactive-timestamp-557"></a>Just like a plain timestamp, but with square brackets instead of
+angular ones.  These timestamps are inactive in the sense that they do
+<em>not</em> trigger an entry to show up in the agenda.
+
+     <pre class="example">          * Gillian comes late for the fifth time [2006-11-01 Wed]
+</pre>
+     </dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This is inspired by the standard ISO 6801 date/time
+format.  To use an alternative format, see <a href="Custom-time-format.html#Custom-time-format">Custom time format</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

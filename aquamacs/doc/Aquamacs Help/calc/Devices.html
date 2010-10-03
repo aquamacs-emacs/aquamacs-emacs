@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+<title>Devices - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Graphics.html#Graphics" title="Graphics">
+<link rel="prev" href="Graphics-Options.html#Graphics-Options" title="Graphics Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Devices"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Graphics-Options.html#Graphics-Options">Graphics Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Graphics.html#Graphics">Graphics</a>
+<hr>
+</div>
+
+<h3 class="section">14.5 Graphical Devices</h3>
+
+<p class="noindent"><a name="index-g-D-2159"></a><a name="index-calc_002dgraph_002ddevice-2160"></a>The <kbd>g D</kbd> (<code>calc-graph-device</code>) command sets the device name
+(or &ldquo;terminal name&rdquo; in GNUPLOT lingo) to be used by <kbd>g p</kbd> commands
+on this graph.  It does not affect the permanent default device name. 
+If you enter a blank name, the device name reverts to the default. 
+Enter &lsquo;<samp><span class="samp">?</span></samp>&rsquo; to see a list of supported devices.
+
+   <p>With a positive numeric prefix argument, <kbd>g D</kbd> instead sets
+the default device name, used by all plots in the future which do
+not override it with a plain <kbd>g D</kbd> command.  If you enter a
+blank line this command shows you the current default.  The special
+name <code>default</code> signifies that Calc should choose <code>x11</code> if
+the X window system is in use (as indicated by the presence of a
+<code>DISPLAY</code> environment variable), <code>windows</code> on MS-Windows, or
+otherwise <code>dumb</code> under GNUPLOT 3.0 and later, or
+<code>postscript</code> under GNUPLOT 2.0.  This is the initial default
+value.
+
+   <p>The <code>dumb</code> device is an interface to &ldquo;dumb terminals,&rdquo; i.e.,
+terminals with no special graphics facilities.  It writes a crude
+picture of the graph composed of characters like <code>-</code> and <code>|</code>
+to a buffer called &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo;, which Calc then displays. 
+The graph is made the same size as the Emacs screen, which on most
+dumb terminals will be
+<!-- @math{80\times24} -->
+80x24
+characters.  The graph is displayed in
+an Emacs &ldquo;recursive edit&rdquo;; type <kbd>q</kbd> or <kbd>C-c C-c</kbd> to exit
+the recursive edit and return to Calc.  Note that the <code>dumb</code>
+device is present only in GNUPLOT 3.0 and later versions.
+
+   <p>The word <code>dumb</code> may be followed by two numbers separated by
+spaces.  These are the desired width and height of the graph in
+characters.  Also, the device name <code>big</code> is like <code>dumb</code>
+but creates a graph four times the width and height of the Emacs
+screen.  You will then have to scroll around to view the entire
+graph.  In the &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo; buffer, &lt;SPC&gt;, &lt;DEL&gt;,
+<kbd>&lt;</kbd>, and <kbd>&gt;</kbd> are defined to scroll by one screenful in each
+of the four directions.
+
+   <p>With a negative numeric prefix argument, <kbd>g D</kbd> sets or displays
+the device name used by <kbd>g P</kbd> (<code>calc-graph-print</code>).  This
+is initially <code>postscript</code>.  If you don't have a PostScript
+printer, you may decide once again to use <code>dumb</code> to create a
+plot on any text-only printer.
+
+   <p><a name="index-g-O-2161"></a><a name="index-calc_002dgraph_002doutput-2162"></a>The <kbd>g O</kbd> (<code>calc-graph-output</code>) command sets the name of the
+output file used by GNUPLOT.  For some devices, notably <code>x11</code> and
+<code>windows</code>, there is no output file and this information is not
+used.  Many other &ldquo;devices&rdquo; are really file formats like
+<code>postscript</code>; in these cases the output in the desired format
+goes into the file you name with <kbd>g O</kbd>.  Type <kbd>g O stdout
+&lt;RET&gt;</kbd> to set GNUPLOT to write to its standard output stream,
+i.e., to &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo;.  This is the default setting.
+
+   <p>Another special output name is <code>tty</code>, which means that GNUPLOT
+is going to write graphics commands directly to its standard output,
+which you wish Emacs to pass through to your terminal.  Tektronix
+graphics terminals, among other devices, operate this way.  Calc does
+this by telling GNUPLOT to write to a temporary file, then running a
+sub-shell executing the command &lsquo;<samp><span class="samp">cat tempfile &gt;/dev/tty</span></samp>&rsquo;.  On
+typical Unix systems, this will copy the temporary file directly to
+the terminal, bypassing Emacs entirely.  You will have to type <kbd>C-l</kbd>
+to Emacs afterwards to refresh the screen.
+
+   <p>Once again, <kbd>g O</kbd> with a positive or negative prefix argument
+sets the default or printer output file names, respectively.  In each
+case you can specify <code>auto</code>, which causes Calc to invent a temporary
+file name for each <kbd>g p</kbd> (or <kbd>g P</kbd>) command.  This temporary file
+will be deleted once it has been displayed or printed.  If the output file
+name is not <code>auto</code>, the file is not automatically deleted.
+
+   <p>The default and printer devices and output files can be saved
+permanently by the <kbd>m m</kbd> (<code>calc-save-modes</code>) command.  The
+default number of data points (see <kbd>g N</kbd>) and the X geometry
+(see <kbd>g X</kbd>) are also saved.  Other graph information is <em>not</em>
+saved; you can save a graph's configuration simply by saving the contents
+of the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer.
+
+   <p><a name="index-calc_002dgnuplot_002dplot_002dcommand-2163"></a><a name="index-calc_002dgnuplot_002ddefault_002ddevice-2164"></a><a name="index-calc_002dgnuplot_002ddefault_002doutput-2165"></a><a name="index-calc_002dgnuplot_002dprint_002dcommand-2166"></a><a name="index-calc_002dgnuplot_002dprint_002ddevice-2167"></a><a name="index-calc_002dgnuplot_002dprint_002doutput-2168"></a>You may wish to configure the default and
+printer devices and output files for the whole system.  The relevant
+Lisp variables are <code>calc-gnuplot-default-device</code> and <code>-output</code>,
+and <code>calc-gnuplot-print-device</code> and <code>-output</code>.  The output
+file names must be either strings as described above, or Lisp
+expressions which are evaluated on the fly to get the output file names.
+
+   <p>Other important Lisp variables are <code>calc-gnuplot-plot-command</code> and
+<code>calc-gnuplot-print-command</code>, which give the system commands to
+display or print the output of GNUPLOT, respectively.  These may be
+<code>nil</code> if no command is necessary, or strings which can include
+&lsquo;<samp><span class="samp">%s</span></samp>&rsquo; to signify the name of the file to be displayed or printed. 
+Or, these variables may contain Lisp expressions which are evaluated
+to display or print the output.  These variables are customizable
+(see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>).
+
+   <p><a name="index-g-x-2169"></a><a name="index-calc_002dgraph_002ddisplay-2170"></a>The <kbd>g x</kbd> (<code>calc-graph-display</code>) command lets you specify
+on which X window system display your graphs should be drawn.  Enter
+a blank line to see the current display name.  This command has no
+effect unless the current device is <code>x11</code>.
+
+   <p><a name="index-g-X-2171"></a><a name="index-calc_002dgraph_002dgeometry-2172"></a>The <kbd>g X</kbd> (<code>calc-graph-geometry</code>) command is a similar
+command for specifying the position and size of the X window. 
+The normal value is <code>default</code>, which generally means your
+window manager will let you place the window interactively. 
+Entering &lsquo;<samp><span class="samp">800x500+0+0</span></samp>&rsquo; would create an 800-by-500 pixel
+window in the upper-left corner of the screen.  This command has no
+effect if the current device is <code>windows</code>.
+
+   <p>The buffer called &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo; holds a transcript of the
+session with GNUPLOT.  This shows the commands Calc has &ldquo;typed&rdquo; to
+GNUPLOT and the responses it has received.  Calc tries to notice when an
+error message has appeared here and display the buffer for you when
+this happens.  You can check this buffer yourself if you suspect
+something has gone wrong<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p><a name="index-g-C-2173"></a><a name="index-calc_002dgraph_002dcommand-2174"></a>The <kbd>g C</kbd> (<code>calc-graph-command</code>) command prompts you to
+enter any line of text, then simply sends that line to the current
+GNUPLOT process.  The &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo; buffer looks deceptively
+like a Shell buffer but you can't type commands in it yourself. 
+Instead, you must use <kbd>g C</kbd> for this purpose.
+
+   <p><a name="index-g-v-2175"></a><a name="index-g-V-2176"></a><a name="index-calc_002dgraph_002dview_002dcommands-2177"></a><a name="index-calc_002dgraph_002dview_002dtrail-2178"></a>The <kbd>g v</kbd> (<code>calc-graph-view-commands</code>) and <kbd>g V</kbd>
+(<code>calc-graph-view-trail</code>) commands display the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo; buffers, respectively, in another window. 
+This happens automatically when Calc thinks there is something you
+will want to see in either of these buffers.  If you type <kbd>g v</kbd>
+or <kbd>g V</kbd> when the relevant buffer is already displayed, the
+buffer is hidden again.  (Note that on MS-Windows, the &lsquo;<samp><span class="samp">*Gnuplot
+Trail*</span></samp>&rsquo; buffer will usually show nothing of interest, because
+GNUPLOT's responses are not communicated back to Calc.)
+
+   <p>One reason to use <kbd>g v</kbd> is to add your own commands to the
+&lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer.  Press <kbd>g v</kbd>, then use
+<kbd>C-x o</kbd> to switch into that window.  For example, GNUPLOT has
+&lsquo;<samp><span class="samp">set label</span></samp>&rsquo; and &lsquo;<samp><span class="samp">set arrow</span></samp>&rsquo; commands that allow you to
+annotate your plots.  Since Calc doesn't understand these commands,
+you have to add them to the &lsquo;<samp><span class="samp">*Gnuplot Commands*</span></samp>&rsquo; buffer
+yourself, then use <kbd>g&nbsp;p</kbd><!-- /@w --> to replot using these new commands.  Note
+that your commands must appear <em>before</em> the <code>plot</code> command. 
+To get help on any GNUPLOT feature, type, e.g., <kbd>g C help set label</kbd>. 
+You may have to type <kbd>g C &lt;RET&gt;</kbd> a few times to clear the
+&ldquo;press return for more&rdquo; or &ldquo;subtopic of <small class="dots">...</small>&rdquo; requests. 
+Note that Calc always sends commands (like &lsquo;<samp><span class="samp">set nolabel</span></samp>&rsquo;) to
+reset all plotting parameters to the defaults before each plot, so
+to delete a label all you need to do is delete the &lsquo;<samp><span class="samp">set label</span></samp>&rsquo;
+line you added (or comment it out with &lsquo;<samp><span class="samp">#</span></samp>&rsquo;) and then replot
+with <kbd>g p</kbd>.
+
+   <p><a name="index-g-q-2179"></a><a name="index-calc_002dgraph_002dquit-2180"></a>You can use <kbd>g q</kbd> (<code>calc-graph-quit</code>) to kill the GNUPLOT
+process that is running.  The next graphing command you give will
+start a fresh GNUPLOT process.  The word &lsquo;<samp><span class="samp">Graph</span></samp>&rsquo; appears in
+the Calc window's mode line whenever a GNUPLOT process is currently
+running.  The GNUPLOT process is automatically killed when you
+exit Emacs if you haven't killed it manually by then.
+
+   <p><a name="index-g-K-2181"></a><a name="index-calc_002dgraph_002dkill-2182"></a>The <kbd>g K</kbd> (<code>calc-graph-kill</code>) command is like <kbd>g q</kbd>
+except that it also views the &lsquo;<samp><span class="samp">*Gnuplot Trail*</span></samp>&rsquo; buffer so that
+you can see the process being killed.  This is better if you are
+killing GNUPLOT because you think it has gotten stuck.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+On MS-Windows, due to the peculiarities of how the Windows version of
+GNUPLOT (called <samp><span class="command">wgnuplot</span></samp>) works, the GNUPLOT responses are
+not communicated back to Calc.  Instead, you need to look them up in
+the GNUPLOT command window that is displayed as in normal interactive
+usage of GNUPLOT. 
+</p>
+
+   <hr></div>
+
+   </body></html>
+

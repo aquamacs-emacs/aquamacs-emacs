@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Conditional Construct Symbols - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
+<link rel="prev" href="Class-Symbols.html#Class-Symbols" title="Class Symbols">
+<link rel="next" href="Switch-Statement-Symbols.html#Switch-Statement-Symbols" title="Switch Statement Symbols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Conditional-Construct-Symbols"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Switch-Statement-Symbols.html#Switch-Statement-Symbols">Switch Statement Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Class-Symbols.html#Class-Symbols">Class Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h4 class="subsection">10.2.3 Conditional Construct Symbols</h4>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>Here is a (totally contrived) example which illustrates how syntax is
+assigned to various conditional constructs:
+
+<pre class="example">      1: void spam( int index )
+      2: {
+      3:     for( int i=0; i&lt;index; i++ )
+      4:     {
+      5:         if( i == 10 )
+      6:             do_something_special();
+      7:         else
+      8:           silly_label:
+      9:             do_something( i );
+     10:     }
+     11:     do {
+     12:         another_thing( i-- );
+     13:     }
+     14:     while( i &gt; 0 );
+     15: }
+</pre>
+   <p>Only the lines that illustrate new syntactic symbols will be discussed.
+
+   <p><a name="index-substatement_002dopen-420"></a><a name="index-statement_002dblock_002dintro-421"></a><a name="index-block_002dclose-422"></a>Line 4 has a brace which opens a conditional's substatement block.  It
+is thus assigned <code>substatement-open</code> syntax, and since line 5 is
+the first line in the substatement block, it is assigned
+<code>statement-block-intro</code> syntax.  Line 10 contains the brace
+that closes the inner substatement block, and is therefore given the
+syntax <code>block-close</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Line 13 is treated the same way.
+
+   <p><a name="index-substatement-423"></a>Lines 6 and 9 are also substatements of conditionals, but since they
+don't start blocks they are given <code>substatement</code> syntax
+instead of <code>substatement-open</code>.
+
+   <p><a name="index-substatement_002dlabel-424"></a>Line 8 contains a label, which is normally given <code>label</code> syntax. 
+This one is however a bit special since it's between a conditional and
+its substatement.  It's analyzed as <code>substatement-label</code> to let you
+handle this rather odd case differently from normal labels.
+
+   <p><a name="index-else_002dclause-425"></a><a name="index-catch_002dclause-426"></a>Line 7 start with an <code>else</code> that matches the <code>if</code> statement on
+line 5.  It is therefore given the <code>else-clause</code> syntax and is
+anchored on the matching <code>if</code>.  The <code>try</code>-<code>catch</code>
+constructs in C++ and Java are treated this way too, except that
+<code>catch</code> and (in Java) <code>finally</code>, are marked with
+<code>catch-clause</code>.
+
+   <p><a name="index-do_002dwhile_002dclosure-427"></a>The <code>while</code> construct on line 14 that closes a <code>do</code>
+conditional is given the special syntax <code>do-while-closure</code> if it
+appears on a line by itself.  Note that if the <code>while</code> appeared on
+the same line as the preceding close brace, that line would still have
+<code>block-close</code> syntax.
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <code>block-open</code> is used only for
+&ldquo;free-standing&rdquo; blocks, and is somewhat rare (see <a href="Literal-Symbols.html#Literal-Symbols">Literal Symbols</a> for an example.)</p>
+
+   <hr></div>
+
+   </body></html>
+

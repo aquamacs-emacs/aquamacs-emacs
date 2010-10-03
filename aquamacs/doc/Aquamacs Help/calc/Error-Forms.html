@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Error Forms - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Data-Types.html#Data-Types" title="Data Types">
+<link rel="prev" href="Modulo-Forms.html#Modulo-Forms" title="Modulo Forms">
+<link rel="next" href="Interval-Forms.html#Interval-Forms" title="Interval Forms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Error-Forms"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Interval-Forms.html#Interval-Forms">Interval Forms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modulo-Forms.html#Modulo-Forms">Modulo Forms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Data-Types.html#Data-Types">Data Types</a>
+<hr>
+</div>
+
+<h3 class="section">5.11 Error Forms</h3>
+
+<p class="noindent"><a name="index-Error-forms-281"></a><a name="index-Standard-deviations-282"></a>An <dfn>error form</dfn> is a number with an associated standard
+deviation, as in &lsquo;<samp><span class="samp">2.3 +/- 0.12</span></samp>&rsquo;.  The notation
+<!-- `@var{x} @tfn{+/-} @math{\sigma}' -->
+`<var>x</var> <tt>+/-</tt> sigma'
+stands for an uncertain value which follows
+a normal or Gaussian distribution of mean &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and standard
+deviation or &ldquo;error&rdquo;
+<!-- @math{\sigma}. -->
+&lsquo;<samp><span class="samp">sigma</span></samp>&rsquo;. 
+Both the mean and the error can be either numbers or
+formulas.  Generally these are real numbers but the mean may also be
+complex.  If the error is negative or complex, it is changed to its
+absolute value.  An error form with zero error is converted to a
+regular number by the Calculator.
+
+   <p>All arithmetic and transcendental functions accept error forms as input. 
+Operations on the mean-value part work just like operations on regular
+numbers.  The error part for any function &lsquo;<samp><span class="samp">f(x)</span></samp>&rsquo; (such as
+<!-- @math{\sin x} -->
+&lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;)
+is defined by the error of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; times the derivative of &lsquo;<samp><span class="samp">f</span></samp>&rsquo;
+evaluated at the mean value of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  For a two-argument function
+&lsquo;<samp><span class="samp">f(x,y)</span></samp>&rsquo; (such as addition) the error is the square root of the sum
+of the squares of the errors due to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;. 
+Note that this
+definition assumes the errors in &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; are uncorrelated. 
+A side effect of this definition is that &lsquo;<samp><span class="samp">(2 +/- 1) * (2 +/- 1)</span></samp>&rsquo;
+is not the same as &lsquo;<samp><span class="samp">(2 +/- 1)^2</span></samp>&rsquo;; the former represents the product
+of two independent values which happen to have the same probability
+distributions, and the latter is the product of one random value with itself. 
+The former will produce an answer with less error, since on the average
+the two independent errors can be expected to cancel out.
+
+   <p>Consult a good text on error analysis for a discussion of the proper use
+of standard deviations.  Actual errors often are neither Gaussian-distributed
+nor uncorrelated, and the above formulas are valid only when errors
+are small.  As an example, the error arising from
+<!-- `@tfn{sin(}@var{x} @tfn{+/-} @math{\sigma}@tfn{)}' -->
+`<tt>sin(</tt><var>x</var> <tt>+/-</tt> <var>sigma</var><tt>)</tt>'
+is
+<!-- `@math{\sigma} @tfn{abs(cos(}@var{x}@tfn{))}'. -->
+`<var>sigma</var> <tt>abs(cos(</tt><var>x</var><tt>))</tt>'. 
+When &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is close to zero,
+<!-- @math{\cos x} -->
+&lsquo;<samp><span class="samp">cos(x)</span></samp>&rsquo;
+is close to one so the error in the sine is close to
+<!-- @math{\sigma}; -->
+&lsquo;<samp><span class="samp">sigma</span></samp>&rsquo;;
+this makes sense, since
+<!-- @math{\sin x} -->
+&lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;
+is approximately &lsquo;<samp><span class="samp">x</span></samp>&rsquo; near zero, so a given error in &lsquo;<samp><span class="samp">x</span></samp>&rsquo; will
+produce about the same error in the sine.  Likewise, near 90 degrees
+<!-- @math{\cos x} -->
+&lsquo;<samp><span class="samp">cos(x)</span></samp>&rsquo;
+is nearly zero and so the computed error is
+small:  The sine curve is nearly flat in that region, so an error in &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+has relatively little effect on the value of
+<!-- @math{\sin x}. -->
+&lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;. 
+However, consider &lsquo;<samp><span class="samp">sin(90 +/- 1000)</span></samp>&rsquo;.  The cosine of 90 is zero, so
+Calc will report zero error!  We get an obviously wrong result because
+we have violated the small-error approximation underlying the error
+analysis.  If the error in &lsquo;<samp><span class="samp">x</span></samp>&rsquo; had been small, the error in
+<!-- @math{\sin x} -->
+&lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;
+would indeed have been negligible.
+
+   <p><a name="index-p-_0028error-forms_0029-283"></a><a name="index-g_t_002b_002f_002d-284"></a>To enter an error form during regular numeric entry, use the <kbd>p</kbd>
+(&ldquo;plus-or-minus&rdquo;) key to type the &lsquo;<samp><span class="samp">+/-</span></samp>&rsquo; symbol.  (If you try actually
+typing &lsquo;<samp><span class="samp">+/-</span></samp>&rsquo; the <kbd>+</kbd> key will be interpreted as the Calculator's
+<kbd>+</kbd> command!)  Within an algebraic formula, you can press <kbd>M-+</kbd> to
+type the &lsquo;<samp><span class="samp">+/-</span></samp>&rsquo; symbol, or type it out by hand.
+
+   <p>Error forms and complex numbers can be mixed; the formulas shown above
+are used for complex numbers, too; note that if the error part evaluates
+to a complex number its absolute value (or the square root of the sum of
+the squares of the absolute values of the two error contributions) is
+used.  Mathematically, this corresponds to a radially symmetric Gaussian
+distribution of numbers on the complex plane.  However, note that Calc
+considers an error form with real components to represent a real number,
+not a complex distribution around a real mean.
+
+   <p>Error forms may also be composed of HMS forms.  For best results, both
+the mean and the error should be HMS forms if either one is.
+
+   <p><a name="index-sdev-285"></a>The algebraic function &lsquo;<samp><span class="samp">sdev(a, b)</span></samp>&rsquo; builds the error form &lsquo;<samp><span class="samp">a +/- b</span></samp>&rsquo;.
+
+   </body></html>
+

@@ -1,0 +1,189 @@
+<html lang="en">
+<head>
+<title>RSS - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
+<link rel="prev" href="Web-Archive.html#Web-Archive" title="Web Archive">
+<link rel="next" href="Customizing-W3.html#Customizing-W3" title="Customizing W3">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="RSS"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Customizing-W3.html#Customizing-W3">Customizing W3</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Web-Archive.html#Web-Archive">Web Archive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.4.6 RSS</h4>
+
+<p><a name="index-nnrss-2315"></a><a name="index-RSS-2316"></a>
+Some web sites have an RDF Site Summary (<acronym>RSS</acronym>). 
+<acronym>RSS</acronym> is a format for summarizing headlines from news related
+sites (such as BBC or CNN).  But basically anything list-like can be
+presented as an <acronym>RSS</acronym> feed: weblogs, changelogs or recent
+changes to a wiki (e.g. <a href="http://cliki.net/recent-changes.rdf">http://cliki.net/recent-changes.rdf</a>).
+
+   <p><acronym>RSS</acronym> has a quite regular and nice interface, and it's
+possible to get the information Gnus needs to keep groups updated.
+
+   <p>Note: you had better use Emacs which supports the <code>utf-8</code> coding
+system because <acronym>RSS</acronym> uses UTF-8 for encoding non-<acronym>ASCII</acronym>
+text by default.  It is also used by default for non-<acronym>ASCII</acronym>
+group names.
+
+   <p><a name="index-G-R-_0028Group_0029-2317"></a>Use <kbd>G R</kbd> from the group buffer to subscribe to a feed&mdash;you will be
+prompted for the location, the title and the description of the feed. 
+The title, which allows any characters, will be used for the group name
+and the name of the group data file.  The description can be omitted.
+
+   <p>An easy way to get started with <code>nnrss</code> is to say something like
+the following in the group buffer: <kbd>B nnrss RET RET y</kbd>, then
+subscribe to groups.
+
+   <p>The <code>nnrss</code> back end saves the group data file in
+<code>nnrss-directory</code> (see below) for each <code>nnrss</code> group.  File
+names containing non-<acronym>ASCII</acronym> characters will be encoded by the
+coding system specified with the <code>nnmail-pathname-coding-system</code>
+variable or other.  Also See <a href="Non_002dASCII-Group-Names.html#Non_002dASCII-Group-Names">Non-ASCII Group Names</a>, for more
+information.
+
+   <p>The <code>nnrss</code> back end generates &lsquo;<samp><span class="samp">multipart/alternative</span></samp>&rsquo;
+<acronym>MIME</acronym> articles in which each contains a &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; part
+and a &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; part.
+
+   <p><a name="index-OPML-2318"></a>You can also use the following commands to import and export your
+subscriptions from a file in <acronym>OPML</acronym> format (Outline Processor
+Markup Language).
+
+<div class="defun">
+&mdash; Function: <b>nnrss-opml-import</b><var> file<a name="index-nnrss_002dopml_002dimport-2319"></a></var><br>
+<blockquote><p>Prompt for an <acronym>OPML</acronym> file, and subscribe to each feed in the
+file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nnrss-opml-export</b><var><a name="index-nnrss_002dopml_002dexport-2320"></a></var><br>
+<blockquote><p>Write your current <acronym>RSS</acronym> subscriptions to a buffer in
+<acronym>OPML</acronym> format. 
+</p></blockquote></div>
+
+   <p>The following <code>nnrss</code> variables can be altered:
+
+     <dl>
+<dt><code>nnrss-directory</code><dd><a name="index-nnrss_002ddirectory-2321"></a>The directory where <code>nnrss</code> stores its files.  The default is
+<samp><span class="file">~/News/rss/</span></samp>.
+
+     <br><dt><code>nnrss-file-coding-system</code><dd><a name="index-nnrss_002dfile_002dcoding_002dsystem-2322"></a>The coding system used when reading and writing the <code>nnrss</code> groups
+data files.  The default is the value of
+<code>mm-universal-coding-system</code> (which defaults to <code>emacs-mule</code>
+in Emacs or <code>escape-quoted</code> in XEmacs).
+
+     <br><dt><code>nnrss-ignore-article-fields</code><dd><a name="index-nnrss_002dignore_002darticle_002dfields-2323"></a>Some feeds update constantly article fields during their publications,
+e.g. to indicate the number of comments.  However, if there is
+a difference between the local article and the distant one, the latter
+is considered to be new.  To avoid this and discard some fields, set this
+variable to the list of fields to be ignored.  The default is
+<code>'(slash:comments)</code>.
+
+     <br><dt><code>nnrss-use-local</code><dd><a name="index-nnrss_002duse_002dlocal-2324"></a><a name="index-nnrss_002dgenerate_002ddownload_002dscript-2325"></a>If you set <code>nnrss-use-local</code> to <code>t</code>, <code>nnrss</code> will read
+the feeds from local files in <code>nnrss-directory</code>.  You can use
+the command <code>nnrss-generate-download-script</code> to generate a
+download script using <samp><span class="command">wget</span></samp>.
+
+     <br><dt><code>nnrss-wash-html-in-text-plain-parts</code><dd>Non-<code>nil</code> means that <code>nnrss</code> renders text in &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo;
+parts as <acronym>HTML</acronym>.  The function specified by the
+<code>mm-text-html-renderer</code> variable (see <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display Customization</a>) will be used
+to render text.  If it is <code>nil</code>, which is the default, text will
+simply be folded.  Leave it <code>nil</code> if you prefer to see
+&lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; parts. 
+</dl>
+
+   <p>The following code may be helpful, if you want to show the description in
+the summary buffer.
+
+<pre class="lisp">     (add-to-list 'nnmail-extra-headers nnrss-description-field)
+     (setq gnus-summary-line-format "%U%R%z%I%(%[%4L: %-15,15f%]%) %s%uX\n")
+     
+     (defun gnus-user-format-function-X (header)
+       (let ((descr
+              (assq nnrss-description-field (mail-header-extra header))))
+         (if descr (concat "\n\t" (cdr descr)) "")))
+</pre>
+   <p>The following code may be useful to open an nnrss url directly from the
+summary buffer.
+
+<pre class="lisp">     (require 'browse-url)
+     
+     (defun browse-nnrss-url (arg)
+       (interactive "p")
+       (let ((url (assq nnrss-url-field
+                        (mail-header-extra
+                         (gnus-data-header
+                          (assq (gnus-summary-article-number)
+                                gnus-newsgroup-data))))))
+         (if url
+             (progn
+               (browse-url (cdr url))
+               (gnus-summary-mark-as-read-forward 1))
+           (gnus-summary-scroll-up arg))))
+     
+     (eval-after-load "gnus"
+       #'(define-key gnus-summary-mode-map
+           (kbd "&lt;RET&gt;") 'browse-nnrss-url))
+     (add-to-list 'nnmail-extra-headers nnrss-url-field)
+</pre>
+   <p>Even if you have added &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; to the
+<code>mm-discouraged-alternatives</code> variable (see <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display Customization</a>) since you don't want to see <acronym>HTML</acronym> parts, it might be
+more useful especially in <code>nnrss</code> groups to display
+&lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; parts.  Here's an example of setting
+<code>mm-discouraged-alternatives</code> as a group parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) in order to display &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; parts only in
+<code>nnrss</code> groups:
+
+<pre class="lisp">     ;; <span class="roman">Set the default value of </span><code>mm-discouraged-alternatives</code><span class="roman">.</span>
+     (eval-after-load "gnus-sum"
+       '(add-to-list
+         'gnus-newsgroup-variables
+         '(mm-discouraged-alternatives
+           . '("text/html" "image/.*"))))
+     
+     ;; <span class="roman">Display &lsquo;</span><samp><span class="samp">text/html</span></samp><span class="roman">&rsquo; parts in </span><code>nnrss</code><span class="roman"> groups.</span>
+     (add-to-list
+      'gnus-parameters
+      '("\\`nnrss:" (mm-discouraged-alternatives nil)))
+</pre>
+   </body></html>
+

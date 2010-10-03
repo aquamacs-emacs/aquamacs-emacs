@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>Various Message Variables - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Insertion-Variables.html#Insertion-Variables" title="Insertion Variables">
+<link rel="next" href="Sending-Variables.html#Sending-Variables" title="Sending Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Various-Message-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sending-Variables.html#Sending-Variables">Sending Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Insertion-Variables.html#Insertion-Variables">Insertion Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h3 class="section">3.7 Various Message Variables</h3>
+
+     <dl>
+<dt><code>message-default-charset</code><dd><a name="index-message_002ddefault_002dcharset-299"></a><a name="index-charset-300"></a>Symbol naming a <acronym>MIME</acronym> charset.  Non-<acronym>ASCII</acronym> characters
+in messages are assumed to be encoded using this charset.  The default
+is <code>iso-8859-1</code> on non-<span class="sc">mule</span> Emacsen; otherwise <code>nil</code>,
+which means ask the user.  (This variable is used only on non-<span class="sc">mule</span>
+Emacsen.)  See <a href="../emacs-mime/Charset-Translation.html#Charset-Translation">Charset Translation</a>, for details on the <span class="sc">mule</span>-to-<acronym>MIME</acronym>
+translation process.
+
+     <br><dt><code>message-fill-column</code><dd><a name="index-message_002dfill_002dcolumn-301"></a><a name="index-auto_002dfill-302"></a>Local value for the column beyond which automatic line-wrapping should
+happen for message buffers.  If non-nil (the default), also turn on
+auto-fill in message buffers.
+
+     <br><dt><code>message-signature-separator</code><dd><a name="index-message_002dsignature_002dseparator-303"></a>Regexp matching the signature separator.  It is &lsquo;<samp><span class="samp">^-- *$</span></samp>&rsquo; by
+default.
+
+     <br><dt><code>mail-header-separator</code><dd><a name="index-mail_002dheader_002dseparator-304"></a>String used to separate the headers from the body.  It is &lsquo;<samp><span class="samp">--text
+follows this line--</span></samp>&rsquo; by default.
+
+     <br><dt><code>message-directory</code><dd><a name="index-message_002ddirectory-305"></a>Directory used by many mailey things.  The default is <samp><span class="file">~/Mail/</span></samp>. 
+All other mail file variables are derived from <code>message-directory</code>.
+
+     <br><dt><code>message-auto-save-directory</code><dd><a name="index-message_002dauto_002dsave_002ddirectory-306"></a>Directory where Message auto-saves buffers if Gnus isn't running.  If
+<code>nil</code>, Message won't auto-save.  The default is <samp><span class="file">~/Mail/drafts/</span></samp>.
+
+     <br><dt><code>message-signature-setup-hook</code><dd><a name="index-message_002dsignature_002dsetup_002dhook-307"></a>Hook run when initializing the message buffer.  It is run after the
+headers have been inserted but before the signature has been inserted.
+
+     <br><dt><code>message-setup-hook</code><dd><a name="index-message_002dsetup_002dhook-308"></a>Hook run as the last thing when the message buffer has been initialized,
+but before yanked text is inserted.
+
+     <br><dt><code>message-header-setup-hook</code><dd><a name="index-message_002dheader_002dsetup_002dhook-309"></a>Hook called narrowed to the headers after initializing the headers.
+
+     <p>For instance, if you're running Gnus and wish to insert a
+&lsquo;<samp><span class="samp">Mail-Copies-To</span></samp>&rsquo; header in all your news articles and all messages
+you send to mailing lists, you could do something like the following:
+
+     <pre class="lisp">          (defun my-message-header-setup-hook ()
+            (let ((group (or gnus-newsgroup-name "")))
+              (when (or (message-fetch-field "newsgroups")
+                        (gnus-group-find-parameter group 'to-address)
+                        (gnus-group-find-parameter group 'to-list))
+                (insert "Mail-Copies-To: never\n"))))
+          
+          (add-hook 'message-header-setup-hook
+                    'my-message-header-setup-hook)
+</pre>
+     <br><dt><code>message-send-hook</code><dd><a name="index-message_002dsend_002dhook-310"></a>Hook run before sending messages.
+
+     <p>If you want to add certain headers before sending, you can use the
+<code>message-add-header</code> function in this hook.  For instance:
+<a name="index-message_002dadd_002dheader-311"></a>
+     <pre class="lisp">          (add-hook 'message-send-hook 'my-message-add-content)
+          (defun my-message-add-content ()
+            (message-add-header "X-In-No-Sense: Nonsense")
+            (message-add-header "X-Whatever: no"))
+</pre>
+     <p>This function won't add the header if the header is already present.
+
+     <br><dt><code>message-send-mail-hook</code><dd><a name="index-message_002dsend_002dmail_002dhook-312"></a>Hook run before sending mail messages.  This hook is run very late &ndash;
+just before the message is actually sent as mail.
+
+     <br><dt><code>message-send-news-hook</code><dd><a name="index-message_002dsend_002dnews_002dhook-313"></a>Hook run before sending news messages.  This hook is run very late &ndash;
+just before the message is actually sent as news.
+
+     <br><dt><code>message-sent-hook</code><dd><a name="index-message_002dsent_002dhook-314"></a>Hook run after sending messages.
+
+     <br><dt><code>message-cancel-hook</code><dd><a name="index-message_002dcancel_002dhook-315"></a>Hook run when canceling news articles.
+
+     <br><dt><code>message-mode-syntax-table</code><dd><a name="index-message_002dmode_002dsyntax_002dtable-316"></a>Syntax table used in message mode buffers.
+
+     <br><dt><code>message-cite-articles-with-x-no-archive</code><dd><a name="index-message_002dcite_002darticles_002dwith_002dx_002dno_002darchive-317"></a>If non-<code>nil</code>, don't strip quoted text from articles that have
+&lsquo;<samp><span class="samp">X-No-Archive</span></samp>&rsquo; set.  Even if this variable isn't set, you can
+undo the stripping by hitting the <code>undo</code> keystroke.
+
+     <br><dt><code>message-strip-special-text-properties</code><dd><a name="index-message_002dstrip_002dspecial_002dtext_002dproperties-318"></a>Emacs has a number of special text properties which can break message
+composing in various ways.  If this option is set, message will strip
+these properties from the message composition buffer.  However, some
+packages requires these properties to be present in order to work.  If
+you use one of these packages, turn this option off, and hope the
+message composition doesn't break too bad.
+
+     <br><dt><code>message-send-method-alist</code><dd><a name="index-message_002dsend_002dmethod_002dalist-319"></a><a name="index-message_002dmail_002dp-320"></a><a name="index-message_002dnews_002dp-321"></a><a name="index-message_002dsend_002dvia_002dmail-322"></a><a name="index-message_002dsend_002dvia_002dnews-323"></a>Alist of ways to send outgoing messages.  Each element has the form:
+
+     <pre class="lisp">          (<var>type</var> <var>predicate</var> <var>function</var>)
+</pre>
+          <dl>
+<dt><var>type</var><dd>A symbol that names the method.
+
+          <br><dt><var>predicate</var><dd>A function called without any parameters to determine whether the
+message is a message of type <var>type</var>.  The function will be called in
+the buffer where the message is.
+
+          <br><dt><var>function</var><dd>A function to be called if <var>predicate</var> returns non-<code>nil</code>. 
+<var>function</var> is called with one parameter&mdash;the prefix. 
+</dl>
+
+     <p>The default is:
+
+     <pre class="lisp">          ((news message-news-p message-send-via-news)
+           (mail message-mail-p message-send-via-mail))
+</pre>
+     <p>The <code>message-news-p</code> function returns non-<code>nil</code> if the message
+looks like news, and the <code>message-send-via-news</code> function sends the
+message according to the <code>message-send-news-function</code> variable
+(see <a href="News-Variables.html#News-Variables">News Variables</a>).  The <code>message-mail-p</code> function returns
+non-<code>nil</code> if the message looks like mail, and the
+<code>message-send-via-mail</code> function sends the message according to the
+<code>message-send-mail-function</code> variable (see <a href="Mail-Variables.html#Mail-Variables">Mail Variables</a>).
+
+     <p>All the elements in this alist will be tried in order, so a message
+containing both a valid &lsquo;<samp><span class="samp">Newsgroups</span></samp>&rsquo; header and a valid &lsquo;<samp><span class="samp">To</span></samp>&rsquo;
+header, for example, will be sent as news, and then as mail. 
+</dl>
+
+   </body></html>
+

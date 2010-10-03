@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Modes in VIP - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Survey.html#Survey" title="Survey">
+<link rel="prev" href="Loading-VIP.html#Loading-VIP" title="Loading VIP">
+<link rel="next" href="Emacs-Mode.html#Emacs-Mode" title="Emacs Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Modes-in-VIP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Emacs-Mode.html#Emacs-Mode">Emacs Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loading-VIP.html#Loading-VIP">Loading VIP</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Survey.html#Survey">Survey</a>
+<hr>
+</div>
+
+<h3 class="section">1.3 Modes in VIP</h3>
+
+<p><a name="index-g_t032-_0040kbd_007bC_002dz_007d-_0028_0040code_007bvip_002dchange_002dmode_002dto_002dvi_007d_0029-13"></a><a name="index-g_t0301-_0040kbd_007bC_002dx-C_002dz_007d-_0028_0040code_007bsuspend_002demacs_007d_0029-14"></a>
+Loading VIP has the effect of globally binding <kbd>C-z</kbd> (<kbd>Control-z</kbd>)
+to the function <code>vip-change-mode-to-vi</code>. The default binding of <kbd>C-z</kbd>
+in GNU Emacs is <code>suspend-emacs</code>, but, you can also call
+<code>suspend-emacs</code> by typing <kbd>C-x C-z</kbd>.  Other than this, all the
+key bindings of Emacs remain the same after loading VIP.
+
+   <p><a name="index-vi-mode-15"></a>
+Now, if you hit <kbd>C-z</kbd>, the function <code>vip-change-mode-to-vi</code> will be
+called and you will be in <dfn>vi mode</dfn>.  (Some major modes may locally bind
+<kbd>C-z</kbd> to some special functions.  In such cases, you can call
+<code>vip-change-mode-to-vi</code> by <code>execute-extended-command</code> which is
+invoked by <kbd>M-x</kbd>.  Here <kbd>M-x</kbd> means <kbd>Meta-x</kbd>, and if your
+terminal does not have a &lt;META&gt; key you can enter it by typing
+<kbd>&lt;ESC&gt; x</kbd>.  The same effect can also be achieve by typing
+<kbd>M-x vip-mode</kbd>.)
+
+   <p><a name="index-mode-line-16"></a>
+You can observe the change of mode by looking at the <dfn>mode line</dfn>.  For
+instance, if the mode line is:
+<pre class="example">     -----Emacs: *scratch*              (Lisp Interaction)----All------------
+</pre>
+   <p class="noindent">then it will change to:
+<pre class="example">     -----Vi:    *scratch*              (Lisp Interaction)----All------------
+</pre>
+   <p class="noindent">Thus the word &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo; in the mode line will change to &lsquo;<samp><span class="samp">Vi</span></samp>&rsquo;.
+
+   <p><a name="index-insert-mode-17"></a><a name="index-emacs-mode-18"></a>
+You can go back to the original <dfn>emacs mode</dfn> by typing <kbd>C-z</kbd> in
+vi mode.  Thus <kbd>C-z</kbd> toggles between these two modes.
+
+   <p>Note that modes in VIP exist orthogonally to modes in Emacs.  This means
+that you can be in vi mode and at the same time, say, shell mode.
+
+   <p>Vi mode corresponds to Vi's command mode.  From vi mode you can enter
+<dfn>insert mode</dfn> (which corresponds to Vi's insert mode) by usual Vi command
+keys like <kbd>i</kbd>, <kbd>a</kbd>, <kbd>o</kbd> <small class="dots">...</small> etc.
+
+   <p>In insert mode, the mode line will look like this:
+<pre class="example">     -----Insert *scratch*              (Lisp Interaction)----All------------
+</pre>
+   <p class="noindent">You can exit from insert mode by hitting &lt;ESC&gt; key as you do in Vi.
+
+   <p>That VIP has three modes may seem very complicated, but in fact it is not
+so.  VIP is implemented so that you can do most editing remaining only
+in the two modes for Vi (that is vi mode and insert mode).
+
+<ul class="menu">
+<li><a accesskey="1" href="Emacs-Mode.html#Emacs-Mode">Emacs Mode</a>:           This is the mode you should know better. 
+<li><a accesskey="2" href="Vi-Mode.html#Vi-Mode">Vi Mode</a>:              Vi commands are executed in this mode. 
+<li><a accesskey="3" href="Insert-Mode.html#Insert-Mode">Insert Mode</a>:          You can enter text, and also can do editing if you
+                          know enough Emacs commands. 
+</ul>
+
+   </body></html>
+

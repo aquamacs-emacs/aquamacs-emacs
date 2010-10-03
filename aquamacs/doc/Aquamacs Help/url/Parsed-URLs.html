@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Parsed URLs - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Started.html#Getting-Started" title="Getting Started">
+<link rel="prev" href="Configuration.html#Configuration" title="Configuration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Parsed-URLs"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Configuration.html#Configuration">Configuration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Started.html#Getting-Started">Getting Started</a>
+<hr>
+</div>
+
+<h3 class="section">1.2 Parsed URLs</h3>
+
+<p><a name="index-parsed-URLs-6"></a>The library functions typically operate on <dfn>parsed</dfn> versions of
+URLs.  These are actually vectors of the form:
+
+<pre class="example">     [<var>type</var> <var>user</var> <var>password</var> <var>host</var> <var>port</var> <var>file</var> <var>target</var> <var>attributes</var> <var>full</var>]
+</pre>
+   <p class="noindent">where
+     <dl>
+<dt><var>type</var><dd>is the type of the URL scheme, e.g., <code>http</code>
+<br><dt><var>user</var><dd>is the username associated with it, or <code>nil</code>;
+<br><dt><var>password</var><dd>is the user password associated with it, or <code>nil</code>;
+<br><dt><var>host</var><dd>is the host name associated with it, or <code>nil</code>;
+<br><dt><var>port</var><dd>is the port number associated with it, or <code>nil</code>;
+<br><dt><var>file</var><dd>is the `file' part of it, or <code>nil</code>.  This doesn't necessarily
+actually refer to a file;
+<br><dt><var>target</var><dd>is the target part, or <code>nil</code>;
+<br><dt><var>attributes</var><dd>is the attributes associated with it, or <code>nil</code>;
+<br><dt><var>full</var><dd>is <code>t</code> for a fully-specified URL, with a host part indicated by
+&lsquo;<samp><span class="samp">//</span></samp>&rsquo; after the scheme part. 
+</dl>
+
+   <p><a name="index-url_002dtype-7"></a><a name="index-url_002duser-8"></a><a name="index-url_002dpassword-9"></a><a name="index-url_002dhost-10"></a><a name="index-url_002dport-11"></a><a name="index-url_002dfile-12"></a><a name="index-url_002dtarget-13"></a><a name="index-url_002dattributes-14"></a><a name="index-url_002dfull-15"></a><a name="index-url_002dset_002dtype-16"></a><a name="index-url_002dset_002duser-17"></a><a name="index-url_002dset_002dpassword-18"></a><a name="index-url_002dset_002dhost-19"></a><a name="index-url_002dset_002dport-20"></a><a name="index-url_002dset_002dfile-21"></a><a name="index-url_002dset_002dtarget-22"></a><a name="index-url_002dset_002dattributes-23"></a><a name="index-url_002dset_002dfull-24"></a>These attributes have accessors named <code>url-</code><var>part</var>, where
+<var>part</var> is the name of one of the elements above, e.g.,
+<code>url-host</code>.  Similarly, there are setters of the form
+<code>url-set-</code><var>part</var>.
+
+   <p>There are functions for parsing and unparsing between the string and
+vector forms.
+
+<div class="defun">
+&mdash; Function: <b>url-generic-parse-url</b><var> url<a name="index-url_002dgeneric_002dparse_002durl-25"></a></var><br>
+<blockquote><p>Return a parsed version of the string <var>url</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-recreate-url</b><var> url<a name="index-url_002drecreate_002durl-26"></a></var><br>
+<blockquote><p><a name="index-unparsing-URLs-27"></a>Recreates a URL string from the parsed <var>url</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

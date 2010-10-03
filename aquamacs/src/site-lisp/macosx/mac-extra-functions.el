@@ -462,7 +462,7 @@ specified in `shell-file-name'."
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
-  (ns-open-help-anchor "index" (aquamacs-help-book-name)))
+  (ns-open-help-anchor "AquamacsIndex" (aquamacs-help-book-name)))
 
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"

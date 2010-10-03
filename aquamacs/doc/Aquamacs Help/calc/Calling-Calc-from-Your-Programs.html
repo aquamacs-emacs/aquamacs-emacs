@@ -1,0 +1,378 @@
+<html lang="en">
+<head>
+<title>Calling Calc from Your Programs - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="prev" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
+<link rel="next" href="Internals.html#Internals" title="Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Calling-Calc-from-Your-Programs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Internals.html#Internals">Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.5.6 Calling Calc from Your Lisp Programs</h4>
+
+<p class="noindent">A later section (see <a href="Internals.html#Internals">Internals</a>) gives a full description of
+Calc's internal Lisp functions.  It's not hard to call Calc from
+inside your programs, but the number of these functions can be daunting. 
+So Calc provides one special &ldquo;programmer-friendly&rdquo; function called
+<code>calc-eval</code> that can be made to do just about everything you
+need.  It's not as fast as the low-level Calc functions, but it's
+much simpler to use!
+
+   <p>It may seem that <code>calc-eval</code> itself has a daunting number of
+options, but they all stem from one simple operation.
+
+   <p>In its simplest manifestation, &lsquo;<samp><span class="samp">(calc-eval "1+2")</span></samp>&rsquo; parses the
+string <code>"1+2"</code> as if it were a Calc algebraic entry and returns
+the result formatted as a string: <code>"3"</code>.
+
+   <p>Since <code>calc-eval</code> is on the list of recommended <code>autoload</code>
+functions, you don't need to make any special preparations to load
+Calc before calling <code>calc-eval</code> the first time.  Calc will be
+loaded and initialized for you.
+
+   <p>All the Calc modes that are currently in effect will be used when
+evaluating the expression and formatting the result.
+
+<h5 class="subsubsection">18.5.6.1 Additional Arguments to <code>calc-eval</code></h5>
+
+<p class="noindent">If the input string parses to a list of expressions, Calc returns
+the results separated by <code>", "</code>.  You can specify a different
+separator by giving a second string argument to <code>calc-eval</code>:
+&lsquo;<samp><span class="samp">(calc-eval "1+2,3+4" ";")</span></samp>&rsquo; returns <code>"3;7"</code>.
+
+   <p>The &ldquo;separator&rdquo; can also be any of several Lisp symbols which
+request other behaviors from <code>calc-eval</code>.  These are discussed
+one by one below.
+
+   <p>You can give additional arguments to be substituted for
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$$</span></samp>&rsquo;, and so on in the main expression.  For
+example, &lsquo;<samp><span class="samp">(calc-eval "$/$$" nil "7" "1+1")</span></samp>&rsquo; evaluates the
+expression <code>"7/(1+1)"</code> to yield the result <code>"3.5"</code>
+(assuming Fraction mode is not in effect).  Note the <code>nil</code>
+used as a placeholder for the item-separator argument.
+
+<h5 class="subsubsection">18.5.6.2 Error Handling</h5>
+
+<p class="noindent">If <code>calc-eval</code> encounters an error, it returns a list containing
+the character position of the error, plus a suitable message as a
+string.  Note that &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo; is <em>not</em> an error by Calc's
+standards; it simply returns the string <code>"1 / 0"</code> which is the
+division left in symbolic form.  But &lsquo;<samp><span class="samp">(calc-eval "1/")</span></samp>&rsquo; will
+return the list &lsquo;<samp><span class="samp">(2 "Expected a number")</span></samp>&rsquo;.
+
+   <p>If you bind the variable <code>calc-eval-error</code> to <code>t</code>
+using a <code>let</code> form surrounding the call to <code>calc-eval</code>,
+errors instead call the Emacs <code>error</code> function which aborts
+to the Emacs command loop with a beep and an error message.
+
+   <p>If you bind this variable to the symbol <code>string</code>, error messages
+are returned as strings instead of lists.  The character position is
+ignored.
+
+   <p>As a courtesy to other Lisp code which may be using Calc, be sure
+to bind <code>calc-eval-error</code> using <code>let</code> rather than changing
+it permanently with <code>setq</code>.
+
+<h5 class="subsubsection">18.5.6.3 Numbers Only</h5>
+
+<p class="noindent">Sometimes it is preferable to treat &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo; as an error
+rather than returning a symbolic result.  If you pass the symbol
+<code>num</code> as the second argument to <code>calc-eval</code>, results
+that are not constants are treated as errors.  The error message
+reported is the first <code>calc-why</code> message if there is one,
+or otherwise &ldquo;Number expected.&rdquo;
+
+   <p>A result is &ldquo;constant&rdquo; if it is a number, vector, or other
+object that does not include variables or function calls.  If it
+is a vector, the components must themselves be constants.
+
+<h5 class="subsubsection">18.5.6.4 Default Modes</h5>
+
+<p class="noindent">If the first argument to <code>calc-eval</code> is a list whose first
+element is a formula string, then <code>calc-eval</code> sets all the
+various Calc modes to their default values while the formula is
+evaluated and formatted.  For example, the precision is set to 12
+digits, digit grouping is turned off, and the Normal language
+mode is used.
+
+   <p>This same principle applies to the other options discussed below. 
+If the first argument would normally be <var>x</var>, then it can also
+be the list &lsquo;<samp><span class="samp">(</span><var>x</var><span class="samp">)</span></samp>&rsquo; to use the default mode settings.
+
+   <p>If there are other elements in the list, they are taken as
+variable-name/value pairs which override the default mode
+settings.  Look at the documentation at the front of the
+<samp><span class="file">calc.el</span></samp> file to find the names of the Lisp variables for
+the various modes.  The mode settings are restored to their
+original values when <code>calc-eval</code> is done.
+
+   <p>For example, &lsquo;<samp><span class="samp">(calc-eval '("$+$$" calc-internal-prec 8) 'num a b)</span></samp>&rsquo;
+computes the sum of two numbers, requiring a numeric result, and
+using default mode settings except that the precision is 8 instead
+of the default of 12.
+
+   <p>It's usually best to use this form of <code>calc-eval</code> unless your
+program actually considers the interaction with Calc's mode settings
+to be a feature.  This will avoid all sorts of potential &ldquo;gotchas&rdquo;;
+consider what happens with &lsquo;<samp><span class="samp">(calc-eval "sqrt(2)" 'num)</span></samp>&rsquo;
+when the user has left Calc in Symbolic mode or No-Simplify mode.
+
+   <p>As another example, &lsquo;<samp><span class="samp">(equal (calc-eval '("$&lt;$$") nil a b) "1")</span></samp>&rsquo;
+checks if the number in string &lsquo;<samp><span class="samp">a</span></samp>&rsquo; is less than the one in
+string &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  Without using a list, the integer 1 might
+come out in a variety of formats which would be hard to test for
+conveniently: <code>"1"</code>, <code>"8#1"</code>, <code>"00001"</code>.  (But
+see &ldquo;Predicates&rdquo; mode, below.)
+
+<h5 class="subsubsection">18.5.6.5 Raw Numbers</h5>
+
+<p class="noindent">Normally all input and output for <code>calc-eval</code> is done with strings. 
+You can do arithmetic with, say, &lsquo;<samp><span class="samp">(calc-eval "$+$$" nil a b)</span></samp>&rsquo;
+in place of &lsquo;<samp><span class="samp">(+ a b)</span></samp>&rsquo;, but this is very inefficient since the
+numbers must be converted to and from string format as they are passed
+from one <code>calc-eval</code> to the next.
+
+   <p>If the separator is the symbol <code>raw</code>, the result will be returned
+as a raw Calc data structure rather than a string.  You can read about
+how these objects look in the following sections, but usually you can
+treat them as &ldquo;black box&rdquo; objects with no important internal
+structure.
+
+   <p>There is also a <code>rawnum</code> symbol, which is a combination of
+<code>raw</code> (returning a raw Calc object) and <code>num</code> (signaling
+an error if that object is not a constant).
+
+   <p>You can pass a raw Calc object to <code>calc-eval</code> in place of a
+string, either as the formula itself or as one of the &lsquo;<samp><span class="samp">$</span></samp>&rsquo;
+arguments.  Thus &lsquo;<samp><span class="samp">(calc-eval "$+$$" 'raw a b)</span></samp>&rsquo; is an
+addition function that operates on raw Calc objects.  Of course
+in this case it would be easier to call the low-level <code>math-add</code>
+function in Calc, if you can remember its name.
+
+   <p>In particular, note that a plain Lisp integer is acceptable to Calc
+as a raw object.  (All Lisp integers are accepted on input, but
+integers of more than six decimal digits are converted to &ldquo;big-integer&rdquo;
+form for output.  See <a href="Data-Type-Formats.html#Data-Type-Formats">Data Type Formats</a>.)
+
+   <p>When it comes time to display the object, just use &lsquo;<samp><span class="samp">(calc-eval a)</span></samp>&rsquo;
+to format it as a string.
+
+   <p>It is an error if the input expression evaluates to a list of
+values.  The separator symbol <code>list</code> is like <code>raw</code>
+except that it returns a list of one or more raw Calc objects.
+
+   <p>Note that a Lisp string is not a valid Calc object, nor is a list
+containing a string.  Thus you can still safely distinguish all the
+various kinds of error returns discussed above.
+
+<h5 class="subsubsection">18.5.6.6 Predicates</h5>
+
+<p class="noindent">If the separator symbol is <code>pred</code>, the result of the formula is
+treated as a true/false value; <code>calc-eval</code> returns <code>t</code> or
+<code>nil</code>, respectively.  A value is considered &ldquo;true&rdquo; if it is a
+non-zero number, or false if it is zero or if it is not a number.
+
+   <p>For example, &lsquo;<samp><span class="samp">(calc-eval "$&lt;$$" 'pred a b)</span></samp>&rsquo; tests whether
+one value is less than another.
+
+   <p>As usual, it is also possible for <code>calc-eval</code> to return one of
+the error indicators described above.  Lisp will interpret such an
+indicator as &ldquo;true&rdquo; if you don't check for it explicitly.  If you
+wish to have an error register as &ldquo;false&rdquo;, use something like
+&lsquo;<samp><span class="samp">(eq (calc-eval ...) t)</span></samp>&rsquo;.
+
+<h5 class="subsubsection">18.5.6.7 Variable Values</h5>
+
+<p class="noindent">Variables in the formula passed to <code>calc-eval</code> are not normally
+replaced by their values.  If you wish this, you can use the
+<code>evalv</code> function (see <a href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>).  For example,
+if 4 is stored in Calc variable <code>a</code> (i.e., in Lisp variable
+<code>var-a</code>), then &lsquo;<samp><span class="samp">(calc-eval "a+pi")</span></samp>&rsquo; will return the
+formula <code>"a + pi"</code>, but &lsquo;<samp><span class="samp">(calc-eval "evalv(a+pi)")</span></samp>&rsquo;
+will return <code>"7.14159265359"</code>.
+
+   <p>To store in a Calc variable, just use <code>setq</code> to store in the
+corresponding Lisp variable.  (This is obtained by prepending
+&lsquo;<samp><span class="samp">var-</span></samp>&rsquo; to the Calc variable name.)  Calc routines will
+understand either string or raw form values stored in variables,
+although raw data objects are much more efficient.  For example,
+to increment the Calc variable <code>a</code>:
+
+<pre class="example">     (setq var-a (calc-eval "evalv(a+1)" 'raw))
+</pre>
+   <h5 class="subsubsection">18.5.6.8 Stack Access</h5>
+
+<p class="noindent">If the separator symbol is <code>push</code>, the formula argument is
+evaluated (with possible &lsquo;<samp><span class="samp">$</span></samp>&rsquo; expansions, as usual).  The
+result is pushed onto the Calc stack.  The return value is <code>nil</code>
+(unless there is an error from evaluating the formula, in which
+case the return value depends on <code>calc-eval-error</code> in the
+usual way).
+
+   <p>If the separator symbol is <code>pop</code>, the first argument to
+<code>calc-eval</code> must be an integer instead of a string.  That
+many values are popped from the stack and thrown away.  A negative
+argument deletes the entry at that stack level.  The return value
+is the number of elements remaining in the stack after popping;
+&lsquo;<samp><span class="samp">(calc-eval 0 'pop)</span></samp>&rsquo; is a good way to measure the size of
+the stack.
+
+   <p>If the separator symbol is <code>top</code>, the first argument to
+<code>calc-eval</code> must again be an integer.  The value at that
+stack level is formatted as a string and returned.  Thus
+&lsquo;<samp><span class="samp">(calc-eval 1 'top)</span></samp>&rsquo; returns the top-of-stack value.  If the
+integer is out of range, <code>nil</code> is returned.
+
+   <p>The separator symbol <code>rawtop</code> is just like <code>top</code> except
+that the stack entry is returned as a raw Calc object instead of
+as a string.
+
+   <p>In all of these cases the first argument can be made a list in
+order to force the default mode settings, as described above. 
+Thus &lsquo;<samp><span class="samp">(calc-eval '(2 calc-number-radix 16) 'top)</span></samp>&rsquo; returns the
+second-to-top stack entry, formatted as a string using the default
+instead of current display modes, except that the radix is
+hexadecimal instead of decimal.
+
+   <p>It is, of course, polite to put the Calc stack back the way you
+found it when you are done, unless the user of your program is
+actually expecting it to affect the stack.
+
+   <p>Note that you do not actually have to switch into the &lsquo;<samp><span class="samp">*Calculator*</span></samp>&rsquo;
+buffer in order to use <code>calc-eval</code>; it temporarily switches into
+the stack buffer if necessary.
+
+<h5 class="subsubsection">18.5.6.9 Keyboard Macros</h5>
+
+<p class="noindent">If the separator symbol is <code>macro</code>, the first argument must be a
+string of characters which Calc can execute as a sequence of keystrokes. 
+This switches into the Calc buffer for the duration of the macro. 
+For example, &lsquo;<samp><span class="samp">(calc-eval "vx5\rVR+" 'macro)</span></samp>&rsquo; pushes the
+vector &lsquo;<samp><span class="samp">[1,2,3,4,5]</span></samp>&rsquo; on the stack and then replaces it
+with the sum of those numbers.  Note that &lsquo;<samp><span class="samp">\r</span></samp>&rsquo; is the Lisp
+notation for the carriage-return, &lt;RET&gt;, character.
+
+   <p>If your keyboard macro wishes to pop the stack, &lsquo;<samp><span class="samp">\C-d</span></samp>&rsquo; is
+safer than &lsquo;<samp><span class="samp">\177</span></samp>&rsquo; (the &lt;DEL&gt; character) because some
+installations may have switched the meanings of &lt;DEL&gt; and
+<kbd>C-h</kbd>.  Calc always interprets <kbd>C-d</kbd> as a synonym for
+&ldquo;pop-stack&rdquo; regardless of key mapping.
+
+   <p>If you provide a third argument to <code>calc-eval</code>, evaluation
+of the keyboard macro will leave a record in the Trail using
+that argument as a tag string.  Normally the Trail is unaffected.
+
+   <p>The return value in this case is always <code>nil</code>.
+
+<h5 class="subsubsection">18.5.6.10 Lisp Evaluation</h5>
+
+<p class="noindent">Finally, if the separator symbol is <code>eval</code>, then the Lisp
+<code>eval</code> function is called on the first argument, which must
+be a Lisp expression rather than a Calc formula.  Remember to
+quote the expression so that it is not evaluated until inside
+<code>calc-eval</code>.
+
+   <p>The difference from plain <code>eval</code> is that <code>calc-eval</code>
+switches to the Calc buffer before evaluating the expression. 
+For example, &lsquo;<samp><span class="samp">(calc-eval '(setq calc-internal-prec 17) 'eval)</span></samp>&rsquo;
+will correctly affect the buffer-local Calc precision variable.
+
+   <p>An alternative would be &lsquo;<samp><span class="samp">(calc-eval '(calc-precision 17) 'eval)</span></samp>&rsquo;. 
+This is evaluating a call to the function that is normally invoked
+by the <kbd>p</kbd> key, giving it 17 as its &ldquo;numeric prefix argument.&rdquo;
+Note that this function will leave a message in the echo area as
+a side effect.  Also, all Calc functions switch to the Calc buffer
+automatically if not invoked from there, so the above call is
+also equivalent to &lsquo;<samp><span class="samp">(calc-precision 17)</span></samp>&rsquo; by itself. 
+In all cases, Calc uses <code>save-excursion</code> to switch back to
+your original buffer when it is done.
+
+   <p>As usual the first argument can be a list that begins with a Lisp
+expression to use default instead of current mode settings.
+
+   <p>The result of <code>calc-eval</code> in this usage is just the result
+returned by the evaluated Lisp expression.
+
+<h5 class="subsubsection">18.5.6.11 Example</h5>
+
+<p class="noindent"><a name="index-convert_002dtemp-2337"></a>Here is a sample Emacs command that uses <code>calc-eval</code>.  Suppose
+you have a document with lots of references to temperatures on the
+Fahrenheit scale, say &ldquo;98.6 F&rdquo;, and you wish to convert these
+references to Centigrade.  The following command does this conversion. 
+Place the Emacs cursor right after the letter &ldquo;F&rdquo; and invoke the
+command to change &ldquo;98.6 F&rdquo; to &ldquo;37 C&rdquo;.  Or, if the temperature is
+already in Centigrade form, the command changes it back to Fahrenheit.
+
+<pre class="example">     (defun convert-temp ()
+       (interactive)
+       (save-excursion
+         (re-search-backward "[^-.0-9]\\([-.0-9]+\\) *\\([FC]\\)")
+         (let* ((top1 (match-beginning 1))
+                (bot1 (match-end 1))
+                (number (buffer-substring top1 bot1))
+                (top2 (match-beginning 2))
+                (bot2 (match-end 2))
+                (type (buffer-substring top2 bot2)))
+           (if (equal type "F")
+               (setq type "C"
+                     number (calc-eval "($ - 32)*5/9" nil number))
+             (setq type "F"
+                   number (calc-eval "$*9/5 + 32" nil number)))
+           (goto-char top2)
+           (delete-region top2 bot2)
+           (insert-before-markers type)
+           (goto-char top1)
+           (delete-region top1 bot1)
+           (if (string-match "\\.$" number)   ; change "37." to "37"
+               (setq number (substring number 0 -1)))
+           (insert number))))
+</pre>
+   <p>Note the use of <code>insert-before-markers</code> when changing between
+&ldquo;F&rdquo; and &ldquo;C&rdquo;, so that the character winds up before the cursor
+instead of after it.
+
+   </body></html>
+

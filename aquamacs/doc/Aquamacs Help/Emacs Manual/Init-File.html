@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Init File - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Syntax.html#Syntax" title="Syntax">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Init-File"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax.html#Syntax">Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">57.6 The Init File, <samp><span class="file">~/.emacs</span></samp></h3>
+
+<p><a name="index-init-file-4064"></a><a name="index-Emacs-initialization-file-4065"></a><a name="index-key-rebinding_002c-permanent-4066"></a><a name="index-rebinding-keys_002c-permanently-4067"></a><a name="index-startup-_0028init-file_0029-4068"></a>
+  When Emacs is started, it normally tries to load a Lisp program from
+an <dfn>initialization file</dfn>, or <dfn>init file</dfn> for short.  This
+file, if it exists, specifies how to initialize Emacs for you.  Emacs
+looks for your init file using the filenames <samp><span class="file">~/.emacs</span></samp>,
+<samp><span class="file">~/.emacs.el</span></samp>, or <samp><span class="file">~/.emacs.d/init.el</span></samp>; you can choose to
+use any one of these three names (see <a href="Find-Init.html#Find-Init">Find Init</a>).  Here, <samp><span class="file">~/</span></samp>
+stands for your home directory.
+
+   <p>You can use the command line switch &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; to prevent loading
+your init file, and &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">--user</span></samp>&rsquo;) to specify a
+different user's init file (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).
+
+   <p><a name="index-g_t_0040file_007bdefault_002eel_007d_002c-the-default-init-file-4069"></a>  There can also be a <dfn>default init file</dfn>, which is the library
+named <samp><span class="file">default.el</span></samp>, found via the standard search path for
+libraries.  The Emacs distribution contains no such library; your site
+may create one for local customizations.  If this library exists, it is
+loaded whenever you start Emacs (except when you specify &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;). 
+But your init file, if any, is loaded first; if it sets
+<code>inhibit-default-init</code> non-<code>nil</code>, then <samp><span class="file">default</span></samp> is not
+loaded.
+
+   <p><a name="index-site-init-file-4070"></a><a name="index-g_t_0040file_007bsite_002dstart_002eel_007d_002c-the-site-startup-file-4071"></a>  Your site may also have a <dfn>site startup file</dfn>; this is named
+<samp><span class="file">site-start.el</span></samp>, if it exists.  Like <samp><span class="file">default.el</span></samp>, Emacs
+finds this file via the standard search path for Lisp libraries. 
+Emacs loads this library before it loads your init file.  To inhibit
+loading of this library, use the option &lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo;. 
+See <a href="Initial-Options.html#Initial-Options">Initial Options</a>.  We recommend against using
+<samp><span class="file">site-start.el</span></samp> for changes that some users may not like.  It is
+better to put them in <samp><span class="file">default.el</span></samp>, so that users can more easily
+override them.
+
+   <p>You can place <samp><span class="file">default.el</span></samp> and <samp><span class="file">site-start.el</span></samp> in any of
+the directories which Emacs searches for Lisp libraries.  The variable
+<code>load-path</code> (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>) specifies these directories. 
+Many sites put these files in the <samp><span class="file">site-lisp</span></samp> subdirectory of the
+Emacs installation directory, typically
+<samp><span class="file">/usr/local/share/emacs/site-lisp</span></samp>.
+
+   <p>Byte-compiling your init file is not recommended (see <a href="../elisp/Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>).  It generally does not speed up startup very much, and often
+leads to problems when you forget to recompile the file.  A better
+solution is to use the Emacs server to reduce the number of times you
+have to start Emacs (see <a href="Emacs-Server.html#Emacs-Server">Emacs Server</a>).  If your init file defines
+many functions, consider moving them to a separate (byte-compiled)
+file that you load in your init file.
+
+   <p>If you are going to write actual Emacs Lisp programs that go beyond
+minor customization, you should read the <cite>Emacs Lisp Reference Manual</cite>. 
+See <a href="../elisp/index.html#Top">Emacs Lisp</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Init-Syntax.html#Init-Syntax">Init Syntax</a>:          Syntax of constants in Emacs Lisp. 
+<li><a accesskey="2" href="Init-Examples.html#Init-Examples">Init Examples</a>:        How to do some things with an init file. 
+<li><a accesskey="3" href="Terminal-Init.html#Terminal-Init">Terminal Init</a>:        Each terminal type can have an init file. 
+<li><a accesskey="4" href="Find-Init.html#Find-Init">Find Init</a>:            How Emacs finds the init file. 
+<li><a accesskey="5" href="Init-Non_002dASCII.html#Init-Non_002dASCII">Init Non-ASCII</a>:       Using non-<acronym>ASCII</acronym> characters in an init file. 
+</ul>
+
+   </body></html>
+

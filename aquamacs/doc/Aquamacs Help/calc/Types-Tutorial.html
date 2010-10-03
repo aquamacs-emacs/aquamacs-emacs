@@ -1,0 +1,468 @@
+<html lang="en">
+<head>
+<title>Types Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tutorial.html#Tutorial" title="Tutorial">
+<link rel="prev" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
+<link rel="next" href="Algebra-Tutorial.html#Algebra-Tutorial" title="Algebra Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Types-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Algebra-Tutorial.html#Algebra-Tutorial">Algebra Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tutorial.html#Tutorial">Tutorial</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 Types Tutorial</h3>
+
+<p class="noindent">Calc understands a variety of data types as well as simple numbers. 
+In this section, we'll experiment with each of these types in turn.
+
+   <p>The numbers we've been using so far have mainly been either <dfn>integers</dfn>
+or <dfn>floats</dfn>.  We saw that floats are usually a good approximation to
+the mathematical concept of real numbers, but they are only approximations
+and are susceptible to roundoff error.  Calc also supports <dfn>fractions</dfn>,
+which can exactly represent any rational number.
+
+<pre class="smallexample">     1:  3628800    2:  3628800    1:  518400:7   1:  518414:7   1:  7:518414
+         .          1:  49             .              .              .
+                        .
+     
+         10 !           49 &lt;RET&gt;         :              2 +            &amp;
+</pre>
+   <p class="noindent">The <kbd>:</kbd> command divides two integers to get a fraction; <kbd>/</kbd>
+would normally divide integers to get a floating-point result. 
+Notice we had to type &lt;RET&gt; between the <kbd>49</kbd> and the <kbd>:</kbd>
+since the <kbd>:</kbd> would otherwise be interpreted as part of a
+fraction beginning with 49.
+
+   <p>You can convert between floating-point and fractional format using
+<kbd>c f</kbd> and <kbd>c F</kbd>:
+
+<pre class="smallexample">     1:  1.35027217629e-5    1:  7:518414
+         .                       .
+     
+         c f                     c F
+</pre>
+   <p>The <kbd>c F</kbd> command replaces a floating-point number with the
+&ldquo;simplest&rdquo; fraction whose floating-point representation is the
+same, to within the current precision.
+
+<pre class="smallexample">     1:  3.14159265359   1:  1146408:364913   1:  3.1416   1:  355:113
+         .                   .                    .            .
+     
+         P                   c F      &lt;DEL&gt;       p 5 &lt;RET&gt; P      c F
+</pre>
+   <p>(&bull;) <strong>Exercise 1.</strong>  A calculation has produced the
+result 1.26508260337.  You suspect it is the square root of the
+product of &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; and some rational number.  Is it?  (Be sure
+to allow for roundoff error!)  See <a href="Types-Answer-1.html#Types-Answer-1">1</a>. (&bull;)
+
+   <p><dfn>Complex numbers</dfn> can be stored in both rectangular and polar form.
+
+<pre class="smallexample">     1:  -9     1:  (0, 3)    1:  (3; 90.)   1:  (6; 90.)   1:  (2.4495; 45.)
+         .          .             .              .              .
+     
+         9 n        Q             c p            2 *            Q
+</pre>
+   <p class="noindent">The square root of <i>-9</i> is by default rendered in rectangular form
+(&lsquo;<samp><span class="samp">0&nbsp;+&nbsp;3i</span></samp>&rsquo;<!-- /@w -->), but we can convert it to polar form (3 with a
+phase angle of 90 degrees).  All the usual arithmetic and scientific
+operations are defined on both types of complex numbers.
+
+   <p>Another generalized kind of number is <dfn>infinity</dfn>.  Infinity
+isn't really a number, but it can sometimes be treated like one. 
+Calc uses the symbol <code>inf</code> to represent positive infinity,
+i.e., a value greater than any real number.  Naturally, you can
+also write &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; for minus infinity, a value less than any
+real number.  The word <code>inf</code> can only be input using
+algebraic entry.
+
+<pre class="smallexample">     2:  inf        2:  -inf       2:  -inf       2:  -inf       1:  nan
+     1:  -17        1:  -inf       1:  -inf       1:  inf            .
+         .              .              .              .
+     
+     ' inf &lt;RET&gt; 17 n     *  &lt;RET&gt;         72 +           A              +
+</pre>
+   <p class="noindent">Since infinity is infinitely large, multiplying it by any finite
+number (like <i>-17</i>) has no effect, except that since <i>-17</i>
+is negative, it changes a plus infinity to a minus infinity. 
+(&ldquo;A huge positive number, multiplied by <i>-17</i>, yields a huge
+negative number.&rdquo;)  Adding any finite number to infinity also
+leaves it unchanged.  Taking an absolute value gives us plus
+infinity again.  Finally, we add this plus infinity to the minus
+infinity we had earlier.  If you work it out, you might expect
+the answer to be <i>-72</i> for this.  But the 72 has been completely
+lost next to the infinities; by the time we compute &lsquo;<samp><span class="samp">inf&nbsp;-&nbsp;inf</span></samp>&rsquo;<!-- /@w -->
+the finite difference between them, if any, is undetectable. 
+So we say the result is <dfn>indeterminate</dfn>, which Calc writes
+with the symbol <code>nan</code> (for Not A Number).
+
+   <p>Dividing by zero is normally treated as an error, but you can get
+Calc to write an answer in terms of infinity by pressing <kbd>m i</kbd>
+to turn on Infinite mode.
+
+<pre class="smallexample">     3:  nan        2:  nan        2:  nan        2:  nan        1:  nan
+     2:  1          1:  1 / 0      1:  uinf       1:  uinf           .
+     1:  0              .              .              .
+         .
+     
+       1 &lt;RET&gt; 0          /       m i    U /            17 n *         +
+</pre>
+   <p class="noindent">Dividing by zero normally is left unevaluated, but after <kbd>m i</kbd>
+it instead gives an infinite result.  The answer is actually
+<code>uinf</code>, &ldquo;undirected infinity.&rdquo;  If you look at a graph of
+&lsquo;<samp><span class="samp">1 / x</span></samp>&rsquo; around &lsquo;<samp><span class="samp">x&nbsp;=&nbsp;0</span></samp>&rsquo;<!-- /@w -->, you'll see that it goes toward
+plus infinity as you approach zero from above, but toward minus
+infinity as you approach from below.  Since we said only &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo;,
+Calc knows that the answer is infinite but not in which direction. 
+That's what <code>uinf</code> means.  Notice that multiplying <code>uinf</code>
+by a negative number still leaves plain <code>uinf</code>; there's no
+point in saying &lsquo;<samp><span class="samp">-uinf</span></samp>&rsquo; because the sign of <code>uinf</code> is
+unknown anyway.  Finally, we add <code>uinf</code> to our <code>nan</code>,
+yielding <code>nan</code> again.  It's easy to see that, because
+<code>nan</code> means &ldquo;totally unknown&rdquo; while <code>uinf</code> means
+&ldquo;unknown sign but known to be infinite,&rdquo; the more mysterious
+<code>nan</code> wins out when it is combined with <code>uinf</code>, or, for
+that matter, with anything else.
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Predict what Calc will answer
+for each of these formulas:  &lsquo;<samp><span class="samp">inf / inf</span></samp>&rsquo;, &lsquo;<samp><span class="samp">exp(inf)</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">exp(-inf)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">sqrt(-inf)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">sqrt(uinf)</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">abs(uinf)</span></samp>&rsquo;, &lsquo;<samp><span class="samp">ln(0)</span></samp>&rsquo;. 
+See <a href="Types-Answer-2.html#Types-Answer-2">2</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 3.</strong>  We saw that &lsquo;<samp><span class="samp">inf - inf = nan</span></samp>&rsquo;,
+which stands for an unknown value.  Can <code>nan</code> stand for
+a complex number?  Can it stand for infinity? 
+See <a href="Types-Answer-3.html#Types-Answer-3">3</a>. (&bull;)
+
+   <p><dfn>HMS forms</dfn> represent a value in terms of hours, minutes, and
+seconds.
+
+<pre class="smallexample">     1:  2@ 30' 0"     1:  3@ 30' 0"     2:  3@ 30' 0"     1:  2.
+         .                 .             1:  1@ 45' 0."        .
+                                             .
+     
+       2@ 30' &lt;RET&gt;          1 +               &lt;RET&gt; 2 /           /
+</pre>
+   <p>HMS forms can also be used to hold angles in degrees, minutes, and
+seconds.
+
+<pre class="smallexample">     1:  0.5        1:  26.56505   1:  26@ 33' 54.18"    1:  0.44721
+         .              .              .                     .
+     
+         0.5            I T            c h                   S
+</pre>
+   <p class="noindent">First we convert the inverse tangent of 0.5 to degrees-minutes-seconds
+form, then we take the sine of that angle.  Note that the trigonometric
+functions will accept HMS forms directly as input.
+
+   <p><a name="index-Beatles-57"></a>(&bull;) <strong>Exercise 4.</strong>  The Beatles' <em>Abbey Road</em> is
+47 minutes and 26 seconds long, and contains 17 songs.  What is the
+average length of a song on <em>Abbey Road</em>?  If the Extended Disco
+Version of <em>Abbey Road</em> added 20 seconds to the length of each
+song, how long would the album be?  See <a href="Types-Answer-4.html#Types-Answer-4">4</a>. (&bull;)
+
+   <p>A <dfn>date form</dfn> represents a date, or a date and time.  Dates must
+be entered using algebraic entry.  Date forms are surrounded by
+&lsquo;<samp><span class="samp">&lt; &gt;</span></samp>&rsquo; symbols; most standard formats for dates are recognized.
+
+<pre class="smallexample">     2:  &lt;Sun Jan 13, 1991&gt;                    1:  2.25
+     1:  &lt;6:00pm Thu Jan 10, 1991&gt;                 .
+         .
+     
+     ' &lt;13 Jan 1991&gt;, &lt;1/10/91, 6pm&gt; &lt;RET&gt;           -
+</pre>
+   <p class="noindent">In this example, we enter two dates, then subtract to find the
+number of days between them.  It is also possible to add an
+HMS form or a number (of days) to a date form to get another
+date form.
+
+<pre class="smallexample">     1:  &lt;4:45:59pm Mon Jan 14, 1991&gt;     1:  &lt;2:50:59am Thu Jan 17, 1991&gt;
+         .                                    .
+     
+         t N                                  2 + 10@ 5' +
+</pre>
+   <!-- [fix-ref Date Arithmetic] -->
+<p class="noindent">The <kbd>t N</kbd> (&ldquo;now&rdquo;) command pushes the current date and time on the
+stack; then we add two days, ten hours and five minutes to the date and
+time.  Other date-and-time related commands include <kbd>t J</kbd>, which
+does Julian day conversions, <kbd>t W</kbd>, which finds the beginning of
+the week in which a date form lies, and <kbd>t I</kbd>, which increments a
+date by one or several months.  See <a href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>, for more.
+
+   <p>(&bull;) <strong>Exercise 5.</strong>  How many days until the next
+Friday the 13th?  See <a href="Types-Answer-5.html#Types-Answer-5">5</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 6.</strong>  How many leap years will there be
+between now and the year 10001 A.D.?  See <a href="Types-Answer-6.html#Types-Answer-6">6</a>. (&bull;)
+
+   <p><a name="index-Slope-and-angle-of-a-line-58"></a><a name="index-Angle-and-slope-of-a-line-59"></a>An <dfn>error form</dfn> represents a mean value with an attached standard
+deviation, or error estimate.  Suppose our measurements indicate that
+a certain telephone pole is about 30 meters away, with an estimated
+error of 1 meter, and 8 meters tall, with an estimated error of 0.2
+meters.  What is the slope of a line from here to the top of the
+pole, and what is the equivalent angle in degrees?
+
+<pre class="smallexample">     1:  8 +/- 0.2    2:  8 +/- 0.2   1:  0.266 +/- 0.011   1:  14.93 +/- 0.594
+         .            1:  30 +/- 1        .                     .
+                          .
+     
+         8 p .2 &lt;RET&gt;       30 p 1          /                     I T
+</pre>
+   <p class="noindent">This means that the angle is about 15 degrees, and, assuming our
+original error estimates were valid standard deviations, there is about
+a 60% chance that the result is correct within 0.59 degrees.
+
+   <p><a name="index-Torus_002c-volume-of-60"></a>(&bull;) <strong>Exercise 7.</strong>  The volume of a torus (a donut shape) is
+<!-- @math{2 \pi^2 R r^2} -->
+&lsquo;<samp><span class="samp">2&nbsp;pi^2&nbsp;R&nbsp;r^2</span></samp>&rsquo;<!-- /@w -->
+where &lsquo;<samp><span class="samp">R</span></samp>&rsquo; is the radius of the circle that
+defines the center of the tube and &lsquo;<samp><span class="samp">r</span></samp>&rsquo; is the radius of the tube
+itself.  Suppose &lsquo;<samp><span class="samp">R</span></samp>&rsquo; is 20 cm and &lsquo;<samp><span class="samp">r</span></samp>&rsquo; is 4 cm, each known to
+within 5 percent.  What is the volume and the relative uncertainty of
+the volume?  See <a href="Types-Answer-7.html#Types-Answer-7">7</a>. (&bull;)
+
+   <p>An <dfn>interval form</dfn> represents a range of values.  While an
+error form is best for making statistical estimates, intervals give
+you exact bounds on an answer.  Suppose we additionally know that
+our telephone pole is definitely between 28 and 31 meters away,
+and that it is between 7.7 and 8.1 meters tall.
+
+<pre class="smallexample">     1:  [7.7 .. 8.1]  2:  [7.7 .. 8.1]  1:  [0.24 .. 0.28]  1:  [13.9 .. 16.1]
+         .             1:  [28 .. 31]        .                   .
+                           .
+     
+       [ 7.7 .. 8.1 ]    [ 28 .. 31 ]        /                   I T
+</pre>
+   <p class="noindent">If our bounds were correct, then the angle to the top of the pole
+is sure to lie in the range shown.
+
+   <p>The square brackets around these intervals indicate that the endpoints
+themselves are allowable values.  In other words, the distance to the
+telephone pole is between 28 and 31, <em>inclusive</em>.  You can also
+make an interval that is exclusive of its endpoints by writing
+parentheses instead of square brackets.  You can even make an interval
+which is inclusive (&ldquo;closed&rdquo;) on one end and exclusive (&ldquo;open&rdquo;) on
+the other.
+
+<pre class="smallexample">     1:  [1 .. 10)    1:  (0.1 .. 1]   2:  (0.1 .. 1]   1:  (0.2 .. 3)
+         .                .            1:  [2 .. 3)         .
+                                           .
+     
+       [ 1 .. 10 )        &amp;              [ 2 .. 3 )         *
+</pre>
+   <p class="noindent">The Calculator automatically keeps track of which end values should
+be open and which should be closed.  You can also make infinite or
+semi-infinite intervals by using &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; or &lsquo;<samp><span class="samp">inf</span></samp>&rsquo; for one
+or both endpoints.
+
+   <p>(&bull;) <strong>Exercise 8.</strong>  What answer would you expect from
+&lsquo;<samp><span class="samp">1&nbsp;/<!-- /@w --> (0&nbsp;..&nbsp;10)<!-- /@w --></span></samp>&rsquo;?  What about &lsquo;<samp><span class="samp">1&nbsp;/<!-- /@w --> (-10&nbsp;..&nbsp;0)<!-- /@w --></span></samp>&rsquo;?  What
+about &lsquo;<samp><span class="samp">1&nbsp;/<!-- /@w --> [0&nbsp;..&nbsp;10]<!-- /@w --></span></samp>&rsquo; (where the interval actually includes
+zero)?  What about &lsquo;<samp><span class="samp">1&nbsp;/<!-- /@w --> (-10&nbsp;..&nbsp;10)<!-- /@w --></span></samp>&rsquo;? 
+See <a href="Types-Answer-8.html#Types-Answer-8">8</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 9.</strong>  Two easy ways of squaring a number
+are <kbd>&lt;RET&gt; *</kbd> and <kbd>2&nbsp;^</kbd><!-- /@w -->.  Normally these produce the same
+answer.  Would you expect this still to hold true for interval forms? 
+If not, which of these will result in a larger interval? 
+See <a href="Types-Answer-9.html#Types-Answer-9">9</a>. (&bull;)
+
+   <p>A <dfn>modulo form</dfn> is used for performing arithmetic modulo <var>m</var>. 
+For example, arithmetic involving time is generally done modulo 12
+or 24 hours.
+
+<pre class="smallexample">     1:  17 mod 24    1:  3 mod 24     1:  21 mod 24    1:  9 mod 24
+         .                .                .                .
+     
+         17 M 24 &lt;RET&gt;      10 +             n                5 /
+</pre>
+   <p class="noindent">In this last step, Calc has divided by 5 modulo 24; i.e., it has found a
+new number which, when multiplied by 5 modulo 24, produces the original
+number, 21.  If <var>m</var> is prime and the divisor is not a multiple of
+<var>m</var>, it is always possible to find such a number.  For non-prime
+<var>m</var> like 24, it is only sometimes possible.
+
+<pre class="smallexample">     1:  10 mod 24    1:  16 mod 24    1:  1000000...   1:  16
+         .                .                .                .
+     
+         10 M 24 &lt;RET&gt;      100 ^            10 &lt;RET&gt; 100 ^     24 %
+</pre>
+   <p class="noindent">These two calculations get the same answer, but the first one is
+much more efficient because it avoids the huge intermediate value
+that arises in the second one.
+
+   <p><a name="index-Fermat_002c-primality-test-of-61"></a>(&bull;) <strong>Exercise 10.</strong>  A theorem of Pierre de Fermat
+says that
+<!-- @w{@math{x^{n-1} \bmod n = 1}} -->
+&lsquo;<samp><span class="samp">x^(n-1) mod n = 1</span></samp>&rsquo;
+if &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is a prime number and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is an integer less than
+&lsquo;<samp><span class="samp">n</span></samp>&rsquo;.  If &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is <em>not</em> a prime number, this will
+<em>not</em> be true for most values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  Thus we can test
+informally if a number is prime by trying this formula for several
+values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  Use this test to tell whether the following numbers
+are prime: 811749613, 15485863.  See <a href="Types-Answer-10.html#Types-Answer-10">10</a>. (&bull;)
+
+   <p>It is possible to use HMS forms as parts of error forms, intervals,
+modulo forms, or as the phase part of a polar complex number. 
+For example, the <code>calc-time</code> command pushes the current time
+of day on the stack as an HMS/modulo form.
+
+<pre class="smallexample">     1:  17@ 34' 45" mod 24@ 0' 0"     1:  6@ 22' 15" mod 24@ 0' 0"
+         .                                 .
+     
+         x time &lt;RET&gt;                        n
+</pre>
+   <p class="noindent">This calculation tells me it is six hours and 22 minutes until midnight.
+
+   <p>(&bull;) <strong>Exercise 11.</strong>  A rule of thumb is that one year
+is about
+<!-- @math{\pi \times 10^7} -->
+&lsquo;<samp><span class="samp">pi&nbsp;*&nbsp;10^7</span></samp>&rsquo;<!-- /@w -->
+seconds.  What time will it be that many seconds from right now? 
+See <a href="Types-Answer-11.html#Types-Answer-11">11</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 12.</strong>  You are preparing to order packaging
+for the CD release of the Extended Disco Version of <em>Abbey Road</em>. 
+You are told that the songs will actually be anywhere from 20 to 60
+seconds longer than the originals.  One CD can hold about 75 minutes
+of music.  Should you order single or double packages? 
+See <a href="Types-Answer-12.html#Types-Answer-12">12</a>. (&bull;)
+
+   <p>Another kind of data the Calculator can manipulate is numbers with
+<dfn>units</dfn>.  This isn't strictly a new data type; it's simply an
+application of algebraic expressions, where we use variables with
+suggestive names like &lsquo;<samp><span class="samp">cm</span></samp>&rsquo; and &lsquo;<samp><span class="samp">in</span></samp>&rsquo; to represent units
+like centimeters and inches.
+
+<pre class="smallexample">     1:  2 in        1:  5.08 cm      1:  0.027778 fath   1:  0.0508 m
+         .               .                .                   .
+     
+         ' 2in &lt;RET&gt;       u c cm &lt;RET&gt;       u c fath &lt;RET&gt;        u b
+</pre>
+   <p class="noindent">We enter the quantity &ldquo;2 inches&rdquo; (actually an algebraic expression
+which means two times the variable &lsquo;<samp><span class="samp">in</span></samp>&rsquo;), then we convert it
+first to centimeters, then to fathoms, then finally to &ldquo;base&rdquo; units,
+which in this case means meters.
+
+<pre class="smallexample">     1:  9 acre     1:  3 sqrt(acre)   1:  190.84 m   1:  190.84 m + 30 cm
+         .              .                  .              .
+     
+      ' 9 acre &lt;RET&gt;      Q                  u s            ' $+30 cm &lt;RET&gt;
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  191.14 m     1:  36536.3046 m^2    1:  365363046 cm^2
+         .                .                     .
+     
+         u s              2 ^                   u c cgs
+</pre>
+   <p class="noindent">Since units expressions are really just formulas, taking the square
+root of &lsquo;<samp><span class="samp">acre</span></samp>&rsquo; is undefined.  After all, <code>acre</code> might be an
+algebraic variable that you will someday assign a value.  We use the
+&ldquo;units-simplify&rdquo; command to simplify the expression with variables
+being interpreted as unit names.
+
+   <p>In the final step, we have converted not to a particular unit, but to a
+units system.  The &ldquo;cgs&rdquo; system uses centimeters instead of meters
+as its standard unit of length.
+
+   <p>There is a wide variety of units defined in the Calculator.
+
+<pre class="smallexample">     1:  55 mph     1:  88.5139 kph   1:   88.5139 km / hr   1:  8.201407e-8 c
+         .              .                  .                     .
+     
+      ' 55 mph &lt;RET&gt;      u c kph &lt;RET&gt;        u c km/hr &lt;RET&gt;         u c c &lt;RET&gt;
+</pre>
+   <p class="noindent">We express a speed first in miles per hour, then in kilometers per
+hour, then again using a slightly more explicit notation, then
+finally in terms of fractions of the speed of light.
+
+   <p>Temperature conversions are a bit more tricky.  There are two ways to
+interpret &ldquo;20 degrees Fahrenheit&rdquo;&mdash;it could mean an actual
+temperature, or it could mean a change in temperature.  For normal
+units there is no difference, but temperature units have an offset
+as well as a scale factor and so there must be two explicit commands
+for them.
+
+<pre class="smallexample">     1:  20 degF       1:  11.1111 degC     1:  -20:3 degC    1:  -6.666 degC
+         .                 .                    .                 .
+     
+       ' 20 degF &lt;RET&gt;       u c degC &lt;RET&gt;         U u t degC &lt;RET&gt;    c f
+</pre>
+   <p class="noindent">First we convert a change of 20 degrees Fahrenheit into an equivalent
+change in degrees Celsius (or Centigrade).  Then, we convert the
+absolute temperature 20 degrees Fahrenheit into Celsius.  Since
+this comes out as an exact fraction, we then convert to floating-point
+for easier comparison with the other result.
+
+   <p>For simple unit conversions, you can put a plain number on the stack. 
+Then <kbd>u c</kbd> and <kbd>u t</kbd> will prompt for both old and new units. 
+When you use this method, you're responsible for remembering which
+numbers are in which units:
+
+<pre class="smallexample">     1:  55         1:  88.5139              1:  8.201407e-8
+         .              .                        .
+     
+         55             u c mph &lt;RET&gt; kph &lt;RET&gt;      u c km/hr &lt;RET&gt; c &lt;RET&gt;
+</pre>
+   <p>To see a complete list of built-in units, type <kbd>u v</kbd>.  Press
+<kbd>C-x&nbsp;*&nbsp;c</kbd><!-- /@w --> again to re-enter the Calculator when you're done looking
+at the units table.
+
+   <p>(&bull;) <strong>Exercise 13.</strong>  How many seconds are there really
+in a year?  See <a href="Types-Answer-13.html#Types-Answer-13">13</a>. (&bull;)
+
+   <p><a name="index-Speed-of-light-62"></a>(&bull;) <strong>Exercise 14.</strong>  Supercomputer designs are limited by
+the speed of light (and of electricity, which is nearly as fast). 
+Suppose a computer has a 4.1 ns (nanosecond) clock cycle, and its
+cabinet is one meter across.  Is speed of light going to be a
+significant factor in its design?  See <a href="Types-Answer-14.html#Types-Answer-14">14</a>. (&bull;)
+
+   <p>(&bull;) <strong>Exercise 15.</strong>  Sam the Slug normally travels about
+five yards in an hour.  He has obtained a supply of Power Pills; each
+Power Pill he eats doubles his speed.  How many Power Pills can he
+swallow and still travel legally on most US highways? 
+See <a href="Types-Answer-15.html#Types-Answer-15">15</a>. (&bull;)
+
+   </body></html>
+

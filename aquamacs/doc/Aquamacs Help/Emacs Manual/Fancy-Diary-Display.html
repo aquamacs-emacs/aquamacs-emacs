@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Fancy Diary Display - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
+<link rel="prev" href="Diary-Display.html#Diary-Display" title="Diary Display">
+<link rel="next" href="Sexp-Diary-Entries.html#Sexp-Diary-Entries" title="Sexp Diary Entries">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Fancy-Diary-Display"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sexp-Diary-Entries.html#Sexp-Diary-Entries">Sexp Diary Entries</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary-Display.html#Diary-Display">Diary Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.15.8 Fancy Diary Display</h4>
+
+<p>The following features only work with the fancy diary display.
+
+   <p><a name="index-sorting-diary-entries-3465"></a>  You can use the normal hook <code>diary-list-entries-hook</code> to sort
+each day's diary entries by their time of day.  Here's how:
+
+   <p><a name="index-diary_002dsort_002dentries-3466"></a>
+<pre class="example">     (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
+</pre>
+   <p class="noindent">For each day, this sorts diary entries that begin with a recognizable
+time of day according to their times.  Diary entries without times come
+first within each day.  Note how the sort command is placed at the end
+of the hook list, in case earlier members of the list change the order
+of the diary entries, or add items.
+
+   <p><a name="index-diary_002dinclude_002dstring-3467"></a>  Your main diary file can include other files.  This permits a group of
+people to share a diary file for events that apply to all of them. 
+Lines in the diary file starting with <code>diary-include-string</code>:
+
+<pre class="smallexample">     #include "<var>filename</var>"
+</pre>
+   <p class="noindent">include the diary entries from the file <var>filename</var> in the fancy
+diary buffer.  The include mechanism is recursive, so that included
+files can include other files, and so on (you must be careful not to
+have a cycle of inclusions, of course).  Here is how to enable the
+include facility:
+
+   <p><a name="index-diary_002dlist_002dentries_002dhook-3468"></a><a name="index-diary_002dmark_002dentries_002dhook-3469"></a><a name="index-diary_002dinclude_002dother_002ddiary_002dfiles-3470"></a><a name="index-diary_002dmark_002dincluded_002ddiary_002dfiles-3471"></a>
+<pre class="smallexample">     (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+     (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+</pre>
+   <p>The include mechanism works only with the fancy diary display, because
+simple diary display shows the entries directly from your diary file.
+
+   </body></html>
+

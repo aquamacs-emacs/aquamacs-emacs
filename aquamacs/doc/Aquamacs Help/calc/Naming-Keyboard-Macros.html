@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Naming Keyboard Macros - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link rel="prev" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
+<link rel="next" href="Conditionals-in-Macros.html#Conditionals-in-Macros" title="Conditionals in Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Naming-Keyboard-Macros"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals in Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.2.1 Naming Keyboard Macros</h4>
+
+<p class="noindent"><a name="index-Z-K-2268"></a><a name="index-calc_002duser_002ddefine_002dkbd_002dmacro-2269"></a>Once you have defined a keyboard macro, you can bind it to a <kbd>z</kbd>
+key sequence with the <kbd>Z K</kbd> (<code>calc-user-define-kbd-macro</code>) command. 
+This command prompts first for a key, then for a command name.  For
+example, if you type <kbd>C-x ( n &lt;TAB&gt; n &lt;TAB&gt; C-x )</kbd> you will
+define a keyboard macro which negates the top two numbers on the stack
+(&lt;TAB&gt; swaps the top two stack elements).  Now you can type
+<kbd>Z K n &lt;RET&gt;</kbd> to define this keyboard macro onto the <kbd>z n</kbd> key
+sequence.  The default command name (if you answer the second prompt with
+just the &lt;RET&gt; key as in this example) will be something like
+&lsquo;<samp><span class="samp">calc-User-n</span></samp>&rsquo;.  The keyboard macro will now be available as both
+<kbd>z n</kbd> and <kbd>M-x calc-User-n</kbd>.  You can backspace and enter a more
+descriptive command name if you wish.
+
+   <p>Macros defined by <kbd>Z K</kbd> act like single commands; they are executed
+in the same way as by the <kbd>X</kbd> key.  If you wish to define the macro
+as a standard no-frills Emacs macro (to be executed as if by <kbd>C-x e</kbd>),
+give a negative prefix argument to <kbd>Z K</kbd>.
+
+   <p>Once you have bound your keyboard macro to a key, you can use
+<kbd>Z P</kbd> to register it permanently with Emacs.  See <a href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>.
+
+   <p><a name="index-Keyboard-macros_002c-editing-2270"></a>The <kbd>Z E</kbd> (<code>calc-user-define-edit</code>) command on a key that has
+been defined by a keyboard macro tries to use the <code>edmacro</code> package
+edit the macro.  Type <kbd>C-c C-c</kbd> to finish editing and update
+the definition stored on the key, or, to cancel the edit, kill the
+buffer with <kbd>C-x k</kbd>. 
+The special characters <code>RET</code>, <code>LFD</code>, <code>TAB</code>, <code>SPC</code>,
+<code>DEL</code>, and <code>NUL</code> must be entered as these three character
+sequences, written in all uppercase, as must the prefixes <code>C-</code> and
+<code>M-</code>.  Spaces and line breaks are ignored.  Other characters are
+copied verbatim into the keyboard macro.  Basically, the notation is the
+same as is used in all of this manual's examples, except that the manual
+takes some liberties with spaces: When we say <kbd>' [1 2 3] &lt;RET&gt;</kbd>,
+we take it for granted that it is clear we really mean
+<kbd>' [1 &lt;SPC&gt; 2 &lt;SPC&gt; 3] &lt;RET&gt;</kbd>.
+
+   <p><a name="index-C_002dx-_002a-m-2271"></a><a name="index-read_002dkbd_002dmacro-2272"></a>The <kbd>C-x * m</kbd> (<code>read-kbd-macro</code>) command reads an Emacs &ldquo;region&rdquo;
+of spelled-out keystrokes and defines it as the current keyboard macro. 
+It is a convenient way to define a keyboard macro that has been stored
+in a file, or to define a macro without executing it at the same time.
+
+   </body></html>
+

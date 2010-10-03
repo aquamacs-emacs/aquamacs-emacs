@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Hooks - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variables.html#Variables" title="Variables">
+<link rel="prev" href="Examining.html#Examining" title="Examining">
+<link rel="next" href="Locals.html#Locals" title="Locals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Hooks"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Locals.html#Locals">Locals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Examining.html#Examining">Examining</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">57.3.2 Hooks</h4>
+
+<p><a name="index-hook-3981"></a><a name="index-running-a-hook-3982"></a>
+  <dfn>Hooks</dfn> are an important mechanism for customizing Emacs.  A
+hook is a Lisp variable which holds a list of functions, to be called
+on some well-defined occasion.  (This is called <dfn>running the
+hook</dfn>.)  The individual functions in the list are called the <dfn>hook
+functions</dfn> of the hook.  With rare exceptions, hooks in Emacs are
+empty when Emacs starts up, so the only hook functions in any given
+hook are the ones you explicitly put there as customization.
+
+   <p>Most major modes run one or more <dfn>mode hooks</dfn> as the last step
+of initialization.  This makes it easy for you to customize the
+behavior of the mode, by setting up a hook function to override the
+local variable assignments already made by the mode.  But hooks are
+also used in other contexts.  For example, the hook
+<code>kill-emacs-hook</code> runs just before quitting the Emacs job
+(see <a href="Exiting.html#Exiting">Exiting</a>).
+
+   <p><a name="index-normal-hook-3983"></a>  Most Emacs hooks are <dfn>normal hooks</dfn>.  This means that running the
+hook operates by calling all the hook functions, unconditionally, with
+no arguments.  We have made an effort to keep most hooks normal so that
+you can use them in a uniform way.  Every variable in Emacs whose name
+ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo; is a normal hook.
+
+   <p><a name="index-abnormal-hook-3984"></a>  There are also a few <dfn>abnormal hooks</dfn>.  These variables' names end
+in &lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;, instead of &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;.  What
+makes these hooks abnormal is that there is something peculiar about the
+way its functions are called&mdash;perhaps they are given arguments, or
+perhaps the values they return are used in some way.  For example,
+<code>find-file-not-found-functions</code> (see <a href="Visiting.html#Visiting">Visiting</a>) is abnormal because
+as soon as one hook function returns a non-<code>nil</code> value, the rest
+are not called at all.  The documentation of each abnormal hook variable
+explains in detail what is peculiar about it.
+
+   <p><a name="index-add_002dhook-3985"></a>  You can set a hook variable with <code>setq</code> like any other Lisp
+variable, but the recommended way to add a hook function to a hook
+(either normal or abnormal) is by calling <code>add-hook</code>. 
+See <a href="../elisp/Hooks.html#Hooks">Hooks</a>.
+
+   <p>For example, here's how to set up a hook to turn on Auto Fill mode
+when entering Text mode and other modes based on Text mode:
+
+<pre class="example">     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+</pre>
+   <p>The next example shows how to use a hook to customize the indentation
+of C code.  (People often have strong personal preferences for one
+format compared to another.)  Here the hook function is an anonymous
+lambda expression.
+
+<pre class="example">     (setq my-c-style
+       '((c-comment-only-line-offset . 4)
+         (c-cleanup-list . (scope-operator
+                            empty-defun-braces
+                            defun-close-semi))
+         (c-offsets-alist . ((arglist-close . c-lineup-arglist)
+                             (substatement-open . 0)))))
+     
+     (add-hook 'c-mode-common-hook
+       '(lambda ()
+          (c-add-style "my-style" my-c-style t)))
+</pre>
+   <p>It is best to design your hook functions so that the order in which
+they are executed does not matter.  Any dependence on the order is
+&ldquo;asking for trouble.&rdquo;  However, the order is predictable: the most
+recently added hook functions are executed first.
+
+   <p><a name="index-remove_002dhook-3986"></a>  If you play with adding various different versions of a hook
+function by calling <code>add-hook</code> over and over, remember that all
+the versions you added will remain in the hook variable together.  You
+can clear out individual functions by calling <code>remove-hook</code>, or
+do <code>(setq </code><var>hook-variable</var><code> nil)</code> to remove everything.
+
+   </body></html>
+

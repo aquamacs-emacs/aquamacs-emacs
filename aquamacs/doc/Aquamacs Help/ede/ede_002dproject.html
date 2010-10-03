@@ -1,0 +1,370 @@
+<html lang="en">
+<head>
+<title>ede-project - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Project.html#Project" title="Project">
+<link rel="prev" href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder" title="ede-project-placeholder">
+<link rel="next" href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject" title="ede-cpp-root-project">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-project"></a>
+<a name="ede_002dproject"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject">ede-cpp-root-project</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Project.html#Project">Project</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.5.2 ede-project</h4>
+
+<p><a name="index-ede_002dproject-10"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-speedbar</code><dd>
+               <dl>
+<dt><code>eieio-speedbar-directory-button</code><dd>
+                    <dl>
+<dt><code>See&nbsp;<a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code><dd>
+                         <dl>
+<dt><code>ede-project</code><dd>
+                              <dl>
+<dt>Children:<dd>See&nbsp;<a href="ede_002dcpp_002droot_002dproject.html#ede_002dcpp_002droot_002dproject">ede-cpp-root-project</a>,<!-- /@w --> ede-emacs-project,<!-- /@w --> ede-linux-project,<!-- /@w --> ede-maven-project,<!-- /@w --> See&nbsp;<a href="ede_002dsimple_002dproject.html#ede_002dsimple_002dproject">ede-simple-project</a>,<!-- /@w --> See&nbsp;<a href="ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject">ede-simple-base-project</a>,<!-- /@w --> See&nbsp;<a href="ede_002dproj_002dproject.html#ede_002dproj_002dproject">ede-proj-project</a>,<!-- /@w --> See&nbsp;<a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile">project-am-makefile</a>,<!-- /@w --> See&nbsp;<a href="ede_002dstep_002dproject.html#ede_002dstep_002dproject">ede-step-project</a>.<!-- /@w -->
+</dl>
+                         </dl>
+                    </dl>
+               </dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:targets</code><dd>Type: <code>list</code>
+
+          <p>List of top level targets in this project.
+
+          <br><dt><code>:tool-cache</code><dd>Type: <code>list</code>
+
+          <p>List of tool cache configurations in this project. 
+This allows any tool to create, manage, and persist project-specific settings.
+
+          <br><dt><code>:web-site-url</code><dd>Type: <code>string</code> <br>
+
+          <p>URL to this projects web site. 
+This is a URL to be sent to a web site for documentation.
+
+          <br><dt><code>:web-site-directory <br></code><dd>
+A directory where web pages can be found by Emacs. 
+For remote locations use a path compatible with ange-ftp or EFS. 
+You can also use TRAMP for use with rcp &amp; scp.
+
+          <br><dt><code>:web-site-file <br></code><dd>
+A file which contains the home page for this project. 
+This file can be relative to slot <code>web-site-directory</code>. 
+This can be a local file, use ange-ftp, EFS, or TRAMP.
+
+          <br><dt><code>:ftp-site</code><dd>Type: <code>string</code> <br>
+
+          <p>FTP site where this project's distribution can be found. 
+This FTP site should be in Emacs form, as needed by <code>ange-ftp</code>, but can
+also be of a form used by TRAMP for use with scp, or rcp.
+
+          <br><dt><code>:ftp-upload-site</code><dd>Type: <code>string</code> <br>
+
+          <p>FTP Site to upload new distributions to. 
+This FTP site should be in Emacs form as needed by <code>ange-ftp</code>. 
+If this slot is <code>nil</code>, then use <code>ftp-site</code> instead.
+
+          <br><dt><code>:configurations</code><dd>Type: <code>list</code> <br>
+Default Value: <code>("debug" "release")</code>
+
+          <p>List of available configuration types. 
+Individual target/project types can form associations between a configuration,
+and target specific elements such as build variables.
+
+          <br><dt><code>:configuration-default <br></code><dd>Default Value: <code>"debug"</code>
+
+          <p>The default configuration.
+
+          <br><dt><code>:local-variables <br></code><dd>Default Value: <code>nil</code>
+
+          <p>Project local variables
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.5.2.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>ede-preprocessor-map</b><var> :AFTER this<a name="index-ede_002dpreprocessor_002dmap-11"></a></var><br>
+<blockquote><p>Get the pre-processor map for project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-subproject-relative-path</b><var> :AFTER proj &amp;optional parent-in<a name="index-ede_002dsubproject_002drelative_002dpath-12"></a></var><br>
+<blockquote><p>Get a path name for <var>PROJ</var> which is relative to the parent project. 
+If PARENT is specified, then be relative to the PARENT project. 
+Specifying PARENT is useful for sub-sub projects relative to the root project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-description</b><var> :AFTER obj<a name="index-eieio_002dspeedbar_002ddescription-13"></a></var><br>
+<blockquote><p>Provide a speedbar description for <var>OBJ</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-any-target-p</b><var> :AFTER this proc<a name="index-ede_002dmap_002dany_002dtarget_002dp-14"></a></var><br>
+<blockquote><p>For project <var>THIS</var>, map <var>PROC</var> to all targets and return if any non-nil. 
+Return the first non-<code>nil</code> value returned by <var>PROC</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-subprojects</b><var> :AFTER this proc<a name="index-ede_002dmap_002dsubprojects-15"></a></var><br>
+<blockquote><p>For object <var>THIS</var>, execute <var>PROC</var> on all direct subprojects. 
+This function does not apply <var>PROC</var> to sub-sub projects. 
+See also <dfn>ede-map-all-subprojects</dfn>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-convert-path</b><var> :AFTER this path<a name="index-ede_002dconvert_002dpath-16"></a></var><br>
+<blockquote><p>Convert path in a standard way for a given project. 
+Default to making it project relative. 
+Argument <var>THIS</var> is the project to convert <var>PATH</var> to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-name</b><var> :AFTER this<a name="index-ede_002dname-17"></a></var><br>
+<blockquote><p>Return a short-name for <var>THIS</var> project file. 
+Do this by extracting the lowest directory name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-set-project-variables</b><var> :AFTER project &amp;optional buffer<a name="index-ede_002dset_002dproject_002dvariables-18"></a></var><br>
+<blockquote><p>Set variables local to <var>PROJECT</var> in <var>BUFFER</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-derive-line-path</b><var> :AFTER obj &amp;optional depth<a name="index-eieio_002dspeedbar_002dderive_002dline_002dpath-19"></a></var><br>
+<blockquote><p>Return the path to <var>OBJ</var>. 
+Optional <var>DEPTH</var> is the depth we start at. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-all-subprojects</b><var> :AFTER this allproc<a name="index-ede_002dmap_002dall_002dsubprojects-20"></a></var><br>
+<blockquote><p>For object <var>THIS</var>, execute PROC on <var>THIS</var> and  all subprojects. 
+This function also applies PROC to sub-sub projects. 
+See also <dfn>ede-map-subprojects</dfn>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-update-version</b><var> :AFTER ot<a name="index-project_002dupdate_002dversion-21"></a></var><br>
+<blockquote><p>The <code>:version</code> of the project <var>OT</var> has been updated. 
+Handle saving, or other detail. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-header-file</b><var> :AFTER this buffer<a name="index-ede_002dbuffer_002dheader_002dfile-22"></a></var><br>
+<blockquote><p>Return <code>nil</code>, projects don't have header files. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-documentation-files</b><var> :AFTER this buffer<a name="index-ede_002dbuffer_002ddocumentation_002dfiles-23"></a></var><br>
+<blockquote><p>Return all documentation in project <var>THIS</var> based on <var>BUFFER</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-targets</b><var> :AFTER this proc<a name="index-ede_002dmap_002dtargets-24"></a></var><br>
+<blockquote><p>For object <var>THIS</var>, execute <var>PROC</var> on all targets. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-mine</b><var> :AFTER this buffer<a name="index-ede_002dbuffer_002dmine-25"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if object <var>THIS</var> lays claim to the file in <var>BUFFER</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-keybindings</b><var> :BEFORE this<a name="index-ede_002dobject_002dkeybindings-26"></a></var><br>
+<blockquote><p>Retrieves the slot <code>keybindings</code> from an object of class <code>ede-project</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-description</b><var> :AFTER this<a name="index-ede_002ddescription-27"></a></var><br>
+<blockquote><p>Return a description suitable for the minibuffer about <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-object-children</b><var> :AFTER this<a name="index-eieio_002dspeedbar_002dobject_002dchildren-28"></a></var><br>
+<blockquote><p>Return the list of speedbar display children for <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-make-dist</b><var> :AFTER this<a name="index-project_002dmake_002ddist-29"></a></var><br>
+<blockquote><p>Build a distribution for the project based on <var>THIS</var> project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-system-include-path</b><var> :AFTER this<a name="index-ede_002dsystem_002dinclude_002dpath-30"></a></var><br>
+<blockquote><p>Get the system include path used by project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-new-target-custom</b><var> :AFTER proj<a name="index-project_002dnew_002dtarget_002dcustom-31"></a></var><br>
+<blockquote><p>Create a new target.  It is up to the project <var>PROJ</var> to get the name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-subproject-p</b><var> :AFTER proj<a name="index-ede_002dsubproject_002dp-32"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>PROJ</var> is a sub project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-expand-filename</b><var> :AFTER this filename &amp;optional force<a name="index-ede_002dexpand_002dfilename-33"></a></var><br>
+<blockquote><p>Return a fully qualified file name based on project <var>THIS</var>. 
+<var>FILENAME</var> should be just a filename which occurs in a directory controlled
+by this project. 
+Optional argument <var>FORCE</var> forces the default filename to be provided even if it
+doesn't exist. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-menu-items-build</b><var> :AFTER obj &amp;optional current<a name="index-ede_002dmenu_002ditems_002dbuild-34"></a></var><br>
+<blockquote><p>Return a list of menu items for building project <var>OBJ</var>. 
+If optional argument <var>CURRENT</var> is non-<code>nil</code>, return sub-menu code. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-update-version-in-source</b><var> :AFTER this version<a name="index-ede_002dupdate_002dversion_002din_002dsource-35"></a></var><br>
+<blockquote><p>Change occurrences of a version string in sources. 
+In project <var>THIS</var>, cycle over all targets to give them a chance to set
+their sources to <var>VERSION</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-new-target</b><var> :AFTER proj &amp;rest args<a name="index-project_002dnew_002dtarget-36"></a></var><br>
+<blockquote><p>Create a new target.  It is up to the project <var>PROJ</var> to get the name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-compile-project</b><var> :AFTER obj &amp;optional command<a name="index-project_002dcompile_002dproject-37"></a></var><br>
+<blockquote><p>Compile the entire current project <var>OBJ</var>. 
+Argument <var>COMMAND</var> is the command to use when compiling. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-object-buttonname</b><var> :AFTER object<a name="index-eieio_002dspeedbar_002dobject_002dbuttonname-38"></a></var><br>
+<blockquote><p>Return a string to use as a speedbar button for <var>OBJECT</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-project-buffers</b><var> :AFTER this proc<a name="index-ede_002dmap_002dproject_002dbuffers-39"></a></var><br>
+<blockquote><p>For <var>THIS</var>, execute <var>PROC</var> on all buffers belonging to <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-expand-filename-impl</b><var> :AFTER this filename &amp;optional force<a name="index-ede_002dexpand_002dfilename_002dimpl-40"></a></var><br>
+<blockquote><p>Return a fully qualified file name based on project <var>THIS</var>. 
+<var>FILENAME</var> should be just a filename which occurs in a directory controlled
+by this project. 
+Optional argument <var>FORCE</var> forces the default filename to be provided even if it
+doesn't exist. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-done-customizing</b><var> :AFTER proj<a name="index-eieio_002ddone_002dcustomizing-41"></a></var><br>
+<blockquote><p>Call this when a user finishes customizing <var>PROJ</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-html-documentation</b><var> :AFTER this<a name="index-ede_002dhtml_002ddocumentation-42"></a></var><br>
+<blockquote><p>Return a list of HTML files provided by project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-documentation</b><var> :AFTER this<a name="index-ede_002ddocumentation-43"></a></var><br>
+<blockquote><p>Return a list of files that provides documentation. 
+Documentation is not for object <var>THIS</var>, but is provided by <var>THIS</var> for other
+files in the project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-interactive-select-target</b><var> :AFTER this prompt<a name="index-project_002dinteractive_002dselect_002dtarget-44"></a></var><br>
+<blockquote><p>Interactively query for a target that exists in project <var>THIS</var>. 
+Argument <var>PROMPT</var> is the prompt to use when querying the user for a target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-target-in-project-p</b><var> :AFTER proj target<a name="index-ede_002dtarget_002din_002dproject_002dp-45"></a></var><br>
+<blockquote><p>Is <var>PROJ</var> the parent of <var>TARGET</var>? 
+If <var>TARGET</var> belongs to a subproject, return that project file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-find-target</b><var> :AFTER proj buffer<a name="index-ede_002dfind_002dtarget-46"></a></var><br>
+<blockquote><p>Fetch the target in <var>PROJ</var> belonging to <var>BUFFER</var> or nil. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-add-subproject</b><var> :AFTER proj-a proj-b<a name="index-ede_002dadd_002dsubproject-47"></a></var><br>
+<blockquote><p>Add into <var>PROJ-A</var>, the subproject <var>PROJ-B</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-commit-project</b><var> :AFTER proj<a name="index-ede_002dcommit_002dproject-48"></a></var><br>
+<blockquote><p>Commit any change to <var>PROJ</var> to its file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-dist-files</b><var> :AFTER this<a name="index-project_002ddist_002dfiles-49"></a></var><br>
+<blockquote><p>Return a list of files that constitutes a distribution of <var>THIS</var> project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-menu</b><var> :BEFORE this<a name="index-ede_002dobject_002dmenu-50"></a></var><br>
+<blockquote><p>Retrieves the slot <code>menu</code> from an object of class <code>ede-project</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-commit-local-variables</b><var> :AFTER proj<a name="index-ede_002dcommit_002dlocal_002dvariables-51"></a></var><br>
+<blockquote><p>Commit change to local variables in <var>PROJ</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

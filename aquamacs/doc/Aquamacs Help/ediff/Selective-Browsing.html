@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Selective Browsing - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Window-and-Frame-Configuration.html#Window-and-Frame-Configuration" title="Window and Frame Configuration">
+<link rel="next" href="Highlighting-Difference-Regions.html#Highlighting-Difference-Regions" title="Highlighting Difference Regions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Selective-Browsing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Highlighting-Difference-Regions.html#Highlighting-Difference-Regions">Highlighting Difference Regions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-and-Frame-Configuration.html#Window-and-Frame-Configuration">Window and Frame Configuration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.4 Selective Browsing</h3>
+
+<p>Sometimes it is convenient to be able to step through only some difference
+regions, those that match certain regular expressions, and to ignore all
+others.  On other occasions, you may want to ignore difference regions that
+match some regular expressions, and to look only at the rest.
+
+   <p>The commands <kbd>#f</kbd> and <kbd>#h</kbd> let you do precisely this.
+
+   <p>Typing <kbd>#f</kbd> lets you specify regular expressions that match difference
+regions you want to focus on. 
+We shall call these regular expressions <var>regexp-A</var>, <var>regexp-B</var> and
+<var>regexp-C</var>. 
+Ediff will then start stepping through only those difference regions
+where the region in buffer A matches <var>regexp-A</var> and/or the region in
+buffer B matches <var>regexp-B</var>, etc.  Whether `and' or `or' will be used
+depends on how you respond to a question.
+
+   <p>When scanning difference regions for the aforesaid regular expressions,
+Ediff narrows the buffers to those regions.  This means that you can use
+the expressions <kbd>\`</kbd> and <kbd>\'</kbd> to tie search to the beginning or end
+of the difference regions.
+
+   <p>On the other hand, typing <kbd>#h</kbd> lets you specify (hide) uninteresting
+regions.  That is, if a difference region in buffer A matches
+<var>regexp-A</var>, the corresponding region in buffer B matches <var>regexp-B</var>
+and (if applicable) buffer C's region matches <var>regexp-C</var>, then the
+region will be ignored by the commands <kbd>n</kbd>/&lt;SPC&gt;
+(<code>ediff-next-difference</code>) and <kbd>p</kbd>/&lt;DEL&gt;
+(<code>ediff-previous-difference</code>) commands.
+
+   <p>Typing <kbd>#f</kbd> and <kbd>#h</kbd> toggles selective browsing on and off.
+
+   <p>Note that selective browsing affects only <code>ediff-next-difference</code>
+and <code>ediff-previous-difference</code>, i.e., the commands
+<kbd>n</kbd>/&lt;SPC&gt; and <kbd>p</kbd>/&lt;DEL&gt;.  <kbd>#f</kbd> and <kbd>#h</kbd> do not
+change the position of the point in the buffers.  And you can still jump
+directly (using <kbd>j</kbd>)  to any numbered
+difference.
+
+   <p>Users can supply their own functions to specify how Ediff should do
+selective browsing.  To change the default Ediff function, add a function to
+<code>ediff-load-hook</code> which will do the following assignments:
+
+<pre class="example">     (setq ediff-hide-regexp-matches-function 'your-hide-function)
+     (setq ediff-focus-on-regexp-matches-function 'your-focus-function)
+</pre>
+   <p><strong>Useful hint</strong>: To specify a regexp that matches everything, don't
+simply type &lt;RET&gt; in response to a prompt.  Typing &lt;RET&gt; tells Ediff
+to accept the default value, which may not be what you want.  Instead, you
+should enter something like &lt;^&gt; or &lt;$&gt;.  These match every
+line.
+
+   <p>You can use the status command, <kbd>i</kbd>, to find out whether
+selective browsing is currently in effect.
+
+   <p>The regular expressions you specified are kept in the local variables
+<code>ediff-regexp-focus-A</code>, <code>ediff-regexp-focus-B</code>,
+<code>ediff-regexp-focus-C</code>, <code>ediff-regexp-hide-A</code>,
+<code>ediff-regexp-hide-B</code>, <code>ediff-regexp-hide-C</code>.  Their default value
+is the empty string (i.e., nothing is hidden or focused on).  To change the
+default, set these variables in <samp><span class="file">.emacs</span></samp> using <code>setq-default</code>.
+
+   <p>In addition to the ability to ignore regions that match regular
+expressions, Ediff can be ordered to start skipping over certain
+&ldquo;uninteresting&rdquo; difference regions.  This is controlled by the following
+variable:
+
+     <dl>
+<dt><code>ediff-ignore-similar-regions</code><dd><a name="index-ediff_002dignore_002dsimilar_002dregions-162"></a>If <code>t</code>, causes Ediff to skip over "uninteresting" difference regions,
+which are the regions where the variants differ only in the amount of the
+white space and newlines.  This feature can be toggled on/off interactively,
+via the command <kbd>##</kbd>. 
+</dl>
+
+   <p><strong>Please note:</strong> in order for this feature to work, auto-refining of
+difference regions must be on, since otherwise Ediff won't know if there
+are fine differences between regions.  On devices where Emacs can display
+faces, auto-refining is a default, but it is not turned on by default on
+text-only terminals.  In that case, you must explicitly turn auto-refining
+on (such as, by typing <kbd>@</kbd>).
+
+   <p><strong>Reassurance:</strong> If many such uninteresting regions appear in a row,
+Ediff may take a long time to skip over them because it has to compute fine
+differences of all intermediate regions.  This delay does not indicate any
+problem.
+
+   <p><a name="index-ediff_002dignore_002dcase_002doption-163"></a><a name="index-ediff_002dignore_002dcase_002doption3-164"></a><a name="index-ediff_002dignore_002dcase-165"></a>Finally, Ediff can be told to ignore the case of the letters. This behavior
+can be toggled with <kbd>#c</kbd> and it is controlled with three variables:
+<code>ediff-ignore-case-option</code>, <code>ediff-ignore-case-option3</code>, and
+<code>ediff-ignore-case</code>.
+
+   <p>The variable <code>ediff-ignore-case-option</code> specifies the option to pass
+to the diff program for comparing two files or buffers. For GNU
+<code>diff</code>, this option is <code>"-i"</code>. The variable
+<code>ediff-ignore-case-option3</code> specifies the option to pass to the
+<code>diff3</code> program in order to make it case-insensitive. GNU <code>diff3</code>
+does not have such an option, so when merging or comparing three files with
+this program, ignoring the letter case is not supported.
+
+   <p>The variable <code>ediff-ignore-case</code> controls whether Ediff starts out by
+ignoring letter case or not. It can be set in <samp><span class="file">.emacs</span></samp> using
+<code>setq-default</code>.
+
+   <p>When case sensitivity is toggled, all difference
+regions are recomputed.
+
+   </body></html>
+

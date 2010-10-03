@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Multiple Solutions - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Solving-Equations.html#Solving-Equations" title="Solving Equations">
+<link rel="prev" href="Solving-Equations.html#Solving-Equations" title="Solving Equations">
+<link rel="next" href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations" title="Solving Systems of Equations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Multiple-Solutions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">Solving Systems of Equations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Solving-Equations.html#Solving-Equations">Solving Equations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Solving-Equations.html#Solving-Equations">Solving Equations</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.6.1 Multiple Solutions</h4>
+
+<p class="noindent"><a name="index-H-a-S-1757"></a><a name="index-fsolve-1758"></a>Some equations have more than one solution.  The Hyperbolic flag
+(<code>H a S</code>) [<code>fsolve</code>] tells the solver to report the fully
+general family of solutions.  It will invent variables <code>n1</code>,
+<code>n2</code>, <small class="dots">...</small>, which represent independent arbitrary integers, and
+<code>s1</code>, <code>s2</code>, <small class="dots">...</small>, which represent independent arbitrary
+signs (either <i>+1</i> or <i>-1</i>).  If you don't use the Hyperbolic
+flag, Calc will use zero in place of all arbitrary integers, and plus
+one in place of all arbitrary signs.  Note that variables like <code>n1</code>
+and <code>s1</code> are not given any special interpretation in Calc except by
+the equation solver itself.  As usual, you can use the <kbd>s&nbsp;l</kbd><!-- /@w -->
+(<code>calc-let</code>) command to obtain solutions for various actual values
+of these variables.
+
+   <p>For example, <kbd>' x^2 = y &lt;RET&gt; H a S x &lt;RET&gt;</kbd> solves to
+get &lsquo;<samp><span class="samp">x = s1 sqrt(y)</span></samp>&rsquo;, indicating that the two solutions to the
+equation are &lsquo;<samp><span class="samp">sqrt(y)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-sqrt(y)</span></samp>&rsquo;.  Another way to
+think about it is that the square-root operation is really a
+two-valued function; since every Calc function must return a
+single result, <code>sqrt</code> chooses to return the positive result. 
+Then <kbd>H a S</kbd> doctors this result using <code>s1</code> to indicate
+the full set of possible values of the mathematical square-root.
+
+   <p>There is a similar phenomenon going the other direction:  Suppose
+we solve &lsquo;<samp><span class="samp">sqrt(y) = x</span></samp>&rsquo; for <code>y</code>.  Calc squares both sides
+to get &lsquo;<samp><span class="samp">y = x^2</span></samp>&rsquo;.  This is correct, except that it introduces
+some dubious solutions.  Consider solving &lsquo;<samp><span class="samp">sqrt(y) = -3</span></samp>&rsquo;:
+Calc will report &lsquo;<samp><span class="samp">y = 9</span></samp>&rsquo; as a valid solution, which is true
+in the mathematical sense of square-root, but false (there is no
+solution) for the actual Calc positive-valued <code>sqrt</code>.  This
+happens for both <kbd>a S</kbd> and <kbd>H a S</kbd>.
+
+   <p><a name="index-g_t_0040code_007bGenCount_007d-variable-1759"></a><a name="index-GenCount-1760"></a><a name="index-an-1761"></a><a name="index-as-1762"></a>If you store a positive integer in the Calc variable <code>GenCount</code>,
+then Calc will generate formulas of the form &lsquo;<samp><span class="samp">as(</span><var>n</var><span class="samp">)</span></samp>&rsquo; for
+arbitrary signs, and &lsquo;<samp><span class="samp">an(</span><var>n</var><span class="samp">)</span></samp>&rsquo; for arbitrary integers,
+where <var>n</var> represents successive values taken by incrementing
+<code>GenCount</code> by one.  While the normal arbitrary sign and
+integer symbols start over at <code>s1</code> and <code>n1</code> with each
+new Calc command, the <code>GenCount</code> approach will give each
+arbitrary value a name that is unique throughout the entire Calc
+session.  Also, the arbitrary values are function calls instead
+of variables, which is advantageous in some cases.  For example,
+you can make a rewrite rule that recognizes all arbitrary signs
+using a pattern like &lsquo;<samp><span class="samp">as(n)</span></samp>&rsquo;.  The <kbd>s l</kbd> command only works
+on variables, but you can use the <kbd>a b</kbd> (<code>calc-substitute</code>)
+command to substitute actual values for function calls like &lsquo;<samp><span class="samp">as(3)</span></samp>&rsquo;.
+
+   <p>The <kbd>s G</kbd> (<code>calc-edit-GenCount</code>) command is a convenient
+way to create or edit this variable.  Press <kbd>C-c C-c</kbd> to finish.
+
+   <p>If you have not stored a value in <code>GenCount</code>, or if the value
+in that variable is not a positive integer, the regular
+<code>s1</code>/<code>n1</code> notation is used.
+
+   <p><a name="index-I-a-S-1763"></a><a name="index-H-I-a-S-1764"></a><a name="index-finv-1765"></a><a name="index-ffinv-1766"></a>With the Inverse flag, <kbd>I a S</kbd> [<code>finv</code>] treats the expression
+on top of the stack as a function of the specified variable and solves
+to find the inverse function, written in terms of the same variable. 
+For example, <kbd>I a S x</kbd> inverts &lsquo;<samp><span class="samp">2x + 6</span></samp>&rsquo; to &lsquo;<samp><span class="samp">x/2 - 3</span></samp>&rsquo;. 
+You can use both Inverse and Hyperbolic [<code>ffinv</code>] to obtain a
+fully general inverse, as described above.
+
+   <p><a name="index-a-P-1767"></a><a name="index-calc_002dpoly_002droots-1768"></a><a name="index-roots-1769"></a>Some equations, specifically polynomials, have a known, finite number
+of solutions.  The <kbd>a P</kbd> (<code>calc-poly-roots</code>) [<code>roots</code>]
+command uses <kbd>H a S</kbd> to solve an equation in general form, then, for
+all arbitrary-sign variables like <code>s1</code>, and all arbitrary-integer
+variables like <code>n1</code> for which <code>n1</code> only usefully varies over
+a finite range, it expands these variables out to all their possible
+values.  The results are collected into a vector, which is returned. 
+For example, &lsquo;<samp><span class="samp">roots(x^4 = 1, x)</span></samp>&rsquo; returns the four solutions
+&lsquo;<samp><span class="samp">[1, -1, (0, 1), (0, -1)]</span></samp>&rsquo;.  Generally an <var>n</var>th degree
+polynomial will always have <var>n</var> roots on the complex plane. 
+(If you have given a <code>real</code> declaration for the solution
+variable, then only the real-valued solutions, if any, will be
+reported; see <a href="Declarations.html#Declarations">Declarations</a>.)
+
+   <p>Note that because <kbd>a P</kbd> uses <kbd>H a S</kbd>, it is able to deliver
+symbolic solutions if the polynomial has symbolic coefficients.  Also
+note that Calc's solver is not able to get exact symbolic solutions
+to all polynomials.  Polynomials containing powers up to &lsquo;<samp><span class="samp">x^4</span></samp>&rsquo;
+can always be solved exactly; polynomials of higher degree sometimes
+can be:  &lsquo;<samp><span class="samp">x^6 + x^3 + 1</span></samp>&rsquo; is converted to &lsquo;<samp><span class="samp">(x^3)^2 + (x^3) + 1</span></samp>&rsquo;,
+which can be solved for &lsquo;<samp><span class="samp">x^3</span></samp>&rsquo; using the quadratic equation, and then
+for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; by taking cube roots.  But in many cases, like
+&lsquo;<samp><span class="samp">x^6 + x + 1</span></samp>&rsquo;, Calc does not know how to rewrite the polynomial
+into a form it can solve.  The <kbd>a P</kbd> command can still deliver a
+list of numerical roots, however, provided that Symbolic mode (<kbd>m s</kbd>)
+is not turned on.  (If you work with Symbolic mode on, recall that the
+<kbd>N</kbd> (<code>calc-eval-num</code>) key is a handy way to reevaluate the
+formula on the stack with Symbolic mode temporarily off.)  Naturally,
+<kbd>a P</kbd> can only provide numerical roots if the polynomial coefficients
+are all numbers (real or complex).
+
+   </body></html>
+

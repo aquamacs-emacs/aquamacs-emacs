@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Installation - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Summary.html#Summary" title="Summary">
+<link rel="next" href="Activation.html#Activation" title="Activation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Installation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Activation.html#Activation">Activation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Summary.html#Summary">Summary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">1.2 Installation</h3>
+
+<p><a name="index-installation-5"></a><a name="index-XEmacs-6"></a>
+<b>Important:</b> <i>If you are using a version of Org that is part of the Emacs
+distribution or an XEmacs package, please skip this section and go directly
+to <a href="Activation.html#Activation">Activation</a>.</i>
+
+   <p>If you have downloaded Org from the Web, either as a distribution <samp><span class="file">.zip</span></samp>
+or <samp><span class="file">.tar</span></samp> file, or as a Git archive, you must take the following steps
+to install it: go into the unpacked Org distribution directory and edit the
+top section of the file <samp><span class="file">Makefile</span></samp>.  You must set the name of the Emacs
+binary (likely either <samp><span class="file">emacs</span></samp> or <samp><span class="file">xemacs</span></samp>), and the paths to the
+directories where local Lisp and Info files are kept.  If you don't have
+access to the system-wide directories, you can simply run Org directly from
+the distribution directory by adding the <samp><span class="file">lisp</span></samp> subdirectory to the
+Emacs load path.  To do this, add the following line to <samp><span class="file">.emacs</span></samp>:
+
+<pre class="example">     (setq load-path (cons "~/path/to/orgdir/lisp" load-path))
+</pre>
+   <p class="noindent">If you plan to use code from the <samp><span class="file">contrib</span></samp> subdirectory, do a similar
+step for this directory:
+
+<pre class="example">     (setq load-path (cons "~/path/to/orgdir/contrib/lisp" load-path))
+</pre>
+   <pre class="sp">
+
+
+</pre>
+<p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+XEmacs users now need to install the file <samp><span class="file">noutline.el</span></samp> from
+the <samp><span class="file">xemacs</span></samp> sub-directory of the Org distribution.  Use the
+command:
+
+<pre class="example">          make install-noutline
+</pre>
+   </td></tr></table>
+
+   <pre class="sp">
+
+
+</pre>
+
+Now byte-compile the Lisp files with the shell command:
+
+<pre class="example">     make
+</pre>
+   <p class="noindent">If you are running Org from the distribution directory, this is
+all.  If you want to install Org into the system directories, use (as
+administrator)
+
+<pre class="example">     make install
+</pre>
+   <p>Installing Info files is system dependent, because of differences in the
+<samp><span class="file">install-info</span></samp> program.  In Debian it copies the info files into the
+correct directory and modifies the info directory file.  In many other
+systems, the files need to be copied to the correct directory separately, and
+<samp><span class="file">install-info</span></samp> then only modifies the directory file.  Check your system
+documentation to find out which of the following commands you need:
+
+<pre class="example">     make install-info
+     make install-info-debian
+</pre>
+   <p>Then add the following line to <samp><span class="file">.emacs</span></samp>.  It is needed so that
+Emacs can autoload functions that are located in files not immediately loaded
+when Org-mode starts.
+<pre class="lisp">     (require 'org-install)
+</pre>
+   <p>Do not forget to activate Org as described in the following section.
+
+   </body></html>
+

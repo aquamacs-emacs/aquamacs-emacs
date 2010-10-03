@@ -1,0 +1,418 @@
+<html lang="en">
+<head>
+<title>Basic Algebra Tutorial - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Algebra-Tutorial.html#Algebra-Tutorial" title="Algebra Tutorial">
+<link rel="prev" href="Algebra-Tutorial.html#Algebra-Tutorial" title="Algebra Tutorial">
+<link rel="next" href="Rewrites-Tutorial.html#Rewrites-Tutorial" title="Rewrites Tutorial">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Algebra-Tutorial"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rewrites-Tutorial.html#Rewrites-Tutorial">Rewrites Tutorial</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebra-Tutorial.html#Algebra-Tutorial">Algebra Tutorial</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Algebra-Tutorial.html#Algebra-Tutorial">Algebra Tutorial</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.5.1 Basic Algebra</h4>
+
+<p class="noindent">If you enter a formula in Algebraic mode that refers to variables,
+the formula itself is pushed onto the stack.  You can manipulate
+formulas as regular data objects.
+
+<pre class="smallexample">     1:  2 x^2 - 6       1:  6 - 2 x^2       1:  (6 - 2 x^2) (3 x^2 + y)
+         .                   .                   .
+     
+         ' 2x^2-6 &lt;RET&gt;        n                   ' 3x^2+y &lt;RET&gt; *
+</pre>
+   <p>(&bull;) <strong>Exercise 1.</strong>  Do <kbd>' x &lt;RET&gt; Q 2 ^</kbd> and
+<kbd>' x &lt;RET&gt; 2 ^ Q</kbd> both wind up with the same result (&lsquo;<samp><span class="samp">x</span></samp>&rsquo;)? 
+Why or why not?  See <a href="Algebra-Answer-1.html#Algebra-Answer-1">1</a>. (&bull;)
+
+   <p>There are also commands for doing common algebraic operations on
+formulas.  Continuing with the formula from the last example,
+
+<pre class="smallexample">     1:  18 x^2 + 6 y - 6 x^4 - 2 x^2 y    1:  (18 - 2 y) x^2 - 6 x^4 + 6 y
+         .                                     .
+     
+         a x                                   a c x &lt;RET&gt;
+</pre>
+   <p class="noindent">First we &ldquo;expand&rdquo; using the distributive law, then we &ldquo;collect&rdquo;
+terms involving like powers of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p>Let's find the value of this expression when &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is 2 and &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+is one-half.
+
+<pre class="smallexample">     1:  17 x^2 - 6 x^4 + 3      1:  -25
+         .                           .
+     
+         1:2 s l y &lt;RET&gt;               2 s l x &lt;RET&gt;
+</pre>
+   <p class="noindent">The <kbd>s l</kbd> command means &ldquo;let&rdquo;; it takes a number from the top of
+the stack and temporarily assigns it as the value of the variable
+you specify.  It then evaluates (as if by the <kbd>=</kbd> key) the
+next expression on the stack.  After this command, the variable goes
+back to its original value, if any.
+
+   <p>(An earlier exercise in this tutorial involved storing a value in the
+variable <code>x</code>; if this value is still there, you will have to
+unstore it with <kbd>s u x &lt;RET&gt;</kbd> before the above example will work
+properly.)
+
+   <p><a name="index-Maximum-of-a-function-using-Calculus-63"></a>Let's find the maximum value of our original expression when &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+is one-half and &lsquo;<samp><span class="samp">x</span></samp>&rsquo; ranges over all possible values.  We can
+do this by taking the derivative with respect to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and examining
+values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; for which the derivative is zero.  If the second
+derivative of the function at that value of &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is negative,
+the function has a local maximum there.
+
+<pre class="smallexample">     1:  17 x^2 - 6 x^4 + 3      1:  34 x - 24 x^3
+         .                           .
+     
+         U &lt;DEL&gt;  s 1                  a d x &lt;RET&gt;   s 2
+</pre>
+   <p class="noindent">Well, the derivative is clearly zero when &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is zero.  To find
+the other root(s), let's divide through by &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and then solve:
+
+<pre class="smallexample">     1:  (34 x - 24 x^3) / x    1:  34 x / x - 24 x^3 / x    1:  34 - 24 x^2
+         .                          .                            .
+     
+         ' x &lt;RET&gt; /                  a x                          a s
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  34 - 24 x^2 = 0        1:  x = 1.19023
+         .                          .
+     
+         0 a =  s 3                 a S x &lt;RET&gt;
+</pre>
+   <p class="noindent">Notice the use of <kbd>a s</kbd> to &ldquo;simplify&rdquo; the formula.  When the
+default algebraic simplifications don't do enough, you can use
+<kbd>a s</kbd> to tell Calc to spend more time on the job.
+
+   <p>Now we compute the second derivative and plug in our values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;:
+
+<pre class="smallexample">     1:  1.19023        2:  1.19023         2:  1.19023
+         .              1:  34 x - 24 x^3   1:  34 - 72 x^2
+                            .                   .
+     
+         a .                r 2                 a d x &lt;RET&gt; s 4
+</pre>
+   <p class="noindent">(The <kbd>a .</kbd> command extracts just the righthand side of an equation. 
+Another method would have been to use <kbd>v u</kbd> to unpack the equation
+&lsquo;<samp><span class="samp">x&nbsp;=&nbsp;1.19</span></samp>&rsquo;<!-- /@w --> to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">1.19</span></samp>&rsquo;, then use <kbd>M-- M-2 &lt;DEL&gt;</kbd>
+to delete the &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.)
+
+<pre class="smallexample">     2:  34 - 72 x^2   1:  -68.         2:  34 - 72 x^2     1:  34
+     1:  1.19023           .            1:  0                   .
+         .                                  .
+     
+         &lt;TAB&gt;               s l x &lt;RET&gt;        U &lt;DEL&gt; 0             s l x &lt;RET&gt;
+</pre>
+   <p class="noindent">The first of these second derivatives is negative, so we know the function
+has a maximum value at &lsquo;<samp><span class="samp">x = 1.19023</span></samp>&rsquo;.  (The function also has a
+local <em>minimum</em> at &lsquo;<samp><span class="samp">x = 0</span></samp>&rsquo;.)
+
+   <p>When we solved for &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, we got only one value even though
+&lsquo;<samp><span class="samp">34 - 24 x^2 = 0</span></samp>&rsquo; is a quadratic equation that ought to have
+two solutions.  The reason is that <kbd>a&nbsp;S</kbd><!-- /@w --> normally returns a
+single &ldquo;principal&rdquo; solution.  If it needs to come up with an
+arbitrary sign (as occurs in the quadratic formula) it picks &lsquo;<samp><span class="samp">+</span></samp>&rsquo;. 
+If it needs an arbitrary integer, it picks zero.  We can get a full
+solution by pressing <kbd>H</kbd> (the Hyperbolic flag) before <kbd>a S</kbd>.
+
+<pre class="smallexample">     1:  34 - 24 x^2 = 0    1:  x = 1.19023 s1      1:  x = -1.19023
+         .                      .                       .
+     
+         r 3                    H a S x &lt;RET&gt;  s 5        1 n  s l s1 &lt;RET&gt;
+</pre>
+   <p class="noindent">Calc has invented the variable &lsquo;<samp><span class="samp">s1</span></samp>&rsquo; to represent an unknown sign;
+it is supposed to be either <i>+1</i> or <i>-1</i>.  Here we have used
+the &ldquo;let&rdquo; command to evaluate the expression when the sign is negative. 
+If we plugged this into our second derivative we would get the same,
+negative, answer, so &lsquo;<samp><span class="samp">x = -1.19023</span></samp>&rsquo; is also a maximum.
+
+   <p>To find the actual maximum value, we must plug our two values of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+into the original formula.
+
+<pre class="smallexample">     2:  17 x^2 - 6 x^4 + 3    1:  24.08333 s1^2 - 12.04166 s1^4 + 3
+     1:  x = 1.19023 s1            .
+         .
+     
+         r 1 r 5                   s l &lt;RET&gt;
+</pre>
+   <p class="noindent">(Here we see another way to use <kbd>s l</kbd>; if its input is an equation
+with a variable on the lefthand side, then <kbd>s l</kbd> treats the equation
+like an assignment to that variable if you don't give a variable name.)
+
+   <p>It's clear that this will have the same value for either sign of
+<code>s1</code>, but let's work it out anyway, just for the exercise:
+
+<pre class="smallexample">     2:  [-1, 1]              1:  [15.04166, 15.04166]
+     1:  24.08333 s1^2 ...        .
+         .
+     
+       [ 1 n , 1 ] &lt;TAB&gt;            V M $ &lt;RET&gt;
+</pre>
+   <p class="noindent">Here we have used a vector mapping operation to evaluate the function
+at several values of &lsquo;<samp><span class="samp">s1</span></samp>&rsquo; at once.  <kbd>V M $</kbd> is like <kbd>V M '</kbd>
+except that it takes the formula from the top of the stack.  The
+formula is interpreted as a function to apply across the vector at the
+next-to-top stack level.  Since a formula on the stack can't contain
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo; signs, Calc assumes the variables in the formula stand for
+different arguments.  It prompts you for an <dfn>argument list</dfn>, giving
+the list of all variables in the formula in alphabetical order as the
+default list.  In this case the default is &lsquo;<samp><span class="samp">(s1)</span></samp>&rsquo;, which is just
+what we want so we simply press &lt;RET&gt; at the prompt.
+
+   <p>If there had been several different values, we could have used
+<kbd>V&nbsp;R&nbsp;X</kbd><!-- /@w --> to find the global maximum.
+
+   <p>Calc has a built-in <kbd>a P</kbd> command that solves an equation using
+<kbd>H&nbsp;a&nbsp;S</kbd><!-- /@w --> and returns a vector of all the solutions.  It simply
+automates the job we just did by hand.  Applied to our original
+cubic polynomial, it would produce the vector of solutions
+&lsquo;<samp><span class="samp">[1.19023, -1.19023, 0]</span></samp>&rsquo;.  (There is also an <kbd>a X</kbd> command
+which finds a local maximum of a function.  It uses a numerical search
+method rather than examining the derivatives, and thus requires you
+to provide some kind of initial guess to show it where to look.)
+
+   <p>(&bull;) <strong>Exercise 2.</strong>  Given a vector of the roots of a
+polynomial (such as the output of an <kbd>a P</kbd> command), what
+sequence of commands would you use to reconstruct the original
+polynomial?  (The answer will be unique to within a constant
+multiple; choose the solution where the leading coefficient is one.) 
+See <a href="Algebra-Answer-2.html#Algebra-Answer-2">2</a>. (&bull;)
+
+   <p>The <kbd>m s</kbd> command enables Symbolic mode, in which formulas
+like &lsquo;<samp><span class="samp">sqrt(5)</span></samp>&rsquo; that can't be evaluated exactly are left in
+symbolic form rather than giving a floating-point approximate answer. 
+Fraction mode (<kbd>m f</kbd>) is also useful when doing algebra.
+
+<pre class="smallexample">     2:  34 x - 24 x^3        2:  34 x - 24 x^3
+     1:  34 x - 24 x^3        1:  [sqrt(51) / 6, sqrt(51) / -6, 0]
+         .                        .
+     
+         r 2  &lt;RET&gt;     m s  m f    a P x &lt;RET&gt;
+</pre>
+   <p>One more mode that makes reading formulas easier is Big mode.
+
+<pre class="smallexample">                    3
+     2:  34 x - 24 x
+     
+           ____   ____
+          V 51   V 51
+     1:  [-----, -----, 0]
+            6     -6
+     
+         .
+     
+         d B
+</pre>
+   <p>Here things like powers, square roots, and quotients and fractions
+are displayed in a two-dimensional pictorial form.  Calc has other
+language modes as well, such as C mode, FORTRAN mode, TeX mode
+and LaTeX mode.
+
+<pre class="smallexample">     2:  34*x - 24*pow(x, 3)               2:  34*x - 24*x**3
+     1:  {sqrt(51) / 6, sqrt(51) / -6, 0}  1:  /sqrt(51) / 6, sqrt(51) / -6, 0/
+         .                                     .
+     
+         d C                                   d F
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     3:  34 x - 24 x^3
+     2:  [{\sqrt{51} \over 6}, {\sqrt{51} \over -6}, 0]
+     1:  {2 \over 3} \sqrt{5}
+         .
+     
+         d T   ' 2 \sqrt{5} \over 3 &lt;RET&gt;
+</pre>
+   <p class="noindent">As you can see, language modes affect both entry and display of
+formulas.  They affect such things as the names used for built-in
+functions, the set of arithmetic operators and their precedences,
+and notations for vectors and matrices.
+
+   <p>Notice that &lsquo;<samp><span class="samp">sqrt(51)</span></samp>&rsquo; may cause problems with older
+implementations of C and FORTRAN, which would require something more
+like &lsquo;<samp><span class="samp">sqrt(51.0)</span></samp>&rsquo;.  It is always wise to check over the formulas
+produced by the various language modes to make sure they are fully
+correct.
+
+   <p>Type <kbd>m s</kbd>, <kbd>m f</kbd>, and <kbd>d N</kbd> to reset these modes.  (You
+may prefer to remain in Big mode, but all the examples in the tutorial
+are shown in normal mode.)
+
+   <p><a name="index-Area-under-a-curve-64"></a>What is the area under the portion of this curve from &lsquo;<samp><span class="samp">x = 1</span></samp>&rsquo; to &lsquo;<samp><span class="samp">2</span></samp>&rsquo;? 
+This is simply the integral of the function:
+
+<pre class="smallexample">     1:  17 x^2 - 6 x^4 + 3     1:  5.6666 x^3 - 1.2 x^5 + 3 x
+         .                          .
+     
+         r 1                        a i x
+</pre>
+   <p class="noindent">We want to evaluate this at our two values for &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and subtract. 
+One way to do it is again with vector mapping and reduction:
+
+<pre class="smallexample">     2:  [2, 1]            1:  [12.93333, 7.46666]    1:  5.46666
+     1:  5.6666 x^3 ...        .                          .
+     
+        [ 2 , 1 ] &lt;TAB&gt;          V M $ &lt;RET&gt;                  V R -
+</pre>
+   <p>(&bull;) <strong>Exercise 3.</strong>  Find the integral from 1 to &lsquo;<samp><span class="samp">y</span></samp>&rsquo;
+of
+<!-- @math{x \sin \pi x} -->
+&lsquo;<samp><span class="samp">x&nbsp;sin(pi&nbsp;x)</span></samp>&rsquo;<!-- /@w -->
+(where the sine is calculated in radians).  Find the values of the
+integral for integers &lsquo;<samp><span class="samp">y</span></samp>&rsquo; from 1 to 5.  See <a href="Algebra-Answer-3.html#Algebra-Answer-3">3</a>. (&bull;)
+
+   <p>Calc's integrator can do many simple integrals symbolically, but many
+others are beyond its capabilities.  Suppose we wish to find the area
+under the curve
+<!-- @math{\sin x \ln x} -->
+&lsquo;<samp><span class="samp">sin(x) ln(x)</span></samp>&rsquo;
+over the same range of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  If you entered this formula and typed
+<kbd>a i x &lt;RET&gt;</kbd> (don't bother to try this), Calc would work for a
+long time but would be unable to find a solution.  In fact, there is no
+closed-form solution to this integral.  Now what do we do?
+
+   <p><a name="index-Integration_002c-numerical-65"></a><a name="index-Numerical-integration-66"></a>One approach would be to do the integral numerically.  It is not hard
+to do this by hand using vector mapping and reduction.  It is rather
+slow, though, since the sine and logarithm functions take a long time. 
+We can save some time by reducing the working precision.
+
+<pre class="smallexample">     3:  10                  1:  [1, 1.1, 1.2,  ...  , 1.8, 1.9]
+     2:  1                       .
+     1:  0.1
+         .
+     
+      10 &lt;RET&gt; 1 &lt;RET&gt; .1 &lt;RET&gt;        C-u v x
+</pre>
+   <p class="noindent">(Note that we have used the extended version of <kbd>v x</kbd>; we could
+also have used plain <kbd>v x</kbd> as follows:  <kbd>v x 10 &lt;RET&gt; 9 + .1 *</kbd>.)
+
+<pre class="smallexample">     2:  [1, 1.1, ... ]              1:  [0., 0.084941, 0.16993, ... ]
+     1:  sin(x) ln(x)                    .
+         .
+     
+         ' sin(x) ln(x) &lt;RET&gt;  s 1    m r  p 5 &lt;RET&gt;   V M $ &lt;RET&gt;
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     1:  3.4195     0.34195
+         .          .
+     
+         V R +      0.1 *
+</pre>
+   <p class="noindent">(If you got wildly different results, did you remember to switch
+to Radians mode?)
+
+   <p>Here we have divided the curve into ten segments of equal width;
+approximating these segments as rectangular boxes (i.e., assuming
+the curve is nearly flat at that resolution), we compute the areas
+of the boxes (height times width), then sum the areas.  (It is
+faster to sum first, then multiply by the width, since the width
+is the same for every box.)
+
+   <p>The true value of this integral turns out to be about 0.374, so
+we're not doing too well.  Let's try another approach.
+
+<pre class="smallexample">     1:  sin(x) ln(x)    1:  0.84147 x - 0.84147 + 0.11957 (x - 1)^2 - ...
+         .                   .
+     
+         r 1                 a t x=1 &lt;RET&gt; 4 &lt;RET&gt;
+</pre>
+   <p class="noindent">Here we have computed the Taylor series expansion of the function
+about the point &lsquo;<samp><span class="samp">x=1</span></samp>&rsquo;.  We can now integrate this polynomial
+approximation, since polynomials are easy to integrate.
+
+<pre class="smallexample">     1:  0.42074 x^2 + ...    1:  [-0.0446, -0.42073]      1:  0.3761
+         .                        .                            .
+     
+         a i x &lt;RET&gt;            [ 2 , 1 ] &lt;TAB&gt;  V M $ &lt;RET&gt;         V R -
+</pre>
+   <p class="noindent">Better!  By increasing the precision and/or asking for more terms
+in the Taylor series, we can get a result as accurate as we like. 
+(Taylor series converge better away from singularities in the
+function such as the one at <code>ln(0)</code>, so it would also help to
+expand the series about the points &lsquo;<samp><span class="samp">x=2</span></samp>&rsquo; or &lsquo;<samp><span class="samp">x=1.5</span></samp>&rsquo; instead
+of &lsquo;<samp><span class="samp">x=1</span></samp>&rsquo;.)
+
+   <p><a name="index-Simpson_0027s-rule-67"></a><a name="index-Integration-by-Simpson_0027s-rule-68"></a>(&bull;) <strong>Exercise 4.</strong>  Our first method approximated the
+curve by stairsteps of width 0.1; the total area was then the sum
+of the areas of the rectangles under these stairsteps.  Our second
+method approximated the function by a polynomial, which turned out
+to be a better approximation than stairsteps.  A third method is
+<dfn>Simpson's rule</dfn>, which is like the stairstep method except
+that the steps are not required to be flat.  Simpson's rule boils
+down to the formula,
+
+<pre class="example">     (h/3) * (f(a) + 4 f(a+h) + 2 f(a+2h) + 4 f(a+3h) + ...
+                   + 2 f(a+(n-2)*h) + 4 f(a+(n-1)*h) + f(a+n*h))
+</pre>
+   <p class="noindent">where &lsquo;<samp><span class="samp">n</span></samp>&rsquo; (which must be even) is the number of slices and &lsquo;<samp><span class="samp">h</span></samp>&rsquo;
+is the width of each slice.  These are 10 and 0.1 in our example. 
+For reference, here is the corresponding formula for the stairstep
+method:
+
+<pre class="example">     h * (f(a) + f(a+h) + f(a+2h) + f(a+3h) + ...
+               + f(a+(n-2)*h) + f(a+(n-1)*h))
+</pre>
+   <p>Compute the integral from 1 to 2 of
+<!-- @math{\sin x \ln x} -->
+&lsquo;<samp><span class="samp">sin(x) ln(x)</span></samp>&rsquo;
+using Simpson's rule with 10 slices. 
+See <a href="Algebra-Answer-4.html#Algebra-Answer-4">4</a>. (&bull;)
+
+   <p>Calc has a built-in <kbd>a I</kbd> command for doing numerical integration. 
+It uses <dfn>Romberg's method</dfn>, which is a more sophisticated cousin
+of Simpson's rule.  In particular, it knows how to keep refining the
+result until the current precision is satisfied.
+
+<!-- [fix-ref Selecting Sub-Formulas] -->
+   <p>Aside from the commands we've seen so far, Calc also provides a
+large set of commands for operating on parts of formulas.  You
+indicate the desired sub-formula by placing the cursor on any part
+of the formula before giving a <dfn>selection</dfn> command.  Selections won't
+be covered in the tutorial; see <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>, for
+details and examples.
+
+<!-- hard exercise: simplify (2^(n r) - 2^(r*(n - 1))) / (2^r - 1) 2^(n - 1) -->
+<!-- to 2^((n-1)*(r-1)). -->
+   </body></html>
+

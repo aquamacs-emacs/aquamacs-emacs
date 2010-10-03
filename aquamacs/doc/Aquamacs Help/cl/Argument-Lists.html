@@ -1,0 +1,262 @@
+<html lang="en">
+<head>
+<title>Argument Lists - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Program-Structure.html#Program-Structure" title="Program Structure">
+<link rel="prev" href="Program-Structure.html#Program-Structure" title="Program Structure">
+<link rel="next" href="Time-of-Evaluation.html#Time-of-Evaluation" title="Time of Evaluation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Argument-Lists"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-of-Evaluation.html#Time-of-Evaluation">Time of Evaluation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Program-Structure.html#Program-Structure">Program Structure</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Structure.html#Program-Structure">Program Structure</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Argument Lists</h3>
+
+<p class="noindent">Emacs Lisp's notation for argument lists of functions is a subset of
+the Common Lisp notation.  As well as the familiar <code>&amp;optional</code>
+and <code>&amp;rest</code> markers, Common Lisp allows you to specify default
+values for optional arguments, and it provides the additional markers
+<code>&amp;key</code> and <code>&amp;aux</code>.
+
+   <p>Since argument parsing is built-in to Emacs, there is no way for
+this package to implement Common Lisp argument lists seamlessly. 
+Instead, this package defines alternates for several Lisp forms
+which you must use if you need Common Lisp argument lists.
+
+<div class="defun">
+&mdash; Special Form: <b>defun*</b><var> name arglist body...<a name="index-defun_002a-1"></a></var><br>
+<blockquote><p>This form is identical to the regular <code>defun</code> form, except
+that <var>arglist</var> is allowed to be a full Common Lisp argument
+list.  Also, the function body is enclosed in an implicit block
+called <var>name</var>; see <a href="Blocks-and-Exits.html#Blocks-and-Exits">Blocks and Exits</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>defsubst*</b><var> name arglist body...<a name="index-defsubst_002a-2"></a></var><br>
+<blockquote><p>This is just like <code>defun*</code>, except that the function that
+is defined is automatically proclaimed <code>inline</code>, i.e.,
+calls to it may be expanded into in-line code by the byte compiler. 
+This is analogous to the <code>defsubst</code> form;
+<code>defsubst*</code> uses a different method (compiler macros) which
+works in all versions of Emacs, and also generates somewhat more
+efficient inline expansions.  In particular, <code>defsubst*</code>
+arranges for the processing of keyword arguments, default values,
+etc., to be done at compile-time whenever possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>defmacro*</b><var> name arglist body...<a name="index-defmacro_002a-3"></a></var><br>
+<blockquote><p>This is identical to the regular <code>defmacro</code> form,
+except that <var>arglist</var> is allowed to be a full Common Lisp
+argument list.  The <code>&amp;environment</code> keyword is supported as
+described in Steele.  The <code>&amp;whole</code> keyword is supported only
+within destructured lists (see below); top-level <code>&amp;whole</code>
+cannot be implemented with the current Emacs Lisp interpreter. 
+The macro expander body is enclosed in an implicit block called
+<var>name</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>function*</b><var> symbol-or-lambda<a name="index-function_002a-4"></a></var><br>
+<blockquote><p>This is identical to the regular <code>function</code> form,
+except that if the argument is a <code>lambda</code> form then that
+form may use a full Common Lisp argument list. 
+</p></blockquote></div>
+
+   <p>Also, all forms (such as <code>defsetf</code> and <code>flet</code>) defined
+in this package that include <var>arglist</var>s in their syntax allow
+full Common Lisp argument lists.
+
+   <p>Note that it is <em>not</em> necessary to use <code>defun*</code> in
+order to have access to most <dfn>CL</dfn> features in your function. 
+These features are always present; <code>defun*</code>'s only
+difference from <code>defun</code> is its more flexible argument
+lists and its implicit block.
+
+   <p>The full form of a Common Lisp argument list is
+
+<pre class="example">     (<var>var</var>...
+      &amp;optional (<var>var</var> <var>initform</var> <var>svar</var>)...
+      &amp;rest <var>var</var>
+      &amp;key ((<var>keyword</var> <var>var</var>) <var>initform</var> <var>svar</var>)...
+      &amp;aux (<var>var</var> <var>initform</var>)...)
+</pre>
+   <p>Each of the five argument list sections is optional.  The <var>svar</var>,
+<var>initform</var>, and <var>keyword</var> parts are optional; if they are
+omitted, then &lsquo;<samp><span class="samp">(</span><var>var</var><span class="samp">)</span></samp>&rsquo; may be written simply &lsquo;<samp><var>var</var></samp>&rsquo;.
+
+   <p>The first section consists of zero or more <dfn>required</dfn> arguments. 
+These arguments must always be specified in a call to the function;
+there is no difference between Emacs Lisp and Common Lisp as far as
+required arguments are concerned.
+
+   <p>The second section consists of <dfn>optional</dfn> arguments.  These
+arguments may be specified in the function call; if they are not,
+<var>initform</var> specifies the default value used for the argument. 
+(No <var>initform</var> means to use <code>nil</code> as the default.)  The
+<var>initform</var> is evaluated with the bindings for the preceding
+arguments already established; <code>(a &amp;optional (b (1+ a)))</code>
+matches one or two arguments, with the second argument defaulting
+to one plus the first argument.  If the <var>svar</var> is specified,
+it is an auxiliary variable which is bound to <code>t</code> if the optional
+argument was specified, or to <code>nil</code> if the argument was omitted. 
+If you don't use an <var>svar</var>, then there will be no way for your
+function to tell whether it was called with no argument, or with
+the default value passed explicitly as an argument.
+
+   <p>The third section consists of a single <dfn>rest</dfn> argument.  If
+more arguments were passed to the function than are accounted for
+by the required and optional arguments, those extra arguments are
+collected into a list and bound to the &ldquo;rest&rdquo; argument variable. 
+Common Lisp's <code>&amp;rest</code> is equivalent to that of Emacs Lisp. 
+Common Lisp accepts <code>&amp;body</code> as a synonym for <code>&amp;rest</code> in
+macro contexts; this package accepts it all the time.
+
+   <p>The fourth section consists of <dfn>keyword</dfn> arguments.  These
+are optional arguments which are specified by name rather than
+positionally in the argument list.  For example,
+
+<pre class="example">     (defun* foo (a &amp;optional b &amp;key c d (e 17)))
+</pre>
+   <p class="noindent">defines a function which may be called with one, two, or more
+arguments.  The first two arguments are bound to <code>a</code> and
+<code>b</code> in the usual way.  The remaining arguments must be
+pairs of the form <code>:c</code>, <code>:d</code>, or <code>:e</code> followed
+by the value to be bound to the corresponding argument variable. 
+(Symbols whose names begin with a colon are called <dfn>keywords</dfn>,
+and they are self-quoting in the same way as <code>nil</code> and
+<code>t</code>.)
+
+   <p>For example, the call <code>(foo 1 2 :d 3 :c 4)</code> sets the five
+arguments to 1, 2, 4, 3, and 17, respectively.  If the same keyword
+appears more than once in the function call, the first occurrence
+takes precedence over the later ones.  Note that it is not possible
+to specify keyword arguments without specifying the optional
+argument <code>b</code> as well, since <code>(foo 1 :c 2)</code> would bind
+<code>b</code> to the keyword <code>:c</code>, then signal an error because
+<code>2</code> is not a valid keyword.
+
+   <p>You can also explicitly specify the keyword argument; it need not be
+simply the variable name prefixed with a colon.  For example,
+
+<pre class="example">     (defun* bar (&amp;key (a 1) ((baz b) 4)))
+</pre>
+   <p class="noindent">specifies a keyword <code>:a</code> that sets the variable <code>a</code> with
+default value 1, as well as a keyword <code>baz</code> that sets the
+variable <code>b</code> with default value 4.  In this case, because
+<code>baz</code> is not self-quoting, you must quote it explicitly in the
+function call, like this:
+
+<pre class="example">     (bar :a 10 'baz 42)
+</pre>
+   <p>Ordinarily, it is an error to pass an unrecognized keyword to
+a function, e.g., <code>(foo 1 2 :c 3 :goober 4)</code>.  You can ask
+Lisp to ignore unrecognized keywords, either by adding the
+marker <code>&amp;allow-other-keys</code> after the keyword section
+of the argument list, or by specifying an <code>:allow-other-keys</code>
+argument in the call whose value is non-<code>nil</code>.  If the
+function uses both <code>&amp;rest</code> and <code>&amp;key</code> at the same time,
+the &ldquo;rest&rdquo; argument is bound to the keyword list as it appears
+in the call.  For example:
+
+<pre class="smallexample">     (defun* find-thing (thing &amp;rest rest &amp;key need &amp;allow-other-keys)
+       (or (apply 'member* thing thing-list :allow-other-keys t rest)
+           (if need (error "Thing not found"))))
+</pre>
+   <p class="noindent">This function takes a <code>:need</code> keyword argument, but also
+accepts other keyword arguments which are passed on to the
+<code>member*</code> function.  <code>allow-other-keys</code> is used to
+keep both <code>find-thing</code> and <code>member*</code> from complaining
+about each others' keywords in the arguments.
+
+   <p>The fifth section of the argument list consists of <dfn>auxiliary
+variables</dfn>.  These are not really arguments at all, but simply
+variables which are bound to <code>nil</code> or to the specified
+<var>initforms</var> during execution of the function.  There is no
+difference between the following two functions, except for a
+matter of stylistic taste:
+
+<pre class="example">     (defun* foo (a b &amp;aux (c (+ a b)) d)
+       <var>body</var>)
+     
+     (defun* foo (a b)
+       (let ((c (+ a b)) d)
+         <var>body</var>))
+</pre>
+   <p>Argument lists support <dfn>destructuring</dfn>.  In Common Lisp,
+destructuring is only allowed with <code>defmacro</code>; this package
+allows it with <code>defun*</code> and other argument lists as well. 
+In destructuring, any argument variable (<var>var</var> in the above
+diagram) can be replaced by a list of variables, or more generally,
+a recursive argument list.  The corresponding argument value must
+be a list whose elements match this recursive argument list. 
+For example:
+
+<pre class="example">     (defmacro* dolist ((var listform &amp;optional resultform)
+                        &amp;rest body)
+       ...)
+</pre>
+   <p>This says that the first argument of <code>dolist</code> must be a list
+of two or three items; if there are other arguments as well as this
+list, they are stored in <code>body</code>.  All features allowed in
+regular argument lists are allowed in these recursive argument lists. 
+In addition, the clause &lsquo;<samp><span class="samp">&amp;whole </span><var>var</var></samp>&rsquo; is allowed at the
+front of a recursive argument list.  It binds <var>var</var> to the
+whole list being matched; thus <code>(&amp;whole all a b)</code> matches
+a list of two things, with <code>a</code> bound to the first thing,
+<code>b</code> bound to the second thing, and <code>all</code> bound to the
+list itself.  (Common Lisp allows <code>&amp;whole</code> in top-level
+<code>defmacro</code> argument lists as well, but Emacs Lisp does not
+support this usage.)
+
+   <p>One last feature of destructuring is that the argument list may be
+dotted, so that the argument list <code>(a b . c)</code> is functionally
+equivalent to <code>(a b &amp;rest c)</code>.
+
+   <p>If the optimization quality <code>safety</code> is set to 0
+(see <a href="Declarations.html#Declarations">Declarations</a>), error checking for wrong number of
+arguments and invalid keyword arguments is disabled.  By default,
+argument lists are rigorously checked.
+
+   </body></html>
+

@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>eieio-speedbar - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Base-Classes.html#Base-Classes" title="Base Classes">
+<link rel="prev" href="eieio_002dnamed.html#eieio_002dnamed" title="eieio-named">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="eieio-speedbar"></a>
+<a name="eieio_002dspeedbar"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="eieio_002dnamed.html#eieio_002dnamed">eieio-named</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Base-Classes.html#Base-Classes">Base Classes</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">11.6 <code>eieio-speedbar</code></h3>
+
+<p>This class is in package <samp><span class="file">eieio-speedbar</span></samp>.
+
+   <p>If a series of class instances map to a tree structure, it is possible
+to cause your classes to be displayable in Speedbar.  See <a href="../speedbar/index.html#Top">Top</a>. 
+Inheriting from these classes will enable a speedbar major display mode
+with a minimum of effort.
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar-65"></a></var><br>
+<blockquote><p>Enables base speedbar display for a class. 
+<a name="index-speedbar_002dmake_002dtag_002dline-66"></a>The slot <var>buttontype</var> is any of the symbols allowed by the
+function <code>speedbar-make-tag-line</code> for the <var>exp-button-type</var>
+argument See <a href="../speedbar/Extending.html#Extending">Extending</a>. 
+The slot <var>buttonface</var> is the face to use for the text of the string
+displayed in speedbar. 
+The slots <var>buttontype</var> and <var>buttonface</var> are class allocated
+slots, and do not take up space in your instances. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar-directory-button</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar_002ddirectory_002dbutton-67"></a></var><br>
+<blockquote><p>This class inherits from <code>eieio-speedbar</code> and initializes
+<var>buttontype</var> and <var>buttonface</var> to appear as directory level lines. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar-file-button</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar_002dfile_002dbutton-68"></a></var><br>
+<blockquote><p>This class inherits from <code>eieio-speedbar</code> and initializes
+<var>buttontype</var> and <var>buttonface</var> to appear as file level lines. 
+</p></blockquote></div>
+
+   <p>To use these classes, inherit from one of them in you class.  You can
+use multiple inheritance with them safely.  To customize your class for
+speedbar display, override the default values for <var>buttontype</var> and
+<var>buttonface</var> to get the desired effects.
+
+   <p>Useful methods to define for your new class include:
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-derive-line-path</b><var> obj depth<a name="index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar-69"></a></var><br>
+<blockquote><p>Return a string representing a directory associated with an instance
+of <var>obj</var>.  <var>depth</var> can be used to indice how many levels of
+indentation have been opened by the user where <var>obj</var> is shown. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-description</b><var> obj<a name="index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar-70"></a></var><br>
+<blockquote><p>Return a string description of <var>OBJ</var>. 
+This is shown in the minibuffer or tooltip when the mouse hovers over
+this instance in speedbar. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-child-description</b><var> obj<a name="index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar-71"></a></var><br>
+<blockquote><p>Return a string representing a description of a child node of <var>obj</var>
+when that child is not an object.  It is often useful to just use
+item info helper functions such as <code>speedbar-item-info-file-helper</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-object-buttonname</b><var> obj<a name="index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar-72"></a></var><br>
+<blockquote><p>Return a string which is the text displayed in speedbar for <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-object-children</b><var> obj<a name="index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar-73"></a></var><br>
+<blockquote><p>Return a list of children of <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-child-make-tag-lines</b><var> obj depth<a name="index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar-74"></a></var><br>
+<blockquote><p>This method inserts a list of speedbar tag lines for <var>obj</var> to
+represent its children.  Implement this method for your class
+if your children are not objects themselves.  You still need to
+implement <code>eieio-speedbar-object-children</code>.
+
+        <p>In this method, use techniques specified in the Speedbar manual. 
+See <a href="../speedbar/Extending.html#Extending">Extending</a>. 
+</p></blockquote></div>
+
+   <p>Some other functions you will need to learn to use are:
+
+<div class="defun">
+&mdash; eieio-speedbar-create: <b>make-map</b><var> key-map menu name toplevelfn<a name="index-make_002dmap-75"></a></var><br>
+<blockquote><p>Register your object display mode with speedbar. 
+<var>make-map</var> is a function which initialized you keymap. 
+<var>key-map</var> is a symbol you keymap is installed into. 
+<var>menu</var> is an easy menu vector representing menu items specific to your
+object display. 
+<var>name</var> is a short string to use as a name identifying you mode. 
+<var>toplevelfn</var> is a function called which must return a list of
+objects representing those in the instance system you wish to browse in
+speedbar.
+
+        <p>Read the Extending chapter in the speedbar manual for more information
+on how speedbar modes work
+See <a href="../speedbar/Extending.html#Extending">Extending</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

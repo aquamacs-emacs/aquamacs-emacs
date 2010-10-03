@@ -1,0 +1,237 @@
+<html lang="en">
+<head>
+<title>Required Back End Functions - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
+<link rel="next" href="Optional-Back-End-Functions.html#Optional-Back-End-Functions" title="Optional Back End Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Required-Back-End-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Optional-Back-End-Functions.html#Optional-Back-End-Functions">Optional Back End Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">10.7.2.1 Required Back End Functions</h5>
+
+     <dl>
+<dt><code>(nnchoke-retrieve-headers ARTICLES &amp;optional GROUP SERVER FETCH-OLD)</code><dd>
+<var>articles</var> is either a range of article numbers or a list of
+<code>Message-ID</code>s.  Current back ends do not fully support either&mdash;only
+sequences (lists) of article numbers, and most back ends do not support
+retrieval of <code>Message-ID</code>s.  But they should try for both.
+
+     <p>The result data should either be HEADs or <acronym>NOV</acronym> lines, and the result
+value should either be <code>headers</code> or <code>nov</code> to reflect this. 
+This might later be expanded to <code>various</code>, which will be a mixture
+of HEADs and <acronym>NOV</acronym> lines, but this is currently not supported by Gnus.
+
+     <p>If <var>fetch-old</var> is non-<code>nil</code> it says to try fetching &ldquo;extra
+headers&rdquo;, in some meaning of the word.  This is generally done by
+fetching (at most) <var>fetch-old</var> extra headers less than the smallest
+article number in <code>articles</code>, and filling the gaps as well.  The
+presence of this parameter can be ignored if the back end finds it
+cumbersome to follow the request.  If this is non-<code>nil</code> and not a
+number, do maximum fetches.
+
+     <p>Here's an example HEAD:
+
+     <pre class="example">          221 1056 Article retrieved.
+          Path: ifi.uio.no!sturles
+          From: sturles@ifi.uio.no (Sturle Sunde)
+          Newsgroups: ifi.discussion
+          Subject: Re: Something very droll
+          Date: 27 Oct 1994 14:02:57 +0100
+          Organization: Dept. of Informatics, University of Oslo, Norway
+          Lines: 26
+          Message-ID: &lt;38o8e1$a0o@holmenkollen.ifi.uio.no&gt;
+          References: &lt;38jdmq$4qu@visbur.ifi.uio.no&gt;
+          NNTP-Posting-Host: holmenkollen.ifi.uio.no
+          .
+</pre>
+     <p>So a <code>headers</code> return value would imply that there's a number of
+these in the data buffer.
+
+     <p>Here's a BNF definition of such a buffer:
+
+     <pre class="example">          headers        = *head
+          head           = error / valid-head
+          error-message  = [ "4" / "5" ] 2number " " &lt;error message&gt; eol
+          valid-head     = valid-message *header "." eol
+          valid-message  = "221 " &lt;number&gt; " Article retrieved." eol
+          header         = &lt;text&gt; eol
+</pre>
+     <p><a name="index-BNF-3185"></a>(The version of BNF used here is the one used in RFC822.)
+
+     <p>If the return value is <code>nov</code>, the data buffer should contain
+<dfn>network overview database</dfn> lines.  These are basically fields
+separated by tabs.
+
+     <pre class="example">          nov-buffer = *nov-line
+          nov-line   = field 7*8[ &lt;TAB&gt; field ] eol
+          field      = &lt;text except TAB&gt;
+</pre>
+     <p>For a closer look at what should be in those fields,
+see <a href="Headers.html#Headers">Headers</a>.
+
+     <br><dt><code>(nnchoke-open-server SERVER &amp;optional DEFINITIONS)</code><dd>
+<var>server</var> is here the virtual server name.  <var>definitions</var> is a
+list of <code>(VARIABLE VALUE)</code> pairs that define this virtual server.
+
+     <p>If the server can't be opened, no error should be signaled.  The back end
+may then choose to refuse further attempts at connecting to this
+server.  In fact, it should do so.
+
+     <p>If the server is opened already, this function should return a
+non-<code>nil</code> value.  There should be no data returned.
+
+     <br><dt><code>(nnchoke-close-server &amp;optional SERVER)</code><dd>
+Close connection to <var>server</var> and free all resources connected
+to it.  Return <code>nil</code> if the server couldn't be closed for some
+reason.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-close)</code><dd>
+Close connection to all servers and free all resources that the back end
+have reserved.  All buffers that have been created by that back end
+should be killed.  (Not the <code>nntp-server-buffer</code>, though.)  This
+function is generally only called when Gnus is shutting down.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-server-opened &amp;optional SERVER)</code><dd>
+If <var>server</var> is the current virtual server, and the connection to the
+physical server is alive, then this function should return a
+non-<code>nil</code> value.  This function should under no circumstances
+attempt to reconnect to a server we have lost connection to.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-status-message &amp;optional SERVER)</code><dd>
+This function should return the last error message from <var>server</var>.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-article ARTICLE &amp;optional GROUP SERVER TO-BUFFER)</code><dd>
+The result data from this function should be the article specified by
+<var>article</var>.  This might either be a <code>Message-ID</code> or a number. 
+It is optional whether to implement retrieval by <code>Message-ID</code>, but
+it would be nice if that were possible.
+
+     <p>If <var>to-buffer</var> is non-<code>nil</code>, the result data should be returned
+in this buffer instead of the normal data buffer.  This is to make it
+possible to avoid copying large amounts of data from one buffer to
+another, while Gnus mainly requests articles to be inserted directly
+into its article buffer.
+
+     <p>If it is at all possible, this function should return a cons cell where
+the <code>car</code> is the group name the article was fetched from, and the <code>cdr</code> is
+the article number.  This will enable Gnus to find out what the real
+group and article numbers are when fetching articles by
+<code>Message-ID</code>.  If this isn't possible, <code>t</code> should be returned
+on successful article retrieval.
+
+     <br><dt><code>(nnchoke-request-group GROUP &amp;optional SERVER FAST)</code><dd>
+Get data on <var>group</var>.  This function also has the side effect of
+making <var>group</var> the current group.
+
+     <p>If <var>fast</var>, don't bother to return useful data, just make <var>group</var>
+the current group.
+
+     <p>Here's an example of some result data and a definition of the same:
+
+     <pre class="example">          211 56 1000 1059 ifi.discussion
+</pre>
+     <p>The first number is the status, which should be 211.  Next is the
+total number of articles in the group, the lowest article number, the
+highest article number, and finally the group name.  Note that the total
+number of articles may be less than one might think while just
+considering the highest and lowest article numbers, but some articles
+may have been canceled.  Gnus just discards the total-number, so
+whether one should take the bother to generate it properly (if that is a
+problem) is left as an exercise to the reader.  If the group contains no
+articles, the lowest article number should be reported as 1 and the
+highest as 0.
+
+     <pre class="example">          group-status = [ error / info ] eol
+          error        = [ "4" / "5" ] 2&lt;number&gt; " " &lt;Error message&gt;
+          info         = "211 " 3* [ &lt;number&gt; " " ] &lt;string&gt;
+</pre>
+     <br><dt><code>(nnchoke-close-group GROUP &amp;optional SERVER)</code><dd>
+Close <var>group</var> and free any resources connected to it.  This will be
+a no-op on most back ends.
+
+     <p>There should be no data returned.
+
+     <br><dt><code>(nnchoke-request-list &amp;optional SERVER)</code><dd>
+Return a list of all groups available on <var>server</var>.  And that means
+<em>all</em>.
+
+     <p>Here's an example from a server that only carries two groups:
+
+     <pre class="example">          ifi.test 0000002200 0000002000 y
+          ifi.discussion 3324 3300 n
+</pre>
+     <p>On each line we have a group name, then the highest article number in
+that group, the lowest article number, and finally a flag.  If the group
+contains no articles, the lowest article number should be reported as 1
+and the highest as 0.
+
+     <pre class="example">          active-file = *active-line
+          active-line = name " " &lt;number&gt; " " &lt;number&gt; " " flags eol
+          name        = &lt;string&gt;
+          flags       = "n" / "y" / "m" / "x" / "j" / "=" name
+</pre>
+     <p>The flag says whether the group is read-only (&lsquo;<samp><span class="samp">n</span></samp>&rsquo;), is moderated
+(&lsquo;<samp><span class="samp">m</span></samp>&rsquo;), is dead (&lsquo;<samp><span class="samp">x</span></samp>&rsquo;), is aliased to some other group
+(&lsquo;<samp><span class="samp">=other-group</span></samp>&rsquo;) or none of the above (&lsquo;<samp><span class="samp">y</span></samp>&rsquo;).
+
+     <br><dt><code>(nnchoke-request-post &amp;optional SERVER)</code><dd>
+This function should post the current buffer.  It might return whether
+the posting was successful or not, but that's not required.  If, for
+instance, the posting is done asynchronously, it has generally not been
+completed by the time this function concludes.  In that case, this
+function should set up some kind of sentinel to beep the user loud and
+clear if the posting could not be completed.
+
+     <p>There should be no result data from this function.
+
+</dl>
+
+   </body></html>
+

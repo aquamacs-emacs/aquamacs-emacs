@@ -1,0 +1,296 @@
+<html lang="en">
+<head>
+<title>Options (Index Support) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029" title="Options (Creating Citations)">
+<link rel="next" href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029" title="Options (Viewing Cross-References)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Index-Support)"></a>
+<a name="Options-_0028Index-Support_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Viewing-Cross_002dReferences_0029.html#Options-_0028Viewing-Cross_002dReferences_0029">Options (Viewing Cross-References)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Creating-Citations_0029.html#Options-_0028Creating-Citations_0029">Options (Creating Citations)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.6 Index Support</h3>
+
+<p><a name="index-Options_002c-Index-support-503"></a><a name="index-Index-support_002c-options-504"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-support-index</b><var><a name="index-reftex_002dsupport_002dindex-505"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, index entries are parsed as well.  Index support
+is resource intensive and the internal structure holding the parsed
+information can become quite big.  Therefore it can be turned off.  When
+this is <code>nil</code> and you execute a command which requires index
+support, you will be asked for confirmation to turn it on and rescan the
+document. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-special-chars</b><var><a name="index-reftex_002dindex_002dspecial_002dchars-506"></a></var><br>
+<blockquote><p>List of special characters in index entries, given as strings.  These
+correspond to the <code>MakeIndex</code> keywords
+<code>(</code><var>level</var> <var>encap</var> <var>actual</var> <var>quote</var> <var>escape</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-macros</b><var><a name="index-reftex_002dindex_002dmacros-507"></a></var><br>
+<blockquote><p>List of macros which define index entries.  The structure of each entry
+is
+     <pre class="lisp">          (<var>macro</var> <var>index-tag</var> <var>key</var> <var>prefix</var> <var>exclude</var> <var>repeat</var>)
+</pre>
+        <p><var>macro</var> is the macro.  Arguments should be denoted by empty braces,
+as for example in &lsquo;<samp><span class="samp">\index[]{*}</span></samp>&rsquo;.  Use square brackets to denote
+optional arguments.  The star marks where the index key is.
+
+        <p><var>index-tag</var> is a short name of the index.  &lsquo;<samp><span class="samp">idx</span></samp>&rsquo; and &lsquo;<samp><span class="samp">glo</span></samp>&rsquo;
+are reserved for the default index and the glossary.  Other indices can
+be defined as well.  If this is an integer, the Nth argument of the
+macro holds the index tag.
+
+        <p><var>key</var> is a character which is used to identify the macro for input
+with <code>reftex-index</code>.  &lsquo;<samp><span class="samp">?i</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?I</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">?g</span></samp>&rsquo; are
+reserved for default index and glossary.
+
+        <p><var>prefix</var> can be a prefix which is added to the <var>key</var> part of the
+index entry.  If you have a macro
+<code>\newcommand{\molec}[1]{#1\index{Molecules!#1}</code>, this prefix
+should be &lsquo;<samp><span class="samp">Molecules!</span></samp>&rsquo;.
+
+        <p><var>exclude</var> can be a function.  If this function exists and returns a
+non-<code>nil</code> value, the index entry at point is ignored.  This was
+implemented to support the (deprecated) &lsquo;<samp><span class="samp">^</span></samp>&rsquo; and &lsquo;<samp><span class="samp">_</span></samp>&rsquo; shortcuts
+in the LaTeX2e <code>index</code> package.
+
+        <p><var>repeat</var>, if non-<code>nil</code>, means the index macro does not typeset
+the entry in the text, so that the text has to be repeated outside the
+index macro.  Needed for <code>reftex-index-selection-or-word</code> and for
+indexing from the phrase buffer.
+
+        <p>The final entry may also be a symbol.  It must have an association in
+the variable <code>reftex-index-macros-builtin</code> to specify the main
+indexing package you are using.  Valid values are currently
+     <pre class="example">          default         <span class="roman">The LaTeX default - unnecessary to specify this one</span>
+          multind         <span class="roman">The multind.sty package</span>
+          index           <span class="roman">The index.sty package</span>
+          index-shortcut  <span class="roman">The index.sty packages with the ^ and _ shortcuts.</span>
+                          <span class="roman">Should not be used - only for old documents</span>
+</pre>
+        <p>Note that AUCTeX sets these things internally for <b>RefTeX</b> as well,
+so with a sufficiently new version of AUCTeX, you should not set the
+package here. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-default-macro</b><var><a name="index-reftex_002dindex_002ddefault_002dmacro-508"></a></var><br>
+<blockquote><p>The default index macro for <code>reftex-index-selection-or-word</code>. 
+This is a list with <code>(</code><var>macro-key</var> <var>default-tag</var><code>)</code>.
+
+        <p><var>macro-key</var> is a character identifying an index macro - see
+<code>reftex-index-macros</code>.
+
+        <p><var>default-tag</var> is the tag to be used if the macro requires a
+<var>tag</var> argument.  When this is <code>nil</code> and a <var>tag</var> is needed,
+<b>RefTeX</b> will ask for it.  When this is the empty string and the
+TAG argument of the index macro is optional, the TAG argument will be
+omitted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-default-tag</b><var><a name="index-reftex_002dindex_002ddefault_002dtag-509"></a></var><br>
+<blockquote><p>Default index tag.  When working with multiple indexes, RefTeX queries
+for an index tag when creating index entries or displaying a specific
+index.  This variable controls the default offered for these queries. 
+The default can be selected with &lt;RET&gt; during selection or
+completion.  Valid values of this variable are:
+     <pre class="example">          nil        <span class="roman">Do not provide a default index</span>
+          "tag"      <span class="roman">The default index tag given as a string, e.g. "idx"</span>
+          last       <span class="roman">The last used index tag will be offered as default</span>
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-math-format</b><var><a name="index-reftex_002dindex_002dmath_002dformat-510"></a></var><br>
+<blockquote><p>Format of index entries when copied from inside math mode.  When
+<code>reftex-index-selection-or-word</code> is executed inside TeX math mode,
+the index key copied from the buffer is processed with this format
+string through the <code>format</code> function.  This can be used to add the
+math delimiters (e.g. &lsquo;<samp><span class="samp">$</span></samp>&rsquo;) to the string.  Requires the
+<samp><span class="file">texmathp.el</span></samp> library which is part of AUCTeX. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrase-file-extension</b><var><a name="index-reftex_002dindex_002dphrase_002dfile_002dextension-511"></a></var><br>
+<blockquote><p>File extension for the index phrase file.  This extension will be added
+to the base name of the master file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-logical-and-regexp</b><var><a name="index-reftex_002dindex_002dphrases_002dlogical_002dand_002dregexp-512"></a></var><br>
+<blockquote><p>Regexp matching the &lsquo;<samp><span class="samp">and</span></samp>&rsquo; operator for index arguments in phrases
+file.  When several index arguments in a phrase line are separated by
+this operator, each part will generate an index macro.  So each match of
+the search phrase will produce <em>several</em> different index entries. 
+Make sure this does no match things which are not separators.  This
+logical &lsquo;<samp><span class="samp">and</span></samp>&rsquo; has higher priority than the logical &lsquo;<samp><span class="samp">or</span></samp>&rsquo;
+specified in <code>reftex-index-phrases-logical-or-regexp</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-logical-or-regexp</b><var><a name="index-reftex_002dindex_002dphrases_002dlogical_002dor_002dregexp-513"></a></var><br>
+<blockquote><p>Regexp matching the &lsquo;<samp><span class="samp">or</span></samp>&rsquo; operator for index arguments in phrases
+file.  When several index arguments in a phrase line are separated by
+this operator, the user will be asked to select one of them at each
+match of the search phrase.  The first index arg will be the default.  A
+number key <kbd>1</kbd>&ndash;<kbd>9</kbd> must be pressed to switch to another.  Make
+sure this does no match things which are not separators.  The logical
+&lsquo;<samp><span class="samp">and</span></samp>&rsquo; specified in <code>reftex-index-phrases-logical-or-regexp</code>
+has higher priority than this logical &lsquo;<samp><span class="samp">or</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-search-whole-words</b><var><a name="index-reftex_002dindex_002dphrases_002dsearch_002dwhole_002dwords-514"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means phrases search will look for whole words, not subwords. 
+This works by requiring word boundaries at the beginning and end of
+the search string.  When the search phrase already has a non-word-char
+at one of these points, no word boundary is required there. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-case-fold-search</b><var><a name="index-reftex_002dindex_002dphrases_002dcase_002dfold_002dsearch-515"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, searching for index phrases will ignore
+case. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-verify-function</b><var><a name="index-reftex_002dindex_002dverify_002dfunction-516"></a></var><br>
+<blockquote><p>A function which is called at each match during global indexing. 
+If the function returns nil, the current match is skipped. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-skip-indexed-matches</b><var><a name="index-reftex_002dindex_002dphrases_002dskip_002dindexed_002dmatches-517"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, skip matches which appear to be indexed already. 
+When doing global indexing from the phrases buffer, searches for some
+phrases may match at places where that phrase was already indexed.  In
+particular when indexing an already processed document again, this
+will even be the norm.  When this variable is non-<code>nil</code>,
+<b>RefTeX</b> checks if the match is an index macro argument, or if an
+index macro is directly before or after the phrase.  If that is the
+case, that match will be ignored. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-wrap-long-lines</b><var><a name="index-reftex_002dindex_002dphrases_002dwrap_002dlong_002dlines-518"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, when indexing from the phrases buffer, wrap lines. 
+Inserting indexing commands in a line makes the line longer - often
+so long that it does not fit onto the screen.  When this variable is
+non-<code>nil</code>, newlines will be added as necessary before and/or after the
+indexing command to keep lines short.  However, the matched text
+phrase and its index command will always end up on a single line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-sort-prefers-entry</b><var><a name="index-reftex_002dindex_002dphrases_002dsort_002dprefers_002dentry-519"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means when sorting phrase lines, the explicit index entry
+is used. Phrase lines in the phrases buffer contain a search phrase, and
+sorting is normally based on these.  Some phrase lines also have
+an explicit index argument specified.  When this variable is
+non-<code>nil</code>, the index argument will be used for sorting. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-sort-in-blocks</b><var><a name="index-reftex_002dindex_002dphrases_002dsort_002din_002dblocks-520"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, empty and comment lines separate phrase buffer
+into blocks.  Sorting will then preserve blocks, so that lines are
+re-arranged only within blocks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-map</b><var><a name="index-reftex_002dindex_002dphrases_002dmap-521"></a></var><br>
+<blockquote><p>Keymap for the Index Phrases buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-phrases-mode-hook</b><var><a name="index-reftex_002dindex_002dphrases_002dmode_002dhook-522"></a></var><br>
+<blockquote><p>Normal hook which is run when a buffer is put into
+<code>reftex-index-phrases-mode</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-section-letters</b><var><a name="index-reftex_002dindex_002dsection_002dletters-523"></a></var><br>
+<blockquote><p>The letters which denote sections in the index.  Usually these are all
+capital letters.  Don't use any downcase letters.  Order is not
+significant, the index will be sorted by whatever the sort function
+thinks is correct.  In addition to these letters, <b>RefTeX</b> will
+create a group &lsquo;<samp><span class="samp">!</span></samp>&rsquo; which contains all entries sorted below the
+lowest specified letter.  In the <samp><span class="file">*Index*</span></samp> buffer, pressing any of
+these capital letters or <kbd>!</kbd> will jump to that section. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-include-context</b><var><a name="index-reftex_002dindex_002dinclude_002dcontext-524"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, display the index definition context in the
+<samp><span class="file">*Index*</span></samp> buffer.  This flag may also be toggled from the
+<samp><span class="file">*Index*</span></samp> buffer with the <kbd>c</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-follow-mode</b><var><a name="index-reftex_002dindex_002dfollow_002dmode-525"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, point in <samp><span class="file">*Index*</span></samp> buffer will cause other
+window to follow.  The other window will show the corresponding part of
+the document.  This flag can be toggled from within the <samp><span class="file">*Index*</span></samp>
+buffer with the <kbd>f</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Keymap: <b>reftex-index-map</b><var><a name="index-reftex_002dindex_002dmap-526"></a></var><br>
+<blockquote><p>The keymap which is active in the <samp><span class="file">*Index*</span></samp> buffer
+(see <a href="Index-Support.html#Index-Support">Index Support</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

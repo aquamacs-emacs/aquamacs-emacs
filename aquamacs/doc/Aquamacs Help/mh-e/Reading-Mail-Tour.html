@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Reading Mail Tour - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tour-Through-MH_002dE.html#Tour-Through-MH_002dE" title="Tour Through MH-E">
+<link rel="prev" href="Sending-Mail-Tour.html#Sending-Mail-Tour" title="Sending Mail Tour">
+<link rel="next" href="Processing-Mail-Tour.html#Processing-Mail-Tour" title="Processing Mail Tour">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Reading-Mail-Tour"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Processing-Mail-Tour.html#Processing-Mail-Tour">Processing Mail Tour</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sending-Mail-Tour.html#Sending-Mail-Tour">Sending Mail Tour</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tour-Through-MH_002dE.html#Tour-Through-MH_002dE">Tour Through MH-E</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Receiving Mail</h3>
+
+<p><a name="index-g_t_0040command_007binc_007d-132"></a><a name="index-g_t_0040command_007bscan_007d-133"></a><a name="index-MH-commands_002c-_0040command_007binc_007d-134"></a><a name="index-MH-commands_002c-_0040command_007bscan_007d-135"></a><a name="index-MH_002dFolder-mode-136"></a><a name="index-modes_002c-MH_002dFolder-137"></a><a name="index-reading-mail-138"></a><a name="index-mh_002drmail-139"></a><a name="index-M_002dx-mh_002drmail-140"></a>
+To read the mail you've just sent yourself, enter <kbd>M-x mh-rmail</kbd>. 
+This incorporates the new mail and puts the output from
+<samp><span class="command">inc</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> (called <dfn>scan lines</dfn> after the MH program
+<samp><span class="command">scan</span></samp><a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> which prints a one-line
+summary of each message) into a buffer called &lsquo;<samp><span class="samp">+inbox</span></samp>&rsquo; whose
+major mode is MH-Folder.
+
+   <p><a name="index-mh_002drmail-141"></a><a name="index-F-r-142"></a><a name="index-M_002dx-mh_002drmail-143"></a>
+   <pre class="sp">
+
+</pre>
+<div align="center"><strong>NOTE</strong></div>
+
+<blockquote>
+
+   <p>The <kbd>M-x mh-rmail</kbd> command will show you only new mail, not mail
+you have already read. If you were to run this tour again, you would
+use <kbd>F r</kbd> to pull all your messages into MH-E. 
+</blockquote>
+
+   <pre class="sp">
+
+</pre>
+
+<a name="index-g_t_0040key_007bRET_007d-144"></a><a name="index-n-145"></a><a name="index-p-146"></a>
+You should see the scan line for your message, and perhaps others. Use
+<kbd>n</kbd> or <kbd>p</kbd> to move the cursor to your test message and type
+&lt;RET&gt; to read your message. You should see something like:
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="smallexample">       3 t08/24 root       received fax files on Wed Aug 24 11:00:13 PDT 1
+     # 4+t08/24 To:wohler  Test&lt;&lt;This is a test message to get the wheels
+     
+     -:%%  {+inbox/select} 4 msgs (1-4)   Bot L4     (MH-Folder Show)---------
+     To: wohler
+     Subject: Test
+     X-Mailer: MH-E 8.1; nmh 1.1; GNU Emacs 23.1
+     Date: Fri, 17 Mar 2006 10:49:11 -0800
+     From: Bill Wohler &lt;wohler@stop.mail-abuse.org&gt;
+     
+     This is a test message to get the wheels churning...
+     
+     
+     
+     --:--  {show-+inbox} 4   All L1     (MH-Show)----------------------------
+     
+</pre>
+   </td></tr></table>
+   <i>After incorporating new messages</i>
+
+   <p><a name="index-g_t_0040key_007bDEL_007d-147"></a><a name="index-g_t_0040key_007bSPC_007d-148"></a>
+If you typed a long message, you can view subsequent pages with
+&lt;SPC&gt; and previous pages with &lt;DEL&gt;.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/reapre.html">Reading Mail: inc show next prev</a> in the MH book.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/faswsprs.html">Find and Specify with scan pick Ranges Sequences</a> in the MH book.</p>
+
+   <hr></div>
+
+   </body></html>
+

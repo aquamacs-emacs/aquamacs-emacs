@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>Customizing the Integrator - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Calculus.html#Calculus" title="Calculus">
+<link rel="prev" href="Integration.html#Integration" title="Integration">
+<link rel="next" href="Numerical-Integration.html#Numerical-Integration" title="Numerical Integration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Customizing-the-Integrator"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Numerical-Integration.html#Numerical-Integration">Numerical Integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Integration.html#Integration">Integration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calculus.html#Calculus">Calculus</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.5.3 Customizing the Integrator</h4>
+
+<p class="noindent"><a name="index-IntegRules-1741"></a>Calc has two built-in rewrite rules called <code>IntegRules</code> and
+<code>IntegAfterRules</code> which you can edit to define new integration
+methods.  See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.  At each step of the integration process,
+Calc wraps the current integrand in a call to the fictitious function
+&lsquo;<samp><span class="samp">integtry(</span><var>expr</var><span class="samp">,</span><var>var</var><span class="samp">)</span></samp>&rsquo;, where <var>expr</var> is the
+integrand and <var>var</var> is the integration variable.  If your rules
+rewrite this to be a plain formula (not a call to <code>integtry</code>), then
+Calc will use this formula as the integral of <var>expr</var>.  For example,
+the rule &lsquo;<samp><span class="samp">integtry(mysin(x),x) := -mycos(x)</span></samp>&rsquo; would define a rule to
+integrate a function <code>mysin</code> that acts like the sine function. 
+Then, putting &lsquo;<samp><span class="samp">4 mysin(2y+1)</span></samp>&rsquo; on the stack and typing <kbd>a i y</kbd>
+will produce the integral &lsquo;<samp><span class="samp">-2 mycos(2y+1)</span></samp>&rsquo;.  Note that Calc has
+automatically made various transformations on the integral to allow it
+to use your rule; integral tables generally give rules for
+&lsquo;<samp><span class="samp">mysin(a x + b)</span></samp>&rsquo;, but you don't need to use this much generality
+in your <code>IntegRules</code>.
+
+   <p><a name="index-Exponential-integral-Ei_0028x_0029-1742"></a><a name="index-Ei-1743"></a>As a more serious example, the expression &lsquo;<samp><span class="samp">exp(x)/x</span></samp>&rsquo; cannot be
+integrated in terms of the standard functions, so the &ldquo;exponential
+integral&rdquo; function
+<!-- @math{{\rm Ei}(x)} -->
+&lsquo;<samp><span class="samp">Ei(x)</span></samp>&rsquo;
+was invented to describe it. 
+We can get Calc to do this integral in terms of a made-up <code>Ei</code>
+function by adding the rule &lsquo;<samp><span class="samp">[integtry(exp(x)/x, x) := Ei(x)]</span></samp>&rsquo;
+to <code>IntegRules</code>.  Now entering &lsquo;<samp><span class="samp">exp(2x)/x</span></samp>&rsquo; on the stack
+and typing <kbd>a i x</kbd> yields &lsquo;<samp><span class="samp">Ei(2 x)</span></samp>&rsquo;.  This new rule will
+work with Calc's various built-in integration methods (such as
+integration by substitution) to solve a variety of other problems
+involving <code>Ei</code>:  For example, now Calc will also be able to
+integrate &lsquo;<samp><span class="samp">exp(exp(x))</span></samp>&rsquo; and &lsquo;<samp><span class="samp">ln(ln(x))</span></samp>&rsquo; (to get &lsquo;<samp><span class="samp">Ei(exp(x))</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">x ln(ln(x)) - Ei(ln(x))</span></samp>&rsquo;, respectively).
+
+   <p>Your rule may do further integration by calling <code>integ</code>.  For
+example, &lsquo;<samp><span class="samp">integtry(twice(u),x) := twice(integ(u))</span></samp>&rsquo; allows Calc
+to integrate &lsquo;<samp><span class="samp">twice(sin(x))</span></samp>&rsquo; to get &lsquo;<samp><span class="samp">twice(-cos(x))</span></samp>&rsquo;. 
+Note that <code>integ</code> was called with only one argument.  This notation
+is allowed only within <code>IntegRules</code>; it means &ldquo;integrate this
+with respect to the same integration variable.&rdquo;  If Calc is unable
+to integrate <code>u</code>, the integration that invoked <code>IntegRules</code>
+also fails.  Thus integrating &lsquo;<samp><span class="samp">twice(f(x))</span></samp>&rsquo; fails, returning the
+unevaluated integral &lsquo;<samp><span class="samp">integ(twice(f(x)), x)</span></samp>&rsquo;.  It is still valid
+to call <code>integ</code> with two or more arguments, however; in this case,
+if <code>u</code> is not integrable, <code>twice</code> itself will still be
+integrated:  If the above rule is changed to &lsquo;<samp><span class="samp">... := twice(integ(u,x))</span></samp>&rsquo;,
+then integrating &lsquo;<samp><span class="samp">twice(f(x))</span></samp>&rsquo; will yield &lsquo;<samp><span class="samp">twice(integ(f(x),x))</span></samp>&rsquo;.
+
+   <p>If a rule instead produces the formula &lsquo;<samp><span class="samp">integsubst(</span><var>sexpr</var><span class="samp">,
+</span><var>svar</var><span class="samp">)</span></samp>&rsquo;, either replacing the top-level <code>integtry</code> call or
+nested anywhere inside the expression, then Calc will apply the
+substitution &lsquo;<samp><var>u</var><span class="samp"> = </span><var>sexpr</var><span class="samp">(</span><var>svar</var><span class="samp">)</span></samp>&rsquo; to try to
+integrate the original <var>expr</var>.  For example, the rule
+&lsquo;<samp><span class="samp">sqrt(a) := integsubst(sqrt(x),x)</span></samp>&rsquo; says that if Calc ever finds
+a square root in the integrand, it should attempt the substitution
+&lsquo;<samp><span class="samp">u = sqrt(x)</span></samp>&rsquo;.  (This particular rule is unnecessary because
+Calc always tries &ldquo;obvious&rdquo; substitutions where <var>sexpr</var> actually
+appears in the integrand.)  The variable <var>svar</var> may be the same
+as the <var>var</var> that appeared in the call to <code>integtry</code>, but
+it need not be.
+
+   <p>When integrating according to an <code>integsubst</code>, Calc uses the
+equation solver to find the inverse of <var>sexpr</var> (if the integrand
+refers to <var>var</var> anywhere except in subexpressions that exactly
+match <var>sexpr</var>).  It uses the differentiator to find the derivative
+of <var>sexpr</var> and/or its inverse (it has two methods that use one
+derivative or the other).  You can also specify these items by adding
+extra arguments to the <code>integsubst</code> your rules construct; the
+general form is &lsquo;<samp><span class="samp">integsubst(</span><var>sexpr</var><span class="samp">, </span><var>svar</var><span class="samp">, </span><var>sinv</var><span class="samp">,
+</span><var>sprime</var><span class="samp">)</span></samp>&rsquo;, where <var>sinv</var> is the inverse of <var>sexpr</var> (still
+written as a function of <var>svar</var>), and <var>sprime</var> is the
+derivative of <var>sexpr</var> with respect to <var>svar</var>.  If you don't
+specify these things, and Calc is not able to work them out on its
+own with the information it knows, then your substitution rule will
+work only in very specific, simple cases.
+
+   <p>Calc applies <code>IntegRules</code> as if by <kbd>C-u 1 a r IntegRules</kbd>;
+in other words, Calc stops rewriting as soon as any rule in your rule
+set succeeds.  (If it weren't for this, the &lsquo;<samp><span class="samp">integsubst(sqrt(x),x)</span></samp>&rsquo;
+example above would keep on adding layers of <code>integsubst</code> calls
+forever!)
+
+   <p><a name="index-IntegSimpRules-1744"></a>Another set of rules, stored in <code>IntegSimpRules</code>, are applied
+every time the integrator uses <kbd>a s</kbd> to simplify an intermediate
+result.  For example, putting the rule &lsquo;<samp><span class="samp">twice(x) := 2 x</span></samp>&rsquo; into
+<code>IntegSimpRules</code> would tell Calc to convert the <code>twice</code>
+function into a form it knows whenever integration is attempted.
+
+   <p>One more way to influence the integrator is to define a function with
+the <kbd>Z F</kbd> command (see <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>).  Calc's
+integrator automatically expands such functions according to their
+defining formulas, even if you originally asked for the function to
+be left unevaluated for symbolic arguments.  (Certain other Calc
+systems, such as the differentiator and the equation solver, also
+do this.)
+
+   <p><a name="index-IntegAfterRules-1745"></a>Sometimes Calc is able to find a solution to your integral, but it
+expresses the result in a way that is unnecessarily complicated.  If
+this happens, you can either use <code>integsubst</code> as described
+above to try to hint at a more direct path to the desired result, or
+you can use <code>IntegAfterRules</code>.  This is an extra rule set that
+runs after the main integrator returns its result; basically, Calc does
+an <kbd>a r IntegAfterRules</kbd> on the result before showing it to you. 
+(It also does an <kbd>a s</kbd>, without <code>IntegSimpRules</code>, after that
+to further simplify the result.)  For example, Calc's integrator
+sometimes produces expressions of the form &lsquo;<samp><span class="samp">ln(1+x) - ln(1-x)</span></samp>&rsquo;;
+the default <code>IntegAfterRules</code> rewrite this into the more readable
+form &lsquo;<samp><span class="samp">2 arctanh(x)</span></samp>&rsquo;.  Note that, unlike <code>IntegRules</code>,
+<code>IntegSimpRules</code> and <code>IntegAfterRules</code> are applied any number
+of times until no further changes are possible.  Rewriting by
+<code>IntegAfterRules</code> occurs only after the main integrator has
+finished, not at every step as for <code>IntegRules</code> and
+<code>IntegSimpRules</code>.
+
+   </body></html>
+

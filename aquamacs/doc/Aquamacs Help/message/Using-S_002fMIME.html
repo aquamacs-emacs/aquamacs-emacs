@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Using S/MIME - Message Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Message Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Security.html#Security" title="Security">
+<link rel="prev" href="Signing-and-encryption.html#Signing-and-encryption" title="Signing and encryption">
+<link rel="next" href="Using-PGP_002fMIME.html#Using-PGP_002fMIME" title="Using PGP/MIME">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Message, the Emacs message composition mode.
+
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Using-S%2fMIME"></a>
+<a name="Using-S_002fMIME"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-PGP_002fMIME.html#Using-PGP_002fMIME">Using PGP/MIME</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Signing-and-encryption.html#Signing-and-encryption">Signing and encryption</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Security.html#Security">Security</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.7.2 Using S/MIME</h4>
+
+<p><em>Note!</em>  This section assume you have a basic familiarity with
+modern cryptography, <acronym>S/MIME</acronym>, various PKCS standards, OpenSSL and
+so on.
+
+   <p>The <acronym>S/MIME</acronym> support in Message (and <acronym>MML</acronym>) require
+OpenSSL.  OpenSSL performs the actual <acronym>S/MIME</acronym> sign/encrypt
+operations.  OpenSSL can be found at <a href="http://www.openssl.org/">http://www.openssl.org/</a>. 
+OpenSSL 0.9.6 and later should work.  Version 0.9.5a cannot extract mail
+addresses from certificates, and it insert a spurious CR character into
+<acronym>MIME</acronym> separators so you may wish to avoid it if you would like
+to avoid being regarded as someone who send strange mail.  (Although by
+sending <acronym>S/MIME</acronym> messages you've probably already lost that
+contest.)
+
+   <p>To be able to send encrypted mail, a personal certificate is not
+required.  Message (<acronym>MML</acronym>) need a certificate for the person to whom you
+wish to communicate with though.  You're asked for this when you type
+<kbd>C-c C-m c s</kbd>.  Currently there are two ways to retrieve this
+certificate, from a local file or from DNS.  If you chose a local
+file, it need to contain a X.509 certificate in <acronym>PEM</acronym> format. 
+If you chose DNS, you're asked for the domain name where the
+certificate is stored, the default is a good guess.  To my belief,
+Message (<acronym>MML</acronym>) is the first mail agent in the world to support
+retrieving <acronym>S/MIME</acronym> certificates from DNS, so you're not
+likely to find very many certificates out there.  At least there
+should be one, stored at the domain <code>simon.josefsson.org</code>.  LDAP
+is a more popular method of distributing certificates, support for it
+is planned.  (Meanwhile, you can use <code>ldapsearch</code> from the
+command line to retrieve a certificate into a file and use it.)
+
+   <p>As for signing messages, OpenSSL can't perform signing operations
+without some kind of configuration.  Especially, you need to tell it
+where your private key and your certificate is stored.  <acronym>MML</acronym>
+uses an Emacs interface to OpenSSL, aptly named <code>smime.el</code>, and it
+contain a <code>custom</code> group used for this configuration.  So, try
+<kbd>M-x customize-group RET smime RET</kbd> and look around.
+
+   <p>Currently there is no support for talking to a CA (or RA) to create
+your own certificate.  None is planned either.  You need to do this
+manually with OpenSSL or using some other program.  I used Netscape
+and got a free <acronym>S/MIME</acronym> certificate from one of the big CA's on the
+net.  Netscape is able to export your private key and certificate in
+PKCS #12 format.  Use OpenSSL to convert this into a plain X.509
+certificate in PEM format as follows.
+
+<pre class="example">     $ openssl pkcs12 -in ns.p12 -clcerts -nodes &gt; key+cert.pem
+</pre>
+   <p>The <samp><span class="file">key+cert.pem</span></samp> file should be pointed to from the
+<code>smime-keys</code> variable.  You should now be able to send signed mail.
+
+   <p><em>Note!</em>  Your private key is now stored unencrypted in the file,
+so take care in handling it.  Storing encrypted keys on the disk are
+supported, and Gnus will ask you for a passphrase before invoking
+OpenSSL.  Read the OpenSSL documentation for how to achieve this.  If
+you use unencrypted keys (e.g., if they are on a secure storage, or if
+you are on a secure single user machine) simply press <code>RET</code> at
+the passphrase prompt.
+
+   </body></html>
+

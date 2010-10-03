@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Algebraic Entry - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Introduction.html#Introduction" title="Introduction">
+<link rel="prev" href="Numeric-Entry.html#Numeric-Entry" title="Numeric Entry">
+<link rel="next" href="Quick-Calculator.html#Quick-Calculator" title="Quick Calculator">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebraic-Entry"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Quick-Calculator.html#Quick-Calculator">Quick Calculator</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Numeric-Entry.html#Numeric-Entry">Numeric Entry</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
+<hr>
+</div>
+
+<h3 class="section">4.5 Algebraic Entry</h3>
+
+<p class="noindent"><a name="index-g_t_0027-183"></a><a name="index-calc_002dalgebraic_002dentry-184"></a><a name="index-Algebraic-notation-185"></a><a name="index-Formulas_002c-entering-186"></a>The <kbd>'</kbd> (<code>calc-algebraic-entry</code>) command can be used to enter
+calculations in algebraic form.  This is accomplished by typing the
+apostrophe key, ', followed by the expression in standard format:
+
+<pre class="example">     ' 2+3*4 &lt;RET&gt;.
+</pre>
+   <p class="noindent">This will compute
+<!-- @math{2+(3\times4) = 14} -->
+&lsquo;<samp><span class="samp">2+(3*4) = 14</span></samp>&rsquo;
+and push it on the stack.  If you wish you can
+ignore the RPN aspect of Calc altogether and simply enter algebraic
+expressions in this way.  You may want to use &lt;DEL&gt; every so often to
+clear previous results off the stack.
+
+   <p>You can press the apostrophe key during normal numeric entry to switch
+the half-entered number into Algebraic entry mode.  One reason to do
+this would be to fix a typo, as the full Emacs cursor motion and editing
+keys are available during algebraic entry but not during numeric entry.
+
+   <p>In the same vein, during either numeric or algebraic entry you can
+press <kbd>`</kbd> (backquote) to switch to <code>calc-edit</code> mode, where
+you complete your half-finished entry in a separate buffer. 
+See <a href="Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack Entries</a>.
+
+   <p><a name="index-m-a-187"></a><a name="index-calc_002dalgebraic_002dmode-188"></a><a name="index-Algebraic-Mode-189"></a>If you prefer algebraic entry, you can use the command <kbd>m a</kbd>
+(<code>calc-algebraic-mode</code>) to set Algebraic mode.  In this mode,
+digits and other keys that would normally start numeric entry instead
+start full algebraic entry; as long as your formula begins with a digit
+you can omit the apostrophe.  Open parentheses and square brackets also
+begin algebraic entry.  You can still do RPN calculations in this mode,
+but you will have to press &lt;RET&gt; to terminate every number:
+<kbd>2 &lt;RET&gt; 3 &lt;RET&gt; * 4 &lt;RET&gt; +</kbd> would accomplish the same
+thing as <kbd>2*3+4 &lt;RET&gt;</kbd>.
+
+   <p><a name="index-Incomplete-Algebraic-Mode-190"></a>If you give a numeric prefix argument like <kbd>C-u</kbd> to the <kbd>m a</kbd>
+command, it enables Incomplete Algebraic mode; this is like regular
+Algebraic mode except that it applies to the <kbd>(</kbd> and <kbd>[</kbd> keys
+only.  Numeric keys still begin a numeric entry in this mode.
+
+   <p><a name="index-m-t-191"></a><a name="index-calc_002dtotal_002dalgebraic_002dmode-192"></a><a name="index-Total-Algebraic-Mode-193"></a>The <kbd>m t</kbd> (<code>calc-total-algebraic-mode</code>) gives you an even
+stronger algebraic-entry mode, in which <em>all</em> regular letter and
+punctuation keys begin algebraic entry.  Use this if you prefer typing
+<kbd>sqrt(&nbsp;)</kbd><!-- /@w --> instead of <kbd>Q</kbd>, <kbd>factor(&nbsp;)</kbd><!-- /@w --> instead of
+<kbd>a f</kbd>, and so on.  To type regular Calc commands when you are in
+Total Algebraic mode, hold down the &lt;META&gt; key.  Thus <kbd>M-q</kbd>
+is the command to quit Calc, <kbd>M-p</kbd> sets the precision, and
+<kbd>M-m t</kbd> (or <kbd>M-m M-t</kbd>, if you prefer) turns Total Algebraic
+mode back off again.  Meta keys also terminate algebraic entry, so
+that <kbd>2+3 M-S</kbd> is equivalent to <kbd>2+3 &lt;RET&gt; M-S</kbd>.  The symbol
+&lsquo;<samp><span class="samp">Alg*</span></samp>&rsquo; will appear in the mode line whenever you are in this mode.
+
+   <p>Pressing <kbd>'</kbd> (the apostrophe) a second time re-enters the previous
+algebraic formula.  You can then use the normal Emacs editing keys to
+modify this formula to your liking before pressing &lt;RET&gt;.
+
+   <p><a name="index-g_t_0024-194"></a><a name="index-Formulas_002c-referring-to-stack-195"></a>Within a formula entered from the keyboard, the symbol <kbd>$</kbd>
+represents the number on the top of the stack.  If an entered formula
+contains any <kbd>$</kbd> characters, the Calculator replaces the top of
+stack with that formula rather than simply pushing the formula onto the
+stack.  Thus, <kbd>' 1+2 &lt;RET&gt;</kbd> pushes 3 on the stack, and <kbd>$*2
+&lt;RET&gt;</kbd> replaces it with 6.  Note that the <kbd>$</kbd> key always
+initiates algebraic entry; the <kbd>'</kbd> is unnecessary if <kbd>$</kbd> is the
+first character in the new formula.
+
+   <p>Higher stack elements can be accessed from an entered formula with the
+symbols <kbd>$$</kbd>, <kbd>$$$</kbd>, and so on.  The number of stack elements
+removed (to be replaced by the entered values) equals the number of dollar
+signs in the longest such symbol in the formula.  For example, &lsquo;<samp><span class="samp">$$+$$$</span></samp>&rsquo;
+adds the second and third stack elements, replacing the top three elements
+with the answer.  (All information about the top stack element is thus lost
+since no single &lsquo;<samp><span class="samp">$</span></samp>&rsquo; appears in this formula.)
+
+   <p>A slightly different way to refer to stack elements is with a dollar
+sign followed by a number:  &lsquo;<samp><span class="samp">$1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$2</span></samp>&rsquo;, and so on are much
+like &lsquo;<samp><span class="samp">$</span></samp>&rsquo;, &lsquo;<samp><span class="samp">$$</span></samp>&rsquo;, etc., except that stack entries referred
+to numerically are not replaced by the algebraic entry.  That is, while
+&lsquo;<samp><span class="samp">$+1</span></samp>&rsquo; replaces 5 on the stack with 6, &lsquo;<samp><span class="samp">$1+1</span></samp>&rsquo; leaves the 5
+on the stack and pushes an additional 6.
+
+   <p>If a sequence of formulas are entered separated by commas, each formula
+is pushed onto the stack in turn.  For example, &lsquo;<samp><span class="samp">1,2,3</span></samp>&rsquo; pushes
+those three numbers onto the stack (leaving the 3 at the top), and
+&lsquo;<samp><span class="samp">$+1,$-1</span></samp>&rsquo; replaces a 5 on the stack with 4 followed by 6.  Also,
+&lsquo;<samp><span class="samp">$,$$</span></samp>&rsquo; exchanges the top two elements of the stack, just like the
+&lt;TAB&gt; key.
+
+   <p>You can finish an algebraic entry with <kbd>M-=</kbd> or <kbd>M-&lt;RET&gt;</kbd> instead
+of &lt;RET&gt;.  This uses <kbd>=</kbd> to evaluate the variables in each
+formula that goes onto the stack.  (Thus <kbd>' pi &lt;RET&gt;</kbd> pushes
+the variable &lsquo;<samp><span class="samp">pi</span></samp>&rsquo;, but <kbd>' pi M-&lt;RET&gt;</kbd> pushes 3.1415.)
+
+   <p>If you finish your algebraic entry by pressing &lt;LFD&gt; (or <kbd>C-j</kbd>)
+instead of &lt;RET&gt;, Calc disables the default simplifications
+(as if by <kbd>m O</kbd>; see <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>) while the entry
+is being pushed on the stack.  Thus <kbd>' 1+2 &lt;RET&gt;</kbd> pushes 3
+on the stack, but <kbd>' 1+2 &lt;LFD&gt;</kbd> pushes the formula &lsquo;<samp><span class="samp">1+2</span></samp>&rsquo;;
+you might then press <kbd>=</kbd> when it is time to evaluate this formula.
+
+   </body></html>
+

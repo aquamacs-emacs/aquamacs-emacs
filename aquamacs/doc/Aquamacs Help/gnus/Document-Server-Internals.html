@@ -1,0 +1,176 @@
+<html lang="en">
+<head>
+<title>Document Server Internals - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Document-Groups.html#Document-Groups" title="Document Groups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Document-Server-Internals"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Document-Groups.html#Document-Groups">Document Groups</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">6.6.3.1 Document Server Internals</h5>
+
+<p>Adding new document types to be recognized by <code>nndoc</code> isn't
+difficult.  You just have to whip up a definition of what the document
+looks like, write a predicate function to recognize that document type,
+and then hook into <code>nndoc</code>.
+
+   <p>First, here's an example document type definition:
+
+<pre class="example">     (mmdf
+      (article-begin .  "^\^A\^A\^A\^A\n")
+      (body-end .  "^\^A\^A\^A\^A\n"))
+</pre>
+   <p>The definition is simply a unique <dfn>name</dfn> followed by a series of
+regexp pseudo-variable settings.  Below are the possible
+variables&mdash;don't be daunted by the number of variables; most document
+types can be defined with very few settings:
+
+     <dl>
+<dt><code>first-article</code><dd>If present, <code>nndoc</code> will skip past all text until it finds
+something that match this regexp.  All text before this will be
+totally ignored.
+
+     <br><dt><code>article-begin</code><dd>This setting has to be present in all document type definitions.  It
+says what the beginning of each article looks like.  To do more
+complicated things that cannot be dealt with a simple regexp, you can
+use <code>article-begin-function</code> instead of this.
+
+     <br><dt><code>article-begin-function</code><dd>If present, this should be a function that moves point to the beginning
+of each article.  This setting overrides <code>article-begin</code>.
+
+     <br><dt><code>head-begin</code><dd>If present, this should be a regexp that matches the head of the
+article.  To do more complicated things that cannot be dealt with a
+simple regexp, you can use <code>head-begin-function</code> instead of this.
+
+     <br><dt><code>head-begin-function</code><dd>If present, this should be a function that moves point to the head of
+the article.  This setting overrides <code>head-begin</code>.
+
+     <br><dt><code>head-end</code><dd>This should match the end of the head of the article.  It defaults to
+&lsquo;<samp><span class="samp">^$</span></samp>&rsquo;&mdash;the empty line.
+
+     <br><dt><code>body-begin</code><dd>This should match the beginning of the body of the article.  It defaults
+to &lsquo;<samp><span class="samp">^\n</span></samp>&rsquo;.  To do more complicated things that cannot be dealt with
+a simple regexp, you can use <code>body-begin-function</code> instead of this.
+
+     <br><dt><code>body-begin-function</code><dd>If present, this function should move point to the beginning of the body
+of the article.  This setting overrides <code>body-begin</code>.
+
+     <br><dt><code>body-end</code><dd>If present, this should match the end of the body of the article.  To do
+more complicated things that cannot be dealt with a simple regexp, you
+can use <code>body-end-function</code> instead of this.
+
+     <br><dt><code>body-end-function</code><dd>If present, this function should move point to the end of the body of
+the article.  This setting overrides <code>body-end</code>.
+
+     <br><dt><code>file-begin</code><dd>If present, this should match the beginning of the file.  All text
+before this regexp will be totally ignored.
+
+     <br><dt><code>file-end</code><dd>If present, this should match the end of the file.  All text after this
+regexp will be totally ignored.
+
+   </dl>
+
+   <p>So, using these variables <code>nndoc</code> is able to dissect a document
+file into a series of articles, each with a head and a body.  However, a
+few more variables are needed since not all document types are all that
+news-like&mdash;variables needed to transform the head or the body into
+something that's palatable for Gnus:
+
+     <dl>
+<dt><code>prepare-body-function</code><dd>If present, this function will be called when requesting an article.  It
+will be called with point at the start of the body, and is useful if the
+document has encoded some parts of its contents.
+
+     <br><dt><code>article-transform-function</code><dd>If present, this function is called when requesting an article.  It's
+meant to be used for more wide-ranging transformation of both head and
+body of the article.
+
+     <br><dt><code>generate-head-function</code><dd>If present, this function is called to generate a head that Gnus can
+understand.  It is called with the article number as a parameter, and is
+expected to generate a nice head for the article in question.  It is
+called when requesting the headers of all articles.
+
+     <br><dt><code>generate-article-function</code><dd>If present, this function is called to generate an entire article that
+Gnus can understand.  It is called with the article number as a
+parameter when requesting all articles.
+
+     <br><dt><code>dissection-function</code><dd>If present, this function is called to dissect a document by itself,
+overriding <code>first-article</code>, <code>article-begin</code>,
+<code>article-begin-function</code>, <code>head-begin</code>,
+<code>head-begin-function</code>, <code>head-end</code>, <code>body-begin</code>,
+<code>body-begin-function</code>, <code>body-end</code>, <code>body-end-function</code>,
+<code>file-begin</code>, and <code>file-end</code>.
+
+   </dl>
+
+   <p>Let's look at the most complicated example I can come up with&mdash;standard
+digests:
+
+<pre class="example">     (standard-digest
+      (first-article . ,(concat "^" (make-string 70 ?-) "\n\n+"))
+      (article-begin . ,(concat "\n\n" (make-string 30 ?-) "\n\n+"))
+      (prepare-body-function . nndoc-unquote-dashes)
+      (body-end-function . nndoc-digest-body-end)
+      (head-end . "^ ?$")
+      (body-begin . "^ ?\n")
+      (file-end . "^End of .*digest.*[0-9].*\n\\*\\*\\|^End of.*Digest *$")
+      (subtype digest guess))
+</pre>
+   <p>We see that all text before a 70-width line of dashes is ignored; all
+text after a line that starts with that &lsquo;<samp><span class="samp">^End of</span></samp>&rsquo; is also ignored;
+each article begins with a 30-width line of dashes; the line separating
+the head from the body may contain a single space; and that the body is
+run through <code>nndoc-unquote-dashes</code> before being delivered.
+
+   <p>To hook your own document definition into <code>nndoc</code>, use the
+<code>nndoc-add-type</code> function.  It takes two parameters&mdash;the first
+is the definition itself and the second (optional) parameter says
+where in the document type definition alist to put this definition. 
+The alist is traversed sequentially, and
+<code>nndoc-</code><var>type</var><code>-type-p</code> is called for a given type <var>type</var>. 
+So <code>nndoc-mmdf-type-p</code> is called to see whether a document is of
+<code>mmdf</code> type, and so on.  These type predicates should return
+<code>nil</code> if the document is not of the correct type; <code>t</code> if it
+is of the correct type; and a number if the document might be of the
+correct type.  A high number means high probability; a low number
+means low probability with &lsquo;<samp><span class="samp">0</span></samp>&rsquo; being the lowest valid number.
+
+   </body></html>
+

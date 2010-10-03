@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Encrypting/decrypting *.gpg files - EasyPG Assistant User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="EasyPG Assistant User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Mail_002dmode-integration.html#Mail_002dmode-integration" title="Mail-mode integration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EasyPG Assistant 1.0.0.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Encrypting%2fdecrypting-*.gpg-files"></a>
+<a name="Encrypting_002fdecrypting-_002a_002egpg-files"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail_002dmode-integration.html#Mail_002dmode-integration">Mail-mode integration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">3.6 Encrypting/decrypting *.gpg files</h3>
+
+<p>By default, every file whose extension is &lsquo;<samp><span class="samp">.gpg</span></samp>&rsquo; will be treated
+as encrypted.  That is, when you attempt to open such a file which
+already exists, the decrypted text is inserted in the buffer rather
+than encrypted one.  On the other hand, when you attempt to save the
+buffer to a file whose extension is &lsquo;<samp><span class="samp">.gpg</span></samp>&rsquo;, encrypted data is
+written.
+
+   <p>If you want to temporarily disable this behavior, use <kbd>M-x
+epa-file-disable</kbd>, and then to enable this behavior use <kbd>M-x
+epa-file-enable</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>epa-file-disable</b><var><a name="index-epa_002dfile_002ddisable-34"></a></var><br>
+<blockquote><p>Disable automatic encryption/decryption of *.gpg files. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-file-enable</b><var><a name="index-epa_002dfile_002denable-35"></a></var><br>
+<blockquote><p>Enable automatic encryption/decryption of *.gpg files. 
+</p></blockquote></div>
+
+<p class="noindent"><code>epa-file</code> will let you select recipients.  If you want to
+suppress this question, it might be a good idea to put the following
+line on the first line of the text being encrypted. 
+<a name="index-epa_002dfile_002dencrypt_002dto-36"></a>
+<p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="lisp">     ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
+</pre>
+   </td></tr></table>
+
+   <p>The file name extension of encrypted files can be controlled by
+<var>epa-file-name-regexp</var>.
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-name-regexp</b><var><a name="index-epa_002dfile_002dname_002dregexp-37"></a></var><br>
+<blockquote><p>Regexp which matches filenames treated as encrypted. 
+</p></blockquote></div>
+
+   <p>Other variables which control the automatic encryption/decryption
+behavior are below.
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-cache-passphrase-for-symmetric-encryption</b><var><a name="index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption-38"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, cache passphrase for symmetric encryption.  The
+default value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-inhibit-auto-save</b><var><a name="index-epa_002dfile_002dinhibit_002dauto_002dsave-39"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, disable auto-saving when opening an encrypted file. 
+The default value is <code>t</code>. 
+</p></blockquote></div>
+
+</body></html>
+

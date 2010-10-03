@@ -1,0 +1,634 @@
+<html lang="en">
+<head>
+<title>GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just "GNU GENERAL
+     PUBLIC LICENSE", with the Front-Cover texts being "A GNU Manual,"
+     and with the Back-Cover Texts as in (a) below.  A copy of the
+     license is included in the section entitled "GNU Free
+     Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">GNU Emacs Calc Manual</h1>
+   <div class="shortcontents">
+<h2>Short Contents</h2>
+<ul>
+<li><a href="index.html#toc_Top">1 The GNU Emacs Calculator</a></li>
+<li><a href="index.html#toc_Getting-Started">2 Getting Started</a></li>
+<li><a href="index.html#toc_Tutorial">3 Tutorial</a></li>
+<li><a href="index.html#toc_Introduction">4 Introduction</a></li>
+<li><a href="index.html#toc_Data-Types">5 Data Types</a></li>
+<li><a href="index.html#toc_Stack-and-Trail">6 Stack and Trail Commands</a></li>
+<li><a href="index.html#toc_Mode-Settings">7 Mode Settings</a></li>
+<li><a href="index.html#toc_Arithmetic">8 Arithmetic Functions</a></li>
+<li><a href="index.html#toc_Scientific-Functions">9 Scientific Functions</a></li>
+<li><a href="index.html#toc_Matrix-Functions">10 Vector/Matrix Functions</a></li>
+<li><a href="index.html#toc_Algebra">11 Algebra</a></li>
+<li><a href="index.html#toc_Units">12 Operating on Units</a></li>
+<li><a href="index.html#toc_Store-and-Recall">13 Storing and Recalling</a></li>
+<li><a href="index.html#toc_Graphics">14 Graphics</a></li>
+<li><a href="index.html#toc_Kill-and-Yank">15 Kill and Yank Functions</a></li>
+<li><a href="index.html#toc_Keypad-Mode">16 Keypad Mode</a></li>
+<li><a href="index.html#toc_Embedded-Mode">17 Embedded Mode</a></li>
+<li><a href="index.html#toc_Programming">18 Programming</a></li>
+<li><a href="index.html#toc_Copying">Appendix A GNU GENERAL PUBLIC LICENSE</a></li>
+<li><a href="index.html#toc_GNU-Free-Documentation-License">Appendix B GNU Free Documentation License</a></li>
+<li><a href="index.html#toc_Customizing-Calc">Appendix C Customizing Calc</a></li>
+<li><a href="index.html#toc_Reporting-Bugs">Appendix D Reporting Bugs</a></li>
+<li><a href="index.html#toc_Summary">Appendix E Calc Summary</a></li>
+<li><a href="index.html#toc_Key-Index">Index of Key Sequences</a></li>
+<li><a href="index.html#toc_Command-Index">Index of Calculator Commands</a></li>
+<li><a href="index.html#toc_Function-Index">Index of Algebraic Functions</a></li>
+<li><a href="index.html#toc_Concept-Index">Concept Index</a></li>
+<li><a href="index.html#toc_Variable-Index">Index of Variables</a></li>
+<li><a href="index.html#toc_Lisp-Function-Index">Index of Lisp Math Functions</a></li>
+</ul>
+</div>
+
+
+
+<!-- [end] -->
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">1 The GNU Emacs Calculator</a>
+<li><a name="toc_Getting-Started" href="Getting-Started.html#Getting-Started">2 Getting Started</a>
+<ul>
+<li><a href="What-is-Calc.html#What-is-Calc">2.1 What is Calc?</a>
+<li><a href="About-This-Manual.html#About-This-Manual">2.2 About This Manual</a>
+<li><a href="Notations-Used-in-This-Manual.html#Notations-Used-in-This-Manual">2.3 Notations Used in This Manual</a>
+<li><a href="Demonstration-of-Calc.html#Demonstration-of-Calc">2.4 A Demonstration of Calc</a>
+<li><a href="Using-Calc.html#Using-Calc">2.5 Using Calc</a>
+<ul>
+<li><a href="Starting-Calc.html#Starting-Calc">2.5.1 Starting Calc</a>
+<li><a href="The-Standard-Interface.html#The-Standard-Interface">2.5.2 The Standard Calc Interface</a>
+<li><a href="Quick-Mode-Overview.html#Quick-Mode-Overview">2.5.3 Quick Mode (Overview)</a>
+<li><a href="Keypad-Mode-Overview.html#Keypad-Mode-Overview">2.5.4 Keypad Mode (Overview)</a>
+<li><a href="Standalone-Operation.html#Standalone-Operation">2.5.5 Standalone Operation</a>
+<li><a href="Embedded-Mode-Overview.html#Embedded-Mode-Overview">2.5.6 Embedded Mode (Overview)</a>
+<li><a href="Other-C_002dx-_002a-Commands.html#Other-C_002dx-_002a-Commands">2.5.7 Other <kbd>C-x *</kbd> Commands</a>
+</li></ul>
+<li><a href="History-and-Acknowledgements.html#History-and-Acknowledgements">2.6 History and Acknowledgements</a>
+</li></ul>
+<li><a name="toc_Tutorial" href="Tutorial.html#Tutorial">3 Tutorial</a>
+<ul>
+<li><a href="Basic-Tutorial.html#Basic-Tutorial">3.1 Basic Tutorial</a>
+<ul>
+<li><a href="RPN-Tutorial.html#RPN-Tutorial">3.1.1 RPN Calculations and the Stack</a>
+<li><a href="Algebraic-Tutorial.html#Algebraic-Tutorial">3.1.2 Algebraic-Style Calculations</a>
+<li><a href="Undo-Tutorial.html#Undo-Tutorial">3.1.3 Undo and Redo</a>
+<li><a href="Modes-Tutorial.html#Modes-Tutorial">3.1.4 Mode-Setting Commands</a>
+</li></ul>
+<li><a href="Arithmetic-Tutorial.html#Arithmetic-Tutorial">3.2 Arithmetic Tutorial</a>
+<li><a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">3.3 Vector/Matrix Tutorial</a>
+<ul>
+<li><a href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial">3.3.1 Vector Analysis</a>
+<li><a href="Matrix-Tutorial.html#Matrix-Tutorial">3.3.2 Matrices</a>
+<li><a href="List-Tutorial.html#List-Tutorial">3.3.3 Vectors as Lists</a>
+</li></ul>
+<li><a href="Types-Tutorial.html#Types-Tutorial">3.4 Types Tutorial</a>
+<li><a href="Algebra-Tutorial.html#Algebra-Tutorial">3.5 Algebra and Calculus Tutorial</a>
+<ul>
+<li><a href="Basic-Algebra-Tutorial.html#Basic-Algebra-Tutorial">3.5.1 Basic Algebra</a>
+<li><a href="Rewrites-Tutorial.html#Rewrites-Tutorial">3.5.2 Rewrite Rules</a>
+</li></ul>
+<li><a href="Programming-Tutorial.html#Programming-Tutorial">3.6 Programming Tutorial</a>
+<li><a href="Answers-to-Exercises.html#Answers-to-Exercises">3.7 Answers to Exercises</a>
+<ul>
+<li><a href="RPN-Answer-1.html#RPN-Answer-1">3.7.1 RPN Tutorial Exercise 1</a>
+<li><a href="RPN-Answer-2.html#RPN-Answer-2">3.7.2 RPN Tutorial Exercise 2</a>
+<li><a href="RPN-Answer-3.html#RPN-Answer-3">3.7.3 RPN Tutorial Exercise 3</a>
+<li><a href="RPN-Answer-4.html#RPN-Answer-4">3.7.4 RPN Tutorial Exercise 4</a>
+<li><a href="Algebraic-Answer-1.html#Algebraic-Answer-1">3.7.5 Algebraic Entry Tutorial Exercise 1</a>
+<li><a href="Algebraic-Answer-2.html#Algebraic-Answer-2">3.7.6 Algebraic Entry Tutorial Exercise 2</a>
+<li><a href="Algebraic-Answer-3.html#Algebraic-Answer-3">3.7.7 Algebraic Entry Tutorial Exercise 3</a>
+<li><a href="Modes-Answer-1.html#Modes-Answer-1">3.7.8 Modes Tutorial Exercise 1</a>
+<li><a href="Modes-Answer-2.html#Modes-Answer-2">3.7.9 Modes Tutorial Exercise 2</a>
+<li><a href="Modes-Answer-3.html#Modes-Answer-3">3.7.10 Modes Tutorial Exercise 3</a>
+<li><a href="Modes-Answer-4.html#Modes-Answer-4">3.7.11 Modes Tutorial Exercise 4</a>
+<li><a href="Arithmetic-Answer-1.html#Arithmetic-Answer-1">3.7.12 Arithmetic Tutorial Exercise 1</a>
+<li><a href="Arithmetic-Answer-2.html#Arithmetic-Answer-2">3.7.13 Arithmetic Tutorial Exercise 2</a>
+<li><a href="Vector-Answer-1.html#Vector-Answer-1">3.7.14 Vector Tutorial Exercise 1</a>
+<li><a href="Vector-Answer-2.html#Vector-Answer-2">3.7.15 Vector Tutorial Exercise 2</a>
+<li><a href="Matrix-Answer-1.html#Matrix-Answer-1">3.7.16 Matrix Tutorial Exercise 1</a>
+<li><a href="Matrix-Answer-2.html#Matrix-Answer-2">3.7.17 Matrix Tutorial Exercise 2</a>
+<li><a href="Matrix-Answer-3.html#Matrix-Answer-3">3.7.18 Matrix Tutorial Exercise 3</a>
+<li><a href="List-Answer-1.html#List-Answer-1">3.7.19 List Tutorial Exercise 1</a>
+<li><a href="List-Answer-2.html#List-Answer-2">3.7.20 List Tutorial Exercise 2</a>
+<li><a href="List-Answer-3.html#List-Answer-3">3.7.21 List Tutorial Exercise 3</a>
+<li><a href="List-Answer-4.html#List-Answer-4">3.7.22 List Tutorial Exercise 4</a>
+<li><a href="List-Answer-5.html#List-Answer-5">3.7.23 List Tutorial Exercise 5</a>
+<li><a href="List-Answer-6.html#List-Answer-6">3.7.24 List Tutorial Exercise 6</a>
+<li><a href="List-Answer-7.html#List-Answer-7">3.7.25 List Tutorial Exercise 7</a>
+<li><a href="List-Answer-8.html#List-Answer-8">3.7.26 List Tutorial Exercise 8</a>
+<li><a href="List-Answer-9.html#List-Answer-9">3.7.27 List Tutorial Exercise 9</a>
+<li><a href="List-Answer-10.html#List-Answer-10">3.7.28 List Tutorial Exercise 10</a>
+<li><a href="List-Answer-11.html#List-Answer-11">3.7.29 List Tutorial Exercise 11</a>
+<li><a href="List-Answer-12.html#List-Answer-12">3.7.30 List Tutorial Exercise 12</a>
+<li><a href="List-Answer-13.html#List-Answer-13">3.7.31 List Tutorial Exercise 13</a>
+<li><a href="List-Answer-14.html#List-Answer-14">3.7.32 List Tutorial Exercise 14</a>
+<li><a href="Types-Answer-1.html#Types-Answer-1">3.7.33 Types Tutorial Exercise 1</a>
+<li><a href="Types-Answer-2.html#Types-Answer-2">3.7.34 Types Tutorial Exercise 2</a>
+<li><a href="Types-Answer-3.html#Types-Answer-3">3.7.35 Types Tutorial Exercise 3</a>
+<li><a href="Types-Answer-4.html#Types-Answer-4">3.7.36 Types Tutorial Exercise 4</a>
+<li><a href="Types-Answer-5.html#Types-Answer-5">3.7.37 Types Tutorial Exercise 5</a>
+<li><a href="Types-Answer-6.html#Types-Answer-6">3.7.38 Types Tutorial Exercise 6</a>
+<li><a href="Types-Answer-7.html#Types-Answer-7">3.7.39 Types Tutorial Exercise 7</a>
+<li><a href="Types-Answer-8.html#Types-Answer-8">3.7.40 Types Tutorial Exercise 8</a>
+<li><a href="Types-Answer-9.html#Types-Answer-9">3.7.41 Types Tutorial Exercise 9</a>
+<li><a href="Types-Answer-10.html#Types-Answer-10">3.7.42 Types Tutorial Exercise 10</a>
+<li><a href="Types-Answer-11.html#Types-Answer-11">3.7.43 Types Tutorial Exercise 11</a>
+<li><a href="Types-Answer-12.html#Types-Answer-12">3.7.44 Types Tutorial Exercise 12</a>
+<li><a href="Types-Answer-13.html#Types-Answer-13">3.7.45 Types Tutorial Exercise 13</a>
+<li><a href="Types-Answer-14.html#Types-Answer-14">3.7.46 Types Tutorial Exercise 14</a>
+<li><a href="Types-Answer-15.html#Types-Answer-15">3.7.47 Types Tutorial Exercise 15</a>
+<li><a href="Algebra-Answer-1.html#Algebra-Answer-1">3.7.48 Algebra Tutorial Exercise 1</a>
+<li><a href="Algebra-Answer-2.html#Algebra-Answer-2">3.7.49 Algebra Tutorial Exercise 2</a>
+<li><a href="Algebra-Answer-3.html#Algebra-Answer-3">3.7.50 Algebra Tutorial Exercise 3</a>
+<li><a href="Algebra-Answer-4.html#Algebra-Answer-4">3.7.51 Algebra Tutorial Exercise 4</a>
+<li><a href="Rewrites-Answer-1.html#Rewrites-Answer-1">3.7.52 Rewrites Tutorial Exercise 1</a>
+<li><a href="Rewrites-Answer-2.html#Rewrites-Answer-2">3.7.53 Rewrites Tutorial Exercise 2</a>
+<li><a href="Rewrites-Answer-3.html#Rewrites-Answer-3">3.7.54 Rewrites Tutorial Exercise 3</a>
+<li><a href="Rewrites-Answer-4.html#Rewrites-Answer-4">3.7.55 Rewrites Tutorial Exercise 4</a>
+<li><a href="Rewrites-Answer-5.html#Rewrites-Answer-5">3.7.56 Rewrites Tutorial Exercise 5</a>
+<li><a href="Rewrites-Answer-6.html#Rewrites-Answer-6">3.7.57 Rewrites Tutorial Exercise 6</a>
+<li><a href="Programming-Answer-1.html#Programming-Answer-1">3.7.58 Programming Tutorial Exercise 1</a>
+<li><a href="Programming-Answer-2.html#Programming-Answer-2">3.7.59 Programming Tutorial Exercise 2</a>
+<li><a href="Programming-Answer-3.html#Programming-Answer-3">3.7.60 Programming Tutorial Exercise 3</a>
+<li><a href="Programming-Answer-4.html#Programming-Answer-4">3.7.61 Programming Tutorial Exercise 4</a>
+<li><a href="Programming-Answer-5.html#Programming-Answer-5">3.7.62 Programming Tutorial Exercise 5</a>
+<li><a href="Programming-Answer-6.html#Programming-Answer-6">3.7.63 Programming Tutorial Exercise 6</a>
+<li><a href="Programming-Answer-7.html#Programming-Answer-7">3.7.64 Programming Tutorial Exercise 7</a>
+<li><a href="Programming-Answer-8.html#Programming-Answer-8">3.7.65 Programming Tutorial Exercise 8</a>
+<li><a href="Programming-Answer-9.html#Programming-Answer-9">3.7.66 Programming Tutorial Exercise 9</a>
+<li><a href="Programming-Answer-10.html#Programming-Answer-10">3.7.67 Programming Tutorial Exercise 10</a>
+<li><a href="Programming-Answer-11.html#Programming-Answer-11">3.7.68 Programming Tutorial Exercise 11</a>
+<li><a href="Programming-Answer-12.html#Programming-Answer-12">3.7.69 Programming Tutorial Exercise 12</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Introduction" href="Introduction.html#Introduction">4 Introduction</a>
+<ul>
+<li><a href="Basic-Commands.html#Basic-Commands">4.1 Basic Commands</a>
+<li><a href="Help-Commands.html#Help-Commands">4.2 Help Commands</a>
+<li><a href="Stack-Basics.html#Stack-Basics">4.3 Stack Basics</a>
+<li><a href="Numeric-Entry.html#Numeric-Entry">4.4 Numeric Entry</a>
+<li><a href="Algebraic-Entry.html#Algebraic-Entry">4.5 Algebraic Entry</a>
+<li><a href="Quick-Calculator.html#Quick-Calculator">4.6 &ldquo;Quick Calculator&rdquo; Mode</a>
+<li><a href="Prefix-Arguments.html#Prefix-Arguments">4.7 Numeric Prefix Arguments</a>
+<li><a href="Undo.html#Undo">4.8 Undoing Mistakes</a>
+<li><a href="Error-Messages.html#Error-Messages">4.9 Error Messages</a>
+<li><a href="Multiple-Calculators.html#Multiple-Calculators">4.10 Multiple Calculators</a>
+<li><a href="Troubleshooting-Commands.html#Troubleshooting-Commands">4.11 Troubleshooting Commands</a>
+<ul>
+<li><a href="Autoloading-Problems.html#Autoloading-Problems">4.11.1 Autoloading Problems</a>
+<li><a href="Recursion-Depth.html#Recursion-Depth">4.11.2 Recursion Depth</a>
+<li><a href="Caches.html#Caches">4.11.3 Caches</a>
+<li><a href="Debugging-Calc.html#Debugging-Calc">4.11.4 Debugging Calc</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Data-Types" href="Data-Types.html#Data-Types">5 Data Types</a>
+<ul>
+<li><a href="Integers.html#Integers">5.1 Integers</a>
+<li><a href="Fractions.html#Fractions">5.2 Fractions</a>
+<li><a href="Floats.html#Floats">5.3 Floats</a>
+<li><a href="Complex-Numbers.html#Complex-Numbers">5.4 Complex Numbers</a>
+<li><a href="Infinities.html#Infinities">5.5 Infinities</a>
+<li><a href="Vectors-and-Matrices.html#Vectors-and-Matrices">5.6 Vectors and Matrices</a>
+<li><a href="Strings.html#Strings">5.7 Strings</a>
+<li><a href="HMS-Forms.html#HMS-Forms">5.8 HMS Forms</a>
+<li><a href="Date-Forms.html#Date-Forms">5.9 Date Forms</a>
+<li><a href="Modulo-Forms.html#Modulo-Forms">5.10 Modulo Forms</a>
+<li><a href="Error-Forms.html#Error-Forms">5.11 Error Forms</a>
+<li><a href="Interval-Forms.html#Interval-Forms">5.12 Interval Forms</a>
+<li><a href="Incomplete-Objects.html#Incomplete-Objects">5.13 Incomplete Objects</a>
+<li><a href="Variables.html#Variables">5.14 Variables</a>
+<li><a href="Formulas.html#Formulas">5.15 Formulas</a>
+</li></ul>
+<li><a name="toc_Stack-and-Trail" href="Stack-and-Trail.html#Stack-and-Trail">6 Stack and Trail Commands</a>
+<ul>
+<li><a href="Stack-Manipulation.html#Stack-Manipulation">6.1 Stack Manipulation Commands</a>
+<li><a href="Editing-Stack-Entries.html#Editing-Stack-Entries">6.2 Editing Stack Entries</a>
+<li><a href="Trail-Commands.html#Trail-Commands">6.3 Trail Commands</a>
+<li><a href="Keep-Arguments.html#Keep-Arguments">6.4 Keep Arguments</a>
+</li></ul>
+<li><a name="toc_Mode-Settings" href="Mode-Settings.html#Mode-Settings">7 Mode Settings</a>
+<ul>
+<li><a href="General-Mode-Commands.html#General-Mode-Commands">7.1 General Mode Commands</a>
+<li><a href="Precision.html#Precision">7.2 Precision</a>
+<li><a href="Inverse-and-Hyperbolic.html#Inverse-and-Hyperbolic">7.3 Inverse and Hyperbolic Flags</a>
+<li><a href="Calculation-Modes.html#Calculation-Modes">7.4 Calculation Modes</a>
+<ul>
+<li><a href="Angular-Modes.html#Angular-Modes">7.4.1 Angular Modes</a>
+<li><a href="Polar-Mode.html#Polar-Mode">7.4.2 Polar Mode</a>
+<li><a href="Fraction-Mode.html#Fraction-Mode">7.4.3 Fraction Mode</a>
+<li><a href="Infinite-Mode.html#Infinite-Mode">7.4.4 Infinite Mode</a>
+<li><a href="Symbolic-Mode.html#Symbolic-Mode">7.4.5 Symbolic Mode</a>
+<li><a href="Matrix-Mode.html#Matrix-Mode">7.4.6 Matrix and Scalar Modes</a>
+<li><a href="Automatic-Recomputation.html#Automatic-Recomputation">7.4.7 Automatic Recomputation</a>
+<li><a href="Working-Message.html#Working-Message">7.4.8 Working Messages</a>
+</li></ul>
+<li><a href="Simplification-Modes.html#Simplification-Modes">7.5 Simplification Modes</a>
+<li><a href="Declarations.html#Declarations">7.6 Declarations</a>
+<ul>
+<li><a href="Declaration-Basics.html#Declaration-Basics">7.6.1 Declaration Basics</a>
+<li><a href="Kinds-of-Declarations.html#Kinds-of-Declarations">7.6.2 Kinds of Declarations</a>
+<li><a href="Functions-for-Declarations.html#Functions-for-Declarations">7.6.3 Functions for Declarations</a>
+</li></ul>
+<li><a href="Display-Modes.html#Display-Modes">7.7 Display Modes</a>
+<ul>
+<li><a href="Radix-Modes.html#Radix-Modes">7.7.1 Radix Modes</a>
+<li><a href="Grouping-Digits.html#Grouping-Digits">7.7.2 Grouping Digits</a>
+<li><a href="Float-Formats.html#Float-Formats">7.7.3 Float Formats</a>
+<li><a href="Complex-Formats.html#Complex-Formats">7.7.4 Complex Formats</a>
+<li><a href="Fraction-Formats.html#Fraction-Formats">7.7.5 Fraction Formats</a>
+<li><a href="HMS-Formats.html#HMS-Formats">7.7.6 HMS Formats</a>
+<li><a href="Date-Formats.html#Date-Formats">7.7.7 Date Formats</a>
+<ul>
+<li><a href="Date-Formatting-Codes.html#Date-Formatting-Codes">7.7.7.1 Date Formatting Codes</a>
+<li><a href="Free_002dForm-Dates.html#Free_002dForm-Dates">7.7.7.2 Free-Form Dates</a>
+<li><a href="Standard-Date-Formats.html#Standard-Date-Formats">7.7.7.3 Standard Date Formats</a>
+</li></ul>
+<li><a href="Truncating-the-Stack.html#Truncating-the-Stack">7.7.8 Truncating the Stack</a>
+<li><a href="Justification.html#Justification">7.7.9 Justification</a>
+<li><a href="Labels.html#Labels">7.7.10 Labels</a>
+</li></ul>
+<li><a href="Language-Modes.html#Language-Modes">7.8 Language Modes</a>
+<ul>
+<li><a href="Normal-Language-Modes.html#Normal-Language-Modes">7.8.1 Normal Language Modes</a>
+<li><a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal">7.8.2 C, FORTRAN, and Pascal Modes</a>
+<li><a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">7.8.3 TeX and LaTeX Language Modes</a>
+<li><a href="Eqn-Language-Mode.html#Eqn-Language-Mode">7.8.4 Eqn Language Mode</a>
+<li><a href="Yacas-Language-Mode.html#Yacas-Language-Mode">7.8.5 Yacas Language Mode</a>
+<li><a href="Maxima-Language-Mode.html#Maxima-Language-Mode">7.8.6 Maxima Language Mode</a>
+<li><a href="Giac-Language-Mode.html#Giac-Language-Mode">7.8.7 Giac Language Mode</a>
+<li><a href="Mathematica-Language-Mode.html#Mathematica-Language-Mode">7.8.8 Mathematica Language Mode</a>
+<li><a href="Maple-Language-Mode.html#Maple-Language-Mode">7.8.9 Maple Language Mode</a>
+<li><a href="Compositions.html#Compositions">7.8.10 Compositions</a>
+<ul>
+<li><a href="Composition-Basics.html#Composition-Basics">7.8.10.1 Composition Basics</a>
+<li><a href="Horizontal-Compositions.html#Horizontal-Compositions">7.8.10.2 Horizontal Compositions</a>
+<li><a href="Vertical-Compositions.html#Vertical-Compositions">7.8.10.3 Vertical Compositions</a>
+<li><a href="Other-Compositions.html#Other-Compositions">7.8.10.4 Other Compositions</a>
+<li><a href="Information-about-Compositions.html#Information-about-Compositions">7.8.10.5 Information about Compositions</a>
+<li><a href="User_002dDefined-Compositions.html#User_002dDefined-Compositions">7.8.10.6 User-Defined Compositions</a>
+</li></ul>
+<li><a href="Syntax-Tables.html#Syntax-Tables">7.8.11 Syntax Tables</a>
+<ul>
+<li><a href="Syntax-Table-Basics.html#Syntax-Table-Basics">7.8.11.1 Syntax Table Basics</a>
+<li><a href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables">7.8.11.2 Precedence</a>
+<li><a href="Advanced-Syntax-Patterns.html#Advanced-Syntax-Patterns">7.8.11.3 Advanced Syntax Patterns</a>
+<li><a href="Conditional-Syntax-Rules.html#Conditional-Syntax-Rules">7.8.11.4 Conditional Syntax Rules</a>
+</li></ul>
+</li></ul>
+<li><a href="Modes-Variable.html#Modes-Variable">7.9 The <code>Modes</code> Variable</a>
+<li><a href="Calc-Mode-Line.html#Calc-Mode-Line">7.10 The Calc Mode Line</a>
+</li></ul>
+<li><a name="toc_Arithmetic" href="Arithmetic.html#Arithmetic">8 Arithmetic Functions</a>
+<ul>
+<li><a href="Basic-Arithmetic.html#Basic-Arithmetic">8.1 Basic Arithmetic</a>
+<li><a href="Integer-Truncation.html#Integer-Truncation">8.2 Integer Truncation</a>
+<li><a href="Complex-Number-Functions.html#Complex-Number-Functions">8.3 Complex Number Functions</a>
+<li><a href="Conversions.html#Conversions">8.4 Conversions</a>
+<li><a href="Date-Arithmetic.html#Date-Arithmetic">8.5 Date Arithmetic</a>
+<ul>
+<li><a href="Date-Conversions.html#Date-Conversions">8.5.1 Date Conversions</a>
+<li><a href="Date-Functions.html#Date-Functions">8.5.2 Date Functions</a>
+<li><a href="Business-Days.html#Business-Days">8.5.3 Business Days</a>
+<li><a href="Time-Zones.html#Time-Zones">8.5.4 Time Zones</a>
+</li></ul>
+<li><a href="Financial-Functions.html#Financial-Functions">8.6 Financial Functions</a>
+<ul>
+<li><a href="Percentages.html#Percentages">8.6.1 Percentages</a>
+<li><a href="Future-Value.html#Future-Value">8.6.2 Future Value</a>
+<li><a href="Present-Value.html#Present-Value">8.6.3 Present Value</a>
+<li><a href="Related-Financial-Functions.html#Related-Financial-Functions">8.6.4 Related Financial Functions</a>
+<li><a href="Depreciation-Functions.html#Depreciation-Functions">8.6.5 Depreciation Functions</a>
+<li><a href="Definitions-of-Financial-Functions.html#Definitions-of-Financial-Functions">8.6.6 Definitions</a>
+</li></ul>
+<li><a href="Binary-Functions.html#Binary-Functions">8.7 Binary Number Functions</a>
+</li></ul>
+<li><a name="toc_Scientific-Functions" href="Scientific-Functions.html#Scientific-Functions">9 Scientific Functions</a>
+<ul>
+<li><a href="Logarithmic-Functions.html#Logarithmic-Functions">9.1 Logarithmic Functions</a>
+<li><a href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions">9.2 Trigonometric/Hyperbolic Functions</a>
+<li><a href="Advanced-Math-Functions.html#Advanced-Math-Functions">9.3 Advanced Mathematical Functions</a>
+<li><a href="Branch-Cuts.html#Branch-Cuts">9.4 Branch Cuts and Principal Values</a>
+<li><a href="Random-Numbers.html#Random-Numbers">9.5 Random Numbers</a>
+<ul>
+<li><a href="Random-Number-Generator.html#Random-Number-Generator">9.5.1 Random Number Generator</a>
+</li></ul>
+<li><a href="Combinatorial-Functions.html#Combinatorial-Functions">9.6 Combinatorial Functions</a>
+<li><a href="Probability-Distribution-Functions.html#Probability-Distribution-Functions">9.7 Probability Distribution Functions</a>
+</li></ul>
+<li><a name="toc_Matrix-Functions" href="Matrix-Functions.html#Matrix-Functions">10 Vector/Matrix Functions</a>
+<ul>
+<li><a href="Packing-and-Unpacking.html#Packing-and-Unpacking">10.1 Packing and Unpacking</a>
+<li><a href="Building-Vectors.html#Building-Vectors">10.2 Building Vectors</a>
+<li><a href="Extracting-Elements.html#Extracting-Elements">10.3 Extracting Vector Elements</a>
+<li><a href="Manipulating-Vectors.html#Manipulating-Vectors">10.4 Manipulating Vectors</a>
+<li><a href="Vector-and-Matrix-Arithmetic.html#Vector-and-Matrix-Arithmetic">10.5 Vector and Matrix Arithmetic</a>
+<li><a href="Set-Operations.html#Set-Operations">10.6 Set Operations using Vectors</a>
+<li><a href="Statistical-Operations.html#Statistical-Operations">10.7 Statistical Operations on Vectors</a>
+<ul>
+<li><a href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics">10.7.1 Single-Variable Statistics</a>
+<li><a href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics">10.7.2 Paired-Sample Statistics</a>
+</li></ul>
+<li><a href="Reducing-and-Mapping.html#Reducing-and-Mapping">10.8 Reducing and Mapping Vectors</a>
+<ul>
+<li><a href="Specifying-Operators.html#Specifying-Operators">10.8.1 Specifying Operators</a>
+<li><a href="Mapping.html#Mapping">10.8.2 Mapping</a>
+<li><a href="Reducing.html#Reducing">10.8.3 Reducing</a>
+<li><a href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points">10.8.4 Nesting and Fixed Points</a>
+<li><a href="Generalized-Products.html#Generalized-Products">10.8.5 Generalized Products</a>
+</li></ul>
+<li><a href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">10.9 Vector and Matrix Display Formats</a>
+</li></ul>
+<li><a name="toc_Algebra" href="Algebra.html#Algebra">11 Algebra</a>
+<ul>
+<li><a href="Selecting-Subformulas.html#Selecting-Subformulas">11.1 Selecting Sub-Formulas</a>
+<ul>
+<li><a href="Making-Selections.html#Making-Selections">11.1.1 Making Selections</a>
+<li><a href="Changing-Selections.html#Changing-Selections">11.1.2 Changing Selections</a>
+<li><a href="Displaying-Selections.html#Displaying-Selections">11.1.3 Displaying Selections</a>
+<li><a href="Operating-on-Selections.html#Operating-on-Selections">11.1.4 Operating on Selections</a>
+<li><a href="Rearranging-with-Selections.html#Rearranging-with-Selections">11.1.5 Rearranging Formulas using Selections</a>
+</li></ul>
+<li><a href="Algebraic-Manipulation.html#Algebraic-Manipulation">11.2 Algebraic Manipulation</a>
+<li><a href="Simplifying-Formulas.html#Simplifying-Formulas">11.3 Simplifying Formulas</a>
+<ul>
+<li><a href="Default-Simplifications.html#Default-Simplifications">11.3.1 Default Simplifications</a>
+<li><a href="Algebraic-Simplifications.html#Algebraic-Simplifications">11.3.2 Algebraic Simplifications</a>
+<li><a href="Unsafe-Simplifications.html#Unsafe-Simplifications">11.3.3 &ldquo;Unsafe&rdquo; Simplifications</a>
+<li><a href="Simplification-of-Units.html#Simplification-of-Units">11.3.4 Simplification of Units</a>
+</li></ul>
+<li><a href="Polynomials.html#Polynomials">11.4 Polynomials</a>
+<li><a href="Calculus.html#Calculus">11.5 Calculus</a>
+<ul>
+<li><a href="Differentiation.html#Differentiation">11.5.1 Differentiation</a>
+<li><a href="Integration.html#Integration">11.5.2 Integration</a>
+<li><a href="Customizing-the-Integrator.html#Customizing-the-Integrator">11.5.3 Customizing the Integrator</a>
+<li><a href="Numerical-Integration.html#Numerical-Integration">11.5.4 Numerical Integration</a>
+<li><a href="Taylor-Series.html#Taylor-Series">11.5.5 Taylor Series</a>
+</li></ul>
+<li><a href="Solving-Equations.html#Solving-Equations">11.6 Solving Equations</a>
+<ul>
+<li><a href="Multiple-Solutions.html#Multiple-Solutions">11.6.1 Multiple Solutions</a>
+<li><a href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">11.6.2 Solving Systems of Equations</a>
+<li><a href="Decomposing-Polynomials.html#Decomposing-Polynomials">11.6.3 Decomposing Polynomials</a>
+</li></ul>
+<li><a href="Numerical-Solutions.html#Numerical-Solutions">11.7 Numerical Solutions</a>
+<ul>
+<li><a href="Root-Finding.html#Root-Finding">11.7.1 Root Finding</a>
+<li><a href="Minimization.html#Minimization">11.7.2 Minimization</a>
+<li><a href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations">11.7.3 Systems of Equations</a>
+</li></ul>
+<li><a href="Curve-Fitting.html#Curve-Fitting">11.8 Curve Fitting</a>
+<ul>
+<li><a href="Linear-Fits.html#Linear-Fits">11.8.1 Linear Fits</a>
+<li><a href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits">11.8.2 Polynomial and Multilinear Fits</a>
+<li><a href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits">11.8.3 Error Estimates for Fits</a>
+<li><a href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models">11.8.4 Standard Nonlinear Models</a>
+<li><a href="Curve-Fitting-Details.html#Curve-Fitting-Details">11.8.5 Curve Fitting Details</a>
+<li><a href="Interpolation.html#Interpolation">11.8.6 Polynomial Interpolation</a>
+</li></ul>
+<li><a href="Summations.html#Summations">11.9 Summations</a>
+<li><a href="Logical-Operations.html#Logical-Operations">11.10 Logical Operations</a>
+<li><a href="Rewrite-Rules.html#Rewrite-Rules">11.11 Rewrite Rules</a>
+<ul>
+<li><a href="Entering-Rewrite-Rules.html#Entering-Rewrite-Rules">11.11.1 Entering Rewrite Rules</a>
+<li><a href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules">11.11.2 Basic Rewrite Rules</a>
+<li><a href="Conditional-Rewrite-Rules.html#Conditional-Rewrite-Rules">11.11.3 Conditional Rewrite Rules</a>
+<li><a href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules">11.11.4 Algebraic Properties of Rewrite Rules</a>
+<li><a href="Other-Features-of-Rewrite-Rules.html#Other-Features-of-Rewrite-Rules">11.11.5 Other Features of Rewrite Rules</a>
+<li><a href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules">11.11.6 Composing Patterns in Rewrite Rules</a>
+<li><a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">11.11.7 Nested Formulas with Rewrite Rules</a>
+<li><a href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules">11.11.8 Multi-Phase Rewrite Rules</a>
+<li><a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">11.11.9 Selections with Rewrite Rules</a>
+<li><a href="Matching-Commands.html#Matching-Commands">11.11.10 Matching Commands</a>
+<li><a href="Automatic-Rewrites.html#Automatic-Rewrites">11.11.11 Automatic Rewrites</a>
+<li><a href="Debugging-Rewrites.html#Debugging-Rewrites">11.11.12 Debugging Rewrites</a>
+<li><a href="Examples-of-Rewrite-Rules.html#Examples-of-Rewrite-Rules">11.11.13 Examples of Rewrite Rules</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Units" href="Units.html#Units">12 Operating on Units</a>
+<ul>
+<li><a href="Basic-Operations-on-Units.html#Basic-Operations-on-Units">12.1 Basic Operations on Units</a>
+<li><a href="The-Units-Table.html#The-Units-Table">12.2 The Units Table</a>
+<li><a href="Predefined-Units.html#Predefined-Units">12.3 Predefined Units</a>
+<li><a href="User_002dDefined-Units.html#User_002dDefined-Units">12.4 User-Defined Units</a>
+</li></ul>
+<li><a name="toc_Store-and-Recall" href="Store-and-Recall.html#Store-and-Recall">13 Storing and Recalling</a>
+<ul>
+<li><a href="Storing-Variables.html#Storing-Variables">13.1 Storing Variables</a>
+<li><a href="Recalling-Variables.html#Recalling-Variables">13.2 Recalling Variables</a>
+<li><a href="Operations-on-Variables.html#Operations-on-Variables">13.3 Other Operations on Variables</a>
+<li><a href="Let-Command.html#Let-Command">13.4 The Let Command</a>
+<li><a href="Evaluates_002dTo-Operator.html#Evaluates_002dTo-Operator">13.5 The Evaluates-To Operator</a>
+</li></ul>
+<li><a name="toc_Graphics" href="Graphics.html#Graphics">14 Graphics</a>
+<ul>
+<li><a href="Basic-Graphics.html#Basic-Graphics">14.1 Basic Graphics</a>
+<li><a href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics">14.2 Three-Dimensional Graphics</a>
+<li><a href="Managing-Curves.html#Managing-Curves">14.3 Managing Curves</a>
+<li><a href="Graphics-Options.html#Graphics-Options">14.4 Graphics Options</a>
+<li><a href="Devices.html#Devices">14.5 Graphical Devices</a>
+</li></ul>
+<li><a name="toc_Kill-and-Yank" href="Kill-and-Yank.html#Kill-and-Yank">15 Kill and Yank Functions</a>
+<ul>
+<li><a href="Killing-From-Stack.html#Killing-From-Stack">15.1 Killing from the Stack</a>
+<li><a href="Yanking-Into-Stack.html#Yanking-Into-Stack">15.2 Yanking into the Stack</a>
+<li><a href="Saving-Into-Registers.html#Saving-Into-Registers">15.3 Saving into Registers</a>
+<li><a href="Inserting-From-Registers.html#Inserting-From-Registers">15.4 Inserting from Registers</a>
+<li><a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers">15.5 Grabbing from Other Buffers</a>
+<li><a href="Yanking-Into-Buffers.html#Yanking-Into-Buffers">15.6 Yanking into Other Buffers</a>
+<li><a href="X-Cut-and-Paste.html#X-Cut-and-Paste">15.7 X Cut and Paste</a>
+</li></ul>
+<li><a name="toc_Keypad-Mode" href="Keypad-Mode.html#Keypad-Mode">16 Keypad Mode</a>
+<ul>
+<li><a href="Keypad-Main-Menu.html#Keypad-Main-Menu">16.1 Main Menu</a>
+<li><a href="Keypad-Functions-Menu.html#Keypad-Functions-Menu">16.2 Functions Menu</a>
+<li><a href="Keypad-Binary-Menu.html#Keypad-Binary-Menu">16.3 Binary Menu</a>
+<li><a href="Keypad-Vectors-Menu.html#Keypad-Vectors-Menu">16.4 Vectors Menu</a>
+<li><a href="Keypad-Modes-Menu.html#Keypad-Modes-Menu">16.5 Modes Menu</a>
+</li></ul>
+<li><a name="toc_Embedded-Mode" href="Embedded-Mode.html#Embedded-Mode">17 Embedded Mode</a>
+<ul>
+<li><a href="Basic-Embedded-Mode.html#Basic-Embedded-Mode">17.1 Basic Embedded Mode</a>
+<li><a href="More-About-Embedded-Mode.html#More-About-Embedded-Mode">17.2 More About Embedded Mode</a>
+<li><a href="Assignments-in-Embedded-Mode.html#Assignments-in-Embedded-Mode">17.3 Assignments in Embedded Mode</a>
+<li><a href="Mode-Settings-in-Embedded-Mode.html#Mode-Settings-in-Embedded-Mode">17.4 Mode Settings in Embedded Mode</a>
+<li><a href="Customizing-Embedded-Mode.html#Customizing-Embedded-Mode">17.5 Customizing Embedded Mode</a>
+</li></ul>
+<li><a name="toc_Programming" href="Programming.html#Programming">18 Programming</a>
+<ul>
+<li><a href="Creating-User-Keys.html#Creating-User-Keys">18.1 Creating User Keys</a>
+<li><a href="Keyboard-Macros.html#Keyboard-Macros">18.2 Programming with Keyboard Macros</a>
+<ul>
+<li><a href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros">18.2.1 Naming Keyboard Macros</a>
+<li><a href="Conditionals-in-Macros.html#Conditionals-in-Macros">18.2.2 Conditionals in Keyboard Macros</a>
+<li><a href="Loops-in-Macros.html#Loops-in-Macros">18.2.3 Loops in Keyboard Macros</a>
+<li><a href="Local-Values-in-Macros.html#Local-Values-in-Macros">18.2.4 Local Values in Macros</a>
+<li><a href="Queries-in-Macros.html#Queries-in-Macros">18.2.5 Queries in Keyboard Macros</a>
+</li></ul>
+<li><a href="Invocation-Macros.html#Invocation-Macros">18.3 Invocation Macros</a>
+<li><a href="Algebraic-Definitions.html#Algebraic-Definitions">18.4 Programming with Formulas</a>
+<li><a href="Lisp-Definitions.html#Lisp-Definitions">18.5 Programming with Lisp</a>
+<ul>
+<li><a href="Defining-Functions.html#Defining-Functions">18.5.1 Defining New Functions</a>
+<li><a href="Defining-Simple-Commands.html#Defining-Simple-Commands">18.5.2 Defining New Simple Commands</a>
+<li><a href="Defining-Stack-Commands.html#Defining-Stack-Commands">18.5.3 Defining New Stack-Based Commands</a>
+<li><a href="Argument-Qualifiers.html#Argument-Qualifiers">18.5.4 Argument Qualifiers</a>
+<li><a href="Example-Definitions.html#Example-Definitions">18.5.5 Example Definitions</a>
+<ul>
+<li><a href="Bit-Counting-Example.html#Bit-Counting-Example">18.5.5.1 Bit-Counting</a>
+<li><a href="Sine-Example.html#Sine-Example">18.5.5.2 The Sine Function</a>
+</li></ul>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6 Calling Calc from Your Lisp Programs</a>
+<ul>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.1 Additional Arguments to <code>calc-eval</code></a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.2 Error Handling</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.3 Numbers Only</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.4 Default Modes</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.5 Raw Numbers</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.6 Predicates</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.7 Variable Values</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.8 Stack Access</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.9 Keyboard Macros</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.10 Lisp Evaluation</a>
+<li><a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">18.5.6.11 Example</a>
+</li></ul>
+<li><a href="Internals.html#Internals">18.5.7 Calculator Internals</a>
+<ul>
+<li><a href="Data-Type-Formats.html#Data-Type-Formats">18.5.7.1 Data Type Formats</a>
+<li><a href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions">18.5.7.2 Interactive Functions</a>
+<li><a href="Stack-Lisp-Functions.html#Stack-Lisp-Functions">18.5.7.3 Stack-Oriented Functions</a>
+<li><a href="Predicates.html#Predicates">18.5.7.4 Predicates</a>
+<li><a href="Computational-Lisp-Functions.html#Computational-Lisp-Functions">18.5.7.5 Computational Functions</a>
+<li><a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions">18.5.7.6 Vector Functions</a>
+<li><a href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions">18.5.7.7 Symbolic Functions</a>
+<li><a href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">18.5.7.8 I/O and Formatting Functions</a>
+<li><a href="Hooks.html#Hooks">18.5.7.9 Hooks</a>
+</li></ul>
+</li></ul>
+</li></ul>
+<li><a name="toc_Copying" href="Copying.html#Copying">Appendix A GNU GENERAL PUBLIC LICENSE</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix B GNU Free Documentation License</a>
+<li><a name="toc_Customizing-Calc" href="Customizing-Calc.html#Customizing-Calc">Appendix C Customizing Calc</a>
+<li><a name="toc_Reporting-Bugs" href="Reporting-Bugs.html#Reporting-Bugs">Appendix D Reporting Bugs</a>
+<li><a name="toc_Summary" href="Summary.html#Summary">Appendix E Calc Summary</a>
+<li><a name="toc_Key-Index" href="Key-Index.html#Key-Index">Index of Key Sequences</a>
+<li><a name="toc_Command-Index" href="Command-Index.html#Command-Index">Index of Calculator Commands</a>
+<li><a name="toc_Function-Index" href="Function-Index.html#Function-Index">Index of Algebraic Functions</a>
+<li><a name="toc_Concept-Index" href="Concept-Index.html#Concept-Index">Concept Index</a>
+<li><a name="toc_Variable-Index" href="Variable-Index.html#Variable-Index">Index of Variables</a>
+<li><a name="toc_Lisp-Function-Index" href="Lisp-Function-Index.html#Lisp-Function-Index">Index of Lisp Math Functions</a>
+</li></ul>
+</div>
+
+<!-- [begin] -->
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Getting-Started.html#Getting-Started">Getting Started</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 The GNU Emacs Calculator</h2>
+
+<p class="noindent"><dfn>Calc</dfn> is an advanced desk calculator and mathematical tool
+written by Dave Gillespie that runs as part of the GNU Emacs environment.
+
+   <p>This manual, also written (mostly) by Dave Gillespie, is divided into
+three major parts: &ldquo;Getting Started,&rdquo; the &ldquo;Calc Tutorial,&rdquo; and the
+&ldquo;Calc Reference.&rdquo;  The Tutorial introduces all the major aspects of
+Calculator use in an easy, hands-on way.  The remainder of the manual is
+a complete reference to the features of the Calculator.
+
+   <p>This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+   <p>Copyright &copy; 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being just &ldquo;GNU GENERAL PUBLIC LICENSE&rdquo;, with the
+Front-Cover texts being &ldquo;A GNU Manual,&rdquo; and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the section
+entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Getting-Started.html#Getting-Started">Getting Started</a>:        General description and overview. 
+<li><a accesskey="2" href="Tutorial.html#Tutorial">Tutorial</a>:               A step-by-step introduction for beginners.
+
+<li><a accesskey="3" href="Introduction.html#Introduction">Introduction</a>:           Introduction to the Calc reference manual. 
+<li><a accesskey="4" href="Data-Types.html#Data-Types">Data Types</a>:             Types of objects manipulated by Calc. 
+<li><a accesskey="5" href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>:        Manipulating the stack and trail buffers. 
+<li><a accesskey="6" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>:          Adjusting display format and other modes. 
+<li><a accesskey="7" href="Arithmetic.html#Arithmetic">Arithmetic</a>:             Basic arithmetic functions. 
+<li><a accesskey="8" href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>:   Transcendentals and other scientific functions. 
+<li><a accesskey="9" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>:       Operations on vectors and matrices. 
+<li><a href="Algebra.html#Algebra">Algebra</a>:                Manipulating expressions algebraically. 
+<li><a href="Units.html#Units">Units</a>:                  Operations on numbers with units. 
+<li><a href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>:       Storing and recalling variables. 
+<li><a href="Graphics.html#Graphics">Graphics</a>:               Commands for making graphs of data. 
+<li><a href="Kill-and-Yank.html#Kill-and-Yank">Kill and Yank</a>:          Moving data into and out of Calc. 
+<li><a href="Keypad-Mode.html#Keypad-Mode">Keypad Mode</a>:            Operating Calc from a keypad. 
+<li><a href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>:          Working with formulas embedded in a file. 
+<li><a href="Programming.html#Programming">Programming</a>:            Calc as a programmable calculator.
+
+<li><a href="Copying.html#Copying">Copying</a>:                How you can copy and share Calc. 
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>:       Customizing Calc. 
+<li><a href="Reporting-Bugs.html#Reporting-Bugs">Reporting Bugs</a>:         How to report bugs and make suggestions.
+
+<li><a href="Summary.html#Summary">Summary</a>:                Summary of Calc commands and functions.
+
+<li><a href="Key-Index.html#Key-Index">Key Index</a>:              The standard Calc key sequences. 
+<li><a href="Command-Index.html#Command-Index">Command Index</a>:          The interactive Calc commands. 
+<li><a href="Function-Index.html#Function-Index">Function Index</a>:         Functions (in algebraic formulas). 
+<li><a href="Concept-Index.html#Concept-Index">Concept Index</a>:          General concepts. 
+<li><a href="Variable-Index.html#Variable-Index">Variable Index</a>:         Variables used by Calc (both user and internal). 
+<li><a href="Lisp-Function-Index.html#Lisp-Function-Index">Lisp Function Index</a>:    Internal Lisp math functions. 
+</ul>
+
+   </body></html>
+

@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>CSS support - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="HTML-export.html#HTML-export" title="HTML export">
+<link rel="prev" href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export" title="Text areas in HTML export">
+<link rel="next" href="Javascript-support.html#Javascript-support" title="Javascript support">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="CSS-support"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Javascript-support.html#Javascript-support">Javascript support</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export">Text areas in HTML export</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="HTML-export.html#HTML-export">HTML export</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.5.7 CSS support</h4>
+
+<p><a name="index-CSS_002c-for-HTML-export-1111"></a><a name="index-HTML-export_002c-CSS-1112"></a>
+<a name="index-org_002dexport_002dhtml_002dtodo_002dkwd_002dclass_002dprefix-1113"></a><a name="index-org_002dexport_002dhtml_002dtag_002dclass_002dprefix-1114"></a>You can also give style information for the exported file.  The HTML exporter
+assigns the following special CSS classes<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> to appropriate
+parts of the document&mdash;your style specifications may change these, in
+addition to any of the standard classes like for headlines, tables, etc.
+<pre class="example">     p.author            <span class="roman">author information, including email</span>
+     p.date              <span class="roman">publishing date</span>
+     p.creator           <span class="roman">creator info, about org-mode version</span>
+     .title              <span class="roman">document title</span>
+     .todo               <span class="roman">TODO keywords, all not-done states</span>
+     .done               <span class="roman">the DONE keywords, all stated the count as done</span>
+     .WAITING            <span class="roman">each TODO keyword also uses a class named after itself</span>
+     .timestamp          <span class="roman">timestamp</span>
+     .timestamp-kwd      <span class="roman">keyword associated with a timestamp, like SCHEDULED</span>
+     .timestamp-wrapper  <span class="roman">span around keyword plus timestamp</span>
+     .tag                <span class="roman">tag in a headline</span>
+     ._HOME              <span class="roman">each tag uses itself as a class, "@" replaced by "_"</span>
+     .target             <span class="roman">target for links</span>
+     .linenr             <span class="roman">the line number in a code example</span>
+     .code-highlighted   <span class="roman">for highlighting referenced code lines</span>
+     div.outline-N       <span class="roman">div for outline level N (headline plus text))</span>
+     div.outline-text-N  <span class="roman">extra div for text at outline level N</span>
+     .section-number-N   <span class="roman">section number in headlines, different for each level</span>
+     div.figure          <span class="roman">how to format an inlined image</span>
+     pre.src             <span class="roman">formatted source code</span>
+     pre.example         <span class="roman">normal example</span>
+     p.verse             <span class="roman">verse paragraph</span>
+     div.footnotes       <span class="roman">footnote section headline</span>
+     p.footnote          <span class="roman">footnote definition paragraph, containing a footnote</span>
+     .footref            <span class="roman">a footnote reference number (always a &lt;sup&gt;)</span>
+     .footnum            <span class="roman">footnote number in footnote definition (always &lt;sup&gt;)</span>
+</pre>
+   <p><a name="index-org_002dexport_002dhtml_002dstyle_002ddefault-1115"></a><a name="index-org_002dexport_002dhtml_002dstyle_002dinclude_002ddefault-1116"></a><a name="index-org_002dexport_002dhtml_002dstyle-1117"></a><a name="index-org_002dexport_002dhtml_002dextra-1118"></a><a name="index-org_002dexport_002dhtml_002dstyle_002ddefault-1119"></a>Each exported file contains a compact default style that defines these
+classes in a basic way<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  You may overwrite these
+settings, or add to them by using the variables <code>org-export-html-style</code>
+(for Org-wide settings) and <code>org-export-html-style-extra</code> (for more
+granular settings, like file-local settings).  To set the latter variable
+individually for each file, you can use
+
+   <p><a name="index-g_t_0023_002bSTYLE-1120"></a>
+<pre class="example">     #+STYLE: &lt;link rel="stylesheet" type="text/css" href="stylesheet.css" /&gt;
+</pre>
+   <p class="noindent">For longer style definitions, you can use several such lines.  You could also
+directly write a <code>&lt;style&gt;</code> <code>&lt;/style&gt;</code> section in this way, without
+referring to an external file.
+
+<!-- FIXME: More about header and footer styles -->
+<!-- FIXME: Talk about links and targets. -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If the classes on TODO
+keywords and tags lead to conflicts, use the variables
+<code>org-export-html-todo-kwd-class-prefix</code> and
+<code>org-export-html-tag-class-prefix</code> to make them unique.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> This style is defined in the constant
+<code>org-export-html-style-default</code>, which you should not modify.  To turn
+inclusion of these defaults off, customize
+<code>org-export-html-style-include-default</code></p>
+
+   <hr></div>
+
+   </body></html>
+

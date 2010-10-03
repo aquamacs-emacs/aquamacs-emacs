@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Programming Answer 9 - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
+<link rel="prev" href="Programming-Answer-8.html#Programming-Answer-8" title="Programming Answer 8">
+<link rel="next" href="Programming-Answer-10.html#Programming-Answer-10" title="Programming Answer 10">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Programming-Answer-9"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Programming-Answer-10.html#Programming-Answer-10">Programming Answer 10</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programming-Answer-8.html#Programming-Answer-8">Programming Answer 8</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.7.66 Programming Tutorial Exercise 9</h4>
+
+<p class="noindent">The first step is to adjust &lsquo;<samp><span class="samp">z</span></samp>&rsquo; to be greater than 5.  A simple
+&ldquo;for&rdquo; loop will do the job here.  If &lsquo;<samp><span class="samp">z</span></samp>&rsquo; is less than 5, we
+reduce the problem using
+<!-- @math{\psi(z) = \psi(z+1) - 1/z}. -->
+&lsquo;<samp><span class="samp">psi(z) = psi(z+1) - 1/z</span></samp>&rsquo;.  We go
+on to compute
+<!-- @math{\psi(z+1)}, -->
+&lsquo;<samp><span class="samp">psi(z+1)</span></samp>&rsquo;,
+and remember to add back a factor of &lsquo;<samp><span class="samp">-1/z</span></samp>&rsquo; when we're done.  This
+step is repeated until &lsquo;<samp><span class="samp">z &gt; 5</span></samp>&rsquo;.
+
+   <p>(Because this definition is long, it will be repeated in concise form
+below.  You can use <kbd>C-x&nbsp;*&nbsp;m</kbd><!-- /@w --> to load it from there.  While you are
+entering a <kbd>Z ` Z '</kbd> body in a macro, Calc simply collects
+keystrokes without executing them.  In the following diagrams we'll
+pretend Calc actually executed the keystrokes as you typed them,
+just for purposes of illustration.)
+
+<pre class="smallexample">     1:  1.             1:  1.
+         .                  .
+     
+      1.0 &lt;RET&gt;       C-x ( Z `  s 1  0 t 2
+</pre>
+   <p>Here, variable 1 holds &lsquo;<samp><span class="samp">z</span></samp>&rsquo; and variable 2 holds the adjustment
+factor.  If &lsquo;<samp><span class="samp">z &lt; 5</span></samp>&rsquo;, we use a loop to increase it.
+
+   <p>(By the way, we started with &lsquo;<samp><span class="samp">1.0</span></samp>&rsquo; instead of the integer 1 because
+otherwise the calculation below will try to do exact fractional arithmetic,
+and will never converge because fractions compare equal only if they
+are exactly equal, not just equal to within the current precision.)
+
+<pre class="smallexample">     3:  1.      2:  1.       1:  6.
+     2:  1.      1:  1            .
+     1:  5           .
+         .
+     
+       &lt;RET&gt; 5        a &lt;    Z [  5 Z (  &amp; s + 2  1 s + 1  1 Z ) r 1  Z ]
+</pre>
+   <p>Now we compute the initial part of the sum:
+<!-- @math{\ln z - {1 \over 2z}} -->
+&lsquo;<samp><span class="samp">ln(z) - 1/2z</span></samp>&rsquo;
+minus the adjustment factor.
+
+<pre class="smallexample">     2:  1.79175946923      2:  1.7084261359      1:  -0.57490719743
+     1:  0.0833333333333    1:  2.28333333333         .
+         .                      .
+     
+         L  r 1 2 * &amp;           -  r 2                -
+</pre>
+   <p>Now we evaluate the series.  We'll use another &ldquo;for&rdquo; loop counting
+up the value of &lsquo;<samp><span class="samp">2 n</span></samp>&rsquo;.  (Calc does have a summation command,
+<kbd>a +</kbd>, but we'll use loops just to get more practice with them.)
+
+<pre class="smallexample">     3:  -0.5749       3:  -0.5749        4:  -0.5749      2:  -0.5749
+     2:  2             2:  1:6            3:  1:6          1:  2.3148e-3
+     1:  40            1:  2              2:  2                .
+         .                 .              1:  36.
+                                              .
+     
+        2 &lt;RET&gt; 40        Z ( &lt;RET&gt; k b &lt;TAB&gt;     &lt;RET&gt; r 1 &lt;TAB&gt; ^      * /
+</pre>
+   <p class="noindent">
+<pre class="smallexample">     3:  -0.5749       3:  -0.5772      2:  -0.5772     1:  -0.577215664892
+     2:  -0.5749       2:  -0.5772      1:  0               .
+     1:  2.3148e-3     1:  -0.5749          .
+         .                 .
+     
+       &lt;TAB&gt; &lt;RET&gt; M-&lt;TAB&gt;       - &lt;RET&gt; M-&lt;TAB&gt;      a =     Z /    2  Z )  Z ' C-x )
+</pre>
+   <p>This is the value of
+<!-- @math{-\gamma}, -->
+&lsquo;<samp><span class="samp">- gamma</span></samp>&rsquo;,
+with a slight bit of roundoff error.  To get a full 12 digits, let's use
+a higher precision:
+
+<pre class="smallexample">     2:  -0.577215664892      2:  -0.577215664892
+     1:  1.                   1:  -0.577215664901532
+     
+         1. &lt;RET&gt;                   p 16 &lt;RET&gt; X
+</pre>
+   <p>Here's the complete sequence of keystrokes:
+
+<pre class="example">     C-x ( Z `  s 1  0 t 2
+                &lt;RET&gt; 5 a &lt;  Z [  5 Z (  &amp; s + 2  1 s + 1  1 Z ) r 1  Z ]
+                L r 1 2 * &amp; - r 2 -
+                2 &lt;RET&gt; 40  Z (  &lt;RET&gt; k b &lt;TAB&gt; &lt;RET&gt; r 1 &lt;TAB&gt; ^ * /
+                               &lt;TAB&gt; &lt;RET&gt; M-&lt;TAB&gt; - &lt;RET&gt; M-&lt;TAB&gt; a = Z /
+                       2  Z )
+           Z '
+     C-x )
+</pre>
+   </body></html>
+

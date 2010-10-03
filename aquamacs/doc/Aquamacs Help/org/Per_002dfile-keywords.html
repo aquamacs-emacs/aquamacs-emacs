@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Per-file keywords - The Org Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Org Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="TODO-extensions.html#TODO-extensions" title="TODO extensions">
+<link rel="prev" href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" title="Fast access to TODO states">
+<link rel="next" href="Faces-for-TODO-keywords.html#Faces-for-TODO-keywords" title="Faces for TODO keywords">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for Org version 6.33x.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Per-file-keywords"></a>
+<a name="Per_002dfile-keywords"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Faces-for-TODO-keywords.html#Faces-for-TODO-keywords">Faces for TODO keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states">Fast access to TODO states</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TODO-extensions.html#TODO-extensions">TODO extensions</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.2.5 Setting up keywords for individual files</h4>
+
+<p><a name="index-keyword-options-382"></a><a name="index-per_002dfile-keywords-383"></a><a name="index-g_t_0023_002bTODO-384"></a><a name="index-g_t_0023_002bTYP_005fTODO-385"></a><a name="index-g_t_0023_002bSEQ_005fTODO-386"></a>
+It can be very useful to use different aspects of the TODO mechanism in
+different files.  For file-local settings, you need to add special lines
+to the file which set the keywords and interpretation for that file
+only.  For example, to set one of the two examples discussed above, you
+need one of the following lines, starting in column zero anywhere in the
+file:
+
+<pre class="example">     #+TODO: TODO FEEDBACK VERIFY | DONE CANCELED
+</pre>
+   <p class="noindent">(you may also write <code>#+SEQ_TODO</code> to be explicit about the
+interpretation, but it means the same as <code>#+TODO</code>), or
+<pre class="example">     #+TYP_TODO: Fred Sara Lucy Mike | DONE
+</pre>
+   <p>A setup for using several sets in parallel would be:
+
+<pre class="example">     #+TODO: TODO | DONE
+     #+TODO: REPORT BUG KNOWNCAUSE | FIXED
+     #+TODO: | CANCELED
+</pre>
+   <p><a name="index-completion_002c-of-option-keywords-387"></a><a name="index-M_002d_0040key_007bTAB_007d-388"></a>To make sure you are using the correct keyword, type
+&lsquo;<samp><span class="samp">#+</span></samp>&rsquo; into the buffer and then use <kbd>M-&lt;TAB&gt;</kbd> completion.
+
+   <p><a name="index-DONE_002c-final-TODO-keyword-389"></a>Remember that the keywords after the vertical bar (or the last keyword
+if no bar is there) must always mean that the item is DONE (although you
+may use a different word).  After changing one of these lines, use
+<kbd>C-c C-c</kbd> with the cursor still in the line to make the changes
+known to Org mode<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Org mode parses these lines only when
+Org mode is activated after visiting a file.  <kbd>C-c C-c</kbd> with the
+cursor in a line starting with &lsquo;<samp><span class="samp">#+</span></samp>&rsquo; is simply restarting Org mode
+for the current buffer.</p>
+
+   <hr></div>
+
+   </body></html>
+

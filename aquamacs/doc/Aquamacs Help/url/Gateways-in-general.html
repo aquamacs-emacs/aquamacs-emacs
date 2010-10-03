@@ -1,0 +1,228 @@
+<html lang="en">
+<head>
+<title>Gateways in general - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="General-Facilities.html#General-Facilities" title="General Facilities">
+<link rel="prev" href="Proxies.html#Proxies" title="Proxies">
+<link rel="next" href="History.html#History" title="History">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Gateways-in-general"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="History.html#History">History</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Proxies.html#Proxies">Proxies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="General-Facilities.html#General-Facilities">General Facilities</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Gateways in General</h3>
+
+<p><a name="index-gateways-113"></a><a name="index-firewalls-114"></a>
+The library provides a general gateway layer through which all
+networking passes.  It can both control access to the network and
+provide access through gateways in firewalls.  This may make direct
+connections in some cases and pass through some sort of gateway in
+others.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  The library's basic function responsible for
+making connections is <code>url-open-stream</code>.
+
+<div class="defun">
+&mdash; Function: <b>url-open-stream</b><var> name buffer host service<a name="index-url_002dopen_002dstream-115"></a></var><br>
+<blockquote><p><a name="index-opening-a-stream-116"></a><a name="index-stream_002c-opening-117"></a>Open a stream to <var>host</var>, possibly via a gateway.  The other
+arguments are as for <code>open-network-stream</code>.  This will not make a
+connection if <code>url-gateway-unplugged</code> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-local-host-regexp</b><var><a name="index-url_002dgateway_002dlocal_002dhost_002dregexp-118"></a></var><br>
+<blockquote><p>This is a regular expression that matches local hosts that do not
+require the use of a gateway.  If <code>nil</code>, all connections are made
+through the gateway. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-method</b><var><a name="index-url_002dgateway_002dmethod-119"></a></var><br>
+<blockquote><p>This variable controls which gateway method is used.  It may be useful
+to bind it temporarily in some applications.  It has values taken from
+a list of symbols.  Possible values are:
+
+          <dl>
+<dt><code>telnet</code><dd><a name="index-g_t_0040command_007btelnet_007d-120"></a>Use this method if you must first telnet and log into a gateway host,
+and then run telnet from that host to connect to outside machines.
+
+          <br><dt><code>rlogin</code><dd><a name="index-g_t_0040command_007brlogin_007d-121"></a>This method is identical to <code>telnet</code>, but uses <samp><span class="command">rlogin</span></samp>
+to log into the remote machine without having to send the username and
+password over the wire every time.
+
+          <br><dt><code>socks</code><dd><a name="index-g_t_0040sc_007bsocks_007d-122"></a>Use if the firewall has a <span class="sc">socks</span> gateway running on it.  The
+<span class="sc">socks</span> v5 protocol is defined in RFC 1928.
+
+          <!-- @item ssl -->
+          <!-- This probably shouldn't be documented -->
+          <!-- Fixme: why not? - fx -->
+          <br><dt><code>native</code><dd>This method uses Emacs's builtin networking directly.  This is the
+default.  It can be used only if there is no firewall blocking access. 
+</dl>
+        </p></blockquote></div>
+
+   <p>The following variables control the gateway methods.
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-host</b><var><a name="index-url_002dgateway_002dtelnet_002dhost-123"></a></var><br>
+<blockquote><p>The gateway host to telnet to.  Once logged in there, you then telnet
+out to the hosts you want to connect to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-parameters</b><var><a name="index-url_002dgateway_002dtelnet_002dparameters-124"></a></var><br>
+<blockquote><p>This should be a list of parameters to pass to the <samp><span class="command">telnet</span></samp> program. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-password-prompt</b><var><a name="index-url_002dgateway_002dtelnet_002dpassword_002dprompt-125"></a></var><br>
+<blockquote><p>This is a regular expression that matches the password prompt when
+logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-login-prompt</b><var><a name="index-url_002dgateway_002dtelnet_002dlogin_002dprompt-126"></a></var><br>
+<blockquote><p>This is a regular expression that matches the username prompt when
+logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-user-name</b><var><a name="index-url_002dgateway_002dtelnet_002duser_002dname-127"></a></var><br>
+<blockquote><p>The username to log in with. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-password</b><var><a name="index-url_002dgateway_002dtelnet_002dpassword-128"></a></var><br>
+<blockquote><p>The password to send when logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-prompt-pattern</b><var><a name="index-url_002dgateway_002dprompt_002dpattern-129"></a></var><br>
+<blockquote><p>This is a regular expression that matches the shell prompt. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-host</b><var><a name="index-url_002dgateway_002drlogin_002dhost-130"></a></var><br>
+<blockquote><p>Host to &lsquo;<samp><span class="samp">rlogin</span></samp>&rsquo; to before telnetting out. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-parameters</b><var><a name="index-url_002dgateway_002drlogin_002dparameters-131"></a></var><br>
+<blockquote><p>Parameters to pass to &lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-user-name</b><var><a name="index-url_002dgateway_002drlogin_002duser_002dname-132"></a></var><br>
+<blockquote><p>User name to use when logging in to the gateway. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-prompt-pattern</b><var><a name="index-url_002dgateway_002dprompt_002dpattern-133"></a></var><br>
+<blockquote><p>This is a regular expression that matches the shell prompt. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>socks-server</b><var><a name="index-socks_002dserver-134"></a></var><br>
+<blockquote><p>This specifies the default server, it takes the form
+<code>("Default&nbsp;server"&nbsp;</code><var>server</var><code>&nbsp;</code><var>port</var><code>&nbsp;</code><var>version</var><code>)</code><!-- /@w -->
+where <var>version</var> can be either 4 or 5. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-password</b><var><a name="index-socks_002dpassword-135"></a></var><br>
+<blockquote><p>If this is <code>nil</code> then you will be asked for the password,
+otherwise it will be used as the password for authenticating you to
+the <span class="sc">socks</span> server. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-username</b><var><a name="index-socks_002dusername-136"></a></var><br>
+<blockquote><p>This is the username to use when authenticating yourself to the
+<span class="sc">socks</span> server.  By default this is your login name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-timeout</b><var><a name="index-socks_002dtimeout-137"></a></var><br>
+<blockquote><p>This controls how long, in seconds, to wait for responses from the
+<span class="sc">socks</span> server; it is 5 by default. 
+</p></blockquote></div>
+   <!-- fixme: these have been effectively commented-out in the code -->
+<!-- @defopt socks-server-aliases -->
+<!-- This a list of server aliases.  It is a list of aliases of the form -->
+<!-- @var{(alias hostname port version)}. -->
+<!-- @end defopt -->
+<!-- @defopt socks-network-aliases -->
+<!-- This a list of network aliases.  Each entry in the list takes the form -->
+<!-- @var{(alias (network))} where @var{alias} is a string that names the -->
+<!-- @var{network}.  The networks can contain a pair (not a dotted pair) of -->
+<!-- @sc{ip} addresses which specify a range of @sc{ip} addresses, an @sc{ip} -->
+<!-- address and a netmask, a domain name or a unique hostname or @sc{ip} -->
+<!-- address. -->
+<!-- @end defopt -->
+<!-- @defopt socks-redirection-rules -->
+<!-- This a list of redirection rules.  Each rule take the form -->
+<!-- @var{(Destination network Connection type)} where @var{Destination -->
+<!-- network} is a network alias from @code{socks-network-aliases} and -->
+<!-- @var{Connection type} can be @code{nil} in which case a direct -->
+<!-- connection is used, or it can be an alias from -->
+<!-- @code{socks-server-aliases} in which case that server is used as a -->
+<!-- proxy. -->
+<!-- @end defopt -->
+
+<div class="defun">
+&mdash; User Option: <b>socks-nslookup-program</b><var><a name="index-socks_002dnslookup_002dprogram-138"></a></var><br>
+<blockquote><p><a name="index-g_t_0040command_007bnslookup_007d-139"></a>This the &lsquo;<samp><span class="samp">nslookup</span></samp>&rsquo; program.  It is <code>"nslookup"</code> by default. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Suppressing-network-connections.html#Suppressing-network-connections">Suppressing network connections</a>
+</ul>
+<!-- * Broken hostname resolution:: -->
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Proxies (which only operate over HTTP) are
+implemented using this.</p>
+
+   <hr></div>
+
+   </body></html>
+

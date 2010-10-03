@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+<title>Displaying and Editing the Index - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Index-Support.html#Index-Support" title="Index Support">
+<link rel="prev" href="The-Index-Phrases-File.html#The-Index-Phrases-File" title="The Index Phrases File">
+<link rel="next" href="Builtin-Index-Macros.html#Builtin-Index-Macros" title="Builtin Index Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Displaying-and-Editing-the-Index"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Index-Phrases-File.html#The-Index-Phrases-File">The Index Phrases File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Index-Support.html#Index-Support">Index Support</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Displaying and Editing the Index</h3>
+
+<p><a name="index-Displaying-the-Index-256"></a><a name="index-Editing-the-Index-257"></a><a name="index-Index-entries_002c-creating-258"></a><a name="index-Index_002c-displaying-259"></a><a name="index-Index_002c-editing-260"></a><a name="index-C_002dc-_003e-261"></a><a name="index-reftex_002ddisplay_002dindex-262"></a>
+In order to compile and display the index, press <kbd>C-c &gt;</kbd>.  If the
+document uses multiple indices, <b>RefTeX</b> will ask you to select
+one.  Then, all index entries will be sorted alphabetically and
+displayed in a special buffer, the <samp><span class="file">*Index*</span></samp> buffer.  From that
+buffer you can check and edit each entry.
+
+   <p>The index can be restricted to the current section or the region.  Then
+only entries in that part of the document will go into the compiled
+index.  To restrict to the current section, use a numeric prefix
+&lsquo;<samp><span class="samp">2</span></samp>&rsquo;, thus press <kbd>C-u 2 C-c &gt;</kbd>.  To restrict to the current
+region, make the region active and use a numeric prefix &lsquo;<samp><span class="samp">3</span></samp>&rsquo; (press
+<kbd>C-u 3 C-c &gt;</kbd>).  From within the <samp><span class="file">*Index*</span></samp> buffer the
+restriction can be moved from one section to the next by pressing the
+<kbd>&lt;</kbd> and <kbd>&gt;</kbd> keys.
+
+   <p>One caveat: <b>RefTeX</b> finds the definition point of an index entry
+by searching near the buffer position where it had found to macro during
+scanning.  If you have several identical index entries in the same
+buffer and significant changes have shifted the entries around, you must
+rescan the buffer to ensure the correspondence between the
+<samp><span class="file">*Index*</span></samp> buffer and the definition locations.  It is therefore
+advisable to rescan the document (with <kbd>r</kbd> or <kbd>C-u r</kbd>)
+frequently while editing the index from the <samp><span class="file">*Index*</span></samp>
+buffer.
+
+   <p><a name="index-g_t_003f-263"></a>Here is a list of special commands available in the <samp><span class="file">*Index*</span></samp> buffer.  A
+summary of this information is always available by pressing
+<kbd>?</kbd>.
+
+     <dl>
+<dt><b>General</b>
+<br><dt><kbd>?</kbd><dd>Display a summary of commands.
+
+     <br><dt><kbd>0-9, -</kbd><dd>Prefix argument.
+
+     <br><dt><b>Moving around</b>
+<br><dt><kbd>! A..Z</kbd><dd>Pressing any capital letter will jump to the corresponding section in
+the <samp><span class="file">*Index*</span></samp> buffer.  The exclamation mark is special and jumps to
+the first entries alphabetically sorted below &lsquo;<samp><span class="samp">A</span></samp>&rsquo;.  These are
+usually non-alphanumeric characters. 
+<br><dt><kbd>n</kbd><dd>Go to next entry. 
+<br><dt><kbd>p</kbd><dd>Go to previous entry.
+
+     <br><dt><b>Access to document locations</b>
+<br><dt><kbd>&lt;SPC&gt;</kbd><dd>Show the place in the document where this index entry is defined.
+
+     <br><dt><kbd>&lt;TAB&gt;</kbd><dd>Go to the definition of the current index entry in another
+window.
+
+     <br><dt><kbd>&lt;RET&gt;</kbd><dd>Go to the definition of the current index entry and hide the
+<samp><span class="file">*Index*</span></samp> buffer window.
+
+     <br><dt><kbd>f</kbd><dd><a name="index-reftex_002dindex_002dfollow_002dmode-264"></a><a name="index-reftex_002drevisit_002dto_002dfollow-265"></a>Toggle follow mode.  When follow mode is active, the other window will
+always show the location corresponding to the line in the <samp><span class="file">*Index*</span></samp>
+buffer at point.  This is similar to pressing &lt;SPC&gt; after each
+cursor motion.  The default for this flag can be set with the variable
+<code>reftex-index-follow-mode</code>.  Note that only context in files
+already visited is shown.  <b>RefTeX</b> will not visit a file just for
+follow mode.  See, however, the variable
+<code>reftex-revisit-to-follow</code>.
+
+     <br><dt><b>Entry editing</b>
+<br><dt><kbd>e</kbd><dd>Edit the current index entry.  In the minibuffer, you can edit the
+index macro which defines this entry.
+
+     <br><dt><kbd>C-k</kbd><dd>Kill the index entry.  Currently not implemented because I don't know
+how to implement an <code>undo</code> function for this.
+
+     <br><dt><kbd>*</kbd><dd>Edit the <var>key</var> part of the entry.  This is the initial part of the
+entry which determines the location of the entry in the index.
+
+     <br><dt><kbd>|</kbd><dd>Edit the <var>attribute</var> part of the entry.  This is the part after the
+vertical bar.  With <code>MakeIndex</code>, this part is an encapsulating
+macro.  With <code>xindy</code>, it is called <em>attribute</em> and is a
+property of the index entry that can lead to special formatting.  When
+called with <kbd>C-u</kbd> prefix, kill the entire <var>attribute</var>
+part.
+
+     <br><dt><kbd>@</kbd><dd>Edit the <var>visual</var> part of the entry.  This is the part after the
+&lsquo;<samp><span class="samp">@</span></samp>&rsquo; which is used by <code>MakeIndex</code> to change the visual
+appearance of the entry in the index.  When called with <kbd>C-u</kbd>
+prefix, kill the entire <var>visual</var> part.
+
+     <br><dt><kbd>(</kbd><dd>Toggle the beginning of page range property &lsquo;<samp><span class="samp">|(</span></samp>&rsquo; of the
+entry.
+
+     <br><dt><kbd>)</kbd><dd>Toggle the end of page range property &lsquo;<samp><span class="samp">|)</span></samp>&rsquo; of the entry.
+
+     <br><dt><kbd>_</kbd><dd>Make the current entry a subentry.  This command will prompt for the
+superordinate entry and insert it.
+
+     <br><dt><kbd>^</kbd><dd>Remove the highest superordinate entry.  If the current entry is a
+subitem (&lsquo;<samp><span class="samp">aaa!bbb!ccc</span></samp>&rsquo;), this function moves it up the hierarchy
+(&lsquo;<samp><span class="samp">bbb!ccc</span></samp>&rsquo;).
+
+     <br><dt><b>Exiting</b>
+<br><dt><kbd>q</kbd><dd>Hide the <samp><span class="file">*Index*</span></samp> buffer.
+
+     <br><dt><kbd>k</kbd><dd>Kill the <samp><span class="file">*Index*</span></samp> buffer.
+
+     <br><dt><kbd>C-c =</kbd><dd>Switch to the Table of Contents buffer of this document.
+
+     <br><dt><b>Controlling what gets displayed</b>
+<br><dt><kbd>c</kbd><dd><a name="index-reftex_002dindex_002dinclude_002dcontext-266"></a>Toggle the display of short context in the <samp><span class="file">*Index*</span></samp> buffer.  The
+default for this flag can be set with the variable
+<code>reftex-index-include-context</code>.
+
+     <br><dt><kbd>}</kbd><dd>Restrict the index to a single document section.  The corresponding
+section number will be displayed in the <code>R&lt;&gt;</code> indicator in the
+mode line and in the header of the <samp><span class="file">*Index*</span></samp> buffer.
+
+     <br><dt><kbd>{</kbd><dd>Widen the index to contain all entries of the document.
+
+     <br><dt><kbd>&lt;</kbd><dd>When the index is currently restricted, move the restriction to the
+previous section.
+
+     <br><dt><kbd>&gt;</kbd><dd>When the index is currently restricted, move the restriction to the
+next section.
+
+     <br><dt><b>Updating the buffer</b>
+<br><dt><kbd>g</kbd><dd>Rebuild the <samp><span class="file">*Index*</span></samp> buffer.  This does <em>not</em> rescan the
+document.  However, it sorts the entries again, so that edited entries
+will move to the correct position.
+
+     <br><dt><kbd>r</kbd><dd><a name="index-reftex_002denable_002dpartial_002dscans-267"></a>Reparse the LaTeX document and rebuild the <samp><span class="file">*Index*</span></samp> buffer.  When
+<code>reftex-enable-partial-scans</code> is non-<code>nil</code>, rescan only the file this
+location is defined in, not the entire document.
+
+     <br><dt><kbd>C-u r</kbd><dd>Reparse the <em>entire</em> LaTeX document and rebuild the <samp><span class="file">*Index*</span></samp>
+buffer.
+
+     <br><dt><kbd>s</kbd><dd>Switch to a different index (for documents with multiple
+indices). 
+</dl>
+
+   </body></html>
+

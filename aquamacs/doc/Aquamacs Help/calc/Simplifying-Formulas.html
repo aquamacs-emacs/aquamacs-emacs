@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Simplifying Formulas - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Algebra.html#Algebra" title="Algebra">
+<link rel="prev" href="Algebraic-Manipulation.html#Algebraic-Manipulation" title="Algebraic Manipulation">
+<link rel="next" href="Polynomials.html#Polynomials" title="Polynomials">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Simplifying-Formulas"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Polynomials.html#Polynomials">Polynomials</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
+<hr>
+</div>
+
+<h3 class="section">11.3 Simplifying Formulas</h3>
+
+<p class="noindent"><a name="index-a-s-1686"></a><a name="index-I-a-s-1687"></a><a name="index-H-a-s-1688"></a><a name="index-calc_002dsimplify-1689"></a><a name="index-simplify-1690"></a>The <kbd>a s</kbd> (<code>calc-simplify</code>) [<code>simplify</code>] command applies
+various algebraic rules to simplify a formula.  This includes rules which
+are not part of the default simplifications because they may be too slow
+to apply all the time, or may not be desirable all of the time.  For
+example, non-adjacent terms of sums are combined, as in &lsquo;<samp><span class="samp">a + b + 2 a</span></samp>&rsquo;
+to &lsquo;<samp><span class="samp">b + 3 a</span></samp>&rsquo;, and some formulas like &lsquo;<samp><span class="samp">sin(arcsin(x))</span></samp>&rsquo; are
+simplified to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+
+   <p>The sections below describe all the various kinds of algebraic
+simplifications Calc provides in full detail.  None of Calc's
+simplification commands are designed to pull rabbits out of hats;
+they simply apply certain specific rules to put formulas into
+less redundant or more pleasing forms.  Serious algebra in Calc
+must be done manually, usually with a combination of selections
+and rewrite rules.  See <a href="Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging with Selections</a>. 
+See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.
+
+   <p>See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>, for commands to control what level of
+simplification occurs automatically.  Normally only the &ldquo;default
+simplifications&rdquo; occur.
+
+   <p>There are some simplifications that, while sometimes useful, are never
+done automatically.  For example, the <kbd>I</kbd> prefix can be given to
+<kbd>a s</kbd>; the <kbd>I a s</kbd> command will change any trigonometric
+function to the appropriate combination of &lsquo;<samp><span class="samp">sin</span></samp>&rsquo;s and &lsquo;<samp><span class="samp">cos</span></samp>&rsquo;s
+before simplifying.  This can be useful in simplifying even mildly
+complicated trigonometric expressions.  For example, while <kbd>a s</kbd>
+can reduce &lsquo;<samp><span class="samp">sin(x) csc(x)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, it will not simplify
+&lsquo;<samp><span class="samp">sin(x)^2 csc(x)</span></samp>&rsquo;.  The command <kbd>I a s</kbd> can be used to
+simplify this latter expression; it will transform &lsquo;<samp><span class="samp">sin(x)^2
+csc(x)</span></samp>&rsquo; into &lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;.  However, <kbd>I a s</kbd> will also perform
+some &ldquo;simplifications&rdquo; which may not be desired; for example, it
+will transform &lsquo;<samp><span class="samp">tan(x)^2</span></samp>&rsquo; into &lsquo;<samp><span class="samp">sin(x)^2 / cos(x)^2</span></samp>&rsquo;.  The
+Hyperbolic prefix <kbd>H</kbd> can be used similarly; the <kbd>H a s</kbd> will
+replace any hyperbolic functions in the formula with the appropriate
+combinations of &lsquo;<samp><span class="samp">sinh</span></samp>&rsquo;s and &lsquo;<samp><span class="samp">cosh</span></samp>&rsquo;s before simplifying.
+
+<ul class="menu">
+<li><a accesskey="1" href="Default-Simplifications.html#Default-Simplifications">Default Simplifications</a>
+<li><a accesskey="2" href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>
+<li><a accesskey="3" href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>
+<li><a accesskey="4" href="Simplification-of-Units.html#Simplification-of-Units">Simplification of Units</a>
+</ul>
+
+   </body></html>
+

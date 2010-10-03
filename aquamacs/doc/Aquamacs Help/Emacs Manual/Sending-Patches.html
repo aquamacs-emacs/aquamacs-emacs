@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Sending Patches - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bugs.html#Bugs" title="Bugs">
+<link rel="prev" href="Checklist.html#Checklist" title="Checklist">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Sending-Patches"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Checklist.html#Checklist">Checklist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bugs.html#Bugs">Bugs</a>
+<hr>
+</div>
+
+<h3 class="section">60.5 Sending Patches for GNU Emacs</h3>
+
+<p><a name="index-sending-patches-for-GNU-Emacs-4120"></a><a name="index-patches_002c-sending-4121"></a>  If you would like to write bug fixes or improvements for GNU Emacs,
+that is very helpful.  When you send your changes, please follow these
+guidelines to make it easy for the maintainers to use them.  If you
+don't follow these guidelines, your information might still be useful,
+but using it will take extra work.  Maintaining GNU Emacs is a lot of
+work in the best of circumstances, and we can't keep up unless you do
+your best to help.
+
+     <ul>
+<li>Send an explanation with your changes of what problem they fix or what
+improvement they bring about.  For a fix for an existing bug, it is
+best to reply to the relevant discussion on the &lsquo;<samp><span class="samp">bug-gnu-emacs</span></samp>&rsquo;
+list, or item in the <a href="http://debbugs.gnu.org">http://debbugs.gnu.org</a> tracker.  Explain
+why your change fixes the bug.
+
+     <li>Always include a proper bug report for the problem you think you have
+fixed.  We need to convince ourselves that the change is right before
+installing it.  Even if it is correct, we might have trouble
+understanding it if we don't have a way to reproduce the problem.
+
+     <li>Include all the comments that are appropriate to help people reading the
+source in the future understand why this change was needed.
+
+     <li>Don't mix together changes made for different reasons. 
+Send them <em>individually</em>.
+
+     <p>If you make two changes for separate reasons, then we might not want to
+install them both.  We might want to install just one.  If you send them
+all jumbled together in a single set of diffs, we have to do extra work
+to disentangle them&mdash;to figure out which parts of the change serve
+which purpose.  If we don't have time for this, we might have to ignore
+your changes entirely.
+
+     <p>If you send each change as soon as you have written it, with its own
+explanation, then two changes never get tangled up, and we can consider
+each one properly without any extra work to disentangle them.
+
+     <li>Send each change as soon as that change is finished.  Sometimes people
+think they are helping us by accumulating many changes to send them all
+together.  As explained above, this is absolutely the worst thing you
+could do.
+
+     <p>Since you should send each change separately, you might as well send it
+right away.  That gives us the option of installing it immediately if it
+is important.
+
+     <li>Use &lsquo;<samp><span class="samp">diff -c</span></samp>&rsquo; to make your diffs.  Diffs without context are hard
+to install reliably.  More than that, they are hard to study; we must
+always study a patch to decide whether we want to install it.  Unidiff
+format is better than contextless diffs, but not as easy to read as
+&lsquo;<samp><span class="samp">-c</span></samp>&rsquo; format.
+
+     <p>If you have GNU diff, use &lsquo;<samp><span class="samp">diff -c -F'^[_a-zA-Z0-9$]+ *('</span></samp>&rsquo; when
+making diffs of C code.  This shows the name of the function that each
+change occurs in.
+
+     <li>Avoid any ambiguity as to which is the old version and which is the new. 
+Please make the old version the first argument to diff, and the new
+version the second argument.  And please give one version or the other a
+name that indicates whether it is the old version or your new changed
+one.
+
+     <li>Write the change log entries for your changes.  This is both to save us
+the extra work of writing them, and to help explain your changes so we
+can understand them.
+
+     <p>The purpose of the change log is to show people where to find what was
+changed.  So you need to be specific about what functions you changed;
+in large functions, it's often helpful to indicate where within the
+function the change was.
+
+     <p>On the other hand, once you have shown people where to find the change,
+you need not explain its purpose in the change log.  Thus, if you add a
+new function, all you need to say about it is that it is new.  If you
+feel that the purpose needs explaining, it probably does&mdash;but put the
+explanation in comments in the code.  It will be more useful there.
+
+     <p>Please read the <samp><span class="file">ChangeLog</span></samp> files in the <samp><span class="file">src</span></samp> and
+<samp><span class="file">lisp</span></samp> directories to see what sorts of information to put in,
+and to learn the style that we use.  See <a href="Change-Log.html#Change-Log">Change Log</a>.
+
+     <li>When you write the fix, keep in mind that we can't install a change that
+would break other systems.  Please think about what effect your change
+will have if compiled on another type of system.
+
+     <p>Sometimes people send fixes that <em>might</em> be an improvement in
+general&mdash;but it is hard to be sure of this.  It's hard to install
+such changes because we have to study them very carefully.  Of course,
+a good explanation of the reasoning by which you concluded the change
+was correct can help convince us.
+
+     <p>The safest changes are changes to the configuration files for a
+particular machine.  These are safe because they can't create new bugs
+on other machines.
+
+     <p>Please help us keep up with the workload by designing the patch in a
+form that is clearly safe to install. 
+</ul>
+
+   </body></html>
+

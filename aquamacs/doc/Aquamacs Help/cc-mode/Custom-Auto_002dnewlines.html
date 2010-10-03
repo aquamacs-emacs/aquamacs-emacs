@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Custom Auto-newlines - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" title="Custom Filling and Breaking">
+<link rel="next" href="Clean_002dups.html#Clean_002dups" title="Clean-ups">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Auto-newlines"></a>
+<a name="Custom-Auto_002dnewlines"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Clean_002dups.html#Clean_002dups">Clean-ups</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom Filling and Breaking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h2 class="chapter">8 Customizing Auto-newlines</h2>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p>CC Mode determines whether to insert auto-newlines in two basically
+different ways, depending on the character just typed:
+
+     <dl>
+<dt>Braces and Colons<dd>CC Mode first determines the syntactic context of the brace or colon
+(see <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>), then looks for a corresponding element in
+an alist.  This element specifies where to put newlines - this is any
+combination of before and after the brace or colon.  If no alist
+element is found, newlines are inserted both before and after a brace,
+but none are inserted around a colon.  See <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a> and
+<a href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>.
+
+     <br><dt>Semicolons and Commas<dd>The variable <code>c-hanging-semi&amp;comma-criteria</code> contains a list of
+functions which determine whether to insert a newline after a newly
+typed semicolon or comma.  See <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>. 
+</dl>
+
+   <p>The names of these configuration variables contain &lsquo;<samp><span class="samp">hanging</span></samp>&rsquo;
+because they let you <dfn>hang</dfn> the pertinent characters.  A character
+which introduces a C construct is said to <dfn>hang on the right</dfn> when
+it appears at the end of a line after other code, being separated by a
+line break from the construct it introduces, like the opening brace in:
+
+<pre class="example">     while (i &lt; MAX) {
+         total += entry[i];
+         entry [i++] = 0;
+     }
+</pre>
+   <p class="noindent">A character <dfn>hangs on the left</dfn> when it appears at the start of
+the line after the construct it closes off, like the above closing
+brace.
+
+   <p>The next chapter, &ldquo;Clean-ups&rdquo;, describes how to configure CC Mode
+to remove these automatically added newlines in certain specific
+circumstances.  See <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>
+<li><a accesskey="2" href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>
+<li><a accesskey="3" href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>
+</ul>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   </body></html>
+

@@ -1,0 +1,259 @@
+<html lang="en">
+<head>
+<title>Algebraic Simplifications - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Simplifying-Formulas.html#Simplifying-Formulas" title="Simplifying Formulas">
+<link rel="prev" href="Default-Simplifications.html#Default-Simplifications" title="Default Simplifications">
+<link rel="next" href="Unsafe-Simplifications.html#Unsafe-Simplifications" title="Unsafe Simplifications">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Algebraic-Simplifications"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Default-Simplifications.html#Default-Simplifications">Default Simplifications</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.3.2 Algebraic Simplifications</h4>
+
+<p class="noindent"><a name="index-Algebraic-simplifications-1692"></a>The <kbd>a s</kbd> command makes simplifications that may be too slow to
+do all the time, or that may not be desirable all of the time. 
+If you find these simplifications are worthwhile, you can type
+<kbd>m A</kbd> to have Calc apply them automatically.
+
+   <p>This section describes all simplifications that are performed by
+the <kbd>a s</kbd> command.  Note that these occur in addition to the
+default simplifications; even if the default simplifications have
+been turned off by an <kbd>m O</kbd> command, <kbd>a s</kbd> will turn them
+back on temporarily while it simplifies the formula.
+
+   <p>There is a variable, <code>AlgSimpRules</code>, in which you can put rewrites
+to be applied by <kbd>a s</kbd>.  Its use is analogous to <code>EvalRules</code>,
+but without the special restrictions.  Basically, the simplifier does
+&lsquo;<samp><span class="samp">a&nbsp;r<!-- /@w --> AlgSimpRules</span></samp>&rsquo; with an infinite repeat count on the whole
+expression being simplified, then it traverses the expression applying
+the built-in rules described below.  If the result is different from
+the original expression, the process repeats with the default
+simplifications (including <code>EvalRules</code>), then <code>AlgSimpRules</code>,
+then the built-in simplifications, and so on.
+
+   <p>Sums are simplified in two ways.  Constant terms are commuted to the
+end of the sum, so that &lsquo;<samp><span class="samp">a + 2 + b</span></samp>&rsquo; changes to &lsquo;<samp><span class="samp">a + b + 2</span></samp>&rsquo;. 
+The only exception is that a constant will not be commuted away
+from the first position of a difference, i.e., &lsquo;<samp><span class="samp">2 - x</span></samp>&rsquo; is not
+commuted to &lsquo;<samp><span class="samp">-x + 2</span></samp>&rsquo;.
+
+   <p>Also, terms of sums are combined by the distributive law, as in
+&lsquo;<samp><span class="samp">x + y + 2 x</span></samp>&rsquo; to &lsquo;<samp><span class="samp">y + 3 x</span></samp>&rsquo;.  This always occurs for
+adjacent terms, but <kbd>a s</kbd> compares all pairs of terms including
+non-adjacent ones.
+
+   <p>Products are sorted into a canonical order using the commutative
+law.  For example, &lsquo;<samp><span class="samp">b c a</span></samp>&rsquo; is commuted to &lsquo;<samp><span class="samp">a b c</span></samp>&rsquo;. 
+This allows easier comparison of products; for example, the default
+simplifications will not change &lsquo;<samp><span class="samp">x y + y x</span></samp>&rsquo; to &lsquo;<samp><span class="samp">2 x y</span></samp>&rsquo;,
+but <kbd>a s</kbd> will; it first rewrites the sum to &lsquo;<samp><span class="samp">x y + x y</span></samp>&rsquo;,
+and then the default simplifications are able to recognize a sum
+of identical terms.
+
+   <p>The canonical ordering used to sort terms of products has the
+property that real-valued numbers, interval forms and infinities
+come first, and are sorted into increasing order.  The <kbd>V S</kbd>
+command uses the same ordering when sorting a vector.
+
+   <p>Sorting of terms of products is inhibited when Matrix mode is
+turned on; in this case, Calc will never exchange the order of
+two terms unless it knows at least one of the terms is a scalar.
+
+   <p>Products of powers are distributed by comparing all pairs of
+terms, using the same method that the default simplifications
+use for adjacent terms of products.
+
+   <p>Even though sums are not sorted, the commutative law is still
+taken into account when terms of a product are being compared. 
+Thus &lsquo;<samp><span class="samp">(x + y) (y + x)</span></samp>&rsquo; will be simplified to &lsquo;<samp><span class="samp">(x + y)^2</span></samp>&rsquo;. 
+A subtle point is that &lsquo;<samp><span class="samp">(x - y) (y - x)</span></samp>&rsquo; will <em>not</em>
+be simplified to &lsquo;<samp><span class="samp">-(x - y)^2</span></samp>&rsquo;; Calc does not notice that
+one term can be written as a constant times the other, even if
+that constant is <i>-1</i>.
+
+   <p>A fraction times any expression, &lsquo;<samp><span class="samp">(a:b) x</span></samp>&rsquo;, is changed to
+a quotient involving integers:  &lsquo;<samp><span class="samp">a x / b</span></samp>&rsquo;.  This is not
+done for floating-point numbers like &lsquo;<samp><span class="samp">0.5</span></samp>&rsquo;, however.  This
+is one reason why you may find it convenient to turn Fraction mode
+on while doing algebra; see <a href="Fraction-Mode.html#Fraction-Mode">Fraction Mode</a>.
+
+   <p>Quotients are simplified by comparing all terms in the numerator
+with all terms in the denominator for possible cancellation using
+the distributive law.  For example, &lsquo;<samp><span class="samp">a x^2 b / c x^3 d</span></samp>&rsquo; will
+cancel &lsquo;<samp><span class="samp">x^2</span></samp>&rsquo; from the top and bottom to get &lsquo;<samp><span class="samp">a b / c x d</span></samp>&rsquo;. 
+(The terms in the denominator will then be rearranged to &lsquo;<samp><span class="samp">c d x</span></samp>&rsquo;
+as described above.)  If there is any common integer or fractional
+factor in the numerator and denominator, it is cancelled out;
+for example, &lsquo;<samp><span class="samp">(4 x + 6) / 8 x</span></samp>&rsquo; simplifies to &lsquo;<samp><span class="samp">(2 x + 3) / 4 x</span></samp>&rsquo;.
+
+   <p>Non-constant common factors are not found even by <kbd>a s</kbd>.  To
+cancel the factor &lsquo;<samp><span class="samp">a</span></samp>&rsquo; in &lsquo;<samp><span class="samp">(a x + a) / a^2</span></samp>&rsquo; you could first
+use <kbd>j M</kbd> on the product &lsquo;<samp><span class="samp">a x</span></samp>&rsquo; to Merge the numerator to
+&lsquo;<samp><span class="samp">a (1+x)</span></samp>&rsquo;, which can then be simplified successfully.
+
+   <p>Integer powers of the variable <code>i</code> are simplified according
+to the identity &lsquo;<samp><span class="samp">i^2 = -1</span></samp>&rsquo;.  If you store a new value other
+than the complex number &lsquo;<samp><span class="samp">(0,1)</span></samp>&rsquo; in <code>i</code>, this simplification
+will no longer occur.  This is done by <kbd>a s</kbd> instead of by default
+in case someone (unwisely) uses the name <code>i</code> for a variable
+unrelated to complex numbers; it would be unfortunate if Calc
+quietly and automatically changed this formula for reasons the
+user might not have been thinking of.
+
+   <p>Square roots of integer or rational arguments are simplified in
+several ways.  (Note that these will be left unevaluated only in
+Symbolic mode.)  First, square integer or rational factors are
+pulled out so that &lsquo;<samp><tt>sqrt</tt><span class="samp">(8)</span></samp>&rsquo; is rewritten as
+<!-- @math{2\,@tfn{sqrt}(2)}. -->
+&lsquo;<samp><span class="samp">2 sqrt(2)</span></samp>&rsquo;. 
+Conceptually speaking this implies factoring the argument into primes
+and moving pairs of primes out of the square root, but for reasons of
+efficiency Calc only looks for primes up to 29.
+
+   <p>Square roots in the denominator of a quotient are moved to the
+numerator:  &lsquo;<samp><span class="samp">1 / </span><tt>sqrt</tt><span class="samp">(3)</span></samp>&rsquo; changes to &lsquo;<samp><tt>sqrt</tt><span class="samp">(3) / 3</span></samp>&rsquo;. 
+The same effect occurs for the square root of a fraction:
+&lsquo;<samp><tt>sqrt</tt><span class="samp">(2:3)</span></samp>&rsquo; changes to &lsquo;<samp><tt>sqrt</tt><span class="samp">(6) / 3</span></samp>&rsquo;.
+
+   <p>The <code>%</code> (modulo) operator is simplified in several ways
+when the modulus &lsquo;<samp><span class="samp">M</span></samp>&rsquo; is a positive real number.  First, if
+the argument is of the form &lsquo;<samp><span class="samp">x + n</span></samp>&rsquo; for some real number
+&lsquo;<samp><span class="samp">n</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is itself reduced modulo &lsquo;<samp><span class="samp">M</span></samp>&rsquo;.  For
+example, &lsquo;<samp><span class="samp">(x - 23) % 10</span></samp>&rsquo; is simplified to &lsquo;<samp><span class="samp">(x + 7) % 10</span></samp>&rsquo;.
+
+   <p>If the argument is multiplied by a constant, and this constant
+has a common integer divisor with the modulus, then this factor is
+cancelled out.  For example, &lsquo;<samp><span class="samp">12 x % 15</span></samp>&rsquo; is changed to
+&lsquo;<samp><span class="samp">3 (4 x % 5)</span></samp>&rsquo; by factoring out 3.  Also, &lsquo;<samp><span class="samp">(12 x + 1) % 15</span></samp>&rsquo;
+is changed to &lsquo;<samp><span class="samp">3 ((4 x + 1:3) % 5)</span></samp>&rsquo;.  While these forms may
+not seem &ldquo;simpler,&rdquo; they allow Calc to discover useful information
+about modulo forms in the presence of declarations.
+
+   <p>If the modulus is 1, then Calc can use <code>int</code> declarations to
+evaluate the expression.  For example, the idiom &lsquo;<samp><span class="samp">x % 2</span></samp>&rsquo; is
+often used to check whether a number is odd or even.  As described
+above, &lsquo;<samp><span class="samp">2&nbsp;n&nbsp;%&nbsp;2</span></samp>&rsquo;<!-- /@w --> and &lsquo;<samp><span class="samp">(2 n + 1) % 2</span></samp>&rsquo; are simplified to
+&lsquo;<samp><span class="samp">2 (n % 1)</span></samp>&rsquo; and &lsquo;<samp><span class="samp">2 ((n + 1:2) % 1)</span></samp>&rsquo;, respectively; Calc
+can simplify these to 0 and 1 (respectively) if <code>n</code> has been
+declared to be an integer.
+
+   <p>Trigonometric functions are simplified in several ways.  Whenever a
+products of two trigonometric functions can be replaced by a single
+function, the replacement is made; for example,
+&lsquo;<samp><tt>tan</tt><span class="samp">(x) </span><tt>cos</tt><span class="samp">(x)</span></samp>&rsquo; is simplified to &lsquo;<samp><tt>sin</tt><span class="samp">(x)</span></samp>&rsquo;. 
+Reciprocals of trigonometric functions are replaced by their reciprocal
+function; for example, &lsquo;<samp><span class="samp">1/</span><tt>sec</tt><span class="samp">(x)</span></samp>&rsquo; is simplified to
+&lsquo;<samp><tt>cos</tt><span class="samp">(x)</span></samp>&rsquo;.  The corresponding simplifications for the
+hyperbolic functions are also handled.
+
+   <p>Trigonometric functions of their inverse functions are
+simplified. The expression &lsquo;<samp><tt>sin</tt><span class="samp">(</span><tt>arcsin</tt><span class="samp">(x))</span></samp>&rsquo; is
+simplified to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;, and similarly for <code>cos</code> and <code>tan</code>. 
+Trigonometric functions of inverses of different trigonometric
+functions can also be simplified, as in &lsquo;<samp><tt>sin</tt><span class="samp">(</span><tt>arccos</tt><span class="samp">(x))</span></samp>&rsquo;
+to &lsquo;<samp><tt>sqrt</tt><span class="samp">(1 - x^2)</span></samp>&rsquo;.
+
+   <p>If the argument to <code>sin</code> is negative-looking, it is simplified to
+&lsquo;<samp><span class="samp">-</span><tt>sin</tt><span class="samp">(x)</span></samp>&rsquo;, and similarly for <code>cos</code> and <code>tan</code>. 
+Finally, certain special values of the argument are recognized;
+see <a href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions">Trigonometric and Hyperbolic Functions</a>.
+
+   <p>Hyperbolic functions of their inverses and of negative-looking
+arguments are also handled, as are exponentials of inverse
+hyperbolic functions.
+
+   <p>No simplifications for inverse trigonometric and hyperbolic
+functions are known, except for negative arguments of <code>arcsin</code>,
+<code>arctan</code>, <code>arcsinh</code>, and <code>arctanh</code>.  Note that
+&lsquo;<samp><tt>arcsin</tt><span class="samp">(</span><tt>sin</tt><span class="samp">(x))</span></samp>&rsquo; can <em>not</em> safely change to
+&lsquo;<samp><span class="samp">x</span></samp>&rsquo;, since this only correct within an integer multiple of
+<!-- @math{2 \pi} -->
+&lsquo;<samp><span class="samp">2 pi</span></samp>&rsquo;
+radians or 360 degrees.  However, &lsquo;<samp><tt>arcsinh</tt><span class="samp">(</span><tt>sinh</tt><span class="samp">(x))</span></samp>&rsquo; is
+simplified to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is known to be real.
+
+   <p>Several simplifications that apply to logarithms and exponentials
+are that &lsquo;<samp><tt>exp</tt><span class="samp">(</span><tt>ln</tt><span class="samp">(x))</span></samp>&rsquo;,
+<!-- @tfn{e}@math{^{\ln(x)}}, -->
+&lsquo;<samp><span class="samp">e^</span><tt>ln</tt><span class="samp">(x)</span></samp>&rsquo;,
+and
+<!-- @math{10^{{\rm log10}(x)}} -->
+&lsquo;<samp><span class="samp">10^</span><tt>log10</tt><span class="samp">(x)</span></samp>&rsquo;
+all reduce to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  Also, &lsquo;<samp><tt>ln</tt><span class="samp">(</span><tt>exp</tt><span class="samp">(x))</span></samp>&rsquo;, etc., can
+reduce to &lsquo;<samp><span class="samp">x</span></samp>&rsquo; if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is provably real.  The form
+&lsquo;<samp><tt>exp</tt><span class="samp">(x)^y</span></samp>&rsquo; is simplified to &lsquo;<samp><tt>exp</tt><span class="samp">(x y)</span></samp>&rsquo;.  If &lsquo;<samp><span class="samp">x</span></samp>&rsquo;
+is a suitable multiple of
+<!-- @math{\pi i} -->
+&lsquo;<samp><span class="samp">pi i</span></samp>&rsquo;
+(as described above for the trigonometric functions), then
+&lsquo;<samp><tt>exp</tt><span class="samp">(x)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">e^x</span></samp>&rsquo; will be expanded.  Finally,
+&lsquo;<samp><tt>ln</tt><span class="samp">(x)</span></samp>&rsquo; is simplified to a form involving <code>pi</code> and
+<code>i</code> where &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is provably negative, positive imaginary, or
+negative imaginary.
+
+   <p>The error functions <code>erf</code> and <code>erfc</code> are simplified when
+their arguments are negative-looking or are calls to the <code>conj</code>
+function.
+
+   <p>Equations and inequalities are simplified by cancelling factors
+of products, quotients, or sums on both sides.  Inequalities
+change sign if a negative multiplicative factor is cancelled. 
+Non-constant multiplicative factors as in &lsquo;<samp><span class="samp">a b = a c</span></samp>&rsquo; are
+cancelled from equations only if they are provably nonzero (generally
+because they were declared so; see <a href="Declarations.html#Declarations">Declarations</a>).  Factors
+are cancelled from inequalities only if they are nonzero and their
+sign is known.
+
+   <p>Simplification also replaces an equation or inequality with
+1 or 0 (&ldquo;true&rdquo; or &ldquo;false&rdquo;) if it can through the use of
+declarations.  If &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is declared to be an integer greater
+than 5, then &lsquo;<samp><span class="samp">x &lt; 3</span></samp>&rsquo;, &lsquo;<samp><span class="samp">x = 3</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">x = 7.5</span></samp>&rsquo; are
+all simplified to 0, but &lsquo;<samp><span class="samp">x &gt; 3</span></samp>&rsquo; is simplified to 1. 
+By a similar analysis, &lsquo;<samp><span class="samp">abs(x) &gt;= 0</span></samp>&rsquo; is simplified to 1,
+as is &lsquo;<samp><span class="samp">x^2 &gt;= 0</span></samp>&rsquo; if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; is known to be real.
+
+   </body></html>
+

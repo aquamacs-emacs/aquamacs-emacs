@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>MS-DOS Processes - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
+<link rel="prev" href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE" title="MS-DOS and MULE">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.2.50.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="MS-DOS-Processes"></a>
+<a name="MS_002dDOS-Processes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS_002dDOS-and-MULE.html#MS_002dDOS-and-MULE">MS-DOS and MULE</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>
+<hr>
+</div>
+
+<h4 class="subsection">G.11.7 Subprocesses on MS-DOS</h4>
+
+<p><a name="index-compilation-under-MS_002dDOS-4448"></a><a name="index-inferior-processes-under-MS_002dDOS-4449"></a><a name="index-compile-_0040r_007b_0028MS_002dDOS_0029_007d-4450"></a><a name="index-grep-_0040r_007b_0028MS_002dDOS_0029_007d-4451"></a>  Because MS-DOS is a single-process &ldquo;operating system,&rdquo;
+asynchronous subprocesses are not available.  In particular, Shell
+mode and its variants do not work.  Most Emacs features that use
+asynchronous subprocesses also don't work on MS-DOS, including
+Shell mode and GUD.  When in doubt, try and see; commands that
+don't work output an error message saying that asynchronous processes
+aren't supported.
+
+   <p>Compilation under Emacs with <kbd>M-x compile</kbd>, searching files with
+<kbd>M-x grep</kbd> and displaying differences between files with <kbd>M-x
+diff</kbd> do work, by running the inferior processes synchronously.  This
+means you cannot do any more editing until the inferior process
+finishes.
+
+   <p>Spell checking also works, by means of special support for synchronous
+invocation of the <code>ispell</code> program.  This is slower than the
+asynchronous invocation on other platforms
+
+   <p>Instead of the Shell mode, which doesn't work on MS-DOS, you can use
+the <kbd>M-x eshell</kbd> command.  This invokes the Eshell package that
+implements a Posix-like shell entirely in Emacs Lisp.
+
+   <p>By contrast, Emacs compiled as a native Windows application
+<strong>does</strong> support asynchronous subprocesses. 
+See <a href="Windows-Processes.html#Windows-Processes">Windows Processes</a>.
+
+   <p><a name="index-printing-under-MS_002dDOS-4452"></a>  Printing commands, such as <code>lpr-buffer</code>
+(see <a href="Printing.html#Printing">Printing</a>) and <code>ps-print-buffer</code> (see <a href="PostScript.html#PostScript">PostScript</a>),
+work in MS-DOS by sending the output to one of the printer ports. 
+See <a href="MS_002dDOS-Printing.html#MS_002dDOS-Printing">MS-DOS Printing</a>.
+
+   <p>When you run a subprocess synchronously on MS-DOS, make sure the
+program terminates and does not try to read keyboard input.  If the
+program does not terminate on its own, you will be unable to terminate
+it, because MS-DOS provides no general way to terminate a process. 
+Pressing <kbd>C-c</kbd> or <kbd>C-&lt;BREAK&gt;</kbd> might sometimes help in these
+cases.
+
+   <p>Accessing files on other machines is not supported on MS-DOS.  Other
+network-oriented commands such as sending mail, Web browsing, remote
+login, etc., don't work either, unless network access is built into
+MS-DOS with some network redirector.
+
+   <p><a name="index-directory-listing-on-MS_002dDOS-4453"></a><a name="index-dired_002dlisting_002dswitches-_0040r_007b_0028MS_002dDOS_0029_007d-4454"></a>  Dired on MS-DOS uses the <code>ls-lisp</code> package where other
+platforms use the system <code>ls</code> command.  Therefore, Dired on
+MS-DOS supports only some of the possible options you can mention in
+the <code>dired-listing-switches</code> variable.  The options that work are
+&lsquo;<samp><span class="samp">-A</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-c</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-i</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-r</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-S</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">-s</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-t</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">-u</span></samp>&rsquo;.
+
+<!-- Copyright (C) 1985, 1986, 1987, 1993, 1995, 2001, 2002, 2003, 2004, -->
+<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- Permission is granted to anyone to make or distribute verbatim copies -->
+<!-- of this document, in any medium, provided that the copyright notice and -->
+<!-- permission notice are preserved, and that the distributor grants the -->
+<!-- recipient permission for further redistribution as permitted by this -->
+<!-- notice. -->
+<!-- Modified versions may not be made. -->
+   </body></html>
+

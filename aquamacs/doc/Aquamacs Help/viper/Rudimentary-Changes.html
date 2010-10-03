@@ -1,0 +1,286 @@
+<html lang="en">
+<head>
+<title>Rudimentary Changes - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Customization.html#Customization" title="Customization">
+<link rel="next" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Rudimentary-Changes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization.html#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Rudimentary Changes</h3>
+
+<p><a name="index-setting-variables-174"></a><a name="index-variables-for-customization-175"></a><a name="index-g_t_0040kbd_007b_003aset_007d-176"></a>
+An easy way to customize Viper is to change the values of constants used in
+Viper.  Here is the list of the constants used in Viper and their default
+values.  The corresponding :se command is also indicated.  (The symbols
+<code>t</code> and <code>nil</code> represent &ldquo;true&rdquo; and &ldquo;false&rdquo; in Lisp).
+
+   <p>Viper supports both the abbreviated Vi variable names and their full
+names.  Variable completion is done on full names only.  &lt;TAB&gt; and
+&lt;SPC&gt; complete
+variable names.  Typing `=' will complete the name and then will prompt for
+a value, if applicable.  For instance, <kbd>:se au &lt;SPC&gt;</kbd> will complete the
+command to <kbd>:set autoindent</kbd>; <kbd>:se ta &lt;SPC&gt;</kbd> will complete the command
+and prompt further like this: <kbd>:set tabstop = </kbd>. 
+However, typing <kbd>:se ts &lt;SPC&gt;</kbd> will produce a &ldquo;No match&rdquo; message
+because <kbd>ts</kbd> is an abbreviation for <kbd>tabstop</kbd> and Viper supports
+completion on full names only.  However, you can still hit &lt;RET&gt;
+or <kbd>=</kbd>, which will complete the command like this: <kbd>:set ts = </kbd> and
+Viper will be waiting for you to type a value for the tabstop variable. 
+To get the full list of Vi variables, type <kbd>:se &lt;SPC&gt; &lt;TAB&gt;</kbd>.
+
+     <dl>
+<dt><code>viper-auto-indent nil</code><dt><code>:se ai (:se autoindent)</code><dt><code>:se ai-g (:se autoindent-global)</code><dd>If <code>t</code>, enable auto indentation. 
+by &lt;RET&gt;, <kbd>o</kbd> or <kbd>O</kbd> command.
+
+     <p><code>viper-auto-indent</code> is a local variable.  To change the value globally, use
+<code>setq-default</code>.  It may be useful for certain major modes to have their
+own values of <code>viper-auto-indent</code>.  This can be achieved by using
+<code>setq</code> to change the local value of this variable in the hooks to the
+appropriate major modes.
+
+     <p><kbd>:se ai</kbd> changes the value of <code>viper-auto-indent</code> in the current
+buffer only; <kbd>:se ai-g</kbd> does the same globally. 
+<br><dt><code>viper-electric-mode t</code><dd>If not <code>nil</code>, auto-indentation becomes electric, which means that
+&lt;RET&gt;, <kbd>O</kbd>, and <kbd>o</kbd> indent cursor according to the current
+major mode.  In the future, this variable may control additional electric
+features.
+
+     <p>This is a local variable: <code>setq</code> changes the value of this variable
+in the current buffer only.  Use <code>setq-default</code> to change the value in
+all buffers. 
+<br><dt><code>viper-case-fold-search nil</code><dt><code>:se ic (:se ignorecase)</code><dd>If not <code>nil</code>, search ignores cases. 
+This can also be toggled by quickly hitting <kbd>/</kbd> twice. 
+<br><dt><code>viper-re-search nil</code><dt><code>:se magic</code><dd>If not <code>nil</code>, search will use regular expressions; if <code>nil</code> then
+use vanilla search. 
+This behavior can also be toggled by quickly hitting <kbd>/</kbd> trice. 
+<br><dt><code>buffer-read-only</code><dt><code>:se ro (:se readonly)</code><dd>Set current buffer to read only.  To change globally put
+<code>(setq-default buffer-read-only t)</code> in your <samp><span class="file">.emacs</span></samp> file. 
+<br><dt><code>blink-matching-paren t</code><dt><code>:se sm (:se showmatch)</code><dd>Show matching parens by blinking cursor. 
+<br><dt><code>tab-width t (default setting via setq-default)</code><dt><code>:se ts=value (:se tabstop=value)</code><dt><code>:se ts-g=value (:se tabstop-global=value)</code><dd><code>tab-width</code> is a local variable that controls the width of the tab stops. 
+To change the value globally, use <code>setq-default</code>; for local settings,
+use <code>setq</code>.
+
+     <p>The command <kbd>:se ts</kbd>
+sets the tab width in the current
+buffer only; it has no effect on other buffers.
+
+     <p>The command <kbd>:se ts-g</kbd> sets tab width globally,
+for all buffers where the tab is not yet set locally,
+including the new buffers.
+
+     <p>Note that typing &lt;TAB&gt; normally
+doesn't insert the tab, since this key is usually bound to
+a text-formatting function, <code>indent-for-tab-command</code> (which facilitates
+programming and document writing).  Instead, the tab is inserted via the
+command <code>viper-insert-tab</code>, which is bound to <kbd>S-tab</kbd> (shift + tab).
+
+     <p>On some non-windowing terminals, Shift doesn't modify the &lt;TAB&gt; key, so
+<kbd>S-tab</kbd> behaves as if it were &lt;TAB&gt;.  In such a case, you will have
+to bind <code>viper-insert-tab</code> to some other convenient key.
+
+     <br><dt><code>viper-shift-width 8</code><dt><code>:se sw=value  (:se shiftwidth=value)</code><dd>The number of columns shifted by <kbd>&gt;</kbd> and <kbd>&lt;</kbd> commands. 
+<br><dt><code>viper-search-wrap-around t</code><dt><code>:se ws (:se wrapscan)</code><dd>If not <code>nil</code>, search wraps around the end/beginning of buffer. 
+<br><dt><code>viper-search-scroll-threshold 2</code><dd>If search lands within this many lines of the window top or bottom, the
+window will be scrolled up or down by about 1/7-th of its size, to reveal
+the context.  If the value is negative&mdash;don't scroll. 
+<br><dt><code>viper-tags-file-name "TAGS"</code><dd>The name of the file used as the tag table. 
+<br><dt><code>viper-re-query-replace nil</code><dd>If not <code>nil</code>, use reg-exp replace in query replace. 
+<br><dt><code>viper-want-ctl-h-help nil</code><dd>If not <code>nil</code>, <kbd>C-h</kbd> is bound to <code>help-command</code>;
+otherwise, <kbd>C-h</kbd> is bound as usual in Vi. 
+<br><dt><code>viper-vi-style-in-minibuffer t</code><dd>If not <code>nil</code>, Viper provides a high degree of compatibility with Vi
+insert mode when you type text in the minibuffer; if <code>nil</code>, typing in
+the minibuffer feels like plain Emacs. 
+<br><dt><code>viper-no-multiple-ESC t</code><dd>If you set this to <code>nil</code>, you can use &lt;ESC&gt; as Meta in Vi state. 
+Normally, this is not necessary, since graphical displays have separate
+Meta keys (usually on each side of the space bar).  On a dumb terminal, Viper
+sets this variable to <code>twice</code>, which is almost like <code>nil</code>, except
+that double &lt;ESC&gt; beeps.  This, too, lets &lt;ESC&gt; to be used as a Meta. 
+<br><dt><code>viper-fast-keyseq-timeout 200</code><dd>Key sequences separated by this many milliseconds are treated as Vi-style
+keyboard macros.  If the key sequence is defined as such a macro, it will be
+executed.  Otherwise, it is processed as an ordinary sequence of typed keys.
+
+     <p>Setting this variable too high may slow down your typing.  Setting it too
+low may make it hard to type macros quickly enough. 
+<br><dt><code>viper-ex-style-motion t</code><dd>Set this to <code>nil</code>, if you want <kbd>l,h</kbd> to cross
+lines, etc.  See <a href="Movement-and-Markers.html#Movement-and-Markers">Movement and Markers</a>, for more info. 
+<br><dt><code>viper-ex-style-editing t</code><dd>Set this to <code>nil</code>, if you want
+<kbd>C-h</kbd> and &lt;DEL&gt; to not stop
+at the beginning of a line in Insert state, &lt;X&gt; and &lt;x&gt; to delete
+characters across lines in Vi command state, etc. 
+<br><dt><code>viper-ESC-moves-cursor-back t</code><dd>It <code>t</code>, cursor moves back 1 character when switching from insert state to vi
+state.  If <code>nil</code>, the cursor stays where it was before the switch. 
+<br><dt><code>viper-always t</code><dd><code>t</code> means: leave it to Viper to decide when a buffer must be brought
+up in Vi state,
+Insert state, or Emacs state.  This heuristics works well in virtually all
+cases.  <code>nil</code> means you either has to invoke <code>viper-mode</code> manually
+for each buffer (or you can add <code>viper-mode</code> to the appropriate major mode
+hooks using <code>viper-load-hook</code>).
+
+     <p>This option must be set in the file <samp><span class="file">~/.viper</span></samp>. 
+<br><dt><code>viper-custom-file-name "~/.viper"</code><dd>File used for Viper-specific customization. 
+Change this setting, if you want.  Must be set in <samp><span class="file">.emacs</span></samp> (not <samp><span class="file">.viper</span></samp>!) 
+before Viper is loaded.  Note that you
+have to set it as a string inside double quotes. 
+<br><dt><code>viper-spell-function 'ispell-region</code><dd>Function used by the command <kbd>#c&lt;move&gt;</kbd> to spell. 
+<br><dt><code>viper-glob-function</code><dd>The value of this variable is the function symbol used to expand wildcard
+symbols. This is platform-dependent. The default tries to set this variable
+to work with most shells, MS Windows, OS/2, etc. However, if it
+doesn't work the way you expect, you should write your own. 
+Use <code>viper-glob-unix-files</code> and <code>viper-glob-mswindows-files</code> in
+<samp><span class="file">viper-util.el</span></samp> as examples.
+
+     <p>This feature is used to expand wildcards in the Ex command <kbd>:e</kbd>. 
+Note that Viper doesn't support wildcards in the <kbd>:r</kbd> and <kbd>:w</kbd>
+commands, because file completion is a better mechanism. 
+<a name="index-g_t_0040code_007bviper_002dglob_002dfunction_007d-177"></a>
+<br><dt><code>ex-cycle-other-window t</code><dd>If not <code>nil</code>, <kbd>:n</kbd> and <kbd>:b</kbd> will cycle through files in another
+window, if one exists. 
+<br><dt><code>ex-cycle-through-non-files nil</code><dd><kbd>:n</kbd> does not normally cycle through buffers.  Set this to get
+buffers also. 
+<br><dt><code>viper-want-emacs-keys-in-insert</code><dd>This is set to <code>nil</code> for user levels 1 and 2 and to <code>t</code> for user
+levels 3 and 4.  Users who specify level 5 are allowed to set this variable
+as they please (the default for this level is <code>t</code>).  If set to
+<code>nil</code>, complete Vi compatibility is provided in Insert state.  This is
+really not recommended, as this precludes you from using language-specific
+features provided by the major modes. 
+<br><dt><code>viper-want-emacs-keys-in-vi</code><dd>This is set to <code>nil</code> for user
+level 1 and to <code>t</code> for user levels 2&ndash;4. 
+At level 5, users are allowed to set this variable as they please (the
+default for this level is <code>t</code>). 
+If set to <code>nil</code>, complete Vi compatibility is provided
+in Vi command state.  Setting this to <code>nil</code> is really a bad idea,
+unless you are a novice, as this precludes the use
+of language-specific features provided by the major modes. 
+<br><dt><code>viper-keep-point-on-repeat t</code><dd>If not <code>nil</code>, point is not moved when the user repeats the previous
+command by typing `.'  This is very useful for doing repeated changes with
+the <kbd>.</kbd> key. 
+<br><dt><code>viper-repeat-from-history-key 'f12</code><dd>Prefix key used to invoke the macros <kbd>f12 1</kbd> and <kbd>f12 2</kbd> that repeat
+the second-last and the third-last destructive command. 
+Both these macros are bound (as Viper macros) to
+<code>viper-repeat-from-history</code>,
+which checks the second key by which it is invoked to see which of the
+previous commands to invoke.  Viper binds <kbd>f12 1</kbd> and <kbd>f12 2</kbd> only,
+but the user can bind more in <samp><span class="file">~/.viper</span></samp>.  See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for how to do
+this. 
+<br><dt><code>viper-keep-point-on-undo nil</code><dd>If not <code>nil</code>, Viper tries to not move point when undoing commands. 
+Instead, it will briefly move the cursor to the place where change has
+taken place.  However, if the undone piece of text is not seen in window,
+then point will be moved to the place where the change took place. 
+Set it to <code>t</code> and see if you like it better. 
+<br><dt><code>viper-delete-backwards-in-replace nil</code><dd>If not <code>nil</code>, &lt;DEL&gt; key will delete characters while moving the cursor
+backwards.  If <code>nil</code>, the cursor will move backwards without deleting
+anything. 
+<br><dt><code>viper-replace-overlay-face 'viper-replace-overlay-face</code><dd>On a graphical display, Viper highlights replacement regions instead of
+putting a &lsquo;<samp><span class="samp">$</span></samp>&rsquo; at the end.  This variable controls the so called
+<dfn>face</dfn> used to highlight the region.
+
+     <p>By default, <code>viper-replace-overlay-face</code> underlines the replacement on
+monochrome displays and also lays a stipple over them.  On color displays,
+replacement regions are highlighted with color.
+
+     <p>If you know something about Emacs faces and don't like how Viper highlights
+replacement regions, you can change <code>viper-replace-overlay-face</code> by
+specifying a new face.  (Emacs faces are described in the Emacs Lisp
+reference.)  On a color display, the following customization method is
+usually most effective:
+     <pre class="example">          (set-face-foreground viper-replace-overlay-face "DarkSlateBlue")
+          (set-face-background viper-replace-overlay-face "yellow")
+</pre>
+     <p>For a complete list of colors available to you, evaluate the expression
+<code>(x-defined-colors)</code>.  (Type it in the buffer <code>*scratch*</code> and then
+hit the <kbd>C-j</kbd> key.
+
+     <br><dt><code>viper-replace-overlay-cursor-color  "Red"</code><dd><a name="index-g_t_0040code_007bviper_002dreplace_002doverlay_002dcursor_002dcolor_007d-178"></a>Cursor color when it is inside the replacement region. 
+This has effect only on color displays and only when Emacs runs as an X
+application. 
+<br><dt><code>viper-insert-state-cursor-color nil</code><dd><a name="index-g_t_0040code_007bviper_002dinsert_002dstate_002dcursor_002dcolor_007d-179"></a>If set to a valid color, this will be the cursor color when Viper is in
+insert state. 
+<br><dt><code>viper-emacs-state-cursor-color nil</code><dd><a name="index-g_t_0040code_007bviper_002demacs_002dstate_002dcursor_002dcolor_007d-180"></a>If set to a valid color, this will be the cursor color when Viper is in
+emacs state. 
+<br><dt><code>viper-replace-region-end-delimiter "$"</code><dd>A string used to mark the end of replacement regions.  It is used only on
+TTYs or if <code>viper-use-replace-region-delimiters</code> is non-<code>nil</code>. 
+<br><dt><code>viper-replace-region-start-delimiter  ""</code><dd>A string used to mark the beginning of replacement regions.  It is used
+only on TTYs or if <code>viper-use-replace-region-delimiters</code> is non-<code>nil</code>. 
+<br><dt><code>viper-use-replace-region-delimiters</code><dd>If non-<code>nil</code>, Viper will always use <code>viper-replace-region-end-delimiter</code> and
+<code>viper-replace-region-start-delimiter</code> to delimit replacement regions,
+even on color displays (where this is unnecessary).  By default, this
+variable is non-<code>nil</code> only on TTYs or monochrome displays. 
+<br><dt><code>viper-allow-multiline-replace-regions t</code><dd>If non-<code>nil</code>, multi-line text replacement regions, such as those produced by
+commands <kbd>c55w</kbd>, <kbd>3C</kbd>, etc., will stay around until the user exits
+the replacement mode.  In this variable is set to <code>nil</code>, Viper will
+emulate the standard Vi behavior, which supports only intra-line
+replacement regions (and multi-line replacement regions are deleted). 
+<br><dt><code>viper-toggle-key "\C-z"</code><dd>Specifies the key used to switch from Emacs to Vi and back. 
+Must be set in <samp><span class="file">.viper</span></samp>.  This variable can't be
+changed interactively after Viper is loaded.
+
+     <p>In Insert state, this key acts as a temporary escape to Vi state, i.e., it
+will set Viper up so that the very next command will be executed as if it
+were typed in Vi state. 
+<br><dt><code>viper-buffer-search-char nil</code><dd>Key used for buffer search.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details. 
+<br><dt><code>viper-surrounding-word-function 'viper-surrounding-word</code><dd>The value of this variable is a function name that is used to determine
+what constitutes a word clicked upon by the mouse.  This is used by mouse
+search and insert. 
+<br><dt><code>viper-search-face 'viper-search-face</code><dd>Variable that controls how search patterns are highlighted when they are
+found. 
+<br><dt><code>viper-vi-state-hook nil</code><dd>List of parameterless functions to be run just after entering the Vi
+command state. 
+<br><dt><code>viper-insert-state-hook nil</code><dd>Same for Insert state.  This hook is also run after entering Replace state. 
+<br><dt><code>viper-replace-state-hook  nil</code><dd>List of (parameterless) functions called just after entering Replace state
+(and after all <code>viper-insert-state-hook</code>). 
+<br><dt><code>viper-emacs-state-hook nil</code><dd>List of (parameterless) functions called just after switching from Vi state
+to Emacs state. 
+<br><dt><code>viper-load-hook nil</code><dd>List of (parameterless) functions called just after loading Viper.  This is
+the last chance to do customization before Viper is up and running. 
+</dl>
+   You can reset some of these constants in Viper with the Ex command <kbd>:set</kbd>
+(when so indicated in the table).  Or you
+can include a line like this in your <samp><span class="file">.viper</span></samp> file:
+<pre class="example">     (setq viper-case-fold-search t)
+</pre>
+   <p><a name="index-g_t_0040code_007bviper_002dauto_002dindent_007d-181"></a><a name="index-g_t_0040code_007bviper_002delectric_002dmode_007d-182"></a><a name="index-g_t_0040code_007bviper_002dcase_002dfold_002dsearch_007d-183"></a><a name="index-g_t_0040code_007bviper_002dre_002dsearch_007d-184"></a><a name="index-g_t_0040code_007bviper_002dshift_002dwidth_007d-185"></a><a name="index-g_t_0040code_007bbuffer_002dread_002donly_007d-186"></a><a name="index-g_t_0040code_007bviper_002dsearch_002dwrap_002daround_007d-187"></a><a name="index-g_t_0040code_007bviper_002dsearch_002dscroll_002dthreshold_007d-188"></a><a name="index-g_t_0040code_007bviper_002dsearch_002dface_007d-189"></a><a name="index-g_t_0040code_007bviper_002dtags_002dfile_002dname_007d-190"></a><a name="index-g_t_0040code_007bviper_002dre_002dquery_002dreplace_007d-191"></a><a name="index-g_t_0040code_007bviper_002dwant_002dctl_002dh_002dhelp_007d-192"></a><a name="index-g_t_0040code_007bviper_002dvi_002dstyle_002din_002dminibuffer_007d-193"></a><a name="index-g_t_0040code_007bviper_002dno_002dmultiple_002dESC_007d-194"></a><a name="index-g_t_0040code_007bviper_002dalways_007d-195"></a><a name="index-g_t_0040code_007bviper_002dfast_002dkeyseq_002dtimeout_007d-196"></a><a name="index-g_t_0040code_007bviper_002dex_002dstyle_002dmotion_007d-197"></a><a name="index-g_t_0040code_007bviper_002dex_002dstyle_002dediting_007d-198"></a><a name="index-g_t_0040code_007bviper_002dESC_002dmoves_002dcursor_002dback_007d-199"></a><a name="index-g_t_0040code_007bviper_002dcustom_002dfile_002dname_007d-200"></a><a name="index-g_t_0040code_007bviper_002dspell_002dfunction_007d-201"></a><a name="index-g_t_0040code_007bex_002dcycle_002dother_002dwindow_007d-202"></a><a name="index-g_t_0040code_007bex_002dcycle_002dthrough_002dnon_002dfiles_007d-203"></a><a name="index-g_t_0040code_007bviper_002dwant_002demacs_002dkeys_002din_002dinsert_007d-204"></a><a name="index-g_t_0040code_007bviper_002dwant_002demacs_002dkeys_002din_002dvi_007d-205"></a><a name="index-g_t_0040code_007bviper_002dkeep_002dpoint_002don_002drepeat_007d-206"></a><a name="index-g_t_0040code_007bviper_002dkeep_002dpoint_002don_002dundo_007d-207"></a><a name="index-g_t_0040code_007bviper_002ddelete_002dbackwards_002din_002dreplace_007d-208"></a><a name="index-g_t_0040code_007bviper_002dreplace_002doverlay_002dface_007d-209"></a><a name="index-g_t_0040code_007bviper_002dreplace_002dregion_002dend_002dsymbol_007d-210"></a><a name="index-g_t_0040code_007bviper_002dreplace_002dregion_002dstart_002dsymbol_007d-211"></a><a name="index-g_t_0040code_007bviper_002dallow_002dmultiline_002dreplace_002dregions_007d-212"></a><a name="index-g_t_0040code_007bviper_002dtoggle_002dkey_007d-213"></a><a name="index-g_t_0040code_007bviper_002dbuffer_002dsearch_002dchar_007d-214"></a><a name="index-g_t_0040code_007bviper_002dsurrounding_002dword_002dfunction_007d-215"></a><a name="index-g_t_0040code_007bviper_002dvi_002dstate_002dhook_007d-216"></a><a name="index-g_t_0040code_007bviper_002dinsert_002dstate_002dhook_007d-217"></a><a name="index-g_t_0040code_007bviper_002dreplace_002dstate_002dhook_007d-218"></a><a name="index-g_t_0040code_007bviper_002demacs_002dstate_002dhook_007d-219"></a>
+
+   </body></html>
+

@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Semantic mode user commands - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Semantic-mode.html#Semantic-mode" title="Semantic mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Semantic-mode-user-commands"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Semantic-mode.html#Semantic-mode">Semantic mode</a>
+<hr>
+</div>
+
+<h4 class="subsection">Semantic mode user commands</h4>
+
+<p>Semantic mode provides a number of commands for navigating, querying,
+and editing source code in a language-aware manner.  These commands
+generally act on <dfn>tags</dfn>, which are the source-code units deemed
+&ldquo;important&rdquo; by the present programming language (e.g. functions in
+the C programming language).
+
+   <p>These commands may be used in any buffer that has been parsed by
+.  Several of them prompt for a tag name using the
+minibuffer; here, the <kbd>TAB</kbd> key can be used to complete tag names. 
+Others act on the <dfn>current tag</dfn>, meaning the tag at (or around)
+point.
+
+     <dl>
+<dt><kbd>C-c , j</kbd><dd>Prompt for a tag defined in the current file, and move point to it
+(<code>semantic-complete-jump-local</code>).
+
+     <br><dt><kbd>C-c , J</kbd><dd>Prompt for a tag defined in any file that Emacs has parsed, and move
+point to it (<code>semantic-complete-jump</code>).
+
+     <br><dt><kbd>C-c , l</kbd><dd>Display a list of the possible completions of the current tag
+(<code>semantic-analyze-possible-completions</code>).
+
+     <br><dt><kbd>C-c , g</kbd><dd>Prompt for a tag, and display a list of tags that call it
+(<code>semantic-symref-symbol</code>).  This relies on the presence of an
+external symbol reference tool.  See <a href="SymRef.html#SymRef">SymRef</a>.
+
+     <br><dt><kbd>C-c , G</kbd><dd>Display a list of tags that call the current tag
+(<code>semantic-symref</code>).  This relies on the presence of an external
+symbol reference tool.  See <a href="SymRef.html#SymRef">SymRef</a>.
+
+     <br><dt><kbd>C-c , p</kbd><dd>Move point to the previous tag (<code>senator-previous-tag</code>).
+
+     <br><dt><kbd>C-c , n</kbd><dd>Move point to the next tag (<code>senator-next-tag</code>).
+
+     <br><dt><kbd>C-c , u</kbd><dd>Move point &ldquo;up&rdquo; one reference (<code>senator-go-to-up-reference</code>). 
+The meaning of &ldquo;up&rdquo; is language-dependent; in C++, for instance,
+this means moving to the parent of the current tag.
+
+     <br><dt><kbd>C-c, &lt;SPC&gt;</kbd><dd>Display a list of possible completions for the symbol at point
+(<code>semantic-complete-analyze-inline</code>).  This also activates a
+special set of keybindings for choosing a completion: &lt;RET&gt;
+accepts the current completion, <kbd>M-n</kbd> and <kbd>M-p</kbd> cycle through
+possible completions, &lt;TAB&gt; completes as far as possible and then
+cycles, and <kbd>C-g</kbd> or any other key aborts the completion. 
+See <a href="Smart-Completion.html#Smart-Completion">Smart Completion</a>.
+
+     <br><dt><kbd>C-c , C-w</kbd><dd>Kill the current tag (<code>senator-kill-tag</code>).  This removes the text
+for that tag, placing it in the kill ring.  You can retrieve the text
+with <kbd>C-y</kbd>.  This also places the tag in the <dfn>tag ring</dfn>, so
+that you can yank it with <kbd>\C-c,\C-y</kbd>, below.
+
+     <br><dt><kbd>C-c , M-w</kbd><dd>Copy the current tag into the kill ring as well as the tag ring
+(<code>senator-copy-tag</code>).
+
+     <br><dt><kbd>C-c , C-y</kbd><dd>Yank a tag from the tag ring (<code>senator-yank-tag</code>).
+
+     <br><dt><kbd>C-c , r</kbd><dd>Copy the current tag into a register
+(<code>senator-copy-tag-to-register</code>).  With an optional argument,
+kill it as well.  This allows you to insert or jump to that tag with
+the usual register commands.  See <a href="../emacs/Registers.html#Registers">Registers</a>.
+
+     <br><dt><kbd>\C-c , up</kbd><dd>Transpose the current tag with the previous one
+(<code>senator-transpose-tags-up</code>).
+
+     <br><dt><kbd>C-c , down</kbd><dd>Transpose the current tag with the next one
+(<code>senator-transpose-tags-down</code>). 
+</dl>
+
+   </body></html>
+

@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Defining Stack Commands - GNU Emacs Calc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs Calc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
+<link rel="prev" href="Defining-Simple-Commands.html#Defining-Simple-Commands" title="Defining Simple Commands">
+<link rel="next" href="Argument-Qualifiers.html#Argument-Qualifiers" title="Argument Qualifiers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Calc, the GNU Emacs calculator, included with GNU Emacs 23.1.
+
+Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being just ``GNU GENERAL
+     PUBLIC LICENSE'', with the Front-Cover texts being ``A GNU
+     Manual,'' and with the Back-Cover Texts as in (a) below.  A copy
+     of the license is included in the section entitled ``GNU Free
+     Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Defining-Stack-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Argument-Qualifiers.html#Argument-Qualifiers">Argument Qualifiers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Simple-Commands.html#Defining-Simple-Commands">Defining Simple Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
+<hr>
+</div>
+
+<h4 class="subsection">18.5.3 Defining New Stack-Based Commands</h4>
+
+<p class="noindent">To define a new computational command which takes and/or leaves arguments
+on the stack, a special form of <code>interactive</code> clause is used.
+
+<pre class="example">     (interactive <var>num</var> <var>tag</var>)
+</pre>
+   <p class="noindent">where <var>num</var> is an integer, and <var>tag</var> is a string.  The effect is
+to pop <var>num</var> values off the stack, resimplify them by calling
+<code>calc-normalize</code>, and hand them to your function according to the
+function's argument list.  Your function may include <code>&amp;optional</code> and
+<code>&amp;rest</code> parameters, so long as calling the function with <var>num</var>
+parameters is valid.
+
+   <p>Your function must return either a number or a formula in a form
+acceptable to Calc, or a list of such numbers or formulas.  These value(s)
+are pushed onto the stack when the function completes.  They are also
+recorded in the Calc Trail buffer on a line beginning with <var>tag</var>,
+a string of (normally) four characters or less.  If you omit <var>tag</var>
+or use <code>nil</code> as a tag, the result is not recorded in the trail.
+
+   <p>As an example, the definition
+
+<pre class="smallexample">     (defmath myfact (n)
+       "Compute the factorial of the integer at the top of the stack."
+       (interactive 1 "fact")
+       (if (&gt; n 0)
+           (* n (myfact (1- n)))
+         (and (= n 0) 1)))
+</pre>
+   <p class="noindent">is a version of the factorial function shown previously which can be used
+as a command as well as an algebraic function.  It expands to
+
+<pre class="smallexample">     (defun calc-myfact ()
+       "Compute the factorial of the integer at the top of the stack."
+       (interactive)
+       (calc-slow-wrapper
+        (calc-enter-result 1 "fact"
+          (cons 'calcFunc-myfact (calc-top-list-n 1)))))
+     
+     (defun calcFunc-myfact (n)
+       "Compute the factorial of the integer at the top of the stack."
+       (if (math-posp n)
+           (math-mul n (calcFunc-myfact (math-add n -1)))
+         (and (math-zerop n) 1)))
+</pre>
+   <p><a name="index-calc_002dslow_002dwrapper-2327"></a>The <code>calc-slow-wrapper</code> function is a version of <code>calc-wrapper</code>
+that automatically puts up a &lsquo;<samp><span class="samp">Working...</span></samp>&rsquo; message before the
+computation begins.  (This message can be turned off by the user
+with an <kbd>m w</kbd> (<code>calc-working</code>) command.)
+
+   <p><a name="index-calc_002dtop_002dlist_002dn-2328"></a>The <code>calc-top-list-n</code> function returns a list of the specified number
+of values from the top of the stack.  It resimplifies each value by
+calling <code>calc-normalize</code>.  If its argument is zero it returns an
+empty list.  It does not actually remove these values from the stack.
+
+   <p><a name="index-calc_002denter_002dresult-2329"></a>The <code>calc-enter-result</code> function takes an integer <var>num</var> and string
+<var>tag</var> as described above, plus a third argument which is either a
+Calculator data object or a list of such objects.  These objects are
+resimplified and pushed onto the stack after popping the specified number
+of values from the stack.  If <var>tag</var> is non-<code>nil</code>, the values
+being pushed are also recorded in the trail.
+
+   <p>Note that if <code>calcFunc-myfact</code> returns <code>nil</code> this represents
+&ldquo;leave the function in symbolic form.&rdquo;  To return an actual empty list,
+in the sense that <code>calc-enter-result</code> will push zero elements back
+onto the stack, you should return the special value &lsquo;<samp><span class="samp">'(nil)</span></samp>&rsquo;, a list
+containing the single symbol <code>nil</code>.
+
+   <p>The <code>interactive</code> declaration can actually contain a limited
+Emacs-style code string as well which comes just before <var>num</var> and
+<var>tag</var>.  Currently the only Emacs code supported is &lsquo;<samp><span class="samp">"p"</span></samp>&rsquo;, as in
+
+<pre class="example">     (defmath foo (a b &amp;optional c)
+       (interactive "p" 2 "foo")
+       <var>body</var>)
+</pre>
+   <p>In this example, the command <code>calc-foo</code> will evaluate the expression
+&lsquo;<samp><span class="samp">foo(a,b)</span></samp>&rsquo; if executed with no argument, or &lsquo;<samp><span class="samp">foo(a,b,n)</span></samp>&rsquo; if
+executed with a numeric prefix argument of &lsquo;<samp><span class="samp">n</span></samp>&rsquo;.
+
+   <p>The other code string allowed is &lsquo;<samp><span class="samp">"m"</span></samp>&rsquo; (unrelated to the usual &lsquo;<samp><span class="samp">"m"</span></samp>&rsquo;
+code as used with <code>defun</code>).  It uses the numeric prefix argument as the
+number of objects to remove from the stack and pass to the function. 
+In this case, the integer <var>num</var> serves as a default number of
+arguments to be used when no prefix is supplied.
+
+   </body></html>
+

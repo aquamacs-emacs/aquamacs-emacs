@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Citing Commands - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands" title="Post-yank Formatting Commands">
+<link rel="prev" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands" title="Post-yank Formatting Commands">
+<link rel="next" href="Insertion-Commands.html#Insertion-Commands" title="Insertion Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Citing-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Insertion-Commands.html#Insertion-Commands">Insertion Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands">Post-yank Formatting Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands">Post-yank Formatting Commands</a>
+<hr>
+</div>
+
+   <p><a name="index-sc_002dcite_002dregion_002dlimit-231"></a>
+
+<h3 class="section">9.1 Commands to Manually Cite, Recite, and Uncite</h3>
+
+<p>Probably the three most common post-yank formatting operations that you
+will perform will be the manual citing, reciting, and unciting of
+regions of text in the reply buffer. Often you may want to recite a
+paragraph to use a nickname, or manually cite a message when setting
+<code>sc-cite-region-limit</code> to <code>nil</code>.  The following commands
+perform these functions on the region of text between &lsquo;<samp><span class="samp">point</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">mark</span></samp>&rsquo;.  Each of them sets the <dfn>undo boundary</dfn> before modifying
+the region so that the command can be undone in the standard Emacs
+way.
+
+   <p>Here is the list of Supercite citing commands:
+
+     
+<a name="index-sc_002dcite_002dregion-232"></a>
+<a name="index-cite_002dregion-_0028sc_002d_0029-233"></a>
+<a name="index-C_002dc-C_002dp-c-234"></a>
+<a name="index-sc_002dpre_002dcite_002dhook-235"></a>
+<a name="index-pre_002dcite_002dhook-_0028sc_002d_0029-236"></a>
+<a name="index-sc_002dconfirm_002dalways_002dp-237"></a>
+<a name="index-confirm_002dalways_002dp-238"></a>
+<a name="index-C_002du-239"></a>
+<dl><dt><code>sc-cite-region</code> (<kbd>C-c C-p c</kbd>)<dd>This command cites each line in the region of text by interpreting the
+selected frame from <code>sc-cite-frame-alist</code>, or the default citing
+frame <code>sc-default-cite-frame</code>.  It runs the hook
+<code>sc-pre-cite-hook</code> before interpreting the frame.  With an optional
+universal argument (<kbd>C-u</kbd>), it temporarily sets
+<code>sc-confirm-always-p</code> to <code>t</code> so you can confirm the
+attribution string for a single manual citing. 
+See <a href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>.
+
+     <p><a name="index-sc_002duncite_002dregion-240"></a><a name="index-uncite_002dregion-_0028sc_002d_0029-241"></a><a name="index-C_002dc-C_002dp-u-242"></a><br><dt><code>sc-uncite-region</code> (<kbd>C-c C-p u</kbd>)<dd>This command removes any citation strings from the beginning of each
+cited line in the region by interpreting the selected frame from
+<code>sc-uncite-frame-alist</code>, or the default unciting frame
+<code>sc-default-uncite-frame</code>.  It runs the hook
+<code>sc-pre-uncite-hook</code> before interpreting the frame. 
+See <a href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>.
+
+     <p><a name="index-sc_002drecite_002dregion-243"></a><a name="index-recite_002dregion-_0028sc_002d_0029-244"></a><a name="index-C_002dc-C_002dp-r-245"></a><br><dt><code>sc-recite-region</code> (<kbd>C-c C-p r</kbd>)<dd>This command recites each line the region by interpreting the selected
+frame from <code>sc-recite-frame-alist</code>, or the default reciting frame
+<code>sc-default-recite-frame</code>. It runs the hook
+<code>sc-pre-recite-hook</code> before interpreting the frame. 
+See <a href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>.
+
+     <p><a name="index-sc_002dconfirm_002dalways_002dp-246"></a><a name="index-confirm_002dalways_002dp-_0028sc_002d_0029-247"></a>Supercite will always ask you to confirm the attribution when reciting a
+region, regardless of the value of <code>sc-confirm-always-p</code>. 
+</dl>
+
+   </body></html>
+

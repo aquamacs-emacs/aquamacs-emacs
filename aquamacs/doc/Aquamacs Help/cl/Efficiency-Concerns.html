@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Efficiency Concerns - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Assertions.html#Assertions" title="Assertions">
+<link rel="next" href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" title="Common Lisp Compatibility">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Efficiency-Concerns"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility">Common Lisp Compatibility</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Assertions.html#Assertions">Assertions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix A Efficiency Concerns</h2>
+
+<h3 class="appendixsec">A.1 Macros</h3>
+
+<p class="noindent">Many of the advanced features of this package, such as <code>defun*</code>,
+<code>loop</code>, and <code>setf</code>, are implemented as Lisp macros.  In
+byte-compiled code, these complex notations will be expanded into
+equivalent Lisp code which is simple and efficient.  For example,
+the forms
+
+<pre class="example">     (incf i n)
+     (push x (car p))
+</pre>
+   <p class="noindent">are expanded at compile-time to the Lisp forms
+
+<pre class="example">     (setq i (+ i n))
+     (setcar p (cons x (car p)))
+</pre>
+   <p class="noindent">which are the most efficient ways of doing these respective operations
+in Lisp.  Thus, there is no performance penalty for using the more
+readable <code>incf</code> and <code>push</code> forms in your compiled code.
+
+   <p><em>Interpreted</em> code, on the other hand, must expand these macros
+every time they are executed.  For this reason it is strongly
+recommended that code making heavy use of macros be compiled. 
+(The features labeled &ldquo;Special Form&rdquo; instead of &ldquo;Function&rdquo; in
+this manual are macros.)  A loop using <code>incf</code> a hundred times
+will execute considerably faster if compiled, and will also
+garbage-collect less because the macro expansion will not have
+to be generated, used, and thrown away a hundred times.
+
+   <p>You can find out how a macro expands by using the
+<code>cl-prettyexpand</code> function.
+
+<div class="defun">
+&mdash; Function: <b>cl-prettyexpand</b><var> form &amp;optional full<a name="index-cl_002dprettyexpand-185"></a></var><br>
+<blockquote><p>This function takes a single Lisp form as an argument and inserts
+a nicely formatted copy of it in the current buffer (which must be
+in Lisp mode so that indentation works properly).  It also expands
+all Lisp macros which appear in the form.  The easiest way to use
+this function is to go to the <code>*scratch*</code> buffer and type, say,
+
+     <pre class="example">          (cl-prettyexpand '(loop for x below 10 collect x))
+</pre>
+        <p class="noindent">and type <kbd>C-x C-e</kbd> immediately after the closing parenthesis;
+the expansion
+
+     <pre class="example">          (block nil
+            (let* ((x 0)
+                   (G1004 nil))
+              (while (&lt; x 10)
+                (setq G1004 (cons x G1004))
+                (setq x (+ x 1)))
+              (nreverse G1004)))
+</pre>
+        <p class="noindent">will be inserted into the buffer.  (The <code>block</code> macro is
+expanded differently in the interpreter and compiler, so
+<code>cl-prettyexpand</code> just leaves it alone.  The temporary
+variable <code>G1004</code> was created by <code>gensym</code>.)
+
+        <p>If the optional argument <var>full</var> is true, then <em>all</em>
+macros are expanded, including <code>block</code>, <code>eval-when</code>,
+and compiler macros.  Expansion is done as if <var>form</var> were
+a top-level form in a file being compiled.  For example,
+
+     <pre class="example">          (cl-prettyexpand '(pushnew 'x list))
+               -| (setq list (adjoin 'x list))
+          (cl-prettyexpand '(pushnew 'x list) t)
+               -| (setq list (if (memq 'x list) list (cons 'x list)))
+          (cl-prettyexpand '(caddr (member* 'a list)) t)
+               -| (car (cdr (cdr (memq 'a list))))
+</pre>
+        <p>Note that <code>adjoin</code>, <code>caddr</code>, and <code>member*</code> all
+have built-in compiler macros to optimize them in common cases. 
+</p></blockquote></div>
+
+<h3 class="appendixsec">A.2 Error Checking</h3>
+
+<p class="noindent">Common Lisp compliance has in general not been sacrificed for the
+sake of efficiency.  A few exceptions have been made for cases
+where substantial gains were possible at the expense of marginal
+incompatibility.
+
+   <p>The Common Lisp standard (as embodied in Steele's book) uses the
+phrase &ldquo;it is an error if&rdquo; to indicate a situation which is not
+supposed to arise in complying programs; implementations are strongly
+encouraged but not required to signal an error in these situations. 
+This package sometimes omits such error checking in the interest of
+compactness and efficiency.  For example, <code>do</code> variable
+specifiers are supposed to be lists of one, two, or three forms;
+extra forms are ignored by this package rather than signaling a
+syntax error.  The <code>endp</code> function is simply a synonym for
+<code>null</code> in this package.  Functions taking keyword arguments
+will accept an odd number of arguments, treating the trailing
+keyword as if it were followed by the value <code>nil</code>.
+
+   <p>Argument lists (as processed by <code>defun*</code> and friends)
+<em>are</em> checked rigorously except for the minor point just
+mentioned; in particular, keyword arguments are checked for
+validity, and <code>&amp;allow-other-keys</code> and <code>:allow-other-keys</code>
+are fully implemented.  Keyword validity checking is slightly
+time consuming (though not too bad in byte-compiled code);
+you can use <code>&amp;allow-other-keys</code> to omit this check.  Functions
+defined in this package such as <code>find</code> and <code>member*</code>
+do check their keyword arguments for validity.
+
+<h3 class="appendixsec">A.3 Optimizing Compiler</h3>
+
+<p class="noindent">Use of the optimizing Emacs compiler is highly recommended; many of the Common
+Lisp macros emit
+code which can be improved by optimization.  In particular,
+<code>block</code>s (whether explicit or implicit in constructs like
+<code>defun*</code> and <code>loop</code>) carry a fair run-time penalty; the
+optimizing compiler removes <code>block</code>s which are not actually
+referenced by <code>return</code> or <code>return-from</code> inside the block.
+
+   </body></html>
+

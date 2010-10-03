@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Signature - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link rel="prev" href="Inserting-Messages.html#Inserting-Messages" title="Inserting Messages">
+<link rel="next" href="Picture.html#Picture" title="Picture">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Signature"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Picture.html#Picture">Picture</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inserting-Messages.html#Inserting-Messages">Inserting Messages</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>
+<hr>
+</div>
+
+<h3 class="section">9.4 Inserting Your Signature</h3>
+
+<p><a name="index-signature-1360"></a><a name="index-mh_002dinsert_002dsignature-1361"></a><a name="index-C_002dc-C_002ds-1362"></a>
+You can insert your signature at the current cursor location with the
+command <kbd>C-c C-s</kbd> (<code>mh-insert-signature</code>).
+
+   <p><a name="index-files_002c-_0040file_007b_002esignature_007d-1363"></a><a name="index-g_t_0040file_007b_002esignature_007d-1364"></a><a name="index-vCard-1365"></a><a name="index-mh_002dsignature_002dfile_002dname-1366"></a>
+By default, the text of your signature is taken from the file
+<samp><span class="file">~/.signature</span></samp>. You can read from other sources by changing the
+option <code>mh-signature-file-name</code>. This file may contain a
+<dfn>vCard</dfn> in which case an attachment is added with the vCard.
+
+   <p><a name="index-mh_002dsignature_002dseparator_002dp-1367"></a><a name="index-mh_002dsignature_002dfile_002dname-1368"></a><a name="index-mh_002dsignature_002dseparator-1369"></a><a name="index-mh_002dsignature_002dseparator_002dregexp-1370"></a>
+The option <code>mh-signature-file-name</code> may also be a symbol, in
+which case that function is called. You may not want a signature
+separator to be added for you; instead you may want to insert one
+yourself. Options that you may find useful to do this include
+<code>mh-signature-separator</code> (when inserting a signature separator)
+and <code>mh-signature-separator-regexp</code> (for finding said separator). 
+The function <code>mh-signature-separator-p</code>, which reports <code>t</code>
+if the buffer contains a separator, may be useful as well.
+
+   <p><a name="index-signature-separator-1371"></a><a name="index-mh_002dsignature_002dseparator_002dflag-1372"></a>
+A signature separator (<code>"-- "</code>) will be added if the signature
+block does not contain one and <code>mh-signature-separator-flag</code> is
+on. It is not recommended that you change this option since various
+mail user agents, including MH-E, use the separator to present the
+signature differently, and to suppress the signature when replying or
+yanking a letter into a draft.
+
+   <p><a name="index-mh_002dinsert_002dsignature_002dhook-1373"></a><a name="index-mh_002dsignature_002dfile_002dname-1374"></a>
+The hook <code>mh-insert-signature-hook</code> is run after the signature is
+inserted. Hook functions may access the actual name of the file or the
+function used to insert the signature with
+<code>mh-signature-file-name</code>.
+
+   <p>The signature can also be inserted using Identities. 
+See <a href="Identities.html#Identities">Identities</a>.
+
+   </body></html>
+

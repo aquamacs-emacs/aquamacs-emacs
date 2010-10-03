@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>Interactive Customization - CC Mode Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CC Mode Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing-Indentation.html#Customizing-Indentation" title="Customizing Indentation">
+<link rel="prev" href="c_002doffsets_002dalist.html#c_002doffsets_002dalist" title="c-offsets-alist">
+<link rel="next" href="Line_002dUp-Functions.html#Line_002dUp-Functions" title="Line-Up Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for CC Mode in Emacs.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Interactive-Customization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>
+<hr>
+</div>
+
+<!-- node-name, next, previous, up -->
+<h3 class="section">11.2 Interactive Customization</h3>
+
+<p><a name="index-customization_002c-interactive-490"></a><a name="index-interactive-customization-491"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+   <p>As an example of how to customize indentation, let's change the
+style of this example<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>:
+
+<pre class="example">      1: int add( int val, int incr, int doit )
+      2: {
+      3:   if( doit )
+      4:     {
+      5:       return( val + incr );
+      6:     }
+      7:   return( val );
+      8: }
+</pre>
+   <p class="noindent">to:
+
+<pre class="example">      1: int add( int val, int incr, int doit )
+      2: {
+      3:   if( doit )
+      4:   {
+      5:     return( val + incr );
+      6:   }
+      7:   return( val );
+      8: }
+</pre>
+   <p>In other words, we want to change the indentation of braces that open a
+block following a condition so that the braces line up under the
+conditional, instead of being indented.  Notice that the construct we
+want to change starts on line 4.  To change the indentation of a line,
+we need to see which syntactic symbols affect the offset calculations
+for that line.  Hitting <kbd>C-c C-s</kbd> on line 4 yields:
+
+<pre class="example">     ((substatement-open 44))
+</pre>
+   <p class="noindent">so we know that to change the offset of the open brace, we need to
+change the indentation for the <code>substatement-open</code> syntactic
+symbol.
+
+   <p>To do this interactively, just hit <kbd>C-c C-o</kbd>.  This prompts
+you for the syntactic symbol to change, providing a reasonable default. 
+In this case, the default is <code>substatement-open</code>, which is just the
+syntactic symbol we want to change!
+
+   <p>After you hit return, CC Mode will then prompt you for the new
+offset value, with the old value as the default.  The default in this
+case is &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, but we want no extra indentation so enter
+&lsquo;<samp><span class="samp">0</span></samp>&rsquo; and <kbd>RET</kbd>.  This will associate the offset 0 with the
+syntactic symbol <code>substatement-open</code>.
+
+   <p>To check your changes quickly, just hit <kbd>C-c C-q</kbd>
+(<code>c-indent-defun</code>) to reindent the entire function.  The example
+should now look like:
+
+<pre class="example">      1: int add( int val, int incr, int doit )
+      2: {
+      3:   if( doit )
+      4:   {
+      5:     return( val + incr );
+      6:   }
+      7:   return( val );
+      8: }
+</pre>
+   <p>Notice how just changing the open brace offset on line 4 is all we
+needed to do.  Since the other affected lines are indented relative to
+line 4, they are automatically indented the way you'd expect.  For more
+complicated examples, this might not always work.  The general approach
+to take is to always start adjusting offsets for lines higher up in the
+file, then reindent and see if any following lines need further
+adjustments.
+
+<!-- Move this bit to "Styles" (2005/10/7) -->
+<div class="defun">
+&mdash; Command: <b>c-set-offset</b><var> symbol offset<a name="index-c_002dset_002doffset-492"></a></var><br>
+<blockquote><p><a name="index-set_002doffset-_0028c_002d_0029-493"></a><a name="index-C_002dc-C_002do-494"></a>This is the command bound to <kbd>C-c C-o</kbd>.  It provides a convenient
+way to set offsets on <code>c-offsets-alist</code> both interactively (see
+the example above) and from your mode hook.
+
+        <p>It takes two arguments when used programmatically: <var>symbol</var> is the
+syntactic element symbol to change and <var>offset</var> is the new offset
+for that syntactic element. 
+</p></blockquote></div>
+   <!-- End of MOVE THIS BIT. -->
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> In this and subsequent examples, the
+original code is formatted using the &lsquo;<samp><span class="samp">gnu</span></samp>&rsquo; style unless otherwise
+indicated.  See <a href="Styles.html#Styles">Styles</a>.</p>
+
+   <hr></div>
+
+   </body></html>
+

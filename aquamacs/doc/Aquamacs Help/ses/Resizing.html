@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Resizing - SES: Simple Emacs Spreadsheet</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SES: Simple Emacs Spreadsheet">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-Basics.html#The-Basics" title="The Basics">
+<link rel="prev" href="Formulas.html#Formulas" title="Formulas">
+<link rel="next" href="Printer-functions.html#Printer-functions" title="Printer functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents SES: the Simple Emacs Spreadsheet.
+
+Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Resizing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Printer-functions.html#Printer-functions">Printer functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Formulas.html#Formulas">Formulas</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-Basics.html#The-Basics">The Basics</a>
+<hr>
+</div>
+
+<h3 class="section">2.2 Resizing the spreadsheet</h3>
+
+<p><a name="index-resizing-spreadsheets-16"></a><a name="index-ses_002dinsert_002drow-17"></a><a name="index-ses_002dinsert_002dcolumn-18"></a><a name="index-ses_002ddelete_002drow-19"></a><a name="index-ses_002ddelete_002dcolumn-20"></a><a name="index-ses_002dset_002dcolumn_002dwidth-21"></a><a name="index-ses_002dforward_002dor_002dinsert-22"></a><a name="index-ses_002dappend_002drow_002djump_002dfirst_002dcolumn-23"></a>
+
+   <p>Basic commands:
+
+     <dl>
+<dt><kbd>C-o</kbd><dd>(<code>ses-insert-row</code>)
+
+     <br><dt><kbd>M-o</kbd><dd>(<code>ses-insert-column</code>)
+
+     <br><dt><kbd>C-k</kbd><dd>(<code>ses-delete-row</code>)
+
+     <br><dt><kbd>M-k</kbd><dd>(<code>ses-delete-column</code>)
+
+     <br><dt><kbd>w</kbd><dd>(<code>ses-set-column-width</code>)
+
+     <br><dt><kbd>TAB</kbd><dd>Moves point to the next rightward cell, or inserts a new column if
+already at last cell on line, or inserts a new row if at endline
+(<code>ses-forward-or-insert</code>).
+
+     <br><dt><kbd>C-j</kbd><dd>Linefeed inserts below the current row and moves to column A
+(<code>ses-append-row-jump-first-column</code>). 
+</dl>
+
+   <p>Resizing the spreadsheet (unless you're just changing a column width)
+relocates all the cell-references in formulas so they still refer to
+the same cells.  If a formula mentioned B1 and you insert a new first
+row, the formula will now mention B2.
+
+   <p>If you delete a cell that a formula refers to, the cell-symbol is
+deleted from the formula, so <code>(+ A1 B1 C1)</code> after deleting the third
+column becomes <code>(+ A1 B1)</code>.  In case this is not what you wanted:
+
+     <dl>
+<dt><kbd>C-_</kbd><dt><kbd>C-x u</kbd><dd>Undo previous action (<code>(undo)</code>). 
+</dl>
+
+   </body></html>
+
