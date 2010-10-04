@@ -339,10 +339,13 @@ While experienced users of Emacs on other platforms can continue to use all the 
 
 Export users who find themselves confused by some changes to the Emacs behavior that they are used to, either due to the upgrade to Emacs 23, or to Aquamacs, may undo configuration changes quickly by using the Emacs Lisp code shown at \url{http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings} in their Preferences.el file.
 
-\subsection{Keyboard Shortcuts}
+\subsection{Key Bindings}
 Emacs has a well-defined set of keyboard shortcuts, to which Aquamacs adds its own to accomodate OS X conventions. See Table \ref{tab:shortcuts} and Table \ref{tab:command} for details.
-
 Note that the descriptions of keys in Aquamacs conform to the Mac standards.
+
+Almost all key bindings are provided by a minor mode, \emph{osx-key-mode}.  This mode can be turned off.  Bindings may also be removed or overriden in its key map, \emph{osx-key-mode-map} (note: Emacs minor mode key bindings have priority compared to global bindings).
+
+Modifier keys may be adjusted using the `ns-...-modifier' customization variables, such as `ns-alternate-modifier', or `ns-right-command-modifier'.
 
 \begin{table}[thp]
 \begin{center}
@@ -351,14 +354,14 @@ Note that the descriptions of keys in Aquamacs conform to the Mac standards.
 
 \hline Command-N &new-frame-with & Create new buffer\\ &-new-scratch & \\
 
-\hline Command-O & mac-find-file- & Open a file\\ & other-frame & \\
+\hline Command-O & find-file & Open a file\\ & other-frame & \\
 \hline  Command-W &  close-window & Close selected window \\ & & deleting buffer\\
 
-\hline Command-Shift-S & mac-save-file-as & Save as\\
+\hline Command-Shift-S & write-file & Save as\\
  
 \hline Command-A & mark-whole-buffer & Select all text\\
 
-\hline Command-V & yank & Paste text\\
+\hline Command-V & cua-paste (yank) & Paste text\\
 
 \hline Command-C & clipboard-kill-ring-save & Copy text\\
 \hline Command-Option-C & aquamacs-clipboard-kill- & Copy text
@@ -405,8 +408,8 @@ marked  &\\
 
 \hline 
 \end{tabular} 
-\caption{Aqua-specific keyboard shortcuts implemented in
-  Aquamacs. This assumes that the ``Option Key is Meta'' (Options menu).  Commands given are usually the traditional Emacs commands rather than direct bindings.}
+\caption{Mac-specific keyboard shortcuts implemented in
+  Aquamacs. This assumes that the ``Option Key is Meta'' (Options menu).  Commands named here are usually the traditional Emacs commands rather than direct bindings.}
 \label{tab:shortcuts}
 \end{center}
 \end{table}
