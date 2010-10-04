@@ -28,7 +28,7 @@
 ;; printable characters with codes above 127: the prefix C-x 8, and,
 ;; with `iso-transl-mode' enabled, also the Alt key, and a dead accent
 ;; key.  For example, you can enter uppercase A-umlaut as `C-x 8 " A'
-;; or, `iso-transl-mode' is enabled, `Alt-" A' (if you have an Alt
+;; or, if `iso-transl-mode' is enabled, `Alt-" A' (if you have an Alt
 ;; key) or `umlaut A' (if you have an umlaut/diaeresis key).
 
 ;; C-x 8 is set up to autoload this package, but Alt keys and dead
@@ -248,9 +248,11 @@ sequence VECTOR.  (VECTOR is normally one character long.)")
 (or iso-transl-ctl-x-8-map
     (fset 'iso-transl-ctl-x-8-map
 	  (setq iso-transl-ctl-x-8-map (make-sparse-keymap))))
+(put 'iso-transl-ctl-x-8-map 'iso-transl-backup nil)
 (or key-translation-map
     (setq key-translation-map (make-sparse-keymap)))
 (define-key key-translation-map "\C-x8" iso-transl-ctl-x-8-map)
+(put 'key-translation-map 'iso-transl-backup nil)
 
 (defmacro iso-transl-define-key (keymap key def)
   "Back up definition of KEY in KEYMAP, then `define-key'."
