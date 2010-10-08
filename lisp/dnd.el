@@ -171,8 +171,8 @@ file://server-name/file-name will also be handled by this function.
 An alternative for systems that do not support unc file names is
 `dnd-open-remote-url'. ACTION is ignored."
 
-  (let* ((f (dnd-get-local-file-name uri t)))
-    (if (and f (file-readable-p f))
+  (let* ((f (dnd-get-local-file-name uri nil)))
+    (if f
 	(progn
 	  (if (fboundp 'aquamacs-find-file)
 	      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))

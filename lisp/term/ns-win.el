@@ -757,23 +757,33 @@ prompting.  If file is a directory perform a `find-file' on it."
 If OPEN-FILE is non-nil, always open the file."
   (interactive)
   (while (car ns-input-file) 
-    (let ((uri (concat "file://" (car ns-input-file))))
+    (let ((uri (concat "file://" 
+		       (if (file-name-absolute-p (car ns-input-file))
+			   (car ns-input-file)
+			 ;; file may be relative when coming from command line
+			 ;; (NSWorkspace application:openFiles is called then, 
+			 ;; in addition to the command line argument.)
+			 (expand-file-name 
+			  (car ns-input-file)
+			  command-line-default-directory)))))
       (unwind-protect
-	  ;; we should really leave it to dnd to 
-	  ;; decide what to do with the file
-	  (require 'dnd)
-	(let* ((event last-input-event)
-	       (window (or (posn-window (event-start event))
-			   (selected-window)))
-	       action)
-	  ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
-	  ;; 	(setq action 'copy))
-	  (when (windowp window) (select-window window))
-	  (if open-file
-	      (dnd-open-local-file uri nil)
-	    (dnd-handle-one-url window action
-				uri))))
-      (setq ns-input-file (cdr ns-input-file)))))
+	  (unwind-protect
+	      ;; we should really leave it to dnd to 
+	      ;; decide what to do with the file
+	      (require 'dnd)
+	    (let* ((event last-input-event)
+		   (window (or (posn-window (event-start event))
+			       (selected-window)))
+		   action)
+	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+	      ;; 	(setq action 'copy))
+	      (when (windowp window) (select-window window))
+		(if open-file
+		    (dnd-open-local-file uri nil)
+		  (dnd-handle-one-url window action
+				      uri))))
+	;; ensure this is run:
+	(setq ns-input-file (cdr ns-input-file))))))
 
 (defun ns-handle-open-file ()
   "Handle one or more files to be opened.
