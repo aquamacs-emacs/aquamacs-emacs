@@ -134,13 +134,15 @@ If kill-session is non-nil, kills the current session
   (let ((osx-version (shell-command-to-string 
 		      "/usr/bin/sw_vers | /usr/bin/awk '/ProductVersion/ {print $2}'"))
 		(aquamacs-args (or args (list "-q"))))
-	(if (string< "10.6" osx-version)
-	    (progn
-	      (async-shell-command (concat  "open -a " (car command-line-args) " -n --args " 
-					    (mapconcat 'identity aquamacs-args " ")))
-	      (if kill-session (kill-emacs)))
-	  (apply 'start-process "aquamacs-with-args" nil 
-		 (car command-line-args) aquamacs-args))))
+    (if (string< "10.6" osx-version)
+	(progn
+	  (apply #'call-process "open" nil 0 nil 
+		 "-a" (car command-line-args) 
+		 "-n" 
+		 "--args" aquamacs-args)
+	  (if kill-session (kill-emacs)))
+      (apply 'start-process "aquamacs-with-args" nil 
+	     (car command-line-args) aquamacs-args))))
 
 (defun start-vanilla-aquamacs (&optional kill-session)
   "Start a vanilla Aquamacs.
