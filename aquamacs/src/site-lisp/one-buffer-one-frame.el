@@ -637,6 +637,12 @@ even if it's the only visible frame."
 
 (defvar aquamacs-last-frame-empty-frame nil)
 (defun aquamacs-make-empty-frame (parms)
+  (let ((frame-to-delete
+	 (when (and aquamacs-last-frame-empty-frame
+		    (not (ns-frame-is-on-active-space-p aquamacs-last-frame-empty-frame)))
+	   (prog1
+	       aquamacs-last-frame-empty-frame
+	     (setq aquamacs-last-frame-empty-frame nil)))))
   (let ((all-parms
 	 (append
 	  '((visibility . nil))
@@ -649,7 +655,9 @@ even if it's the only visible frame."
       (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))
   (select-frame aquamacs-last-frame-empty-frame)
   (raise-frame aquamacs-last-frame-empty-frame)
-  aquamacs-last-frame-empty-frame)    
+  (if frame-to-delete
+      (delete-frame frame-to-delete)))
+  aquamacs-last-frame-empty-frame)
 
 (defvar aquamacs-deleted-frame-position nil)
 (defun aquamacs-delete-frame (&optional frame)
@@ -676,7 +684,10 @@ even if it's the only visible frame."
 	;; do not delete the last visible frame if there are others hidden:
 	;; doing so prevents Aquamacs from receiving keyboard input (NS problem?)
 	(progn 
-	  (delete-frame (or frame (selected-frame)))
+	  (if (equal (ns-visible-frame-list)
+		     (list (or frame (selected-frame))))
+	      (error) ;; create *empty* frame or hide current one
+	    (delete-frame (or frame (selected-frame))))
 	  (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
 	    (error)))
       (error
