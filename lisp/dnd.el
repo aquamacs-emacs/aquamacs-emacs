@@ -175,7 +175,22 @@ An alternative for systems that do not support unc file names is
     (if f
 	(progn
 	  (if (fboundp 'aquamacs-find-file)
-	      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))
+	      (let ((one-buffer-one-frame-mode 
+		     (or one-buffer-one-frame-mode 
+			 dnd-open-file-other-window
+			 (and (boundp 'tabbar-mode)
+			      tabbar-mode 
+			      (fboundp 'ns-frame-is-on-active-space-p)	      
+			      (fboundp 'ns-visible-frame-list)
+			      (if (ns-frame-is-on-active-space-p (selected-frame))
+				  nil ;; no need to open a new frame
+				(if (not (ns-visible-frame-list))
+				    t ;; no frame visible on this space, open a new frame
+				  ;; frame visible on this space, we just need to make it selected
+				  (select-frame-set-input-focus (car (ns-visible-frame-list)))
+				  ;; .. and proceed to use it
+				  nil)
+				)))))
 		(aquamacs-find-file f))
 	    (if dnd-open-file-other-window
 		(find-file-other-window f)
