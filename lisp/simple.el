@@ -2832,11 +2832,6 @@ If `interprogram-cut-function' is non-nil, apply it to STRING.
 Optional second argument REPLACE non-nil means that STRING will replace
 the front of the kill ring, rather than being added to the list.
 
-Optional third arguments YANK-HANDLER controls how the STRING is later
-inserted into a buffer; see `insert-for-yank' for details.
-When a yank handler is specified, STRING must be non-empty (the yank
-handler, if non-nil, is stored as a `yank-handler' text property on STRING).
-
 When `save-interprogram-paste-before-kill' and `interprogram-paste-function'
 are non-nil, saves the interprogram paste string(s) into `kill-ring' before
 STRING.
@@ -2873,22 +2868,19 @@ argument should still be a \"useful\" string for such uses."
   (setq kill-ring-yank-pointer kill-ring) 
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
+(set-advertised-calling-convention
+ 'kill-new '(string &optional replace) "23.3")
 
 (defun kill-append (string before-p &optional yank-handler)
   "Append STRING to the end of the latest kill in the kill ring.
 If BEFORE-P is non-nil, prepend STRING to the kill.
-Optional third argument YANK-HANDLER, if non-nil, specifies the
-yank-handler text property to be set on the combined kill ring
-string.  If the specified yank-handler arg differs from the
-yank-handler property of the latest kill string, this function
-adds the combined string to the kill ring as a new element,
-instead of replacing the last kill with it.
 If `interprogram-cut-function' is set, pass the resulting kill to it."
   (let* ((cur (car kill-ring)))
     (kill-new (if before-p (concat string cur) (concat cur string))
 	      (or (= (length cur) 0)
 		  (equal yank-handler (get-text-property 0 'yank-handler cur)))
 	      yank-handler)))
+(set-advertised-calling-convention 'kill-append '(string before-p) "23.3")
 
 (defcustom yank-pop-change-selection nil
   "If non-nil, rotating the kill ring changes the window system selection."
@@ -2969,11 +2961,7 @@ Supply two arguments, character positions indicating the stretch of text
 Any command that calls this function is a \"kill command\".
 If the previous command was also a kill command,
 the text killed this time appends to the text killed last time
-to make one entry in the kill ring.
-
-In Lisp code, optional third arg YANK-HANDLER, if non-nil,
-specifies the yank-handler text property to be set on the killed
-text.  See `insert-for-yank'."
+to make one entry in the kill ring."
   ;; Pass point first, then mark, because the order matters
   ;; when calling kill-append.
   (interactive (list (point) (mark)))
@@ -3005,6 +2993,7 @@ text.  See `insert-for-yank'."
        (barf-if-buffer-read-only)
        ;; If the buffer isn't read-only, the text is.
        (signal 'text-read-only (list (current-buffer)))))))
+(set-advertised-calling-convention 'kill-region '(beg end) "23.3")
 
 ;; copy-region-as-kill no longer sets this-command, because it's confusing
 ;; to get two copies of the text when the user accidentally types M-w and
@@ -3928,15 +3917,17 @@ Non-nil also enables highlighting of the region whenever the mark is active.
 The variable `highlight-nonselected-windows' controls whether to highlight
 all windows or just the selected window.
 
-If the value is `lambda', that enables Transient Mark mode temporarily.
-After any subsequent action that would normally deactivate the mark
-\(such as buffer modification), Transient Mark mode is turned off.
+Lisp programs may give this variable certain special values:
 
-If the value is (only . OLDVAL), that enables Transient Mark mode
-temporarily.  After any subsequent point motion command that is not
-shift-translated, or any other action that would normally deactivate
-the mark (such as buffer modification), the value of
-`transient-mark-mode' is set to OLDVAL.")
+- A value of `lambda' enables Transient Mark mode temporarily.
+  It is disabled again after any subsequent action that would
+  normally deactivate the mark (e.g. buffer modification).
+
+- A value of (only . OLDVAL) enables Transient Mark mode
+  temporarily.  After any subsequent point motion command that is
+  not shift-translated, or any other action that would normally
+  deactivate the mark (e.g. buffer modification), the value of
+  `transient-mark-mode' is set to OLDVAL.")
 
 (defvar widen-automatically t
   "Non-nil means it is ok for commands to call `widen' when they want to.
@@ -4127,6 +4118,11 @@ into account variable-width characters and line continuation."
 	 ;; When already vscrolled, we vscroll some more if we can,
 	 ;; or clear vscroll and move forward at end of tall image.
 	 ((> (setq vs (window-vscroll nil t)) 0)
+
+	  ;; If we are vscrolling an image at the top of the screen,
+	  ;; we could actually advance point if this yields space
+	  ;; below....
+
 	  (when (> rbot 0)
 	    (set-window-vscroll nil (+ vs (min rbot (frame-char-height))) t)))
 	 ;; If cursor just entered the bottom scroll margin, move forward,
@@ -4263,7 +4259,7 @@ into account variable-width characters and line continuation."
 		  (goto-char (next-char-property-change (point))))
 		;; Move a line.
 		;; We don't use `end-of-line', since we want to escape
-		;; from field boundaries ocurring exactly at point.
+		;; from field boundaries occurring exactly at point.
 		(goto-char (constrain-to-field
 			    (let ((inhibit-field-text-motion t))
 			      (line-end-position))

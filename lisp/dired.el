@@ -2012,6 +2012,14 @@ Otherwise, an error occurs in these cases."
           ;; with quotation marks in their names.
 	  (while (string-match "\\(?:[^\\]\\|\\`\\)\\(\"\\)" file)
 	    (setq file (replace-match "\\\"" nil t file 1)))
+	  
+	  (when (eq system-type 'windows-nt)
+	    (save-match-data
+	      (let ((start 0))
+		(while (string-match "\\\\" file start)
+		  (aset file (match-beginning 0) ?/)
+		  (setq start (match-end 0))))))
+
           (setq file (read (concat "\"" file "\"")))
 	  ;; The above `read' will return a unibyte string if FILE
 	  ;; contains eight-bit-control/graphic characters.
@@ -2747,7 +2755,8 @@ name, or the marker and a count of marked files."
 		    ;; that's possible.  (Bug#1806)
 		    (split-window-vertically))
 	       ;; Otherwise, try to split WINDOW sensibly.
-	       (split-window-sensibly window)))))
+	       (split-window-sensibly window))))
+	pop-up-frames)
     (pop-to-buffer (get-buffer-create buf)))
   ;; If dired-shrink-to-fit is t, make its window fit its contents.
   (when dired-shrink-to-fit
@@ -3523,7 +3532,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "07676ea25af17f5d50cc5db4f53bddc0")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "03cf081d2aac54764123d2407c3196a2")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\

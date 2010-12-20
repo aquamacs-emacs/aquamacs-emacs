@@ -97,6 +97,9 @@ when editing big diffs)."
   :options '(diff-delete-empty-files diff-make-unified)
   :group 'diff-mode)
 
+(defvar diff-vc-backend nil
+  "The VC backend that created the current Diff buffer, if any.")
+
 (defvar diff-outline-regexp
   "\\([*+][*+][*+] [^0-9]\\|@@ ...\\|\\*\\*\\* [0-9].\\|--- [0-9]..\\)")
 
@@ -138,6 +141,7 @@ when editing big diffs)."
     ;; Standard M-r is useful, so don't change M-r or M-R.
     ;;("r" . diff-restrict-view)
     ;;("R" . diff-reverse-direction)
+    ("g" . revert-buffer)
     ("q" . quit-window))
   "Basic keymap for `diff-mode', bound to various prefix keys.")
 
@@ -1823,10 +1827,13 @@ For use in `add-log-current-defun-function'."
   (eval-and-compile (require 'smerge-mode))
   (save-excursion
     (diff-beginning-of-hunk 'try-harder)
-    (let* ((style (diff-hunk-style))    ;Skips the hunk header as well.
+    (let* ((start (point))
+           (style (diff-hunk-style))    ;Skips the hunk header as well.
            (beg (point))
            (props '((diff-mode . fine) (face diff-refine-change)))
-           (end (progn (diff-end-of-hunk) (point))))
+           ;; Be careful to go back to `start' so diff-end-of-hunk gets
+           ;; to read the hunk header's line info.
+           (end (progn (goto-char start) (diff-end-of-hunk) (point))))
 
       (remove-overlays beg end 'diff-mode 'fine)
 

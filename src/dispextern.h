@@ -1878,7 +1878,7 @@ struct composition_it
      are not iterating over a composition now.  */
   int id;
   /* If non-negative, character that triggers the automatic
-     composition at `stop_pos', and this is an automatic compositoin.
+     composition at `stop_pos', and this is an automatic composition.
      If negative, this is a static composition.  This is set to -2
      temporarily if searching of composition reach a limit or a
      newline.  */
@@ -1993,6 +1993,12 @@ struct it
   /* Total number of overlay strings to process.  This can be >
      OVERLAY_STRING_CHUNK_SIZE.  */
   int n_overlay_strings;
+
+  /* The charpos where n_overlay_strings was calculated.  This should
+     be set at the same time as n_overlay_strings.  It is needed
+     because we show before-strings at the start of invisible text;
+     see handle_invisible_prop in xdisp.c.  */
+  int overlay_strings_charpos;
 
   /* Vector of overlays to process.  Overlay strings are processed
      OVERLAY_STRING_CHUNK_SIZE at a time.  */
@@ -2848,6 +2854,10 @@ extern void expose_frame P_ ((struct frame *, int, int, int, int));
 extern int x_intersect_rectangles P_ ((XRectangle *, XRectangle *,
 				       XRectangle *));
 #endif
+
+/* Flags passed to try_window.  */
+#define TRY_WINDOW_CHECK_MARGINS	(1 << 0)
+#define TRY_WINDOW_IGNORE_FONTS_CHANGE	(1 << 1)
 
 /* Defined in fringe.c */
 
