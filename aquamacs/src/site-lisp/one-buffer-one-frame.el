@@ -569,7 +569,10 @@ the current window is switched to the new buffer."
 		;; dr 12/2006 - we'll try this again, because
 		;; that's the way display-buffer is supposed to work.
 		  
-		(unless (eq display-buffer-reuse-frames 'select)
+		(unless (or (eq display-buffer-reuse-frames 'select)
+			    ;; re-selecting the old frame would cause a space switch,
+			    ;; assuming the new one is on the active space.
+			    (not (ns-frame-is-on-active-space-p sframe)))
 		  ;; we can't use select-frame-set-input-focus because
 		  ;; that would raise the (main) frame over the newly
 		  ;; opened one, and we don't want that.
@@ -982,7 +985,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 					 (&rest args) activate protect) 
       (let ((one-buffer-one-frame nil))
 	ad-do-it)))
-  
+
 ;; ediff-directories, e.g. uses split-window to create a new window
 ;; in a frame, and then `switch-to-buffer', which should simply show
 ;; another buffer in the newly created window. Problem is, in this
