@@ -642,6 +642,7 @@ even if it's the only visible frame."
 (defun aquamacs-make-empty-frame (parms)
   (let ((frame-to-delete
 	 (when (and aquamacs-last-frame-empty-frame
+		    (frame-live-p aquamacs-last-frame-empty-frame)
 		    (not (ns-frame-is-on-active-space-p aquamacs-last-frame-empty-frame)))
 	   (prog1
 	       aquamacs-last-frame-empty-frame
@@ -969,11 +970,31 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 ;; 	  (setq list))
 ;; 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'ignore)
-(define-key special-event-map [ns-application-activated] 'ignore)
+(define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
 )
 
+(defun aquamacs-handle-app-activated ()
+  "Aquamacs was activated.
+Ensure that there is a (hidden) frame in the current space."
+  (interactive)
+  ;; Must call at idle time.  Frame is not correctly
+  ;; keyed if it is created at this time. (E.g., no blinking cursor,
+  ;; and menu events are ignored.)
+  ;; this is a problem with event handling at the C level
+  ;; To Do: diagnose and fix.  Perhaps related to the way
+  ;; the NS port handles file requests via ns_pending_files
+  ;; (which do not display the behavior.)
+  (run-with-idle-timer 0.1 nil 'aquamacs-handle-app-activated2))
 
-  
+(defun aquamacs-handle-app-activated2 ()
+  (unless (ns-frame-is-on-active-space-p (selected-frame))
+    (let* ((display-buffer-reuse-frames 'select)
+	   (one-buffer-one-frame nil)
+	   (hf (aquamacs-make-empty-frame aquamacs-deleted-frame-position)))
+      (select-window (frame-first-window hf))
+      (make-frame-visible hf) ; HACK: must do this first, presumably to convince NS to make it key.
+      ;; (switch-to-buffer (init-aquamacs-last-frame-empty-buffer) 'norecord)
+      (make-frame-invisible hf t))))
 
 
 ;; FIXES IN VARIOUS PLACES
