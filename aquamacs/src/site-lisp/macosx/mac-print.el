@@ -123,7 +123,8 @@ in HTML format."
     (let ((x-select-enable-clipboard t)
 	  (buf (aquamacs-convert-to-html-buffer beg end)))
       (with-current-buffer buf
-	(copy-region-as-kill (point-min) (point-max)))
+	(copy-region-as-kill (point-min) (point-max))
+        (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
       ;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
       ;; (with-current-buffer buf
       ;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))

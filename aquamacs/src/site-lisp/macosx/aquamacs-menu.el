@@ -292,7 +292,7 @@ customization buffer."
 	      :help "Copy selected text in region"))
  
 (define-key-after menu-bar-edit-menu [copy-html]
-  `(menu-item "Copy as HTML" 
+  `(menu-item "Copy Styled as HTML" 
 	      aquamacs-copy-as-html
 	      :enable mark-active
 	      :help "Copy selected text in region as formatted HTML")

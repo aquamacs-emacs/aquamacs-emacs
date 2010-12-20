@@ -112,7 +112,7 @@ Offer to send a bug report."
 	(when (file-newer-than-file-p file aquamacs-id-file)
 	  (let ((location (aq-chomp
 			   (shell-command-to-string
-			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
+			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
 	    (when (aquamacs-ask-for-confirmation (format "Aquamacs crashed the last time you ran it.  Send Report? 
 Please send a simple bug report by e-mailing the automatically
 generated crash report to us.
