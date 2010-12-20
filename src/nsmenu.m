@@ -526,6 +526,21 @@ set_frame_menubar (struct frame *f, int first_time, int deep_p)
   ns_update_menubar (f, deep_p, nil);
 }
 
+/* Utility (from macmenu.c): is this item a separator? */
+static int
+name_is_separator (name)
+     const char *name;
+{
+  const char *start = name;
+
+  /* Check if name string consists of only dashes ('-').  */
+  while (*name == '-') name++;
+  /* Separators can also be of the form "--:TripleSuperMegaEtched"
+     or "--deep-shadow".  We don't implement them yet, se we just treat
+     them like normal separators.  */
+  return (*name == '\0' || start + 2 == name);
+}
+
 
 /* ==========================================================================
 
