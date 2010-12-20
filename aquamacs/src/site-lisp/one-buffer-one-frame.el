@@ -971,6 +971,7 @@ The buffer contains unsaved changes which will be lost if you discard them now."
 ;; 	(setq list (cdr list))))))
 (define-key special-event-map [ns-application-reopen] 'ignore)
 (define-key special-event-map [ns-application-activated] 'aquamacs-handle-app-activated)
+(define-key global-map [ns-new-frame] 'new-empty-buffer-other-frame)
 )
 
 (defun aquamacs-handle-app-activated ()
