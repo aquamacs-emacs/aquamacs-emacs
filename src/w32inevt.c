@@ -23,11 +23,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 */
 
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
-#include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
 #include <setjmp.h>
@@ -283,13 +279,13 @@ w32_kbd_patch_key (KEY_EVENT_RECORD *event)
 }
 
 
-extern char *lispy_function_keys[];
+extern const char *const lispy_function_keys[];
 
 static int faked_key = 0;
 
 /* return code -1 means that event_queue_ptr won't be incremented.
    In other word, this event makes two key codes.   (by himi)       */
-int
+static int
 key_event (KEY_EVENT_RECORD *event, struct input_event *emacs_ev, int *isdead)
 {
   static int mod_key_state = 0;
@@ -785,5 +781,3 @@ w32_console_read_socket (struct terminal *terminal,
   return ret;
 }
 
-/* arch-tag: 0bcb39b7-d085-4b85-9070-6750e8c03047
-   (do not change this comment) */

@@ -1,8 +1,8 @@
 ;;; tool-bar.el --- setting up the tool bar
-;;
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
-;;
+
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+;;   2009, 2010  Free Software Foundation, Inc.
+
 ;; Author: Dave Love <fx@gnu.org>
 ;; Keywords: mouse frames
 ;; Package: emacs
@@ -51,8 +51,8 @@ See `tool-bar-add-item' and `tool-bar-add-item-from-menu' for
 conveniently adding tool bar items."
   :init-value t
   :global t
-  :group 'mouse
-  :group 'frames
+  ;; It's defined in C/cus-start, this stops the d-m-m macro defining it again.
+  :variable tool-bar-mode
   (let ((val (if tool-bar-mode 1 0)))
     (dolist (frame (frame-list))
       (set-frame-parameter frame 'tool-bar-lines val))
@@ -75,7 +75,7 @@ underscore. EXTENSION and the original file name extension (starting
 with a period) are added to the file name.
 
 E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
-  (mapcar
+g  (mapcar
    (lambda (spec) 
      (let ((f (plist-get spec :file)) 
 	    )
@@ -90,7 +90,7 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 	  )))
    image-spec-list))
 
-(defun tool-bar-get-image-spec (icon)
+(defun tool-bar--image-expression (icon)
   (let* ((fg (face-attribute 'tool-bar :foreground))
 	 (bg (face-attribute 'tool-bar :background))
 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
@@ -213,6 +213,8 @@ Use this function only to make bindings in the global value of `tool-bar-map'.
 To define items in any other map, use `tool-bar-local-item'."
   (apply 'tool-bar-local-item icon def key tool-bar-map props))
 
+
+
 ;;;###autoload
 (defun tool-bar-local-item (icon def key map &rest props)
   "Add an item to the tool bar in map MAP.
@@ -227,7 +229,7 @@ use. The function will first try to use low-color/ICON.xpm if
 display-color-cells is less or equal to 256, then ICON.xpm, then
 ICON.pbm, and finally ICON.xbm, using `find-image'."
   (let* ((icon-name (if (consp icon) (car icon) icon))
-	 (is (tool-bar-get-image-spec icon-name))
+	 (is (tool-bar--image-expression icon-name))
 	 (image (car is))
 	 (images (cdr is))) 
     (when (and (display-images-p) image)
@@ -269,7 +271,7 @@ holds a keymap."
   (let* ((icon-name icon)
 	 (menu-bar-map (lookup-key from-map [menu-bar]))
 	 (keys (where-is-internal command menu-bar-map))
-	 (is (tool-bar-get-image-spec icon-name))
+	 (is (tool-bar--image-expression icon-name))
 	 (image (car is))
 	 (images (cdr is)) 
 	 submap key)
@@ -304,7 +306,7 @@ holds a keymap."
             ;; with a list of menu cache info, get rid of that.
             (if (and (consp rest) (consp (car rest)))
                 (setq rest (cdr rest)))
-	      (append `(menu-item ,(car defn) ,rest)
+            (append `(menu-item ,(car defn) ,rest)
 		      (list :image image) props))))))))
 
 ;;; Set up some global items.  Additions/deletions up for grabs.
@@ -315,14 +317,16 @@ holds a keymap."
   (unless tool-bar-setup
     (with-selected-frame
      (or frame (selected-frame))
-  ;; People say it's bad to have EXIT on the tool bar, since users
-  ;; might inadvertently click that button.
-  ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
-  (tool-bar-add-item-from-menu 'find-file "new" nil :label "New File")
-  (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
-  (tool-bar-add-item-from-menu 'dired "diropen")
-  (tool-bar-add-item-from-menu 'kill-this-buffer "close")
-  (tool-bar-add-item-from-menu 'save-buffer "save" nil 
+ 
+  (setq tool-bar-separator-image-expression
+	(tool-bar--image-expression "separator"))
+  (tool-bar-add-item-from-menu 'find-file "new" nil :label "New File"
+			       :vert-only t)
+  (tool-bar-add-item-from-menu 'menu-find-file-existing "open" nil
+			       :label "Open" :vert-only t)
+  (tool-bar-add-item-from-menu 'dired "diropen" nil :vert-only t)
+  (tool-bar-add-item-from-menu 'kill-this-buffer "close" nil :vert-only t)
+  (tool-bar-add-item-from-menu 'save-buffer "save" nil
 			       :label "Save"
 			       :visible '(or buffer-file-name
 					     (not (eq 'special
@@ -337,16 +341,18 @@ holds a keymap."
   (tool-bar-add-item-from-menu 'undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class))))
+  (define-key-after (default-value 'tool-bar-map) [separator-2] menu-bar-separator)
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
-			       "cut" nil
-			       :visible '(not (eq 'special (get major-mode
+			       "cut" nil :vert-only t
+			       :enable '(not (eq 'special (get major-mode
 								'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
-			       "copy")
+			       "copy" nil :vert-only t)
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
-			       "paste" nil
-			       :visible '(not (eq 'special (get major-mode
+			       "paste" nil :vert-only t
+			       :enable '(not (eq 'special (get major-mode
 								'mode-class))))
+  (define-key-after (default-value 'tool-bar-map) [separator-3] menu-bar-separator)
   (tool-bar-add-item-from-menu 'nonincremental-search-forward "search"
 			       nil :label "Search")
   ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
@@ -355,7 +361,6 @@ holds a keymap."
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
-  (tool-bar-add-item-from-menu 'print-buffer "print" nil :label "Print")
 
   ;; tool-bar-add-item-from-menu itself operates on
   ;; (default-value 'tool-bar-map), but when we don't use that function,
@@ -365,7 +370,7 @@ holds a keymap."
        (tool-bar-add-item "preferences" 'customize 'customize :label "Customize"
 		       :help "Edit preferences (customize)")
 
-       (tool-bar-add-item "help" (lambda ()
+    (tool-bar-add-item "help" (lambda ()
 				(interactive)
 				(popup-menu menu-bar-help-menu))
 		       'help
@@ -373,6 +378,24 @@ holds a keymap."
 		       :help "Pop up the Help menu"))
      (setq tool-bar-setup t))))
 
+(if (featurep 'move-toolbar)
+    (defcustom tool-bar-position 'top
+      "Specify on which side the tool bar shall be.
+Possible values are `top' (tool bar on top), `bottom' (tool bar at bottom),
+`left' (tool bar on left) and `right' (tool bar on right).
+Customize `tool-bar-mode' if you want to show or hide the tool bar."
+      :type '(choice (const top)
+		     (const bottom)
+		     (const left)
+		     (const right))
+      :group 'frames
+      :initialize 'custom-initialize-default
+      :set (lambda (sym val)
+	     (set-default sym val)
+	     (modify-all-frames-parameters
+	      (list (cons 'tool-bar-position val))))))
+
+
 (provide 'tool-bar)
-;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
+
 ;;; tool-bar.el ends here

@@ -323,13 +323,11 @@ Keymap to display on column and line numbers.")
 	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
        (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-       (lotsofdashes (make-string 100 32))
-       (dash (propertize " " 'help-echo help-echo))
-       (dashes (propertize "  " 'help-echo help-echo))
+       (spaces (propertize " " 'help-echo help-echo))
        (standard-mode-line-format
 	(list
 	 "%e"
-	 (propertize dash 'help-echo help-echo)
+	 (propertize "-" 'help-echo help-echo)
 	 'mode-line-mule-info
 	 'mode-line-client
 	 'mode-line-modified
@@ -341,9 +339,10 @@ Keymap to display on column and line numbers.")
 	 '(vc-mode vc-mode)
 	 (propertize "  " 'help-echo help-echo)
 	 'mode-line-modes
-	 `(which-func-mode ("" which-func-format ,dashes))
-	 `(global-mode-string ("" global-mode-string ,dashes))
-	 (propertize (concat dash lotsofdashes) 'help-echo help-echo)))
+	 `(which-func-mode ("" which-func-format ,spaces))
+	 `(global-mode-string ("" global-mode-string ,spaces))
+	 `(:eval (unless (display-graphic-p)
+		   ,(propertize "-%-" 'help-echo help-echo)))))
        (standard-mode-line-modes
 	(list
 	 (propertize "%[" 'help-echo recursive-edit-help-echo)
@@ -369,7 +368,7 @@ mouse-3: Toggle minor modes"
 				 'mouse-2 #'mode-line-widen))
 	 (propertize ")" 'help-echo help-echo)
 	 (propertize "%]" 'help-echo recursive-edit-help-echo)
-	 (propertize dashes 'help-echo help-echo)))
+	 spaces))
 
        (standard-mode-line-position
 	`((-3 ,(propertize
@@ -661,6 +660,16 @@ is okay.  See `mode-line-format'.")
 
 (define-key esc-map "\t" 'complete-symbol)
 
+(defun complete-symbol (arg)
+  "Perform completion on the text around point.
+The completion method is determined by `completion-at-point-functions'.
+
+With a prefix argument, this command does completion within
+the collection of symbols listed in the index of the manual for the
+language you are using."
+  (interactive "P")
+  (if arg (info-complete-symbol) (completion-at-point)))
+
 ;; Reduce total amount of space we must allocate during this function
 ;; that we will not need to keep permanently.
 (garbage-collect)
@@ -831,7 +840,7 @@ if `inhibit-field-text-motion' is non-nil."
 (define-key global-map [?\C-\M--] 'negative-argument)
 
 (define-key global-map "\177" 'delete-backward-char)
-(define-key global-map "\C-d" 'delete-forward-char)
+(define-key global-map "\C-d" 'delete-char)
 
 (define-key global-map "\C-k" 'kill-line)
 (define-key global-map "\C-w" 'kill-region)
@@ -940,7 +949,7 @@ if `inhibit-field-text-motion' is non-nil."
 ;; (define-key global-map [clearline]	'function-key-error)
 (define-key global-map [insertline]	'open-line)
 (define-key global-map [deleteline]	'kill-line)
-(define-key global-map [deletechar]	'delete-char)
+(define-key global-map [deletechar]	'delete-forward-char)
 ;; (define-key global-map [backtab]	'function-key-error)
 ;; (define-key global-map [f1]		'function-key-error)
 ;; (define-key global-map [f2]		'function-key-error)

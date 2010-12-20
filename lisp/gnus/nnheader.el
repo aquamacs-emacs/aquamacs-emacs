@@ -27,6 +27,7 @@
 
 ;;; Code:
 
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 (eval-when-compile (require 'cl))
@@ -365,15 +366,13 @@ on your system, you could say something like:
 	      (setq num 0
 		    beg (point-min)
 		    end (point-max))
-	    (goto-char (point-min))
 	    ;; Search to the beginning of the next header.  Error
 	    ;; messages do not begin with 2 or 3.
 	    (when (re-search-forward "^[23][0-9]+ " nil t)
-	      (end-of-line)
 	      (setq num (read cur)
 		    beg (point)
 		    end (if (search-forward "\n.\n" nil t)
-			    (- (point) 2)
+			    (goto-char  (- (point) 2))
 			  (point)))))
       (with-temp-buffer
 	(insert-buffer-substring cur beg end)
@@ -463,7 +462,7 @@ on your system, you could say something like:
       (let ((extra (mail-header-extra header)))
 	(while extra
 	  (insert (symbol-name (caar extra))
-		  ": " (cdar extra) "\t")
+		  ": " (if (stringp (cdar extra)) (cdar extra) "") "\t")
 	  (pop extra))))
     (insert "\n")
     (backward-char 1)
@@ -570,8 +569,6 @@ the line could be found."
 
 (defvar nntp-server-buffer nil)
 (defvar nntp-process-response nil)
-(defvar news-reply-yank-from nil)
-(defvar news-reply-yank-message-id nil)
 
 (defvar nnheader-callback-function nil)
 
@@ -824,19 +821,22 @@ The first string in ARGS can be a format string."
 	 (apply 'format args)))
   nil)
 
-(defun nnheader-get-report (backend)
+(defun nnheader-get-report-string (backend)
   "Get the most recent report from BACKEND."
   (condition-case ()
-      (nnheader-message 5 "%s" (symbol-value (intern (format "%s-status-string"
-							     backend))))
-    (error (nnheader-message 5 ""))))
+      (format "%s" (symbol-value (intern (format "%s-status-string"
+						 backend))))
+    (error "")))
+
+(defun nnheader-get-report (backend)
+  "Get the most recent report from BACKEND."
+  (nnheader-message 5 (nnheader-get-report-string backend)))
 
 (defun nnheader-insert (format &rest args)
   "Clear the communication buffer and insert FORMAT and ARGS into the buffer.
 If FORMAT isn't a format string, it and all ARGS will be inserted
 without formatting."
-  (save-excursion
-    (set-buffer nntp-server-buffer)
+  (with-current-buffer nntp-server-buffer
     (erase-buffer)
     (if (string-match "%" format)
 	(insert (apply 'format format args))
@@ -1077,6 +1077,26 @@ See `find-file-noselect' for the arguments."
    (truncate (* (- nnheader-read-timeout
 		   (truncate nnheader-read-timeout))
 		1000))))
+
+(defun nnheader-update-marks-actions (backend-marks actions)
+  (dolist (action actions)
+    (let ((range (nth 0 action))
+	  (what  (nth 1 action))
+	  (marks (nth 2 action)))
+      (dolist (mark marks)
+	(setq backend-marks
+	      (gnus-update-alist-soft
+	       mark
+	       (cond
+		((eq what 'add)
+		 (gnus-range-add (cdr (assoc mark backend-marks)) range))
+		((eq what 'del)
+		 (gnus-remove-from-range
+		  (cdr (assoc mark backend-marks)) range))
+		((eq what 'set)
+		 range))
+	       backend-marks)))))
+  backend-marks)
 
 (when (featurep 'xemacs)
   (require 'nnheaderxm))

@@ -36,19 +36,19 @@ commands, as a script file."
 ;;; User Variables:
 
 (defcustom eshell-script-load-hook '(eshell-script-initialize)
-  "*A list of functions to call when loading `eshell-script'."
+  "A list of functions to call when loading `eshell-script'."
   :type 'hook
   :group 'eshell-script)
 
 (defcustom eshell-login-script (expand-file-name "login" eshell-directory-name)
-  "*If non-nil, a file to invoke when starting up Eshell interactively.
+  "If non-nil, a file to invoke when starting up Eshell interactively.
 This file should be a file containing Eshell commands, where comment
 lines begin with '#'."
   :type 'file
   :group 'eshell-script)
 
 (defcustom eshell-rc-script (expand-file-name "profile" eshell-directory-name)
-  "*If non-nil, a file to invoke whenever Eshell is started.
+  "If non-nil, a file to invoke whenever Eshell is started.
 This includes when running `eshell-command'."
   :type 'file
   :group 'eshell-script)
@@ -90,23 +90,25 @@ Comments begin with '#'."
   (interactive "f")
   (let ((orig (point))
 	(here (point-max))
-	(inhibit-point-motion-hooks t)
-	after-change-functions)
+	(inhibit-point-motion-hooks t))
     (goto-char (point-max))
-    (insert-file-contents file)
-    (goto-char (point-max))
-    (throw 'eshell-replace-command
-	   (prog1
-	       (list 'let
-		     (list (list 'eshell-command-name (list 'quote file))
-			   (list 'eshell-command-arguments
-				 (list 'quote args)))
-		     (let ((cmd (eshell-parse-command (cons here (point)))))
-		       (if subcommand-p
-			   (setq cmd (list 'eshell-as-subcommand cmd)))
-		       cmd))
-	     (delete-region here (point))
-	     (goto-char orig)))))
+    (with-silent-modifications
+      ;; FIXME: Why not use a temporary buffer and avoid this
+      ;; "insert&delete" business?  --Stef
+      (insert-file-contents file)
+      (goto-char (point-max))
+      (throw 'eshell-replace-command
+             (prog1
+                 (list 'let
+                       (list (list 'eshell-command-name (list 'quote file))
+                             (list 'eshell-command-arguments
+                                   (list 'quote args)))
+                       (let ((cmd (eshell-parse-command (cons here (point)))))
+                         (if subcommand-p
+                             (setq cmd (list 'eshell-as-subcommand cmd)))
+                         cmd))
+               (delete-region here (point))
+               (goto-char orig))))))
 
 (defun eshell/source (&rest args)
   "Source a file in a subshell environment."

@@ -1,3 +1,169 @@
+2010-12-15  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (install-arch-dep, uninstall): Remove code relating to the
+	long absent lib-src/fns-*.el.
+
+2010-12-11  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Exclude etc/*.pyc.
+
+2010-12-10  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* configure.in: Don't double machfile in final message.
+
+2010-12-04  Chong Yidong  <cyd@stupidchicken.com>
+
+	* configure.in: Fix last change.
+
+2010-12-04  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* configure.in: Remove reference to removed machine description
+	files and allow $machine and $machfile to be empty.  Substitute
+	M_FILE/S_FILE instead of machfile/opsysfile.
+
+2010-12-03  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Remove EMACS_UNIBYTE unsetting; it does nothing.
+
+2010-11-23  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in <AC_CHECK_HEADERS>: Remove sys/ioctl.h.
+	(EXTERNALLY_VISIBLE): New definition.
+
+2010-11-21  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in (INLINE): Do not depend on OPTIMIZE, unused.
+
+2010-11-15  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in: Do not check for unconditionally included headers.
+
+2010-11-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* .dir-locals.el (log-edit-mode): Set log-edit-rewrite-fixes.
+
+2010-11-09  Michael Albinus  <michael.albinus@gmx.de>
+
+	* configure.in: Don't write a warning for D-Bus anymore.
+
+2010-11-06  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* configure.in: Fix indentation.
+
+2010-10-31  Ken Brown  <kbrown@cornell.edu>
+
+	* configure.in (checking whether localtime caches TZ): Use
+	unsetenv instead of modifying environment directly.
+
+2010-10-25  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* configure.in (checking for -znocombreloc): Use AC_LANG_PROGRAM
+	to avoid warning.
+
+2010-10-24  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* configure.in: Remove the BROKEN annotation from gnutls.
+
+2010-10-22  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Avoid listing .el files twice.  Don't try to run
+	autoconf if --no-update.
+
+2010-10-20  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: No longer create lisp/MANIFEST.
+
+2010-10-14  Glenn Morris  <rgm@gnu.org>
+
+	* BUGS, INSTALL.BZR, README: Updates.
+
+2010-10-13  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Remove --compress.  Check for the appropriate
+	gzip-like executable, and if not found, don't compress.
+	Check version number in README, don't change it.
+	Use find for nt/inc/*.h.
+
+2010-10-12  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure (ns_appdir, OLDXMENU, TOOLTIP_SUPPORT): Remove
+	trailing / from directory names.
+
+2010-10-12  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Update and simplify.
+
+2010-10-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* make-dist: Don't distribute src/buildobj.h.  (Bug#7167)
+
+2010-10-10  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in (PROFILING_LDFLAGS): Do not define, remove all uses.
+
+2010-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: No more doc/emacs/*.texi.in.
+
+	* configure.in (AC_OUTPUT): Remove doc/emacs/emacsver.texi.
+
+2010-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* configure.in: Combine some conditionals.
+
+	* configure.in (AC_OUTPUT): Add doc/emacs/emacsver.texi.
+	* make-dist: Include doc/emacs/*.texi.in.
+
+	* INSTALL, make-dist: Remove references to b2m.
+	* Makefile.in (MAN_PAGES): Remove b2m.1.
+
+2010-10-05  Glenn Morris  <rgm@gnu.org>
+
+	* .dir-locals.el: The Emacs convention is sentence-end-double-space.
+
+2010-10-03  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in (NO_INLINE, noinline): Move here from src/xterm.c.
+
+2010-10-01  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in: Include stdlib.h and string.h unconditionally.
+
+2010-09-29  Romain Francoise  <romain@orebokech.com>
+
+	* configure.in: Don't enable ImageMagick unless HAVE_X11.
+
+2010-09-28  Glenn Morris  <rgm@gnu.org>
+
+	* configure.in (HAVE_GNUTLS): Add a description to make autoheader
+	happy.
+
+2010-09-27  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* configure.in: Enable imagemagick by default.
+
+2010-09-26  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* configure.in (HAVE_GNUTLS): Don't break if we don't have the
+	gnutls libraries.
+
+2010-09-26  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* configure.in: Set up GnuTLS.
+
+2010-09-22  Chong Yidong  <cyd@stupidchicken.com>
+
+	* configure.in: Announce whether libxml2 is linked to.
+
+2010-09-20  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* configure.in (LINKER): Rename to LD_FIRSTFLAG, do not include $(CC).
+
+2010-09-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.bat: Detect that libxml2 is installed and if so, build
+	with it.
+
 2010-09-13  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* configure.in (HAVE_LIBXML2): Check that the libxml2 we found can
@@ -2764,7 +2930,7 @@
 
 	* make-dist (lispref): Do include lispref/index.texi.
 
-2004-01-06  Eric Hanchrow  <offby1@blarg.net>  (tiny change)
+2004-01-06  Eric Hanchrow  <offby1@blarg.net>
 
 	* make-dist (tempdir): Include cursors in nt/icons.
 

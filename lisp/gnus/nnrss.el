@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-;; For Emacs < 22.2.
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
@@ -77,7 +77,8 @@ this variable to the list of fields to be ignored.")
 (defvar nnrss-group-alist '()
   "List of RSS addresses.")
 
-(defvar nnrss-use-local nil)
+(defvar nnrss-use-local nil
+  "If non-nil nnrss will read the feeds from local files in nnrss-directory.")
 
 (defvar nnrss-description-field 'X-Gnus-Description
   "Field name used for DESCRIPTION.
@@ -112,11 +113,6 @@ versions of xml.el.")
 The cdr of each element is used to decode data if it is available when
 the car is what the data specify as the encoding.  Or, the car is used
 for decoding when the cdr that the data specify is not available.")
-
-(defvar nnrss-wash-html-in-text-plain-parts nil
-  "*Non-nil means render text in text/plain parts as HTML.
-The function specified by the `mm-text-html-renderer' variable will be
-used to render text.  If it is nil, text will simply be folded.")
 
 (nnoo-define-basics nnrss)
 
@@ -178,7 +174,7 @@ used to render text.  If it is nil, text will simply be folded.")
 		    "\n")))))
   'nov)
 
-(deffoo nnrss-request-group (group &optional server dont-check)
+(deffoo nnrss-request-group (group &optional server dont-check info)
   (setq group (nnrss-decode-group-name group))
   (nnheader-message 6 "nnrss: Requesting %s..." group)
   (nnrss-possibly-change-group group server)
@@ -195,9 +191,6 @@ used to render text.  If it is nil, text will simply be folded.")
 
 (deffoo nnrss-close-group (group &optional server)
   t)
-
-(defvar mm-text-html-renderer)
-(defvar mm-text-html-washer-alist)
 
 (deffoo nnrss-request-article (article &optional group server buffer)
   (setq group (nnrss-decode-group-name group))
@@ -239,46 +232,25 @@ used to render text.  If it is nil, text will simply be folded.")
 	    (when text
 	      (insert text)
 	      (goto-char body)
-	      (if (and nnrss-wash-html-in-text-plain-parts
-		       (progn
-			 (require 'mm-view)
-			 (setq fn (or (cdr (assq mm-text-html-renderer
-						 mm-text-html-washer-alist))
-				      mm-text-html-renderer))))
-		  (progn
-		    (narrow-to-region body (point-max))
-		    (if (functionp fn)
-			(funcall fn)
-		      (apply (car fn) (cdr fn)))
-		    (widen)
-		    (goto-char body)
-		    (re-search-forward "[^\t\n ]" nil t)
-		    (beginning-of-line)
-		    (delete-region body (point))
-		    (goto-char (point-max))
-		    (skip-chars-backward "\t\n ")
-		    (end-of-line)
-		    (delete-region (point) (point-max))
-		    (insert "\n"))
-		(while (re-search-forward "\n+" nil t)
-		  (replace-match " "))
-		(goto-char body)
-		;; See `nnrss-check-group', which inserts "<br /><br />".
-		(when (search-forward "<br /><br />" nil t)
-		  (if (eobp)
-		      (replace-match "\n")
-		    (replace-match "\n\n")))
-		(unless (eobp)
-		  (let ((fill-column (default-value 'fill-column))
-			(window (get-buffer-window nntp-server-buffer)))
-		    (when window
-		      (setq fill-column
-			    (max 1 (/ (* (window-width window) 7) 8))))
-		    (fill-region (point) (point-max))
-		    (goto-char (point-max))
-		    ;; XEmacs version of `fill-region' inserts newline.
-		    (unless (bolp)
-		      (insert "\n")))))
+	      (while (re-search-forward "\n+" nil t)
+		(replace-match " "))
+	      (goto-char body)
+	      ;; See `nnrss-check-group', which inserts "<br /><br />".
+	      (when (search-forward "<br /><br />" nil t)
+		(if (eobp)
+		    (replace-match "\n")
+		  (replace-match "\n\n")))
+	      (unless (eobp)
+		(let ((fill-column (default-value 'fill-column))
+		      (window (get-buffer-window nntp-server-buffer)))
+		  (when window
+		    (setq fill-column
+			  (max 1 (/ (* (window-width window) 7) 8))))
+		  (fill-region (point) (point-max))
+		  (goto-char (point-max))
+		  ;; XEmacs version of `fill-region' inserts newline.
+		  (unless (bolp)
+		    (insert "\n"))))
 	      (when (or link enclosure)
 		(insert "\n")))
 	    (when link
@@ -391,8 +363,8 @@ used to render text.  If it is nil, text will simply be folded.")
   t)
 
 (deffoo nnrss-retrieve-groups (groups &optional server)
-  (nnrss-possibly-change-group nil server)
   (dolist (group groups)
+    (nnrss-possibly-change-group group server)
     (nnrss-check-group group server))
   (with-current-buffer nntp-server-buffer
     (erase-buffer)
@@ -561,12 +533,7 @@ which RSS 2.0 allows."
   (let ((file (nnrss-make-filename "nnrss" server))
 	(file-name-coding-system nnmail-pathname-coding-system))
     (when (file-exists-p file)
-      ;; In Emacs 21.3 and earlier, `load' doesn't support non-ASCII
-      ;; file names.  So, we use `insert-file-contents' instead.
-      (mm-with-multibyte-buffer
-	(let ((coding-system-for-read nnrss-file-coding-system))
-	  (insert-file-contents file)
-	  (eval-region (point-min) (point-max)))))))
+      (load file nil t t))))
 
 (defun nnrss-save-server-data (server)
   (gnus-make-directory nnrss-directory)
@@ -590,12 +557,7 @@ which RSS 2.0 allows."
   (let ((file (nnrss-make-filename group server))
 	(file-name-coding-system nnmail-pathname-coding-system))
     (when (file-exists-p file)
-      ;; In Emacs 21.3 and earlier, `load' doesn't support non-ASCII
-      ;; file names.  So, we use `insert-file-contents' instead.
-      (mm-with-multibyte-buffer
-	(let ((coding-system-for-read nnrss-file-coding-system))
-	  (insert-file-contents file)
-	  (eval-region (point-min) (point-max))))
+      (load file nil t t)
       (dolist (e nnrss-group-data)
 	(puthash (nth 9 e) t nnrss-group-hashtb)
 	(when (and (car e) (> nnrss-group-min (car e)))
@@ -712,9 +674,6 @@ which RSS 2.0 allows."
 	    (push (list group nnrss-group-max url) nnrss-server-data)))
 	(setq changed t))
       (setq xml (nnrss-fetch url)))
-    ;; See
-    ;; http://feeds.archive.org/validator/docs/howto/declare_namespaces.html
-    ;; for more RSS namespaces.
     (setq dc-ns (nnrss-get-namespace-prefix xml "http://purl.org/dc/elements/1.1/")
 	  rdf-ns (nnrss-get-namespace-prefix xml "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 	  rss-ns (nnrss-get-namespace-prefix xml "http://purl.org/rss/1.0/")
@@ -975,7 +934,7 @@ whether they are `offsite' or `onsite'."
 
 (defun nnrss-discover-feed (url)
   "Given a page, find an RSS feed using Mark Pilgrim's
-`ultra-liberal rss locator' (URL `http://diveintomark.org/2002/08/15.html')."
+`ultra-liberal rss locator'."
 
   (let ((parsed-page (nnrss-fetch url)))
 
@@ -1058,9 +1017,9 @@ whether they are `offsite' or `onsite'."
 				    (cdr (assoc "feedid" listinfo)))))
 			   feedinfo)))
 	      (cdr (assoc
-		    (completing-read
-		     "Multiple feeds found.  Select one: "
-		     selection nil t) urllist)))))))))
+		    (gnus-completing-read
+		     "Multiple feeds found. Select one"
+		     selection t) urllist)))))))))
 
 (defun nnrss-rss-p (data)
   "Test if DATA is an RSS feed.

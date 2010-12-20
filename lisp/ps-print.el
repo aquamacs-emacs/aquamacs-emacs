@@ -1466,12 +1466,9 @@ Please send all bug fixes and enhancements to
 (require 'lpr)
 
 
-(or (featurep 'lisp-float-type)
-    (error "`ps-print' requires floating point support"))
-
-
 (if (featurep 'xemacs)
-    ()
+    (or (featurep 'lisp-float-type)
+	(error "`ps-print' requires floating point support"))
   (unless (and (boundp 'emacs-major-version)
 	       (>= emacs-major-version 23))
     (error "`ps-print' only supports Emacs 23 and higher")))
@@ -4331,14 +4328,17 @@ Try: pr -t file | awk '{printf \"%3d %s\n\", length($0), $0}' | sort -r | head"
 	 (ps-header-font-size-internal
 	  (or ps-header-font-size-internal
 	      (ps-get-font-size 'ps-header-font-size)))
+	 (ps-footer-font-size-internal
+	  (or ps-footer-font-size-internal
+	      (ps-get-font-size 'ps-footer-font-size)))
 	 (ps-header-title-font-size-internal
 	  (or ps-header-title-font-size-internal
 	      (ps-get-font-size 'ps-header-title-font-size)))
 	 (buf (get-buffer-create "*Line-lengths*"))
 	 (ifs ps-font-size-internal)	; initial font size
-	 (icw (ps-avg-char-width 'ps-font-for-text)) ; initial character width
 	 (print-width (progn (ps-get-page-dimensions)
 			     ps-print-width))
+	 (icw (ps-avg-char-width 'ps-font-for-text)) ; initial character width
 	 (ps-setup (ps-setup))		; setup for the current buffer
 	 (fs-min 5)			; minimum font size
 	 cw-min				; minimum character width
@@ -4378,6 +4378,9 @@ and on the current ps-print setup."
 	 (ps-header-font-size-internal
 	  (or ps-header-font-size-internal
 	      (ps-get-font-size 'ps-header-font-size)))
+	 (ps-footer-font-size-internal
+	  (or ps-footer-font-size-internal
+	      (ps-get-font-size 'ps-footer-font-size)))
 	 (ps-header-title-font-size-internal
 	  (or ps-header-title-font-size-internal
 	      (ps-get-font-size 'ps-header-title-font-size)))
@@ -4387,9 +4390,9 @@ and on the current ps-print setup."
 	 (buf (get-buffer-create "*Nb-Pages*"))
 	 (ils ps-line-spacing-internal) ; initial line spacing
 	 (ifs ps-font-size-internal)	; initial font size
-	 (ilh (ps-line-height 'ps-font-for-text)) ; initial line height
 	 (page-height (progn (ps-get-page-dimensions)
 			     ps-print-height))
+	 (ilh (ps-line-height 'ps-font-for-text)) ; initial line height
 	 (ps-setup (ps-setup))		; setup for the current buffer
 	 (fs-min 4)			; minimum font size
 	 lh-min				; minimum line height
@@ -6656,7 +6659,7 @@ If FACE is not a valid face name, use default face."
 ;; But autoload them here to make the separation invisible.
 
 ;;;### (autoloads (ps-mule-end-job ps-mule-begin-job ps-mule-initialize
-;;;;;;  ps-multibyte-buffer) "ps-mule" "ps-mule.el" "d2fcad95db7404989362657faf744796")
+;;;;;;  ps-multibyte-buffer) "ps-mule" "ps-mule.el" "26f1d5db9476d0e84ab55627fbb72b1b")
 ;;; Generated autoloads from ps-mule.el
 
 (defvar ps-multibyte-buffer nil "\
@@ -6726,5 +6729,4 @@ Finish printing job for multi-byte chars.
 
 (provide 'ps-print)
 
-;; arch-tag: fb06a585-1112-4206-885d-a57d95d50579
 ;;; ps-print.el ends here

@@ -255,6 +255,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have a gif (or ungif) library. */
 #undef HAVE_GIF
 
+/* Define if using GnuTLS. */
+#undef HAVE_GNUTLS
+
 /* Define to 1 if you have the gpm library (-lgpm). */
 #undef HAVE_GPM
 
@@ -290,6 +293,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `gtk_widget_set_has_window' function. */
 #undef HAVE_GTK_WIDGET_SET_HAS_WINDOW
+
+/* Define to 1 if you have the `g_type_init' function. */
+#undef HAVE_G_TYPE_INIT
 
 /* Define to 1 if netdb.h declares h_errno. */
 #undef HAVE_H_ERRNO
@@ -404,6 +410,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the `Xext' library (-lXext). */
 #undef HAVE_LIBXEXT
+
+/* Define to 1 if you have the libxml library (-lxml2). */
+#undef HAVE_LIBXML2
 
 /* Define to 1 if you have the `Xmu' library (-lXmu). */
 #undef HAVE_LIBXMU
@@ -654,9 +663,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the `sysinfo' function. */
 #undef HAVE_SYSINFO
 
-/* Define to 1 if you have the <sys/ioctl.h> header file. */
-#undef HAVE_SYS_IOCTL_H
-
 /* Define to 1 if you have the <sys/mman.h> header file. */
 #undef HAVE_SYS_MMAN_H
 
@@ -681,9 +687,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define to 1 if you have the <sys/systeminfo.h> header file. */
 #undef HAVE_SYS_SYSTEMINFO_H
 
-/* Define to 1 if you have the <sys/timeb.h> header file. */
-#undef HAVE_SYS_TIMEB_H
-
 /* Define to 1 if you have the <sys/time.h> header file. */
 #undef HAVE_SYS_TIME_H
 
@@ -704,9 +707,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the <sys/_mbstate_t.h> header file. */
 #undef HAVE_SYS__MBSTATE_T_H
-
-/* Define to 1 if you have the <termios.h> header file. */
-#undef HAVE_TERMIOS_H
 
 /* Define to 1 if you have the <term.h> header file. */
 #undef HAVE_TERM_H
@@ -812,9 +812,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Define to 1 if you have the SM library (-lSM). */
 #undef HAVE_X_SM
-
-/* Define to 1 if you have the libxml2 library (-lxml2). */
-#undef HAVE_LIBXML2
 
 /* Define to 1 if you want to use the X window system. */
 #undef HAVE_X_WINDOWS
@@ -1076,7 +1073,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Don't try to switch on inline handling as detected by AC_C_INLINE
    generally, because even if non-gcc compilers accept `inline', they
    may reject `extern inline'.  */
-#if defined (__GNUC__) && defined (OPTIMIZE)
+#if defined (__GNUC__)
 #define INLINE __inline__
 #else
 #define INLINE
@@ -1092,19 +1089,18 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Include the os and machine dependent files.  */
 #include config_opsysfile
-#include config_machfile
+#ifdef config_machfile
+# include config_machfile
+#endif
 
-/* Set up some defines, C and LD flags for NeXTstep interface on GNUstep.
-  (There is probably a better place to do this, but right now the Cocoa
-   side does this in s/darwin.h and we cannot
-   parallel this exactly since GNUstep is multi-OS.  */
-#ifdef HAVE_NS
-# ifdef NS_IMPL_GNUSTEP
 /* GNUstep needs a bit more pure memory.  Of the existing knobs,
-SYSTEM_PURESIZE_EXTRA seems like the least likely to cause problems.  */
+   SYSTEM_PURESIZE_EXTRA seems like the least likely to cause problems.
+  (There is probably a better place to do this, but right now the
+   Cocoa side does this in s/darwin.h and we cannot parallel this
+   exactly since GNUstep is multi-OS.  */
+#if defined HAVE_NS && defined NS_IMPL_GNUSTEP
 #  define SYSTEM_PURESIZE_EXTRA 30000
-# endif /* NS_IMPL_GNUSTEP */
-#endif /* HAVE_NS */
+#endif
 
 /* SIGTYPE is the macro we actually use.  */
 #ifndef SIGTYPE
@@ -1161,13 +1157,8 @@ SYSTEM_PURESIZE_EXTRA seems like the least likely to cause problems.  */
    not define __STDC__ (e.g. DEC C by default) or may define it as zero.  */
 #undef PROTOTYPES
 
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 
 #ifdef HAVE_ALLOCA_H
 # include <alloca.h>
@@ -1200,6 +1191,23 @@ typedef unsigned size_t;
 #define NO_RETURN	__attribute__ ((__noreturn__))
 #else
 #define NO_RETURN	/* nothing */
+#endif
+
+#if __GNUC__ >= 3  /* On GCC 3.0 we might get a warning.  */
+#define NO_INLINE __attribute__((noinline))
+#else
+#define NO_INLINE
+#endif
+
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
+#define EXTERNALLY_VISIBLE __attribute__((externally_visible))
+#else
+#define EXTERNALLY_VISIBLE
+#endif
+
+/* Some versions of GNU/Linux define noinline in their headers.  */
+#ifdef noinline
+#undef noinline
 #endif
 
 /* These won't be used automatically yet.  We also need to know, at least,

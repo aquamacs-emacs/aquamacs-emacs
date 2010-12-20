@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-;; For Emacs < 22.2.
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
@@ -219,34 +219,6 @@ See Info node `(gnus)Mail Source Specifiers'."
 					   (boolean :tag "Dontexpunge"))
 				    (group :inline t
 					   (const :format "" :value :plugged)
-					   (boolean :tag "Plugged"))))
-		   (cons :tag "Webmail server"
-			 (const :format "" webmail)
-			 (checklist :tag "Options" :greedy t
-				    (group :inline t
-					  (const :format "" :value :subtype)
-					  ;; Should be generated from
-					  ;; `webmail-type-definition', but we
-					  ;; can't require webmail without W3.
-					  (choice :tag "Subtype"
-						  :value hotmail
-						  (const hotmail)
-						  (const yahoo)
-						  (const netaddress)
-						  (const netscape)
-						  (const my-deja)))
-				    (group :inline t
-					   (const :format "" :value :user)
-					   (string :tag "User"))
-				    (group :inline t
-					   (const :format "" :value :password)
-					   (string :tag "Password"))
-				    (group :inline t
-					   (const :format ""
-						  :value :dontexpunge)
-					   (boolean :tag "Dontexpunge"))
-				    (group :inline t
-					   (const :format "" :value :plugged)
 					   (boolean :tag "Plugged"))))))))
 
 (defcustom mail-source-ignore-errors nil
@@ -387,13 +359,7 @@ Common keywords should be listed here.")
        (:prescript)
        (:prescript-delay)
        (:postscript)
-       (:dontexpunge))
-      (webmail
-       (:subtype hotmail)
-       (:user (or (user-login-name) (getenv "LOGNAME") (getenv "USER")))
-       (:password)
-       (:dontexpunge)
-       (:authentication password)))
+       (:dontexpunge)))
     "Mapping from keywords to default values.
 All keywords that can be used must be listed here."))
 
@@ -402,8 +368,7 @@ All keywords that can be used must be listed here."))
     (directory mail-source-fetch-directory)
     (pop mail-source-fetch-pop)
     (maildir mail-source-fetch-maildir)
-    (imap mail-source-fetch-imap)
-    (webmail mail-source-fetch-webmail))
+    (imap mail-source-fetch-imap))
   "A mapping from source type to fetcher function.")
 
 (defvar mail-source-password-cache nil)
@@ -536,6 +501,8 @@ See `mail-source-bind'."
    (t
     value)))
 
+(autoload 'nnheader-message "nnheader")
+
 (defun mail-source-fetch (source callback &optional method)
   "Fetch mail from SOURCE and call CALLBACK zero or more times.
 CALLBACK will be called with the name of the file where (some of)
@@ -629,6 +596,8 @@ Deleting old (> %s day(s)) incoming mail file `%s'." diff bfile)
 	0)
     (funcall callback mail-source-crash-box info)))
 
+(autoload 'gnus-float-time "gnus-util")
+
 (defvar mail-source-incoming-last-checked-time nil)
 
 (defun mail-source-delete-crash-box ()
@@ -649,7 +618,7 @@ Deleting old (> %s day(s)) incoming mail file `%s'." diff bfile)
 	  ;; Don't check for old incoming files more than once per day to
 	  ;; save a lot of file accesses.
 	  (when (or (null mail-source-incoming-last-checked-time)
-		    (> (time-to-seconds
+		    (> (gnus-float-time
 			(time-since mail-source-incoming-last-checked-time))
 		       (* 24 60 60)))
 	    (setq mail-source-incoming-last-checked-time (current-time))
@@ -993,7 +962,7 @@ This only works when `display-time' is enabled."
     (if on
 	(progn
 	  (require 'time)
-	  ;; display-time-mail-function is an Emacs 21 feature.
+	  ;; display-time-mail-function is an Emacs feature.
 	  (setq display-time-mail-function #'mail-source-new-mail-p)
 	  ;; Set up the main timer.
 	  (setq mail-source-report-new-mail-timer
@@ -1137,30 +1106,6 @@ This only works when `display-time' is enabled."
        (format-spec-make ?p password ?t mail-source-crash-box
 			 ?s server ?P port ?u user))
       found)))
-
-(autoload 'webmail-fetch "webmail")
-
-(defun mail-source-fetch-webmail (source callback)
-  "Fetch for webmail source."
-  (mail-source-bind (webmail source)
-    (let ((mail-source-string (format "webmail:%s:%s" subtype user))
-	  (webmail-newmail-only dontexpunge)
-	  (webmail-move-to-trash-can (not dontexpunge)))
-      (when (eq authentication 'password)
-	(setq password
-	      (or password
-		  (cdr (assoc (format "webmail:%s:%s" subtype user)
-			      mail-source-password-cache))
-		  (read-passwd
-		   (format "Password for %s at %s: " user subtype))))
-	(when (and password
-		   (not (assoc (format "webmail:%s:%s" subtype user)
-			       mail-source-password-cache)))
-	  (push (cons (format "webmail:%s:%s" subtype user) password)
-		mail-source-password-cache)))
-      (webmail-fetch mail-source-crash-box subtype user password)
-      (mail-source-callback callback (symbol-name subtype))
-      (mail-source-delete-crash-box))))
 
 (provide 'mail-source)
 

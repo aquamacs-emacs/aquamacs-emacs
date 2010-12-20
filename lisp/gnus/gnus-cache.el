@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-;; For Emacs < 22.2.
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
@@ -180,8 +180,7 @@ it's not cached."
 	;; Save the article in the cache.
 	(if (file-exists-p file)
 	    t				; The article already is saved.
-	  (save-excursion
-	    (set-buffer nntp-server-buffer)
+	  (with-current-buffer nntp-server-buffer
 	    (require 'gnus-art)
 	    (let ((gnus-use-cache nil)
 		  (gnus-article-decode-hook nil))
@@ -384,9 +383,14 @@ Returns the list of articles removed."
   "Insert all the articles cached for this group into the current buffer."
   (interactive)
   (let ((gnus-verbose (max 6 gnus-verbose)))
-    (if (not gnus-newsgroup-cached)
-	(gnus-message 3 "No cached articles for this group")
-      (gnus-summary-goto-subjects gnus-newsgroup-cached))))
+    (cond
+     ((not gnus-newsgroup-cached)
+      (gnus-message 3 "No cached articles for this group"))
+     ;; This is faster if there are few articles to insert.
+     ((< (length gnus-newsgroup-cached) 20)
+      (gnus-summary-goto-subjects gnus-newsgroup-cached))
+     (t
+      (gnus-summary-include-articles gnus-newsgroup-cached)))))
 
 (defun gnus-summary-limit-include-cached ()
   "Limit the summary buffer to articles that are cached."
@@ -554,8 +558,7 @@ system for example was used.")
   (let ((cache-buf (gnus-get-buffer-create " *gnus-cache*"))
 	beg end)
     (gnus-cache-save-buffers)
-    (save-excursion
-      (set-buffer cache-buf)
+    (with-current-buffer cache-buf
       (erase-buffer)
       (let ((coding-system-for-read gnus-cache-overview-coding-system)
 	    (file-name-coding-system nnmail-pathname-coding-system))
@@ -605,7 +608,7 @@ system for example was used.")
 	(insert-file-contents (gnus-cache-file-name group entry)))
       (goto-char (point-min))
       (insert "220 ")
-      (princ (car cached) (current-buffer))
+      (princ (pop cached) (current-buffer))
       (insert " Article retrieved.\n")
       (search-forward "\n\n" nil 'move)
       (delete-region (point) (point-max))
@@ -844,8 +847,7 @@ supported."
 	    ,@body)
      (when (and gnus-cache-need-update-total-fetched-for
 		(not gnus-cache-inhibit-update-total-fetched-for))
-	(save-excursion
-	  (set-buffer gnus-group-buffer)
+	(with-current-buffer gnus-group-buffer
 	  (setq gnus-cache-need-update-total-fetched-for nil)
 	  (gnus-group-update-group ,group t)))))
 

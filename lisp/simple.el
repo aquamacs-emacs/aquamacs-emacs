@@ -1,8 +1,8 @@
 ;;; simple.el --- basic editing commands for Emacs
 
-;; Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997, 1998,
+;;   1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+;;   2010  Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -442,7 +442,9 @@ Other major modes are defined by comparison with this one."
 (define-derived-mode prog-mode fundamental-mode "Prog"
   "Major mode for editing programming language source code."
   (set (make-local-variable 'require-final-newline) mode-require-final-newline)
-  (set (make-local-variable 'parse-sexp-ignore-comments) t))
+  (set (make-local-variable 'parse-sexp-ignore-comments) t)
+  ;; Any programming language is always written left to right.
+  (setq bidi-paragraph-direction 'left-to-right))
 
 ;; Making and deleting lines.
 
@@ -513,7 +515,7 @@ With arg N, insert N newlines."
   (interactive "*p")
   (let* ((do-fill-prefix (and fill-prefix (bolp)))
 	 (do-left-margin (and (bolp) (> (current-left-margin) 0)))
-	 (loc (point))
+	 (loc (point-marker))
 	 ;; Don't expand an abbrev before point.
 	 (abbrev-mode nil))
     (newline n)
@@ -760,10 +762,14 @@ If BACKWARD-ONLY is non-nil, only delete them before point."
        (constrain-to-field nil orig-pos)))))
 
 (defun just-one-space (&optional n)
-  "Delete all spaces and tabs around point, leaving one space (or N spaces)."
+  "Delete all spaces and tabs around point, leaving one space (or N spaces).
+If N is negative, delete newlines as well."
   (interactive "*p")
-  (let ((orig-pos (point)))
-    (skip-chars-backward " \t")
+  (unless n (setq n 1))
+  (let ((orig-pos (point))
+        (skip-characters (if (< n 0) " \t\n\r" " \t"))
+        (n (abs n)))
+    (skip-chars-backward skip-characters)
     (constrain-to-field nil orig-pos)
     (dotimes (i (or n 1))
       (if (= (following-char) ?\s)
@@ -772,7 +778,7 @@ If BACKWARD-ONLY is non-nil, only delete them before point."
     (delete-region
      (point)
      (progn
-       (skip-chars-forward " \t")
+       (skip-chars-forward skip-characters)
        (constrain-to-field nil orig-pos t)))))
 
 (defun beginning-of-buffer (&optional arg)
@@ -973,6 +979,21 @@ rather than line counts."
     (if (eq selective-display t)
 	(re-search-forward "[\n\C-m]" nil 'end (1- line))
       (forward-line (1- line)))))
+
+(defun count-words-region (start end)
+  "Print the number of words in the region.
+When called interactively, the word count is printed in echo area."
+  (interactive "r")
+  (let ((count 0))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region start end)
+        (goto-char (point-min))
+        (while (forward-word 1)
+          (setq count (1+ count)))))
+    (if (interactive-p)
+        (message "Region has %d words" count))
+    count))
 
 (defun count-lines-region (start end)
   "Print number of lines and characters in the region."
@@ -2976,11 +2997,6 @@ If `interprogram-cut-function' is non-nil, apply it to STRING.
 Optional second argument REPLACE non-nil means that STRING will replace
 the front of the kill ring, rather than being added to the list.
 
-Optional third arguments YANK-HANDLER controls how the STRING is later
-inserted into a buffer; see `insert-for-yank' for details.
-When a yank handler is specified, STRING must be non-empty (the yank
-handler, if non-nil, is stored as a `yank-handler' text property on STRING).
-
 When `save-interprogram-paste-before-kill' and `interprogram-paste-function'
 are non-nil, saves the interprogram paste string(s) into `kill-ring' before
 STRING.
@@ -3020,22 +3036,19 @@ argument should still be a \"useful\" string for such uses."
   (setq kill-ring-yank-pointer kill-ring)
   (if interprogram-cut-function
       (funcall interprogram-cut-function string)))
+(set-advertised-calling-convention
+ 'kill-new '(string &optional replace) "23.3")
 
 (defun kill-append (string before-p &optional yank-handler)
   "Append STRING to the end of the latest kill in the kill ring.
 If BEFORE-P is non-nil, prepend STRING to the kill.
-Optional third argument YANK-HANDLER, if non-nil, specifies the
-yank-handler text property to be set on the combined kill ring
-string.  If the specified yank-handler arg differs from the
-yank-handler property of the latest kill string, this function
-adds the combined string to the kill ring as a new element,
-instead of replacing the last kill with it.
 If `interprogram-cut-function' is set, pass the resulting kill to it."
   (let* ((cur (car kill-ring)))
     (kill-new (if before-p (concat string cur) (concat cur string))
 	      (or (= (length cur) 0)
 		  (equal yank-handler (get-text-property 0 'yank-handler cur)))
 	      yank-handler)))
+(set-advertised-calling-convention 'kill-append '(string before-p) "23.3")
 
 (defcustom yank-pop-change-selection nil
   "If non-nil, rotating the kill ring changes the window system selection."
@@ -3116,11 +3129,7 @@ Supply two arguments, character positions indicating the stretch of text
 Any command that calls this function is a \"kill command\".
 If the previous command was also a kill command,
 the text killed this time appends to the text killed last time
-to make one entry in the kill ring.
-
-In Lisp code, optional third arg YANK-HANDLER, if non-nil,
-specifies the yank-handler text property to be set on the killed
-text.  See `insert-for-yank'."
+to make one entry in the kill ring."
   ;; Pass point first, then mark, because the order matters
   ;; when calling kill-append.
   (interactive (list (point) (mark)))
@@ -3152,6 +3161,7 @@ text.  See `insert-for-yank'."
        (barf-if-buffer-read-only)
        ;; If the buffer isn't read-only, the text is.
        (signal 'text-read-only (list (current-buffer)))))))
+(set-advertised-calling-convention 'kill-region '(beg end) "23.3")
 
 ;; copy-region-as-kill no longer sets this-command, because it's confusing
 ;; to get two copies of the text when the user accidentally types M-w and
@@ -3686,8 +3696,6 @@ a mistake; see the documentation of `set-mark'."
       (marker-position (mark-marker))
     (signal 'mark-inactive nil)))
 
-(declare-function x-selection-owner-p "xselect.c" (&optional selection))
-
 (defsubst deactivate-mark (&optional force)
   "Deactivate the mark by setting `mark-active' to nil.
 Unless FORCE is non-nil, this function does nothing if Transient
@@ -4054,29 +4062,8 @@ Invoke \\[apropos-documentation] and type \"transient\" or
 \"mark.*active\" at the prompt, to see the documentation of
 commands which are sensitive to the Transient Mark mode."
   :global t
-  :init-value (not noninteractive)
-  :initialize 'custom-initialize-delay
-  :group 'editing-basics)
-
-;; The variable transient-mark-mode is ugly: it can take on special
-;; values.  Document these here.
-(defvar transient-mark-mode t
-  "*Non-nil if Transient Mark mode is enabled.
-See the command `transient-mark-mode' for a description of this minor mode.
-
-Non-nil also enables highlighting of the region whenever the mark is active.
-The variable `highlight-nonselected-windows' controls whether to highlight
-all windows or just the selected window.
-
-If the value is `lambda', that enables Transient Mark mode temporarily.
-After any subsequent action that would normally deactivate the mark
-\(such as buffer modification), Transient Mark mode is turned off.
-
-If the value is (only . OLDVAL), that enables Transient Mark mode
-temporarily.  After any subsequent point motion command that is not
-shift-translated, or any other action that would normally deactivate
-the mark (such as buffer modification), the value of
-`transient-mark-mode' is set to OLDVAL.")
+  ;; It's defined in C/cus-start, this stops the d-m-m macro defining it again.
+  :variable transient-mark-mode)
 
 (defvar widen-automatically t
   "Non-nil means it is ok for commands to call `widen' when they want to.
@@ -4411,7 +4398,7 @@ into account variable-width characters and line continuation."
 		  (goto-char (next-char-property-change (point))))
 		;; Move a line.
 		;; We don't use `end-of-line', since we want to escape
-		;; from field boundaries ocurring exactly at point.
+		;; from field boundaries occurring exactly at point.
 		(goto-char (constrain-to-field
 			    (let ((inhibit-field-text-motion t))
 			      (line-end-position))
@@ -4498,7 +4485,7 @@ into account variable-width characters and line continuation."
 
       (let (new
 	    (old (point))
-	    (line-beg (save-excursion (beginning-of-line) (point)))
+	    (line-beg (line-beginning-position))
 	    (line-end
 	     ;; Compute the end of the line
 	     ;; ignoring effectively invisible newlines.
@@ -4606,7 +4593,7 @@ and `current-column' to be able to ignore invisible text."
 	;; that will get us to the same place on the screen
 	;; but with a more reasonable buffer position.
 	(goto-char normal-location)
-	(let ((line-beg (save-excursion (beginning-of-line) (point))))
+	(let ((line-beg (line-beginning-position)))
 	  (while (and (not (bolp)) (invisible-p (1- (point))))
 	    (goto-char (previous-char-property-change (point) line-beg))))))))
 
@@ -5092,16 +5079,12 @@ If optional arg REALLY-WORD is non-nil, it finds just a word."
 		 ;; Point is neither within nor adjacent to a word.
 		 (not strict))
 	;; Look for preceding word in same line.
-	(skip-syntax-backward not-syntaxes
-			      (save-excursion (beginning-of-line)
-					      (point)))
+	(skip-syntax-backward not-syntaxes (line-beginning-position))
 	(if (bolp)
 	    ;; No preceding word in same line.
 	    ;; Look for following word in same line.
 	    (progn
-	      (skip-syntax-forward not-syntaxes
-				   (save-excursion (end-of-line)
-						   (point)))
+	      (skip-syntax-forward not-syntaxes (line-end-position))
 	      (setq start (point))
 	      (skip-syntax-forward syntaxes)
 	      (setq end (point)))
@@ -5639,9 +5622,10 @@ The function should return non-nil if the two tokens do not match.")
                         ;; backward-sexp skips backward over prefix chars,
                         ;; so move back to the matching paren.
                         (while (and (< (point) (1- oldpos))
-                                    (let ((code (car (syntax-after (point)))))
-                                      (or (eq (logand 65536 code) 6)
-                                          (eq (logand 1048576 code) 1048576))))
+                                    (let ((code (syntax-after (point))))
+                                      (or (eq (syntax-class code) 6)
+                                          (eq (logand 1048576 (car code))
+                                              1048576))))
                           (forward-char 1))
                         (point))
                     (error nil))))))
@@ -6741,7 +6725,7 @@ See also `normal-erase-is-backspace'."
 
 	     (if enabled
 		 (progn
-		   (define-key local-function-key-map [delete] [?\C-d])
+		   (define-key local-function-key-map [delete] [deletechar])
 		   (define-key local-function-key-map [kp-delete] [?\C-d])
 		   (define-key local-function-key-map [backspace] [?\C-?])
                    (dolist (b bindings)
@@ -7031,5 +7015,4 @@ a previously deleted region (now at POS)."
 
 (provide 'simple)
 
-;; arch-tag: 24af67c0-2a49-44f6-b3b1-312d8b570dfd
 ;;; simple.el ends here

@@ -184,7 +184,7 @@ When found, offer to remove them."
   :type 'boolean
   :group 'gnus-agent)
 
-(defcustom gnus-agent-auto-agentize-methods '(nntp)
+(defcustom gnus-agent-auto-agentize-methods nil
   "Initially, all servers from these methods are agentized.
 The user may remove or add servers using the Server buffer.
 See Info node `(gnus)Server Buffer'."
@@ -305,8 +305,7 @@ buffer.  Automatically blocks multiple updates due to recursion."
 `(prog1 (let ((gnus-agent-inhibit-update-total-fetched-for t)) ,@body)
      (when (and gnus-agent-need-update-total-fetched-for
 		(not gnus-agent-inhibit-update-total-fetched-for))
-	(save-excursion
-	  (set-buffer gnus-group-buffer)
+	(with-current-buffer gnus-group-buffer
 	  (setq gnus-agent-need-update-total-fetched-for nil)
 	  (gnus-group-update-group ,group t)))))
 
@@ -460,10 +459,7 @@ manipulated as follows:
   (let ((def (or (gnus-group-group-name) gnus-newsgroup-name)))
     (when def
       (setq def (gnus-group-decoded-name def)))
-    (gnus-group-completing-read (if def
-				    (concat "Group Name (" def "): ")
-				  "Group Name: ")
-				nil nil t nil nil def)))
+    (gnus-group-completing-read nil nil t nil nil def)))
 
 ;;; Fetching setup functions.
 
@@ -474,8 +470,7 @@ manipulated as follows:
 (defun gnus-agent-stop-fetch ()
   "Save all data structures and clean up."
   (setq gnus-agent-spam-hashtb nil)
-  (save-excursion
-    (set-buffer nntp-server-buffer)
+  (with-current-buffer nntp-server-buffer
     (widen)))
 
 (defmacro gnus-agent-with-fetch (&rest forms)
@@ -518,8 +513,8 @@ manipulated as follows:
     ;; Set up the menu.
     (when (gnus-visual-p 'agent-menu 'menu)
       (funcall (intern (format "gnus-agent-%s-make-menu-bar" buffer))))
-    (unless (assq 'gnus-agent-mode minor-mode-alist)
-      (push gnus-agent-mode-status minor-mode-alist))
+    (unless (assq mode minor-mode-alist)
+      (push (cons mode (cdr gnus-agent-mode-status)) minor-mode-alist))
     (unless (assq mode minor-mode-map-alist)
       (push (cons mode (symbol-value (intern (format "gnus-agent-%s-mode-map"
 						     buffer))))
@@ -608,16 +603,13 @@ manipulated as follows:
       (propertize string 'local-map
 		  (make-mode-line-mouse-map mouse-button mouse-func)
 		  'mouse-face
-		  (cond ((and (featurep 'xemacs)
-			      ;; XEmacs' `facep' only checks for a face
-			      ;; object, not for a face name, so it's useless
-			      ;; to check with `facep'.
-			      (find-face 'modeline))
-			 'modeline)
-			((facep 'mode-line-highlight) ;; Emacs 22
-			 'mode-line-highlight)
-			((facep 'mode-line) ;; Emacs 21
-			 'mode-line)) )
+		  (if (and (featurep 'xemacs)
+			   ;; XEmacs' `facep' only checks for a face
+			   ;; object, not for a face name, so it's useless
+			   ;; to check with `facep'.
+			   (find-face 'modeline))
+		      'modeline
+		    'mode-line-highlight))
     string))
 
 (defun gnus-agent-toggle-plugged (set-to)
@@ -693,7 +685,6 @@ This will modify the `gnus-setup-news-hook', and
 minor mode in all Gnus buffers."
   (interactive)
   (gnus-open-agent)
-  (add-hook 'gnus-setup-news-hook 'gnus-agent-queue-setup)
   (unless gnus-agent-send-mail-function
     (setq gnus-agent-send-mail-function
 	  (or message-send-mail-real-function
@@ -703,7 +694,9 @@ minor mode in all Gnus buffers."
   ;; If the servers file doesn't exist, auto-agentize some servers and
   ;; save the servers file so this auto-agentizing isn't invoked
   ;; again.
-  (unless (file-exists-p (nnheader-concat gnus-agent-directory "lib/servers"))
+  (when (and (not (file-exists-p (nnheader-concat
+				  gnus-agent-directory "lib/servers")))
+	     gnus-agent-auto-agentize-methods)
     (gnus-message 3 "First time agent user, agentizing remote groups...")
     (mapc
      (lambda (server-or-method)
@@ -809,23 +802,24 @@ be a select method."
   (setq group (or group gnus-newsgroup-name))
   (unless group
     (error "No group on the current line"))
-
-  (gnus-agent-while-plugged
-    (let ((gnus-command-method (gnus-find-method-for-group group)))
-      (gnus-agent-with-fetch
-        (gnus-agent-fetch-group-1 group gnus-command-method)
-        (gnus-message 5 "Fetching %s...done" group)))))
+  (if (not (gnus-agent-group-covered-p group))
+      (message "%s isn't covered by the agent" group)
+    (gnus-agent-while-plugged
+      (let ((gnus-command-method (gnus-find-method-for-group group)))
+	(gnus-agent-with-fetch
+	  (gnus-agent-fetch-group-1 group gnus-command-method)
+	  (gnus-message 5 "Fetching %s...done" group))))))
 
 (defun gnus-agent-add-group (category arg)
   "Add the current group to an agent category."
   (interactive
    (list
     (intern
-     (completing-read
-      "Add to category: "
-      (mapcar (lambda (cat) (list (symbol-name (car cat))))
+     (gnus-completing-read
+      "Add to category"
+      (mapcar (lambda (cat) (symbol-name (car cat)))
 	      gnus-category-alist)
-      nil t))
+      t))
     current-prefix-arg))
   (let ((cat (assq category gnus-category-alist))
 	c groups)
@@ -1031,7 +1025,7 @@ supported."
                   (unless (member server gnus-agent-covered-methods)
                     (push server gnus-agent-covered-methods)
                     (setq gnus-agent-method-p-cache nil))
-                (gnus-message 1 "Ignoring disappeared server `%s'" server))))
+                (gnus-message 8 "Ignoring disappeared server `%s'" server))))
           (prog1 gnus-agent-covered-methods
             (setq gnus-agent-covered-methods nil))))
 
@@ -1519,7 +1513,7 @@ downloaded into the agent."
   "Fetch ARTICLES from GROUP and put them into the Agent."
   (when articles
     (gnus-agent-load-alist group)
-    (let* ((alist   gnus-agent-article-alist)
+    (let* ((alist gnus-agent-article-alist)
            (headers (if (< (length articles) 2) nil gnus-newsgroup-headers))
            (selected-sets (list nil))
            (current-set-size 0)
@@ -1561,9 +1555,9 @@ downloaded into the agent."
                                       ;; 65 char/line.  If the line count
                                       ;; is missing, arbitrarily assume a
                                       ;; size of 1000 characters.
-                                    (max (* 65 (mail-header-lines
-                                                (car headers)))
-                                         1000)
+				      (max (* 65 (mail-header-lines
+						  (car headers)))
+					   1000)
                                     char-size))
 			      0))))
             (setcar selected-sets (nreverse (car selected-sets)))
@@ -1608,8 +1602,7 @@ downloaded into the agent."
 		       nntp-server-buffer (point-min) (point-max))
                       (setq pos (nreverse pos)))))
                 ;; Then save these articles into the Agent.
-                (save-excursion
-                  (set-buffer nntp-server-buffer)
+                (with-current-buffer nntp-server-buffer
                   (while pos
                     (narrow-to-region (cdar pos) (or (cdadr pos) (point-max)))
                     (goto-char (point-min))
@@ -1693,8 +1686,7 @@ downloaded into the agent."
   (setq date (or date t))
 
   (let (gnus-agent-article-alist group alist beg end)
-    (save-excursion
-      (set-buffer gnus-agent-overview-buffer)
+    (with-current-buffer gnus-agent-overview-buffer
       (when (nnheader-find-nov-line article)
 	(forward-word 1)
 	(setq beg (point))
@@ -1705,9 +1697,8 @@ downloaded into the agent."
 	(push (setq alist (list group (gnus-agent-load-alist (caar crosses))))
 	      gnus-agent-group-alist))
       (setcdr alist (cons (cons (cdar crosses) date) (cdr alist)))
-      (save-excursion
-	(set-buffer (gnus-get-buffer-create (format " *Gnus agent overview %s*"
-						    group)))
+      (with-current-buffer (gnus-get-buffer-create
+			    (format " *Gnus agent overview %s*"group))
 	(when (= (point-max) (point-min))
 	  (push (cons group (current-buffer)) gnus-agent-buffer-alist)
 	  (ignore-errors
@@ -1939,9 +1930,7 @@ article numbers will be returned."
        10 "gnus-agent-fetch-headers: undownloaded articles are '%s'"
        (gnus-compress-sequence articles t))
 
-      (save-excursion
-        (set-buffer nntp-server-buffer)
-
+      (with-current-buffer nntp-server-buffer
         (if articles
             (progn
 	      (gnus-message 7 "Fetching headers for %s..."
@@ -2111,12 +2100,12 @@ doesn't exist, to valid the overview buffer."
   (let* ((gnus-agent-read-agentview group)
 	 (file-name-coding-system nnmail-pathname-coding-system)
 	 (agentview (gnus-agent-article-name ".agentview" group)))
-    (when (file-exists-p agentview)
-      (setq gnus-agent-article-alist
-	    (gnus-cache-file-contents
-	     agentview
-	     'gnus-agent-file-loading-cache
-	     'gnus-agent-read-agentview)))))
+    (setq gnus-agent-article-alist
+	  (and (file-exists-p agentview)
+	       (gnus-cache-file-contents
+		agentview
+		'gnus-agent-file-loading-cache
+		'gnus-agent-read-agentview)))))
 
 (defun gnus-agent-read-agentview (file)
   "Load FILE and do a `read' there."
@@ -2360,7 +2349,6 @@ modified) original contents, they are first saved to their own file."
          (local (or local (gnus-agent-load-local)))
          (symb (intern gmane local))
          (minmax (and (boundp symb) (symbol-value symb))))
-
     (if (cond ((and minmax
                     (or (not (eq min (car minmax)))
                         (not (eq max (cdr minmax))))
@@ -2385,7 +2373,7 @@ modified) original contents, they are first saved to their own file."
 
 (defun gnus-agent-batch-confirmation (msg)
   "Show error message and return t."
-  (gnus-message 1 msg)
+  (gnus-message 1 "%s" msg)
   t)
 
 ;;;###autoload
@@ -2767,8 +2755,7 @@ The following commands are available:
 
 (defun gnus-category-setup-buffer ()
   (unless (get-buffer gnus-category-buffer)
-    (save-excursion
-      (set-buffer (gnus-get-buffer-create gnus-category-buffer))
+    (with-current-buffer (gnus-get-buffer-create gnus-category-buffer)
       (gnus-category-mode))))
 
 (defun gnus-category-prepare ()
@@ -3132,7 +3119,7 @@ FORCE is equivalent to setting the expiration predicates to true."
                        group overview (gnus-gethash-safe group orig)
                        articles force))))
               (kill-buffer overview))))
-      (gnus-message 4 (gnus-agent-expire-done-message)))))
+      (gnus-message 4 "%s" (gnus-agent-expire-done-message)))))
 
 (defun gnus-agent-expire-group-1 (group overview active articles force)
   ;; Internal function - requires caller to have set
@@ -3557,7 +3544,7 @@ articles in every agentized group? "))
                              expiring-group overview active articles force))))))))
             (kill-buffer overview))
           (gnus-agent-expire-unagentized-dirs)
-          (gnus-message 4 (gnus-agent-expire-done-message))))))
+          (gnus-message 4 "%s" (gnus-agent-expire-done-message))))))
 
 (defun gnus-agent-expire-done-message ()
   (if (and (> gnus-verbose 4)
@@ -3764,7 +3751,7 @@ has been fetched."
 	    (erase-buffer)
             (cond ((not (eq 'nov (let (gnus-agent) ; Turn off agent
                                    (gnus-retrieve-headers
-                                    uncached-articles group fetch-old))))
+                                    uncached-articles group))))
                    (nnvirtual-convert-headers))
                   ((eq 'nntp (car gnus-current-select-method))
                    ;; The author of gnus-get-newsgroup-headers-xover

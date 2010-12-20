@@ -1,8 +1,8 @@
 ;;; nntp.el --- nntp access for Gnus
 
-;; Copyright (C) 1987, 1988, 1989, 1990, 1992, 1993,
-;;   1994, 1995, 1996, 1997, 1998, 2000, 2001, 2002,
-;;   2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 1987, 1988, 1989, 1990, 1992, 1993, 1994, 1995, 1996,
+;;   1997, 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+;;   2009, 2010  Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-;; For Emacs < 22.2.
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
@@ -34,6 +34,7 @@
 (require 'nnoo)
 (require 'gnus-util)
 (require 'gnus)
+(require 'proto-stream)
 (require 'gnus-group) ;; gnus-group-name-charset
 
 (nnoo-declare nntp)
@@ -86,6 +87,8 @@ host.
 
 Direct connections:
 - `nntp-open-network-stream' (the default),
+- `network-only' (the same as the above, but don't do automatic
+  STARTTLS upgrades).
 - `nntp-open-ssl-stream',
 - `nntp-open-tls-stream',
 - `nntp-open-netcat-stream'.
@@ -267,6 +270,11 @@ NOTE: This variable is never seen to work in Emacs 20 and XEmacs 21.")
   "*Hook run just before posting an article.  It is supposed to be used
 to insert Cancel-Lock headers.")
 
+(defvoo nntp-server-list-active-group 'try
+  "If nil, then always use GROUP instead of LIST ACTIVE.
+This is usually slower, but on misconfigured servers that don't
+update their active files often, this can help.")
+
 ;;; Internal variables.
 
 (defvar nntp-record-commands nil
@@ -296,17 +304,9 @@ to insert Cancel-Lock headers.")
 (defvoo nntp-inhibit-output nil)
 
 (defvoo nntp-server-xover 'try)
-(defvoo nntp-server-list-active-group 'try)
 
 (defvar nntp-async-timer nil)
 (defvar nntp-async-process-list nil)
-
-(defvar nntp-ssl-program
-  "openssl s_client -quiet -ssl3 -connect %s:%p"
-"A string containing commands for SSL connections.
-Within a string, %s is replaced with the server address and %p with
-port number on server.  The program should accept IMAP commands on
-stdin and return responses to stdout.")
 
 (defvar nntp-authinfo-rejected nil
 "A custom error condition used to report 'Authentication Rejected' errors.
@@ -400,7 +400,8 @@ be restored and the command retried."
       (cond ((looking-at "480")
 	     (nntp-handle-authinfo process))
 	    ((looking-at "482")
-	     (nnheader-report 'nntp (get 'nntp-authinfo-rejected 'error-message))
+	     (nnheader-report 'nntp "%s"
+			      (get 'nntp-authinfo-rejected 'error-message))
 	     (signal 'nntp-authinfo-rejected nil))
 	    ((looking-at "^.*\n")
 	     (delete-region (point) (progn (forward-line 1) (point)))))
@@ -987,7 +988,7 @@ command whose response triggered the error."
     "\r?\n\\.\r?\n" "BODY"
     (if (numberp article) (int-to-string article) article))))
 
-(deffoo nntp-request-group (group &optional server dont-check)
+(deffoo nntp-request-group (group &optional server dont-check info)
   (nntp-with-open-group
     nil server
     (when (nntp-send-command "^[245].*\n" "GROUP" group)
@@ -1014,7 +1015,8 @@ command whose response triggered the error."
     (unless (assq 'nntp-address defs)
       (setq defs (append defs (list (list 'nntp-address server)))))
     (nnoo-change-server 'nntp server defs)
-    (unless connectionless
+    (if connectionless
+	t
       (or (nntp-find-connection nntp-server-buffer)
 	  (nntp-open-connection nntp-server-buffer)))))
 
@@ -1113,23 +1115,11 @@ command whose response triggered the error."
 	     nntp-marks-file-name)
     (nntp-possibly-create-directory group server)
     (nntp-open-marks group server)
-    (dolist (action actions)
-      (let ((range (nth 0 action))
-	    (what  (nth 1 action))
-	    (marks (nth 2 action)))
-	(assert (or (eq what 'add) (eq what 'del)) nil
-		"Unknown request-set-mark action: %s" what)
-	(dolist (mark marks)
-	  (setq nntp-marks (gnus-update-alist-soft
-			    mark
-			    (funcall (if (eq what 'add) 'gnus-range-add
-				       'gnus-remove-from-range)
-				     (cdr (assoc mark nntp-marks)) range)
-			    nntp-marks)))))
+    (setq nntp-marks (nnheader-update-marks-actions nntp-marks actions))
     (nntp-save-marks group server))
   nil)
 
-(deffoo nntp-request-update-info (group info &optional server)
+(deffoo nntp-request-marks (group info &optional server)
   (when (and (not nntp-marks-is-evil)
 	     nntp-marks-file-name)
     (nntp-possibly-create-directory group server)
@@ -1167,7 +1157,7 @@ It will make innd servers spawn an nnrpd process to allow actual article
 reading."
   (nntp-send-command "^.*\n" "MODE READER"))
 
-(declare-function netrc-parse "netrc" (file))
+(declare-function netrc-parse "netrc" (&optional file))
 (declare-function netrc-machine "netrc"
 		  (list machine &optional port defaultport))
 (declare-function netrc-get "netrc" (alist type))
@@ -1275,11 +1265,29 @@ password contained in '~/.nntp-authinfo'."
 		`(lambda ()
 		   (nntp-kill-buffer ,pbuffer)))))
 	 (process
-	  (condition-case ()
+	  (condition-case err
 	      (let ((coding-system-for-read nntp-coding-system-for-read)
-		    (coding-system-for-write nntp-coding-system-for-write))
-		(funcall nntp-open-connection-function pbuffer))
-	    (error nil)
+		    (coding-system-for-write nntp-coding-system-for-write)
+		    (map '((nntp-open-network-stream network)
+			   (network-only network-only)
+			   (nntp-open-ssl-stream tls)
+			   (nntp-open-tls-stream tls))))
+		(if (assoc nntp-open-connection-function map)
+		    (car (open-protocol-stream
+			  "nntpd" pbuffer nntp-address nntp-port-number
+			  :type (cadr
+				 (assoc nntp-open-connection-function map))
+			  :end-of-command "^\\([2345]\\|[.]\\).*\n"
+			  :capability-command "CAPABILITIES\r\n"
+			  :success "^3"
+			  :starttls-function
+			  (lambda (capabilities)
+			    (if (not (string-match "STARTTLS" capabilities))
+				nil
+			      "STARTTLS\r\n"))))
+		  (funcall nntp-open-connection-function pbuffer)))
+	    (error
+	     (nnheader-report 'nntp "%s" err))
 	    (quit
 	     (message "Quit opening connection to %s" nntp-address)
 	     (nntp-kill-buffer pbuffer)
@@ -1306,40 +1314,6 @@ password contained in '~/.nntp-authinfo'."
 		(nntp-send-authinfo t))))
 	(nntp-kill-buffer (process-buffer process))
 	nil))))
-
-(defun nntp-open-network-stream (buffer)
-  (open-network-stream "nntpd" buffer nntp-address nntp-port-number))
-
-(autoload 'format-spec "format-spec")
-(autoload 'format-spec-make "format-spec")
-(autoload 'open-tls-stream "tls")
-
-(defun nntp-open-ssl-stream (buffer)
-  (let* ((process-connection-type nil)
-	 (proc (start-process "nntpd" buffer
-			      shell-file-name
-			      shell-command-switch
-			      (format-spec nntp-ssl-program
-					   (format-spec-make
-					    ?s nntp-address
-					    ?p nntp-port-number)))))
-    (gnus-set-process-query-on-exit-flag proc nil)
-    (with-current-buffer buffer
-      (let ((nntp-connection-alist (list proc buffer nil)))
-	(nntp-wait-for-string "^\r*20[01]"))
-      (beginning-of-line)
-      (delete-region (point-min) (point))
-      proc)))
-
-(defun nntp-open-tls-stream (buffer)
-  (let ((proc (open-tls-stream "nntpd" buffer nntp-address nntp-port-number)))
-    (gnus-set-process-query-on-exit-flag proc nil)
-    (with-current-buffer buffer
-      (let ((nntp-connection-alist (list proc buffer nil)))
-	(nntp-wait-for-string "^\r*20[01]"))
-      (beginning-of-line)
-      (delete-region (point-min) (point))
-      proc)))
 
 (defun nntp-read-server-type ()
   "Find out what the name of the server we have connected to is."
@@ -1441,7 +1415,7 @@ password contained in '~/.nntp-authinfo'."
   (let ((message (buffer-string)))
     (while (string-match "[\r\n]+" message)
       (setq message (replace-match " " t t message)))
-    (nnheader-report 'nntp message)
+    (nnheader-report 'nntp "%s" message)
     message))
 
 (defun nntp-accept-process-output (process)

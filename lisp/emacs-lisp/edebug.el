@@ -1,8 +1,8 @@
 ;;; edebug.el --- a source-level debugger for Emacs Lisp
 
-;; Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1997, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1997,
+;;   1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+;;   2010  Free Software Foundation, Inc.
 
 ;; Author: Daniel LaLiberte <liberte@holonexus.org>
 ;; Maintainer: FSF
@@ -2991,7 +2991,7 @@ MSG is printed after `::::} '."
   ;; Set up the overlay arrow at beginning-of-line in current buffer.
   ;; The arrow string is derived from edebug-arrow-alist and
   ;; edebug-execution-mode.
-  (let ((pos (save-excursion (beginning-of-line) (point))))
+  (let ((pos (line-beginning-position)))
     (setq overlay-arrow-string
 	  (cdr (assq edebug-execution-mode edebug-arrow-alist)))
     (setq overlay-arrow-position (make-marker))
@@ -4011,18 +4011,16 @@ May only be called from within `edebug-recursive-edit'."
 
 
 
-(defvar edebug-eval-mode-map nil
-  "Keymap for Edebug Eval mode.  Superset of Lisp Interaction mode.")
-
-(unless edebug-eval-mode-map
-  (setq edebug-eval-mode-map (make-sparse-keymap))
-  (set-keymap-parent edebug-eval-mode-map lisp-interaction-mode-map)
-
-  (define-key edebug-eval-mode-map "\C-c\C-w" 'edebug-where)
-  (define-key edebug-eval-mode-map "\C-c\C-d" 'edebug-delete-eval-item)
-  (define-key edebug-eval-mode-map "\C-c\C-u" 'edebug-update-eval-list)
-  (define-key edebug-eval-mode-map "\C-x\C-e" 'edebug-eval-last-sexp)
-  (define-key edebug-eval-mode-map "\C-j" 'edebug-eval-print-last-sexp))
+(defvar edebug-eval-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map lisp-interaction-mode-map)
+    (define-key map "\C-c\C-w" 'edebug-where)
+    (define-key map "\C-c\C-d" 'edebug-delete-eval-item)
+    (define-key map "\C-c\C-u" 'edebug-update-eval-list)
+    (define-key map "\C-x\C-e" 'edebug-eval-last-sexp)
+    (define-key map "\C-j" 'edebug-eval-print-last-sexp)
+  map)
+"Keymap for Edebug Eval mode.  Superset of Lisp Interaction mode.")
 
 (put 'edebug-eval-mode 'mode-class 'special)
 
@@ -4456,5 +4454,4 @@ With prefix argument, make it a temporary breakpoint."
 
 (provide 'edebug)
 
-;; arch-tag: 19c8d05c-4554-426e-ac72-e0fa1fcb0808
 ;;; edebug.el ends here

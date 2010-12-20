@@ -306,21 +306,34 @@ to their equivalents used on Mac OS X."
 
 (defvar menu-bar-option-key-menu (make-sparse-keymap "Modifier Keys"))
  
+(defun ns-modifier-setting-description-2 (mapping)
+  (cond ((eq mapping 'alt)
+	 "Command (A-)")
+	((eq mapping 'meta)
+	 "Meta (M-)")
+	((eq mapping 'control)
+	 "Control (C-)")
+	((eq mapping nil)
+	 "system's key modifier")
+	(t mapping)))
+
 (defun ns-modifier-setting-description (right general)
   (if (or (not right)
-	  (and (eq right 'none) (eq ns-alternate-modifier 'none)))
+	  (and (eq right 'left) (or (eq ns-alternate-modifier nil) (eq ns-alternate-modifier 'none))))
       "is system's key modifier"
 	(format "set to %s" 
-		(if (eq right 'none) 
-		    general right))))
+		(ns-modifier-setting-description-2
+		 (if (eq right 'left) 
+		     general 
+		   right)))))
 
 (defun toggle-mac-right-option-modifier (&optional interactively)
   (interactive "p")
   (setq ns-right-alternate-modifier
 	(if (eq 'meta
-		(if (eq ns-right-alternate-modifier 'none)
+		(if (eq ns-right-alternate-modifier 'left)
 		    ns-alternate-modifier ns-right-alternate-modifier))
-	    'none
+	    'left
 	  'meta))
   (if interactively (customize-mark-as-set 'ns-right-alternate-modifier))
   (message "Right Option %s." 
@@ -332,7 +345,7 @@ to their equivalents used on Mac OS X."
 	(if (eq 'meta
 		(if (eq ns-right-command-modifier 'none)
 		    ns-command-modifier ns-right-command-modifier))
-	    'none  ; same function as left command modifier
+	    'left  ; same function as left command modifier
 	  'meta))
   (if interactively (customize-mark-as-set 'ns-right-command-modifier))
   (message "Right Command %s." (ns-modifier-setting-description ns-right-command-modifier ns-command-modifier)))
@@ -346,8 +359,8 @@ to their equivalents used on Mac OS X."
 do not let it produce special characters (passing the key to the system)."
     :button (:toggle . 
 		     (eq 'meta
-			 (or (if (eq ns-right-command-modifier 'none)
-				 ns-command-modifier ns-right-command-modifier) 'none)))))
+			 (or (if (eq ns-right-command-modifier 'left)
+				 ns-command-modifier ns-right-command-modifier) 'left)))))
 		    
 (define-key menu-bar-option-key-menu [right-option]
   `(menu-item "Right Option is Meta"
@@ -357,8 +370,8 @@ do not let it produce special characters (passing the key to the system)."
 do not let it produce special characters (passing the key to the system)."
     :button (:toggle . 
 		     (eq 'meta
-			 (or (if (eq ns-right-alternate-modifier 'none)
-				 ns-alternate-modifier ns-right-alternate-modifier) 'none)))))
+			 (or (if (eq ns-right-alternate-modifier 'left)
+				 ns-alternate-modifier ns-right-alternate-modifier) 'left)))))
 		     
 (define-key menu-bar-option-key-menu [right-sep]
   '(menu-item "--"))

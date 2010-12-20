@@ -55,8 +55,7 @@
   :group 'comm
   :version "20.3")
 
-(defcustom net-utils-remove-ctl-m
-  (member system-type (list 'windows-nt 'msdos))
+(defcustom net-utils-remove-ctl-m (memq system-type '(windows-nt msdos))
   "If non-nil, remove control-Ms from output."
   :group 'net-utils
   :type  'boolean)
@@ -82,7 +81,7 @@
 ;; On GNU/Linux and Irix, the system's ping program seems to send packets
 ;; indefinitely unless told otherwise
 (defcustom ping-program-options
-  (and (memq system-type (list 'linux 'gnu/linux 'irix))
+  (and (memq system-type '(gnu/linux irix))
        (list "-c" "4"))
   "Options for the ping program.
 These options can be used to limit how many ICMP packets are emitted."
@@ -99,6 +98,9 @@ These options can be used to limit how many ICMP packets are emitted."
   :group 'net-utils
   :type  'string)
 
+(define-obsolete-variable-alias 'ipconfig-program-options
+  'ifconfig-program-options "22.2")
+
 (defcustom ifconfig-program-options
   (list
    (if (eq system-type 'windows-nt)
@@ -112,9 +114,6 @@ These options can be used to limit how many ICMP packets are emitted."
   :group 'net-utils
   :type 'string
   :version "23.1")
-
-(define-obsolete-variable-alias 'ipconfig-program-options
-  'ifconfig-program-options "22.2")
 
 (defcustom iwconfig-program-options nil
  "Options for the iwconfig program."
@@ -889,5 +888,4 @@ from SEARCH-STRING.  With argument, prompt for whois server."
 
 (provide 'net-utils)
 
-;; arch-tag: 97119e91-9edb-4376-838b-bf7058fa1314
 ;;; net-utils.el ends here

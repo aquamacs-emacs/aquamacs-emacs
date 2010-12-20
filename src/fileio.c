@@ -1,7 +1,8 @@
 /* File IO for GNU Emacs.
-   Copyright (C) 1985, 1986, 1987, 1988, 1993, 1994, 1995, 1996,
-                 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-                 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1985, 1986, 1987, 1988, 1993, 1994, 1995, 1996, 1997,
+  1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -20,11 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <limits.h>
-
-#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
-#endif
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -71,7 +68,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef WINDOWSNT
 #define NOMINMAX 1
 #include <windows.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #endif /* not WINDOWSNT */
 
@@ -79,7 +75,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "msdos.h"
 #include <sys/param.h>
 #include <fcntl.h>
-#include <string.h>
 #endif
 
 #ifdef DOS_NT
@@ -104,14 +99,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #include "commands.h"
-
-#ifndef O_WRONLY
-#define O_WRONLY 1
-#endif
-
-#ifndef O_RDONLY
-#define O_RDONLY 0
-#endif
 
 #ifndef S_ISLNK
 #  define lstat stat
@@ -187,10 +174,6 @@ Lisp_Object Vauto_save_visited_file_name;
 
 /* Whether or not to continue auto-saving after a large deletion.  */
 Lisp_Object Vauto_save_include_big_deletions;
-
-/* On NT, specifies the directory separator character, used (eg.) when
-   expanding file names.  This can be bound to / or \. */
-Lisp_Object Vdirectory_sep_char;
 
 #ifdef HAVE_FSYNC
 /* Nonzero means skip the call to fsync in Fwrite-region.  */
@@ -803,6 +786,9 @@ File name components that are `.' are removed, and
 so are file name components followed by `..', along with the `..' itself;
 note that these simplifications are done without checking the resulting
 file names in the file system.
+Multiple consecutive slashes are collapsed into a single slash,
+except at the beginning of the file name when they are significant (e.g.,
+UNC file names on MS-Windows.)
 An initial `~/' expands to your home directory.
 An initial `~USER/' expands to USER's home directory.
 See also the function `substitute-in-file-name'.
@@ -810,7 +796,7 @@ See also the function `substitute-in-file-name'.
 For technical reasons, this function can return correct but
 non-intuitive results for the root directory; for instance,
 \(expand-file-name ".." "/") returns "/..".  For this reason, use
-(directory-file-name (file-name-directory dirname)) to traverse a
+\(directory-file-name (file-name-directory dirname)) to traverse a
 filesystem tree, not (expand-file-name ".."  dirname).  */)
   (Lisp_Object name, Lisp_Object default_directory)
 {
@@ -5061,9 +5047,10 @@ e_write (int desc, Lisp_Object string, int start, int end, struct coding_system 
 }
 
 DEFUN ("verify-visited-file-modtime", Fverify_visited_file_modtime,
-       Sverify_visited_file_modtime, 1, 1, 0,
+       Sverify_visited_file_modtime, 0, 1, 0,
        doc: /* Return t if last mod time of BUF's visited file matches what BUF records.
 This means that the file has not been changed since it was visited or saved.
+If BUF is omitted or nil, it defaults to the current buffer.
 See Info node `(elisp)Modification Time' for more details.  */)
   (Lisp_Object buf)
 {
@@ -5072,8 +5059,13 @@ See Info node `(elisp)Modification Time' for more details.  */)
   Lisp_Object handler;
   Lisp_Object filename;
 
-  CHECK_BUFFER (buf);
-  b = XBUFFER (buf);
+  if (NILP (buf))
+    b = current_buffer;
+  else
+    {
+      CHECK_BUFFER (buf);
+      b = XBUFFER (buf);
+    }
 
   if (!STRINGP (b->filename)) return Qt;
   if (b->modtime == 0) return Qt;
@@ -5880,5 +5872,3 @@ This includes interactive calls to `delete-file' and
 #endif
 }
 
-/* arch-tag: 64ba3fd7-f844-4fb2-ba4b-427eb928786c
-   (do not change this comment) */

@@ -28,11 +28,7 @@
 ;; documented in the Emacs user's manual.
 
 ;;; Code:
-(eval-when-compile
-  ;; Necessary to avoid recursive `require's.
-  (provide 'sendmail)
-  (require 'rmail)
-  (require 'mailalias))
+(require 'mail-utils)
 
 (autoload 'rfc2047-encode-string "rfc2047")
 
@@ -203,13 +199,14 @@ when you first send mail."
   :type '(choice (const nil) string)
   :group 'sendmail)
 
-;;;###autoload
 (defcustom mail-alias-file nil
-  "If non-nil, the name of a file to use instead of `/usr/lib/aliases'.
+  "If non-nil, the name of a file to use instead of the sendmail default.
 This file defines aliases to be expanded by the mailer; this is a different
 feature from that of defining aliases in `.mailrc' to be expanded in Emacs.
-This variable has no effect unless your system uses sendmail as its mailer."
-  :type '(choice (const nil) file)
+This variable has no effect unless your system uses sendmail as its mailer.
+The default file is defined in sendmail's configuration file, e.g.
+`/etc/aliases'."
+  :type '(choice (const :tag "Sendmail default" nil) file)
   :group 'sendmail)
 
 ;;;###autoload
@@ -285,14 +282,14 @@ regardless of what part of it (if any) is included in the cited text.")
 
 ;;;###autoload
 (defcustom mail-citation-prefix-regexp
-  (purecopy "\\([ \t]*\\(\\w\\|[_.]\\)+>+\\|[ \t]*[]>|}]\\)+")
+  (purecopy "\\([ \t]*\\(\\w\\|[_.]\\)+>+\\|[ \t]*[]>|]\\)+")
   "Regular expression to match a citation prefix plus whitespace.
 It should match whatever sort of citation prefixes you want to handle,
 with whitespace before and after; it should also match just whitespace.
 The default value matches citations like `foo-bar>' plus whitespace."
   :type 'regexp
   :group 'sendmail
-  :version "20.3")
+  :version "24.1")
 
 (defvar mail-abbrevs-loaded nil)
 (defvar mail-mode-map
@@ -383,15 +380,8 @@ The default value matches citations like `foo-bar>' plus whitespace."
     map))
 
 (autoload 'build-mail-aliases "mailalias"
-  "Read mail aliases from user's personal aliases file and set `mail-aliases'."
-  nil)
-
-(autoload 'expand-mail-aliases "mailalias"
-  "Expand all mail aliases in suitable header fields found between BEG and END.
-Suitable header fields are `To', `Cc' and `Bcc' and their `Resent-' variants.
-Optional second arg EXCLUDE may be a regular expression defining text to be
-removed from alias expansions."
-  nil)
+  "Read mail aliases from personal aliases file and set `mail-aliases'.
+By default, this is the file specified by `mail-personal-alias-file'." t)
 
 ;;;###autoload
 (defcustom mail-signature t
@@ -440,8 +430,6 @@ before you edit the message, so you can edit or delete the lines."
   :type '(choice (const nil) string)
   :group 'sendmail)
 
-;; FIXME no need for autoload
-;;;###autoload
 (defcustom mail-bury-selects-summary t
   "If non-nil, try to show Rmail summary buffer after returning from mail.
 The functions \\[mail-send-on-exit] or \\[mail-dont-send] select
@@ -450,8 +438,6 @@ is non-nil."
   :type 'boolean
   :group 'sendmail)
 
-;; FIXME no need for autoload
-;;;###autoload
 (defcustom mail-send-nonascii 'mime
   "Specify whether to allow sending non-ASCII characters in mail.
 If t, that means do allow it.  nil means don't allow it.
@@ -475,23 +461,16 @@ support Delivery Status Notification."
 
 ;; Note: could use /usr/ucb/mail instead of sendmail;
 ;; options -t, and -v if not interactive.
-(defvar mail-mailer-swallows-blank-line
-  (if (and (string-match "sparc-sun-sunos\\(\\'\\|[^5]\\)" system-configuration)
-	   (file-readable-p "/etc/sendmail.cf")
-           (with-temp-buffer
-             (insert-file-contents "/etc/sendmail.cf")
-             (goto-char (point-min))
-             (let ((case-fold-search nil))
-               (re-search-forward "^OR\\>" nil t))))
-      ;; According to RFC822, "The field-name must be composed of printable
-      ;; ASCII characters (i.e. characters that have decimal values between
-      ;; 33 and 126, except colon)", i.e. any chars except ctl chars,
-      ;; space, or colon.
-      '(looking-at "[ \t]\\|[][!\"#$%&'()*+,-./0-9;<=>?@A-Z\\\\^_`a-z{|}~]+:"))
+(defvar mail-mailer-swallows-blank-line nil
   "Set this non-nil if the system's mailer runs the header and body together.
-\(This problem exists on Sunos 4 when sendmail is run in remote mode.)
-The value should be an expression to test whether the problem will
-actually occur.")
+The actual value should be an expression to evaluate that returns
+non-nil if the problem will actually occur.
+\(As far as we know, this is not an issue on any system still supported
+by Emacs.)")
+
+(put 'mail-mailer-swallows-blank-line 'risky-local-variable t) ; gets evalled
+(make-obsolete-variable 'mail-mailer-swallows-blank-line
+			"no need to set this on any modern system." "24.1")
 
 (defvar mail-mode-syntax-table
   ;; define-derived-mode will make it inherit from text-mode-syntax-table.
@@ -546,12 +525,11 @@ actually occur.")
   (or mail-default-reply-to
       (setq mail-default-reply-to (getenv "REPLYTO")))
   (sendmail-sync-aliases)
-  (if (eq mail-aliases t)
-      (progn
-	(setq mail-aliases nil)
-	(when mail-personal-alias-file
-	  (if (file-exists-p mail-personal-alias-file)
-	      (build-mail-aliases)))))
+  (when (eq mail-aliases t)
+    (setq mail-aliases nil)
+    (and mail-personal-alias-file
+	 (file-exists-p mail-personal-alias-file)
+	 (build-mail-aliases)))
   ;; Don't leave this around from a previous message.
   (kill-local-variable 'buffer-file-coding-system)
   ;; This doesn't work for enable-multibyte-characters.
@@ -718,7 +696,7 @@ Leave point at the start of the delimiter line."
   "Carry out Auto Fill for Mail mode.
 If within the headers, this makes the new lines into continuation lines."
   (if (< (point) (mail-header-end))
-      (let ((old-line-start (save-excursion (beginning-of-line) (point))))
+      (let ((old-line-start (line-beginning-position)))
 	(if (do-auto-fill)
 	    (save-excursion
 	      (beginning-of-line)
@@ -1097,23 +1075,23 @@ external program defined by `sendmail-program'."
 	      ;; Delete Resent-BCC ourselves
 	      (if (save-excursion (beginning-of-line)
 				  (looking-at "resent-bcc"))
-		  (delete-region (save-excursion (beginning-of-line) (point))
-				 (save-excursion (end-of-line) (1+ (point))))))
-;;;  Apparently this causes a duplicate Sender.
-;;; 	    ;; If the From is different than current user, insert Sender.
-;;; 	    (goto-char (point-min))
-;;; 	    (and (re-search-forward "^From:"  delimline t)
-;;; 		 (progn
-;;; 		   (require 'mail-utils)
-;;; 		   (not (string-equal
-;;; 			 (mail-strip-quoted-names
-;;; 			  (save-restriction
-;;; 			    (narrow-to-region (point-min) delimline)
-;;; 			    (mail-fetch-field "From")))
-;;; 			 (user-login-name))))
-;;; 		 (progn
-;;; 		   (forward-line 1)
-;;; 		   (insert "Sender: " (user-login-name) "\n")))
+		  (delete-region (line-beginning-position)
+				 (line-beginning-position 2))))
+            ;; Apparently this causes a duplicate Sender.
+	    ;; ;; If the From is different than current user, insert Sender.
+	    ;; (goto-char (point-min))
+	    ;; (and (re-search-forward "^From:"  delimline t)
+	    ;;      (progn
+	    ;;        (require 'mail-utils)
+	    ;;        (not (string-equal
+	    ;;     	 (mail-strip-quoted-names
+	    ;;     	  (save-restriction
+	    ;;     	    (narrow-to-region (point-min) delimline)
+	    ;;     	    (mail-fetch-field "From")))
+	    ;;     	 (user-login-name))))
+	    ;;      (progn
+	    ;;        (forward-line 1)
+	    ;;        (insert "Sender: " (user-login-name) "\n")))
 	    ;; Don't send out a blank subject line
 	    (goto-char (point-min))
 	    (if (re-search-forward "^Subject:\\([ \t]*\n\\)+\\b" delimline t)
@@ -1150,8 +1128,7 @@ external program defined by `sendmail-program'."
 		   ;; should override any specified in the message itself.
 		     (when where-content-type
 		       (goto-char where-content-type)
-		       (beginning-of-line)
-		       (delete-region (point)
+		       (delete-region (point-at-bol)
 				      (progn (forward-line 1) (point)))))))
 	    ;; Insert an extra newline if we need it to work around
 	    ;; Sun's bug that swallows newlines.
@@ -1180,9 +1157,9 @@ external program defined by `sendmail-program'."
 				    nil errbuf nil "-oi")
 			      (and envelope-from
 				   (list "-f" envelope-from))
-;;; 			      ;; Don't say "from root" if running under su.
-;;; 			      (and (equal (user-real-login-name) "root")
-;;; 				   (list "-f" (user-login-name)))
+			      ;; ;; Don't say "from root" if running under su.
+			      ;; (and (equal (user-real-login-name) "root")
+			      ;;      (list "-f" (user-login-name)))
 			      (and mail-alias-file
 				   (list (concat "-oA" mail-alias-file)))
 			      (if mail-interactive
@@ -1715,48 +1692,48 @@ The seventh argument ACTIONS is a list of actions to take
  when the message is sent, we apply FUNCTION to ARGS.
  This is how Rmail arranges to mark messages `answered'."
   (interactive "P")
-;;;  This is commented out because I found it was confusing in practice.
-;;;  It is easy enough to rename *mail* by hand with rename-buffer
-;;;  if you want to have multiple mail buffers.
-;;;  And then you can control which messages to save. --rms.
-;;;  (let ((index 1)
-;;;	buffer)
-;;;    ;; If requested, look for a mail buffer that is modified and go to it.
-;;;    (if noerase
-;;;	(progn
-;;;	  (while (and (setq buffer
-;;;			    (get-buffer (if (= 1 index) "*mail*"
-;;;					  (format "*mail*<%d>" index))))
-;;;		      (not (buffer-modified-p buffer)))
-;;;	    (setq index (1+ index)))
-;;;	  (if buffer (switch-to-buffer buffer)
-;;;	    ;; If none exists, start a new message.
-;;;	    ;; This will never re-use an existing unmodified mail buffer
-;;;	    ;; (since index is not 1 anymore).  Perhaps it should.
-;;;	    (setq noerase nil))))
-;;;    ;; Unless we found a modified message and are happy, start a new message.
-;;;    (if (not noerase)
-;;;	(progn
-;;;	  ;; Look for existing unmodified mail buffer.
-;;;	  (while (and (setq buffer
-;;;			    (get-buffer (if (= 1 index) "*mail*"
-;;;					  (format "*mail*<%d>" index))))
-;;;		      (buffer-modified-p buffer))
-;;;	    (setq index (1+ index)))
-;;;	  ;; If none, make a new one.
-;;;	  (or buffer
-;;;	      (setq buffer (generate-new-buffer "*mail*")))
-;;;	  ;; Go there and initialize it.
-;;;	  (switch-to-buffer buffer)
-;;;	  (erase-buffer)
-;;;          (setq default-directory (expand-file-name "~/"))
-;;;          (auto-save-mode auto-save-default)
-;;;          (mail-mode)
-;;;          (mail-setup to subject in-reply-to cc replybuffer actions)
-;;;	  (if (and buffer-auto-save-file-name
-;;;		   (file-exists-p buffer-auto-save-file-name))
-;;;	      (message "Auto save file for draft message exists; consider M-x mail-recover"))
-;;;          t))
+ ;; This is commented out because I found it was confusing in practice.
+ ;; It is easy enough to rename *mail* by hand with rename-buffer
+ ;; if you want to have multiple mail buffers.
+ ;; And then you can control which messages to save. --rms.
+ ;; (let ((index 1)
+ ;;        buffer)
+ ;;   ;; If requested, look for a mail buffer that is modified and go to it.
+ ;;   (if noerase
+ ;;        (progn
+ ;;          (while (and (setq buffer
+ ;;        		    (get-buffer (if (= 1 index) "*mail*"
+ ;;        				  (format "*mail*<%d>" index))))
+ ;;        	      (not (buffer-modified-p buffer)))
+ ;;            (setq index (1+ index)))
+ ;;          (if buffer (switch-to-buffer buffer)
+ ;;            ;; If none exists, start a new message.
+ ;;            ;; This will never re-use an existing unmodified mail buffer
+ ;;            ;; (since index is not 1 anymore).  Perhaps it should.
+ ;;            (setq noerase nil))))
+ ;;   ;; Unless we found a modified message and are happy, start a new message.
+ ;;   (if (not noerase)
+ ;;        (progn
+ ;;          ;; Look for existing unmodified mail buffer.
+ ;;          (while (and (setq buffer
+ ;;        		    (get-buffer (if (= 1 index) "*mail*"
+ ;;        				  (format "*mail*<%d>" index))))
+ ;;        	      (buffer-modified-p buffer))
+ ;;            (setq index (1+ index)))
+ ;;          ;; If none, make a new one.
+ ;;          (or buffer
+ ;;              (setq buffer (generate-new-buffer "*mail*")))
+ ;;          ;; Go there and initialize it.
+ ;;          (switch-to-buffer buffer)
+ ;;          (erase-buffer)
+ ;;         (setq default-directory (expand-file-name "~/"))
+ ;;         (auto-save-mode auto-save-default)
+ ;;         (mail-mode)
+ ;;         (mail-setup to subject in-reply-to cc replybuffer actions)
+ ;;          (if (and buffer-auto-save-file-name
+ ;;        	   (file-exists-p buffer-auto-save-file-name))
+ ;;              (message "Auto save file for draft message exists; consider M-x mail-recover"))
+ ;;         t))
 
   (if (eq noerase 'new)
       (pop-to-buffer (generate-new-buffer "*mail*"))
@@ -1777,7 +1754,7 @@ The seventh argument ACTIONS is a list of actions to take
   (mail-mode)
   ;; Disconnect the buffer from its visited file
   ;; (in case the user has actually visited a file *mail*).
-;;;  (set-visited-file-name nil)
+  ;; (set-visited-file-name nil)
   (let (initialized)
     (and (not (and noerase
 		   (not (eq noerase 'new))))
@@ -1826,6 +1803,9 @@ The seventh argument ACTIONS is a list of actions to take
       ;; names are normally ``trivial'', so Dired will set point after
       ;; all the files, at buffer bottom.  We want it on the first
       ;; file instead.
+      ;; Require dired so that dired-trivial-filenames does not get
+      ;; unbound on exit from the let.
+      (require 'dired)
       (let ((dired-trivial-filenames t))
 	(dired-other-window wildcard (concat dired-listing-switches "t")))
       (rename-buffer "*Auto-saved Drafts*" t)
@@ -1956,5 +1936,4 @@ you can move to one of them and type C-c C-c to recover that one."
 
 (provide 'sendmail)
 
-;; arch-tag: 48bc1025-d993-4d31-8d81-2a29491f0626
 ;;; sendmail.el ends here

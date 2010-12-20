@@ -37,9 +37,6 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'timezone))
-
 (defgroup change-log nil
   "Change log maintenance."
   :group 'tools
@@ -701,7 +698,7 @@ current buffer to the complete file name.
 Optional arg BUFFER-FILE overrides `buffer-file-name'."
   ;; If we are called from a diff, first switch to the source buffer;
   ;; in order to respect buffer-local settings of change-log-default-name, etc.
-  (with-current-buffer (let ((buff (if (eq major-mode 'diff-mode)
+  (with-current-buffer (let ((buff (if (derived-mode-p 'diff-mode)
 				       (car (ignore-errors
 					     (diff-find-source-location))))))
 			 (if (buffer-live-p buff) buff
@@ -1183,7 +1180,7 @@ Has a preference of looking backwards."
 		((apply 'derived-mode-p add-log-c-like-modes)
 		 (or (c-cpp-define-name)
 		     (c-defun-name)))
-		((memq major-mode add-log-tex-like-modes)
+		((apply #'derived-mode-p add-log-tex-like-modes)
 		 (if (re-search-backward
 		      "\\\\\\(sub\\)*\\(section\\|paragraph\\|chapter\\)"
 		      nil t)
@@ -1252,19 +1249,18 @@ Has a preference of looking backwards."
 	  (change-log-get-method-definition-1 ""))
 	(concat change-log-get-method-definition-md "]"))))))
 
+(autoload 'timezone-make-date-sortable "timezone")
+
 (defun change-log-sortable-date-at ()
   "Return date of log entry in a consistent form for sorting.
 Point is assumed to be at the start of the entry."
-  (require 'timezone)
   (if (looking-at change-log-start-entry-re)
       (let ((date (match-string-no-properties 0)))
 	(if date
 	    (if (string-match "\\(....\\)-\\(..\\)-\\(..\\)\\s-+" date)
 		(concat (match-string 1 date) (match-string 2 date)
 			(match-string 3 date))
-	      (condition-case nil
-		  (timezone-make-date-sortable date)
-		(error nil)))))
+	      (ignore-errors (timezone-make-date-sortable date)))))
     (error "Bad date")))
 
 (defun change-log-resolve-conflict ()

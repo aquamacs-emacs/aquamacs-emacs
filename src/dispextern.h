@@ -69,6 +69,11 @@ typedef Pixmap XImagePtr;
 typedef XImagePtr XImagePtr_or_DC;
 #endif
 
+#ifndef HAVE_WINDOW_SYSTEM
+typedef int Cursor;
+#define No_Cursor (0)
+#endif
+
 #ifndef NativeRectangle
 #define NativeRectangle int
 #endif
@@ -279,6 +284,9 @@ enum glyph_type
   /* Glyph describes a static composition.  */
   COMPOSITE_GLYPH,
 
+  /* Glyph describes a glyphless character.  */
+  GLYPHLESS_GLYPH,
+
   /* Glyph describes an image.  */
   IMAGE_GLYPH,
 
@@ -333,7 +341,7 @@ struct glyph
 
   /* Which kind of glyph this is---character, image etc.  Value
      should be an enumerator of type enum glyph_type.  */
-  unsigned type : 2;
+  unsigned type : 3;
 
   /* 1 means this glyph was produced from multibyte text.  Zero
      means it was produced from unibyte text, i.e. charsets aren't
@@ -363,12 +371,11 @@ struct glyph
      displaying.  The member `pixel_width' above is set to 1.  */
   unsigned padding_p : 1;
 
-  /* 1 means the actual glyph is not available, draw a box instead.
-     This can happen when a font couldn't be loaded, or a character
-     doesn't have a glyph in a font.  */
+  /* 1 means the actual glyph is not available, draw using `struct
+     glyphless' below instead.  This can happen when a font couldn't
+     be loaded, or a character doesn't have a glyph in a font.  */
   unsigned glyph_not_available_p : 1;
 
- 
   /* Non-zero means don't display cursor here.  */
   unsigned avoid_cursor_p : 1;
 
@@ -394,7 +401,20 @@ struct glyph
      w32_char_font_type.  Otherwise it equals FONT_TYPE_UNKNOWN.  */
   unsigned font_type : 3;
 
-  struct glyph_slice slice;
+  /* A union of sub-structures for different glyph types.  */
+  union
+  {
+    /* Metrics of a partial glyph of an image (type == IMAGE_GLYPH).  */
+    struct glyph_slice img;
+    /* Start and end indices of glyphs of a graphme cluster of a
+       composition (type == COMPOSITE_GLYPH).  */
+    struct { int from, to; } cmp;
+    /* Pixel offsets for upper and lower part of the acronym.  */
+    struct {
+      short upper_xoff, upper_yoff;
+      short lower_xoff, lower_yoff;
+    } glyphless;
+  } slice;
 
   /* A union of sub-structures for different glyph types.  */
   union
@@ -402,16 +422,13 @@ struct glyph
     /* Character code for character glyphs (type == CHAR_GLYPH).  */
     unsigned ch;
 
-    /* Sub-structures for type == COMPOSITION_GLYPH.  */
+    /* Sub-structures for type == COMPOSITE_GLYPH.  */
     struct
     {
       /* Flag to tell if the composition is automatic or not.  */
       unsigned automatic : 1;
       /* ID of the composition.  */
-      unsigned id    : 23;
-      /* Start and end indices of glyphs of the composition.  */
-      unsigned from : 4;
-      unsigned to : 4;
+      unsigned id    : 31;
     } cmp;
 
     /* Image ID for image glyphs (type == IMAGE_GLYPH).  */
@@ -428,6 +445,19 @@ struct glyph
     }
     stretch;
 
+    /* Sub-stretch for type == GLYPHLESS_GLYPH.  */
+    struct
+    {
+      /* Value is an enum of the type glyphless_display_method.  */
+      unsigned method : 2;
+      /* 1 iff this glyph is for a character of no font. */
+      unsigned for_no_font : 1;
+      /* Length of acronym or hexadecimal code string (at most 8).  */
+      unsigned len : 4;
+      /* Character to display.  Actually we need only 22 bits.  */
+      unsigned ch : 26;
+    } glyphless;
+
     /* Used to compare all bit-fields above in one step.  */
     unsigned val;
   } u;
@@ -443,13 +473,21 @@ struct glyph
 #define CHAR_GLYPH_SPACE_P(GLYPH) \
   ((GLYPH).u.ch == SPACEGLYPH && (GLYPH).face_id == DEFAULT_FACE_ID)
 
-/* Are glyph slices of glyphs *X and *Y equal */
+/* Are glyph slices of glyphs *X and *Y equal?  It assumes that both
+   glyphs have the same type.
 
-#define GLYPH_SLICE_EQUAL_P(X, Y)		\
-  ((X)->slice.x == (Y)->slice.x			\
-   && (X)->slice.y == (Y)->slice.y		\
-   && (X)->slice.width == (Y)->slice.width	\
-   && (X)->slice.height == (Y)->slice.height)
+   Note: for composition glyphs, we don't have to compare slice.cmp.to
+   because they should be the same if and only if slice.cmp.from are
+   the same.  */
+
+#define GLYPH_SLICE_EQUAL_P(X, Y)				\
+  ((X)->type == IMAGE_GLYPH					\
+   ? ((X)->slice.img.x == (Y)->slice.img.x			\
+      && (X)->slice.img.y == (Y)->slice.img.y			\
+      && (X)->slice.img.width == (Y)->slice.img.width		\
+      && (X)->slice.img.height == (Y)->slice.img.height)	\
+   : ((X)->type != COMPOSITE_GLYPH				\
+      || (X)->slice.cmp.from == (Y)->slice.cmp.from))
 
 /* Are glyphs *X and *Y displayed equal?  */
 
@@ -1775,7 +1813,7 @@ typedef enum { NEUTRAL_DIR, L2R, R2L } bidi_dir_t;
 /* Data type for storing information about characters we need to
    remember.  */
 struct bidi_saved_info {
-  int bytepos, charpos;		/* character's buffer position */
+  EMACS_INT bytepos, charpos;	/* character's buffer position */
   bidi_type_t type;		/* character's resolved bidi type */
   bidi_type_t type_after_w1;	/* original type of the character, after W1 */
   bidi_type_t orig_type;	/* type as we found it in the buffer */
@@ -1910,6 +1948,9 @@ enum display_element_type
   /* A composition (static and automatic).  */
   IT_COMPOSITION,
 
+  /* A glyphless character (e.g. ZWNJ, LRE).  */
+  IT_GLYPHLESS,
+
   /* An image.  */
   IT_IMAGE,
 
@@ -1955,6 +1996,21 @@ enum line_wrap_method
   WORD_WRAP,
   WINDOW_WRAP
 };
+
+/* An enumerator for the method of displaying glyphless characters.  */
+
+enum glyphless_display_method
+  {
+    /* Display a thin (1-pixel width) space.  On a TTY, display a
+       1-character width space.  */
+    GLYPHLESS_DISPLAY_THIN_SPACE,
+    /* Display an empty box of proper width.  */
+    GLYPHLESS_DISPLAY_EMPTY_BOX,
+    /* Display an acronym string in a box.  */
+    GLYPHLESS_DISPLAY_ACRONYM,
+    /* Display the hexadecimal code of the character in a box.  */
+    GLYPHLESS_DISPLAY_HEX_CODE
+  };
 
 struct it_slice
 {
@@ -2059,7 +2115,7 @@ struct it
 
   /* Number of characters in the string (s, or it->string) we iterate
      over.  */
-  int string_nchars;
+  EMACS_INT string_nchars;
 
   /* Start and end of a visible region; -1 if the region is not
      visible in the window.  */
@@ -2126,6 +2182,12 @@ struct it
   /* Total number of overlay strings to process.  This can be >
      OVERLAY_STRING_CHUNK_SIZE.  */
   int n_overlay_strings;
+
+  /* The charpos where n_overlay_strings was calculated.  This should
+     be set at the same time as n_overlay_strings.  It is needed
+     because we show before-strings at the start of invisible text;
+     see handle_invisible_prop in xdisp.c.  */
+  int overlay_strings_charpos;
 
   /* Vector of overlays to process.  Overlay strings are processed
      OVERLAY_STRING_CHUNK_SIZE at a time.  */
@@ -2286,6 +2348,10 @@ struct it
      called.  If we are setting it->C directly before calling
      PRODUCE_GLYPHS, this should be set beforehand too.  */
   int char_to_display;
+
+  /* If what == IT_GLYPHLESS, the method to display such a
+     character.  */
+  enum glyphless_display_method glyphless_method;
 
   /* If what == IT_IMAGE, the id of the image to display.  */
   int image_id;
@@ -2823,7 +2889,8 @@ enum tool_bar_item_idx
   /* The binding.  */
   TOOL_BAR_ITEM_BINDING,
 
-  /* Button type.  One of nil, `:radio' or `:toggle'.  */
+  /* Button type.  One of nil (default button), t (a separator),
+     `:radio', or `:toggle'.  The latter two currently do nothing.  */
   TOOL_BAR_ITEM_TYPE,
 
   /* Help string.  */
@@ -2834,6 +2901,9 @@ enum tool_bar_item_idx
 
   /* Label to show when text labels are enabled.  */
   TOOL_BAR_ITEM_LABEL,
+
+  /* If we shall show the label only below the icon and not beside it.  */
+  TOOL_BAR_ITEM_VERT_ONLY,
 
   /* Sentinel = number of slots in tool_bar_items occupied by one
      tool-bar item.  */
@@ -2904,12 +2974,12 @@ extern EMACS_INT tool_bar_button_relief;
 
 extern void bidi_init_it (EMACS_INT, EMACS_INT, struct bidi_it *);
 extern void bidi_move_to_visually_next (struct bidi_it *);
-extern void bidi_paragraph_init (bidi_dir_t, struct bidi_it *);
+extern void bidi_paragraph_init (bidi_dir_t, struct bidi_it *, int);
 extern int  bidi_mirror_char (int);
 
 /* Defined in xdisp.c */
 
-struct glyph_row *row_containing_pos (struct window *, int,
+struct glyph_row *row_containing_pos (struct window *, EMACS_INT,
                                       struct glyph_row *,
                                       struct glyph_row *, int);
 EMACS_INT string_buffer_position (struct window *, Lisp_Object,
@@ -2937,7 +3007,8 @@ void remember_mouse_glyph (struct frame *, int, int, NativeRectangle *);
 void mark_window_display_accurate (Lisp_Object, int);
 void redisplay_preserve_echo_area (int);
 int set_cursor_from_row (struct window *, struct glyph_row *,
-                         struct glyph_matrix *, int, int, int, int);
+                         struct glyph_matrix *, EMACS_INT, EMACS_INT,
+			 int, int);
 void init_iterator (struct it *, struct window *, EMACS_INT,
                     EMACS_INT, struct glyph_row *, enum face_id);
 void init_iterator_to_row_start (struct it *, struct window *,
@@ -2945,7 +3016,7 @@ void init_iterator_to_row_start (struct it *, struct window *,
 int get_next_display_element (struct it *);
 void set_iterator_to_next (struct it *, int);
 void start_display (struct it *, struct window *, struct text_pos);
-void move_it_to (struct it *, int, int, int, int, int);
+void move_it_to (struct it *, EMACS_INT, int, int, int, int);
 void move_it_vertically (struct it *, int);
 void move_it_vertically_backward (struct it *, int);
 void move_it_by_lines (struct it *, int, int);
@@ -2964,15 +3035,16 @@ extern int help_echo_showing_p;
 extern int current_mode_line_height, current_header_line_height;
 extern Lisp_Object help_echo_string, help_echo_window;
 extern Lisp_Object help_echo_object, previous_help_echo_string;
-extern int help_echo_pos;
+extern EMACS_INT help_echo_pos;
 extern struct frame *last_mouse_frame;
 extern int last_tool_bar_item;
 extern Lisp_Object Vmouse_autoselect_window;
 extern int unibyte_display_via_language_environment;
 extern EMACS_INT underline_minimum_offset;
+extern Lisp_Object Vglyphless_char_display;
 
 extern void reseat_at_previous_visible_line_start (struct it *);
-
+extern Lisp_Object lookup_glyphless_char_display (int, struct it *);
 extern int calc_pixel_width_or_height (double *, struct it *, Lisp_Object,
                                        struct font *, int, int *);
 
@@ -3011,28 +3083,31 @@ extern void x_update_cursor (struct frame *, int);
 extern void x_clear_cursor (struct window *);
 extern void x_draw_vertical_border (struct window *w);
 
-extern void frame_to_window_pixel_xy (struct window *, int *, int *);
 extern int get_glyph_string_clip_rects (struct glyph_string *,
                                         NativeRectangle *, int);
 extern void get_glyph_string_clip_rect (struct glyph_string *,
                                         NativeRectangle *nr);
 extern Lisp_Object find_hot_spot (Lisp_Object, int, int);
-extern void note_mouse_highlight (struct frame *, int, int);
-extern void x_clear_window_mouse_face (struct window *);
-extern void cancel_mouse_face (struct frame *);
 
 extern void handle_tool_bar_click (struct frame *,
                                    int, int, int, unsigned int);
 
-/* msdos.c defines its own versions of these functions. */
-extern int clear_mouse_face (Display_Info *);
-extern void show_mouse_face (Display_Info *, enum draw_glyphs_face);
-extern int cursor_in_mouse_face_p (struct window *w);
-
 extern void expose_frame (struct frame *, int, int, int, int);
 extern int x_intersect_rectangles (XRectangle *, XRectangle *,
                                    XRectangle *);
-#endif
+#endif	/* HAVE_WINDOW_SYSTEM */
+
+extern void frame_to_window_pixel_xy (struct window *, int *, int *);
+extern void note_mouse_highlight (struct frame *, int, int);
+extern void x_clear_window_mouse_face (struct window *);
+extern void cancel_mouse_face (struct frame *);
+extern int clear_mouse_face (Mouse_HLInfo *);
+extern void show_mouse_face (Mouse_HLInfo *, enum draw_glyphs_face);
+extern int cursor_in_mouse_face_p (struct window *w);
+extern void draw_row_with_mouse_face (struct window *, int, struct glyph_row *,
+				      int, int, enum draw_glyphs_face);
+extern void tty_draw_row_with_mouse_face (struct window *, struct glyph_row *,
+					  int, int, enum draw_glyphs_face);
 
 /* Flags passed to try_window.  */
 #define TRY_WINDOW_CHECK_MARGINS	(1 << 0)
@@ -3064,7 +3139,7 @@ extern int x_create_bitmap_from_data (struct frame *, char *,
                                       unsigned int, unsigned int);
 extern int x_create_bitmap_from_file (struct frame *, Lisp_Object);
 #if defined (HAVE_XPM) && defined (HAVE_X_WINDOWS)
-extern int x_create_bitmap_from_xpm_data (struct frame *f, char **bits);
+extern int x_create_bitmap_from_xpm_data (struct frame *f, const char **bits);
 #endif
 #ifndef x_destroy_bitmap
 extern void x_destroy_bitmap (struct frame *, int);
@@ -3118,7 +3193,6 @@ char *choose_face_font (struct frame *, Lisp_Object *, Lisp_Object,
 int ascii_face_of_lisp_face (struct frame *, int);
 void prepare_face_for_display (struct frame *, struct face *);
 int xstrcasecmp (const unsigned char *, const unsigned char *);
-int lookup_face (struct frame *, Lisp_Object *);
 int lookup_named_face (struct frame *, Lisp_Object, int);
 int lookup_basic_face (struct frame *, int);
 int smaller_face (struct frame *, int, int);
@@ -3217,11 +3291,11 @@ extern Lisp_Object buffer_posn_from_coords (struct window *,
                                             Lisp_Object *,
                                             int *, int *, int *, int *);
 extern Lisp_Object mode_line_string (struct window *, enum window_part,
-                                     int *, int *, int *,
+                                     int *, int *, EMACS_INT *,
                                      Lisp_Object *,
                                      int *, int *, int *, int *);
 extern Lisp_Object marginal_area_string (struct window *, enum window_part,
-                                         int *, int *, int *,
+                                         int *, int *, EMACS_INT *,
                                          Lisp_Object *,
                                          int *, int *, int *, int *);
 extern void redraw_frame (struct frame *);
@@ -3244,9 +3318,9 @@ void shift_glyph_matrix (struct window *, struct glyph_matrix *,
                          int, int, int);
 void rotate_matrix (struct glyph_matrix *, int, int, int);
 void increment_matrix_positions (struct glyph_matrix *,
-                                 int, int, int, int);
+                                 int, int, EMACS_INT, EMACS_INT);
 void blank_row (struct window *, struct glyph_row *, int);
-void increment_row_positions (struct glyph_row *, int, int);
+void increment_row_positions (struct glyph_row *, EMACS_INT, EMACS_INT);
 void enable_glyph_matrix_rows (struct glyph_matrix *, int, int, int);
 void clear_glyph_row (struct glyph_row *);
 void prepare_desired_row (struct glyph_row *);

@@ -50,7 +50,6 @@
 
 ;; Silence the compiler.
 (cc-bytecomp-defvar adaptive-fill-first-line-regexp) ; Emacs
-(cc-bytecomp-obsolete-fun make-local-hook) ; Marked obsolete in Emacs 21.1.
 
 
 (defvar c-style-alist
@@ -541,13 +540,12 @@ variables."
 
     (when (boundp 'adaptive-fill-first-line-regexp)
       ;; XEmacs adaptive fill mode doesn't have this.
-      (make-local-variable 'adaptive-fill-first-line-regexp)
-      (setq adaptive-fill-first-line-regexp
-	    (concat "\\`" comment-line-prefix
-		    ;; Maybe we should incorporate the old value here,
-		    ;; but then we have to do all sorts of kludges to
-		    ;; deal with the \` and \' it probably contains.
-		    "\\'"))))
+      (set (make-local-variable 'adaptive-fill-first-line-regexp)
+           (concat "\\`" comment-line-prefix
+                   ;; Maybe we should incorporate the old value here,
+                   ;; but then we have to do all sorts of kludges to
+                   ;; deal with the \` and \' it probably contains.
+                   "\\'"))))
 
   ;; Set up the values for use in strings.  These are the default
   ;; paragraph-start/separate values, enhanced to accept escaped EOLs as
@@ -649,7 +647,7 @@ any reason to call this function directly."
     (mapc func varsyms)
     ;; Hooks must be handled specially
     (if this-buf-only-p
-	(make-local-hook 'c-special-indent-hook)
+	(if (featurep 'xemacs) (make-local-hook 'c-special-indent-hook))
       (with-no-warnings (make-variable-buffer-local 'c-special-indent-hook))
       (setq c-style-variables-are-local-p t))
     ))

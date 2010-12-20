@@ -48,6 +48,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "lisp.h"
 
+#ifdef USE_MOTIF
+/* For Vdouble_click_time.  */
+#include "keyboard.h"
+#endif
+
 extern char *getenv (const char *);
 
 extern struct passwd *getpwuid (uid_t);
@@ -127,7 +132,7 @@ x_get_customization_string (XrmDatabase db, const char *name, const char *class)
    Return NULL otherwise.  */
 
 static char *
-magic_file_p (const char *string, int string_len, const char *class, const char *escaped_suffix, const char *suffix)
+magic_file_p (const char *string, EMACS_INT string_len, const char *class, const char *escaped_suffix, const char *suffix)
 {
   char *lang = getenv ("LANG");
 

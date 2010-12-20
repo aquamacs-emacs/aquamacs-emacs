@@ -59,16 +59,11 @@
 (defvar tramp-cache-data (make-hash-table :test 'equal)
   "Hash table for remote files properties.")
 
-(defvar tramp-cache-inhibit-cache nil
-  "Inhibit cache read access, when `t'.
-`nil' means to accept cache entries unconditionally.  If the
-value is a timestamp (as returned by `current-time'), cache
-entries are not used when they have been written before this
-time.")
-
 (defcustom tramp-persistency-file-name
   (cond
    ;; GNU Emacs.
+   ((and (fboundp 'locate-user-emacs-file))
+    (expand-file-name (tramp-compat-funcall 'locate-user-emacs-file "tramp")))
    ((and (boundp 'user-emacs-directory)
 	 (stringp (symbol-value 'user-emacs-directory))
 	 (file-directory-p (symbol-value 'user-emacs-directory)))
@@ -104,19 +99,25 @@ Returns DEFAULT if not set."
 	 (value (when (hash-table-p hash) (gethash property hash))))
     (if
 	;; We take the value only if there is any, and
-	;; `tramp-cache-inhibit-cache' indicates that it is still
+	;; `remote-file-name-inhibit-cache' indicates that it is still
 	;; valid.  Otherwise, DEFAULT is set.
 	(and (consp value)
-	     (or (null tramp-cache-inhibit-cache)
-		 (and (consp tramp-cache-inhibit-cache)
+	     (or (null remote-file-name-inhibit-cache)
+		 (and (integerp remote-file-name-inhibit-cache)
+		      (<=
+		       (tramp-time-diff (current-time) (car value))
+		       remote-file-name-inhibit-cache))
+		 (and (consp remote-file-name-inhibit-cache)
 		      (tramp-time-less-p
-		       tramp-cache-inhibit-cache (car value)))))
+		       remote-file-name-inhibit-cache (car value)))))
 	(setq value (cdr value))
       (setq value default))
 
-    (if (consp tramp-cache-inhibit-cache)
-	(tramp-message vec 1 "%s %s %s" file property value))
     (tramp-message vec 8 "%s %s %s" file property value)
+    (when (>= tramp-verbose 10)
+      (let* ((var (intern (concat "tramp-cache-get-count-" property)))
+	     (val (or (ignore-errors (symbol-value var)) 0)))
+	(set var (1+ val))))
     value))
 
 ;;;###tramp-autoload
@@ -132,6 +133,10 @@ Returns VALUE."
     ;; We put the timestamp there.
     (puthash property (cons (current-time) value) hash)
     (tramp-message vec 8 "%s %s %s" file property value)
+    (when (>= tramp-verbose 10)
+      (let* ((var (intern (concat "tramp-cache-set-count-" property)))
+	     (val (or (ignore-errors (symbol-value var)) 0)))
+	(set var (1+ val))))
     value))
 
 ;;;###tramp-autoload
@@ -400,5 +405,4 @@ for all methods.  Resulting data are derived from connection history."
 
 (provide 'tramp-cache)
 
-;; arch-tag: ee1739b7-7628-408c-9b96-d11a74b05d26
 ;;; tramp-cache.el ends here

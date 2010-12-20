@@ -849,7 +849,8 @@ rotate_matrix (struct glyph_matrix *matrix, int first, int last, int by)
    DELTA_BYTES.  */
 
 void
-increment_matrix_positions (struct glyph_matrix *matrix, int start, int end, int delta, int delta_bytes)
+increment_matrix_positions (struct glyph_matrix *matrix, int start, int end,
+			    EMACS_INT delta, EMACS_INT delta_bytes)
 {
   /* Check that START and END are reasonable values.  */
   xassert (start >= 0 && start <= matrix->nrows);
@@ -1088,7 +1089,8 @@ blank_row (struct window *w, struct glyph_row *row, int y)
    ends.  */
 
 void
-increment_row_positions (struct glyph_row *row, int delta, int delta_bytes)
+increment_row_positions (struct glyph_row *row,
+			 EMACS_INT delta, EMACS_INT delta_bytes)
 {
   int area, i;
 
@@ -1178,7 +1180,7 @@ swap_glyph_pointers (struct glyph_row *a, struct glyph_row *b)
 /* Copy glyph row structure FROM to glyph row structure TO, except
    that glyph pointers in the structures are left unchanged.  */
 
-INLINE void
+static INLINE void
 copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
 {
   struct glyph *pointers[1 + LAST_AREA];
@@ -1200,7 +1202,8 @@ copy_row_except_pointers (struct glyph_row *to, struct glyph_row *from)
    positions in row TO by DELTA/ DELTA_BYTES.  */
 
 void
-copy_glyph_row_contents (struct glyph_row *to, struct glyph_row *from, int delta, int delta_bytes)
+copy_glyph_row_contents (struct glyph_row *to, struct glyph_row *from,
+			 EMACS_INT delta, EMACS_INT delta_bytes)
 {
   int area;
 
@@ -2890,6 +2893,14 @@ mirror_make_current (struct window *w, int frame_row)
 	      else
 		swap_glyph_pointers (desired_row, current_row);
 	      current_row->enabled_p = 1;
+
+	      /* Set the Y coordinate of the mode/header line's row.
+		 It is needed in draw_row_with_mouse_face to find the
+		 screen coordinates.  (Window-based redisplay sets
+		 this in update_window, but no one seems to do that
+		 for frame-based redisplay.)  */
+	      if (current_row->mode_line_p)
+		current_row->y = row;
 	    }
 	}
 
@@ -3436,7 +3447,9 @@ update_frame (struct frame *f, int force_p, int inhibit_hairy_id_p)
 #endif
     }
 
+#if PERIODIC_PREEMPTION_CHECKING
  do_pause:
+#endif
   /* Reset flags indicating that a window should be updated.  */
   set_window_update_flags (root_window, 0);
 
@@ -4899,7 +4912,9 @@ update_frame_1 (struct frame *f, int force_p, int inhibit_id_p)
 	}
     }
 
+#if !PERIODIC_PREEMPTION_CHECKING
  do_pause:
+#endif
 
   clear_desired_matrices (f);
   return pause;
@@ -5384,7 +5399,7 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
   BYTEPOS (startp) = min (ZV_BYTE, max (BEGV_BYTE, BYTEPOS (startp)));
   start_display (&it, w, startp);
 
-  x0 = *x - WINDOW_LEFT_MARGIN_WIDTH (w);
+  x0 = *x;
 
   /* First, move to the beginning of the row corresponding to *Y.  We
      need to be in that row to get the correct value of base paragraph
@@ -5422,6 +5437,22 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
   if (STRINGP (it.string))
     string = it.string;
   *pos = it.current;
+  if (it.what == IT_COMPOSITION
+      && it.cmp_it.nchars > 1
+      && it.cmp_it.reversed_p)
+    {
+      /* The current display element is a grapheme cluster in a
+	 composition.  In that case, we need the position of the first
+	 character of the cluster.  But, as it.cmp_it.reversed_p is 1,
+	 it.current points to the last character of the cluster, thus
+	 we must move back to the first character of the same
+	 cluster.  */
+      CHARPOS (pos->pos) -= it.cmp_it.nchars - 1;
+      if (STRINGP (it.string))
+	BYTEPOS (pos->pos) = string_char_to_byte (string, CHARPOS (pos->pos));
+      else
+	BYTEPOS (pos->pos) = CHAR_TO_BYTE (CHARPOS (pos->pos));
+    }
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (it.what == IT_IMAGE)
@@ -5443,8 +5474,8 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
 	  if (img)
 	    {
 	      *dy -= row->ascent - glyph->ascent;
-	      *dx += glyph->slice.x;
-	      *dy += glyph->slice.y;
+	      *dx += glyph->slice.img.x;
+	      *dy += glyph->slice.img.y;
 	      /* Image slices positions are still relative to the entire image */
 	      *width = img->width;
 	      *height = img->height;
@@ -5484,7 +5515,9 @@ buffer_posn_from_coords (struct window *w, int *x, int *y, struct display_pos *p
    *CHARPOS is set to the position in the string returned.  */
 
 Lisp_Object
-mode_line_string (struct window *w, enum window_part part, int *x, int *y, int *charpos, Lisp_Object *object, int *dx, int *dy, int *width, int *height)
+mode_line_string (struct window *w, enum window_part part,
+		  int *x, int *y, EMACS_INT *charpos, Lisp_Object *object,
+		  int *dx, int *dy, int *width, int *height)
 {
   struct glyph_row *row;
   struct glyph *glyph, *end;
@@ -5551,7 +5584,9 @@ mode_line_string (struct window *w, enum window_part part, int *x, int *y, int *
    the string returned.  */
 
 Lisp_Object
-marginal_area_string (struct window *w, enum window_part part, int *x, int *y, int *charpos, Lisp_Object *object, int *dx, int *dy, int *width, int *height)
+marginal_area_string (struct window *w, enum window_part part,
+		      int *x, int *y, EMACS_INT *charpos, Lisp_Object *object,
+		      int *dx, int *dy, int *width, int *height)
 {
   struct glyph_row *row = w->current_matrix->rows;
   struct glyph *glyph, *end;
@@ -5606,8 +5641,8 @@ marginal_area_string (struct window *w, enum window_part part, int *x, int *y, i
 	      if (img != NULL)
 		*object = img->spec;
 	      y0 -= row->ascent - glyph->ascent;
-	      x0 += glyph->slice.x;
-	      y0 += glyph->slice.y;
+	      x0 += glyph->slice.img.x;
+	      y0 += glyph->slice.img.y;
 	    }
 #endif
 	}
@@ -6395,6 +6430,12 @@ init_display (void)
     f->terminal = t;
 
     t->reference_count++;
+#ifdef MSDOS
+    f->output_data.tty->display_info = &the_only_display_info;
+#else
+    if (f->output_method == output_termcap)
+      create_tty_output (f);
+#endif
     t->display_info.tty->top_frame = selected_frame;
     change_frame_size (XFRAME (selected_frame),
                        FrameRows (t->display_info.tty),
@@ -6562,13 +6603,29 @@ It is up to you to set this variable if your terminal can do that.  */);
 
   DEFVAR_LISP ("initial-window-system", &Vinitial_window_system,
 	       doc: /* Name of the window system that Emacs uses for the first frame.
-The value is a symbol--for instance, `x' for X windows.
-The value is nil if Emacs is using a text-only terminal.  */);
+The value is a symbol:
+ nil for a termcap frame (a character-only terminal),
+ 'x' for an Emacs frame that is really an X window,
+ 'w32' for an Emacs frame that is a window on MS-Windows display,
+ 'ns' for an Emacs frame on a GNUstep or Macintosh Cocoa display,
+ 'pc' for a direct-write MS-DOS frame.
+
+Use of this variable as a boolean is deprecated.  Instead,
+use `display-graphic-p' or any of the other `display-*-p'
+predicates which report frame's specific UI-related capabilities.  */);
 
   DEFVAR_KBOARD ("window-system", Vwindow_system,
 		 doc: /* Name of window system through which the selected frame is displayed.
-The value is a symbol--for instance, `x' for X windows.
-The value is nil if the selected frame is on a text-only-terminal.  */);
+The value is a symbol:
+ nil for a termcap frame (a character-only terminal),
+ 'x' for an Emacs frame that is really an X window,
+ 'w32' for an Emacs frame that is a window on MS-Windows display,
+ 'ns' for an Emacs frame on a GNUstep or Macintosh Cocoa display,
+ 'pc' for a direct-write MS-DOS frame.
+
+Use of this variable as a boolean is deprecated.  Instead,
+use `display-graphic-p' or any of the other `display-*-p'
+predicates which report frame's specific UI-related capabilities.  */);
 
   DEFVAR_LISP ("window-system-version", &Vwindow_system_version,
 	       doc: /* The version number of the window system in use.

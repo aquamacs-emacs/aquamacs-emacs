@@ -71,9 +71,10 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   :version "21.1"
   :group 'vc)
 
-(defcustom vc-sccs-header (or (cdr (assoc 'SCCS vc-header-alist)) '("%W%"))
+(defcustom vc-sccs-header '("%W%")
   "Header keywords to be inserted by `vc-insert-headers'."
   :type '(repeat string)
+  :version "24.1"     ; no longer consult the obsolete vc-header-alist
   :group 'vc)
 
 ;;;###autoload
@@ -236,7 +237,7 @@ expanded if `vc-keep-workfiles' is non-nil, otherwise, delete the workfile."
       (stringp (vc-sccs-search-project-dir (or (file-name-directory file) "")
 					   (file-name-nondirectory file)))))
 
-(defun vc-sccs-checkin (files rev comment &optional extra-args-ignored)
+(defun vc-sccs-checkin (files rev comment)
   "SCCS-specific version of `vc-backend-checkin'."
   (dolist (file (vc-expand-dirs files))
     (apply 'vc-sccs-do-command nil 0 "delta" (vc-name file)

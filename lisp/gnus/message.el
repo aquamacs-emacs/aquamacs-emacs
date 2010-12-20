@@ -29,6 +29,7 @@
 
 ;;; Code:
 
+;; For Emacs <22.2 and XEmacs.
 (eval-and-compile
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 (eval-when-compile
@@ -160,9 +161,7 @@ If this variable is nil, no such courtesy message will be added."
   :type 'regexp)
 
 (defcustom message-from-style mail-from-style
-;; Default to the value of `mail-from-style', available in all Emacsen
-;; that Gnus supports.
-  "*Specifies how \"From\" headers look.
+  "Specifies how \"From\" headers look.
 
 If nil, they contain just the return address like:
 	king@grassland.com
@@ -278,14 +277,14 @@ This is a list of regexps and regexp matches."
 		 regexp))
 
 (defcustom message-ignored-mail-headers
-  "^[GF]cc:\\|^Resent-Fcc:\\|^Xref:\\|^X-Draft-From:\\|^X-Gnus-Agent-Meta-Information:"
+  "^\\([GF]cc\\|Resent-Fcc\\|Xref\\|X-Draft-From\\|X-Gnus-Agent-Meta-Information\\):"
   "*Regexp of headers to be removed unconditionally before mailing."
   :group 'message-mail
   :group 'message-headers
   :link '(custom-manual "(message)Mail Headers")
   :type 'regexp)
 
-(defcustom message-ignored-supersedes-headers "^Path:\\|^Date\\|^NNTP-Posting-Host:\\|^Xref:\\|^Lines:\\|^Received:\\|^X-From-Line:\\|^X-Trace:\\|^X-ID:\\|^X-Complaints-To:\\|Return-Path:\\|^Supersedes:\\|^NNTP-Posting-Date:\\|^X-Trace:\\|^X-Complaints-To:\\|^Cancel-Lock:\\|^Cancel-Key:\\|^X-Hashcash:\\|^X-Payment:\\|^Approved:"
+(defcustom message-ignored-supersedes-headers "^Path:\\|^Date\\|^NNTP-Posting-Host:\\|^Xref:\\|^Lines:\\|^Received:\\|^X-From-Line:\\|^X-Trace:\\|^X-ID:\\|^X-Complaints-To:\\|Return-Path:\\|^Supersedes:\\|^NNTP-Posting-Date:\\|^X-Trace:\\|^X-Complaints-To:\\|^Cancel-Lock:\\|^Cancel-Key:\\|^X-Hashcash:\\|^X-Payment:\\|^Approved:\\|^Injection-Date:\\|^Injection-Info:"
   "*Header lines matching this regexp will be deleted before posting.
 It's best to delete old Path and Date headers before posting to avoid
 any confusion."
@@ -307,7 +306,7 @@ any confusion."
 
 ;;; Start of variables adopted from `message-utils.el'.
 
-(defcustom message-subject-trailing-was-query 'ask
+(defcustom message-subject-trailing-was-query t
   "*What to do with trailing \"(was: <old subject>)\" in subject lines.
 If nil, leave the subject unchanged.  If it is the symbol `ask', query
 the user what do do.  In this case, the subject is matched against
@@ -315,7 +314,7 @@ the user what do do.  In this case, the subject is matched against
 `message-subject-trailing-was-query' is t, always strip the trailing
 old subject.  In this case, `message-subject-trailing-was-regexp' is
 used."
-  :version "22.1"
+  :version "24.1"
   :type '(choice (const :tag "never" nil)
 		 (const :tag "always strip" t)
 		 (const ask))
@@ -323,7 +322,7 @@ used."
   :group 'message-various)
 
 (defcustom message-subject-trailing-was-ask-regexp
-  "[ \t]*\\([[(]+[Ww][Aa][Ss][ \t]*.*[\])]+\\)"
+  "[ \t]*\\([[(]+[Ww][Aa][Ss]:?[ \t]*.*[])]+\\)"
   "*Regexp matching \"(was: <old subject>)\" in the subject line.
 
 The function `message-strip-subject-trailing-was' uses this regexp if
@@ -446,8 +445,6 @@ whitespace)."
   :group 'message-various)
 
 (defcustom message-interactive mail-interactive
-;; Default to the value of `mail-interactive', available in all Emacsen
-;; that Gnus supports.
   "Non-nil means when sending a message wait for and display errors.
 A value of nil means let mailer mail back a message to report errors."
   :version "23.2"
@@ -510,14 +507,9 @@ This is used by `message-kill-buffer'."
   :group 'message-buffers
   :type 'boolean)
 
-(defvar gnus-local-organization)
 (defcustom message-user-organization
-  (or (and (boundp 'gnus-local-organization)
-	   (stringp gnus-local-organization)
-	   gnus-local-organization)
-      (getenv "ORGANIZATION")
-      t)
-  "*String to be used as an Organization header.
+  (or (getenv "ORGANIZATION") t)
+  "String to be used as an Organization header.
 If t, use `message-user-organization-file'."
   :group 'message-headers
   :type '(choice string
@@ -625,30 +617,9 @@ Done before generating the new subject of a forward."
   :link '(custom-manual "(message)Insertion Variables")
   :type 'regexp)
 
-(defcustom message-cite-prefix-regexp
-  ;; Default to the value of `mail-citation-prefix-regexp' if available.
-  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is unavailable
-  ;; unless sendmail.el is loaded.
-  (cond ((boundp 'mail-citation-prefix-regexp)
-	 mail-citation-prefix-regexp)
-	((string-match "[[:digit:]]" "1")
-	 ;; Support POSIX?  XEmacs 21.5.27 doesn't.
-	 "\\([ \t]*[_.[:word:]]+>+\\|[ \t]*[]>|}]\\)+")
-	(t
-	 ;; ?-, ?_ or ?. MUST NOT be in syntax entry w.
-	 (let (non-word-constituents)
-	   (with-syntax-table text-mode-syntax-table
-	     (setq non-word-constituents
-		   (concat
-		    (if (string-match "\\w" "_")  "" "_")
-		    (if (string-match "\\w" ".")  "" "."))))
-	   (if (equal non-word-constituents "")
-	       "\\([ \t]*\\(\\w\\)+>+\\|[ \t]*[]>|}]\\)+"
-	     (concat "\\([ \t]*\\(\\w\\|["
-		     non-word-constituents
-		     "]\\)+>+\\|[ \t]*[]>|}]\\)+")))))
+(defcustom message-cite-prefix-regexp mail-citation-prefix-regexp
   "*Regexp matching the longest possible citation prefix on a line."
-  :version "23.2"
+  :version "24.1"
   :group 'message-insertion
   :link '(custom-manual "(message)Insertion Variables")
   :type 'regexp
@@ -840,9 +811,7 @@ Doing so would be even more evil than leaving it out."
   :type 'boolean)
 
 (defcustom message-sendmail-envelope-from
-  ;; Default to the value of `mail-envelope-from' if available.
-  ;; Note: as for Emacsen that Gnus supports, except for SXEmacs, it is
-  ;; unavailable unless sendmail.el is loaded.
+  ;; `mail-envelope-from' is unavailable unless sendmail.el is loaded.
   (if (boundp 'mail-envelope-from) mail-envelope-from)
   "*Envelope-from when sending mail with sendmail.
 If this is nil, use `user-mail-address'.  If it is the symbol
@@ -1020,10 +989,7 @@ Please also read the note in the documentation of
   :version "23.1" ;; No Gnus
   :group 'message-insertion)
 
-(defcustom message-yank-prefix
-  ;; Default to the value of `mail-yank-prefix' if available.
-  ;; Note: as for Emacs 21, it is unavailable unless sendmail.el is loaded.
-  (if (boundp 'mail-yank-prefix) mail-yank-prefix "> ")
+(defcustom message-yank-prefix mail-yank-prefix
   "*Prefix inserted on the lines of yanked messages.
 Fix `message-cite-prefix-regexp' if it is set to an abnormal value.
 See also `message-yank-cited-prefix' and `message-yank-empty-prefix'."
@@ -1049,11 +1015,7 @@ See also `message-yank-prefix' and `message-yank-cited-prefix'."
   :link '(custom-manual "(message)Insertion Variables")
   :group 'message-insertion)
 
-(defcustom message-indentation-spaces
-  ;; Default to the value of `mail-indentation-spaces' if available.
-  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is unavailable
-  ;; unless sendmail.el is loaded.
-  (if (boundp 'mail-indentation-spaces) mail-indentation-spaces 3)
+(defcustom message-indentation-spaces mail-indentation-spaces
   "*Number of spaces to insert at the beginning of each cited line.
 Used by `message-yank-original' via `message-yank-cite'."
   :version "23.2"
@@ -1084,8 +1046,6 @@ point and mark around the citation text as modified."
   :group 'message-insertion)
 
 (defcustom message-signature mail-signature
-  ;; Default to the value of `mail-signature', available in all Emacsen
-  ;; that Gnus supports.
   "*String to be inserted at the end of the message buffer.
 If t, the `message-signature-file' file will be inserted instead.
 If a function, the result from the function will be used instead.
@@ -1095,11 +1055,7 @@ If a form, the result from the form will be used instead."
   :link '(custom-manual "(message)Insertion Variables")
   :group 'message-insertion)
 
-(defcustom message-signature-file
-  ;; Default to the value of `mail-signature-file' if available.
-  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is unavailable
-  ;; unless sendmail.el is loaded.
-  (if (boundp 'mail-signature-file) mail-signature-file "~/.signature")
+(defcustom message-signature-file mail-signature-file
   "*Name of file containing the text inserted at end of message buffer.
 Ignored if the named file doesn't exist.
 If nil, don't insert a signature.
@@ -1178,13 +1134,17 @@ It is a vector of the following headers:
   :error "All header lines must be newline terminated")
 
 (defcustom message-default-headers ""
-  "*A string containing header lines to be inserted in outgoing messages.
-It is inserted before you edit the message, so you can edit or delete
-these lines."
+  "Header lines to be inserted in outgoing messages.
+This can be set to a string containing or a function returning
+header lines to be inserted before you edit the message, so you
+can edit or delete these lines.  If set to a function, it is
+called and its result is inserted."
   :version "23.2"
   :group 'message-headers
   :link '(custom-manual "(message)Message Headers")
-  :type 'message-header-lines)
+  :type '(choice
+          (message-header-lines :tag "String")
+          (function :tag "Function")))
 
 (defcustom message-default-mail-headers
   ;; Ease the transition from mail-mode to message-mode.  See bugs#4431, 5555.
@@ -1198,8 +1158,8 @@ these lines."
 		   (stringp mail-archive-file-name))
 	      (format "FCC: %s\n" mail-archive-file-name))
 	  ;; Use the value of `mail-default-headers' if available.
-	  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is
-	  ;; unavailable unless sendmail.el is loaded.
+	  ;; Note: as for XEmacs 21.4 and 21.5, it is unavailable
+	  ;; unless sendmail.el is loaded.
 	  (if (boundp 'mail-default-headers)
 	      mail-default-headers))
   "*A string of header lines to be inserted in outgoing mails."
@@ -2191,7 +2151,6 @@ Leading \"Re: \" is not stripped by this function.  Use the function
 
 (defun message-change-subject (new-subject)
   "Ask for NEW-SUBJECT header, append (was: <Old Subject>)."
-  ;; <URL:http://www.landfield.com/usefor/drafts/draft-ietf-usefor-useage--1.02.unpaged>
   (interactive
    (list
     (read-from-minibuffer "New subject: ")))
@@ -2679,7 +2638,6 @@ PGG manual, depending on the value of `mml2015-use'."
 
   (define-key message-mode-map "\C-a" 'message-beginning-of-line)
   (define-key message-mode-map "\t" 'message-tab)
-  (define-key message-mode-map "\M-;" 'comment-region)
 
   (define-key message-mode-map "\M-n" 'message-display-abbrev))
 
@@ -2956,6 +2914,7 @@ M-RET    `message-newline-and-reformat' (break the line and reformat)."
 	  (mail-aliases-setup))))
    ((message-mail-alias-type-p 'ecomplete)
     (ecomplete-setup)))
+  (add-hook 'completion-at-point-functions 'message-completion-function nil t)
   (unless buffer-file-name
     (message-set-auto-save-file-name))
   (unless (buffer-base-buffer)
@@ -3084,10 +3043,22 @@ M-RET    `message-newline-and-reformat' (break the line and reformat)."
   (interactive)
   (message-position-on-field "Summary" "Subject"))
 
-(defun message-goto-body (&optional interactivep)
+(eval-when-compile
+  (defmacro message-called-interactively-p (kind)
+    (condition-case nil
+	(progn
+	  (eval '(called-interactively-p 'any))
+	  ;; Emacs >=23.2
+	  `(called-interactively-p ,kind))
+      ;; Emacs <23.2
+      (wrong-number-of-arguments '(called-interactively-p))
+      ;; XEmacs
+      (void-function '(interactive-p)))))
+
+(defun message-goto-body ()
   "Move point to the beginning of the message body."
-  (interactive (list t))
-  (when (and interactivep
+  (interactive)
+  (when (and (message-called-interactively-p 'any)
 	     (looking-at "[ \t]*\n"))
     (expand-abbrev))
   (goto-char (point-min))
@@ -3096,7 +3067,7 @@ M-RET    `message-newline-and-reformat' (break the line and reformat)."
 
 (defun message-in-body-p ()
   "Return t if point is in the message body."
-  (let ((body (save-excursion (message-goto-body) (point))))
+  (let ((body (save-excursion (message-goto-body))))
     (>= (point) body)))
 
 (defun message-goto-eoh ()
@@ -4246,7 +4217,7 @@ conformance."
 		 (?r ,(format
 		       "Replace non-printable characters with \"%s\" and send"
 		       message-replacement-char))
-		 (?i "Ignore non-printable characters and send")
+		 (?s "Send as is without removing anything")
 		 (?e "Continue editing"))))
 	(if (eq choice ?e)
 	  (error "Non-printable characters"))
@@ -4290,9 +4261,10 @@ matching entry in `message-bogus-addresses'."
   ;; FIXME: How about "foo@subdomain", when the MTA adds ".domain.tld"?
   (let (found)
     (mapc (lambda (address)
-	    (setq address (cadr address))
+	    (setq address (or (cadr address) ""))
 	    (when
-		(or (not
+		(or (string= "" address)
+                    (not
 		     (or
 		      (not (string-match "@" address))
 		      (string-match
@@ -4306,7 +4278,7 @@ matching entry in `message-bogus-addresses'."
 					       "\\|")
 				  message-bogus-addresses)))
 			   (string-match re address))))
-			 (push address found)))
+              (push address found)))
 	  ;;
 	  (mail-extract-address-components recipients t))
     found))
@@ -4519,6 +4491,8 @@ This function could be useful in `message-setup-hook'."
 	      (save-restriction
 		(message-narrow-to-headers)
 		(and news
+		     (not (message-fetch-field "List-Post"))
+		     (not (message-fetch-field "List-ID"))
 		     (or (message-fetch-field "cc")
 			 (message-fetch-field "bcc")
 			 (message-fetch-field "to"))
@@ -4535,7 +4509,9 @@ This function could be useful in `message-setup-hook'."
 			 (string= "base64"
 				  (message-fetch-field
 				   "content-transfer-encoding")))))))
-	    (message-insert-courtesy-copy))
+	    (message-insert-courtesy-copy
+	     (with-current-buffer mailbuf
+	       message-courtesy-message)))
           ;; Let's make sure we encoded all the body.
           (assert (save-excursion
                     (goto-char (point-min))
@@ -5349,8 +5325,14 @@ Otherwise, generate and save a value for `canlock-password' first."
 
 (defun message-output (filename)
   "Append this article to Unix/babyl mail file FILENAME."
-  (if (and (file-readable-p filename)
-	   (mail-file-babyl-p filename))
+  (if (or (and (file-readable-p filename)
+	       (mail-file-babyl-p filename))
+	  ;; gnus-output-to-mail does the wrong thing with live, mbox
+	  ;; Rmail buffers in Emacs 23.
+	  ;; http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=597255
+	  (let ((buff (find-buffer-visiting filename)))
+	    (and buff (with-current-buffer buff
+			(eq major-mode 'rmail-mode)))))
       (gnus-output-to-rmail filename t)
     (gnus-output-to-mail filename t)))
 
@@ -5770,7 +5752,9 @@ subscribed address (and not the additional To and Cc header contents)."
 		(mapcar (lambda (rhs) (or (cadr (split-string rhs "@")) ""))
 			(mapcar 'downcase
 				(mapcar
-				 'cadr
+				 (lambda (elem)
+				   (or (cadr elem)
+				       ""))
 				 (mail-extract-address-components field t))))))
 	;; Note that `rhs' will be "" if the address does not have
 	;; the domain part, i.e., if it is a local user's address.
@@ -5968,7 +5952,7 @@ Headers already prepared in the buffer are not modified."
       ;; Check for IDNA
       (message-idna-to-ascii-rhs))))
 
-(defun message-insert-courtesy-copy ()
+(defun message-insert-courtesy-copy (message)
   "Insert a courtesy message in mail copies of combined messages."
   (let (newsgroups)
     (save-excursion
@@ -5978,12 +5962,12 @@ Headers already prepared in the buffer are not modified."
 	  (goto-char (point-max))
 	  (insert "Posted-To: " newsgroups "\n")))
       (forward-line 1)
-      (when message-courtesy-message
+      (when message
 	(cond
-	 ((string-match "%s" message-courtesy-message)
-	  (insert (format message-courtesy-message newsgroups)))
+	 ((string-match "%s" message)
+	  (insert (format message newsgroups)))
 	 (t
-	  (insert message-courtesy-message)))))))
+	  (insert message)))))))
 
 ;;;
 ;;; Setting up a message buffer
@@ -6083,6 +6067,7 @@ If the current line has `message-yank-prefix', insert it on the new line."
 When sending via news, also check that the REFERENCES are less
 than 988 characters long, and if they are not, trim them until
 they are."
+  ;; 21 is the number suggested by USEAGE.
   (let ((maxcount 21)
 	(count 0)
 	(cut 2)
@@ -6394,7 +6379,10 @@ are not included."
    headers)
   (delete-region (point) (progn (forward-line -1) (point)))
   (when message-default-headers
-    (insert message-default-headers)
+    (insert
+     (if (functionp message-default-headers)
+         (funcall message-default-headers)
+       message-default-headers))
     (or (bolp) (insert ?\n)))
   (insert mail-header-separator "\n")
   (forward-line -1)
@@ -6599,6 +6587,10 @@ The function is called with one parameter, a cons cell ..."
     (save-match-data
       ;; Build (textual) list of new recipient addresses.
       (cond
+       (to-address
+	(setq recipients (concat ", " to-address))
+	;; If the author explicitly asked for a copy, we don't deny it to them.
+	(if mct (setq recipients (concat recipients ", " mct))))
        ((not wide)
 	(setq recipients (concat ", " author)))
        (address-headers
@@ -6634,10 +6626,6 @@ responses here are directed to other addresses.
 You may customize the variable `message-use-mail-followup-to', if you
 want to get rid of this query permanently.")))
 	(setq recipients (concat ", " mft)))
-       (to-address
-	(setq recipients (concat ", " to-address))
-	;; If the author explicitly asked for a copy, we don't deny it to them.
-	(if mct (setq recipients (concat recipients ", " mct))))
        (t
 	(setq recipients (if never-mct "" (concat ", " author)))
 	(if to (setq recipients (concat recipients ", " to)))
@@ -7453,7 +7441,11 @@ is for the internal use."
       (when (looking-at "From ")
 	(replace-match "X-From-Line: "))
       ;; Send it.
-      (let ((message-inhibit-body-encoding t)
+      (let ((message-inhibit-body-encoding
+	     ;; Don't do any further encoding if it looks like the
+	     ;; message has already been encoded.
+	     (let ((case-fold-search t))
+	       (re-search-forward "^mime-version:" nil t)))
 	    (message-inhibit-ecomplete t)
 	    message-required-mail-headers
 	    message-generate-hashcash
@@ -7753,7 +7745,7 @@ When FORCE, rebuild the tool bar."
   :type '(alist :key-type regexp :value-type function))
 
 (defcustom message-expand-name-databases
-  (list 'bbdb 'eudc)
+  '(bbdb eudc)
   "List of databases to try for name completion (`message-expand-name').
 Each element is a symbol and can be `bbdb' or `eudc'."
   :group 'message
@@ -7775,15 +7767,25 @@ If nil, the function bound in `text-mode-map' or `global-map' is executed."
 Execute function specified by `message-tab-body-function' when not in
 those headers."
   (interactive)
+  (cond
+   ((if (and (boundp 'completion-fail-discreetly)
+             (fboundp 'completion-at-point))
+        (let ((completion-fail-discreetly t)) (completion-at-point))
+      (funcall (or (message-completion-function) #'ignore)))
+    ;; Completion was performed; nothing else to do.
+    nil)
+   (message-tab-body-function (funcall message-tab-body-function))
+   (t (funcall (or (lookup-key text-mode-map "\t")
+                   (lookup-key global-map "\t")
+                   'indent-relative)))))
+
+(defun message-completion-function ()
   (let ((alist message-completion-alist))
     (while (and alist
 		(let ((mail-abbrev-mode-regexp (caar alist)))
 		  (not (mail-abbrev-in-expansion-header-p))))
       (setq alist (cdr alist)))
-    (funcall (or (cdar alist) message-tab-body-function
-		 (lookup-key text-mode-map "\t")
-		 (lookup-key global-map "\t")
-		 'indent-relative))))
+    (cdar alist)))
 
 (eval-and-compile
   (condition-case nil
